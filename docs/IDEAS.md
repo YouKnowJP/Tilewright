@@ -7,13 +7,19 @@ They are proposals for this small tool, not claims that Tilewright already
 supports those editors' formats or all their capabilities. The
 [roadmap](../ROADMAP.md) tracks selected work and remaining estimates.
 
-## Delivered in this iteration
+## Delivered in v0.2.0 and v0.3.0
 
 **Finish structural editing.** A map no longer needs to be recreated to change
 its dimensions. Users can anchor retained content, preview cropped occupied
 cells, choose fill for new cells, and undo the resize. Layers can be renamed,
 duplicated, reordered, and deleted with confirmation and undo. This closes a
 specific gap in the existing workflow without changing the saved map format.
+
+**Give the worlds a reason to explore.** Lantern Trails now has three real
+quests with keys, patrols, dash energy, health, crate-and-plate bridge puzzles,
+fog, hints, treasures, stars, and progression. Custom expeditions generate
+reachable objectives on editor maps. An adventure overview is delivered; an
+editor minimap navigator remains a separate future tool.
 
 ## Highest-value next steps
 
@@ -34,9 +40,13 @@ specific gap in the existing workflow without changing the saved map format.
   make previews match the final operation and retain one undo step per stroke.
 - **Terrain connections:** use explicit neighbor-based tile rules to connect
   water banks, paths, or fences. Keep rules deterministic and inspectable.
-- **Walkability preview:** let the author mark solid terrain, choose a test
-  starting cell, and walk through the fictional map. Separate editor annotations
-  from artwork and define export semantics before implementing it.
+- **Adventure authoring:** add explicit spawn, lantern, key, gate, patrol-route,
+  and pressure-plate editing, with playable previews and solvability warnings.
+  Custom map expeditions already work; custom authored puzzles need a separate
+  versioned entity format, validation, and portable export.
+- **More campaign variety:** add authored optional paths, crate-reset checkpoints,
+  alternative patrol patterns, and additional quest layouts. Verify that each
+  teaches a distinct decision rather than increasing map size alone.
 - **Offline installation:** add an installable static app with explicit update
   and recovery behavior. Existing maps must remain available after an update.
 - **Practical accessibility:** test actual screen readers and physical touch

@@ -4,15 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#294f43">
-  <meta name="description" content="Make a little world. A local-first tile map editor with original tiles, layers, and portable exports.">
+  <meta name="description" content="Make a little world. Build tile maps and play Lantern Trails: three original puzzle adventures with exploration, patrols, and clever crossings.">
   <title>Tilewright — Make a little world</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="adventure.css">
   <script type="module" src="src/bootstrap.mjs"></script>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.2.0</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.3.0</span></a>
     <span class="header-note">A small tool for imaginary places.</span>
     <a class="source-link" href="https://github.com/YouKnowJP/Personal-Project/tree/main/Tilewright" target="_blank" rel="noreferrer">Source code <span aria-hidden="true">↗</span></a>
   </header>
@@ -21,7 +22,8 @@
       <div><p class="eyebrow">YOUR WORLD, ONE TILE AT A TIME</p><h1 id="intro-title">Make a little world<span>.</span></h1><p class="intro-description">A quiet corner for your next adventure. Paint, experiment, and take it with you.</p></div>
       <div class="local-note"><span class="local-dot"></span><div><strong>Made here. Kept here.</strong><span>No account. Your map stays in this browser.</span></div></div>
     </section>
-    <section class="editor" aria-label="Tile map editor">
+    <nav class="mode-switcher" aria-label="Tilewright mode"><button id="mode-create" aria-pressed="true">Create a world</button><button id="mode-play" aria-pressed="false">Play adventures <span aria-hidden="true">↗</span></button></nav>
+    <section class="editor" id="editor" aria-label="Tile map editor">
       <div class="document-bar">
         <div class="document-identity"><span class="map-symbol" aria-hidden="true">▧</span><div><span id="document-title">Willowbend</span><span class="document-meta" id="document-meta">28 × 20 tiles</span></div><span class="save-indicator" id="save-state">Sample map</span></div>
         <div class="document-actions"><button id="new-map">+ New map</button><button id="import-map">Import</button><button class="primary" id="export-json">Export JSON <span aria-hidden="true">↗</span></button></div>
@@ -69,6 +71,27 @@
         </aside>
       </div>
       <div class="editor-bottom"><p id="status" role="status" aria-live="polite">Welcome to Willowbend. Pick a tile and make it yours.</p><button id="help-button">Keyboard shortcuts <span aria-hidden="true">?</span></button></div>
+    </section>
+    <section class="adventure" id="adventure" aria-label="Lantern Trails adventure game" hidden>
+      <div class="adventure-heading"><div><p class="eyebrow">LANTERN TRAILS</p><h2>A little courage. A little cleverness.</h2><p>Restore the light, outsmart the wardens, and find your way home.</p></div><button id="play-custom">Play your current map <span aria-hidden="true">↗</span></button></div>
+      <div class="trail-picker" id="trail-picker" aria-label="Adventure selection"></div>
+      <div class="game-layout">
+        <section class="game-main" aria-labelledby="game-title">
+          <div class="game-toolbar"><div><h3 id="game-title">Candlebrook</h3><p id="game-subtitle">The lost lanterns</p></div><div class="game-toolbar-actions"><button id="game-choose">Choose trail</button><button id="game-hint-button" aria-expanded="false" aria-controls="game-hint">Scout hint</button><button id="game-sound" aria-pressed="false">Sound off</button><button id="game-pause" aria-pressed="false">Pause</button><button id="game-restart">Restart</button></div></div>
+          <section class="game-hint" id="game-hint" hidden><h3>A scout’s advice</h3><p id="game-hint-text"></p></section>
+          <div class="game-hud" aria-label="Adventure status"><div><span>HEARTS</span><strong id="game-health" class="resource-meter" role="img" aria-label="Health: 3 of 3"></strong></div><div><span>ENERGY</span><strong id="game-energy" class="resource-meter" role="img" aria-label="Energy: 3 of 3"></strong></div><div><span>LANTERNS</span><strong id="game-lanterns">0/3</strong></div><div><span>KEYS</span><strong id="game-keys">0</strong></div><div><span>TREASURES</span><strong id="game-coins">0/4</strong></div><div><span>TURNS</span><strong id="game-turns">0</strong></div></div>
+          <div class="game-viewport" id="game-viewport"><canvas id="adventure-canvas" width="528" height="336" tabindex="0" role="img" aria-label="Adventure map. Move with arrows or WASD. Shift plus a direction dashes. Space waits." aria-describedby="game-controls-help"></canvas><div class="game-overlay" id="game-overlay" hidden><p id="game-result-eyebrow" class="eyebrow"></p><h3 id="game-result-title"></h3><div id="game-stars" class="game-stars"></div><p id="game-result-text"></p><div><button id="game-primary" class="primary">Resume adventure</button><button id="game-back-editor">Back to editor</button></div></div></div>
+          <div class="game-controls"><div class="direction-pad" aria-label="Movement controls"><button data-move="up" aria-label="Move up">↑</button><button data-move="left" aria-label="Move left">←</button><button data-move="down" aria-label="Move down">↓</button><button data-move="right" aria-label="Move right">→</button></div><button id="dash-button" aria-pressed="false">Dash <kbd>Shift</kbd><small>2 energy · then choose a direction</small></button><button id="game-wait">Wait <kbd>Space</kbd><small>Let patrols move · recharge</small></button><p id="game-controls-help">Arrows / WASD to move · Shift + direction to dash · Swipe or use the direction pad on touch.</p></div>
+          <p id="game-status" class="game-status" role="status" aria-live="polite">Find three lanterns and reach the beacon.</p>
+        </section>
+        <aside class="game-aside" aria-label="Quest information">
+          <section class="quest-brief"><p class="eyebrow">YOUR LITTLE QUEST</p><h3>Bring back the light.</h3><p id="game-story"></p><ul class="quest-list"><li id="quest-lanterns">Restore all three lanterns</li><li id="quest-plates" hidden></li><li id="quest-beacon">Reach the turquoise beacon</li></ul><span class="turn-based-tag">TURN BASED · NO TIMER</span></section>
+          <section class="game-map-note"><p class="eyebrow">YOUR DISCOVERED WORLD</p><canvas id="game-minimap" width="240" height="144" role="img" aria-label="Discovered map overview. Gold marks your position; turquoise marks the beacon."></canvas><p>Gold is you. Turquoise is the beacon.<br>Explore to uncover the trail.</p></section>
+          <section class="game-field-guide"><h3>A few things for the trail</h3><p><strong>Wardens</strong> move after you. Their red outlines mark the next step.</p><p><strong>Dash</strong> moves two tiles before patrols move. Walking and waiting recharge it.</p><p><strong>Crates</strong> hold copper plates down. Leave them in place to keep bridges open.</p><p><strong>Three stars</strong> reward a clean route within the trail’s target turns. Coins add bonus points.</p></section>
+          <section class="game-best-note"><span class="eyebrow">YOUR BEST ON THIS TRAIL</span><p id="game-best">No finish yet.</p></section>
+        </aside>
+      </div>
+      <p class="game-save-note" id="game-save-note">Adventure bests stay in this browser. Your editor map is untouched.</p>
     </section>
     <footer class="page-footer"><span>A little less setup. A little more making.</span><span>LOCAL FIRST <span>·</span> OPEN SOURCE <span>·</span> MIT LICENSE</span></footer>
     <p class="sr-only" id="canvas-help">Tab through the palette and tools. On the map, use arrow keys to move and Space or Enter to paint. For a rectangle, Space sets the first corner and Space again sets the second. Escape cancels a stroke. B brush, E erase, F fill, R rectangle, I eyedropper, H pan, G grid. With Pan selected, drag to scroll or use arrow keys. Use Fit map to see the entire map. Ctrl or Command Z undoes; Shift Z redoes.</p>

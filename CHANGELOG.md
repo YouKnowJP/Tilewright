@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.0 — 2026-10-18
+
+- Add Lantern Trails: three original, progressively unlocked adventures with
+  lantern objectives, exploration fog, a following camera, and a discovered map.
+- Add predictable wardens and next-move markers, three hearts, healing pickups,
+  two-turn damage protection, energy-based dash, and deliberate wait turns.
+- Add brass keys/gates, pushable crates, pressure plates, and linked river bridges.
+- Add optional treasures, turn targets, scoring, three-star results, local bests,
+  pause/resume, restart, contextual scout hints, and opt-in synthesized sound.
+- Turn the current editor map into a reachable custom expedition without
+  changing the document, autosave, or undo history. Keep version-1 map files.
+- Add keyboard, touch direction-pad, and swipe controls; keep the board bounded
+  and bring gameplay into view with a sticky Create/Play switch.
+- Add 17 rule/persistence tests (45 total) and browser campaign-completion,
+  touch, responsive-layout, save-isolation, and storage-failure checks.
+
 ## 0.2.0 — 2026-10-18
 
 - Add layer naming, independent duplication, forward/backward ordering, and

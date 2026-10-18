@@ -14,6 +14,12 @@ installation, build-time framework, database service, or remote API.
 | `src/viewport.mjs` | Fit-to-workspace geometry and zoom-aware pointer hit testing. |
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
 | `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
+| `src/adventure.mjs` | Pure turn rules, collision, pickups, puzzles, patrol intent, scoring, exploration, and connected custom expeditions. |
+| `src/adventure-levels.mjs` | Three original authored quest definitions and fictional maps. |
+| `src/adventure-ui.mjs` | Mode lifecycle, campaign progression, keyboard/touch controls, HUD, hints, and results. |
+| `src/adventure-render.mjs` | Cached map background, following camera, original sprites, fog, and discovered-map overview. |
+| `src/adventure-records.mjs` | Bounded, validated personal bests stored independently of map saves. |
+| `src/adventure-sound.mjs` | Opt-in local Web Audio synthesis. |
 | `serve.mjs` | Loopback-only development HTTP server with a shared public-file allowlist. |
 | `scripts/build.mjs` | Stage and package public assets; refuse to overwrite unrelated nonempty directories. |
 
@@ -68,6 +74,42 @@ The renderer draws a transparency checkerboard only in editor mode. PNG
 export uses the same tile compositor without editor overlays or background.
 Rectangle previews draw their actual tile content before a single final commit.
 
+## Adventure simulation and rendering
+
+`createRun` validates and snapshots a map and its authored entities. `stepRun`
+returns a new state for each action without mutating prior states or the editor.
+A valid walk/wait advances each patrol once and restores energy. Dash performs
+up to two movement/pickup/push steps for two energy, then advances patrols once.
+Blocked actions do not spend a turn. Patrols ping-pong over adjacent route cells;
+`enemyIntent` drives both the simulation and the next-step markers.
+
+Keys are consumed once to open a permanent gate. A linked bridge opens while
+all its plates hold crates or the player. Enemy contact during the player's
+path or after patrol movement costs at most one heart; two subsequent actions
+are protected. Three lost hearts end a run. A win requires all lanterns and
+arrival at the beacon after hazard resolution. Damage, turn count, coins, and
+remaining hearts determine the result. No real-time clock affects game rules.
+
+Custom adventures derive collision from visible layers in compositing order.
+A breadth-first search selects the largest connected walkable component. A
+farthest-point spread picks three lanterns and a far beacon, all reachable.
+The shortest of six lantern visit orders plus 20% determines the turn target.
+A hash of the validated map identifies its local record. No entities or
+annotations are written back to version-1 editor documents.
+
+The adventure renderer caches the static map once, then draws a bounded camera
+window and dynamic entities. Exploring reveals nearby cells; previously visited
+terrain remains dimly visible. Player interpolation, lantern bobbing, and
+collection particles are disabled for reduced-motion preferences. Animation
+runs only while play is active and stops on paused/hidden pages or settled
+results. The board resizes independently of page height; focusing or moving the
+explorer does not scroll the document. An explicit mode/stage selection brings
+the board into view. A separate direction pad and canvas swipes support touch.
+
+Campaign route fixtures exercise ordinary moves through every authored puzzle,
+finishing in 54, 50, and 73 turns without damage. Browser checks replay these
+same moves through actual keyboard input, including intermediate wait turns.
+
 ## JSON version 1
 
 ```json
@@ -108,6 +150,12 @@ the current map. Future format versions are rejected until explicitly supported.
 Reads and writes are guarded, including access to the storage property itself.
 Corrupt saved data is left untouched until the user makes another committed
 change. Failed writes leave editing available and request a JSON export.
+
+`tilewright.adventures.v1` independently stores up to 64 normalized best
+results, prioritizing campaign unlocks when old custom records are evicted.
+Only stars, score, and turn counts are retained. Failed writes preserve session
+progress. These local results are editable by the browser owner and have no
+competitive integrity guarantee. Sound starts only after an explicit user action.
 
 The development server serves only `PUBLIC_FILES` from the build module, rejects
 non-read methods, and adds content-type, no-sniff, and CSP headers. Its CSP blocks

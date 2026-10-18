@@ -13,7 +13,8 @@ the program's current rules and supply personal statements in your own words.
   and identify Tilewright in the description/comments.
 - **License:** MIT, present at the repository root and in this project.
 - **Technology:** JavaScript, HTML, CSS, Canvas; Node.js development/test tools.
-- **Purpose:** a local creative tool for authoring fictional tile maps.
+- **Purpose:** a local creative tool for authoring fictional tile maps and playing
+  original turn-based puzzle adventures.
 - **Status:** first implemented with AI assistance on October 18, 2026.
   No established user base, public deployment, published release, or multi-month
   development record is claimed.
@@ -31,7 +32,7 @@ the program's current rules and supply personal statements in your own words.
 | Clear README and accepted license | Included with local run instructions, tests, architecture, and MIT license. |
 | Real, active history and signs of use | **New project.** One implementation session cannot establish a sustained record. Continue real development and record actual use, issues, and releases over time. |
 | At least 20 hours of planned work | Proposed 23–33 h remaining roadmap, excluding completed layer-management/resizing work. The owner must choose work they truly intend to do. |
-| No disallowed AI or security scope | Creative map editor; no model training, evaluation, inference infrastructure, or offensive tooling. |
+| No disallowed AI or security scope | Creative map editor and puzzle game; no model training, evaluation, inference infrastructure, or offensive tooling. |
 | No confidential or third-party data | No such material is part of this implementation. The owner must verify their own circumstances and any later imports. |
 | No secrets, including in history | No credentials are needed. New source is reviewed before commit, and repository ignores cover environment files. No claim of a complete historical secret audit is made. |
 | Commits linked to the owner's GitHub account | The initial Tilewright commit uses the authenticated `YouKnowJP` account's GitHub noreply address with its account ID. Preserve a linked address for future commits; do not invent contributors or backdate work. |
@@ -47,8 +48,10 @@ code. Resolve uncertain eligibility with the program's General Questions thread.
 ## Factual description to adapt
 
 > Tilewright is a local-first tile map editor for sketching small game worlds
-> and fictional places. It uses JavaScript, HTML, CSS, and Canvas, with painting
-> tools, layers, undo/redo, local saving, and JSON/PNG export. It is newly
+> and fictional places, with three original Lantern Trails puzzle adventures.
+> It uses JavaScript, HTML, CSS, and Canvas, with painting
+> tools, layers, undo/redo, local saving, JSON/PNG export, and turn-based quests
+> with patrols and crate puzzles. It is newly
 > implemented; planned work includes reusable selections, custom tilesets, a
 > local map library, export adapters, and accessibility improvements.
 

@@ -1,6 +1,6 @@
 # Tilewright roadmap
 
-The current editor is a usable starting point. These are **unfinished** feature
+The current editor and three-quest game are a usable starting point. These are **unfinished** feature
 proposals with planning estimates, not completed work or hours already spent.
 The owner should prioritize the work they actually intend to undertake before
 using this plan in a program submission.
@@ -18,7 +18,20 @@ The previous map-resizing/layer-management milestone is complete in v0.2.0;
 it is excluded from remaining estimates. See [feature ideas](docs/IDEAS.md)
 for the rationale and additional options, which are not commitments or worked hours.
 
-## Available in v0.2.0
+## Available in v0.3.0
+
+- Three progressively unlocked Lantern Trails quests, with stars and local bests.
+- Lantern exploration, fog, a following camera, a discovered map, and scout hints.
+- Predictable patrols, health/healing, energy-based dash, and protected recovery.
+- Keys/gates, crate-and-pressure-plate puzzles, linked bridges, and treasures.
+- Custom expeditions from visible editor maps, with reachable objectives and
+  route-based turn targets, independent of editor saves and undo.
+- Pause/retry, keyboard/touch/swipe controls, reduced-motion rendering, and
+  opt-in synthesized sound.
+
+The remaining estimates above exclude this completed game milestone.
+
+## Editor features retained
 
 - Twelve original tiles and a fictional sample map.
 - Brush with interpolated strokes, eraser, bounded flood fill, rectangle,
@@ -35,7 +48,8 @@ for the rationale and additional options, which are not commitments or worked ho
 
 ## Boundaries
 
-Keep this a small creative tool with local files and user-owned artwork. No AI
+Keep this a small creative tool and fictional puzzle game with local files and
+user-owned artwork. No AI
 model work, inference infrastructure, offensive security tooling, account
 services, or processing of other people's personal or regulated records is
 planned. Future library and tileset work must preserve explicit backup/export

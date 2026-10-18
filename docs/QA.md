@@ -1,5 +1,49 @@
 # Verification record
 
+## Lantern Trails — v0.3.0
+
+The Node suite has **45 passing tests**. Seventeen adventure/persistence tests
+cover keys and permanent gates, crates and linked pressure plates, closed/open
+river crossings, blocked pushes, dash pickup paths and energy, predictable
+patrol intent, damage and two-turn recovery, loss, healing, beacon requirements,
+scoring, visible-layer collision, exploration, reachable custom objectives,
+minimum/disconnected maps, malformed markers, safe storage, bounded records,
+and best-result ordering. Existing editor/server/build tests remain green.
+
+Ordinary move fixtures complete Candlebrook in **54 turns**, Copper Crossing in
+**50**, and The Ember Vault in **73**, all with three hearts and three stars.
+They use real key collection, gate unlocking, crate pushes, bridge crossings,
+and patrol timing; no state overrides unlock or complete these quests.
+
+The combined optional browser suite passes in isolated Chrome 155.0.8059.82.
+The adventure checks cover:
+
+- All three quests completed through actual keyboard input at **390 and 1440
+  CSS pixels**, including wait turns, result screens, and Next adventure.
+- Locked/unlocked quest cards, three-star bests, and progression after reload.
+- Dash energy, recharge, pause input suppression, restart, and scout hints.
+- Custom expeditions using the current editor snapshot, unchanged editor saves,
+  and preserved undo history after playing and switching modes.
+- Useful rejection of an unplayable 1 × 1 map while the current game survives.
+- **320, 768, and 1024 CSS pixel** layouts with reduced motion, touch direction
+  buttons, actual CDP touch swipes, and no arrow-key page jump.
+- Bounded camera/canvas geometry, no sideways page overflow, and mobile dash/
+  wait controls staying on the same row and visible when entering play.
+- A win and session unlock with localStorage blocked, plus an expedition on a
+  maximum **64 × 64** map without stretching the board or page.
+- No runtime errors or failed asset responses in the campaign completion flows.
+
+The existing five-width editor, scrolling, layer/resize, touch, keyboard, PNG,
+and startup-failure checks also pass. Run `npm run test:browser` with an
+independently installed Playwright and Chrome; game-only checks are available
+through `node scripts/adventure-browser-checks.mjs`. The application and Node
+checks still require no npm packages. All browser contexts are disposable.
+
+[Desktop adventure](adventure.png) and [phone adventure](adventure-mobile.png)
+screenshots show Copper Crossing reached through normal keyboard play.
+Synthesized sound is opt-in; audible quality and physical-device audio playback
+have not been assessed by automation.
+
 ## Structural editing — v0.2.0
 
 The Node suite has **28 passing tests**. Nine new operation tests cover safe
@@ -111,6 +155,7 @@ Node suite; CI currently runs the Node suite and build, not browser automation.
 No Safari, Firefox, physical phone/tablet, screen-reader, or extended user
 playtest is claimed. Native download/file-picker behavior, maximum-size
 interactive performance, and cross-browser pointer cancellation need further
-device coverage. New maps currently have a fixed tile size; layer deletion,
-reordering, selections, multiple local projects, and custom tilesets are
-unfinished roadmap work.
+device coverage. New maps currently have a fixed tile size; selections, multiple local projects,
+custom tilesets, custom puzzle authoring, and additional campaign content are
+unfinished ideas. Layer deletion/reordering and the three-quest campaign are
+implemented. No extended difficulty or replayability study is claimed.

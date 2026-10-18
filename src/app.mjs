@@ -6,6 +6,7 @@ import { TILE_SIZE, drawTile, renderMap } from './render.mjs';
 import { cellAtPoint, fitZoom } from './viewport.mjs';
 import { createIcon } from './icons.mjs';
 import { renameLayer, duplicateLayer, moveLayer, removeLayer, resizeDocument, croppedTileCount } from './operations.mjs';
+import { createAdventureUI } from './adventure-ui.mjs';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#map');
@@ -433,6 +434,7 @@ $('#file-input').addEventListener('change', async event => {
 });
 $('#help-button').addEventListener('click', () => { cancelStroke(); $('#help-dialog').showModal(); });
 document.addEventListener('keydown', event => {
+  if (!$('#adventure').hidden) return;
   if (event.key === 'Escape') { cancelStroke(); return; }
   if (event.target.closest('input, select, textarea, dialog') || event.altKey) return;
   const key = event.key.toLowerCase();
@@ -451,3 +453,22 @@ document.querySelectorAll('[data-icon]').forEach(element => element.append(creat
 initializePalette(); refresh();
 new ResizeObserver(() => layoutCanvas()).observe(viewport);
 announce(restored.error || (restored.document ? 'Your last map was restored from this browser.' : 'Welcome to Willowbend. Pick a tile and make it yours.'));
+
+const adventures = createAdventureUI({ storage, getMap: () => history.document, backToEditor: () => setMode(false) });
+function setMode(play, updateURL = true) {
+  cancelStroke(); $('#editor').hidden = play; $('#adventure').hidden = !play;
+  document.body.classList.toggle('playing', play);
+  document.title = play ? 'Tilewright — Lantern Trails' : 'Tilewright — Make a little world';
+  $('#mode-create').setAttribute('aria-pressed', String(!play)); $('#mode-play').setAttribute('aria-pressed', String(play));
+  const heading = $('#intro-title'), accent = document.createElement('span'); accent.textContent = '.';
+  heading.replaceChildren(document.createTextNode(play ? 'Follow a little adventure' : 'Make a little world'), accent);
+  $('.intro .eyebrow').textContent = play ? 'GATHER LIGHT. OUTSMART THE WARDENS.' : 'YOUR WORLD, ONE TILE AT A TIME';
+  $('.intro-description').textContent = play ? 'Three quests, clever crossings, and a little trail magic. The world moves when you do.'
+    : 'A quiet corner for your next adventure. Paint, experiment, and take it with you.';
+  if (play) adventures.enter(); else { adventures.leave(); layoutCanvas(); }
+  if (updateURL) window.history.replaceState(null, '', `${location.pathname}${location.search}${play ? '#play' : ''}`);
+}
+$('#mode-create').addEventListener('click', () => setMode(false));
+$('#mode-play').addEventListener('click', () => setMode(true));
+window.addEventListener('hashchange', () => setMode(location.hash === '#play', false));
+if (location.hash === '#play') setMode(true, false);

@@ -1,12 +1,13 @@
 # Tilewright
 
-**Make a little world.** Tilewright is a local-first tile map editor for people
-sketching small game worlds, tabletop settings, or imaginary places. Paint with
-an original pixel-art palette, separate terrain from details, and export your
-work as a portable map file or image. It is built with JavaScript ES modules,
-HTML, CSS, and Canvas, with no runtime packages, accounts, or backend.
+**Make a little world. Then go on an adventure.** Tilewright combines a local
+tile map editor with **Lantern Trails**, an original turn-based puzzle game.
+Explore three handcrafted quests, outsmart patrols, solve crate-and-bridge
+puzzles, and restore lost lanterns. You can also explore a world you paint.
+It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
+accounts, or backend.
 
-![Tilewright editing the fictional Willowbend map](docs/tilewright.png)
+![Lantern Trails adventure gameplay](docs/adventure.png)
 
 ## Run locally
 
@@ -24,6 +25,58 @@ this directory (in PowerShell, set `$env:PORT=4180` first).
 Use an HTTP server; opening `index.html` with `file://` does not support the
 module setup. The editor works without an internet connection while the local
 server is running. Installation as an offline web app is future work.
+
+## Play Lantern Trails
+
+Choose **Play adventures**, or open [the game directly](http://127.0.0.1:4174/#play).
+Restore every golden lantern, then reach the turquoise beacon. The world only
+advances after a valid move or wait; there is no timer. Blocked moves cost nothing.
+
+| Quest | Challenge | Three-star turn target |
+| --- | --- | ---: |
+| Candlebrook | Find the brass key, open the forest gate, and avoid a trail warden. | 70 |
+| Copper Crossing | Push a crate onto a copper plate to hold a river bridge open. | 85 |
+| The Ember Vault | Hold two plates, cross the river, and unlock a guarded lantern vault. | 110 |
+
+Wardens follow predictable patrols. Red outlined cells show their next step.
+Touching a warden costs a heart, followed by two protected turns to escape.
+You have three hearts; trail potions restore one. **Dash** travels up to two
+cells before patrols move once, spending two energy. Walking and waiting
+restore one energy, up to three. Crates can be pushed but not pulled, so plan
+the side you approach from. Restart is always available.
+
+Fog reveals the world as you explore. The discovered-map overview, quest
+checklist, and **Scout hint** help with navigation and each puzzle. Optional
+coins add points. Finish without taking damage within the displayed target for
+three stars; two stars need at least two remaining hearts and at most 1.5 times
+the target. Other wins earn one star. Points are 250 for finishing, 100 per
+lantern, 25 per coin, 50 per remaining heart, and 5 per turn below the target.
+
+Completing a quest unlocks the next one. Best results prioritize stars, then
+score, then fewer turns. Progress stays in this browser, separately from the
+editor save. If storage is unavailable, unlocks still work for the session.
+**Sound** is optional, off by default, and synthesized locally.
+
+| Game action | Control |
+| --- | --- |
+| Move | Arrow keys / WASD, direction pad, or swipe on the board |
+| Dash | Shift + direction, or Dash followed by a direction |
+| Wait and recharge | Space with the board focused, or Wait |
+| Pause / resume | P / Escape, or Pause |
+| Restart current quest | R, or Restart |
+| Toggle scout hint | H, or Scout hint |
+| Choose a quest | Choose trail, then a quest card |
+
+**Play your current map** creates a quiet expedition on a snapshot of visible
+layers, with three reachable lanterns, coins, and a beacon. It uses the largest
+connected area of at least six walkable cells. Land and bridges are walkable;
+water, empty space, trees, rocks, and cabins block movement. Flowers preserve
+the terrain beneath them. The turn target comes from the shortest lantern tour
+plus 20% room for exploration. Custom expeditions have no wardens or authored
+gate puzzles. Editing or renaming a map creates a new expedition identity.
+Playing never changes map tiles, autosave, or undo history.
+
+![Touch controls and the following camera on a phone layout](docs/adventure-mobile.png)
 
 ## Make your first map
 
@@ -113,7 +166,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 28 focused model/storage/viewport/operation/server/build
+This checks every JavaScript module, runs 45 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -123,8 +176,10 @@ An optional browser regression suite lives in `scripts/browser-checks.mjs`.
 With Playwright separately installed in the development environment and Google
 Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
-it does not modify existing browser maps. Playwright is not needed to run the
-editor or the default checks, and browser tests are not currently run in CI.
+it does not modify existing browser maps. It completes all three adventures
+through real keyboard input and checks unlocks, touch/swipe controls, responsive
+rendering, storage failures, and preserved editor history. Playwright is not
+needed to run the app or the default checks, and browser tests are not currently run in CI.
 
 The distributable contains only browser assets, an MIT license, and release
 metadata. Serve `dist/` over HTTP with a static server; development tooling and
@@ -150,6 +205,6 @@ the current repository and identify facts the owner must personally confirm.
 ## License
 
 [MIT](LICENSE), matching the repository's root license. Code, palette artwork,
-and the fictional sample map are original to this project. No third-party
-assets, fonts, datasets, or runtime packages are bundled. See the repository's
+fictional maps, adventure sprites, and synthesized sounds are original to this
+project. No third-party assets, fonts, datasets, or runtime packages are bundled. See the repository's
 [asset notices](../THIRD_PARTY_NOTICES.md).

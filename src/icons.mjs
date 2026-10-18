@@ -15,6 +15,7 @@ const PATHS = {
   'arrow-up': ['m5 11 7-7 7 7', 'M12 4v16'],
   'arrow-down': ['m5 13 7 7 7-7', 'M12 4v16'],
   trash: ['M3 6h18', 'M5 6l1 15h12l1-15', 'M9 6V3h6v3', 'M10 10v7M14 10v7'],
+  heart: ['M12 21 3.5 12.5a5.5 5.5 0 0 1 8-7.5l.5.5.5-.5a5.5 5.5 0 0 1 8 7.5Z'],
 };
 
 export function createIcon(name) {

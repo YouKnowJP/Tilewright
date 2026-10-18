@@ -1,9 +1,9 @@
 {
   "name": "tilewright",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "A local-first tile map editor for small game worlds.",
+  "description": "A local-first tile map editor and original turn-based puzzle adventure game.",
   "license": "MIT",
   "engines": { "node": ">=22" },
   "scripts": {
