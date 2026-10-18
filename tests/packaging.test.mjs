@@ -40,6 +40,11 @@ test('development server serves modules, supports HEAD, and rejects private path
     assert.match(page.headers.get('content-security-policy'), /connect-src 'none'/);
     const module = await fetch(`${base}/src/model.mjs`);
     assert.match(module.headers.get('content-type'), /javascript/);
+    for (const file of PUBLIC_FILES) {
+      const asset = await fetch(`${base}/${file}`);
+      assert.equal(asset.status, 200, `Public asset must load: ${file}`);
+      if (file.endsWith('.mjs')) assert.match(asset.headers.get('content-type'), /javascript/);
+    }
     const head = await fetch(base, { method: 'HEAD' }); assert.equal(head.status, 200); assert.equal(await head.text(), '');
     for (const file of ['package.json', '.env', '.git/config', 'tests/model.test.mjs', 'serve.mjs', 'src/../package.json', '%2e%2e%2fLICENSE', 'src%2f..%2f..%2fLICENSE']) {
       assert.equal((await fetch(`${base}/${file}`)).status, 404, file);

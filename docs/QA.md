@@ -1,5 +1,40 @@
 # Verification record
 
+## Scrolling and rendering corrections — v0.1.1
+
+The original checks confirmed page overflow and editing, but did not verify
+that every map edge was initially visible or that touch users could pan a
+zoomed map. The initial fixed 100% zoom clipped the map on small screens.
+This revision adds Fit mode, bounded scrolling, pan controls, and a full-width
+phone canvas, with regression checks for the actual navigation behavior.
+
+The Node suite now has **19 passing tests**, including fit geometry at multiple
+document/view sizes and coordinate mapping at every supported zoom. Server
+tests verify successful loading of every public asset, including startup modules.
+
+The reusable `scripts/browser-checks.mjs` suite passed in isolated headless
+Chrome 155.0.8059.82 at **320, 390, 768, 1024, and 1440 CSS pixels**. It verifies:
+
+- All four map edges are visible on initial load and after resizing.
+- Every zoom from 25% to 200% changes only canvas scale, without growing the
+  viewport or the page and without sideways page overflow.
+- Both scrollbars reach the final row/column, and clicks at the far corner
+  paint the correct tile after zooming and scrolling.
+- Mouse and touch pan gestures move both axes without changing map data.
+- Clicking the canvas does not jump the outer page; wheel gestures over a
+  fitted map continue scrolling the document.
+- Keyboard navigation scrolls the last cell into view and paints it correctly.
+- PNG dimensions stay 672 × 480 when the editor is zoomed to 200%.
+- Minimum (1 × 1) and maximum (64 × 64) maps open fully fitted.
+- Every tool has its SVG icon, all public assets load, and no browser runtime
+  errors occur during the normal navigation flows.
+- An intentionally failed application-module request displays startup guidance
+  instead of leaving an empty map with no explanation.
+
+Updated [desktop](tilewright.png) and [phone](tilewright-mobile.png) screenshots
+show the untouched fictional map. Browser checks remain separate from default
+Node verification and CI. They use disposable contexts, not existing user saves.
+
 ## Initial implementation — October 18, 2026
 
 Automated verification used Node.js 26.0.0 on macOS. The 16 `node:test` cases

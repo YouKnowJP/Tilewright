@@ -8,11 +8,11 @@
   <title>Tilewright — Make a little world</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="src/app.mjs"></script>
+  <script type="module" src="src/bootstrap.mjs"></script>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.1</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.1.1</span></a>
     <span class="header-note">A small tool for imaginary places.</span>
     <a class="source-link" href="https://github.com/YouKnowJP/Personal-Project/tree/main/Tilewright" target="_blank" rel="noreferrer">Source code <span aria-hidden="true">↗</span></a>
   </header>
@@ -37,22 +37,23 @@
         <div class="canvas-panel">
           <div class="toolbar" role="toolbar" aria-label="Drawing tools">
             <div class="tool-buttons">
-              <button class="tool active" data-tool="brush" aria-label="Brush (B)" title="Brush (B)" aria-pressed="true"><span aria-hidden="true">✎</span></button>
-              <button class="tool" data-tool="erase" aria-label="Eraser (E)" title="Eraser (E)" aria-pressed="false"><span aria-hidden="true">▱</span></button>
-              <button class="tool" data-tool="fill" aria-label="Flood fill (F)" title="Flood fill (F)" aria-pressed="false"><span aria-hidden="true">◩</span></button>
-              <button class="tool" data-tool="rectangle" aria-label="Rectangle (R)" title="Rectangle (R)" aria-pressed="false"><span aria-hidden="true">□</span></button>
-              <button class="tool" data-tool="pick" aria-label="Eyedropper (I)" title="Eyedropper (I)" aria-pressed="false"><span aria-hidden="true">⌖</span></button>
+              <button class="tool active" data-tool="brush" data-icon="brush" aria-label="Brush (B)" title="Brush (B)" aria-pressed="true"></button>
+              <button class="tool" data-tool="erase" data-icon="erase" aria-label="Eraser (E)" title="Eraser (E)" aria-pressed="false"></button>
+              <button class="tool" data-tool="fill" data-icon="fill" aria-label="Flood fill (F)" title="Flood fill (F)" aria-pressed="false"></button>
+              <button class="tool" data-tool="rectangle" data-icon="rectangle" aria-label="Rectangle (R)" title="Rectangle (R)" aria-pressed="false"></button>
+              <button class="tool" data-tool="pick" data-icon="pick" aria-label="Eyedropper (I)" title="Eyedropper (I)" aria-pressed="false"></button>
+              <button class="tool" data-tool="pan" data-icon="pan" aria-label="Pan map (H)" title="Pan map (H)" aria-pressed="false"></button>
             </div>
-            <div class="history-buttons"><button id="undo" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)" disabled>↶</button><button id="redo" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)" disabled>↷</button></div>
-            <div class="view-controls"><button id="grid-toggle" aria-label="Toggle grid" aria-pressed="true" title="Toggle grid (G)">▦</button><label class="sr-only" for="zoom">Zoom</label><select id="zoom"><option value="0.75">75%</option><option value="1" selected>100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></div>
+            <div class="history-buttons"><button id="undo" data-icon="undo" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)" disabled></button><button id="redo" data-icon="redo" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)" disabled></button></div>
+            <div class="view-controls"><button id="grid-toggle" data-icon="grid" aria-label="Toggle grid" aria-pressed="true" title="Toggle grid (G)"></button><label class="sr-only" for="zoom">Zoom</label><select id="zoom"><option value="fit" selected>Fit map</option><option value="0.25">25%</option><option value="0.5">50%</option><option value="0.75">75%</option><option value="1">100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></div>
           </div>
-          <div class="canvas-viewport" id="viewport"><div class="canvas-wrap"><canvas id="map" width="672" height="480" tabindex="0" role="img" aria-label="Editable tile map. Arrow keys move the cursor; Space applies the selected tool." aria-describedby="canvas-help"></canvas></div></div>
+          <div class="canvas-viewport" id="viewport" tabindex="0" aria-label="Scrollable map workspace"><div class="canvas-wrap"><canvas id="map" width="672" height="480" tabindex="0" role="img" aria-label="Editable tile map. Arrow keys move the cursor; Space applies the selected tool." aria-describedby="canvas-help"></canvas></div><div class="loading-note" id="loading-note" role="status"><strong>Loading the editor…</strong><p>For a local copy, run <code>npm --prefix Tilewright start</code> and open <a href="http://127.0.0.1:4174">localhost:4174</a>.</p></div></div>
           <div class="canvas-footer"><span><span class="small-dot"></span><span id="tool-name">Brush</span><span class="footer-separator">/</span><span id="active-layer-label">Ground</span></span><span id="coordinates">X: 00&nbsp; Y: 00</span><span id="map-pixels">672 × 480 px</span></div>
         </div>
         <aside class="inspector" aria-label="Map settings">
-          <div class="panel-heading"><h2>Layers</h2><button class="icon-button" id="add-layer" aria-label="Add layer" title="Add a layer (up to 6)">+</button></div>
-          <p class="panel-caption">Top layer appears in front.</p><div id="layers" class="layer-list"></div>
-          <div class="inspector-section"><h2>Map details</h2><label class="field-label" for="map-name">Name</label><input id="map-name" maxlength="64" value="Willowbend"><div class="dimensions"><div><span class="field-label">Width</span><span id="map-width" class="dimension-value">28 <small>tiles</small></span></div><span class="dimension-cross">×</span><div><span class="field-label">Height</span><span id="map-height" class="dimension-value">20 <small>tiles</small></span></div></div><div class="tile-size-line"><span>Tile size</span><strong>24 × 24 px</strong></div></div>
+          <div class="layer-section"><div class="panel-heading"><h2>Layers</h2><button class="icon-button" id="add-layer" aria-label="Add layer" title="Add a layer (up to 6)">+</button></div>
+          <p class="panel-caption">Top layer appears in front.</p><div id="layers" class="layer-list"></div></div>
+          <div class="inspector-section map-details"><h2>Map details</h2><label class="field-label" for="map-name">Name</label><input id="map-name" maxlength="64" value="Willowbend"><div class="dimensions"><div><span class="field-label">Width</span><span id="map-width" class="dimension-value">28 <small>tiles</small></span></div><span class="dimension-cross">×</span><div><span class="field-label">Height</span><span id="map-height" class="dimension-value">20 <small>tiles</small></span></div></div><div class="tile-size-line"><span>Tile size</span><strong>24 × 24 px</strong></div></div>
           <div class="inspector-section export-section"><h2>Take it with you</h2><p>Save the whole map as JSON, or a picture of the visible layers.</p><button id="export-png">↓ Export PNG</button><span>PNG exports without the grid.</span></div>
           <button class="sample-button" id="load-sample">↺ Open the sample map</button>
         </aside>
@@ -60,11 +61,11 @@
       <div class="editor-bottom"><p id="status" role="status" aria-live="polite">Welcome to Willowbend. Pick a tile and make it yours.</p><button id="help-button">Keyboard shortcuts <span aria-hidden="true">?</span></button></div>
     </section>
     <footer class="page-footer"><span>A little less setup. A little more making.</span><span>LOCAL FIRST <span>·</span> OPEN SOURCE <span>·</span> MIT LICENSE</span></footer>
-    <p class="sr-only" id="canvas-help">Tab through the palette and tools. On the map, use arrow keys to move and Space or Enter to paint. For a rectangle, Space sets the first corner and Space again sets the second. Escape cancels a stroke. B brush, E erase, F fill, R rectangle, I eyedropper, G grid. Ctrl or Command Z undoes; Shift Z redoes.</p>
+    <p class="sr-only" id="canvas-help">Tab through the palette and tools. On the map, use arrow keys to move and Space or Enter to paint. For a rectangle, Space sets the first corner and Space again sets the second. Escape cancels a stroke. B brush, E erase, F fill, R rectangle, I eyedropper, H pan, G grid. With Pan selected, drag to scroll or use arrow keys. Use Fit map to see the entire map. Ctrl or Command Z undoes; Shift Z redoes.</p>
   </main>
   <input type="file" id="file-input" accept="application/json,.json" hidden>
   <dialog id="new-dialog"><form id="new-form"><span class="eyebrow">A FRESH START</span><h2>Room for a new world.</h2><p>Choose a name and a size. You can export your current map before starting over.</p><label for="new-name">Map name</label><input id="new-name" maxlength="64" value="Untitled world" required><div class="form-row"><div><label for="new-width">Width in tiles</label><input id="new-width" type="number" min="1" max="64" value="28" required></div><div><label for="new-height">Height in tiles</label><input id="new-height" type="number" min="1" max="64" value="20" required></div></div><p class="dialog-note">Up to 64 × 64 tiles. Starts with ground and detail layers.</p><div class="dialog-actions"><button type="button" id="cancel-new">Cancel</button><button class="primary" type="submit">Create map</button></div></form></dialog>
-  <dialog id="help-dialog"><span class="eyebrow">LESS CLICKING, MORE MAKING</span><h2>At your fingertips.</h2><dl class="shortcut-list"><dt>Brush / Erase / Fill</dt><dd>B / E / F</dd><dt>Rectangle / Eyedropper</dt><dd>R / I</dd><dt>Toggle grid</dt><dd>G</dd><dt>Undo</dt><dd>Ctrl or ⌘ Z</dd><dt>Redo</dt><dd>Ctrl or ⌘ Shift Z</dd><dt>Export JSON</dt><dd>Ctrl or ⌘ S</dd><dt>Move map cursor</dt><dd>Arrow keys</dd><dt>Apply tool / rectangle corner</dt><dd>Space or Enter</dd><dt>Cancel current stroke</dt><dd>Esc</dd></dl><p>Tools paint on the selected layer. The eyedropper samples that layer, including empty cells. Select the Details layer for trees, flowers, and cabins.</p><form method="dialog"><button class="primary">Back to the map</button></form></dialog>
+  <dialog id="help-dialog"><span class="eyebrow">LESS CLICKING, MORE MAKING</span><h2>At your fingertips.</h2><dl class="shortcut-list"><dt>Brush / Erase / Fill</dt><dd>B / E / F</dd><dt>Rectangle / Eyedropper</dt><dd>R / I</dd><dt>Pan the map</dt><dd>H, then drag or arrows</dd><dt>Toggle grid</dt><dd>G</dd><dt>Undo</dt><dd>Ctrl or ⌘ Z</dd><dt>Redo</dt><dd>Ctrl or ⌘ Shift Z</dd><dt>Export JSON</dt><dd>Ctrl or ⌘ S</dd><dt>Move map cursor</dt><dd>Arrow keys</dd><dt>Apply tool / rectangle corner</dt><dd>Space or Enter</dd><dt>Cancel current stroke</dt><dd>Esc</dd></dl><p>Tools paint on the selected layer. The eyedropper samples that layer, including empty cells. Select the Details layer for trees, flowers, and cabins. Fit map shows the whole canvas; zoom in and use Pan to reach every corner.</p><form method="dialog"><button class="primary">Back to the map</button></form></dialog>
   <noscript><p>This editor needs JavaScript enabled. No network service or account is required.</p></noscript>
 </body>
 </html>

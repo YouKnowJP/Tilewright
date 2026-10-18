@@ -1,0 +1,182 @@
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const BASE = 'http://127.0.0.1:4174';
+
+async function metrics(page) {
+  return page.evaluate(() => {
+    const viewport = document.querySelector('#viewport'), canvas = document.querySelector('#map');
+    const view = viewport.getBoundingClientRect(), map = canvas.getBoundingClientRect();
+    return {
+      pageWidth: document.documentElement.scrollWidth, width: innerWidth,
+      pageHeight: document.documentElement.scrollHeight, pageY: scrollY,
+      view: { left: view.left, top: view.top, right: view.left + viewport.clientWidth,
+        bottom: view.top + viewport.clientHeight, height: view.height },
+      map: { left: map.left, top: map.top, right: map.right, bottom: map.bottom, width: map.width, height: map.height },
+      scrollLeft: viewport.scrollLeft, scrollTop: viewport.scrollTop,
+      scrollWidth: viewport.scrollWidth, scrollHeight: viewport.scrollHeight,
+      clientWidth: viewport.clientWidth, clientHeight: viewport.clientHeight,
+    };
+  });
+}
+
+function assertFits(state) {
+  assert.equal(state.pageWidth, state.width, 'The document must not scroll sideways.');
+  assert.ok(state.map.left >= state.view.left && state.map.right <= state.view.right + 1, 'Fit must show both horizontal map edges.');
+  assert.ok(state.map.top >= state.view.top && state.map.bottom <= state.view.bottom + 1, 'Fit must show both vertical map edges.');
+  assert.ok(state.scrollWidth <= state.clientWidth + 1 && state.scrollHeight <= state.clientHeight + 1, 'Fit must not require map scrolling.');
+}
+
+async function clickCell(page, x, y) {
+  await page.locator('#viewport').scrollIntoViewIfNeeded();
+  const { map, view } = await metrics(page);
+  const point = { x: map.left + (x + .5) * map.width / 28, y: map.top + (y + .5) * map.height / 20 };
+  assert.ok(point.x > view.left && point.x < view.right && point.y > view.top && point.y < view.bottom, 'Target cell must actually be visible.');
+  const pageY = await page.evaluate(() => scrollY);
+  await page.mouse.click(point.x, point.y);
+  assert.equal(await page.evaluate(() => scrollY), pageY, 'Focusing the map must not jump the page.');
+}
+
+export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chrome' } = {}) {
+  const browser = await browserType.launch({ headless: true, channel });
+  const results = [];
+  try {
+    for (const width of [320, 390, 768, 1024, 1440]) {
+      const context = await browser.newContext({ viewport: { width, height: 900 }, acceptDownloads: true });
+      let step = 'loading';
+      try {
+        const page = await context.newPage(), errors = [], failedAssets = [];
+        page.on('pageerror', error => errors.push(error.message));
+        page.on('response', response => { if (response.status() >= 400) failedAssets.push(response.url()); });
+        await page.goto(baseURL);
+        await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
+        step = 'initial fit';
+        assertFits(await metrics(page));
+        assert.equal(await page.locator('[data-tool] svg').count(), 6, 'Every tool must have a rendered SVG icon.');
+        const initial = await metrics(page);
+        for (const zoom of ['0.25', '0.5', '0.75', '1', '1.25', '1.5', '2']) {
+          step = `zoom ${zoom}`;
+          await page.locator('#zoom').selectOption(zoom);
+          const state = await metrics(page);
+          assert.ok(Math.abs(state.map.width - 672 * Number(zoom)) < 1, `Correct canvas width at ${zoom}.`);
+          assert.ok(Math.abs(state.view.height - initial.view.height) < 1, 'Zoom must not grow the viewport.');
+          assert.ok(Math.abs(state.pageHeight - initial.pageHeight) < 2, 'Zoom must not grow the page.');
+          assert.equal(state.pageWidth, width);
+        }
+        await page.locator('#viewport').evaluate(element => element.scrollTo(element.scrollWidth, element.scrollHeight));
+        step = 'far-corner painting';
+        let state = await metrics(page);
+        assert.ok(state.map.right <= state.view.right && state.map.bottom <= state.view.bottom, 'Scrollbars must reach the far map edges.');
+        await page.getByRole('button', { name: 'Stone tile', exact: true }).click();
+        await clickCell(page, 27, 19);
+        const saved = () => page.evaluate(() => localStorage.getItem('tilewright.document.v1'));
+        assert.equal(JSON.parse(await saved()).layers[0].tiles[559], 6, 'A scrolled and zoomed click must paint the correct cell.');
+
+        await page.getByRole('button', { name: 'Pan map (H)', exact: true }).click();
+        step = 'panning';
+        await page.locator('#viewport').evaluate(element => element.scrollTo(0, 0));
+        await page.locator('#viewport').scrollIntoViewIfNeeded();
+        const beforePan = await saved(), view = (await metrics(page)).view;
+        await page.mouse.move(view.left + 160, view.top + 130);
+        await page.mouse.down(); await page.mouse.move(view.left + 80, view.top + 70, { steps: 5 }); await page.mouse.up();
+        state = await metrics(page);
+        assert.ok(state.scrollLeft >= 75 && state.scrollTop >= 55, 'Pan must scroll in both directions.');
+        assert.equal(await saved(), beforePan, 'Panning must never edit the document.');
+
+        await page.locator('#zoom').selectOption('fit'); assertFits(await metrics(page));
+        step = 'page wheel scrolling';
+        await page.evaluate(() => {
+          const top = document.querySelector('#viewport').getBoundingClientRect().top + scrollY;
+          const maximum = document.documentElement.scrollHeight - innerHeight;
+          scrollTo(0, Math.min(top - 100, Math.max(0, maximum - 120)));
+        });
+        state = await metrics(page);
+        await page.mouse.move(state.view.left + 100, state.view.top + 100);
+        await page.mouse.wheel(0, 120);
+        await page.waitForFunction(previous => scrollY > previous, state.pageY, { timeout: 3000 });
+        assert.ok((await metrics(page)).pageY > state.pageY, 'Wheel scrolling over a fitted map must scroll the page.');
+
+        await page.setViewportSize({ width: width === 390 ? 1024 : 390, height: 900 });
+        step = 'resize fit';
+        await page.waitForFunction(() => {
+          const map = document.querySelector('#map').getBoundingClientRect(), view = document.querySelector('#viewport').getBoundingClientRect();
+          return map.left >= view.left && map.right <= view.right && map.top >= view.top && map.bottom <= view.bottom;
+        });
+        assertFits(await metrics(page));
+        assert.deepEqual(errors, [], 'No runtime errors during resize or scrolling.');
+        assert.deepEqual(failedAssets, [], 'Every editor asset must load successfully.');
+        results.push({ width, checks: 'fit, all zoom levels, bounded scrolling, far-corner painting, pan, page wheel, resize, icons, asset loading' });
+      } catch (error) { throw new Error(`${width}px, ${step}: ${error.message}`, { cause: error }); }
+      finally { await context.close(); }
+    }
+
+    const touchContext = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, acceptDownloads: true });
+    try {
+      const page = await touchContext.newPage();
+      await page.goto(baseURL);
+      await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
+      await page.locator('#zoom').selectOption('2');
+      await page.getByRole('button', { name: 'Pan map (H)', exact: true }).click();
+      await page.locator('#viewport').evaluate(element => element.scrollTo(0, 0));
+      await page.locator('#viewport').scrollIntoViewIfNeeded();
+      const view = (await metrics(page)).view, input = await touchContext.newCDPSession(page);
+      await input.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: view.left + 180, y: view.top + 140 }] });
+      for (let step = 1; step <= 5; step++) {
+        await input.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: view.left + 180 - step * 16, y: view.top + 140 - step * 14 }] });
+      }
+      await input.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      let state = await metrics(page);
+      assert.ok(state.scrollLeft >= 75 && state.scrollTop >= 65, 'A real touch drag must pan both axes.');
+      assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), null, 'Touch panning must not create an edit.');
+      await input.detach();
+
+      await page.getByRole('button', { name: 'Brush (B)', exact: true }).click();
+      await page.getByRole('button', { name: 'Stone tile', exact: true }).click();
+      await page.locator('#viewport').evaluate(element => element.scrollTo(0, 0));
+      await clickCell(page, 0, 0);
+      const beforeArrows = await page.evaluate(() => localStorage.getItem('tilewright.document.v1'));
+      for (let x = 0; x < 27; x++) await page.keyboard.press('ArrowRight');
+      for (let y = 0; y < 19; y++) await page.keyboard.press('ArrowDown');
+      state = await metrics(page);
+      assert.ok(state.map.right <= state.view.right && state.map.bottom <= state.view.bottom, 'Keyboard navigation must reveal the last cell.');
+      assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), beforeArrows, 'Cursor navigation must not paint.');
+      await page.keyboard.press('Space');
+      assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.document.v1')).layers[0].tiles[559]), 6);
+
+      const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /Export PNG/ }).click()]);
+      const chunks = [];
+      for await (const chunk of await download.createReadStream()) chunks.push(chunk);
+      const png = Buffer.concat(chunks);
+      assert.ok(png.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), 'PNG must be a valid image.');
+      assert.equal(png.readUInt32BE(16), 672); assert.equal(png.readUInt32BE(20), 480);
+      results.push({ checks: 'Touch panning, keyboard cursor visibility, no accidental edits, full-size PNG at 200% zoom.' });
+
+      for (const size of [64, 1]) {
+        await page.getByRole('button', { name: '+ New map', exact: true }).click();
+        await page.locator('#new-width').fill(String(size)); await page.locator('#new-height').fill(String(size));
+        page.once('dialog', dialog => dialog.accept());
+        await page.getByRole('button', { name: 'Create map', exact: true }).click();
+        assertFits(await metrics(page));
+        if (size === 1) assert.equal((await metrics(page)).map.width, 24, 'Tiny maps must retain their natural pixel size.');
+      }
+      results.push({ checks: 'Largest and smallest maps load fitted and fully visible.' });
+    } finally { await touchContext.close(); }
+
+    const failureContext = await browser.newContext();
+    try {
+      const page = await failureContext.newPage();
+      await page.route('**/src/app.mjs', route => route.abort());
+      await page.goto(baseURL);
+      await page.getByText('The editor could not load.', { exact: true }).waitFor();
+      assert.match(await page.locator('#status').textContent(), /startup failed/);
+      results.push({ checks: 'Failed module loading shows a useful error instead of an empty canvas.' });
+    } finally { await failureContext.close(); }
+    return { browser: browser.version(), results };
+  } finally { await browser.close(); }
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const { chromium } = await import('playwright');
+  console.log(JSON.stringify(await checkBrowser(chromium), null, 2));
+}

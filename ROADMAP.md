@@ -11,7 +11,7 @@ using this plan in a program submission.
 | 2 | Map resizing and layer management | 5–7 h | Resize with explicit anchor and crop preview; rename, reorder, duplicate, and delete layers with confirmation; undo all operations; preserve existing version-1 documents. |
 | 3 | Custom tilesets | 6–9 h | Import a bounded, user-owned PNG atlas; choose tile size; store portable tileset metadata; render and export consistently; reject oversized or corrupt images; document artwork licensing responsibilities. |
 | 4 | Local project library and recovery | 5–7 h | Keep multiple named maps in IndexedDB; duplicate, rename, and delete them; provide backup/export and recovery after failed writes or version upgrades; test storage unavailability and migration. |
-| 5 | Accessibility and input refinement | 3–5 h | Test screen readers and actual touch devices; improve keyboard layer navigation and tile descriptions; add configurable shortcuts and accessible panning; verify focus restoration and reduced motion. |
+| 5 | Accessibility and input refinement | 3–5 h | Test screen readers and actual touch devices; improve keyboard layer navigation and tile descriptions; add configurable shortcuts; validate the existing pan/fit controls with assistive technology and real devices. |
 | 6 | Interoperable export and release | 3–4 h | Implement one documented game-tool interchange format; verify a round trip with that tool; add export fixtures, a tagged release procedure, and a user guide based on actual use. |
 | | **Total** | **28–40 h** | Ship observable behavior, targeted tests, updated docs, and honest release notes. |
 
@@ -24,6 +24,8 @@ using this plan in a program submission.
 - Sixty-step session undo/redo, including names and layer changes.
 - Local autosave with failure reporting; versioned, bounded JSON import/export.
 - PNG export, grid toggle, zoom, keyboard drawing, and responsive workspace.
+- Automatic Fit map, mouse/touch panning, visible keyboard cursor navigation,
+  and consistent SVG tool icons.
 - Dependency-free local server and static build; focused automated checks.
 
 ## Boundaries

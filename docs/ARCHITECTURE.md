@@ -10,6 +10,9 @@ installation, build-time framework, database service, or remote API.
 | `src/render.mjs` | Original pixel artwork and compositing into Canvas; optional grid/cursor overlays. |
 | `src/storage.mjs` | Local-storage adapter; reject corrupt saves and report unavailable storage. |
 | `src/app.mjs` | DOM, pointer/keyboard input, stroke previews, history commits, file handling, and downloads. |
+| `src/bootstrap.mjs` | Load the editor and replace a blank canvas with useful startup/error guidance if imports fail. |
+| `src/viewport.mjs` | Fit-to-workspace geometry and zoom-aware pointer hit testing. |
+| `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
 | `serve.mjs` | Loopback-only development HTTP server with a shared public-file allowlist. |
 | `scripts/build.mjs` | Stage and package public assets; refuse to overwrite unrelated nonempty directories. |
 
@@ -30,6 +33,25 @@ Flood fill uses an iterative queue with four-neighbor connectivity, so a full
 64 × 64 map does not need recursive calls. The current maximum is 24,576 cells
 across six layers. Full snapshot history and redraws are reasonable at this
 bound; larger documents would need a different history/rendering strategy.
+
+## Viewport and rendering
+
+The scroll container has bounded dimensions independent of the document's
+intrinsic pixel size. Its content wrapper centers maps smaller than the view
+and retains reachable padded edges for larger maps. Fit mode computes a scale
+from the view's actual inner size and padding; a ResizeObserver reapplies it
+when the layout changes. Fixed zoom preserves the map point at the center of
+the view. New documents reset to Fit mode. Zoom never changes exported pixels.
+
+Pan uses captured mouse/touch pointers to change scroll offsets without
+editing tiles. Keyboard drawing reveals the active cell within the container;
+canvas focus uses `preventScroll` to avoid moving the outer page. At Fit zoom,
+wheel gestures can continue scrolling the page. Phone layouts give the canvas
+the full workspace width, with palette and settings in separate rows.
+
+The renderer draws a transparency checkerboard only in editor mode. PNG
+export uses the same tile compositor without editor overlays or background.
+Rectangle previews draw their actual tile content before a single final commit.
 
 ## JSON version 1
 

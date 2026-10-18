@@ -65,15 +65,19 @@ export function drawTile(ctx, tile, x, y, size = TILE_SIZE, variant = 0) {
   ctx.restore();
 }
 
-export function renderMap(canvas, document, { grid = false, cursor = null, preview = null } = {}) {
+export function renderMap(canvas, document, { editor = false, grid = false, cursor = null, preview = null } = {}) {
   const width = document.width * TILE_SIZE, height = document.height * TILE_SIZE;
   if (canvas.width !== width) canvas.width = width;
   if (canvas.height !== height) canvas.height = height;
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, width, height);
   // Checkerboard makes empty/transparent cells visible in the editor only.
-  if (grid) {
+  if (editor) {
     ctx.fillStyle = '#e1e4da'; ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = '#edf0e7';
+    for (let y = 0; y < height; y += 12) {
+      for (let x = (y / 12 % 2) * 12; x < width; x += 24) ctx.fillRect(x, y, 12, 12);
+    }
   }
   for (const layer of document.layers) {
     if (!layer.visible) continue;

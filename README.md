@@ -39,7 +39,10 @@ server is running. Installation as an offline web app is future work.
    Empty cells are transparent in the PNG.
 
 Maps can be 1–64 tiles wide and high. The zoom control changes the editor view,
-not export resolution. Large maps scroll inside the workspace. One stroke,
+not export resolution. **Fit map** is the default and shows the whole map,
+including after a window resize. Zoom in and select **Pan (H)** to drag the
+workspace with a mouse or touch. With Pan selected, arrow keys also scroll.
+Normal page scrolling remains available over a fitted map. One stroke,
 rectangle, fill, rename, layer addition, or visibility change is one undo step.
 The current session keeps the last 60 changes; reloading starts a fresh history.
 
@@ -68,6 +71,8 @@ Use your own non-sensitive creative material.
 | --- | --- |
 | Brush / eraser / flood fill | B / E / F |
 | Rectangle / eyedropper | R / I |
+| Pan the map | H, then drag or use arrow keys |
+| See the entire map | Choose Fit map in the zoom control |
 | Show or hide grid | G |
 | Undo | Ctrl/Command + Z |
 | Redo | Ctrl/Command + Shift + Z, or Ctrl/Command + Y |
@@ -79,7 +84,8 @@ Use your own non-sensitive creative material.
 
 Tab reaches tiles, tools, layers, settings, and the canvas. Screen-reader status
 messages announce keyboard cursor positions and changes. Touch users can tap
-or drag to paint and scroll the workspace using its surrounding area. Full
+or drag to paint, and use Pan to move around a zoomed map. The keyboard drawing
+cursor automatically scrolls into view. Full
 screen-reader and real-device validation remains on the roadmap.
 
 ## Develop and verify
@@ -88,15 +94,26 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 16 focused model/storage/server/build
+This checks every JavaScript module, runs 19 focused model/storage/viewport/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
 26 on Linux, plus Node 24 on macOS and Windows.
 
+An optional browser regression suite lives in `scripts/browser-checks.mjs`.
+With Playwright separately installed in the development environment and Google
+Chrome available, keep the local server running and use `npm run test:browser`
+inside this folder. It uses a separate headless browser and disposable contexts;
+it does not modify existing browser maps. Playwright is not needed to run the
+editor or the default checks, and browser tests are not currently run in CI.
+
 The distributable contains only browser assets, an MIT license, and release
 metadata. Serve `dist/` over HTTP with a static server; development tooling and
 tests are excluded. Generated builds and browser-test output are ignored by Git.
+
+If the editor cannot load its modules, the map area displays startup guidance.
+For a local copy, use the server command above; GitHub's source-file view and
+`file://` are not running copies of the application.
 
 See the [architecture and JSON format](docs/ARCHITECTURE.md),
 [verification record](docs/QA.md), [changelog](CHANGELOG.md), and

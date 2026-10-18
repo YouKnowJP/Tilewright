@@ -4,7 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const PUBLIC_FILES = Object.freeze(['index.html', 'style.css', 'icon.svg', 'LICENSE',
-  'src/app.mjs', 'src/model.mjs', 'src/sample.mjs', 'src/render.mjs', 'src/storage.mjs']);
+  'src/bootstrap.mjs', 'src/app.mjs', 'src/model.mjs', 'src/sample.mjs', 'src/render.mjs', 'src/storage.mjs',
+  'src/viewport.mjs', 'src/icons.mjs']);
 
 export async function build(destination = path.join(ROOT, 'dist')) {
   destination = path.resolve(destination);

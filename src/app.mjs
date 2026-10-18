@@ -3,28 +3,66 @@ import { TILES, MAX_LAYERS, MAX_FILE_BYTES, History, createDocument, validateDoc
 import { createSample } from './sample.mjs';
 import { loadDocument, saveDocument } from './storage.mjs';
 import { TILE_SIZE, drawTile, renderMap } from './render.mjs';
+import { cellAtPoint, fitZoom } from './viewport.mjs';
+import { createIcon } from './icons.mjs';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#map');
+const viewport = $('#viewport');
+const zoomControl = $('#zoom');
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
 const restored = loadDocument(storage);
 let history = new History(restored.document || createSample());
 let activeLayer = history.document.layers[0].id;
 let selectedTile = 1, tool = 'brush', grid = true, cursor = { x: 0, y: 0 }, stroke = null;
+let pan = null, showCursor = false;
 let hasEdits = Boolean(restored.document);
 let saveLabel = restored.document ? 'Restored locally' : 'Sample map';
-const toolNames = { brush: 'Brush', erase: 'Eraser', fill: 'Flood fill', rectangle: 'Rectangle', pick: 'Eyedropper' };
+const toolNames = { brush: 'Brush', erase: 'Eraser', fill: 'Flood fill', rectangle: 'Rectangle', pick: 'Eyedropper', pan: 'Pan' };
 const announce = message => { $('#status').textContent = message; };
 
 function currentProjection() {
-  if (!stroke || stroke.tool === 'rectangle') return history.document;
-  return paintCells(stroke.base, stroke.layer, [...stroke.cells.values()], stroke.tile);
+  if (!stroke) return history.document;
+  const cells = stroke.tool === 'rectangle' ? rectangleCells(stroke.start, cursor) : [...stroke.cells.values()];
+  return paintCells(stroke.base, stroke.layer, cells, stroke.tile);
 }
 
 function draw() {
-  renderMap(canvas, currentProjection(), { grid, cursor,
+  renderMap(canvas, currentProjection(), { editor: true, grid, cursor: showCursor && tool !== 'pan' ? cursor : null,
     preview: stroke?.tool === 'rectangle' ? rectangleCells(stroke.start, cursor) : null });
   $('#coordinates').textContent = `X: ${String(cursor.x).padStart(2, '0')}  Y: ${String(cursor.y).padStart(2, '0')}`;
+}
+
+function layoutCanvas(preserveCenter = true) {
+  const map = history.document;
+  const padding = getComputedStyle($('.canvas-wrap'));
+  const paddingX = parseFloat(padding.paddingLeft) + parseFloat(padding.paddingRight);
+  const paddingY = parseFloat(padding.paddingTop) + parseFloat(padding.paddingBottom);
+  const scale = zoomControl.value === 'fit'
+    ? fitZoom(map.width, map.height, viewport.clientWidth, viewport.clientHeight, paddingX, paddingY)
+    : Number(zoomControl.value);
+  const oldBounds = canvas.getBoundingClientRect(), view = viewport.getBoundingClientRect();
+  const centerX = view.left + viewport.clientWidth / 2, centerY = view.top + viewport.clientHeight / 2;
+  const fractionX = (centerX - oldBounds.left) / oldBounds.width;
+  const fractionY = (centerY - oldBounds.top) / oldBounds.height;
+  const width = map.width * TILE_SIZE * scale, height = map.height * TILE_SIZE * scale;
+  if (Math.abs(oldBounds.width - width) < .02 && Math.abs(oldBounds.height - height) < .02) return;
+  canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
+  if (zoomControl.value === 'fit' || !preserveCenter) { viewport.scrollTo(0, 0); return; }
+  const bounds = canvas.getBoundingClientRect();
+  viewport.scrollLeft += bounds.left + fractionX * bounds.width - centerX;
+  viewport.scrollTop += bounds.top + fractionY * bounds.height - centerY;
+}
+
+function revealCursor() {
+  const bounds = canvas.getBoundingClientRect(), view = viewport.getBoundingClientRect();
+  const width = bounds.width / history.document.width, height = bounds.height / history.document.height;
+  const left = bounds.left + cursor.x * width, top = bounds.top + cursor.y * height;
+  const right = left + width, bottom = top + height;
+  if (left < view.left + 8) viewport.scrollLeft -= view.left + 8 - left;
+  else if (right > view.left + viewport.clientWidth - 8) viewport.scrollLeft += right - view.left - viewport.clientWidth + 8;
+  if (top < view.top + 8) viewport.scrollTop -= view.top + 8 - top;
+  else if (bottom > view.top + viewport.clientHeight - 8) viewport.scrollTop += bottom - view.top - viewport.clientHeight + 8;
 }
 
 function refresh() {
@@ -51,24 +89,27 @@ function refresh() {
     select.className = 'layer-select';
     select.setAttribute('aria-pressed', String(layer.id === activeLayer));
     select.setAttribute('aria-label', `Select ${layer.name} layer`);
-    const icon = Object.assign(document.createElement('span'), { className: 'layer-icon', textContent: '▱' });
-    icon.setAttribute('aria-hidden', 'true');
+    const icon = createIcon('layers');
     select.append(icon, Object.assign(document.createElement('span'), { textContent: layer.name }));
-    select.addEventListener('click', () => { cancelStroke(); activeLayer = layer.id; refresh(); announce(`${layer.name} selected. Tools affect this layer.`); });
+    select.dataset.layer = layer.id;
+    select.addEventListener('click', () => {
+      cancelStroke(); activeLayer = layer.id; refresh();
+      $(`.layer-select[data-layer="${layer.id}"]`).focus({ preventScroll: true });
+      announce(`${layer.name} selected. Tools affect this layer.`);
+    });
     const visibility = document.createElement('button');
     visibility.className = 'visibility'; visibility.dataset.layer = layer.id;
-    visibility.textContent = layer.visible ? '◉' : '○';
+    visibility.append(createIcon(layer.visible ? 'eye' : 'eye-off'));
     visibility.setAttribute('aria-label', `${layer.visible ? 'Hide' : 'Show'} ${layer.name} layer`);
     visibility.addEventListener('click', () => {
       cancelStroke();
       commit({ ...history.document, layers: history.document.layers.map(item => item.id === layer.id ? { ...item, visible: !item.visible } : item) },
         `${layer.name} ${layer.visible ? 'hidden' : 'shown'}.`);
-      $(`.visibility[data-layer="${layer.id}"]`)?.focus();
+      $(`.visibility[data-layer="${layer.id}"]`)?.focus({ preventScroll: true });
     });
     row.append(select, visibility); return row;
   }));
-  canvas.style.width = `${map.width * TILE_SIZE * Number($('#zoom').value)}px`;
-  canvas.style.height = `${map.height * TILE_SIZE * Number($('#zoom').value)}px`;
+  layoutCanvas();
   draw();
 }
 
@@ -85,7 +126,13 @@ function commit(map, message) {
   announce(saved ? message : `${message} Browser saving is unavailable. Export JSON to keep your work.`);
 }
 
-function cancelStroke() { stroke = null; draw(); }
+function endPan() {
+  const pointerId = pan?.pointerId;
+  pan = null; canvas.classList.remove('is-panning');
+  if (pointerId !== undefined && canvas.hasPointerCapture(pointerId)) canvas.releasePointerCapture(pointerId);
+}
+
+function cancelStroke() { stroke = null; endPan(); draw(); }
 
 function selectTool(next) {
   cancelStroke(); tool = next;
@@ -94,7 +141,10 @@ function selectTool(next) {
     button.setAttribute('aria-pressed', String(button.dataset.tool === tool));
   });
   $('#tool-name').textContent = toolNames[tool]; refresh();
-  announce(`${toolNames[tool]} selected. ${tool === 'rectangle' ? 'Drag between two corners, or use Space and arrow keys.' : 'Paint on the selected layer.'}`);
+  canvas.dataset.tool = tool;
+  const instructions = tool === 'pan' ? 'Drag the map to scroll, or use arrow keys. Fit map shows the whole canvas.'
+    : tool === 'rectangle' ? 'Drag between two corners, or use Space and arrow keys.' : 'Paint on the selected layer.';
+  announce(`${toolNames[tool]} selected. ${instructions}`);
 }
 
 function selectTile(id) {
@@ -128,12 +178,11 @@ function initializePalette() {
 }
 
 function eventCell(event) {
-  const box = canvas.getBoundingClientRect();
-  return { x: Math.max(0, Math.min(history.document.width - 1, Math.floor((event.clientX - box.left) / box.width * history.document.width))),
-    y: Math.max(0, Math.min(history.document.height - 1, Math.floor((event.clientY - box.top) / box.height * history.document.height))) };
+  return cellAtPoint(history.document.width, history.document.height, canvas.getBoundingClientRect(), event.clientX, event.clientY);
 }
 
 function begin(cell, pointerId = null) {
+  if (tool === 'pan') { announce('Drag the map to scroll, or use arrow keys.'); return; }
   const map = history.document, layer = map.layers.find(item => item.id === activeLayer);
   if (tool === 'pick') {
     selectTile(layer.tiles[cell.y * map.width + cell.x]);
@@ -160,13 +209,25 @@ function finishStroke() {
 }
 
 canvas.addEventListener('pointerdown', event => {
-  if (event.button !== 0 || (stroke && stroke.pointerId !== null)) return;
-  event.preventDefault(); cancelStroke(); cursor = eventCell(event); canvas.focus();
-  canvas.setPointerCapture(event.pointerId); begin(cursor, event.pointerId);
+  if (event.button !== 0 || pan || (stroke && stroke.pointerId !== null)) return;
+  event.preventDefault(); cancelStroke(); cursor = eventCell(event); showCursor = true;
+  canvas.focus({ preventScroll: true }); canvas.setPointerCapture(event.pointerId);
+  if (tool === 'pan') {
+    pan = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop };
+    canvas.classList.add('is-panning'); return;
+  }
+  begin(cursor, event.pointerId);
 });
 canvas.addEventListener('pointermove', event => {
+  if (pan) {
+    if (pan.pointerId === event.pointerId) {
+      viewport.scrollLeft = pan.left + pan.x - event.clientX;
+      viewport.scrollTop = pan.top + pan.y - event.clientY;
+    }
+    return;
+  }
   if (stroke?.pointerId !== undefined && stroke.pointerId !== null && stroke.pointerId !== event.pointerId) return;
-  cursor = eventCell(event);
+  cursor = eventCell(event); showCursor = true;
   if (stroke && stroke.pointerId === event.pointerId) {
     for (const cell of lineCells(stroke.last, cursor)) stroke.cells.set(`${cell.x},${cell.y}`, cell);
     stroke.last = cursor;
@@ -174,24 +235,30 @@ canvas.addEventListener('pointermove', event => {
   draw();
 });
 canvas.addEventListener('pointerup', event => {
+  if (pan?.pointerId === event.pointerId) { endPan(); return; }
   if (stroke?.pointerId === event.pointerId) { cursor = eventCell(event); finishStroke(); }
   if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
 });
 canvas.addEventListener('pointercancel', () => { cancelStroke(); announce('Stroke canceled.'); });
 canvas.addEventListener('lostpointercapture', event => {
+  if (pan?.pointerId === event.pointerId) { endPan(); return; }
   if (!stroke || stroke.pointerId !== event.pointerId) return;
   // Some browsers release capture just before dispatching pointerup.
   // Preserve the completed stroke; explicit pointercancel still discards it.
   if (event.buttons === 0) finishStroke();
   else cancelStroke();
 });
-canvas.addEventListener('blur', () => { if (stroke?.pointerId === null) cancelStroke(); });
+canvas.addEventListener('pointerleave', () => { if (!stroke) { showCursor = false; draw(); } });
+canvas.addEventListener('focus', () => { showCursor = true; draw(); });
+canvas.addEventListener('blur', () => { showCursor = false; if (stroke?.pointerId === null) cancelStroke(); else draw(); });
 canvas.addEventListener('keydown', event => {
   const moves = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
   if (moves[event.key]) {
     event.preventDefault();
     const [dx, dy] = moves[event.key];
+    if (tool === 'pan') { viewport.scrollBy(dx * TILE_SIZE * 2, dy * TILE_SIZE * 2); return; }
     if (inBounds(history.document, cursor.x + dx, cursor.y + dy)) cursor = { x: cursor.x + dx, y: cursor.y + dy };
+    showCursor = true; revealCursor();
     draw(); announce(`Column ${cursor.x + 1}, row ${cursor.y + 1}. ${TILES[history.document.layers.find(layer => layer.id === activeLayer).tiles[cursor.y * history.document.width + cursor.x]].name}.`);
   } else if (event.key === ' ' || event.key === 'Enter') {
     event.preventDefault();
@@ -208,7 +275,7 @@ function moveHistory(direction) {
 $('#undo').addEventListener('click', () => moveHistory('undo'));
 $('#redo').addEventListener('click', () => moveHistory('redo'));
 document.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => selectTool(button.dataset.tool)));
-$('#zoom').addEventListener('change', refresh);
+zoomControl.addEventListener('change', () => { cancelStroke(); layoutCanvas(); announce(zoomControl.value === 'fit' ? 'Whole map fitted to the workspace.' : `Zoom ${Math.round(Number(zoomControl.value) * 100)} percent. Use Pan to move around the map.`); });
 function toggleGrid() { grid = !grid; $('#grid-toggle').setAttribute('aria-pressed', String(grid)); draw(); announce(`Grid ${grid ? 'shown' : 'hidden'}.`); }
 $('#grid-toggle').addEventListener('click', toggleGrid);
 $('#map-name').addEventListener('change', event => {
@@ -247,7 +314,8 @@ $('#export-png').addEventListener('click', () => {
 
 function replaceDocument(map) {
   cancelStroke(); history = new History(map); activeLayer = map.layers[0].id; cursor = { x: 0, y: 0 }; hasEdits = true;
-  const saved = persist(); refresh(); $('#viewport').scrollTo(0, 0);
+  zoomControl.value = 'fit';
+  const saved = persist(); refresh(); viewport.scrollTo(0, 0);
   announce(saved ? `${map.name} opened and saved locally.` : `${map.name} opened. Local saving failed; export JSON to keep your work.`);
 }
 function canReplace() { return !hasEdits || window.confirm('Replace the current map? Export JSON first if you want to keep both maps.'); }
@@ -282,10 +350,12 @@ document.addEventListener('keydown', event => {
     if (key === 's') { event.preventDefault(); exportJSON(); }
     return;
   }
-  const shortcuts = { b: 'brush', e: 'erase', f: 'fill', r: 'rectangle', i: 'pick' };
+  const shortcuts = { b: 'brush', e: 'erase', f: 'fill', r: 'rectangle', i: 'pick', h: 'pan' };
   if (shortcuts[key]) { event.preventDefault(); selectTool(shortcuts[key]); }
   if (key === 'g') { event.preventDefault(); toggleGrid(); }
 });
 
+document.querySelectorAll('[data-icon]').forEach(element => element.append(createIcon(element.dataset.icon)));
 initializePalette(); refresh();
+new ResizeObserver(() => layoutCanvas()).observe(viewport);
 announce(restored.error || (restored.document ? 'Your last map was restored from this browser.' : 'Welcome to Willowbend. Pick a tile and make it yours.'));
