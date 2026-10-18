@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#294f43">
+  <meta name="description" content="Make a little world. A local-first tile map editor with original tiles, layers, and portable exports.">
+  <title>Tilewright — Make a little world</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="src/app.mjs"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.1</span></a>
+    <span class="header-note">A small tool for imaginary places.</span>
+    <a class="source-link" href="https://github.com/YouKnowJP/Personal-Project/tree/main/Tilewright" target="_blank" rel="noreferrer">Source code <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="intro-title">
+      <div><p class="eyebrow">YOUR WORLD, ONE TILE AT A TIME</p><h1 id="intro-title">Make a little world<span>.</span></h1><p class="intro-description">A quiet corner for your next adventure. Paint, experiment, and take it with you.</p></div>
+      <div class="local-note"><span class="local-dot"></span><div><strong>Made here. Kept here.</strong><span>No account. Your map stays in this browser.</span></div></div>
+    </section>
+    <section class="editor" aria-label="Tile map editor">
+      <div class="document-bar">
+        <div class="document-identity"><span class="map-symbol" aria-hidden="true">▧</span><div><span id="document-title">Willowbend</span><span class="document-meta" id="document-meta">28 × 20 tiles</span></div><span class="save-indicator" id="save-state">Sample map</span></div>
+        <div class="document-actions"><button id="new-map">+ New map</button><button id="import-map">Import</button><button class="primary" id="export-json">Export JSON <span aria-hidden="true">↗</span></button></div>
+      </div>
+      <div class="workspace">
+        <aside class="palette-panel" aria-label="Tile palette">
+          <div class="panel-heading"><h2>Tile palette</h2><span>12 tiles</span></div>
+          <p class="section-label">TERRAIN</p><div class="tile-grid" id="terrain-palette"></div>
+          <p class="section-label objects-label">OBJECTS</p><div class="tile-grid" id="objects-palette"></div>
+          <div class="selected-tile"><canvas id="selected-preview" width="48" height="48" aria-hidden="true"></canvas><div><span>Selected tile</span><strong id="selected-name">Meadow</strong></div></div>
+          <div class="palette-tip"><span aria-hidden="true">✳</span><p>Little details make a place.<br>Try a few flowers by the trail.</p></div>
+        </aside>
+        <div class="canvas-panel">
+          <div class="toolbar" role="toolbar" aria-label="Drawing tools">
+            <div class="tool-buttons">
+              <button class="tool active" data-tool="brush" aria-label="Brush (B)" title="Brush (B)" aria-pressed="true"><span aria-hidden="true">✎</span></button>
+              <button class="tool" data-tool="erase" aria-label="Eraser (E)" title="Eraser (E)" aria-pressed="false"><span aria-hidden="true">▱</span></button>
+              <button class="tool" data-tool="fill" aria-label="Flood fill (F)" title="Flood fill (F)" aria-pressed="false"><span aria-hidden="true">◩</span></button>
+              <button class="tool" data-tool="rectangle" aria-label="Rectangle (R)" title="Rectangle (R)" aria-pressed="false"><span aria-hidden="true">□</span></button>
+              <button class="tool" data-tool="pick" aria-label="Eyedropper (I)" title="Eyedropper (I)" aria-pressed="false"><span aria-hidden="true">⌖</span></button>
+            </div>
+            <div class="history-buttons"><button id="undo" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)" disabled>↶</button><button id="redo" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)" disabled>↷</button></div>
+            <div class="view-controls"><button id="grid-toggle" aria-label="Toggle grid" aria-pressed="true" title="Toggle grid (G)">▦</button><label class="sr-only" for="zoom">Zoom</label><select id="zoom"><option value="0.75">75%</option><option value="1" selected>100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></div>
+          </div>
+          <div class="canvas-viewport" id="viewport"><div class="canvas-wrap"><canvas id="map" width="672" height="480" tabindex="0" role="img" aria-label="Editable tile map. Arrow keys move the cursor; Space applies the selected tool." aria-describedby="canvas-help"></canvas></div></div>
+          <div class="canvas-footer"><span><span class="small-dot"></span><span id="tool-name">Brush</span><span class="footer-separator">/</span><span id="active-layer-label">Ground</span></span><span id="coordinates">X: 00&nbsp; Y: 00</span><span id="map-pixels">672 × 480 px</span></div>
+        </div>
+        <aside class="inspector" aria-label="Map settings">
+          <div class="panel-heading"><h2>Layers</h2><button class="icon-button" id="add-layer" aria-label="Add layer" title="Add a layer (up to 6)">+</button></div>
+          <p class="panel-caption">Top layer appears in front.</p><div id="layers" class="layer-list"></div>
+          <div class="inspector-section"><h2>Map details</h2><label class="field-label" for="map-name">Name</label><input id="map-name" maxlength="64" value="Willowbend"><div class="dimensions"><div><span class="field-label">Width</span><span id="map-width" class="dimension-value">28 <small>tiles</small></span></div><span class="dimension-cross">×</span><div><span class="field-label">Height</span><span id="map-height" class="dimension-value">20 <small>tiles</small></span></div></div><div class="tile-size-line"><span>Tile size</span><strong>24 × 24 px</strong></div></div>
+          <div class="inspector-section export-section"><h2>Take it with you</h2><p>Save the whole map as JSON, or a picture of the visible layers.</p><button id="export-png">↓ Export PNG</button><span>PNG exports without the grid.</span></div>
+          <button class="sample-button" id="load-sample">↺ Open the sample map</button>
+        </aside>
+      </div>
+      <div class="editor-bottom"><p id="status" role="status" aria-live="polite">Welcome to Willowbend. Pick a tile and make it yours.</p><button id="help-button">Keyboard shortcuts <span aria-hidden="true">?</span></button></div>
+    </section>
+    <footer class="page-footer"><span>A little less setup. A little more making.</span><span>LOCAL FIRST <span>·</span> OPEN SOURCE <span>·</span> MIT LICENSE</span></footer>
+    <p class="sr-only" id="canvas-help">Tab through the palette and tools. On the map, use arrow keys to move and Space or Enter to paint. For a rectangle, Space sets the first corner and Space again sets the second. Escape cancels a stroke. B brush, E erase, F fill, R rectangle, I eyedropper, G grid. Ctrl or Command Z undoes; Shift Z redoes.</p>
+  </main>
+  <input type="file" id="file-input" accept="application/json,.json" hidden>
+  <dialog id="new-dialog"><form id="new-form"><span class="eyebrow">A FRESH START</span><h2>Room for a new world.</h2><p>Choose a name and a size. You can export your current map before starting over.</p><label for="new-name">Map name</label><input id="new-name" maxlength="64" value="Untitled world" required><div class="form-row"><div><label for="new-width">Width in tiles</label><input id="new-width" type="number" min="1" max="64" value="28" required></div><div><label for="new-height">Height in tiles</label><input id="new-height" type="number" min="1" max="64" value="20" required></div></div><p class="dialog-note">Up to 64 × 64 tiles. Starts with ground and detail layers.</p><div class="dialog-actions"><button type="button" id="cancel-new">Cancel</button><button class="primary" type="submit">Create map</button></div></form></dialog>
+  <dialog id="help-dialog"><span class="eyebrow">LESS CLICKING, MORE MAKING</span><h2>At your fingertips.</h2><dl class="shortcut-list"><dt>Brush / Erase / Fill</dt><dd>B / E / F</dd><dt>Rectangle / Eyedropper</dt><dd>R / I</dd><dt>Toggle grid</dt><dd>G</dd><dt>Undo</dt><dd>Ctrl or ⌘ Z</dd><dt>Redo</dt><dd>Ctrl or ⌘ Shift Z</dd><dt>Export JSON</dt><dd>Ctrl or ⌘ S</dd><dt>Move map cursor</dt><dd>Arrow keys</dd><dt>Apply tool / rectangle corner</dt><dd>Space or Enter</dd><dt>Cancel current stroke</dt><dd>Esc</dd></dl><p>Tools paint on the selected layer. The eyedropper samples that layer, including empty cells. Select the Details layer for trees, flowers, and cabins.</p><form method="dialog"><button class="primary">Back to the map</button></form></dialog>
+  <noscript><p>This editor needs JavaScript enabled. No network service or account is required.</p></noscript>
+</body>
+</html>

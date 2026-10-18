@@ -1,0 +1,21 @@
+{
+  "name": "tilewright",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A local-first tile map editor for small game worlds.",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node serve.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test",
+    "build": "node scripts/build.mjs",
+    "verify": "npm run check && npm test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YouKnowJP/Personal-Project.git",
+    "directory": "Tilewright"
+  }
+}
