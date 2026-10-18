@@ -1,5 +1,23 @@
 # Verification record
 
+## Structural editing — v0.2.0
+
+The Node suite has **28 passing tests**. Nine new operation tests cover safe
+layer names, independent copies and unique IDs, compositing order, layer
+limits, every resize anchor, new-cell fill, hidden-layer crop counts, odd center
+offsets, extreme sizes, immutable source data, undo/redo, and version-1 JSON
+round trips.
+
+The browser suite additionally exercises structural editing at **390 and
+1440 CSS pixels** in isolated Chrome 155.0.8059.82 contexts. Rename, duplication,
+reordering, cancellation/confirmation of deletion, six-layer and final-layer
+limits, and undo/redo pass. Opening settings and adding layers do not stretch
+the canvas. Resize checks cover live preview, cancellation without an edit,
+centered growth, fill only in new back-layer cells, fitting after resize,
+crop warnings/previews, complete undo restoration, and invalid-size rejection.
+The previous five-width scrolling, touch, keyboard, PNG, and loading checks
+continue to pass. No runtime errors were observed in the added flows.
+
 ## Scrolling and rendering corrections — v0.1.1
 
 The original checks confirmed page overflow and editing, but did not verify

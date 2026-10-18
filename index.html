@@ -12,7 +12,7 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.1.1</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.2.0</span></a>
     <span class="header-note">A small tool for imaginary places.</span>
     <a class="source-link" href="https://github.com/YouKnowJP/Personal-Project/tree/main/Tilewright" target="_blank" rel="noreferrer">Source code <span aria-hidden="true">↗</span></a>
   </header>
@@ -52,8 +52,18 @@
         </div>
         <aside class="inspector" aria-label="Map settings">
           <div class="layer-section"><div class="panel-heading"><h2>Layers</h2><button class="icon-button" id="add-layer" aria-label="Add layer" title="Add a layer (up to 6)">+</button></div>
-          <p class="panel-caption">Top layer appears in front.</p><div id="layers" class="layer-list"></div></div>
-          <div class="inspector-section map-details"><h2>Map details</h2><label class="field-label" for="map-name">Name</label><input id="map-name" maxlength="64" value="Willowbend"><div class="dimensions"><div><span class="field-label">Width</span><span id="map-width" class="dimension-value">28 <small>tiles</small></span></div><span class="dimension-cross">×</span><div><span class="field-label">Height</span><span id="map-height" class="dimension-value">20 <small>tiles</small></span></div></div><div class="tile-size-line"><span>Tile size</span><strong>24 × 24 px</strong></div></div>
+          <p class="panel-caption">Top layer appears in front.</p><div id="layers" class="layer-list"></div>
+          <details class="layer-controls"><summary>Layer settings</summary>
+            <label class="field-label" for="layer-name">Selected layer name</label><input id="layer-name" maxlength="32" value="Ground">
+            <p id="layer-info" class="panel-caption"></p>
+            <div class="layer-actions" role="toolbar" aria-label="Selected layer actions">
+              <button id="duplicate-layer" data-icon="duplicate" aria-label="Duplicate selected layer" title="Duplicate layer"></button>
+              <button id="raise-layer" data-icon="arrow-up" aria-label="Move selected layer forward" title="Move layer forward"></button>
+              <button id="lower-layer" data-icon="arrow-down" aria-label="Move selected layer backward" title="Move layer backward"></button>
+              <button id="delete-layer" data-icon="trash" aria-label="Delete selected layer" title="Delete layer"></button>
+            </div>
+          </details></div>
+          <div class="inspector-section map-details"><h2>Map details</h2><label class="field-label" for="map-name">Name</label><input id="map-name" maxlength="64" value="Willowbend"><div class="dimensions"><div><span class="field-label">Width</span><span id="map-width" class="dimension-value">28 <small>tiles</small></span></div><span class="dimension-cross">×</span><div><span class="field-label">Height</span><span id="map-height" class="dimension-value">20 <small>tiles</small></span></div></div><div class="tile-size-line"><span>Tile size</span><strong>24 × 24 px</strong></div><button id="resize-map" class="resize-button">Resize map…</button></div>
           <div class="inspector-section export-section"><h2>Take it with you</h2><p>Save the whole map as JSON, or a picture of the visible layers.</p><button id="export-png">↓ Export PNG</button><span>PNG exports without the grid.</span></div>
           <button class="sample-button" id="load-sample">↺ Open the sample map</button>
         </aside>
@@ -64,6 +74,19 @@
     <p class="sr-only" id="canvas-help">Tab through the palette and tools. On the map, use arrow keys to move and Space or Enter to paint. For a rectangle, Space sets the first corner and Space again sets the second. Escape cancels a stroke. B brush, E erase, F fill, R rectangle, I eyedropper, H pan, G grid. With Pan selected, drag to scroll or use arrow keys. Use Fit map to see the entire map. Ctrl or Command Z undoes; Shift Z redoes.</p>
   </main>
   <input type="file" id="file-input" accept="application/json,.json" hidden>
+  <dialog id="resize-dialog" class="resize-dialog">
+    <form id="resize-form">
+      <span class="eyebrow">MAKE ROOM, KEEP YOUR WORK</span><h2>Reshape your world.</h2>
+      <p>Keep existing tiles at the chosen anchor. Preview the result before applying. Undo restores the full original map.</p>
+      <div class="form-row"><div><label for="resize-width">Width in tiles</label><input id="resize-width" type="number" min="1" max="64" step="1" required></div><div><label for="resize-height">Height in tiles</label><input id="resize-height" type="number" min="1" max="64" step="1" required></div></div>
+      <div class="form-row"><div><label for="resize-anchor">Keep tiles anchored to</label><select id="resize-anchor"><option value="top-left">Top left</option><option value="top">Top center</option><option value="top-right">Top right</option><option value="left">Middle left</option><option value="center">Center</option><option value="right">Middle right</option><option value="bottom-left">Bottom left</option><option value="bottom">Bottom center</option><option value="bottom-right">Bottom right</option></select></div><div><label for="resize-fill">New back-layer cells</label><select id="resize-fill"><option value="0">Empty</option><option value="1" selected>Meadow</option><option value="2">Moss</option><option value="3">Water</option><option value="4">Sand</option><option value="5">Trail</option><option value="6">Stone</option></select></div></div>
+      <p class="preview-label">PREVIEW AFTER RESIZE</p>
+      <div class="resize-preview-wrap" id="resize-preview-wrap"><canvas id="resize-preview" width="1" height="1" role="img" aria-label="Preview of the resized map"></canvas></div>
+      <p id="resize-summary" class="resize-summary" role="status" aria-live="polite"></p>
+      <p id="resize-error" class="resize-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" id="cancel-resize">Cancel</button><button class="primary" type="submit" id="apply-resize">Resize map</button></div>
+    </form>
+  </dialog>
   <dialog id="new-dialog"><form id="new-form"><span class="eyebrow">A FRESH START</span><h2>Room for a new world.</h2><p>Choose a name and a size. You can export your current map before starting over.</p><label for="new-name">Map name</label><input id="new-name" maxlength="64" value="Untitled world" required><div class="form-row"><div><label for="new-width">Width in tiles</label><input id="new-width" type="number" min="1" max="64" value="28" required></div><div><label for="new-height">Height in tiles</label><input id="new-height" type="number" min="1" max="64" value="20" required></div></div><p class="dialog-note">Up to 64 × 64 tiles. Starts with ground and detail layers.</p><div class="dialog-actions"><button type="button" id="cancel-new">Cancel</button><button class="primary" type="submit">Create map</button></div></form></dialog>
   <dialog id="help-dialog"><span class="eyebrow">LESS CLICKING, MORE MAKING</span><h2>At your fingertips.</h2><dl class="shortcut-list"><dt>Brush / Erase / Fill</dt><dd>B / E / F</dd><dt>Rectangle / Eyedropper</dt><dd>R / I</dd><dt>Pan the map</dt><dd>H, then drag or arrows</dd><dt>Toggle grid</dt><dd>G</dd><dt>Undo</dt><dd>Ctrl or ⌘ Z</dd><dt>Redo</dt><dd>Ctrl or ⌘ Shift Z</dd><dt>Export JSON</dt><dd>Ctrl or ⌘ S</dd><dt>Move map cursor</dt><dd>Arrow keys</dd><dt>Apply tool / rectangle corner</dt><dd>Space or Enter</dd><dt>Cancel current stroke</dt><dd>Esc</dd></dl><p>Tools paint on the selected layer. The eyedropper samples that layer, including empty cells. Select the Details layer for trees, flowers, and cabins. Fit map shows the whole canvas; zoom in and use Pan to reach every corner.</p><form method="dialog"><button class="primary">Back to the map</button></form></dialog>
   <noscript><p>This editor needs JavaScript enabled. No network service or account is required.</p></noscript>

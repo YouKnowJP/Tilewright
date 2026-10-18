@@ -19,7 +19,7 @@ the program's current rules and supply personal statements in your own words.
   development record is claimed.
 - **Data:** original fictional artwork and map fixtures; no real customer,
   personal, health, financial, or other regulated records are bundled.
-- **Work ahead:** [28–40 estimated hours](../ROADMAP.md) of specific unfinished
+- **Work ahead:** [23–33 estimated hours](../ROADMAP.md) of specific unfinished
   features, with acceptance criteria. Estimates are plans, not performed hours.
 
 ## Requirements and remaining evidence
@@ -30,7 +30,7 @@ the program's current rules and supply personal statements in your own words.
 | Public GitHub repository | Existing public repository; preserve its history and submit its main URL. |
 | Clear README and accepted license | Included with local run instructions, tests, architecture, and MIT license. |
 | Real, active history and signs of use | **New project.** One implementation session cannot establish a sustained record. Continue real development and record actual use, issues, and releases over time. |
-| At least 20 hours of planned work | Proposed 28–40 h roadmap. The owner must choose work they truly intend to do. |
+| At least 20 hours of planned work | Proposed 23–33 h remaining roadmap, excluding completed layer-management/resizing work. The owner must choose work they truly intend to do. |
 | No disallowed AI or security scope | Creative map editor; no model training, evaluation, inference infrastructure, or offensive tooling. |
 | No confidential or third-party data | No such material is part of this implementation. The owner must verify their own circumstances and any later imports. |
 | No secrets, including in history | No credentials are needed. New source is reviewed before commit, and repository ignores cover environment files. No claim of a complete historical secret audit is made. |
@@ -49,8 +49,8 @@ code. Resolve uncertain eligibility with the program's General Questions thread.
 > Tilewright is a local-first tile map editor for sketching small game worlds
 > and fictional places. It uses JavaScript, HTML, CSS, and Canvas, with painting
 > tools, layers, undo/redo, local saving, and JSON/PNG export. It is newly
-> implemented; planned work includes selections, custom tilesets, a local map
-> library, resizing, and accessibility improvements.
+> implemented; planned work includes reusable selections, custom tilesets, a
+> local map library, export adapters, and accessibility improvements.
 
 Do not add claims of daily use, existing users, ownership arrangements, or
 historical activity unless they are true. Do not split or re-upload this code

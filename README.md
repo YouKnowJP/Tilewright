@@ -33,7 +33,8 @@ server is running. Installation as an offline web app is future work.
 3. Choose a tile and paint. Drag the brush for a continuous stroke; try fill,
    rectangle, eraser, or eyedropper from the toolbar.
 4. Use the layer eye buttons to hide or show a layer. The uppermost layer in
-   the list appears in front. **+** adds a layer, up to six.
+   the list appears in front. **+** adds a layer, up to six. Open **Layer
+   settings** to rename, duplicate, reorder, or delete the selected layer.
 5. **Export JSON** saves all layers, including hidden ones, in an editable file.
    **Export PNG** saves visible layers at 24 pixels per tile without the grid.
    Empty cells are transparent in the PNG.
@@ -42,9 +43,27 @@ Maps can be 1–64 tiles wide and high. The zoom control changes the editor view
 not export resolution. **Fit map** is the default and shows the whole map,
 including after a window resize. Zoom in and select **Pan (H)** to drag the
 workspace with a mouse or touch. With Pan selected, arrow keys also scroll.
-Normal page scrolling remains available over a fitted map. One stroke,
-rectangle, fill, rename, layer addition, or visibility change is one undo step.
+Normal page scrolling remains available over a fitted map. Each drawing or
+structural operation is one undo step, including renames, layer management,
+visibility changes, and map resizing.
 The current session keeps the last 60 changes; reloading starts a fresh history.
+
+## Change a map without starting over
+
+Choose **Resize map…** under Map details to expand or crop an existing map.
+Select dimensions, an anchor for existing content, and the tile used for new
+cells on the backmost layer. New cells on other layers remain empty. The live
+preview shows the resulting map and reports occupied cells that would be lost,
+including hidden layers. **Cancel** leaves the map untouched; **Resize map**
+applies one undoable change and resets the view to Fit map.
+
+![Resize preview with crop information](docs/resize-preview.png)
+
+Layer settings apply to the selected layer. Duplicating makes an independent
+copy immediately in front of the source; moving a layer changes compositing
+order. Moving an opaque terrain layer in front of objects can cover them.
+Deleting requires confirmation and can be undone; the final layer is retained.
+Names, ordering, and resized content remain compatible with version-1 JSON maps.
 
 ## Your work and backups
 
@@ -94,7 +113,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 19 focused model/storage/viewport/server/build
+This checks every JavaScript module, runs 28 focused model/storage/viewport/operation/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -117,7 +136,8 @@ For a local copy, use the server command above; GitHub's source-file view and
 
 See the [architecture and JSON format](docs/ARCHITECTURE.md),
 [verification record](docs/QA.md), [changelog](CHANGELOG.md), and
-[28–40 hour roadmap](ROADMAP.md).
+[23–33 hour roadmap](ROADMAP.md). The [feature ideas](docs/IDEAS.md) explain
+future priorities and completion criteria beyond the current release.
 
 ## Project status
 

@@ -111,6 +111,102 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
       finally { await context.close(); }
     }
 
+    for (const width of [390, 1440]) {
+      const context = await browser.newContext({ viewport: { width, height: 900 } });
+      let step = 'layer settings';
+      try {
+        const page = await context.newPage(), errors = [];
+        page.on('pageerror', error => errors.push(error.message));
+        await page.goto(baseURL);
+        await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
+        const saved = () => page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.document.v1')));
+        await page.getByRole('button', { name: 'Select Details layer', exact: true }).click();
+        await page.locator('.layer-controls summary').click();
+        const initialViewHeight = (await metrics(page)).view.height;
+        await page.locator('#layer-name').fill('Canopy'); await page.locator('#layer-name').press('Enter');
+        assert.equal((await saved()).layers[1].name, 'Canopy', 'Layer name must persist.');
+        await page.getByRole('button', { name: 'Duplicate selected layer', exact: true }).click();
+        let map = await saved();
+        const copyId = map.layers[2].id;
+        assert.equal(map.layers[2].name, 'Canopy copy');
+        assert.deepEqual(map.layers[2].tiles, map.layers[1].tiles);
+        assert.equal(await page.locator('#raise-layer').isDisabled(), true, 'The front layer cannot move further forward.');
+        await page.getByRole('button', { name: 'Move selected layer backward', exact: true }).click();
+        assert.equal((await saved()).layers[1].id, copyId);
+        await page.getByRole('button', { name: 'Move selected layer forward', exact: true }).click();
+        assert.equal((await saved()).layers[2].id, copyId);
+        const beforeDelete = await saved();
+        page.once('dialog', dialog => dialog.dismiss());
+        await page.getByRole('button', { name: 'Delete selected layer', exact: true }).click();
+        assert.deepEqual(await saved(), beforeDelete, 'Canceling deletion must retain the layer.');
+        page.once('dialog', dialog => dialog.accept());
+        await page.getByRole('button', { name: 'Delete selected layer', exact: true }).click();
+        assert.equal((await saved()).layers.length, 2);
+        await page.getByRole('button', { name: 'Undo', exact: true }).click();
+        assert.deepEqual(await saved(), beforeDelete, 'Undo must restore layer content and order.');
+        await page.getByRole('button', { name: 'Redo', exact: true }).click();
+        assert.equal((await saved()).layers.length, 2);
+
+        step = 'layer limits';
+        while ((await saved()).layers.length < 6) await page.getByRole('button', { name: 'Duplicate selected layer', exact: true }).click();
+        assert.equal(await page.locator('#duplicate-layer').isDisabled(), true);
+        assert.equal(await page.locator('#add-layer').isDisabled(), true);
+        assert.ok(Math.abs((await metrics(page)).view.height - initialViewHeight) < 1, 'Layer settings must not stretch the canvas.');
+        while ((await saved()).layers.length > 1) {
+          page.once('dialog', dialog => dialog.accept());
+          await page.getByRole('button', { name: 'Delete selected layer', exact: true }).click();
+        }
+        assert.equal(await page.locator('#delete-layer').isDisabled(), true, 'The final layer cannot be deleted.');
+        page.once('dialog', dialog => dialog.accept());
+        await page.getByRole('button', { name: /Open the sample map/ }).click();
+        const original = await saved();
+
+        step = 'resize preview and cancel';
+        const setResize = async () => {
+          await page.locator('#resize-width').fill('30'); await page.locator('#resize-height').fill('22');
+          await page.locator('#resize-anchor').selectOption('center'); await page.locator('#resize-fill').selectOption('4');
+        };
+        await page.getByRole('button', { name: 'Resize map…', exact: true }).click(); await setResize();
+        assert.equal(await page.locator('#resize-preview').getAttribute('width'), '720');
+        assert.match(await page.locator('#resize-summary').textContent(), /100 new cells/);
+        await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+        assert.deepEqual(await saved(), original, 'Preview and cancel must not edit the map.');
+
+        step = 'anchored growth and history';
+        await page.getByRole('button', { name: 'Resize map…', exact: true }).click(); await setResize();
+        await page.getByRole('button', { name: 'Resize map', exact: true }).click();
+        map = await saved(); assert.equal(map.width, 30); assert.equal(map.height, 22);
+        for (let i = 0; i < map.layers.length; i++) {
+          assert.equal(map.layers[i].tiles[31], original.layers[i].tiles[0], 'Center growth must offset existing tiles.');
+          assert.equal(map.layers[i].tiles[0], i === 0 ? 4 : 0, 'Fill must apply only to new back-layer cells.');
+        }
+        assertFits(await metrics(page));
+        await page.getByRole('button', { name: 'Undo', exact: true }).click(); assert.deepEqual(await saved(), original);
+        await page.getByRole('button', { name: 'Redo', exact: true }).click(); assert.deepEqual(await saved(), map);
+
+        step = 'crop preview and restore';
+        await page.getByRole('button', { name: 'Resize map…', exact: true }).click();
+        await page.locator('#resize-width').fill('8'); await page.locator('#resize-height').fill('6');
+        await page.locator('#resize-anchor').selectOption('bottom-right');
+        assert.match(await page.locator('#resize-summary').textContent(), /occupied cells will be cropped/);
+        assert.equal(await page.locator('#resize-preview').getAttribute('width'), '192');
+        await page.getByRole('button', { name: 'Resize map', exact: true }).click();
+        assert.equal((await saved()).width, 8); assertFits(await metrics(page));
+        await page.getByRole('button', { name: 'Undo', exact: true }).click(); assert.deepEqual(await saved(), map);
+
+        step = 'invalid resize';
+        await page.getByRole('button', { name: 'Resize map…', exact: true }).click();
+        await page.locator('#resize-width').fill('65');
+        assert.equal(await page.locator('#apply-resize').isDisabled(), true);
+        assert.equal(await page.locator('#resize-error').isVisible(), true);
+        await page.getByRole('button', { name: 'Cancel', exact: true }).click(); assert.deepEqual(await saved(), map);
+        assert.equal((await metrics(page)).pageWidth, width);
+        assert.deepEqual(errors, [], 'Structural editing must not cause runtime errors.');
+        results.push({ width, checks: 'layer rename/duplicate/order/delete, limits, cancel/undo/redo, resize preview, anchors, fill, crop, validation, stable layout' });
+      } catch (error) { throw new Error(`${width}px, ${step}: ${error.message}`, { cause: error }); }
+      finally { await context.close(); }
+    }
+
     const touchContext = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, acceptDownloads: true });
     try {
       const page = await touchContext.newPage();

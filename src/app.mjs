@@ -5,6 +5,7 @@ import { loadDocument, saveDocument } from './storage.mjs';
 import { TILE_SIZE, drawTile, renderMap } from './render.mjs';
 import { cellAtPoint, fitZoom } from './viewport.mjs';
 import { createIcon } from './icons.mjs';
+import { renameLayer, duplicateLayer, moveLayer, removeLayer, resizeDocument, croppedTileCount } from './operations.mjs';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#map');
@@ -14,6 +15,7 @@ const storage = { getItem: key => localStorage.getItem(key), setItem: (key, valu
 const restored = loadDocument(storage);
 let history = new History(restored.document || createSample());
 let activeLayer = history.document.layers[0].id;
+let lastLayerPosition = 0;
 let selectedTile = 1, tool = 'brush', grid = true, cursor = { x: 0, y: 0 }, stroke = null;
 let pan = null, showCursor = false;
 let hasEdits = Boolean(restored.document);
@@ -67,7 +69,9 @@ function revealCursor() {
 
 function refresh() {
   const map = history.document;
-  if (!map.layers.some(layer => layer.id === activeLayer)) activeLayer = map.layers[0].id;
+  if (!map.layers.some(layer => layer.id === activeLayer)) activeLayer = map.layers[Math.min(lastLayerPosition, map.layers.length - 1)].id;
+  lastLayerPosition = map.layers.findIndex(layer => layer.id === activeLayer);
+  const selectedLayer = map.layers[lastLayerPosition];
   cursor = { x: Math.min(cursor.x, map.width - 1), y: Math.min(cursor.y, map.height - 1) };
   $('#document-title').textContent = map.name;
   $('#document-meta').textContent = `${map.width} × ${map.height} tiles`;
@@ -80,6 +84,12 @@ function refresh() {
   $('#undo').disabled = !history.past.length;
   $('#redo').disabled = !history.future.length;
   $('#add-layer').disabled = map.layers.length >= MAX_LAYERS;
+  $('#layer-name').value = selectedLayer.name;
+  $('#layer-info').textContent = `${selectedLayer.tiles.filter(tile => tile !== 0).length} occupied cells · ${selectedLayer.visible ? 'Visible' : 'Hidden'}`;
+  $('#duplicate-layer').disabled = map.layers.length >= MAX_LAYERS;
+  $('#raise-layer').disabled = lastLayerPosition === map.layers.length - 1;
+  $('#lower-layer').disabled = lastLayerPosition === 0;
+  $('#delete-layer').disabled = map.layers.length <= 1;
   $('#save-state').textContent = saveLabel;
   $('#save-state').classList.toggle('error', saveLabel === 'Export to keep changes');
   $('#layers').replaceChildren(...[...map.layers].reverse().map(layer => {
@@ -292,6 +302,88 @@ $('#add-layer').addEventListener('click', () => {
   const layer = { id: `layer-${suffix}`, name: `Layer ${suffix}`, visible: true, tiles: Array(map.width * map.height).fill(0) };
   activeLayer = layer.id;
   commit({ ...map, layers: [...map.layers, layer] }, 'New layer added in front.');
+});
+
+$('#layer-name').addEventListener('change', event => {
+  cancelStroke();
+  try {
+    commit(renameLayer(history.document, activeLayer, event.target.value), 'Layer renamed.');
+    event.target.value = history.document.layers.find(layer => layer.id === activeLayer).name;
+  } catch (error) { event.target.value = history.document.layers.find(layer => layer.id === activeLayer).name; announce(error.message); }
+});
+$('#layer-name').addEventListener('keydown', event => {
+  if (event.key === 'Enter') { event.preventDefault(); event.target.blur(); }
+  if (event.key === 'Escape') {
+    event.preventDefault(); event.stopPropagation();
+    event.target.value = history.document.layers.find(layer => layer.id === activeLayer).name; event.target.blur();
+  }
+});
+$('#duplicate-layer').addEventListener('click', () => {
+  cancelStroke();
+  try {
+    const next = duplicateLayer(history.document, activeLayer);
+    activeLayer = next.layers[lastLayerPosition + 1].id;
+    commit(next, 'Layer duplicated in front of its original.');
+  } catch (error) { announce(error.message); }
+});
+for (const [selector, direction, label] of [['#raise-layer', 1, 'forward'], ['#lower-layer', -1, 'backward']]) {
+  $(selector).addEventListener('click', () => {
+    cancelStroke(); commit(moveLayer(history.document, activeLayer, direction), `Layer moved ${label}.`);
+  });
+}
+$('#delete-layer').addEventListener('click', () => {
+  const layer = history.document.layers.find(item => item.id === activeLayer);
+  const count = layer.tiles.filter(tile => tile !== 0).length;
+  if (!window.confirm(`Delete “${layer.name}” and its ${count} occupied cells? Undo can restore the layer.`)) return;
+  cancelStroke();
+  try { commit(removeLayer(history.document, activeLayer), 'Layer deleted. Undo restores it.'); }
+  catch (error) { announce(error.message); }
+});
+
+function resizeDraft() {
+  const width = Number($('#resize-width').value), height = Number($('#resize-height').value);
+  const anchor = $('#resize-anchor').value, fillTile = Number($('#resize-fill').value);
+  return { width, height, anchor, fillTile,
+    map: resizeDocument(history.document, width, height, { anchor, fillTile }),
+    cropped: croppedTileCount(history.document, width, height, anchor) };
+}
+
+function updateResizePreview() {
+  try {
+    const draft = resizeDraft();
+    $('#resize-error').hidden = true; $('#resize-preview-wrap').hidden = false;
+    $('#apply-resize').disabled = draft.map === history.document;
+    renderMap($('#resize-preview'), draft.map, { editor: true });
+    $('#resize-preview').setAttribute('aria-label', `${draft.width} by ${draft.height} map after resizing, ${draft.anchor.replaceAll('-', ' ')} anchor. ${draft.cropped} occupied cells cropped.`);
+    const added = draft.width * draft.height - Math.min(draft.width, history.document.width) * Math.min(draft.height, history.document.height);
+    const retained = draft.cropped ? `${draft.cropped} occupied cells will be cropped, including hidden layers. Undo restores them.` : 'All occupied tiles are retained.';
+    $('#resize-summary').textContent = draft.map === history.document ? 'Choose different dimensions to resize.'
+      : `${retained}${added ? ` ${added} new cells per layer. Back layer: ${TILES[draft.fillTile].name}; other layers: empty.` : ''}`;
+    $('#resize-summary').classList.toggle('has-crop', draft.cropped > 0);
+  } catch (error) {
+    $('#resize-preview-wrap').hidden = true; $('#apply-resize').disabled = true;
+    $('#resize-summary').textContent = ''; $('#resize-error').textContent = error.message; $('#resize-error').hidden = false;
+  }
+}
+$('#resize-map').addEventListener('click', () => {
+  cancelStroke();
+  $('#resize-width').value = history.document.width; $('#resize-height').value = history.document.height;
+  $('#resize-anchor').value = 'top-left'; $('#resize-fill').value = '1';
+  updateResizePreview(); $('#resize-dialog').showModal();
+});
+for (const selector of ['#resize-width', '#resize-height', '#resize-anchor', '#resize-fill']) {
+  $(selector).addEventListener('input', updateResizePreview);
+  $(selector).addEventListener('change', updateResizePreview);
+}
+$('#cancel-resize').addEventListener('click', () => $('#resize-dialog').close());
+$('#resize-form').addEventListener('submit', event => {
+  event.preventDefault();
+  try {
+    const draft = resizeDraft();
+    cancelStroke(); zoomControl.value = 'fit';
+    commit(draft.map, `Map resized to ${draft.width} × ${draft.height}. Undo restores the previous dimensions and tiles.`);
+    viewport.scrollTo(0, 0); $('#resize-dialog').close();
+  } catch { updateResizePreview(); }
 });
 
 function download(blob, extension) {

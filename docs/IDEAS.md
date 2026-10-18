@@ -1,0 +1,53 @@
+# Ideas for a more complete Tilewright
+
+These priorities come from inspecting the current editor's gaps and reviewing
+the official [Tiled layer workflows](https://doc.mapeditor.org/en/stable/manual/layers/)
+and [LDtk editor overview](https://ldtk.io/docs/general/editor-components/).
+They are proposals for this small tool, not claims that Tilewright already
+supports those editors' formats or all their capabilities. The
+[roadmap](../ROADMAP.md) tracks selected work and remaining estimates.
+
+## Delivered in this iteration
+
+**Finish structural editing.** A map no longer needs to be recreated to change
+its dimensions. Users can anchor retained content, preview cropped occupied
+cells, choose fill for new cells, and undo the resize. Layers can be renamed,
+duplicated, reordered, and deleted with confirmation and undo. This closes a
+specific gap in the existing workflow without changing the saved map format.
+
+## Highest-value next steps
+
+| Idea | Problem it solves | A useful first version | Completion evidence |
+| --- | --- | --- | --- |
+| Reusable selections and stamps | Painting the same cabin garden or tree cluster repeatedly is slow. | Select a rectangle on one layer; copy/cut/paste with a placement preview; rotate or flip it; commit one undo step. Extend to multiple layers after the base behavior works. | Test map boundaries, transparent cells, canceled placement, transformations, and undo/redo. |
+| Local map library and recovery | There is one autosave slot, so switching projects requires manual exports. | Keep named maps locally; duplicate/open/delete them; retain a previous recovery copy; export portable backups. | Simulate write failure, storage quota, migration from the current autosave, and restoration without data loss. |
+| Custom tilesets | The original twelve tiles limit the worlds people can make. | Import an owned PNG atlas with bounded dimensions and tile size; preview the palette; make map and tileset portable together. | Verify corrupt/oversized images, missing artwork, persistence, image export, and explicit format migration. |
+| Minimap navigator | A large map at 200% zoom is hard to navigate using only scrollbars. | Show the whole map with a viewport rectangle; click or keyboard-navigate to another region. | Keep the viewport indicator correct after zoom, resize, window changes, and hidden-layer updates. |
+| Export adapter | JSON is portable, but game projects must currently interpret Tilewright's own format. | Pick one documented target format and export a small, complete map with its tileset reference. | Import the result into the actual target tool, compare every cell/layer, and keep golden export fixtures. |
+
+## Smaller refinements after those foundations
+
+- **Layer locks:** prevent painting and erasing on a locked layer while leaving
+  it visible. Version the field deliberately, preserve older maps, and make
+  lock status obvious in keyboard and touch workflows.
+- **Brush footprints:** add small square/round brushes and an outline rectangle;
+  make previews match the final operation and retain one undo step per stroke.
+- **Terrain connections:** use explicit neighbor-based tile rules to connect
+  water banks, paths, or fences. Keep rules deterministic and inspectable.
+- **Walkability preview:** let the author mark solid terrain, choose a test
+  starting cell, and walk through the fictional map. Separate editor annotations
+  from artwork and define export semantics before implementing it.
+- **Offline installation:** add an installable static app with explicit update
+  and recovery behavior. Existing maps must remain available after an update.
+- **Practical accessibility:** test actual screen readers and physical touch
+  devices; improve readable tile descriptions, shortcut customization, and
+  discoverability of panning/zoom without relying on hover tooltips.
+
+## How to prioritize
+
+Start with selections/stamps for frequent drawing work, or the local library
+for users juggling several maps. Custom tilesets should precede broad export
+support so an exported game world can carry usable artwork. The minimap is a
+small independent navigation improvement once actual larger-map use justifies
+it. Keep confirmation, undo, import validation, local backups, and responsive
+rendering as acceptance criteria for every new workflow.

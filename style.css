@@ -408,6 +408,8 @@ h1>span {
 .canvas-panel {
   min-width:0;
   min-height:0;
+  height:clamp(460px,65svh,640px);
+  align-self:start;
   display:flex;
   flex-direction:column;
   background:#e9ece3;
@@ -602,6 +604,50 @@ h1>span {
   display:flex;
   flex-direction:column;
   gap:5px;
+  max-height:260px;
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+
+.layer-controls {
+  margin-top:13px;
+  border-top:1px solid var(--line);
+  padding-top:11px;
+}
+
+.layer-controls summary {
+  cursor:pointer;
+  color:#63765b;
+  font-size:10px;
+}
+
+.layer-controls .field-label {
+  margin-top:14px;
+}
+
+.layer-actions {
+  display:flex;
+  gap:6px;
+}
+
+.layer-actions button {
+  display:grid;
+  place-items:center;
+  padding:7px;
+  width:34px;
+  height:34px;
+}
+
+.layer-actions #delete-layer {
+  margin-left:auto;
+  color:#996c54;
+}
+
+.resize-button {
+  width:100%;
+  margin-top:14px;
+  padding:8px;
+  font-size:11px;
 }
 
 .layer-row {
@@ -817,6 +863,8 @@ dialog {
   background:var(--white);
   max-width:440px;
   width:calc(100% - 32px);
+  max-height:calc(100svh - 32px);
+  overflow-y:auto;
   box-shadow:0 16px 80px #233e3233;
 }
 
@@ -865,6 +913,49 @@ dialog label {
 dialog .dialog-note {
   font-size:10px;
   margin-top:12px;
+}
+
+.resize-dialog {
+  max-width:560px;
+}
+
+.resize-dialog .preview-label {
+  margin:19px 0 9px;
+  font-size:9px;
+  letter-spacing:1.2px;
+}
+
+.resize-preview-wrap {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:200px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:#e9ece3;
+}
+
+.resize-preview-wrap[hidden] {
+  display:none;
+}
+
+#resize-preview {
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  image-rendering:pixelated;
+}
+
+.resize-dialog .resize-summary {
+  margin:12px 0 0;
+  font-size:11px;
+}
+
+.resize-summary.has-crop,.resize-dialog .resize-error {
+  color:#985d3d;
 }
 
 .shortcut-list {
@@ -1067,6 +1158,8 @@ dialog>form[method="dialog"] {
   }
   .canvas-panel {
     flex:none;
+    height:auto;
+    align-self:stretch;
   }
   .toolbar {
     gap:6px;
@@ -1127,6 +1220,20 @@ dialog>form[method="dialog"] {
   }
   .panel-caption,.field-label {
     font-size:10px;
+  }
+  .layer-controls summary {
+    font-size:11px;
+  }
+  .layer-actions {
+    flex-wrap:wrap;
+    gap:4px;
+  }
+  .layer-actions button {
+    width:32px;
+    height:36px;
+  }
+  .resize-button {
+    min-height:36px;
   }
   .editor-bottom {
     align-items:flex-start;

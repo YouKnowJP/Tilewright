@@ -13,6 +13,7 @@ installation, build-time framework, database service, or remote API.
 | `src/bootstrap.mjs` | Load the editor and replace a blank canvas with useful startup/error guidance if imports fail. |
 | `src/viewport.mjs` | Fit-to-workspace geometry and zoom-aware pointer hit testing. |
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
+| `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
 | `serve.mjs` | Loopback-only development HTTP server with a shared public-file allowlist. |
 | `scripts/build.mjs` | Stage and package public assets; refuse to overwrite unrelated nonempty directories. |
 
@@ -28,6 +29,20 @@ History stores up to 60 immutable document snapshots and a redo stack. New edits
 clear redo. Renames, visibility changes, and new layers use the same commit path
 as painting. New/imported/sample documents start fresh histories. The local save
 contains only the current document; view controls and history are session state.
+
+Layer operations preserve IDs except when creating a duplicate, which receives
+a unique ID and its own cell array immediately in front of the source. The
+model enforces 1–6 layers. The selected-layer settings are view state; a missing
+selection after undo/deletion falls back to the nearest surviving layer.
+
+Resizing creates new arrays for every layer, copies retained cells at the chosen
+anchor offset, and fills new cells only in the backmost layer. Other new cells
+are transparent. Original empty cells stay empty. Center offsets use
+`floor((newSize - oldSize) / 2)`: odd growth adds the extra cell on the right or
+bottom, while odd centered cropping removes the extra cell on the left or top.
+The preview counts discarded nonzero cells across all layers, including hidden
+ones. Preview/cancel do not edit storage or history; application is one history
+commit. No document-format revision is needed.
 
 Flood fill uses an iterative queue with four-neighbor connectivity, so a full
 64 × 64 map does not need recursive calls. The current maximum is 24,576 cells

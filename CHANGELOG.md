@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.0 — 2026-10-18
+
+- Add layer naming, independent duplication, forward/backward ordering, and
+  deletion with confirmation. Preserve the six-layer limit and a minimum of
+  one layer, with all structural changes available in undo/redo.
+- Add map resizing with nine placement anchors, a live result preview, a count
+  of cropped occupied cells including hidden layers, and configurable fill for
+  new back-layer cells. Keep new cells in other layers transparent.
+- Make resizing one undo step, preserve version-1 save compatibility, and fit
+  resized maps to the workspace automatically.
+- Keep the canvas height independent of expanded layer settings and add
+  phone/desktop browser coverage for structural editing and resize dialogs.
+- Add nine operation tests (28 total), update screenshots and documentation,
+  and separate completed roadmap work from prioritized future ideas.
+
 ## 0.1.1 — 2026-10-18
 
 - Fit the entire map on initial load, replacement, and workspace resize; add
