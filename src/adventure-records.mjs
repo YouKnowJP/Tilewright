@@ -24,7 +24,7 @@ export function saveResult(storage, records, id, result) {
   const improved = !old || result.stars > old.stars || (result.stars === old.stars
     && (result.score > old.score || (result.score === old.score && result.turns < old.turns)));
   const next = { ...records, [id]: improved ? { ...result } : old };
-  const optional = Object.keys(next).filter(key => !/^trail-[123]$/.test(key));
+  const optional = Object.keys(next).filter(key => !/^trail-[1-6](?:-nemesis)?$/.test(key));
   while (Object.keys(next).length > 64) delete next[optional.shift()];
   try { storage.setItem(RECORD_KEY, JSON.stringify({ version: 1, records: next })); return { records: next, saved: true, improved }; }
   catch { return { records: next, saved: false, improved }; }

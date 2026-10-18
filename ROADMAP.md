@@ -1,6 +1,6 @@
 # Tilewright roadmap
 
-The current editor and three-quest game are a usable starting point. These are **unfinished** feature
+The current editor and six-mission game are a usable starting point. These are **unfinished** feature
 proposals with planning estimates, not completed work or hours already spent.
 The owner should prioritize the work they actually intend to undertake before
 using this plan in a program submission.
@@ -18,9 +18,22 @@ The previous map-resizing/layer-management milestone is complete in v0.2.0;
 it is excluded from remaining estimates. See [feature ideas](docs/IDEAS.md)
 for the rationale and additional options, which are not commitments or worked hours.
 
-## Available in v0.3.0
+## Available in v0.4.0
 
-- Three progressively unlocked Lantern Trails quests, with stars and local bests.
+- Three harder second-act missions with dialogue choices, a journal, relay
+  sequences/alarms, rescue goals, and safely following companions.
+- Adaptive hunters that learn observed movement patterns locally, with
+  committed next-step markers, cover, decoys, shields, and replenishment supplies.
+- A three-phase Watcher with marked sweeps, cycling embers, and distinct endings.
+- Nemesis rules and independent bests, retained campaign saves, and an explicit
+  learning reset that preserves maps and progress.
+- [Mission guide and seven future mission concepts](docs/MISSIONS.md), with
+  concrete interaction and fairness criteria. These ideas are unfinished and
+  are not included in the completed features or the estimates above.
+
+## Earlier game features retained
+
+- Three introductory Lantern Trails quests, stars, and local bests.
 - Lantern exploration, fog, a following camera, a discovered map, and scout hints.
 - Predictable patrols, health/healing, energy-based dash, and protected recovery.
 - Keys/gates, crate-and-pressure-plate puzzles, linked bridges, and treasures.

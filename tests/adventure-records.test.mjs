@@ -48,3 +48,18 @@ test('custom expedition records are bounded without evicting campaign unlocks', 
   assert.equal('custom-0' in records, false); assert.deepEqual(records['custom-99'], best);
   assert.deepEqual(loadRecords(store), records);
 });
+
+
+test('record eviction preserves every new campaign and Nemesis best alongside legacy saves', () => {
+  const store = storage(); let records = {};
+  for (let i = 1; i <= 6; i++) {
+    records = saveResult(store, records, `trail-${i}`, best).records;
+    records = saveResult(store, records, `trail-${i}-nemesis`, best).records;
+  }
+  for (let i = 0; i < 100; i++) records = saveResult(store, records, `custom-${i}`, best).records;
+  assert.equal(Object.keys(records).length, 64);
+  for (let i = 1; i <= 6; i++) {
+    assert.deepEqual(records[`trail-${i}`], best); assert.deepEqual(records[`trail-${i}-nemesis`], best);
+  }
+  assert.deepEqual(loadRecords(store), records);
+});

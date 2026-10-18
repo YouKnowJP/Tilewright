@@ -1,5 +1,5 @@
 import { renderMap, drawTile, TILE_SIZE } from './render.mjs';
-import { activePlates, enemyIntent, gateIsOpen } from './adventure.mjs';
+import { activePlates, enemyIntent, gateIsOpen, hazardActive } from './adventure.mjs';
 
 const near = (a, b) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <= 30;
 const same = (a, b) => a.x === b.x && a.y === b.y;
@@ -41,6 +41,55 @@ export function createAdventureRenderer(canvas, stage) {
     const visible = point => run.seen[point.y * stage.map.width + point.x];
     const active = activePlates(run);
 
+    for (const cover of stage.cover) {
+      const x = cover.x * 24, y = cover.y * 24;
+      for (let i = 0; i < 3; i++) {
+        const stemX = x + 5 + i * 7, top = y + 6 + (i % 2) * 3;
+        rect('#648957', stemX, top, 2, 16);
+        for (let leaf = 0; leaf < 3; leaf++) {
+          const leafY = top + 3 + leaf * 4;
+          rect('#9fbe7a', stemX - 3, leafY - 2, 3, 2); rect('#b0ce86', stemX + 2, leafY - 2, 3, 2);
+          rect('#82a86b', stemX - 2, leafY, 6, 2);
+        }
+      }
+    }
+    for (const hazard of stage.hazards) {
+      const x = hazard.x * 24, y = hazard.y * 24, active = hazardActive(run, hazard), warning = hazardActive(run, hazard, run.turns + 1);
+      rect(active ? '#905646' : '#6b7160', x + 2, y + 16, 20, 7);
+      for (let i = 0; i < 3; i++) {
+        rect(active ? '#e99a50' : '#a2936e', x + 4 + i * 6, y + (active ? 9 : 17), 3, active ? 11 : 3);
+        if (active) rect('#ffe5a1', x + 5 + i * 6, y + 12, 2, 6);
+      }
+      if (warning) { ctx.strokeStyle = '#edb35d'; ctx.lineWidth = 2; ctx.setLineDash([2, 2]); ctx.strokeRect(x + 1, y + 1, 22, 22); ctx.setLineDash([]); }
+    }
+    for (const relay of stage.relays) {
+      const x = relay.x * 24, y = relay.y * 24, powered = stage.sequence.slice(0, run.relayProgress).includes(relay.id);
+      const colors = { copper: '#dda76a', glass: '#89c8b6', iron: '#aab4b2', moon: '#c6acd9', root: '#a4c27d', sun: '#f5d27a' };
+      rect('#5a685c', x + 5, y + 19, 14, 4); rect('#89967a', x + 8, y + 13, 8, 8);
+      if (powered) circle('#a0e1ba55', x + 12, y + 10, 12);
+      rect(powered ? '#a6e0b8' : colors[relay.id] || '#d9bc83', x + 5, y + 7, 14, 10);
+      rect('#eee3b5', x + 9, y + 4, 6, 3); rect('#5b7861', x + 11, y + 14, 2, 5);
+    }
+    for (const supply of stage.supplies) {
+      if (run.usedSupplies.includes(supply.id)) continue;
+      const x = supply.x * 24, y = supply.y * 24;
+      rect('#4a6c63', x + 3, y + 8, 18, 14); rect('#8fb4a1', x + 4, y + 7, 16, 12);
+      rect('#e4d6a0', x + 10, y + 6, 4, 14); rect('#e4d6a0', x + 7, y + 12, 10, 3);
+    }
+    for (const npc of stage.npcs) {
+      const position = run.companions.find(companion => companion.id === npc.id) || npc;
+      const x = position.x * 24, y = position.y * 24;
+      circle('#354f3b55', x + 12, y + 21, 8);
+      rect('#456f75', x + 6, y + 10, 13, 12); rect('#9cc4b5', x + 8, y + 11, 9, 8);
+      rect('#755943', x + 6, y + 4, 13, 8); rect('#edc795', x + 8, y + 7, 9, 6);
+      rect(run.rescued.includes(npc.id) ? '#a8e0b8' : '#fff0bc', x + 8, y - 3, 11, 6);
+      rect('#497567', x + 10, y - 1, 2, 2); rect('#497567', x + 14, y - 1, 2, 2);
+    }
+    if (run.lure && run.lure.until > run.turns) {
+      const x = run.lure.x * 24, y = run.lure.y * 24;
+      circle('#90d8ce55', x + 12, y + 11, 14); circle('#b5ede1', x + 12, y + 11, 6);
+      rect('#f4edc9', x + 10, y + 7, 4, 8);
+    }
     for (const plate of stage.plates) {
       const x = plate.x * 24, y = plate.y * 24;
       rect('#635e45', x + 3, y + 14, 18, 7); rect(active.includes(plate.id) ? '#8cc09a' : '#d8a56a', x + 4, y + 12, 16, 6);
@@ -51,6 +100,10 @@ export function createAdventureRenderer(canvas, stage) {
       if (gate.type === 'bridge') {
         if (open) drawTile(ctx, 12, x, y);
         else { rect('#426f75', x + 2, y + 8, 20, 2); rect('#c99c65', x + 1, y + 5, 3, 14); rect('#c99c65', x + 20, y + 5, 3, 14); }
+      } else if (gate.type === 'signal' && !open) {
+        rect('#6e657d', x + 2, y + 2, 3, 22); rect('#6e657d', x + 19, y + 2, 3, 22);
+        rect('#bcadd7', x + 4, y + 6, 16, 3); rect('#bcadd7', x + 4, y + 16, 16, 3);
+        circle('#e8d3ed', x + 12, y + 12, 4);
       } else if (!open) {
         rect('#6e563d', x + 1, y + 3, 3, 20); rect('#6e563d', x + 20, y + 3, 3, 20);
         rect('#c99a52', x + 3, y + 6, 18, 4); rect('#dfbb70', x + 3, y + 14, 18, 4);
@@ -105,6 +158,28 @@ export function createAdventureRenderer(canvas, stage) {
       rect('#ecaa86', x + 6, y + 6, 6, 3); rect('#fff0c2', x + 7, y + 11, 3, 4); rect('#fff0c2', x + 15, y + 11, 3, 4);
       rect('#4d5145', x + 8, y + 13, 2, 2); rect('#4d5145', x + 16, y + 13, 2, 2);
     }
+    for (const hunter of run.hunters) {
+      for (const cell of hunter.attack || []) {
+        if (!near(cell, run.player)) continue;
+        const ax = cell.x * 24, ay = cell.y * 24;
+        rect('#b66b8855', ax + 1, ay + 1, 22, 22); ctx.strokeStyle = '#f0b2aa'; ctx.lineWidth = 2;
+        ctx.strokeRect(ax + 2, ay + 2, 20, 20); ctx.beginPath(); ctx.moveTo(ax + 6, ay + 6); ctx.lineTo(ax + 18, ay + 18);
+        ctx.moveTo(ax + 18, ay + 6); ctx.lineTo(ax + 6, ay + 18); ctx.stroke();
+      }
+      if (!near(hunter, run.player)) continue;
+      const x = hunter.x * 24, y = hunter.y * 24;
+      ctx.strokeStyle = hunter.mode === 'distracted' ? '#84d3c5' : '#e18d82'; ctx.lineWidth = 2; ctx.setLineDash([3, 2]);
+      ctx.strokeRect(hunter.intent.x * 24 + 2, hunter.intent.y * 24 + 2, 20, 20); ctx.setLineDash([]);
+      circle('#37364955', x + 12, y + 21, 10);
+      rect(hunter.boss ? '#654b77' : '#526580', x + 3, y + 9, 18, 12);
+      rect(hunter.boss ? '#a384b0' : '#8ba3ad', x + 5, y + 5, 14, 12);
+      rect('#f8d3a4', x + 7, y + 11, 3, 3); rect('#f8d3a4', x + 15, y + 11, 3, 3);
+      rect('#403d50', x + 8, y + 12, 2, 2); rect('#403d50', x + 16, y + 12, 2, 2);
+      if (hunter.boss) {
+        rect('#deb975', x + 5, y + 1, 14, 5);
+        for (let i = 0; i < hunter.phase; i++) rect('#fff0bc', x + 6 + i * 5, y - 2, 3, 5);
+      }
+    }
     for (let y = Math.floor(cameraY); y < Math.min(stage.map.height, Math.ceil(cameraY + rows)); y++) {
       for (let x = Math.floor(cameraX); x < Math.min(stage.map.width, Math.ceil(cameraX + columns)); x++) {
         if (!run.seen[y * stage.map.width + x]) rect('#142d2c', x * 24, y * 24, 24, 24);
@@ -112,6 +187,7 @@ export function createAdventureRenderer(canvas, stage) {
       }
     }
     const x = player.x * 24, y = player.y * 24;
+    if (run.ward > 0) { circle('#a4e8da44', x + 12, y + 12, 17); ctx.strokeStyle = '#b2edda'; ctx.lineWidth = 2; ctx.strokeRect(x - 1, y - 1, 26, 26); }
     circle('#354f3b55', x + 12, y + 21, 8);
     const blink = run.invulnerability > 0 && !reducedMotion.matches && Math.floor(time / 130) % 2;
     ctx.globalAlpha = blink ? .55 : 1;

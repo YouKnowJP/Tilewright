@@ -108,7 +108,7 @@ test('the beacon needs all lanterns, dash stops on a completed beacon, and scori
 test('all three authored adventures are completable with three stars using ordinary moves', () => {
   const routes = JSON.parse(readFileSync(new URL('fixtures/adventure-routes.json', import.meta.url)));
   const turns = [];
-  for (const definition of createCampaign()) {
+  for (const definition of createCampaign().slice(0, 3)) {
     const before = JSON.stringify(definition), initial = createRun(definition);
     const won = steps(initial, routes[definition.id]);
     assert.equal(won.status, 'won', definition.name); assert.equal(won.health, 3); assert.equal(won.damage, 0);

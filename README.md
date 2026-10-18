@@ -2,12 +2,12 @@
 
 **Make a little world. Then go on an adventure.** Tilewright combines a local
 tile map editor with **Lantern Trails**, an original turn-based puzzle game.
-Explore three handcrafted quests, outsmart patrols, solve crate-and-bridge
-puzzles, and restore lost lanterns. You can also explore a world you paint.
+Explore six handcrafted missions, speak to keepers, rescue companions, solve
+crate-and-relay puzzles, and outsmart hunters that learn your movement habits. You can also explore a world you paint.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
-![Lantern Trails adventure gameplay](docs/adventure.png)
+![The Watcher’s Crown with a marked sweep and active shield](docs/watcher.png)
 
 ## Run locally
 
@@ -37,13 +37,45 @@ advances after a valid move or wait; there is no timer. Blocked moves cost nothi
 | Candlebrook | Find the brass key, open the forest gate, and avoid a trail warden. | 70 |
 | Copper Crossing | Push a crate onto a copper plate to hold a river bridge open. | 85 |
 | The Ember Vault | Hold two plates, cross the river, and unlock a guarded lantern vault. | 110 |
+| Briarwatch Rescue | Evade adaptive hunters, restore the lights, and return to rescue Orin. | 105 |
+| Bellforge Heist | Ring the bells in order, open a signal gate, and cross pulsing embers. | 110 |
+| The Watcher’s Crown | Rescue Sola and silence a three-phase Watcher behind crate, key, and relay locks. | 135 |
 
-Wardens follow predictable patrols. Red outlined cells show their next step.
+**Begin hard missions** opens the second act immediately. Its other missions
+unlock in order. Choose **Nemesis** under Rules to start with two hearts, one
+decoy, and one shield, shorten recovery windows, extend hunter vision, add a
+reinforcement, and make ember pulses more frequent. Introductory patrols become
+adaptive hunters in this mode. Nemesis has separate bests and 85% turn targets.
+Changing rules restarts the mission; the final result screen offers Nemesis too.
+
+**E / Interact** talks to a keeper, rings a nearby bell, or opens supplies.
+Dialogue choices grant a decoy or shield once and record advice in a journal.
+Rescue missions require returning to the stranded keeper after lighting every
+lantern; rescued characters follow safely to the beacon. Wrong relay notes reset
+the sequence and raise a six-turn alarm. Completed relays open signal gates
+and briefly stun hunters. Supplies restore a heart, decoy, and shield charge.
+
+Wardens on the introductory Trail missions follow predictable patrols. Red outlined cells show their next step.
 Touching a warden costs a heart, followed by two protected turns to escape.
-You have three hearts; trail potions restore one. **Dash** travels up to two
+Trail rules start with three hearts; trail potions restore one. **Dash** travels up to two
 cells before patrols move once, spending two energy. Walking and waiting
 restore one energy, up to three. Crates can be pushed but not pulled, so plan
 the side you approach from. Restart is always available.
+
+Hunters learn from successful moves, waits, and dashes using bounded local
+movement counts and action transitions. With a reliable pattern, they anticipate
+the next direction or dash and try to intercept it. They need sight, sound, or
+a recent lead to locate you. **Their next step is committed before your input**.
+The Watcher gains phases as lanterns are restored and marks sweep cells before
+striking. Walls block sight and sweeps. Orange outlines mark next-turn ember
+danger; crossing a burning cell during a dash still hurts.
+
+**Q / Decoy** throws a false light ahead to distract enemies for five following
+turns. **C / Shield** protects this turn and the next two. Both consume a charge
+and a turn. Fern patches hide quiet movement from distant hunters, while a dash
+stays audible for three turns. The notebook explains observed patterns. Learning
+persists in this browser across missions and retries; **Forget learned habits**
+clears it while retaining your maps and bests. No remote AI service is used.
 
 Fog reveals the world as you explore. The discovered-map overview, quest
 checklist, and **Scout hint** help with navigation and each puzzle. Optional
@@ -64,6 +96,8 @@ editor save. If storage is unavailable, unlocks still work for the session.
 | Wait and recharge | Space with the board focused, or Wait |
 | Pause / resume | P / Escape, or Pause |
 | Restart current quest | R, or Restart |
+| Talk / ring relay / open supplies | E, or Interact |
+| Throw a decoy / raise a shield | Q / C, or the tactical buttons |
 | Toggle scout hint | H, or Scout hint |
 | Choose a quest | Choose trail, then a quest card |
 
@@ -76,7 +110,10 @@ plus 20% room for exploration. Custom expeditions have no wardens or authored
 gate puzzles. Editing or renaming a map creates a new expedition identity.
 Playing never changes map tiles, autosave, or undo history.
 
-![Touch controls and the following camera on a phone layout](docs/adventure-mobile.png)
+![Dialogue choices on a phone layout](docs/dialogue-mobile.png)
+
+See the [mission guide and future mission ideas](docs/MISSIONS.md) for
+walkthrough goals, counterplay, and proposed interactions.
 
 ## Make your first map
 
@@ -134,7 +171,7 @@ Undo does not cross document replacement.
 
 The app makes no external requests automatically. The Source code link opens
 GitHub only when selected. Bundled data is fictional artwork; the editor has
-no accounts, analytics, cloud sync, imported personal datasets, or AI features.
+no accounts, analytics, cloud sync, imported personal datasets, or remote AI services.
 Use your own non-sensitive creative material.
 
 ## Controls
@@ -166,7 +203,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 45 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 63 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -176,9 +213,10 @@ An optional browser regression suite lives in `scripts/browser-checks.mjs`.
 With Playwright separately installed in the development environment and Google
 Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
-it does not modify existing browser maps. It completes all three adventures
+it does not modify existing browser maps. It completes all six missions and the Nemesis finale
 through real keyboard input and checks unlocks, touch/swipe controls, responsive
-rendering, storage failures, and preserved editor history. Playwright is not
+rendering, dialogue choices, rescue/relay objectives, local learning, memory
+reset, storage failures, and preserved editor history. Playwright is not
 needed to run the app or the default checks, and browser tests are not currently run in CI.
 
 The distributable contains only browser assets, an MIT license, and release

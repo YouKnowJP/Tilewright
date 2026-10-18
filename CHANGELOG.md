@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.4.0 — 2026-10-18
+
+- Expand the campaign to six missions with a directly accessible hard second
+  act: Briarwatch Rescue, Bellforge Heist, and The Watcher’s Crown.
+- Add locally learned movement transitions, predictive interception, sight,
+  sound, fading enemy awareness, fern cover, and readable committed hunter moves.
+  Keep a bounded browser profile and a reset control separate from map/progress data.
+- Add named keepers, dialogue choices with one-time loadout effects, a journal,
+  rescue requirements, and companions that follow safely to the beacon.
+- Add ordered bell relays, wrong-note alarms, signal gates, cycling ember fields,
+  decoys, three-turn shields, and one-use replenishment supplies.
+- Add a three-phase Watcher with premarked sweep attacks, contextual taunts,
+  mission-specific endings, and an invitation to take on Nemesis after the finale.
+- Add Nemesis rules with fewer starting resources, extra hunters, longer ember
+  pulses, shorter protection windows, and independent turn targets and bests.
+- Retain version-1 editor saves and existing campaign progress. Preserve all six
+  missions' normal/Nemesis records when evicting old custom expedition bests.
+- Add 18 regression tests (63 total), real-input hard-mission/Nemesis browser
+  playthroughs, phone dialogue/tactical checks, screenshots, and mission ideas.
+
 ## 0.3.0 — 2026-10-18
 
 - Add Lantern Trails: three original, progressively unlocked adventures with

@@ -6,7 +6,7 @@ const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const PUBLIC_FILES = Object.freeze(['index.html', 'style.css', 'adventure.css', 'icon.svg', 'LICENSE',
   'src/bootstrap.mjs', 'src/app.mjs', 'src/model.mjs', 'src/sample.mjs', 'src/render.mjs', 'src/storage.mjs',
   'src/viewport.mjs', 'src/icons.mjs', 'src/operations.mjs', 'src/adventure.mjs', 'src/adventure-levels.mjs',
-  'src/adventure-records.mjs', 'src/adventure-render.mjs', 'src/adventure-sound.mjs', 'src/adventure-ui.mjs']);
+  'src/adventure-records.mjs', 'src/adventure-render.mjs', 'src/adventure-sound.mjs', 'src/adventure-ui.mjs', 'src/adventure-brain.mjs', 'src/adventure-tactics.mjs']);
 
 export async function build(destination = path.join(ROOT, 'dist')) {
   destination = path.resolve(destination);

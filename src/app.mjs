@@ -463,7 +463,7 @@ function setMode(play, updateURL = true) {
   const heading = $('#intro-title'), accent = document.createElement('span'); accent.textContent = '.';
   heading.replaceChildren(document.createTextNode(play ? 'Follow a little adventure' : 'Make a little world'), accent);
   $('.intro .eyebrow').textContent = play ? 'GATHER LIGHT. OUTSMART THE WARDENS.' : 'YOUR WORLD, ONE TILE AT A TIME';
-  $('.intro-description').textContent = play ? 'Three quests, clever crossings, and a little trail magic. The world moves when you do.'
+  $('.intro-description').textContent = play ? 'Six missions, adaptive hunters, and a little trail magic. The world moves when you do.'
     : 'A quiet corner for your next adventure. Paint, experiment, and take it with you.';
   if (play) adventures.enter(); else { adventures.leave(); layoutCanvas(); }
   if (updateURL) window.history.replaceState(null, '', `${location.pathname}${location.search}${play ? '#play' : ''}`);

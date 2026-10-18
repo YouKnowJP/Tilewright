@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#294f43">
-  <meta name="description" content="Make a little world. Build tile maps and play Lantern Trails: three original puzzle adventures with exploration, patrols, and clever crossings.">
+  <meta name="description" content="Make a little world. Build tile maps and play Lantern Trails: six interactive missions with adaptive hunters, dialogue, rescues, and puzzle crossings.">
   <title>Tilewright — Make a little world</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
@@ -13,7 +13,7 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.3.0</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.4.0</span></a>
     <span class="header-note">A small tool for imaginary places.</span>
     <a class="source-link" href="https://github.com/YouKnowJP/Personal-Project/tree/main/Tilewright" target="_blank" rel="noreferrer">Source code <span aria-hidden="true">↗</span></a>
   </header>
@@ -73,7 +73,7 @@
       <div class="editor-bottom"><p id="status" role="status" aria-live="polite">Welcome to Willowbend. Pick a tile and make it yours.</p><button id="help-button">Keyboard shortcuts <span aria-hidden="true">?</span></button></div>
     </section>
     <section class="adventure" id="adventure" aria-label="Lantern Trails adventure game" hidden>
-      <div class="adventure-heading"><div><p class="eyebrow">LANTERN TRAILS</p><h2>A little courage. A little cleverness.</h2><p>Restore the light, outsmart the wardens, and find your way home.</p></div><button id="play-custom">Play your current map <span aria-hidden="true">↗</span></button></div>
+      <div class="adventure-heading"><div><p class="eyebrow">LANTERN TRAILS</p><h2>The forest is learning your footsteps.</h2><p>Six missions. Keepers to rescue. A Watcher to outsmart.</p></div><div class="adventure-options"><label for="game-difficulty">Rules <small>changes restart this mission</small></label><select id="game-difficulty"><option value="trail">Trail · three hearts</option><option value="nemesis">Nemesis · two hearts, smarter hunters</option></select><button id="begin-contracts">Begin hard missions</button><button id="play-custom">Play your current map <span aria-hidden="true">↗</span></button></div></div>
       <div class="trail-picker" id="trail-picker" aria-label="Adventure selection"></div>
       <div class="game-layout">
         <section class="game-main" aria-labelledby="game-title">
@@ -81,13 +81,16 @@
           <section class="game-hint" id="game-hint" hidden><h3>A scout’s advice</h3><p id="game-hint-text"></p></section>
           <div class="game-hud" aria-label="Adventure status"><div><span>HEARTS</span><strong id="game-health" class="resource-meter" role="img" aria-label="Health: 3 of 3"></strong></div><div><span>ENERGY</span><strong id="game-energy" class="resource-meter" role="img" aria-label="Energy: 3 of 3"></strong></div><div><span>LANTERNS</span><strong id="game-lanterns">0/3</strong></div><div><span>KEYS</span><strong id="game-keys">0</strong></div><div><span>TREASURES</span><strong id="game-coins">0/4</strong></div><div><span>TURNS</span><strong id="game-turns">0</strong></div></div>
           <div class="game-viewport" id="game-viewport"><canvas id="adventure-canvas" width="528" height="336" tabindex="0" role="img" aria-label="Adventure map. Move with arrows or WASD. Shift plus a direction dashes. Space waits." aria-describedby="game-controls-help"></canvas><div class="game-overlay" id="game-overlay" hidden><p id="game-result-eyebrow" class="eyebrow"></p><h3 id="game-result-title"></h3><div id="game-stars" class="game-stars"></div><p id="game-result-text"></p><div><button id="game-primary" class="primary">Resume adventure</button><button id="game-back-editor">Back to editor</button></div></div></div>
-          <div class="game-controls"><div class="direction-pad" aria-label="Movement controls"><button data-move="up" aria-label="Move up">↑</button><button data-move="left" aria-label="Move left">←</button><button data-move="down" aria-label="Move down">↓</button><button data-move="right" aria-label="Move right">→</button></div><button id="dash-button" aria-pressed="false">Dash <kbd>Shift</kbd><small>2 energy · then choose a direction</small></button><button id="game-wait">Wait <kbd>Space</kbd><small>Let patrols move · recharge</small></button><p id="game-controls-help">Arrows / WASD to move · Shift + direction to dash · Swipe or use the direction pad on touch.</p></div>
+          <div class="game-controls"><div class="direction-pad" aria-label="Movement controls"><button data-move="up" aria-label="Move up">↑</button><button data-move="left" aria-label="Move left">←</button><button data-move="down" aria-label="Move down">↓</button><button data-move="right" aria-label="Move right">→</button></div><button id="dash-button" aria-pressed="false">Dash <kbd>Shift</kbd><small>2 energy · then choose a direction</small></button><button id="game-wait">Wait <kbd>Space</kbd><small>Let patrols move · recharge</small></button><p id="game-controls-help">Arrows / WASD to move · Shift + direction to dash · Swipe or use the direction pad on touch.</p><div class="tactical-actions"><button id="game-interact" disabled>Interact <kbd>E</kbd></button><button id="game-decoy">Decoy <span id="game-decoys">2</span><kbd>Q</kbd></button><button id="game-shield">Shield <span id="game-shields">2</span><kbd>C</kbd></button></div></div>
           <p id="game-status" class="game-status" role="status" aria-live="polite">Find three lanterns and reach the beacon.</p>
         </section>
         <aside class="game-aside" aria-label="Quest information">
-          <section class="quest-brief"><p class="eyebrow">YOUR LITTLE QUEST</p><h3>Bring back the light.</h3><p id="game-story"></p><ul class="quest-list"><li id="quest-lanterns">Restore all three lanterns</li><li id="quest-plates" hidden></li><li id="quest-beacon">Reach the turquoise beacon</li></ul><span class="turn-based-tag">TURN BASED · NO TIMER</span></section>
+          <section class="quest-brief"><p class="eyebrow">YOUR LITTLE QUEST</p><h3>Bring back the light.</h3><p id="game-story"></p><ul class="quest-list"><li id="quest-lanterns">Restore all three lanterns</li><li id="quest-plates" hidden></li><li id="quest-mission" hidden></li><li id="quest-beacon">Reach the turquoise beacon</li></ul><span class="turn-based-tag">TURN BASED · NO TIMER</span></section>
           <section class="game-map-note"><p class="eyebrow">YOUR DISCOVERED WORLD</p><canvas id="game-minimap" width="240" height="144" role="img" aria-label="Discovered map overview. Gold marks your position; turquoise marks the beacon."></canvas><p>Gold is you. Turquoise is the beacon.<br>Explore to uncover the trail.</p></section>
-          <section class="game-field-guide"><h3>A few things for the trail</h3><p><strong>Wardens</strong> move after you. Their red outlines mark the next step.</p><p><strong>Dash</strong> moves two tiles before patrols move. Walking and waiting recharge it.</p><p><strong>Crates</strong> hold copper plates down. Leave them in place to keep bridges open.</p><p><strong>Three stars</strong> reward a clean route within the trail’s target turns. Coins add bonus points.</p></section>
+
+          <section class="game-learning-note"><p class="eyebrow">THE WATCHER’S NOTEBOOK</p><h3>Change your rhythm.</h3><p id="game-learning"></p><p id="game-threat"></p><p id="game-learning-save"></p><button id="forget-habits">Forget learned habits</button></section>
+          <section class="game-journal-note"><p class="eyebrow">TRAIL JOURNAL</p><div id="game-journal"><p>Speak to a keeper to record their advice.</p></div></section>
+          <details class="game-field-guide"><summary>Field guide &amp; controls</summary><p><strong>Wardens</strong> move after you. Their red outlines mark the next step.</p><p><strong>Dash</strong> moves two tiles before patrols move. Walking and waiting recharge it.</p><p><strong>Crates</strong> hold copper plates down. Leave them in place to keep bridges open.</p><p><strong>Interact · E</strong> talks to keepers, rings nearby relays, or opens supplies.</p><p><strong>Decoy · Q</strong> throws a false lantern ahead. <strong>Shield · C</strong> protects this turn and the next two.</p><p><strong>Fern cover</strong> hides quiet movement from distant hunters. Dashes are audible for three turns.</p><p><strong>Watcher sweeps</strong> strike the crossed cells next turn. Leave the lane or shield before it hits.</p><p><strong>Embers</strong> pulse each turn. Orange outlines warn where they will burn next.</p><p><strong>Three stars</strong> reward a clean route within the trail’s target turns. Coins add bonus points.</p></details>
           <section class="game-best-note"><span class="eyebrow">YOUR BEST ON THIS TRAIL</span><p id="game-best">No finish yet.</p></section>
         </aside>
       </div>
@@ -97,6 +100,7 @@
     <p class="sr-only" id="canvas-help">Tab through the palette and tools. On the map, use arrow keys to move and Space or Enter to paint. For a rectangle, Space sets the first corner and Space again sets the second. Escape cancels a stroke. B brush, E erase, F fill, R rectangle, I eyedropper, H pan, G grid. With Pan selected, drag to scroll or use arrow keys. Use Fit map to see the entire map. Ctrl or Command Z undoes; Shift Z redoes.</p>
   </main>
   <input type="file" id="file-input" accept="application/json,.json" hidden>
+  <dialog id="conversation-dialog" class="conversation-dialog" aria-labelledby="conversation-name"><p class="eyebrow">A VOICE ON THE TRAIL</p><h2 id="conversation-name"></h2><div id="conversation-lines"></div><div id="conversation-options"></div><button id="conversation-close">Back to the trail</button></dialog>
   <dialog id="resize-dialog" class="resize-dialog">
     <form id="resize-form">
       <span class="eyebrow">MAKE ROOM, KEEP YOUR WORK</span><h2>Reshape your world.</h2>

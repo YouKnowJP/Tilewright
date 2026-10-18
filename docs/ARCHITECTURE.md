@@ -15,10 +15,12 @@ installation, build-time framework, database service, or remote API.
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
 | `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
 | `src/adventure.mjs` | Pure turn rules, collision, pickups, puzzles, patrol intent, scoring, exploration, and connected custom expeditions. |
-| `src/adventure-levels.mjs` | Three original authored quest definitions and fictional maps. |
+| `src/adventure-levels.mjs` | Six original authored quest definitions and fictional maps. |
 | `src/adventure-ui.mjs` | Mode lifecycle, campaign progression, keyboard/touch controls, HUD, hints, and results. |
 | `src/adventure-render.mjs` | Cached map background, following camera, original sprites, fog, and discovered-map overview. |
 | `src/adventure-records.mjs` | Bounded, validated personal bests stored independently of map saves. |
+| `src/adventure-brain.mjs` | Bounded action/transition counts, decaying movement predictions, normalization, and isolated local learning persistence. |
+| `src/adventure-tactics.mjs` | Line of sight, bounded pathfinding, committed pursuit/interception/search, decoys, and boss sweeps. |
 | `src/adventure-sound.mjs` | Opt-in local Web Audio synthesis. |
 | `serve.mjs` | Loopback-only development HTTP server with a shared public-file allowlist. |
 | `scripts/build.mjs` | Stage and package public assets; refuse to overwrite unrelated nonempty directories. |
@@ -86,8 +88,8 @@ Blocked actions do not spend a turn. Patrols ping-pong over adjacent route cells
 Keys are consumed once to open a permanent gate. A linked bridge opens while
 all its plates hold crates or the player. Enemy contact during the player's
 path or after patrol movement costs at most one heart; two subsequent actions
-are protected. Three lost hearts end a run. A win requires all lanterns and
-arrival at the beacon after hazard resolution. Damage, turn count, coins, and
+are protected. Three lost hearts end a run. A win requires all lanterns, authored relay/rescue requirements, and arrival at
+the beacon after hazard resolution. Damage, turn count, coins, and
 remaining hearts determine the result. No real-time clock affects game rules.
 
 Custom adventures derive collision from visible layers in compositing order.
@@ -109,6 +111,52 @@ the board into view. A separate direction pad and canvas swipes support touch.
 Campaign route fixtures exercise ordinary moves through every authored puzzle,
 finishing in 54, 50, and 73 turns without damage. Browser checks replay these
 same moves through actual keyboard input, including intermediate wait turns.
+
+## Adaptive opponents and interactive missions
+
+A movement profile contains counts for nine movement/wait/dash actions and
+first-order transitions. Only successful turn actions train it. Counts decay
+at a total of 128 to make recent habits more influential; the observation
+counter is capped. With at least three matching transitions (or eight global
+samples) and a top frequency of at least 42%, a hunter projects the likely
+next movement and routes toward that interception cell. This is a small,
+deterministic statistical game system, not an external language model or a
+claim to infer psychological intent.
+
+Hunters need line of sight, audible dashes, an alarm, or a lead that expires
+after five planning updates. Quiet fern cover hides a distant player. Their
+path uses a bounded breadth-first search respecting land, gates, crates, and
+occupied keeper cells. Decoys override nearby targets. Periodic recovery
+creates escape windows. **The plan in the current state is executed on the
+next turn**, before a replacement plan is computed from the resulting state.
+The same committed cells drive the warning renderer. Boss sweeps stop at
+obstacles and show all nearby threatened cells even if the boss itself is
+outside the visible radius.
+
+Relays advance a stage-authored sequence; a wrong note resets it and makes
+an audible alarm for six turns. Completion opens signal gates and stuns
+hunters. Hazard activity comes from turn modulo period, so waiting and dashing
+have predictable effects. Shields protect activation and two following turns.
+Supply caches are one-use; loadout counts are capped at three.
+
+Conversation actions pause turn rules and accept one authored choice per
+keeper. They do not train the movement learner. Choices grant a bounded item
+and remain in the journal. Rescuing requires the lanterns and a return
+interaction; a rescued keeper follows previous player cells without blocking
+movement or taking damage. Dialogue remains closable across visibility changes.
+
+Nemesis converts introductory patrols to hunters and enables authored
+reinforcements. It starts with fewer hearts/resources, expands detection,
+reduces recovery/protection, expands ember phases, and uses 85% turn targets.
+Bests use a `-nemesis` suffix; either rule set can unlock the next mission.
+The second act's first contract is available without introductory progress.
+
+`tilewright.tactics.v1` stores only normalized counts and the last action,
+with a 12 KB read cap. Local learning is retained across retries/missions and
+can be reset independently of bests and editor saves. Failed writes leave
+learning available for the session. All normal and Nemesis second-act missions
+have complete real-action fixtures; browser tests replay the dialogue and
+movement through actual controls.
 
 ## JSON version 1
 

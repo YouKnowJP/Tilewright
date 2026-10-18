@@ -1,5 +1,57 @@
 # Verification record
 
+## Adaptive missions and Nemesis — v0.4.0
+
+The Node suite has **63 passing tests** (18 additions). New coverage verifies
+movement-transition learning, decay, normalization, corrupt/blocked storage,
+changed interception routes under different learned patterns, committed enemy
+steps, visibility/cover/noise, fading awareness, decoy lifetime, shield lifetime,
+ember timing, dialogue/one-time choices, following rescue companions, ordered
+relays/alarms/gates, supply limits, required objectives, boss phases/sweeps,
+Nemesis reinforcements/hazard windows, separate bests, and objective-aware hints.
+Existing editor, map-format, build, and server checks remain green.
+
+Complete input fixtures verify all second-act missions on both rule sets,
+starting with fresh learned counts. Ordinary in-game moves then train opponents
+throughout each run; no completion flags, inventory, health, puzzle state, or
+positions are overridden in these playthroughs.
+
+| Mission | Trail turns | Nemesis turns | Result |
+| --- | ---: | ---: | --- |
+| Briarwatch Rescue | 78 | 78 | All required lanterns/rescue, no damage, three stars |
+| Bellforge Heist | 77 | 78 | Correct relay sequence and gate, no damage, three stars |
+| The Watcher’s Crown | 97 | 104 | Crates, key, relays, Sola, signal gate, no damage, three stars |
+
+Fixtures prove solvability for those action histories; adaptation means another
+history can change enemy decisions. Different trained profiles are separately
+tested to produce different interception routes. No psychological inference,
+external model training, remote AI call, or broad difficulty study is claimed.
+
+The optional Chrome 155.0.8059.82 browser checks pass at **390 and 1440 CSS
+pixels** through actual keyboard movement, dashes, E interactions, dialogue
+choice clicks, and tactical inputs. They finish the three harder contracts,
+rescue/following objectives, and the Nemesis finale with three stars; verify
+memory across reload, independent reset and bests, the final Nemesis invitation,
+retained editor data, and absence of runtime/asset errors. A dialogue visibility
+change regression verifies that tab visibility events cannot trap the player
+inside a paused conversation.
+
+At **320 × 844** with emulated touch and reduced motion, dialogue stays within
+the screen, loadout choices and tactical actions work, controls remain visible,
+and the page does not overflow sideways. Prior editor, introductory-adventure,
+scrolling, resize/layer, PNG, failed-startup, and storage-failure suites also pass.
+
+Use `npm run test:browser` for all three suites, or
+`node scripts/contract-browser-checks.mjs` for the new mission checks, with
+Playwright separately installed and Chrome available. Browser tests use isolated
+contexts and never clear existing user saves. Default Node verification still
+needs no installed packages.
+
+[Desktop Watcher](watcher.png), [phone Watcher](watcher-mobile.png), and
+[phone dialogue](dialogue-mobile.png) screenshots are captured after real input,
+including the Nemesis shield and incoming marked sweep. Existing fictional
+editor and introductory campaign screenshots remain as historical records.
+
 ## Lantern Trails — v0.3.0
 
 The Node suite has **45 passing tests**. Seventeen adventure/persistence tests
@@ -156,6 +208,7 @@ No Safari, Firefox, physical phone/tablet, screen-reader, or extended user
 playtest is claimed. Native download/file-picker behavior, maximum-size
 interactive performance, and cross-browser pointer cancellation need further
 device coverage. New maps currently have a fixed tile size; selections, multiple local projects,
-custom tilesets, custom puzzle authoring, and additional campaign content are
-unfinished ideas. Layer deletion/reordering and the three-quest campaign are
+custom tilesets, custom puzzle authoring, branching mission formats, seeded contracts, and additional campaign content are
+unfinished ideas. Six missions, adaptive hunters, dialogue/rescues, and Nemesis
+are implemented. Layer deletion/reordering and the three-quest campaign are
 implemented. No extended difficulty or replayability study is claimed.
