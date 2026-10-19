@@ -7,7 +7,7 @@ They are proposals for this small tool, not claims that Tilewright already
 supports those editors' formats or all their capabilities. The
 [roadmap](../ROADMAP.md) tracks selected work and remaining estimates.
 
-## Delivered through v0.4.0
+## Delivered through v0.5.0
 
 **Finish structural editing.** A map no longer needs to be recreated to change
 its dimensions. Users can anchor retained content, preview cropped occupied
@@ -22,10 +22,15 @@ dialogue choices, rescue/following, ordered relays, alarms, timed embers, and
 Nemesis rules. Custom expeditions generate reachable objectives on editor maps. An adventure overview is delivered; an
 editor minimap navigator remains a separate future tool.
 
-For detailed new gameplay proposals, see [mission design and counterplay](MISSIONS.md):
-branching passwords, a noisy relic courier, flood puzzles, false-trail duels,
-evacuations, seeded contract remixes, and checkpoint bargains. These are future
-ideas, distinct from the six playable missions.
+**Give each return a different route.** Seeded expeditions now connect three,
+six, or nine legs through camp upgrades and route choices. Four regions, six
+mission families, noisy courier relics, optional oaths, daily trails, checkpoint
+backups, and twelve badges are playable. See the [expedition guide](EXPEDITIONS.md).
+
+Further gameplay proposals in [mission design and counterplay](MISSIONS.md)
+include branching passwords, reversible flood puzzles, evacuation consequences,
+and resource-priced recovery points. These remain distinct from delivered
+courier missions, generated contracts, camps, and free current-leg retries.
 
 ## Highest-value next steps
 

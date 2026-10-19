@@ -4,7 +4,7 @@ export function createAdventureSound() {
     try {
       const Audio = window.AudioContext || window.webkitAudioContext;
       if (!Audio) return false;
-      if (!context) context = new Audio();
+      if (!context || context.state === 'closed') context = new Audio();
       await context.resume(); enabled = !enabled; return enabled;
     } catch { enabled = false; return false; }
   }
@@ -14,14 +14,14 @@ export function createAdventureSound() {
       || events.find(event => event.type === 'lantern')?.type || events[0]?.type;
     const notes = type === 'relay-complete' || type === 'rescue' ? [392, 523.25, 783.99] : type === 'alarm' ? [220, 164.81, 220] : type === 'shield' ? [392, 659.25] : type === 'win' ? [523.25, 659.25, 783.99, 1046.5] : type === 'lantern' ? [659.25, 783.99, 1046.5]
       : type === 'hurt' ? [146.83, 110] : type === 'key' || type === 'coin' ? [880] : type === 'unlock' ? [392, 523.25] : [];
-    notes.forEach((frequency, index) => {
+    try { notes.forEach((frequency, index) => {
       const oscillator = context.createOscillator(), volume = context.createGain();
       const start = context.currentTime + index * .1;
       oscillator.type = type === 'hurt' ? 'triangle' : 'sine'; oscillator.frequency.value = frequency;
       volume.gain.setValueAtTime(0, start); volume.gain.linearRampToValueAtTime(.065, start + .012);
       volume.gain.exponentialRampToValueAtTime(.001, start + .2);
-      oscillator.connect(volume); volume.connect(context.destination); oscillator.start(start); oscillator.stop(start + .22);
-    });
+      oscillator.connect(volume); volume.connect(context.destination); oscillator.onended = () => { oscillator.disconnect(); volume.disconnect(); }; oscillator.start(start); oscillator.stop(start + .22);
+    }); } catch { enabled = false; }
   }
-  return { toggle, play };
+  return { toggle, play, get enabled() { return enabled; } };
 }

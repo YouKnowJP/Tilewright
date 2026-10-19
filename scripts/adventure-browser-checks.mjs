@@ -53,7 +53,7 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
         await page.locator('#mode-play').click();
         await page.locator('#game-hint-button').click();
         assert.ok(await page.locator('#game-hint').isVisible());
-        assert.match(await page.locator('#game-hint-text').textContent(), /lantern.*lies/);
+        assert.match(await page.locator('#game-hint-text').textContent(), /(?:lantern|key).*lies/);
         await page.locator('#game-hint-button').click();
         await page.locator('#game-pause').click();
         await playRoute(page, ['up']); assert.equal(await page.locator('#game-turns').textContent(), '0');

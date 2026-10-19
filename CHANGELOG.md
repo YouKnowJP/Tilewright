@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.5.0 — 2026-10-18
+
+- Add seeded three-, six-, and nine-leg journeys, single contracts, and five-leg
+  UTC daily trails across four regions and six objective families.
+- Add singing-relic courier missions with carry noise, drop/retrieve counterplay,
+  and delivery requirements; generate reachable key/signal prerequisites.
+- Add camps with eight permanent run upgrades, restocking, resource carryover,
+  sheltered/perilous route previews, and a final Watcher crossing.
+- Add four oath choices, route/oath bonuses, twelve logbook badges, exploration
+  totals, and personal bests separated by seed and rules.
+- Add per-action checkpoints, strict replay-based JSON backups, camp/dialogue/
+  lost-state resume, and current-leg retries that retain earlier wins and learning.
+- Keep expedition learning separate from campaign habits, maps, and bests.
+  Retain play/export when storage is blocked or full.
+- Correct objective hints to locate missing keys, reduce the tablet board height
+  so tactical controls stay visible, keep phone camp departure controls visible,
+  and release synthesized audio nodes during long sessions.
+- Add 28 Node regressions (91 total), 13 full-run fixtures covering 34 legs,
+  2,304 generated-layout checks, all 256 upgrade combinations, a 30,000-input
+  soak, and complete browser runs/options/recovery/mobile regressions.
+
 ## 0.4.0 — 2026-10-18
 
 - Expand the campaign to six missions with a directly accessible hard second

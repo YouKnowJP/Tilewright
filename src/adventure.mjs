@@ -1,5 +1,6 @@
 import { validateDocument } from './model.mjs';
 import { freshMemory, normalizeMemory, learnMove } from './adventure-brain.mjs';
+import { perkEffects } from './adventure-perks.mjs';
 import { planHunters } from './adventure-tactics.mjs';
 
 export const DIRECTIONS = Object.freeze({ up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] });
@@ -46,24 +47,29 @@ export function canEnter(run, point, unlock = false) {
 
 function reveal(run, point) {
   const { width, height } = run.stage.map;
-  for (let y = Math.max(0, point.y - 5); y <= Math.min(height - 1, point.y + 5); y++) {
-    for (let x = Math.max(0, point.x - 5); x <= Math.min(width - 1, point.x + 5); x++) {
-      if ((x - point.x) ** 2 + (y - point.y) ** 2 <= 30) run.seen[y * width + x] = true;
+  const radius = Math.ceil(Math.sqrt(run.effects.sightSquared));
+  for (let y = Math.max(0, point.y - radius); y <= Math.min(height - 1, point.y + radius); y++) {
+    for (let x = Math.max(0, point.x - radius); x <= Math.min(width - 1, point.x + radius); x++) {
+      if ((x - point.x) ** 2 + (y - point.y) ** 2 <= run.effects.sightSquared) run.seen[y * width + x] = true;
     }
   }
 }
 
-export function createRun(definition, { memory = freshMemory(), difficulty = 'trail' } = {}) {
+export function createRun(definition, { memory = freshMemory(), difficulty = 'trail', perks = [], loadout = null } = {}) {
   const map = validateDocument(definition.map);
   const stage = { ...definition, map };
   for (const name of ['lanterns', 'keys', 'coins', 'hearts', 'crates', 'plates', 'gates', 'enemies', 'npcs', 'relays', 'supplies', 'cover', 'hazards', 'hunters']) {
     stage[name] = structuredClone(definition[name] || []);
   }
+  const effects = perkEffects(perks);
+  stage.relic = definition.relic ? structuredClone(definition.relic) : null; stage.delivery = definition.delivery ? { ...definition.delivery } : null;
+  stage.restrictions = { noDash: Boolean(definition.restrictions?.noDash), noShield: Boolean(definition.restrictions?.noShield) };
+  if (loadout && ['health', 'decoys', 'shields'].some(key => !Number.isInteger(loadout[key]) || loadout[key] < (key === 'health' ? 1 : 0) || loadout[key] > 3)) throw new Error('Invalid expedition supplies.');
   stage.sequence = [...(definition.sequence || [])]; stage.requiredRescues = [...(definition.requiredRescues || [])];
   if (!stage.start || !stage.exit || !stage.lanterns.length) throw new Error('An adventure needs a start, a beacon, and at least one lantern.');
   const points = [stage.start, stage.exit, ...stage.lanterns, ...stage.keys, ...stage.coins, ...stage.hearts,
     ...stage.crates, ...stage.plates, ...stage.gates, ...stage.enemies.flatMap(enemy => enemy.route),
-    ...stage.npcs, ...stage.relays, ...stage.supplies, ...stage.cover, ...stage.hazards, ...stage.hunters.flatMap(hunter => hunter.route)];
+    ...stage.npcs, ...stage.relays, ...stage.supplies, ...stage.cover, ...stage.hazards, ...stage.hunters.flatMap(hunter => hunter.route), ...(stage.relic ? [stage.relic, stage.delivery] : [])];
   if (points.some(point => !point || !Number.isInteger(point.x) || !Number.isInteger(point.y) || !inside(map, point))) {
     throw new Error('Adventure markers must be inside the map.');
   }
@@ -89,11 +95,12 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
     crates: stage.crates.map(crate => ({ ...crate })),
     enemies: (hard ? [] : stage.enemies).map(enemy => ({ ...enemy, index: 0, direction: 1 })),
     hunters: hunters.map(hunter => ({ ...hunter, ...hunter.route[0], patrolIndex: 1, memory: 0 })),
+    perks: [...perks], effects, carrying: false, cargoPoint: stage.relic ? { x: stage.relic.x, y: stage.relic.y } : null, cargoDelivered: false,
     difficulty: hard ? 'nemesis' : 'trail', memory: normalizeMemory(memory),
-    decoys: hard ? 1 : 2, shields: hard ? 1 : 2, ward: 0, lure: null, noise: 0, stun: 0, alarm: 0,
+    decoys: Math.min(3, (loadout?.decoys ?? (hard ? 1 : 2)) + effects.provision), shields: Math.min(3, (loadout?.shields ?? (hard ? 1 : 2)) + effects.provision), ward: 0, lure: null, noise: 0, stun: 0, alarm: 0,
     choices: {}, rescued: [], companions: [], relayProgress: 0, usedSupplies: [], dialogue: null,
     collectedLanterns: [], collectedKeys: [], collectedCoins: [], collectedHearts: [], openGates: [],
-    keyCount: 0, health: hard ? 2 : MAX_HEARTS, energy: MAX_ENERGY, turns: 0, damage: 0, invulnerability: 0,
+    keyCount: 0, health: loadout?.health ?? (hard ? 2 : MAX_HEARTS), energy: MAX_ENERGY, turns: 0, damage: 0, invulnerability: 0,
     status: 'playing', seen: Array(map.width * map.height).fill(false), events: [], message: stage.intro || 'Find the lanterns, then return to the beacon.',
   };
   if (!canEnter(run, run.player) || stage.crates.some(crate => same(crate, run.player))) throw new Error('The starting cell is blocked.');
@@ -111,6 +118,7 @@ function collect(run) {
     if (!item || (type === 'heart' && run.health === MAX_HEARTS)) continue;
     run[collection].push(item.id); run.events.push({ type, x: item.x, y: item.y });
     if (type === 'key') run.keyCount++;
+    if (type === 'lantern' && run.effects.lanternHealing) run.health = Math.min(MAX_HEARTS, run.health + run.effects.lanternHealing);
     if (type === 'heart') run.health = Math.min(MAX_HEARTS, run.health + 1);
   }
 }
@@ -148,6 +156,7 @@ export function hazardActive(run, hazard, turn = run.turns) {
 export function nearbyInteractions(run) {
   return [...run.stage.npcs.map(item => ({ ...item, ...(run.companions.find(companion => companion.id === item.id) || {}), kind: 'npc', label: `Talk to ${item.name}` })),
     ...run.stage.relays.map(item => ({ ...item, kind: 'relay', label: `Ring ${item.name}` })),
+    ...(run.stage.relic && run.cargoPoint && !run.carrying && !run.cargoDelivered ? [{ ...run.cargoPoint, id: run.stage.relic.id, name: run.stage.relic.name, kind: 'relic', label: 'Pick up the singing relic' }] : []),
     ...run.stage.supplies.filter(item => !run.usedSupplies.includes(item.id)).map(item => ({ ...item, kind: 'supply', label: 'Open trail supplies' }))]
     .filter(item => Math.abs(item.x - run.player.x) + Math.abs(item.y - run.player.y) <= 1)
     .sort((a, b) => (run.rescued.includes(a.id) ? 2 : 0) - (run.rescued.includes(b.id) ? 2 : 0) || Math.abs(a.x - run.player.x) + Math.abs(a.y - run.player.y) - Math.abs(b.x - run.player.x) - Math.abs(b.y - run.player.y));
@@ -155,8 +164,10 @@ export function nearbyInteractions(run) {
 
 export function missionGoals(run) {
   return [
-    { label: `Restore all ${run.stage.lanterns.length} lanterns`, done: run.collectedLanterns.length === run.stage.lanterns.length },
+    { label: `Restore ${run.stage.lanterns.length === 1 ? 'the lantern' : `all ${run.stage.lanterns.length} lanterns`}`, done: run.collectedLanterns.length === run.stage.lanterns.length },
     ...(run.stage.sequence.length ? [{ label: `Power the relay sequence (${run.relayProgress}/${run.stage.sequence.length})`, done: run.relayProgress === run.stage.sequence.length }] : []),
+    ...(run.stage.requireCoins ? [{ label: `Recover every coin (${run.collectedCoins.length}/${run.stage.coins.length})`, done: run.collectedCoins.length === run.stage.coins.length }] : []),
+    ...(run.stage.relic ? [{ label: 'Deliver the singing relic to the beacon', done: run.cargoDelivered }] : []),
     ...run.stage.requiredRescues.map(id => ({ label: `Return to rescue ${run.stage.npcs.find(npc => npc.id === id).name} after restoring the lights`, done: run.rescued.includes(id) })),
   ];
 }
@@ -187,7 +198,10 @@ export function stepRun(run, action) {
   }
   const dash = action.startsWith('dash-'), direction = dash ? action.slice(5) : action;
   const moving = Boolean(DIRECTIONS[direction]), tactical = ['decoy', 'shield'].includes(action);
-  if (!moving && direction !== 'wait' && !interaction && !tactical) return run;
+  if (!moving && direction !== 'wait' && !interaction && !tactical && action !== 'drop-cargo') return run;
+  if (dash && run.stage.restrictions.noDash) return { ...run, events: [], message: 'Measured steps oath: use walking, cover, decoys, and shields.' };
+  if (action === 'shield' && run.stage.restrictions.noShield) return { ...run, events: [], message: 'Unwarded oath: use cover, timing, and decoys instead of a shield.' };
+  if (action === 'drop-cargo' && !run.carrying) return run;
   if (dash && (!moving || run.energy < 2)) return { ...run, events: [], message: 'Dash needs two energy. Walk or wait to recharge.' };
   if (tactical && run[action === 'decoy' ? 'decoys' : 'shields'] < 1) return { ...run, events: [], message: `No ${action === 'decoy' ? 'decoys' : 'shields'} left. Find supplies or ask a trail keeper.` };
   if (interaction?.kind === 'relay' && run.relayProgress === run.stage.sequence.length) return { ...run, events: [], message: 'The relay network is already powered.' };
@@ -230,8 +244,10 @@ export function stepRun(run, action) {
       const target = { x: p.x + dx, y: p.y + dy };
       if (!canEnter(next, target) || next.crates.some(crate => same(crate, target))) break; p = target;
     }
-    next.decoys--; next.lure = { ...p, until: run.turns + 6 }; next.events.push({ type: 'decoy' });
-  } else if (action === 'shield') { next.shields--; next.ward = 3; next.events.push({ type: 'shield' }); }
+    next.decoys--; next.lure = { ...p, until: run.turns + next.effects.decoyTurns + 1 }; next.events.push({ type: 'decoy' });
+  } else if (action === 'shield') { next.shields--; next.ward = next.effects.shieldTurns; next.events.push({ type: 'shield' }); }
+  else if (action === 'drop-cargo') { next.carrying = false; next.cargoPoint = { ...next.player }; next.noise = 0; next.events.push({ type: 'cargo-drop' }); }
+  else if (interaction?.kind === 'relic') { next.carrying = true; next.cargoPoint = null; next.events.push({ type: 'cargo' }); }
   else if (interaction?.kind === 'supply') {
     next.usedSupplies.push(interaction.id); next.decoys = Math.min(3, next.decoys + 1); next.shields = Math.min(3, next.shields + 1);
     next.health = Math.min(MAX_HEARTS, next.health + 1); next.events.push({ type: 'supply' });
@@ -245,9 +261,11 @@ export function stepRun(run, action) {
     }
   }
   next.turns++;
-  next.energy = dash ? run.energy - 2 : moving || direction === 'wait' ? Math.min(MAX_ENERGY, run.energy + 1) : run.energy;
+  next.energy = dash ? run.energy - 2 : moving || direction === 'wait' ? Math.min(MAX_ENERGY, run.energy + next.effects.recharge) : run.energy;
   if (moving || direction === 'wait') next.memory = learnMove(run.memory, action);
-  if (dash) next.noise = 3;
+  if (dash) next.noise = next.effects.dashNoise;
+  if (next.carrying) next.noise = Math.max(next.noise, 2);
+  if (next.carrying && same(next.player, next.stage.delivery)) { next.carrying = false; next.cargoDelivered = true; next.cargoPoint = null; next.events.push({ type: 'delivery' }); }
   for (const enemy of next.enemies) {
     const intent = enemyIntent(next, enemy); enemy.index = intent.index; enemy.direction = intent.direction;
   }
@@ -261,7 +279,7 @@ export function stepRun(run, action) {
   if ((touchedEnemy || burned) && run.invulnerability === 0) {
     if (next.ward > 0) next.events.push({ type: 'blocked-hit' });
     else {
-      next.health--; next.damage++; next.invulnerability = next.difficulty === 'nemesis' ? 1 : 2;
+      next.health--; next.damage++; next.invulnerability = (next.difficulty === 'nemesis' ? 1 : 2) + next.effects.protection;
       next.events.push({ type: 'hurt', ...next.player });
     }
   }
@@ -275,19 +293,21 @@ export function stepRun(run, action) {
     const lanterns = next.stage.lanterns.length - next.collectedLanterns.length;
     next.message = lanterns ? `The beacon needs ${lanterns} more ${lanterns === 1 ? 'lantern' : 'lanterns'}.` : `Before leaving: ${missing.map(goal => goal.label.toLowerCase()).join('; ')}.`; return next;
   }
-  const priority = ['hurt', 'blocked-hit', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
+  const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const messages = { hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
     'blocked-hit': 'Your shield absorbs the hit. Keep moving before it fades.',
     'relay-complete': 'The relay network is powered! Signal gates open and hunters are stunned for three more turns.',
     alarm: 'Wrong relay! The sequence reset and every hunter heard the alarm. Break line of sight.',
     relay: `Relay ${next.relayProgress} of ${next.stage.sequence.length} powered.`, supply: 'Supplies found: one heart, a decoy, and a shield charge.',
-    decoy: 'A false lantern! Nearby hunters follow it for five turns. Take another route.', shield: 'Shield raised for this turn and the next two. It blocks wardens and embers.',
+    decoy: `A false lantern! Nearby hunters follow it for ${next.effects.decoyTurns} turns. Take another route.`, shield: `Shield raised for ${next.effects.shieldTurns} turns, including this one. It blocks wardens, sweeps, and embers.`,
+    cargo: 'The relic is singing. Hunters can hear you; press X to set it down and draw them away.',
+    'cargo-drop': 'Relic set down. Its song is a false trail; pick it up again with Interact.', delivery: 'Relic delivered safely! Finish any remaining objectives and reach the beacon.',
     phase: `Lantern restored. Watcher phase ${boss?.phase}: “${boss?.phase === 2 ? 'I have seen that turn before.' : 'Then I will meet you where you always run.'}” Watch for its marked sweep.`,
     lantern: `Lantern lit! ${next.collectedLanterns.length} of ${next.stage.lanterns.length} restored.`,
     key: 'A brass key. It opens one locked gate.', unlock: 'Gate unlocked. A new part of the trail awaits.',
     push: activePlates(next).length ? 'Pressure plate held. Keep the crate in place to hold the crossing open.' : 'Crate moved. Push it onto a copper pressure plate.',
-    heart: 'One heart restored.', coin: 'A trail coin! Optional treasures improve your score.' };
+    heart: 'One heart restored.', coin: next.stage.requireCoins ? 'A trail coin! Recover every coin before leaving this trail.' : 'A trail coin! Optional treasures improve your score.' };
   next.message = event ? messages[event.type] : direction === 'wait' ? 'You wait. Enemies move and energy recharges.'
     : dash ? 'A quick dash! Hunters nearby can hear it. Walk or wait to recharge.' : 'Watch the hunters. Use cover, change direction, or create an opening.';
   return next;
@@ -310,8 +330,11 @@ export function scoutHint(run) {
   const relay = run.stage.sequence.length > run.relayProgress ? run.stage.relays.find(item => item.id === run.stage.sequence[run.relayProgress]) : null;
   const lantern = [...missing].sort((a, b) => Math.abs(a.x - run.player.x) + Math.abs(a.y - run.player.y) - Math.abs(b.x - run.player.x) - Math.abs(b.y - run.player.y))[0];
   const npc = rescue && run.stage.npcs.find(item => item.id === rescue);
-  const target = relay || lantern || npc || run.stage.exit;
-  const label = relay ? `The next relay, ${relay.name || relay.id},` : lantern ? 'An unlit lantern' : npc ? npc.name : 'The beacon';
+  const coin = run.stage.requireCoins && run.stage.coins.find(item => !run.collectedCoins.includes(item.id));
+  const cargo = run.stage.relic && !run.cargoDelivered ? run.carrying ? run.stage.delivery : run.cargoPoint : null;
+  const key = run.keyCount === 0 && run.stage.gates.some(gate => gate.type === 'key' && !gateIsOpen(run, gate)) ? run.stage.keys.find(item => !run.collectedKeys.includes(item.id)) : null;
+  const target = key || relay || lantern || npc || coin || cargo || run.stage.exit;
+  const label = key ? 'A brass key' : relay ? `The next relay, ${relay.name || relay.id},` : lantern ? 'An unlit lantern' : npc ? npc.name : coin ? 'An unrecovered coin' : cargo ? run.carrying ? 'The relic delivery beacon' : 'The singing relic' : 'The beacon';
   const horizontal = target.x > run.player.x ? 'east' : target.x < run.player.x ? 'west' : '';
   const vertical = target.y > run.player.y ? 'south' : target.y < run.player.y ? 'north' : '';
   return `${run.stage.hint || ''} ${label} lies ${[vertical, horizontal].filter(Boolean).join('-') || 'right here'}.`;

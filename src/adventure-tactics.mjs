@@ -65,6 +65,8 @@ export function planHunters(run, canEnter) {
     }
     if (run.lure && run.lure.until > run.turns && Math.abs(run.lure.x - from.x) + Math.abs(run.lure.y - from.y) <= 12) {
       target = { x: run.lure.x, y: run.lure.y }; mode = 'distracted';
+    } else if (run.cargoPoint && !run.cargoDelivered && Math.abs(run.cargoPoint.x - from.x) + Math.abs(run.cargoPoint.y - from.y) <= 12) {
+      target = { ...run.cargoPoint }; mode = 'following relic';
     } else if (!hunter.memory) {
       target = hunter.route[hunter.patrolIndex || 0];
       if (same(from, target)) hunter.patrolIndex = ((hunter.patrolIndex || 0) + 1) % hunter.route.length;

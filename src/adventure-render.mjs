@@ -1,13 +1,13 @@
 import { renderMap, drawTile, TILE_SIZE } from './render.mjs';
 import { activePlates, enemyIntent, gateIsOpen, hazardActive } from './adventure.mjs';
 
-const near = (a, b) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <= 30;
 const same = (a, b) => a.x === b.x && a.y === b.y;
 
 export function createAdventureRenderer(canvas, stage) {
   const background = document.createElement('canvas'); renderMap(background, stage.map);
   let columns = Math.min(24, stage.map.width), rows = Math.min(16, stage.map.height);
   let state = null, previous = null, movedAt = 0;
+  const near = (a, b) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <= (state?.effects.sightSquared ?? 30);
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   function resize(width, height) {
@@ -123,6 +123,10 @@ export function createAdventureRenderer(canvas, stage) {
       rect('#f2bc59', x + 8, y + 8 + bob, 8, 8); rect('#fff0b3', x + 10, y + 9 + bob, 4, 5);
       rect('#e8cd8a', x + 9, y + 19 + bob, 6, 2);
     }
+    if (run.cargoPoint && !run.cargoDelivered) {
+      const x = run.cargoPoint.x * 24, y = run.cargoPoint.y * 24;
+      circle('#b8d9e05a', x + 12, y + 12, 12); rect('#7c8d9c', x + 6, y + 6, 12, 14); rect('#e8ddb4', x + 9, y + 4, 6, 15); rect('#a9dfdf', x + 10, y + 8, 4, 5);
+    }
     for (const key of stage.keys) {
       if (run.collectedKeys.includes(key.id) || !visible(key)) continue;
       const x = key.x * 24, y = key.y * 24;
@@ -199,6 +203,7 @@ export function createAdventureRenderer(canvas, stage) {
       rect('#3a4d42', x + (run.facing === 'left' ? 8 : 10), y + 10, 2, 2);
       rect('#3a4d42', x + (run.facing === 'right' ? 16 : 14), y + 10, 2, 2);
     }
+    if (run.carrying) { rect('#b9dfe0', x + 1, y + 10, 5, 10); rect('#f3e5b7', x + 2, y + 12, 3, 4); }
     rect('#f7d47b', x + 17, y + 15, 4, 5); ctx.globalAlpha = 1;
     if (run.events.some(event => ['lantern', 'win'].includes(event.type)) && time - movedAt < 550 && !reducedMotion.matches) {
       const spread = (time - movedAt) / 35;

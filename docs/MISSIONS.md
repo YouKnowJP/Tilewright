@@ -59,16 +59,23 @@ The finale's result screen offers this mode directly.
 All authored missions have verified winning input routes. This is evidence of
 solvability, not a claim that difficulty has been balanced through a user study.
 
+## Play now: expeditions
+
+[Seeded expeditions](EXPEDITIONS.md) add longer journeys, six generated mission
+families, four regions, camp choices, upgrades, oaths, daily trails, and portable
+checkpoints. The Singing relic family implements carry noise, deliberate drops,
+retrieval, and delivery. Seeded contracts implement shuffled bells, cover and
+hunter layouts, and optional no-shield/all-coin/no-dash rules. Current-leg retry
+retains upgrades and opponent learning; it is free and has no keeper bargain.
+
 ## Further mission ideas — not implemented
 
 | Idea | Player interaction and tension | Evidence needed before shipping |
 | --- | --- | --- |
 | The borrowed voice | Negotiate with two keepers for different passwords. One opens a safer route; the other grants supplies for a guarded shortcut. | Both branches must lead to distinct, completable routes; dialogue must reflect the chosen promise. |
-| Courier in a living forest | Carry a noisy relic between safe houses, choose when to put it down, and use its noise to lure hunters away from the delivery route. | Telegraph who hears the relic; test drop/retrieve/save behavior and avoid permanent loss of the quest item. |
 | Flooded archive | Turn pumps to move water between rooms, changing paths and hunter access while recovering pages in a chosen order. | Reversible valves, a clear flood preview, and solvability checks for every reachable water configuration. |
 | The false trail duel | A rival reads repeated route choices. Place false footprints and switch exits to bait an interception, then cross behind it. | Show exactly what the rival observed; compare trained and untrained behavior; ensure every interception has a response window. |
 | Evacuation under the bells | Choose which group to lead first. Each rescue changes available shelters and the next conversation; no one is silently lost to an unseen timer. | Persistent branch consequences, explicit deadlines if used, and accessible warnings before irreversible choices. |
-| Remixed contracts | Replay authored rooms with a seeded bell order, different cover patches, and optional vows such as no shields or collect every coin. | Generate only verified reachable combinations, record seed/rules with results, and keep unfair layouts out of the pool. |
 | Checkpoint bargains | Ask a keeper to create one recovery point at a resource cost; restarting restores puzzle state while the Watcher remembers observed movement. | Clearly distinguish restored mission state from retained learning; test crate/gate restoration and repeated recovery. |
 
 Prefer missions that add a decision, relationship, or consequence. More enemies

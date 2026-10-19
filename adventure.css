@@ -159,3 +159,68 @@
 
 .game-aside .game-field-guide { border:1px solid #dce3d2; background:#fffefa; border-radius:8px; padding:19px; }
 .game-field-guide summary { font-size:13px; cursor:pointer; color:#627953; }
+[hidden].expedition-hub,[hidden].game-expedition-banner,[hidden].game-expedition-kit,#trail-picker[hidden],#game-cargo[hidden] { display:none; }
+.adventure-library-tabs { display:flex; gap:6px; margin:0 0 16px; }
+.adventure-library-tabs button { font-size:12px; padding:11px 15px; }
+.adventure-library-tabs button[aria-pressed="true"] { background:#e5edd9; border-color:#9fb18c; }
+.expedition-hub { background:#fffefa; border:1px solid #d0ddc5; border-radius:9px; padding:25px; margin-bottom:20px; }
+.expedition-intro h2 { font-size:26px; font-weight:500; letter-spacing:-.6px; margin:9px 0; }
+.expedition-intro>p:last-child { font-size:12px; color:#788c6c; line-height:1.8; max-width:700px; }
+.expedition-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:23px; }
+.expedition-form>div { min-width:0; }
+.expedition-form label { display:block; font-size:11px; color:#6d815f; margin-bottom:7px; }
+.expedition-form select,.expedition-form input { display:block; width:100%; max-width:100%; padding:11px; min-height:42px; border:1px solid #cad7bf; border-radius:5px; background:#fbfcf5; font-size:12px; }
+.expedition-form .expedition-seed-field,.expedition-mode-note,.expedition-error,.expedition-hub-actions { grid-column:1 / -1; }
+.expedition-seed-field>div { display:flex; gap:8px; }
+.expedition-seed-field button { flex-shrink:0; font-size:11px; }
+.expedition-mode-note,.expedition-checkpoint { font-size:11px; line-height:1.8; color:#80916f; }
+.expedition-error { font-size:12px; line-height:1.7; color:#a15b45; }
+.expedition-hub-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.expedition-hub-actions button { min-height:42px; font-size:12px; }
+.expedition-checkpoint { margin:17px 0 0; }
+.expedition-logbook { border-top:1px solid #e0e6d7; margin-top:20px; padding-top:16px; }
+.expedition-logbook summary { font-size:13px; cursor:pointer; color:#58774a; }
+.expedition-logbook>p,#expedition-bests p { font-size:11px; line-height:1.8; margin:15px 0; color:#7e8e6d; }
+.expedition-logbook h3 { font-size:13px; font-weight:500; margin-top:24px; }
+.expedition-badges { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:16px; }
+.expedition-badge { padding:12px; border:1px solid #e2e7d9; border-radius:5px; opacity:.55; }
+.expedition-badge.earned { background:#edf3df; border-color:#bed09b; opacity:1; }
+.expedition-badge strong { display:block; font-size:11px; font-weight:500; color:#5b7a4e; }
+.expedition-badge span { display:block; font-size:10px; line-height:1.7; color:#839371; margin-top:6px; }
+.game-expedition-banner { background:#eee9d4; color:#8a7852; font:10px/1.7 ui-monospace,monospace; padding:9px 17px; border-bottom:1px solid #ddd5b7; }
+#game-perks p,#game-expedition-earned { font-size:11px; line-height:1.8; margin-top:10px; color:#7d8e6b; }
+.camp-dialog { width:min(680px,calc(100% - 28px)); max-height:88svh; overflow:auto; }
+.camp-dialog h2 { font-size:25px; margin:10px 0 16px; }
+.camp-dialog .dialog-actions { position:sticky; bottom:0; background:#fffefa; padding:14px 0 0; margin-top:14px; border-top:1px solid #d6dfca; }
+#camp-summary { color:#7e8e6c; font-size:12px; line-height:1.8; }
+.camp-dialog fieldset { border:0; padding:0; margin:24px 0; min-width:0; }
+.camp-dialog legend { font-size:13px; color:#5f7a4f; margin-bottom:12px; }
+.camp-perks { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }
+.camp-routes { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+.camp-choice { display:flex; flex-direction:column; gap:8px; padding:13px; border:1px solid #d6dfca; border-radius:6px; cursor:pointer; background:#fafbf2; }
+.camp-choice:has(input:checked) { background:#e6efda; border-color:#7f9d68; }
+.camp-choice input { width:17px; height:17px; accent-color:#537843; }
+.camp-choice strong { font-size:12px; font-weight:500; }
+.camp-choice span,.camp-choice small { font-size:10px; color:#7f8e6b; line-height:1.7; }
+@media(min-width:761px) and (max-width:1050px) {
+  .game-viewport { height:clamp(240px,34svh,360px); }
+  .expedition-active .game-viewport { height:clamp(240px,30svh,320px); }
+  .tactical-actions button { min-height:44px; }
+}
+@media(max-width:760px) {
+  .expedition-hub { padding:18px 13px; }
+  .expedition-intro h2 { font-size:24px; }
+  .expedition-form { grid-template-columns:minmax(0,1fr); gap:15px; }
+  .expedition-form select,.expedition-form input { font-size:16px; }
+  .expedition-badges { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .expedition-hub-actions button { font-size:11px; }
+  .game-expedition-kit { grid-column:1 / -1; }
+  .game-expedition-banner { font-size:9px; padding:7px 12px; }
+  .expedition-active .game-viewport { height:clamp(210px,28svh,300px); }
+  .tactical-actions:has(#game-cargo:not([hidden])) { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .camp-perks,.camp-routes { grid-template-columns:minmax(0,1fr); }
+  .camp-choice { display:grid; grid-template-columns:20px minmax(0,1fr); padding:13px; }
+  .camp-choice input { grid-row:1 / 4; }
+  .camp-choice span,.camp-choice small { grid-column:2; font-size:11px; }
+  .camp-dialog { padding:22px 16px; }
+}

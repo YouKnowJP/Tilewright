@@ -4,6 +4,9 @@ import { createAdventureRenderer } from './adventure-render.mjs';
 import { createAdventureSound } from './adventure-sound.mjs';
 import { loadRecords, saveResult } from './adventure-records.mjs';
 import { freshMemory, loadMemory, saveMemory, memorySummary } from './adventure-brain.mjs';
+import { createExpeditionUI } from './adventure-expedition-ui.mjs';
+import { journeyScore } from './adventure-journey.mjs';
+import { PERKS, VOWS } from './adventure-perks.mjs';
 import { createIcon } from './icons.mjs';
 
 export function createAdventureUI({ storage, getMap, backToEditor }) {
@@ -12,6 +15,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   const sound = createAdventureSound(), motion = matchMedia('(prefers-reduced-motion: reduce)');
   let records = loadRecords(storage), memory = loadMemory(storage), run = null, renderer = null;
   let difficulty = 'trail', memorySaveFailed = false;
+  let expeditions;
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0, pointer = null;
   let saveFailed = false, hintVisible = false;
 
@@ -64,33 +68,47 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     if (!run) return;
     const stage = run.stage, result = resultFor(run), index = campaign.findIndex(item => item.id === stage.id);
     $('#game-title').textContent = stage.name;
-    $('#game-subtitle').textContent = `${index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
+    $('#game-sound').textContent = sound.enabled ? 'Sound on' : 'Sound off'; $('#game-sound').setAttribute('aria-pressed', String(sound.enabled));
+    const journey = expeditions?.session;
+    $('#game-difficulty').disabled = Boolean(journey);
+    $('#game-expedition-banner').hidden = !journey; $('#game-expedition-kit').hidden = !journey;
+    document.body.classList.toggle('expedition-active', Boolean(journey));
+    if (journey) {
+      const oath = VOWS.find(item => item.id === journey.config.vow);
+      $('#game-expedition-banner').textContent = `Leg ${journey.leg + 1}/${journey.config.length} · ${journey.config.seed} · ${oath.name} · ${journeyScore(journey)} points · ${journey.retries} retries`;
+      $('#game-perks').replaceChildren(...(journey.perks.length ? journey.perks.map(id => PERKS.find(perk => perk.id === id).name) : ['Your first camp upgrade awaits.']).map(text => Object.assign(document.createElement('p'), { textContent: text })));
+      $('#game-expedition-earned').textContent = expeditions.earned.length ? `New logbook badges: ${expeditions.earned.length}. View them in the expedition hub.` : expeditions.checkpointFailed ? 'Checkpoint unavailable. Export a backup from the hub to keep this run.' : 'Checkpoint saved after each turn. Export a backup from the expedition hub.';
+    }
+    $('#game-cargo').hidden = !stage.relic; $('#game-cargo').disabled = !run.carrying || paused || run.status !== 'playing';
+    $('#game-cargo').textContent = run.cargoDelivered ? 'Relic delivered' : run.carrying ? 'Set relic down (X)' : 'Relic on trail';
+    $('#game-restart').disabled = Boolean(journey && ['camp', 'won'].includes(journey.phase));
+    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
     $('#game-story').textContent = stage.intro;
     $('#game-lanterns').textContent = `${run.collectedLanterns.length}/${stage.lanterns.length}`;
     $('#game-turns').textContent = run.turns;
     $('#game-keys').textContent = run.keyCount;
     $('#game-coins').textContent = `${run.collectedCoins.length}/${stage.coins.length}`;
     resource($('#game-health'), run.health, MAX_HEARTS, true); resource($('#game-energy'), run.energy, MAX_ENERGY);
-    $('#quest-lanterns').textContent = `${run.collectedLanterns.length === stage.lanterns.length ? '✓' : '○'} Restore all ${stage.lanterns.length} lanterns`;
+    $('#quest-lanterns').textContent = `${run.collectedLanterns.length === stage.lanterns.length ? '✓' : '○'} Restore ${stage.lanterns.length === 1 ? 'the lantern' : `all ${stage.lanterns.length} lanterns`}`;
     $('#quest-plates').hidden = !stage.plates.length;
     $('#quest-plates').textContent = `${activePlates(run).length === stage.plates.length ? '✓' : '○'} Hold ${stage.plates.length} copper ${stage.plates.length === 1 ? 'plate' : 'plates'} with crates`;
     const extraGoals = missionGoals(run).slice(1);
     $('#quest-mission').hidden = !extraGoals.length;
     $('#quest-mission').replaceChildren(...extraGoals.map(goal => Object.assign(document.createElement('p'), { textContent: `${goal.done ? '✓' : '○'} ${goal.label}` })));
     const interact = nearbyInteractions(run)[0];
-    $('#game-interact').textContent = interact ? `${interact.kind === 'npc' ? 'Talk:' : interact.kind === 'relay' ? 'Ring:' : 'Open:'} ${interact.name || 'supplies'} (E)` : 'Interact (E)';
+    $('#game-interact').textContent = interact ? `${interact.kind === 'npc' ? 'Talk:' : interact.kind === 'relay' ? 'Ring:' : interact.kind === 'relic' ? 'Take:' : 'Open:'} ${interact.name || 'supplies'} (E)` : 'Interact (E)';
     $('#game-interact').setAttribute('aria-label', interact?.label || 'Interact with a nearby keeper, relay, or supplies');
     $('#game-interact').disabled = !interact || paused || run.status !== 'playing';
     $('#game-decoys').textContent = run.decoys; $('#game-shields').textContent = run.shields;
     $('#game-decoy').disabled = !run.decoys || paused || run.status !== 'playing';
-    $('#game-shield').disabled = !run.shields || paused || run.status !== 'playing';
+    $('#game-shield').disabled = !run.shields || run.stage.restrictions.noShield || paused || run.status !== 'playing';
     $('#game-shield').classList.toggle('armed', run.ward > 0);
     $('#game-shield').setAttribute('aria-label', `Shield: ${run.shields} charges, ${run.ward} protected turns remaining`);
     $('#game-learning').textContent = memorySummary(run.memory);
     const boss = run.hunters.find(hunter => hunter.boss);
     const cover = stage.cover.some(p => p.x === run.player.x && p.y === run.player.y);
-    $('#game-threat').textContent = `${boss ? `Watcher phase ${boss.phase}/3 · ${boss.mode}. ` : run.hunters.length ? `${run.hunters.length} adaptive hunters on this trail. ` : 'Patrols follow fixed routes on Trail rules. '}${run.alarm ? `Alarm: ${run.alarm} turns. ` : ''}${run.ward ? `Shield: ${run.ward} turns. ` : ''}${cover ? run.noise ? 'In cover, but still audible.' : 'In fern cover: distant hunters cannot see you.' : run.noise ? 'Your dash can still be heard.' : 'Walk quietly; hunters need sight, sound, or a recent lead.'}`;
-    $('#game-learning-save').textContent = memorySaveFailed ? 'Learning is available for this session; browser saving is unavailable.' : 'Movement habits stay in this browser. Forget them at any time.';
+    $('#game-threat').textContent = `${boss ? `Watcher phase ${boss.phase}/3 · ${boss.mode}. ` : run.hunters.length ? `${run.hunters.length} adaptive ${run.hunters.length === 1 ? 'hunter' : 'hunters'} on this trail. ` : 'Patrols follow fixed routes on Trail rules. '}${run.alarm ? `Alarm: ${run.alarm} turns. ` : ''}${run.ward ? `Shield: ${run.ward} turns. ` : ''}${cover ? run.noise ? 'In cover, but still audible.' : 'In fern cover: distant hunters cannot see you.' : run.carrying ? 'Your relic is singing: hunters can hear you.' : run.noise ? 'Your dash can still be heard.' : 'Walk quietly; hunters need sight, sound, or a recent lead.'}`;
+    $('#game-learning-save').textContent = journey ? 'This expedition keeps its own learned movement history. Campaign memory is retained separately.' : memorySaveFailed ? 'Learning is available for this session; browser saving is unavailable.' : 'Movement habits stay in this browser. Forget them at any time.';
     const entries = stage.npcs.filter(npc => Object.hasOwn(run.choices, npc.id)).map(npc => `${npc.name}: ${npc.choices.find(choice => choice.id === run.choices[npc.id]).response}`);
     $('#game-journal').replaceChildren(...(entries.length ? entries : ['Speak to a keeper to record their advice.']).map(text => Object.assign(document.createElement('p'), { textContent: text })));
     updateConversation();
@@ -100,13 +118,13 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#game-hint-button').setAttribute('aria-expanded', String(hintVisible));
     $('#game-status').textContent = paused ? 'Paused. Resume when you are ready; the world only moves when you do.' : `${run.message}${boss?.mode === 'charging sweep' && Math.abs(boss.x - run.player.x) + Math.abs(boss.y - run.player.y) <= 7 ? ' Watcher sweep incoming: leave the crossed cells!' : ''}`;
     $('#dash-button').classList.toggle('armed', dashArmed); $('#dash-button').setAttribute('aria-pressed', String(dashArmed));
-    $('#dash-button').disabled = paused || run.status !== 'playing' || run.energy < 2;
+    $('#dash-button').disabled = paused || run.status !== 'playing' || run.energy < 2 || run.stage.restrictions.noDash;
     document.querySelectorAll('[data-move], #game-wait').forEach(button => { button.disabled = paused || run.status !== 'playing'; });
     $('#game-pause').textContent = paused ? 'Resume' : 'Pause'; $('#game-pause').setAttribute('aria-pressed', String(paused));
     $('#game-pause').disabled = run.status !== 'playing';
-    const best = records[recordId(run)];
-    $('#game-best').textContent = best ? `${'★'.repeat(best.stars)} · ${best.score} points · ${best.turns} turns` : 'No finish yet. Your first adventure starts here.';
-    $('#game-save-note').textContent = saveFailed ? 'Browser saving is unavailable. Unlocks and bests remain available for this session. Your editor map is untouched.'
+    const best = journey ? null : records[recordId(run)];
+    $('#game-best').textContent = journey ? 'View expedition bests and badges in the logbook.' : best ? `${'★'.repeat(best.stars)} · ${best.score} points · ${best.turns} turns` : 'No finish yet. Your first adventure starts here.';
+    $('#game-save-note').textContent = journey ? expeditions.checkpointFailed ? 'Checkpoint unavailable. Keep this tab open or export an expedition backup.' : 'Expedition checkpoint saved. Campaign maps, bests, and learned habits are kept separately.' : saveFailed ? 'Browser saving is unavailable. Unlocks and bests remain available for this session. Your editor map is untouched.'
       : 'Adventure bests are kept in this browser. Playing never changes your editor map or its undo history.';
     $('#adventure').dataset.status = run.status;
     canvas.setAttribute('aria-label', `${stage.name}. ${run.difficulty} rules. Column ${run.player.x + 1}, row ${run.player.y + 1}. Health ${run.health} of 3. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns. ${run.message}`);
@@ -126,12 +144,19 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       $('#game-result-text').textContent = 'The red outlined cell shows each warden’s next move. Wait for an opening, or dash two tiles before they move.';
       $('#game-primary').textContent = 'Retry adventure'; $('#game-stars').textContent = '';
     }
+    if (journey && !paused && run.status !== 'playing') {
+      $('#game-result-eyebrow').textContent = journey.phase === 'camp' ? 'A LIGHT ALONG THE ROAD' : journey.phase === 'won' ? 'THE LONG WAY HOME' : 'ANOTHER ROUTE IS POSSIBLE';
+      $('#game-result-title').textContent = journey.phase === 'camp' ? 'A fire and a fresh trail.' : journey.phase === 'won' ? 'Your expedition is complete.' : 'Take another run at this leg.';
+      $('#game-result-text').textContent = `${journeyScore(journey)} points · ${journey.receipts.length}/${journey.config.length} legs finished · ${journey.retries} retries. ${journey.phase === 'camp' ? 'Supplies carry forward. Choose a camp upgrade and your next route.' : journey.phase === 'won' ? 'Your route and achievements are recorded in the logbook. Try a new seed, oath, or rule set.' : 'Retry from this leg’s checkpoint. Earlier legs and upgrades are retained; hunters remember the attempt.'}`;
+      $('#game-primary').textContent = journey.phase === 'camp' ? 'Make camp →' : journey.phase === 'won' ? 'Choose another expedition' : 'Retry this leg';
+    }
     renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
   }
 
   function revealBoard() { requestAnimationFrame(() => { if (active) $('.game-main').scrollIntoView({ block: 'start' }); }); }
 
   function start(stage) {
+    expeditions?.suspend(); $('#game-difficulty').disabled = false;
     run = createRun(stage, { memory, difficulty }); paused = false; dashArmed = false; lastAction = performance.now();
     renderer = createAdventureRenderer(canvas, run.stage); renderPicker(); resize(); update();
     revealBoard();
@@ -140,9 +165,11 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   function action(direction, dash = false) {
     const conversationAction = direction === 'close-dialogue' || direction.startsWith('choose:');
     if (!active || !run || (paused && !conversationAction) || run.status !== 'playing') return;
+    const input = `${['up', 'right', 'down', 'left'].includes(direction) && (dash || dashArmed) ? 'dash-' : ''}${direction}`;
+    if (expeditions?.session) { dashArmed = false; lastAction = performance.now(); expeditions.act(input); return; }
     const before = run;
     run = stepRun(run, `${['up', 'right', 'down', 'left'].includes(direction) && (dash || dashArmed) ? 'dash-' : ''}${direction}`);
-    dashArmed = false; lastAction = performance.now(); sound.play(run.events);
+    dashArmed = false; lastAction = performance.now(); if (run !== before) sound.play(run.events);
     if (run.memory !== memory) { memory = run.memory; memorySaveFailed = !saveMemory(storage, memory); }
     if (run.status === 'won' && before.status !== 'won') {
       const saved = saveResult(storage, records, recordId(run), resultFor(run)); records = saved.records; saveFailed = !saved.saved;
@@ -168,11 +195,13 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   }
   function interact() { const target = run && nearbyInteractions(run)[0]; if (target) action(`interact:${target.id}`); }
   $('#game-interact').addEventListener('click', interact);
+  $('#game-cargo').addEventListener('click', () => action('drop-cargo'));
   $('#game-decoy').addEventListener('click', () => action('decoy'));
   $('#game-shield').addEventListener('click', () => action('shield'));
   $('#begin-contracts').addEventListener('click', () => start(campaign[3]));
-  $('#game-difficulty').addEventListener('change', event => { difficulty = event.target.value; if (run) start(run.stage); else renderPicker(); });
+  $('#game-difficulty').addEventListener('change', event => { if (expeditions?.session) { event.target.value = difficulty; return; } difficulty = event.target.value; if (run) start(run.stage); else renderPicker(); });
   $('#forget-habits').addEventListener('click', () => {
+    if (expeditions?.session) { expeditions.act('forget'); return; }
     memory = freshMemory(); memorySaveFailed = !saveMemory(storage, memory); if (run) run = { ...run, memory }; update();
   });
   $('#conversation-close').addEventListener('click', () => action('close-dialogue'));
@@ -182,11 +211,11 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   function pause() { if (!run || run.status !== 'playing') return; paused = !paused; update(); }
   function hint() { hintVisible = !hintVisible; update(); }
   $('#game-pause').addEventListener('click', pause);
-  $('#game-restart').addEventListener('click', () => { if (run) start(run.stage); });
+  $('#game-restart').addEventListener('click', () => { if (expeditions?.session) expeditions.retry(); else if (run) start(run.stage); });
   $('#game-hint-button').addEventListener('click', hint);
   $('#game-choose').addEventListener('click', () => {
-    $('.adventure-heading').scrollIntoView({ block: 'start' });
-    $('#trail-picker button:not(:disabled)').focus({ preventScroll: true });
+    expeditions.show(expeditions.session ? 'expeditions' : 'story');
+    $(expeditions.session ? '#expedition-resume' : '#trail-picker button:not(:disabled)').focus({ preventScroll: true });
   });
   $('#game-sound').addEventListener('click', async () => {
     const enabled = await sound.toggle(); $('#game-sound').textContent = enabled ? 'Sound on' : 'Sound off';
@@ -197,6 +226,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   document.querySelectorAll('[data-move]').forEach(button => button.addEventListener('click', () => action(button.dataset.move)));
   $('#game-primary').addEventListener('click', () => {
     if (paused) { pause(); return; }
+    if (expeditions?.session) { const phase = expeditions.session.phase; if (phase === 'camp') expeditions.openCamp(); else if (phase === 'won') expeditions.show(); else expeditions.retry(); return; }
     const index = campaign.findIndex(stage => stage.id === run.stage.id);
     if (run.status === 'won' && index === campaign.length - 1 && difficulty === 'trail') { difficulty = 'nemesis'; $('#game-difficulty').value = difficulty; start(campaign[3]); return; }
     start(run.status === 'won' && index >= 0 && index < campaign.length - 1 ? campaign[index + 1] : run.stage);
@@ -214,10 +244,10 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       event.preventDefault();
       if (!event.repeat || performance.now() - lastAction > 130) action(directions[key], event.shiftKey);
     } else if (key === ' ' && !event.target.closest('button')) { event.preventDefault(); if (!event.repeat) action('wait'); }
-    else if (!event.repeat && ['p', 'Escape', 'r', 'h', 'e', 'q', 'c'].includes(key)) {
+    else if (!event.repeat && ['p', 'Escape', 'r', 'h', 'e', 'q', 'c', 'x'].includes(key)) {
       event.preventDefault();
-      if (key === 'r') start(run.stage); else if (key === 'h') hint(); else if (key === 'e') interact();
-      else if (key === 'q') action('decoy'); else if (key === 'c') action('shield'); else pause();
+      if (key === 'r') { if (expeditions?.session) expeditions.retry(); else start(run.stage); } else if (key === 'h') hint(); else if (key === 'e') interact();
+      else if (key === 'x') action('drop-cargo'); else if (key === 'q') action('decoy'); else if (key === 'c') action('shield'); else pause();
     } else if (key === 'Enter' && run.status !== 'playing' && !event.target.closest('button')) { event.preventDefault(); $('#game-primary').click(); }
   });
   canvas.addEventListener('pointerdown', event => {
@@ -235,6 +265,14 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   canvas.addEventListener('pointercancel', () => { pointer = null; });
   document.addEventListener('visibilitychange', () => { if (document.hidden && active && run?.status === 'playing' && !run.dialogue && !paused) { paused = true; update(); } });
   new ResizeObserver(resize).observe(viewport);
+  expeditions = createExpeditionUI({ storage, onNotice: text => { $('#game-status').textContent = text; }, onRun(session, newStage) {
+    run = session.run; difficulty = session.config.difficulty; $('#game-difficulty').value = difficulty;
+    if (newStage || !renderer || run.stage.id !== $('#adventure').dataset.stage) {
+      renderer = createAdventureRenderer(canvas, run.stage); paused = false; dashArmed = false; renderPicker(); resize(); revealBoard();
+    }
+    $('#adventure').dataset.stage = run.stage.id; lastAction = performance.now(); if (!newStage) sound.play(run.events); update();
+    if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
+  } });
   renderPicker();
   return {
     enter() { active = true; if (!run) start(campaign[0]); else { paused = false; resize(); update(); revealBoard(); } },

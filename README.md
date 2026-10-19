@@ -2,8 +2,10 @@
 
 **Make a little world. Then go on an adventure.** Tilewright combines a local
 tile map editor with **Lantern Trails**, an original turn-based puzzle game.
-Explore six handcrafted missions, speak to keepers, rescue companions, solve
-crate-and-relay puzzles, and outsmart hunters that learn your movement habits. You can also explore a world you paint.
+Explore six handcrafted missions or start a branching expedition of three, six,
+or nine legs. Try daily trails, build a camp toolkit, rescue keepers, deliver
+noisy relics, and outsmart hunters that learn your movement habits. You can also
+explore a world you paint.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
@@ -115,6 +117,30 @@ Playing never changes map tiles, autosave, or undo history.
 See the [mission guide and future mission ideas](docs/MISSIONS.md) for
 walkthrough goals, counterplay, and proposed interactions.
 
+## Play longer expeditions
+
+Choose **Start an expedition** in Play adventures. Pick a seed, three/six/nine
+legs, Trail or Nemesis, and an optional oath. Each leg changes the region,
+layout, objective, and hunter encounters. Complete lost-light, relay, rescue,
+relic-courier, treasure, and final Watcher missions across four regions.
+
+At camp, choose an upgrade and a sheltered/perilous route. Eight upgrades
+change stealth, energy, shields, healing, supplies, vision, protection, and
+decoys. Four oath choices include collecting every coin, walking without
+dashes, and surviving without shields. A single-contract mode and a five-leg
+UTC daily trail offer shorter or regularly changing goals. Twelve logbook
+badges and separate personal bests track exploration.
+
+Checkpoints retain the current leg, dialogue, supplies, learning, and camp
+choices. Resume after reloading, retry a lost leg without losing earlier wins,
+or export/import an expedition backup. Maps and campaign saves are retained.
+**X / Set relic down** drops carried cargo as a distraction; **E** retrieves it.
+
+![A generated expedition with its quest checklist](docs/expedition.png)
+
+See the [expedition guide](docs/EXPEDITIONS.md) for every mode, mission, upgrade,
+oath, score rule, checkpoint limit, and ideas for your next run.
+
 ## Make your first map
 
 1. Explore **Willowbend**, the bundled fictional map, or select **New map**.
@@ -203,7 +229,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 63 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 91 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -214,7 +240,9 @@ With Playwright separately installed in the development environment and Google
 Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
 it does not modify existing browser maps. It completes all six missions and the Nemesis finale
-through real keyboard input and checks unlocks, touch/swipe controls, responsive
+and five complete multi-leg expeditions through real keyboard input. It checks
+all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
+backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, and preserved editor history. Playwright is not
 needed to run the app or the default checks, and browser tests are not currently run in CI.

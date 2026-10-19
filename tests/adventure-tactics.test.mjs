@@ -211,7 +211,8 @@ test('all three contracts remain beatable under Nemesis rules with reinforcement
 
 test('scout advice follows relay and rescue objectives instead of sending an unfinished mission to the exit', () => {
   const rescue = createRun(createCampaign()[3]);
-  const ready = { ...rescue, collectedLanterns: rescue.stage.lanterns.map(item => item.id) };
+  const ready = { ...rescue, collectedLanterns: rescue.stage.lanterns.map(item => item.id),
+    collectedKeys: rescue.stage.keys.map(item => item.id), openGates: rescue.stage.gates.filter(gate => gate.type === 'key').map(gate => gate.id) };
   assert.match(scoutHint(ready), /Orin lies/);
   const heist = createRun(createCampaign()[4]); assert.match(scoutHint(heist), /Copper bell/);
 });

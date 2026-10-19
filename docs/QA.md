@@ -1,5 +1,70 @@
 # Verification record
 
+## Replayable expeditions — v0.5.0
+
+**91 Node tests pass**, including 28 new tests. Syntax checks and the static
+build pass; the package contains 29 public files. Generated-map prerequisites
+and objectives are reachable across **2,304 seed/leg/branch combinations**,
+including all six mission families and four regions. All **256 upgrade subsets**
+preserve resource bounds and oath restrictions. A deterministic **30,000-input**
+soak covers varied seeds, movement, tactics, interactions, retries, both rule
+sets, oaths, bounded state, and checkpoint replay.
+
+Thirteen independent ordinary-action fixtures complete **34 legs / 3,534 turns**.
+They cover all four oath choices on both rule sets in single contracts, plus:
+
+| Completed expedition | Legs | Turns |
+| --- | ---: | ---: |
+| Trail long voyage | 9 | 887 |
+| Unwarded Nemesis journey | 6 | 474 |
+| UTC daily trail (2026-10-18) | 5 | 406 |
+| Measured steps Nemesis journey | 3 | 422 |
+| Treasure oath Nemesis journey | 3 | 408 |
+
+No health, position, inventory, puzzle, or completion flags are overridden in
+these playthroughs. Full runs exercise all eight camp upgrades, both branches,
+all mission families, and all twelve attainable badges. Each offered camp
+upgrade/restock × route combination is separately replay-checked. Tests verify
+courier pickup/drop/distraction/reclaim/delivery, oath exit requirements,
+permanent resource caps, exact save/replay, corrupt/oversized/future/tampered
+backup rejection, lost-state reload/retry, independent campaign/map saves, and
+no duplicate credit after camp/finish resume or a post-win learning reset.
+Audio tests cover opt-in/off, unavailable/denied/closed contexts, synthesis
+failure, and disconnecting completed oscillators/gains during long play.
+
+The optional **Chrome 155.0.8059.82** expedition suite passes using disposable
+contexts. It exercises all **33 form configurations** (24 journey combinations,
+eight single contracts, one fixed daily), daily UTC rules and custom-setting
+restoration, surprise seeds, invalid input, and canceling replacement. It
+completes all five multi-leg runs above through real keyboard movement, dashes,
+E interactions, dialogue choice clicks, and camp forms. It verifies camp cancel,
+Escape and reload, all upgrade pickups in the nine-leg run, final resume with
+unchanged logbook credit, and unchanged editor/campaign/movement saves.
+
+Recovery checks include mid-dialogue resume, actual later-leg death and exact
+reload, retry retaining earlier wins/upgrades, pause input suppression, story/
+Create switching, downloaded JSON matching the checkpoint, valid import in a
+new context, cancellation, and malformed/oversized/future/tampered rejection.
+Blocked storage and quota failures still allow a complete contract and backup
+export, with a visible warning. No runtime, console, or failed-asset errors are
+observed in the desktop options/full-run flows.
+
+At **320, 390, and 768 × 844 CSS pixels**, emulated touch/reduced-motion checks
+complete a courier contract, exercise relic drop/reclaim and held-cargo import,
+verify visible tactical controls, and choose restock/perilous at a bounded,
+scrollable camp. Departure buttons stay visible while choices scroll. Testing
+caught and corrected an oversized tablet board. All prior editor, six-story,
+Nemesis, scrolling, swipe, resize, layer, export, and failed-startup suites also
+pass. Run `npm run test:browser` for all four suites, or
+`node scripts/expedition-browser-checks.mjs` for expeditions, with independently
+installed Playwright and Chrome. Browser checks remain separate from default CI.
+
+[Generated expedition](expedition.png), [hub/logbook](expedition-hub.png), and
+[phone camp](expedition-camp-mobile.png) show real UI after ordinary inputs.
+The [expedition guide](EXPEDITIONS.md) documents controls, goals, scores,
+checkpoint compatibility and bounds. Coverage is evidence for tested inputs;
+it cannot guarantee every possible seed, device, or strategy is bug-free.
+
 ## Adaptive missions and Nemesis — v0.4.0
 
 The Node suite has **63 passing tests** (18 additions). New coverage verifies
@@ -41,7 +106,7 @@ the screen, loadout choices and tactical actions work, controls remain visible,
 and the page does not overflow sideways. Prior editor, introductory-adventure,
 scrolling, resize/layer, PNG, failed-startup, and storage-failure suites also pass.
 
-Use `npm run test:browser` for all three suites, or
+At v0.4.0, `npm run test:browser` covered the three existing suites; use
 `node scripts/contract-browser-checks.mjs` for the new mission checks, with
 Playwright separately installed and Chrome available. Browser tests use isolated
 contexts and never clear existing user saves. Default Node verification still
@@ -208,7 +273,8 @@ No Safari, Firefox, physical phone/tablet, screen-reader, or extended user
 playtest is claimed. Native download/file-picker behavior, maximum-size
 interactive performance, and cross-browser pointer cancellation need further
 device coverage. New maps currently have a fixed tile size; selections, multiple local projects,
-custom tilesets, custom puzzle authoring, branching mission formats, seeded contracts, and additional campaign content are
-unfinished ideas. Six missions, adaptive hunters, dialogue/rescues, and Nemesis
-are implemented. Layer deletion/reordering and the three-quest campaign are
-implemented. No extended difficulty or replayability study is claimed.
+custom tilesets, custom puzzle authoring, branching dialogue consequences, and
+additional authored campaign content remain unfinished ideas. Six story missions,
+seeded branching journeys, daily trails, camps/upgrades, courier missions, oaths,
+checkpoints, adaptive hunters, dialogue/rescues, and Nemesis are implemented.
+No physical-device or extended player difficulty/enjoyment study is claimed.

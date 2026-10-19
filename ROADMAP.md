@@ -1,6 +1,6 @@
 # Tilewright roadmap
 
-The current editor and six-mission game are a usable starting point. These are **unfinished** feature
+The current editor, six story missions, and replayable expedition game are usable. These are **unfinished** feature
 proposals with planning estimates, not completed work or hours already spent.
 The owner should prioritize the work they actually intend to undertake before
 using this plan in a program submission.
@@ -18,6 +18,17 @@ The previous map-resizing/layer-management milestone is complete in v0.2.0;
 it is excluded from remaining estimates. See [feature ideas](docs/IDEAS.md)
 for the rationale and additional options, which are not commitments or worked hours.
 
+## Available in v0.5.0
+
+- Seeded three/six/nine-leg journeys, single contracts, and five-leg UTC daily trails.
+- Four regions, six mission families, relic carry/drop/delivery, and final Watchers.
+- Eight camp upgrades, restocking, route branches, four oath choices, and bonuses.
+- Twelve badges, expedition bests, checkpoints/backups, and current-leg recovery.
+- Complete winning fixtures, reachability/soak checks, and browser options/recovery coverage.
+
+See the [expedition guide](docs/EXPEDITIONS.md). This completed milestone is
+excluded from the remaining estimates above.
+
 ## Available in v0.4.0
 
 - Three harder second-act missions with dialogue choices, a journal, relay
@@ -27,7 +38,7 @@ for the rationale and additional options, which are not commitments or worked ho
 - A three-phase Watcher with marked sweeps, cycling embers, and distinct endings.
 - Nemesis rules and independent bests, retained campaign saves, and an explicit
   learning reset that preserves maps and progress.
-- [Mission guide and seven future mission concepts](docs/MISSIONS.md), with
+- [Mission guide and further mission concepts](docs/MISSIONS.md), with
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 

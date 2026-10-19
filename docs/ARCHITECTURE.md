@@ -21,7 +21,12 @@ installation, build-time framework, database service, or remote API.
 | `src/adventure-records.mjs` | Bounded, validated personal bests stored independently of map saves. |
 | `src/adventure-brain.mjs` | Bounded action/transition counts, decaying movement predictions, normalization, and isolated local learning persistence. |
 | `src/adventure-tactics.mjs` | Line of sight, bounded pathfinding, committed pursuit/interception/search, decoys, and boss sweeps. |
-| `src/adventure-sound.mjs` | Opt-in local Web Audio synthesis. |
+| `src/adventure-sound.mjs` | Opt-in local Web Audio synthesis with released audio nodes. |
+| `src/adventure-generator.mjs` | Seeded connected room graphs, prerequisites, region/mission variety, route previews, and daily rules. |
+| `src/adventure-perks.mjs` | Validated run upgrades, effects, and oath definitions. |
+| `src/adventure-journey.mjs` | Immutable leg/camp/retry lifecycle, isolated learning, score, bounded action journals, and verified checkpoint replay. |
+| `src/adventure-logbook.mjs` | Achievement rules, cumulative totals, bounded bests and duplicate-credit tokens. |
+| `src/adventure-expedition-ui.mjs` | Mode/seed/rules form, hub/logbook, camp choices, resume, backup files, and save warnings. |
 | `serve.mjs` | Loopback-only development HTTP server with a shared public-file allowlist. |
 | `scripts/build.mjs` | Stage and package public assets; refuse to overwrite unrelated nonempty directories. |
 
@@ -157,6 +162,57 @@ can be reset independently of bests and editor saves. Failed writes leave
 learning available for the session. All normal and Nemesis second-act missions
 have complete real-action fixtures; browser tests replay the dialogue and
 movement through actual controls.
+
+## Seeded journeys and replay checkpoints
+
+The generator builds a randomized spanning tree over 20 rooms (24 from leg
+five), adds loops, and protects one far leaf from extra entrances. Key or
+signal gates guard that leaf; their prerequisites are allocated outside it.
+Room-center objectives and corner pickups remain reachable. A seeded PRNG
+controls layout, region, relay order, cover, hazards, supplies, and hunter routes.
+A route preview uses the same selection function as the generated stage.
+Sheltered/perilous branches are recorded in the path. The last multi-leg stage
+is a Watcher crossing. Maps are 27 × 22 or 32 × 22, using existing original tiles.
+
+Courier cargo is either on a cell, carried, or delivered. Carrying raises noise;
+dropping costs a turn and makes a nearby audible target, overridden by a decoy.
+Retrieval is a normal interaction. Arrival at the delivery beacon transfers it
+before checking all exit requirements. Oaths enforce no-dash/no-shield at the
+rule layer, and required coins/delivery are real mission goals. Upgrades feed
+validated effects into the existing rules without changing the map format.
+
+Journeys advance through playing → camp → playing, then won, with lost/retry
+recovery. Completed receipts cannot be retried or credited twice in the active
+history. Camps restore health, carry supplies, grant one offered upgrade or
+restock, and choose a generated route. A retry regenerates the same current leg
+with its starting loadout, retaining previous receipts, upgrades, and newly
+learned movement counts. Fresh journeys have their own fresh profile.
+
+`tilewright.expedition.v1` keeps a version/rules envelope, normalized config,
+current leg/path/kit, initial leg memory, earlier receipts, and at most 8,192
+meaningful actions. It does not import arbitrary runtime maps or enemy objects.
+Restore validates bounds, regenerates the stage, replays ordinary actions, and
+compares a deterministic state fingerprint/status. Facing-only inputs, dialogue,
+choices, and learning resets are journaled; transient messages/events are
+excluded from the fingerprint. Import is capped at 220 KB and requires rules
+version 0.5.0. Future simulation changes need migration or a deliberate rules
+revision. The fingerprint detects damaged/inconsistent backups, not malicious
+score editing. Browser owners control their own local data.
+
+`tilewright.logbook.v1` normalizes up to 32 bests and 12 badges, with cumulative
+counters and at most 512 recent credit tokens. Ordinary repeated camp/finish
+resume is idempotent. Importing a completed backup older than the retained token
+window can credit it again. Data is bounded rather than a permanent event log.
+Logbook reads are capped at 96 KB. All storage access is guarded. Failed writes
+retain in-session play and expose a backup export warning. The editor map,
+campaign records, and campaign movement profile use independent storage keys.
+
+The 13 expedition fixtures complete 34 legs through public actions only;
+`solve-expeditions.mjs` is an optional developer witness generator using the
+real rules for candidate actions. It never changes runtime health, positions,
+objectives, or inventory to produce a win. Search limits are not a completeness
+proof. The fixtures are replayed independently by the Node suite; browser tests
+also complete long journeys through real keyboard, dialogue, and camp forms.
 
 ## JSON version 1
 
