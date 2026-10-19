@@ -1,6 +1,6 @@
 # Tilewright roadmap
 
-The current editor, nine story missions, and replayable expedition game are usable. These are **unfinished** feature
+The current editor, 24 story missions, eight Guild jobs, and replayable expedition game are usable. These are **unfinished** feature
 proposals with planning estimates, not completed work or hours already spent.
 The owner should prioritize the work they actually intend to undertake before
 using this plan in a program submission.
@@ -55,6 +55,21 @@ excluded from the remaining estimates above.
 - [Mission guide and further mission concepts](docs/MISSIONS.md), with
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
+
+## Lantern doubles completed — v0.10
+
+- Echoist's cast/return tool holds plates, lures hunters, and creates a timed
+  return route. Costs, lifetime, landing threats, and capture are visible.
+- Two new authored Guild jobs with dialogue choices, plate/crate alternatives,
+  a locked lighthouse, rain control, rescue, and a carried memory lens.
+- All eight jobs support three specialists and both rules: 48 independent bests
+  and up to 144 commendations, retaining the original records.
+- 68 complete public-action witnesses, a 48,000-input Guild soak, unchanged
+  expedition rules, and expanded keyboard/touch/browser checks.
+
+These completed additions are excluded from the remaining editor estimates.
+The listening duel, keeper promises, travelling storm, and voluntary quiet-heist
+concepts in [feature ideas](docs/IDEAS.md) remain unimplemented proposals.
 
 ## New horizons completed — v0.9
 

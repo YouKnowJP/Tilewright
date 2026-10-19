@@ -5,8 +5,10 @@ tile map editor with **Lantern Trails**, an original turn-based puzzle game.
 Explore twenty-four handcrafted missions across eight illustrated chapters or start a branching expedition of three, six,
 or nine legs. Try daily trails, build a camp toolkit, rescue keepers, deliver
 noisy relics, and outsmart hunters that learn your movement habits. You can also
-explore a world you paint. The **Wayfarers’ Guild** adds six dispatches,
-two specialist tools, linked waystones, and optional commendations.
+explore a world you paint. The **Wayfarers’ Guild** adds eight dispatches,
+three specialist tools, linked waystones, and optional commendations. The new
+**Echoist** leaves a lantern double to hold a plate, lure a hunter, or return to
+after taking a risky shortcut.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
@@ -171,19 +173,26 @@ walkthrough goals, counterplay, and proposed interactions.
 
 ## Take a Guild dispatch
 
-Choose **Trails → Guild jobs & specialists** in the adventure library. Six open jobs
+Choose **Trails → Guild jobs & specialists** in the adventure library. Eight open jobs
 combine new waystones with rescue convoys, treasure routes, relay locks, and
 singing cargo. Choose **Bellrunner** to interrupt nearby hunters with a pulse,
-or **Mistweaver** to conceal movement while evading their last lead. Both tools
-use B or a button, spend two energy, and recharge every six turns. Waystone
+**Mistweaver** to conceal movement while evading their last lead, or **Echoist**
+to leave a double that lures hunters and holds plates for six more turns.
+Use B or the tool button: casting spends two energy and recharges after six turns.
+Echoist can press B again to return for one energy, consuming the double.
+Its six lights and the Plan forecast show the remaining turns. Waystone
 travel uses E, one energy, and one turn; the landing forecast explains threats.
 
 Three optional commendations add route and resource goals. Each specialist and
-rule set keeps its own best: 24 categories and up to 72 commendations. Guild
+rule set keeps its own best: 48 categories and up to 144 commendations. Guild
 bests save on completion; unfinished jobs restart from the beginning. Story
 progress, editor maps, and expedition checkpoints are retained separately.
 
-See the [Guild guide](docs/GUILD.md) for tools, loadouts, portal rules, all six
+Start with **The Glasshouse Double**, a plate-bridge lesson, then **The Borrowed
+Horizon**, a lighthouse rescue with a memory lens, ordered bells, and a choice
+between remote rain and supplies. Both jobs also work with Pulse and Veil.
+
+See the [Guild guide](docs/GUILD.md) for tools, loadouts, portal rules, all eight
 jobs, and scoring, and the [developer research](docs/RESEARCH.md) behind them.
 
 ![The Wayfarers’ Guild dispatch board](docs/guild-board.png)
@@ -300,7 +309,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 224 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 258 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -312,7 +321,7 @@ Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
 it does not modify existing browser maps. It completes all twenty-four story missions,
 all 28 atlas difficulty/choice variants, all sluice branches and no-trade runs,
-24 Guild specialist/rule combinations plus eight alternate routes, the Nemesis
+48 Guild specialist/rule combinations plus twenty alternate routes, the Nemesis
 finales, and five multi-leg expeditions through real input. It checks
 all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive

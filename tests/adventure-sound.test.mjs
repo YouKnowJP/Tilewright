@@ -15,7 +15,7 @@ test('sound is opt-in, can be toggled, releases every oscillator, and recreates 
   try {
     const sound = createAdventureSound(); sound.play([{ type: 'win' }]); assert.equal(contexts.length, 0);
     assert.equal(await sound.toggle(), true);
-    for (const type of ['win', 'relay-complete', 'alarm', 'shield', 'rescue', 'hurt', 'lantern', 'key', 'coin', 'unlock', 'move']) sound.play([{ type }]);
+    for (const type of ['win', 'relay-complete', 'alarm', 'shield', 'rescue', 'hurt', 'lantern', 'key', 'coin', 'unlock', 'pulse', 'veil', 'waystone', 'echo', 'echo-return', 'echo-fade', 'move']) sound.play([{ type }]);
     assert.ok(nodes.length > 30); assert.ok(nodes.every(node => node.disconnected));
     assert.equal(await sound.toggle(), false); const count = nodes.length; sound.play([{ type: 'win' }]); assert.equal(nodes.length, count);
     contexts[0].state = 'closed'; assert.equal(await sound.toggle(), true); assert.equal(contexts.length, 2);

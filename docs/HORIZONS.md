@@ -4,7 +4,7 @@ Open **Play adventures → Trails → Story missions**, then choose **07 The
 Tideglass Coast** or **08 The Clockwork Orchard**. Both chapter entries are
 open immediately. Finish their missions in order to unlock the next one.
 Each rule set keeps its own stars, score, and turn best. The campaign now has
-**24 story missions across eight chapters**, plus the six separate Guild jobs.
+**24 story missions across eight chapters**, plus the eight separate Guild jobs.
 
 ## Chapter 7: The Tideglass Coast
 

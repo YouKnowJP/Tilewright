@@ -3,7 +3,7 @@ import { freshMemory, normalizeMemory, learnMove } from './adventure-brain.mjs';
 import { perkEffects } from './adventure-perks.mjs';
 import { planHunters } from './adventure-tactics.mjs';
 import { switchGateOpen, switchChange, choiceProblem, validateMechanisms } from './adventure-mechanisms.mjs';
-import { validateTools, powerProblem, waystoneProblem, pulseCells } from './adventure-tools.mjs';
+import { validateTools, powerProblem, powerCost, liveEcho, waystoneProblem, pulseCells } from './adventure-tools.mjs';
 
 export const DIRECTIONS = Object.freeze({ up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] });
 export const MAX_HEARTS = 3;
@@ -26,13 +26,15 @@ export function walkableCells(document) {
 }
 
 export function activePlates(run) {
-  return run.stage.plates.filter(plate => same(plate, run.player) || run.crates.some(crate => same(crate, plate))).map(plate => plate.id);
+  const echo = liveEcho(run);
+  return run.stage.plates.filter(plate => same(plate, run.player) || run.crates.some(crate => same(crate, plate)) || (echo && same(plate, echo))).map(plate => plate.id);
 }
 
 export function gateIsOpen(run, gate) {
   if (gate.type === 'switch') return switchGateOpen(run, gate);
   if (gate.type === 'key') return run.openGates.includes(gate.id);
   if (gate.type === 'signal') return run.relayProgress === run.stage.sequence.length;
+  if (gate.safeClose && [run.player, ...run.crates, ...run.companions, ...run.hunters, ...run.enemies.map(enemy => enemy.route[enemy.index])].some(point => same(point, gate))) return true;
   const active = activePlates(run);
   return gate.plates.every(id => active.includes(id));
 }
@@ -113,6 +115,7 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   };
   if (stage.guild) {
     run.guild = { kit: stage.guild.kit, readyAt: 0, uses: 0, warps: 0, veilUntil: 0 };
+    if (stage.guild.kit === 'echoist') Object.assign(run.guild, { echo: null, swaps: 0 });
     run.decoys = stage.guild.kit === 'mistweaver' ? (hard ? 2 : 3) : 1;
     run.shields = stage.guild.kit === 'mistweaver' ? (hard ? 0 : 1) : (hard ? 1 : 2);
   }
@@ -158,7 +161,7 @@ function blockMessage(run, point) {
   const gate = run.stage.gates.find(item => same(item, point));
   if (gate?.type === 'key' && !gateIsOpen(run, gate)) return 'A locked gate. Find a key first.';
   if (gate?.type === 'signal') return 'A signal gate. Ring the relays in the correct order to open it.';
-  if (gate?.type === 'bridge') return 'The crossing is closed. Leave crates on every linked pressure plate.';
+  if (gate?.type === 'bridge') return run.guild?.kit === 'echoist' ? 'The crossing is closed. Hold each linked pressure plate with a crate or a lantern double.' : 'The crossing is closed. Leave crates on every linked pressure plate.';
   if (gate?.type === 'switch') return 'This crossing follows the valve settings. Inspect nearby controls and read the scout hint.';
   return 'That way is blocked. Trees, rocks, cabins, and deep water need a different route.';
 }
@@ -226,7 +229,7 @@ export function stepRun(run, action) {
   if (dash && run.stage.restrictions.noDash) return { ...run, events: [], message: 'Measured steps oath: use walking, cover, decoys, and shields.' };
   if (action === 'shield' && run.stage.restrictions.noShield) return { ...run, events: [], message: 'Unwarded oath: use cover, timing, and decoys instead of a shield.' };
   if (action === 'drop-cargo' && !run.carrying) return run;
-  const toolProblem = action === 'power' ? powerProblem(run) : interaction?.kind === 'waystone' ? waystoneProblem(run, interaction, canEnter) : null;
+  const toolProblem = action === 'power' ? powerProblem(run, canEnter) : interaction?.kind === 'waystone' ? waystoneProblem(run, interaction, canEnter) : null;
   if (toolProblem) return { ...run, events: [], message: toolProblem };
   if (dash && (!moving || run.energy < 2)) return { ...run, events: [], message: 'Dash needs two energy. Walk or wait to recharge.' };
   if (['decoy', 'shield'].includes(action) && run[action === 'decoy' ? 'decoys' : 'shields'] < 1) return { ...run, events: [], message: `No ${action === 'decoy' ? 'decoys' : 'shields'} left. Find supplies or ask a trail keeper.` };
@@ -267,12 +270,21 @@ export function stepRun(run, action) {
     }
     if (!moved) return { ...run, facing: direction, events: [], message: blocked };
   } else if (action === 'power') {
-    next.guild.uses++; next.guild.readyAt = run.turns + 6;
-    if (run.guild.kit === 'bellrunner') {
-      const cells = pulseCells(run, canEnter);
-      for (const hunter of next.hunters) if (cells.some(cell => same(cell, hunter))) hunter.dazedUntil = run.turns + 2;
-    } else next.guild.veilUntil = run.turns + 4;
-    next.events.push({ type: run.guild.kit === 'bellrunner' ? 'pulse' : 'veil', ...next.player });
+    if (liveEcho(run)) {
+      let following = { ...next.player };
+      for (const companion of next.companions) { const previous = { x: companion.x, y: companion.y }; companion.x = following.x; companion.y = following.y; following = previous; }
+      next.player = { x: run.guild.echo.x, y: run.guild.echo.y }; next.guild.echo = null; next.guild.swaps++;
+      visited.push(next.player); collect(next); reveal(next, next.player);
+      next.events.push({ type: 'echo-return', ...next.player });
+    } else {
+      next.guild.uses++; next.guild.readyAt = run.turns + 6;
+      if (run.guild.kit === 'bellrunner') {
+        const cells = pulseCells(run, canEnter);
+        for (const hunter of next.hunters) if (cells.some(cell => same(cell, hunter))) hunter.dazedUntil = run.turns + 2;
+      } else if (run.guild.kit === 'mistweaver') next.guild.veilUntil = run.turns + 4;
+      else next.guild.echo = { x: next.player.x, y: next.player.y, until: run.turns + 7 };
+      next.events.push({ type: run.guild.kit === 'bellrunner' ? 'pulse' : run.guild.kit === 'mistweaver' ? 'veil' : 'echo', ...next.player });
+    }
   } else if (interaction?.kind === 'waystone') {
     const destination = next.stage.waystones.find(item => item.id === interaction.partner);
     let following = { ...next.player };
@@ -304,7 +316,7 @@ export function stepRun(run, action) {
     }
   }
   next.turns++;
-  next.energy = dash || action === 'power' ? run.energy - 2 : interaction?.kind === 'waystone' ? run.energy - 1 : moving || direction === 'wait' ? Math.min(MAX_ENERGY, run.energy + next.effects.recharge) : run.energy;
+  next.energy = action === 'power' ? run.energy - powerCost(run) : dash ? run.energy - 2 : interaction?.kind === 'waystone' ? run.energy - 1 : moving || direction === 'wait' ? Math.min(MAX_ENERGY, run.energy + next.effects.recharge) : run.energy;
   if (moving || direction === 'wait') next.memory = learnMove(run.memory, action);
   if (dash) next.noise = next.effects.dashNoise;
   if (next.carrying) next.noise = Math.max(next.noise, 2);
@@ -315,6 +327,9 @@ export function stepRun(run, action) {
   for (const hunter of next.hunters) {
     const intent = hunter.intent;
     if (next.stun === 0 && !(next.turns <= hunter.dazedUntil) && canEnter(next, intent) && !next.crates.some(crate => same(crate, intent))) { hunter.x = intent.x; hunter.y = intent.y; }
+  }
+  if (next.guild?.echo && (next.guild.echo.until <= next.turns || [...next.hunters, ...next.enemies.map(enemy => enemy.route[enemy.index])].some(point => same(point, next.guild.echo)))) {
+    next.events.push({ type: 'echo-fade', ...next.guild.echo }); next.guild.echo = null;
   }
   touchedEnemy ||= next.enemies.some(enemy => same(enemy.route[enemy.index], next.player)) || next.hunters.some(hunter => same(hunter, next.player));
   touchedEnemy ||= next.stun === 0 && run.hunters.some(hunter => !(next.turns <= next.hunters.find(item => item.id === hunter.id)?.dazedUntil) && (hunter.attack || []).some(cell => [...visited, next.player].some(point => same(cell, point))));
@@ -336,11 +351,14 @@ export function stepRun(run, action) {
     const lanterns = next.stage.lanterns.length - next.collectedLanterns.length;
     next.message = lanterns ? `The beacon needs ${lanterns} more ${lanterns === 1 ? 'lantern' : 'lanterns'}.` : `Before leaving: ${missing.map(goal => goal.label.toLowerCase()).join('; ')}.`; return next;
   }
-  const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
+  const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const messages = { hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
     pulse: 'Resonance pulse! Hunters within four reachable steps halt for this turn and the next. Contact and fire still hurt.',
     veil: 'Mist veil raised. Existing enemy plans still resolve; move away from their last lead. Cargo and alarms reveal you.',
+    echo: 'Double cast! Six more turns to lure hunters or hold a plate. B returns to it for one energy. Check Plan before returning.',
+    'echo-return': 'Returned to your double. One energy spent; the double dissolves and enemies take their turn.',
+    'echo-fade': 'Your double has faded or a hunter reached it. Check pressure crossings before moving.',
     waystone: `Waystone crossed to ${event?.name}. One energy spent; enemies moved once.`,
     'blocked-hit': 'Your shield absorbs the hit. Keep moving before it fades.',
     'relay-complete': 'The relay network is powered! Signal gates open and hunters are stunned for three more turns.',

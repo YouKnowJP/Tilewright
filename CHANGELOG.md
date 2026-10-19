@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.10.0 — 2026-10-19
+
+- Add Echoist, a third Guild specialist: cast a six-turn lantern double to hold
+  pressure plates and lure hunters, then return for one energy. Capture, lifetime,
+  cooldown, landing dangers, blocked returns, and costs are explicit.
+- Add The Glasshouse Double and The Borrowed Horizon with plate/crate/waystone
+  alternatives, keeper loadout choices, a locked lighthouse, rain control, Neri's
+  rescue, ordered bells, and memory-lens delivery. All three kits work on both rules.
+- Put the two new jobs first and select Echoist for the next job by default.
+  Keep the existing single tool button; it changes from Double to Return with a
+  countdown. Add original double sprites, minimap markers, and opt-in sound.
+- Keep occupied cells of the new pressure bridges open until clear. Returning
+  grants no immunity, and a hunter reaching the double extinguishes it.
+- Expand Guild bests from 24 to 48 categories / 144 commendations while retaining
+  all original records. Preserve story saves and expedition rules 0.6.0.
+- Add 34 tests (258 total), 68 complete Guild witness routes including every
+  dialogue branch, a 48,000-input Guild soak, and expanded real-input browser
+  playthroughs. Reject recorded movements that spend no turn.
+- Document four further gameplay prototypes separately from delivered features.
+
 ## 0.9.0 — 2026-10-19
 
 - Add six authored story missions across The Tideglass Coast and The Clockwork

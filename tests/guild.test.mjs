@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createDocument } from '../src/model.mjs';
 import { createRun, stepRun, canEnter, missionComplete, resultFor, hazardActive } from '../src/adventure.mjs';
 import { createGuildJobs, guildMerits, loadGuild, saveGuild, GUILD_KEY, guildRecordId } from '../src/adventure-guild.mjs';
-import { powerProblem, waystoneProblem, waystonePreview } from '../src/adventure-tools.mjs';
+import { GUILD_KITS, powerProblem, waystoneProblem, waystonePreview } from '../src/adventure-tools.mjs';
 import { planHunters } from '../src/adventure-tactics.mjs';
 import { threatForecast } from '../src/adventure-intel.mjs';
 import { restoreJourney, serializeJourney, advanceJourney } from '../src/adventure-journey.mjs';
@@ -16,7 +16,11 @@ const stage = (overrides = {}) => ({ id: 'guild-1', name: 'Test dispatch', map: 
 const fixtures = JSON.parse(readFileSync(new URL('fixtures/guild-routes.json', import.meta.url), 'utf8'));
 for (const fixture of fixtures) test(`Guild clean full win: ${fixture.id}/${fixture.kit}/${fixture.difficulty}`, () => {
   const definition = createGuildJobs(fixture.kit).find(s => s.id === fixture.id), before = structuredClone(definition), initial = createRun(definition, { difficulty: fixture.difficulty });
-  const final = fixture.actions.reduce(stepRun, initial);
+  const final = fixture.actions.reduce((run, action) => {
+    const next = stepRun(run, action);
+    if (!/^(interact:|choose:|close-dialogue)/.test(action)) assert.equal(next.turns, run.turns + 1, `Unplayable witness input: ${action}`);
+    return next;
+  }, initial);
   assert.equal(final.status, 'won'); assert.equal(missionComplete(final), true); assert.equal(final.damage, 0);
   assert.deepEqual(resultFor(final), fixture.result); assert.equal(fixture.result.stars, 3);
   assert.deepEqual(guildMerits(final), fixture.merits); assert.ok(guildMerits(final).every(merit => merit.done));
@@ -25,10 +29,10 @@ for (const fixture of fixtures) test(`Guild clean full win: ${fixture.id}/${fixt
   for (const id of definition.requiredRescues || []) assert.ok(final.rescued.includes(id));
   assert.deepEqual(definition, before); assert.equal(initial.turns, 0);
 });
-test('all six jobs and both kits have independent ordinary-action witnesses for both rule sets', () => {
-  assert.equal(fixtures.length, 24);
-  assert.equal(new Set(fixtures.map(f => `${f.id}/${f.kit}/${f.difficulty}`)).size, 24);
-  assert.equal(new Set(createGuildJobs().map(stage => JSON.stringify(stage.map.layers))).size, 6);
+test('all eight jobs and three kits have independent ordinary-action witnesses for both rule sets', () => {
+  assert.equal(fixtures.length, 48);
+  assert.equal(new Set(fixtures.map(f => `${f.id}/${f.kit}/${f.difficulty}`)).size, 48);
+  assert.equal(new Set(createGuildJobs().map(stage => JSON.stringify(stage.map.layers))).size, 8);
 });
 test('pulse cancels a nearby committed move and sweep, expires, respects walls, and retains earlier snapshots', () => {
   const definition = stage({ hunters: [{ id: 'near', route: [p(3, 2), p(3, 3)] }, { id: 'far', route: [p(9, 7), p(10, 7)] }] });
@@ -112,16 +116,16 @@ for (const fixture of legacy) test(`genuine pre-Guild 0.6 backup restores: ${fix
   assert.deepEqual(restored.run.player, fixture.player); assert.equal(Object.hasOwn(restored.run, 'guild'), false);
   const next = advanceJourney(restored, restored.run.dialogue ? 'close-dialogue' : 'wait'); assert.deepEqual(restoreJourney(serializeJourney(next)).run, next.run);
 });
-test('24,000 varied Guild inputs preserve resources, valid landings, bounded cooldowns, and earlier tool state', () => {
+test('48,000 varied Guild inputs preserve resources, valid landings, bounded cooldowns, and earlier tool state', () => {
   let seed = 9026;
   const choose = count => { seed = Math.imul(seed, 1664525) + 1013904223 >>> 0; return seed % count; };
-  for (const kit of ['bellrunner', 'mistweaver']) for (const stage of createGuildJobs(kit)) for (const difficulty of ['trail', 'nemesis']) {
+  for (const { id: kit } of GUILD_KITS) for (const stage of createGuildJobs(kit)) for (const difficulty of ['trail', 'nemesis']) {
     let run = createRun(stage, { difficulty });
     for (let i = 0; i < 1000; i++) {
       if (run.status !== 'playing') run = createRun(stage, { difficulty, memory: run.memory });
       const actions = run.dialogue ? ['close-dialogue'] : ['up', 'right', 'down', 'left', 'dash-up', 'dash-right', 'dash-down', 'dash-left', 'wait', 'power', 'shield', 'decoy', 'drop-cargo',
         ...[...stage.waystones, ...stage.npcs, ...stage.supplies, ...stage.relays, ...stage.switches, ...(stage.relic ? [stage.relic] : [])].map(item => `interact:${item.id}`)];
-      const prior = run, tools = { ...run.guild }; run = stepRun(run, actions[choose(actions.length)]);
+      const prior = run, tools = structuredClone(run.guild); run = stepRun(run, actions[choose(actions.length)]);
       assert.deepEqual(prior.guild, tools); assert.equal(canEnter(run, run.player), true);
       assert.ok(run.energy >= 0 && run.energy <= 3 && run.health >= 0 && run.health <= 3);
       assert.ok(run.decoys >= 0 && run.decoys <= 3 && run.shields >= 0 && run.shields <= 3);

@@ -12,7 +12,7 @@ import { choiceProblem, wallet, mechanismPreview } from './adventure-mechanisms.
 import { threatForecast } from './adventure-intel.mjs';
 import { CHAPTERS, drawAtlasArt, themeFor, drawKeeperPortrait } from './adventure-art.mjs';
 import { createGuildJobs, guildMerits, guildRecordId, loadGuild, saveGuild, GUILD_IDS, MERITS } from './adventure-guild.mjs';
-import { GUILD_KITS, kitFor, powerProblem, waystonePreview } from './adventure-tools.mjs';
+import { GUILD_KITS, kitFor, powerProblem, powerPreview, liveEcho, waystonePreview } from './adventure-tools.mjs';
 
 export function createAdventureUI({ storage, getMap, backToEditor }) {
   const $ = selector => document.querySelector(selector);
@@ -24,7 +24,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0, pointer = null;
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
-  let guildRecords = loadGuild(storage), selectedKit = 'bellrunner', guildSaveFailed = false;
+  let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;
   let selectedChapter = 0, libraryTab = 'story';
   const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(max-width: 1000px)');
   const libraryOpen = () => !$('#adventure-library').hidden;
@@ -82,8 +82,9 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   });
 
   function renderGuild() {
-    const kit = GUILD_KITS.find(kit => kit.id === selectedKit), jobs = createGuildJobs(selectedKit);
-    $('#guild-kit-note').textContent = `${kit.power}: ${kit.description} Both tools cost two energy and one turn, with a six-turn recharge.`;
+    const kit = GUILD_KITS.find(kit => kit.id === selectedKit), allJobs = createGuildJobs(selectedKit), jobs = [...allJobs.slice(6), ...allJobs.slice(0, 6)];
+    $('#guild-kit').value = selectedKit;
+    $('#guild-kit-note').textContent = `${kit.power}: ${kit.description} Casting costs two energy and one turn, with a six-turn recharge.${kit.id === 'echoist' ? ' Returning costs one energy and consumes the double.' : ''}`;
     $('#guild-jobs').replaceChildren(...jobs.map((stage, index) => {
       const button = document.createElement('button'); button.className = 'guild-job'; button.dataset.guildJob = stage.id;
       const art = document.createElement('canvas'); art.setAttribute('aria-hidden', 'true'); drawAtlasArt(art, themeFor(stage), index % 3);
@@ -95,7 +96,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       button.addEventListener('click', () => start(stage)); return button;
     }));
     const matches = Object.entries(guildRecords).filter(([id]) => id.endsWith(`-${selectedKit}-${difficulty}`));
-    $('#guild-progress').textContent = `${matches.length}/6 jobs finished · ${matches.reduce((sum, [, record]) => sum + record.merits, 0)}/18 commendations · ${kit.name} / ${difficulty}. ${guildSaveFailed ? 'Saving unavailable; results remain in this session.' : 'Bests save on completion. An unfinished job restarts from the beginning.'}`;
+    $('#guild-progress').textContent = `${matches.length}/${jobs.length} jobs finished · ${matches.reduce((sum, [, record]) => sum + record.merits, 0)}/${jobs.length * 3} commendations · ${kit.name} / ${difficulty}. ${guildSaveFailed ? 'Saving unavailable; results remain in this session.' : 'Bests save on completion. An unfinished job restarts from the beginning.'}`;
   }
   function showGuild() {
     expeditions.show('guild'); $('#guild-hub').hidden = false; $('#library-guild').setAttribute('aria-pressed', 'true'); renderGuild();
@@ -182,18 +183,19 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     if (!run) return;
     const stage = run.stage, result = resultFor(run), index = campaign.findIndex(item => item.id === stage.id);
     const theme = themeFor(stage);
-    $('#game-map-legend').textContent = run.guild ? 'Gold is you; turquoise is the beacon. Purple squares are discovered waystones; white outlines are wheels and bells.' : 'Gold is you. Turquoise is the beacon. Outlined squares are discovered wheels and bells.';
+    $('#game-map-legend').textContent = run.guild ? 'Gold is you; turquoise is the beacon. Purple squares are waystones; white outlines are wheels and bells. A pale blue double marks your return point.' : 'Gold is you. Turquoise is the beacon. Outlined squares are discovered wheels and bells.';
     $('.game-main').style.setProperty('--region-color', theme.dark);
     $('#game-region').textContent = run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
     document.body.classList.toggle('guild-active', Boolean(run.guild));
     $('#game-power').hidden = !run.guild; $('#game-guild-kit').hidden = !run.guild;
     if (run.guild) {
-      const kit = kitFor(run), problem = powerProblem(run), remaining = Math.max(0, run.guild.readyAt - run.turns);
-      $('#game-power').textContent = `${kit.id === 'bellrunner' ? 'Pulse' : 'Veil'}${remaining ? ` · ${remaining}` : ' · B'}`;
+      const kit = kitFor(run), problem = powerProblem(run, canEnter), remaining = Math.max(0, run.guild.readyAt - run.turns), echo = liveEcho(run);
+      const preview = powerPreview(run, canEnter, hazardActive);
+      $('#game-power').textContent = echo ? `Return · ${echo.until - run.turns}` : `${kit.id === 'bellrunner' ? 'Pulse' : kit.id === 'mistweaver' ? 'Veil' : 'Double'}${remaining ? ` · ${remaining}` : ' · B'}`;
       $('#game-power').disabled = Boolean(problem) || paused || run.status !== 'playing';
-      $('#game-power').setAttribute('aria-label', `${kit.power}. ${problem || 'Ready. Two energy, one turn; six-turn recharge.'}`);
+      $('#game-power').setAttribute('aria-label', `${kit.power}. ${preview}`);
       $('#game-guild-description').textContent = `${kit.name}: ${kit.description}`;
-      $('#game-guild-state').textContent = `${problem || 'Tool ready: two energy, one turn; six-turn recharge.'} Used ${run.guild.uses} times. ${run.guild.warps} waystone jumps.${run.guild.veilUntil > run.turns ? ` Veil: ${run.guild.veilUntil - run.turns} turns; ${run.carrying || run.alarm ? 'revealed by cargo/alarm' : 'recent leads still persist'}.` : ''}`;
+      $('#game-guild-state').textContent = `${preview} Cast ${run.guild.uses} times. ${run.guild.warps} waystone jumps.${kit.id === 'echoist' ? ` ${run.guild.swaps} double returns.` : ''}${run.guild.veilUntil > run.turns ? ` Veil: ${run.guild.veilUntil - run.turns} turns; ${run.carrying || run.alarm ? 'revealed by cargo/alarm' : 'recent leads still persist'}.` : ''}`;
       $('#game-guild-merits').replaceChildren(...guildMerits(run).map(merit => {
         const failed = merit.id === 'clean' && run.damage > 0 || merit.id === 'swift' && run.turns > turnTarget(run);
         return Object.assign(document.createElement('p'), { className: failed ? 'merit-missed' : '', textContent: `${merit.done ? '✦' : failed ? '×' : '○'} ${merit.label}` });
@@ -303,7 +305,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     if (run.guild && !paused && result) {
       const merits = guildMerits(run).filter(merit => merit.done).length;
       $('#game-result-eyebrow').textContent = 'GUILD DISPATCH COMPLETE'; $('#game-result-title').textContent = `${merits === 3 ? 'An exemplary dispatch.' : 'A job worth telling.'}`;
-      $('#game-result-text').textContent = `${kitFor(run).name} · ${merits}/3 commendations · ${result.score + merits * 150} points · ${result.turns} turns. ${merits < 3 ? 'Try a different route or specialist to earn the remaining commendations.' : 'All optional goals met. Try the other specialist or Nemesis for a different run.'}`;
+      $('#game-result-text').textContent = `${kitFor(run).name} · ${merits}/3 commendations · ${result.score + merits * 150} points · ${result.turns} turns. ${merits < 3 ? 'Try a different route or specialist to earn the remaining commendations.' : 'All optional goals met. Try another specialist or Nemesis for a different run.'}`;
       $('#game-primary').textContent = 'Choose another Guild job';
     }
     if (result && !paused && (journey ? expeditions.checkpointFailed : run.guild ? guildSaveFailed : saveFailed)) {

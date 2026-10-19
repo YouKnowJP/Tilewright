@@ -207,6 +207,14 @@ export function createAdventureRenderer(canvas, stage) {
         else if (!near({ x, y }, run.player)) rect(`${stage.theme ? themeFor(stage).dark : '#173932'}66`, x * 24, y * 24, 24, 24);
       }
     }
+    const echo = run.guild?.echo;
+    if (echo && echo.until > run.turns) {
+      const ex = echo.x * 24, ey = echo.y * 24;
+      circle('#9fe9ed44', ex + 12, ey + 13, 15);
+      ctx.strokeStyle = '#b6f6f1'; ctx.lineWidth = 2; ctx.setLineDash([3, 2]); ctx.strokeRect(ex + 3, ey + 2, 18, 21); ctx.setLineDash([]);
+      rect('#69b9c4', ex + 6, ey + 11, 13, 10); rect('#c4eeea', ex + 8, ey + 5, 9, 8); rect('#fff1b0', ex + 17, ey + 15, 4, 5);
+      for (let i = 0; i < echo.until - run.turns; i++) rect('#efffff', ex + 1 + i * 4, ey + 24, 3, 2);
+    }
     const x = player.x * 24, y = player.y * 24;
     if (run.guild?.veilUntil > run.turns) { circle(run.carrying || run.alarm ? '#edbb7c66' : '#bedde366', x + 12, y + 12, 17); }
     if (run.events.some(event => event.type === 'pulse') && (reducedMotion.matches || time - movedAt < 450)) {
@@ -260,7 +268,7 @@ export function createAdventureRenderer(canvas, stage) {
       if (!run.seen[stone.y * stage.map.width + stone.x]) continue;
       ctx.fillStyle = '#d8b9f5'; ctx.fillRect(ox + stone.x * scale, oy + stone.y * scale, Math.max(3, scale), Math.max(3, scale));
     }
-    for (const [point, color] of [[stage.exit, '#8de1ba'], [run.player, '#fff2c0']]) {
+    for (const [point, color] of [[stage.exit, '#8de1ba'], ...(run.guild?.echo ? [[run.guild.echo, '#b6f6f1']] : []), [run.player, '#fff2c0']]) {
       ctx.fillStyle = color; ctx.fillRect(ox + point.x * scale, oy + point.y * scale, Math.max(3, scale), Math.max(3, scale));
     }
     ctx.strokeStyle = '#fff0b380'; ctx.lineWidth = 1;

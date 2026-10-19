@@ -1,13 +1,30 @@
 export const GUILD_KITS = Object.freeze([
   { id: 'bellrunner', name: 'Bellrunner', power: 'Resonance pulse', description: 'Halt reachable hunters within four steps for this turn and the next. Contact and embers still hurt. Start with more shields.' },
   { id: 'mistweaver', name: 'Mistweaver', power: 'Mist veil', description: 'Hide from new sight and ordinary dash noise for four turns. Existing plans and recent leads remain dangerous. Cargo and alarms reveal you. Start with more decoys.' },
+  { id: 'echoist', name: 'Echoist', power: 'Lantern double', description: 'Leave a double that lures hunters and holds a pressure plate for six more turns. Use B again to return to it for one energy. Hunters extinguish doubles they reach; committed moves still resolve.' },
 ]);
 export const kitFor = run => GUILD_KITS.find(kit => kit.id === run.guild?.kit);
-export function powerProblem(run) {
+export const liveEcho = run => run.guild?.echo?.until > run.turns ? run.guild.echo : null;
+export const powerCost = run => liveEcho(run) ? 1 : 2;
+export function powerProblem(run, canEnter) {
   if (!run.guild) return 'Specialist tools are available on Guild jobs.';
+  const echo = liveEcho(run);
+  if (echo) {
+    if (!canEnter?.(run, echo) || run.crates.some(item => item.x === echo.x && item.y === echo.y)) return 'The double’s return cell is blocked. No turn or energy spent.';
+    if ([...run.hunters, ...run.enemies.map(enemy => enemy.route[enemy.index])].some(item => item.x === echo.x && item.y === echo.y)) return 'A hunter occupies the double. No turn or energy spent.';
+    return run.energy < 1 ? 'Returning to the double needs one energy. Walk or wait to recharge.' : null;
+  }
   if (run.turns < run.guild.readyAt) return `Recharges in ${run.guild.readyAt - run.turns} turns.`;
   if (run.energy < 2) return 'Needs two energy. Walk or wait to recharge.';
   return null;
+}
+export function powerPreview(run, canEnter, hazardActive) {
+  const echo = liveEcho(run), problem = powerProblem(run, canEnter);
+  if (!echo) return problem || (run.guild.kit === 'echoist' ? 'Cast: two energy, one turn; six-turn recharge. The double lasts six more turns, holds plates, and lures hunters within twelve cells.' : 'Ready: two energy, one turn; six-turn recharge.');
+  const same = point => point.x === echo.x && point.y === echo.y;
+  const enemy = run.hunters.some(hunter => same(hunter.intent) || hunter.attack.some(same)) || run.enemies.some(enemy => enemy.route.some(same));
+  const fire = run.stage.hazards.some(hazard => same(hazard) && hazardActive(run, hazard, run.turns + 1));
+  return `Double: column ${echo.x + 1}, row ${echo.y + 1}; ${echo.until - run.turns} turns left. ${problem || 'Return: one energy, one turn; consumes the double.'}${enemy ? ' Enemy movement or a sweep threatens the return; inspect Plan.' : ''}${fire ? ' The return cell burns next turn!' : ''} Reading does not spend its lifetime.`;
 }
 export function pulseCells(run, canEnter) {
   const cells = [run.player], seen = new Set([`${run.player.x},${run.player.y}`]);

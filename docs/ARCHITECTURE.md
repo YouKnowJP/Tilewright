@@ -15,12 +15,12 @@ installation, build-time framework, database service, or remote API.
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
 | `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
 | `src/adventure.mjs` | Pure turn rules, collision, pickups, puzzles, patrol intent, scoring, exploration, and connected custom expeditions. |
-| `src/adventure-levels.mjs` | Campaign assembly, eighteen stable record identities, and the first six authored maps. |
+| `src/adventure-levels.mjs` | Campaign assembly, twenty-four stable record identities, and the first six authored maps. |
 | `src/adventure-horizon-levels.mjs` | Six authored coast/garden missions, including token circuits, changing doors, cart routes, and rescue finales. |
 | `src/adventure-atlas-levels.mjs` | Nine authored archive, desert, and northern missions with constraint, treasure, courier, rescue, and finale goals. |
-| `src/adventure-tools.mjs` | Specialist validation, power availability, reachable pulse area, and waystone checks/previews. |
-| `src/adventure-guild.mjs` | Six authored Guild jobs, commendation evaluation, and bounded kit/rule best storage. |
-| `src/adventure-art.mjs` | Six chapter palettes, original landscape card art, keeper portraits, and cached cosmetic map recoloring. No top-level DOM access or simulation state. |
+| `src/adventure-tools.mjs` | Specialist validation, dynamic cast/return costs and forecasts, reachable pulse area, and waystone checks/previews. |
+| `src/adventure-guild.mjs` | Eight authored Guild jobs, commendation evaluation, and bounded kit/rule best storage. |
+| `src/adventure-art.mjs` | Eight chapter palettes, original landscape card art, keeper portraits, and cached cosmetic map recoloring. No top-level DOM access or simulation state. |
 | `src/adventure-sluice-levels.mjs` | Three authored sluice/shutter/rescue missions and their dialogue routes, trades, and epilogues. |
 | `src/adventure-mechanisms.mjs` | Switch conditions, safe state changes, previews, trade availability, and definition validation. |
 | `src/adventure-intel.mjs` | Read-only, nearby next-turn warnings derived from committed enemy plans and hazard timing. |
@@ -417,3 +417,34 @@ ordinary public actions, and independent tests replay 22 clean witnesses, all
 choices, both difficulty settings, and the optional upper cart crossing. The
 developer local-search key now includes crate positions. Browser tests verify
 actual interaction controls, progression, layout, and save retention.
+
+## Lantern doubles — v0.10
+
+Only Echoist Guild runs add `echo` and `swaps` fields inside `guild`. Casting
+stores the current cell and an end turn seven greater than the pre-action turn:
+after activation, six further turns remain. The double holds a plate remotely
+and overrides ordinary hunter pursuit within twelve Manhattan cells; a thrown
+lure has higher priority. Existing committed enemy movement resolves unchanged.
+After enemy movement, a reached or expired double is removed before planning
+the next intent. Fixed patrols do not acquire the new lure behavior.
+
+While a live double exists, the power action returns for one energy and consumes
+it; otherwise casting costs two. Availability, button text, and forecasts share
+these rules. Returning checks passability, crates, current enemies, and energy
+before cloning state. Landing collection, reveal, companions, cargo delivery,
+and committed threats use the normal turn pipeline. Returns do not increment
+cast count or reset casting cooldown. No input can create multiple doubles.
+
+Only the two new jobs opt their plate bridges into `safeClose`: an occupied
+bridge cell stays open until the player, crate, companion, hunter, or patrol
+clears it. Other cells close normally when their linked plate loses its weight.
+Earlier story puzzles retain their prior semantics. The original 24 Guild best
+identities remain valid within the expanded 48-ID whitelist and 16 KB read cap.
+Story/generated runs gain no new state, and expedition rules remain 0.6.0.
+
+The 68 Guild witness routes cover every job/kit/rule combination and 20 alternate
+routes or dialogue choices. Their 5,336 turns use the public reducer, including
+actual double-held crossings and returns. Boundary tests cover expiration,
+capture, rejected returns, landing hazards, companions, cargo, previous-state
+immutability, and complete old/new record retention. The expanded Guild soak
+uses 48,000 inputs; the retained/new total across game suites is 150,000.

@@ -7,7 +7,7 @@ They are proposals for this small tool, not claims that Tilewright already
 supports those editors' formats or all their capabilities. The
 [roadmap](../ROADMAP.md) tracks selected work and remaining estimates.
 
-## Delivered through v0.8.0
+## Delivered through v0.10.0
 
 **Finish structural editing.** A map no longer needs to be recreated to change
 its dimensions. Users can anchor retained content, preview cropped occupied
@@ -15,25 +15,29 @@ cells, choose fill for new cells, and undo the resize. Layers can be renamed,
 duplicated, reordered, and deleted with confirmation and undo. This closes a
 specific gap in the existing workflow without changing the saved map format.
 
-**Give the worlds a reason to explore.** Lantern Trails now has eighteen real
+**Give the worlds a reason to explore.** Lantern Trails now has twenty-four real
 missions with keys, patrols, dash energy, health, crate-and-plate bridge puzzles,
 fog, hints, treasures, stars, and progression. The harder second act adds local adaptive interception,
 dialogue choices, rescue/following, ordered relays, alarms, timed embers, and
 Nemesis rules. Custom expeditions generate reachable objectives on editor maps. An adventure overview is delivered; an
 editor minimap navigator remains a separate future tool.
 
-**Make the journey feel like distinct places.** Six illustrated atlas chapters
+**Make the journey feel like distinct places.** Eight illustrated atlas chapters
 now provide region artwork, mechanic tags, chapter stars, and open chapter
-entries. Violet stone, warm dunes, and blue snow distinguish nine new maps.
+entries. Violet stone, warm dunes, blue snow, a sea-glass coast, and brassleaf
+gardens distinguish their maps.
 Keeper portraits, discovered mechanism pins, optional field goals, and visible
 mission constraints support longer runs. Walking-only treasure circuits, a
 shield-free bazaar, four-note locks, and convoy finales vary the decisions. See
 the [atlas guide](ATLAS.md).
 
-**Change the player’s tools.** Six Guild jobs now support Bellrunner’s pulse
-and Mistweaver’s veil, paired waystones, three optional commendations per job,
-and independent kit/rule records. These create 24 result categories across the
-new jobs. See [Guild rules](GUILD.md) and [research and future prototypes](RESEARCH.md).
+**Change the player’s tools.** Eight Guild jobs support Bellrunner’s pulse,
+Mistweaver’s veil, and Echoist’s lantern double, paired waystones, three optional
+commendations per job, and 48 independent kit/rule records. The double creates
+a second position to hold a plate, lure a hunter, and return to before it fades.
+Glasshouse and Borrowed Horizon combine this choice with lasting crate routes,
+keeper bargains, a locked lighthouse, rescue, and a carried lens. See
+[Guild rules](GUILD.md) and [research and future prototypes](RESEARCH.md).
 
 **Give each return a different route.** Seeded expeditions now connect three,
 six, or nine legs through camp upgrades and route choices. Four regions, six
@@ -52,7 +56,19 @@ All conversations can be reread in the journal. Occupied floors cannot close,
 and full parcels cannot waste coins. These refinements are delivered; richer
 multi-mission relationships and moving-water terrain remain future ideas.
 
-## Highest-value next steps
+## Next gameplay concepts to prototype
+
+These ideas are not implemented. Each needs a small authored test before adding
+more interface, content, or persistent progression.
+
+| Concept | New decision | First playable slice and checks |
+| --- | --- | --- |
+| The Listening Duel | Change the habits a rival has learned, then exploit its visible prediction. | A two-room rivalry with explicit "expects east" intent, a misleading route, and a clean non-deception route. Never infer a player's thoughts or personality. |
+| The Keeper's Promise | Choose which route help a rescued keeper offers on the next mission. | Two linked maps, one reversible camp choice, and a preview of the changed route. Test both outcomes and checkpoint restoration; no hidden permanent punishment. |
+| The Travelling Storm | Route around a weather front instead of only waiting for a fixed ember cycle. | One map with a three-turn forecast and sheltered lanes. Verify every launch phase has an executable safe route and that the forecast matches the reducer. |
+| The Quiet Heist | Voluntarily raise visible security for extra treasure, then choose when to leave. | A small optional vault with announced reinforcements and a guaranteed normal exit. Keep the clean baseline route and alternate bests; test every escalation step. |
+
+## Highest-value editor next steps
 
 | Idea | Problem it solves | A useful first version | Completion evidence |
 | --- | --- | --- | --- |

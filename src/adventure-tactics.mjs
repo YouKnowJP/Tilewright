@@ -1,4 +1,5 @@
 import { predictMove } from './adventure-brain.mjs';
+import { liveEcho } from './adventure-tools.mjs';
 const vectors = { up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] };
 const same = (a, b) => a.x === b.x && a.y === b.y;
 export const hunterPoint = hunter => ({ x: hunter.x, y: hunter.y });
@@ -66,6 +67,8 @@ export function planHunters(run, canEnter) {
     }
     if (run.lure && run.lure.until > run.turns && Math.abs(run.lure.x - from.x) + Math.abs(run.lure.y - from.y) <= 12) {
       target = { x: run.lure.x, y: run.lure.y }; mode = 'distracted';
+    } else if (liveEcho(run) && Math.abs(liveEcho(run).x - from.x) + Math.abs(liveEcho(run).y - from.y) <= 12) {
+      target = { x: liveEcho(run).x, y: liveEcho(run).y }; mode = 'following double';
     } else if (run.cargoPoint && !run.cargoDelivered && Math.abs(run.cargoPoint.x - from.x) + Math.abs(run.cargoPoint.y - from.y) <= 12) {
       target = { ...run.cargoPoint }; mode = 'following relic';
     } else if (!hunter.memory) {

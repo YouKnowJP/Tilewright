@@ -1,7 +1,7 @@
 import { createDocument } from './model.mjs';
 import { GUILD_KITS } from './adventure-tools.mjs';
 export const GUILD_KEY = 'tilewright.guild.v1';
-export const GUILD_IDS = Object.freeze(Array.from({ length: 6 }, (_, i) => `guild-${i + 1}`));
+export const GUILD_IDS = Object.freeze(Array.from({ length: 8 }, (_, i) => `guild-${i + 1}`));
 const cells = (values, prefix) => values.map(([x, y], i) => ({ id: `${prefix}-${i}`, x, y }));
 const hunter = (id, points, extra = {}) => ({ id, route: points.map(([x, y]) => ({ x, y })), vision: 7, ...extra });
 const stonePair = (id, name, a, b) => [{ id: `${id}-west`, name: `${name} west`, x: a[0], y: a[1], partner: `${id}-east` }, { id: `${id}-east`, name: `${name} east`, x: b[0], y: b[1], partner: `${id}-west` }];
@@ -90,8 +90,47 @@ export function createGuildJobs(kit = 'bellrunner') {
       npcs: [keeper('elu', 'Elu', 2, 12, ['“Root, Snow, Star. Bring Tess and the dispatch prism back together.”', 'Dawnfold and Duskfold offer different escape routes. Read the destination forecast before spending your last energy.']), keeper('tess', 'Tess', 28, 7, ['“Four lamps, then I follow. We can carry the northern dispatch home.”'], true)], requiredRescues: ['tess'],
       intro: 'A Guild finale across a frozen divide. Restore four lights, three bells, and a keeper, then return with the singing dispatch through either fold.',
       hint: 'Restore the two west lamps, ring Root then Snow, and jump east. Restore the eastern lamps, ring Star, rescue Tess, and take the prism. Return through either waystone pair.' }),
+    job(7, 'The Glasshouse Double', 'clockwork', 26, 18, 1, kit, ['clean', 'treasure', 'power'], {
+      subtitle: 'One keeper. Two places.', par: 125, optionalPlates: true,
+      lanterns: cells([[5, 3], [15, 5], [22, 14]], 'lamp'), coins: cells([[6, 3], [14, 5], [22, 12], [5, 14]], 'coin'),
+      hearts: cells([[6, 12], [20, 13]], 'heart'), supplies: cells([[7, 12], [20, 12]], 'supply'),
+      crates: cells([[9, 5]], 'crate'), plates: cells([[10, 5]], 'plate'),
+      gates: [12, 13].map(x => ({ id: `glass-span-${x}`, type: 'bridge', x, y: 5, plates: ['plate-0'], safeClose: true })),
+      waystones: stonePair('glass', 'Glasshouse', [8, 13], [18, 13]),
+      relays: [{ id: 'glass', name: 'Glass bell', x: 6, y: 4 }, { id: 'glimmer', name: 'Glimmer bell', x: 22, y: 11 }], sequence: ['glass', 'glimmer'],
+      hunters: [hunter('glass-listener', [[20, 8], [23, 8]], { vision: 6 }), hunter('night-glazier', [[20, 14], [23, 14]], { nemesisOnly: true, vision: 6 })],
+      cover: [...cover(16, 7), ...cover(21, 12)],
+      npcs: [{ ...keeper('ivo', 'Ivo', 2, 9, ['“A double can hold the copper plate while you cross. Its six small lights count the turns you have left.”', '“B casts it; B again returns you for one energy. It cannot carry treasure for you. A crate holds the bridge for as long as you leave it there.”']), choices: [
+        { id: 'shield', label: 'Take a spare shield', response: '“For the committed move you cannot lure away.”', effect: { shields: 1 } },
+        { id: 'decoys', label: 'Take two false lanterns', response: '“A false lantern can draw a hunter away from your return point.”', effect: { decoys: 2 } },
+      ] }],
+      intro: 'An abandoned glasshouse has two ways across its canal. Hold the northern plate with a crate or your double, or take the southern waystone. Light three lamps and ring Glass before Glimmer.',
+      hint: 'The northern plate is at column 11, row 6. Push its crate east, or step around the crate and cast a double on the plate. Cross to the nearby lamp; return before its six lights fade. Occupied bridge cells stay open until clear. The southern waystone always offers another route.' }),
+    job(8, 'The Borrowed Horizon', 'coast', 30, 22, 4, kit, ['clean', 'power', 'travel'], {
+      subtitle: 'Leave a light. Bring a life home.', start: { x: 3, y: 11 }, exit: { x: 3, y: 18 }, par: 180, optionalPlates: true,
+      lanterns: cells([[5, 4], [10, 18], [26, 4], [26, 18]], 'lamp'), coins: cells([[6, 17], [12, 4], [24, 5], [27, 17]], 'coin'),
+      hearts: cells([[11, 13], [24, 16]], 'heart'), supplies: cells([[11, 14], [22, 10], [27, 15]], 'supply'),
+      crates: cells([[11, 6]], 'crate'), plates: cells([[12, 6]], 'plate'),
+      keys: cells([[12, 4]], 'key'),
+      gates: [...[14, 15].map(x => ({ id: `horizon-span-${x}`, type: 'bridge', x, y: 6, plates: ['plate-0'], safeClose: true })), { id: 'memory-lock', type: 'key', x: 24, y: 5 }],
+      waystones: [...stonePair('mirror', 'Mirror', [10, 5], [20, 5]), ...stonePair('shore', 'Shore', [10, 17], [20, 17])],
+      switches: [{ id: 'rain', name: 'Rain condenser', x: 23, y: 11, initial: false, description: 'Cool the eastern ember lane.' }], requiredSwitches: ['rain'],
+      hazards: [21, 22, 23, 24, 25, 26, 27].map(x => ({ x, y: 12, period: 5, phases: [2, 3], disabledBy: 'rain' })),
+      relic: { id: 'relic', name: 'Memory lens', x: 26, y: 6 }, delivery: { x: 3, y: 18 },
+      relays: [{ id: 'mirror', name: 'Mirror bell', x: 6, y: 4 }, { id: 'tide', name: 'Tide bell', x: 25, y: 4 }, { id: 'home', name: 'Home bell', x: 25, y: 17 }], sequence: ['mirror', 'tide', 'home'],
+      hunters: [hunter('horizon-watcher', [[23, 9], [27, 9]], { boss: true, vision: 6 }), hunter('shore-listener', [[22, 15], [26, 15]], { nemesisOnly: true, vision: 6 })],
+      cover: [...cover(18, 7), ...cover(24, 14), ...cover(26, 16)],
+      npcs: [{ ...keeper('ivo', 'Ivo', 2, 11, ['“Neri and the memory lens are across the water. Mirror, Tide, Home: ring the bells in that order.”', '“I can cool the ember lane from here, or send supplies so you can reach the condenser yourself. Your double draws hunters, but cannot erase their next move.”']), choices: [
+        { id: 'cool', label: 'Ask Ivo to cool the eastern lane', response: '“The rain is yours. The road is still watched.”', effect: { switches: { rain: true } } },
+        { id: 'kit', label: 'Take supplies and operate Rain yourself', response: '“A shield and two lanterns. Find the Rain condenser before crossing the embers.”', effect: { shields: 1, decoys: 2 } },
+      ] }, keeper('neri', 'Neri', 27, 7, ['“Restore all four lamps and I will follow. Take the lens too; these memories belong on the other shore.”'], true)], requiredRescues: ['neri'],
+      intro: 'Recover a memory lens and rescue Neri across a watched coast. Choose Ivo’s remote rain or extra supplies, ring Mirror → Tide → Home, and plan a safe return through either waystone or the plate bridge.',
+      hint: 'Restore both western lamps, ring Mirror, and collect the west key before crossing east. Unlock the lighthouse at column 25, row 6. Ring Tide, restore the eastern lamps, cool Rain if needed, and ring Home. Return to Neri and pick up the lens. Two waystone jumps earn Traveler; a northern crate or double can hold an alternate crossing.' }),
   ];
   river(jobs[0].map, 12); wall(jobs[1].map, 14, [10]); river(jobs[2].map, 13); wall(jobs[3].map, 15, []); river(jobs[4].map, 14); river(jobs[5].map, 15, 3);
+  river(jobs[6].map, 12); river(jobs[7].map, 14);
+  for (let y = 2; y <= 8; y++) for (let x = 24; x <= 28; x++) if (y === 2 || y === 8 || x === 24 || x === 28) paint(jobs[7].map, x, y, 6, 9);
+  paint(jobs[7].map, 24, 5, 6);
   for (const stage of jobs) {
     for (const p of [stage.start, stage.exit, ...stage.lanterns, ...stage.keys, ...stage.coins, ...stage.hearts, ...stage.supplies, ...stage.waystones, ...stage.npcs, ...stage.relays, ...stage.switches, ...stage.cover, ...(stage.relic ? [stage.relic] : [])]) stage.map.layers[1].tiles[p.y * stage.map.width + p.x] = 0;
   }

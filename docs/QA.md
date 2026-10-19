@@ -1,5 +1,52 @@
 # Verification record
 
+## Lantern doubles — v0.10.0
+
+**258 Node tests pass**, JavaScript syntax checks pass, and the **37-file static
+build** succeeds. All eight Guild jobs have clean three-star witnesses for all
+three kits on Trail and Nemesis: **48 main routes plus 20 alternate routes /
+5,336 turns**. Both choices on each new job are covered, including manual Rain,
+the lighthouse key, Neri's rescue, lens delivery, actual pressure crossings,
+double-held plates, and returns before expiry. No witness edits runtime state.
+Every recorded movement/tool input must advance a turn; rejected actions cannot
+silently make an unplayable witness pass.
+
+Focused checks cover six further turns after casting, separate cast/return
+costs, unchanged cooldown on return, free blocked/powerless returns, hunter
+capture, decoy priority, committed sweeps/fire, cargo, companions, pickups,
+occupied bridge safety, and previous-state immutability. All 48 records survive
+round-trip storage, including the original 24 identities. Genuine old checkpoint
+fixtures and earlier story routes remain green; expedition rules stay 0.6.0.
+The expanded **48,000-input Guild soak** brings the retained/new total to
+**150,000 deterministic exploratory inputs**. These checks test specified rules
+and executable routes, not human enjoyment or an absence of every possible bug.
+
+The expanded Guild browser checks pass on **Chrome 155.0.8059.82**: 68 desktop
+kit/rule/choice routes, 32 complete touch routes at **320, 390, 768, and 1024 ×
+844 CSS pixels**, plus completed jobs under blocked and quota-limited storage.
+All eight jobs finish through visible controls at every touch width; the new
+jobs use Echoist, including the manual-Rain/plate route in Borrowed Horizon.
+Desktop checks verify costs, result separation/reload, original save retention,
+dialogue/modal/pause shortcut isolation, restart, and editor return. A separate
+fresh-page check verifies the Echoist default and the two new jobs appearing first.
+
+Touch testing caught a rejected dash and a displaced crate in the developer's
+longer double witness. The corrected approach walks around the crate and
+recharges before casting. All revised Echoist choice/rule routes were replayed
+again through Chrome, then all four complete touch sets passed. The stricter
+turn-advancement assertion now prevents that class of fixture from passing.
+
+The seven-size layout suite also passes at 320×740, 390×844, 768×900, 1024×768,
+1440×900, 320×568, and 844×390. It checks visible controls, bounded short-screen
+scroll, chapter selection, tab focus, menus, library shortcuts, and responsive
+notes relocation. Desktop and phone double sprites, countdowns, and the updated
+Guild board were visually inspected. This release reruns Guild and layout
+browser coverage; other story/expedition browser suites retain their earlier
+version-specific results below. Physical devices, other browsers, screen-reader
+audits, and human balance studies remain outside this verification.
+
+![The double route on a phone](echo-bridge-mobile.png)
+
 ## New horizons — v0.9.0
 
 **224 Node tests pass**, along with JavaScript syntax checks and the **37-file
