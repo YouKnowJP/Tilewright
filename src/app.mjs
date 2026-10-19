@@ -470,5 +470,10 @@ function setMode(play, updateURL = true) {
 }
 $('#mode-create').addEventListener('click', () => setMode(false));
 $('#mode-play').addEventListener('click', () => setMode(true));
-window.addEventListener('hashchange', () => setMode(location.hash === '#play', false));
-if (location.hash === '#play') setMode(true, false);
+function readGameHash() {
+  const shared = location.hash.startsWith('#adventure=');
+  setMode(location.hash === '#play' || shared, false);
+  if (shared) adventures.openShared(location.hash.slice(11));
+}
+window.addEventListener('hashchange', readGameHash);
+if (location.hash === '#play' || location.hash.startsWith('#adventure=')) readGameHash();

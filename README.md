@@ -9,6 +9,9 @@ explore a world you paint. The **Wayfarers’ Guild** adds eight dispatches,
 three specialist tools, linked waystones, and optional commendations. The new
 **Echoist** leaves a lantern double to hold a plate, lure a hunter, or return to
 after taking a risky shortcut.
+The **Adventure Workshop** adds three authored adventures, 24 editable object
+types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
+playtests, and file/code sharing with other players.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
@@ -30,6 +33,25 @@ this directory (in PowerShell, set `$env:PORT=4180` first).
 Use an HTTP server; opening `index.html` with `file://` does not support the
 module setup. The editor works without an internet connection while the local
 server is running. Installation as an offline web app is future work.
+
+## Create and share adventures
+
+Open **Adventure Workshop** on the game's title screen. Play three new featured
+worlds, remix them, or start a blank, seeded, or terrain-copy world. Paint
+lanterns, keepers, rescues, relic deliveries, doors, pressure bridges, paired
+waystones, patrols, and adaptive hunters. Write the opening, dialogue, hints,
+and ending; choose a specialist kit and challenge rules.
+
+Finish **Playtest** to record a replayable creator clear. **Share** downloads an
+adventure file or copies an `LT1` code; another player imports either through
+**Workshop → Import & play**. Publicly hosted copies also offer smaller play
+links. Local copies share files/codes. There is no online gallery or upload
+service. Your shelf holds up to 32 worlds separately from campaign progress.
+
+See the [Workshop guide](docs/WORKSHOP.md) for puzzle channels, controls,
+playtesting, sharing, and storage limits.
+
+![Adventure Workshop](docs/workshop-shelf.png)
 
 ## Play Lantern Trails
 
@@ -353,7 +375,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 264 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 290 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -366,12 +388,15 @@ inside this folder. It uses a separate headless browser and disposable contexts;
 it does not modify existing browser maps. It completes all twenty-four story missions,
 all 28 atlas difficulty/choice variants, all sluice branches and no-trade runs,
 48 Guild specialist/rule combinations plus twenty alternate routes, the Nemesis
-finales, and five multi-leg expeditions through real input. It checks
+finales, five multi-leg expeditions, and all three Workshop adventures on both
+rule sets through real input. Workshop checks also create all twenty world
+recipes and verify editing, creator clears, sharing to another browser session,
+file/code/link import, storage failures, and responsive layouts. It checks
 all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The eleven suites include `scripts/front-browser-checks.mjs`,
+editor history. The twelve suites include `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.

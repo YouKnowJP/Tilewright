@@ -14,6 +14,7 @@ import { choiceProblem, wallet, mechanismPreview } from './adventure-mechanisms.
 import { threatForecast } from './adventure-intel.mjs';
 import { CHAPTERS, drawAtlasArt, themeFor, drawKeeperPortrait } from './adventure-art.mjs';
 import { createGuildJobs, guildMerits, guildRecordId, loadGuild, saveGuild, GUILD_IDS, MERITS } from './adventure-guild.mjs';
+import { createWorkshopUI } from './workshop-ui.mjs';
 import { GUILD_KITS, kitFor, powerProblem, powerPreview, liveEcho, waystonePreview } from './adventure-tools.mjs';
 
 export function createAdventureUI({ storage, getMap, backToEditor }) {
@@ -25,7 +26,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   const motion = { get matches() { return front?.preferences.motion === 'reduced' || systemMotion.matches; } };
   let records = loadRecords(storage), memory = loadMemory(storage), run = null, renderer = null;
   let difficulty = 'trail', memorySaveFailed = false;
-  let expeditions;
+  let expeditions, workshop, workshopActions = [], workshopClearNote = '';
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0, pointer = null;
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
@@ -33,7 +34,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   let selectedChapter = 0, libraryTab = 'story';
   const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(max-width: 1000px)');
   const libraryOpen = () => !$('#adventure-library').hidden;
-  const outsideBoard = () => libraryOpen() || !$('#game-title-screen').hidden;
+  const outsideBoard = () => libraryOpen() || !$('#game-title-screen').hidden || !$('#adventure-workshop').hidden;
 
   function frontStyle(view) {
     $('#adventure').dataset.view = view;
@@ -43,6 +44,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     document.body.classList.toggle('game-library-open', view === 'library');
   }
   function showTitle() {
+    workshop?.hide();
     for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog', '#game-notes-dialog']) if ($(selector).open) $(selector).close();
     $('#game-menu').open = false; $('#adventure-library').hidden = true; $('#game-layout').hidden = true;
     frontStyle('title');
@@ -51,6 +53,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     window.scrollTo(0, 0);
   }
   function showJournal() { showTitle(); front.journal(); }
+  function openWorkshop(section = 'shelf') { showTitle(); front.hide(); frontStyle('workshop'); workshop.show(section); }
   function journalDestination(target) {
     if (target.mode === 'story') {
       selectedChapter = target.chapter ?? selectedChapter; renderPicker(); expeditions.show('story');
@@ -86,6 +89,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     resize();
   }
   function showLibrary(tab) {
+    workshop?.hide();
     libraryTab = tab;
     front?.hide(); frontStyle('library');
     if (notesDialog.open) notesDialog.close();
@@ -98,6 +102,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     window.scrollTo(0, 0);
   }
   function showBoard() {
+    workshop?.hide();
     if (!run) { showTitle(); return; }
     front?.hide(); frontStyle('play');
     if (notesDialog.open) notesDialog.close();
@@ -127,6 +132,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#game-result-menu').addEventListener('click', showTitle);
   $('#game-title-menu').addEventListener('click', showTitle);
   $('#game-journal-menu').addEventListener('click', showJournal);
+  for (const id of ['title-workshop','front-workshop','game-workshop-menu']) $(`#${id}`).addEventListener('click', () => openWorkshop());
   $('#game-guide-menu').addEventListener('click', () => { $('#game-menu').open = false; front.guide(); });
   let optionsReturn = null;
   $('#game-settings-button').addEventListener('click', () => { optionsReturn = $('#game-menu summary'); $('#game-menu').open = false; front.settings(); });
@@ -254,7 +260,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     const theme = themeFor(stage);
     $('#game-map-legend').textContent = run.guild ? 'Gold is you; turquoise is the beacon. Purple squares are waystones; white outlines are wheels and bells. A pale blue double marks your return point.' : 'Gold is you. Turquoise is the beacon. Outlined squares are discovered wheels and bells.';
     $('.game-main').style.setProperty('--region-color', theme.dark);
-    $('#game-region').textContent = run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
+    $('#game-region').textContent = stage.workshop ? `${theme.place} / Player adventure / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
     document.body.classList.toggle('guild-active', Boolean(run.guild));
     $('#game-power').hidden = !run.guild; $('#game-guild-kit').hidden = !run.guild;
     if (run.guild) {
@@ -271,6 +277,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
         entry.dataset.earned = String(merit.done); return entry;
       }));
     }
+    $('#game-guild-kit > p:last-child').textContent = stage.workshop ? 'Optional specialist goals apply to this attempt. Stars and bests save for this world version and rule set.' : 'Finish the job to record commendations. They never block the exit. Bests are separate for each specialist and rule set.';
     $('#game-rule-note').hidden = !stage.restrictions.noDash && !stage.restrictions.noShield && !stage.requireCoins;
     $('#game-rule-note').textContent = [stage.restrictions.noDash ? 'Walking only: dash is disabled.' : '', stage.restrictions.noShield ? 'Unwarded: shields are disabled.' : '', stage.requireCoins ? 'Recover every coin before leaving.' : ''].filter(Boolean).join(' ');
     $('#game-title').textContent = stage.name;
@@ -288,7 +295,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#game-cargo').hidden = !stage.relic; $('#game-cargo').disabled = !run.carrying || paused || run.status !== 'playing';
     $('#game-cargo').textContent = run.cargoDelivered ? 'Relic delivered' : run.carrying ? 'Set relic down (X)' : 'Relic on trail';
     $('#game-restart').disabled = Boolean(journey && ['camp', 'won'].includes(journey.phase));
-    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : run.guild ? stage.subtitle : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
+    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : stage.workshop ? 'Adventure Workshop' : run.guild ? stage.subtitle : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
     $('#game-story').textContent = stage.intro;
     $('#game-lanterns').textContent = `${run.collectedLanterns.length}/${stage.lanterns.length}`;
     $('#game-turns').textContent = run.turns;
@@ -320,11 +327,12 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     const boss = run.hunters.find(hunter => hunter.boss);
     const cover = stage.cover.some(p => p.x === run.player.x && p.y === run.player.y);
     $('#game-threat').textContent = `${boss ? `Watcher phase ${boss.phase}/3 · ${boss.mode}. ` : run.hunters.length ? `${run.hunters.length} adaptive ${run.hunters.length === 1 ? 'hunter' : 'hunters'} on this trail. ` : 'Patrols follow fixed routes on Trail rules. '}${run.alarm ? `Alarm: ${run.alarm} turns. ` : ''}${run.ward ? `Shield: ${run.ward} turns. ` : ''}${cover ? run.noise ? 'In cover, but still audible.' : 'In fern cover: distant hunters cannot see you.' : run.carrying ? 'Your relic is singing: hunters can hear you.' : run.noise ? 'Your dash can still be heard.' : 'Walk quietly; hunters need sight, sound, or a recent lead.'}`;
-    $('#game-learning-save').textContent = journey ? 'This expedition keeps its own learned movement history. Campaign memory is retained separately.' : memorySaveFailed ? 'Learning is available for this session; browser saving is unavailable.' : 'Movement habits stay in this browser. Forget them at any time.';
+    $('#forget-habits').disabled = Boolean(stage.workshop);
+    $('#game-learning-save').textContent = stage.workshop ? 'Hunters learn during this adventure. Every restart begins with fresh habits, so shared routes can be replayed fairly.' : journey ? 'This expedition keeps its own learned movement history. Campaign memory is retained separately.' : memorySaveFailed ? 'Learning is available for this session; browser saving is unavailable.' : 'Movement habits stay in this browser. Forget them at any time.';
     const entries = stage.npcs.filter(npc => run.talkedTo.includes(npc.id)).map(npc => `${npc.name}: ${run.rescued.includes(npc.id) && npc.after ? npc.after : Object.hasOwn(run.choices, npc.id) ? npc.choices.find(choice => choice.id === run.choices[npc.id]).response : npc.lines.join(' ')}`);
     $('#game-journal').replaceChildren(...(entries.length ? entries : ['Speak to a keeper to record their advice.']).map(text => Object.assign(document.createElement('p'), { textContent: text })));
     const sidequests = [
-      ...(stage.optionalPlates ? [{ text: 'Build the optional weight bridge', done: activePlates(run).length === stage.plates.length }] : []),
+      ...(stage.optionalPlates && stage.plates.length ? [{ text: 'Build the optional weight bridge', done: activePlates(run).length === stage.plates.length }] : []),
       ...(stage.coins.length && !stage.requireCoins ? [{ text: `Find every treasure (${run.collectedCoins.length}/${stage.coins.length})`, done: run.collectedCoins.length === stage.coins.length }] : []),
       ...(stage.npcs.length ? [{ text: `Hear every keeper’s story (${run.talkedTo.length}/${stage.npcs.length})`, done: run.talkedTo.length === stage.npcs.length }] : []),
       { text: `Finish without taking damage${run.status === 'playing' && run.damage === 0 ? ' (clean so far)' : ''}`, done: run.status === 'won' && run.damage === 0 },
@@ -349,11 +357,12 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     document.querySelectorAll('[data-move], #game-wait').forEach(button => { button.disabled = paused || run.status !== 'playing'; });
     $('#game-pause').textContent = paused ? 'Resume' : 'Pause'; $('#game-pause').setAttribute('aria-pressed', String(paused));
     $('#game-pause').disabled = run.status !== 'playing';
-    const best = journey ? null : run.guild ? guildRecords[guildRecordId(run)] : records[recordId(run)];
-    $('#game-best').textContent = journey ? 'View expedition bests and badges in the logbook.' : best ? `${run.guild ? `${best.merits}/3 commendations` : '★'.repeat(best.stars)} · ${best.score} points · ${best.turns} turns` : 'No finish yet. Your first adventure starts here.';
+    const best = stage.workshop ? workshop.best(stage.workshop.key, run.difficulty) : journey ? null : run.guild ? guildRecords[guildRecordId(run)] : records[recordId(run)];
+    $('#game-best').textContent = journey ? 'View expedition bests and badges in the logbook.' : best ? `${run.guild && !stage.workshop ? `${best.merits}/3 commendations` : '★'.repeat(best.stars)} · ${best.score} points · ${best.turns} turns` : 'No finish yet. Your first adventure starts here.';
     $('#game-save-note').textContent = journey ? expeditions.checkpointFailed ? 'Checkpoint unavailable. Keep this tab open or export an expedition backup.' : 'Expedition checkpoint saved. Campaign maps, bests, and learned habits are kept separately.' : saveFailed ? 'Browser saving is unavailable. Unlocks and bests remain available for this session. Your editor map is untouched.'
       : 'Adventure bests are kept in this browser. Playing never changes your editor map or its undo history.';
     if (run.guild) $('#game-save-note').textContent = guildSaveFailed ? 'Guild saving unavailable. Results remain available for this session.' : 'Guild bests save on completion, separately for each specialist and rule set. An unfinished job restarts from the beginning.';
+    if (stage.workshop) $('#game-save-note').textContent = workshop.saveFailed ? 'Workshop saving unavailable. Download your adventure to keep a backup.' : 'Player adventure bests and drafts save separately from the story, Guild, and expeditions.';
     $('#adventure').dataset.status = run.status;
     canvas.setAttribute('aria-label', `${stage.name}. ${run.difficulty} rules. Column ${run.player.x + 1}, row ${run.player.y + 1}. Health ${run.health} of 3. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns. ${run.message}`);
     $('#game-overlay').hidden = !paused && run.status === 'playing';
@@ -386,7 +395,13 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       $('#game-result-text').textContent = `${kitFor(run).name} · ${merits}/3 commendations · ${result.score + merits * 150} points · ${result.turns} turns. ${merits < 3 ? 'Try a different route or specialist to earn the remaining commendations.' : 'All optional goals met. Try another specialist or Nemesis for a different run.'}`;
       $('#game-primary').textContent = 'Choose another Guild job';
     }
-    if (result && !paused && (journey ? expeditions.checkpointFailed : run.guild ? guildSaveFailed : saveFailed)) {
+    if (stage.workshop && result && !paused) {
+      $('#game-result-eyebrow').textContent = 'ANOTHER KEEPER’S WORLD, RESTORED';
+      $('#game-result-title').textContent = 'A story worth bringing home.';
+      $('#game-result-text').textContent = `${result.score} points · ${result.turns} turns · ${result.stars} stars. ${stage.ending || ''}${workshop.returnSection === 'build' ? ` ${workshopClearNote}` : ''}`;
+      $('#game-primary').textContent = workshop.returnSection === 'build' ? 'Return to your designer' : 'Back to player adventures';
+    }
+    if (result && !paused && (stage.workshop ? workshop.saveFailed : journey ? expeditions.checkpointFailed : run.guild ? guildSaveFailed : saveFailed)) {
       $('#game-result-text').textContent += ' Saving unavailable. Keep this tab open to retain this result.';
     }
     $('#game-nemesis').hidden = Boolean(journey) || paused || run.status !== 'won' || !stage.actFinal || difficulty !== 'trail';
@@ -399,7 +414,8 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
 
   function start(stage) {
     expeditions?.suspend(); $('#game-difficulty').disabled = false;
-    run = createRun(stage, { memory, difficulty }); paused = false; dashArmed = false; interactionId = null; lastAction = performance.now();
+    workshopActions = []; workshopClearNote = '';
+    run = createRun(stage, { memory: stage.workshop ? freshMemory() : memory, difficulty }); paused = false; dashArmed = false; interactionId = null; lastAction = performance.now();
     const chapterIndex = campaign.findIndex(item => item.id === stage.id);
     if (chapterIndex >= 0) selectedChapter = Math.floor(chapterIndex / 3);
     hintVisible = false; selectNotes('quest');
@@ -415,9 +431,11 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     const before = run;
     run = stepRun(run, `${['up', 'right', 'down', 'left'].includes(direction) && (dash || dashArmed) ? 'dash-' : ''}${direction}`);
     dashArmed = false; lastAction = performance.now(); if (run !== before) sound.play(run.events);
-    if (run.memory !== memory) { memory = run.memory; memorySaveFailed = !saveMemory(storage, memory); }
+    if (run.stage.workshop && workshopActions.length <= 2000) workshopActions.push(input);
+    if (!run.stage.workshop && run.memory !== memory) { memory = run.memory; memorySaveFailed = !saveMemory(storage, memory); }
     if (run.status === 'won' && before.status !== 'won') {
-      if (run.guild) { const saved = saveGuild(storage, guildRecords, run, resultFor(run).score); guildRecords = saved.records; guildSaveFailed = !saved.saved; renderGuild(); }
+      if (run.stage.workshop) workshopClearNote = workshop.recordWin(run, workshopActions);
+      else if (run.guild) { const saved = saveGuild(storage, guildRecords, run, resultFor(run).score); guildRecords = saved.records; guildSaveFailed = !saved.saved; renderGuild(); }
       else { const saved = saveResult(storage, records, recordId(run), resultFor(run)); records = saved.records; saveFailed = !saved.saved; }
       renderPicker();
     }
@@ -467,6 +485,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     else { renderPicker(); renderGuild(); }
   });
   $('#forget-habits').addEventListener('click', () => {
+    if (run?.stage.workshop) return;
     if (expeditions?.session) { expeditions.act('forget'); return; }
     memory = freshMemory(); memorySaveFailed = !saveMemory(storage, memory); if (run) run = { ...run, memory }; update();
   });
@@ -487,6 +506,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#game-inspect').addEventListener('click', inspect);
   $('#forecast-close').addEventListener('click', () => $('#forecast-dialog').close());
   $('#game-choose').addEventListener('click', () => {
+    if (run?.stage.workshop) { openWorkshop(workshop.returnSection); return; }
     if (run?.guild) { showGuild(); $('#guild-jobs button').focus({ preventScroll: true }); return; }
     expeditions.show(expeditions.session ? 'expeditions' : 'story');
     $(expeditions.session ? '#expedition-resume' : '#trail-picker button:not(:disabled)').focus({ preventScroll: true });
@@ -501,6 +521,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#game-primary').addEventListener('click', () => {
     if (paused) { pause(); return; }
     if (expeditions?.session) { const phase = expeditions.session.phase; if (phase === 'camp') expeditions.openCamp(); else if (phase === 'won') expeditions.show(); else expeditions.retry(); return; }
+    if (run.stage.workshop && run.status === 'won') { openWorkshop(workshop.returnSection); return; }
     if (run.guild && run.status === 'won') { showGuild(); $('#guild-jobs button').focus({ preventScroll: true }); return; }
     const index = campaign.findIndex(stage => stage.id === run.stage.id);
     if (run.status === 'won' && index === campaign.length - 1) { expeditions.show('story'); $('.atlas-nav button[aria-pressed="true"]').focus({ preventScroll: true }); return; }
@@ -556,6 +577,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#adventure').dataset.stage = run.stage.id; lastAction = performance.now(); if (!newStage) sound.play(run.events); update();
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
   } });
+  workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
   front = createFrontMenu({ storage, sound,
     onMode(mode) { if (mode === 'guild') showGuild(); else expeditions.show(mode); },
     onContinue() { paused = false; showBoard(); update(); revealBoard(); },
@@ -570,7 +592,9 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   renderPicker(); renderGuild();
   return {
     enter() { active = true; showTitle(); },
+    openShared(code) { openWorkshop('import'); workshop.openShared(code); },
     leave() {
+      workshop.hide();
       active = false; pointer = null; dashArmed = false;
       front.close(); front.hide(); frontStyle('play');
       for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog', '#game-notes-dialog']) if ($(selector).open) $(selector).close();

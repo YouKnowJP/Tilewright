@@ -56,6 +56,20 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Adventure Workshop completed — v0.13
+
+- Three authored player adventures with dialogue, rescues, relics, specialist
+  puzzles, and multiple recorded solutions.
+- Blank/terrain-copy creation and twenty seeded recipes; 24 editable objects,
+  linked channels, routes, story details, stamps, undo/redo, and playtests.
+- A searchable 32-world shelf with previews, remixing, isolated bests and draft
+  autosave, responsive properties, and explicit Main menu navigation.
+- Portable adventure files/codes and hosted preview links; creator clear
+  verification and solution replay. See [the Workshop guide](docs/WORKSHOP.md).
+- Future possibilities: campaign bundles, creator challenges, custom local
+  tilesets, and an opt-in hosted gallery with moderation and durable storage.
+  Those services are not included in the current local sharing release.
+
 ## Game presentation and journal completed — v0.12
 
 - A shared game theme for board/HUD, all reading panels, dialogue, camp, pause,

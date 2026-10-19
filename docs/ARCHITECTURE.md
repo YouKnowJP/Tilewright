@@ -493,3 +493,71 @@ actual double-held crossings and returns. Boundary tests cover expiration,
 capture, rejected returns, landing hazards, companions, cargo, previous-state
 immutability, and complete old/new record retention. The expanded Guild soak
 uses 48,000 inputs; the retained/new total across game suites is 150,000.
+
+## Player-authored adventures and portable sharing — v0.13
+
+`workshop-model.mjs` normalizes a bounded version-1 adventure blueprint into the
+existing pure game engine. It supports 24 object kinds, four shared channels,
+keeper dialogue/choices, three specialist kits, ordered bells, optional/required
+puzzle goals, and authored opening/ending/hints. Maps retain the existing
+1–64-cell / six-layer schema. Blank Studio worlds start at 8×8 or larger;
+terrain imports retain their original dimensions. Object IDs, text, routes,
+coordinates, quantities, and action journals are checked before engine creation.
+Unknown fields are discarded. Names are single-line; narrative text can contain
+paragraphs. No arbitrary scripts, external assets, or network calls are loaded.
+
+Structural checks combine game validation with an optimistic flood through open
+gates and adjacency checks for interactions. Waystones allow disconnected areas.
+This deliberately does not claim to solve crate, sequence, or return-path puzzles.
+`workshop-worlds.mjs` provides three authored examples, terrain conversion, and
+four-region/five-mission seeded templates using the existing generator. A bounded
+512-seed search finds the requested recipe before generating the one map.
+
+`workshop-designer.mjs` owns an independent 30-entry immutable history, pointer
+stroke transactions, rectangle/fill/line painting, route selection, properties,
+and keyboard cursor. Pointer cancellation reverts the uncommitted stroke. World
+notes move into a dialog at ≤1000px; the actual controls are retained rather than
+duplicated. Thumbnail drawing bounds each canvas to 360×240; the full designer
+canvas is at most 1536×1536. Stamps replace a bounded footprint and clear upper
+terrain layers there, so copied maps do not leave invisible blockers above them.
+
+`workshop-ui.mjs` coordinates shelf/search, draft replacement, previews, playtests,
+file/code sharing, imports, and a deterministic solution viewer. It inserts player
+strings through `textContent` or form values. Async proof verification yields
+every 40 actions, with a cancellation token preventing delayed dialogs after
+leaving. Replay stores one current run, not thousands of snapshots, and stops its
+timer on close/navigation. It never calls live gameplay/save/audio handlers.
+
+A content identity hashes normalized world data excluding the clear journal.
+World edits therefore get separate bests, and adding a proof does not erase a
+best. The dual 32-bit hash is a local identifier, not cryptographic authentication.
+Workshop runs begin with fresh memory and do not write campaign habits. Tagged
+player runs are routed before `run.guild`, since specialist functionality is
+reused without making these worlds official Guild dispatches. Creator trials
+record actual accepted inputs (including free dialogue/facing changes), up to
+2,000 actions. A win attaches the journal to the matching draft/saved version.
+Edits remove the old proof; undo can restore the old world and its matching proof.
+
+`verifyAdventureProof` independently creates a fresh run and replays the bounded
+journal to an actual win, rejecting post-finish actions and unfinished routes.
+Imported/persisted attached clears must pass this check before the UI calls them
+verified. The included routes are ordinary-action witnesses, also checked by
+Node and native browser playthroughs on both rules. Replays prove one route on
+one rule set; author names and solvability claims are not trusted certificates.
+Future changes to engine rules may invalidate old clears, which are rechecked.
+
+`workshop-sharing.mjs` stores terrain as bounded run-length pairs. Parsing checks
+400 KB, dimensions, layer count, and expansion bounds before decoding. Portable
+codes use `LT1.<checksum>.<base64url UTF-8 JSON>` with a 300,000-character cap.
+The checksum detects damaged text, not tampering/authorship. Public HTTP(S) links
+carry smaller codes (≤12,000 characters) in `#adventure=` and open a preview,
+never a run or automatic shelf write. Local/private origins and larger payloads
+use files/codes. This release provides no gallery, accounts, backend, uploads,
+remote map discovery, or live multiplayer.
+
+`workshop-library.mjs` isolates `tilewright.workshop.v1` (32 entries, 4M-character
+shelf), `tilewright.workshop.draft.v1`, and `tilewright.workshop.bests.v1` (64
+rule/content-specific records). Malformed entries are isolated. A full shelf
+requires explicit removal rather than silent eviction. Failed writes return
+session data and truthful export guidance. Existing story, Guild, terrain,
+preferences, and expedition formats/checkpoint rules are unchanged.

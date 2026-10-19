@@ -1,5 +1,54 @@
 # Verification record
 
+## Adventure Workshop — v0.13.0
+
+**290 Node tests**, syntax checks, and the **51-file static build** pass.
+Twenty-six new checks cover normalized/bounded adventure data, channels/routes,
+all twenty deterministic region/mission recipes, terrain copying and stamps,
+Unicode/RLE file and code round trips, malformed expansion/checksum/size limits,
+private-origin link rejection, isolated stores and failed writes, shelf limits,
+and real creator-clear replay. All three authored worlds and three alternate
+solutions complete with ordinary actions on both Trail and Nemesis. Export size
+checks count UTF-8 bytes so a generated file cannot exceed the import limit.
+
+The new twelfth browser suite uses Chrome 155.0.8059.85 with disposable contexts.
+It completes all three adventures on both rules, then exercises alternative
+lever/supplies, waystone, and lantern-double solutions. It builds a world,
+edits dialogue and terrain, draws a patrol, uses stamps and Undo/Redo, finishes
+an actual creator trial, watches its replay, downloads a file, and imports the
+file/code/fragment URL. A separate browser storage space receives the adventure
+and completes it. Importing leaves the current draft and existing game saves
+unchanged. Invalid clears, incomplete codes, and oversized files are rejected.
+
+All twenty world recipes are also created using visible controls. Responsive
+shelf/preview/designer/sharing and real paint actions pass at widths 320, 390,
+768, 1024, and 1440. New-world playthroughs exercise touch movement, dialogue,
+specialists, and interaction selection on smaller screens. Properties use a
+dialog on compact layouts; Fit shows the entire world without inner scrolling.
+Blocked storage retains a real win/clear in session and exposes backup guidance;
+denied clipboard access exposes selected manual text. An unreadable shelf is
+retained until the player explicitly saves/adds a world.
+
+Every object inspector is checked for irrelevant controls. Visual review found
+that checkbox display rules overrode hidden fields; a stronger scoped hidden
+rule fixes it. World notes now show only the selected object's relevant settings.
+Other fixes preserve unapplied metadata on Main menu, prioritize primary objects
+when selecting overlapping cells, clear hidden upper terrain within stamps,
+allow visibility editing on copied layers, and avoid phantom pressure-bridge
+goals on worlds without plates. Native touch cancellation leaves no saved stroke.
+
+The retained title, journal, fitted-play, editor, introductory, hard-contract,
+sluice, expedition, atlas, Guild, and Horizon browser suites also pass for
+this release. Desktop and phone shelf, designer, selected-object notes, preview,
+sharing, and solution replay are visually inspected. Existing checkpoint rules
+and saves retain their versions; no public upload/gallery service is implied.
+These tests do not establish physical-device, other-engine, screen-reader,
+human enjoyment, or universal puzzle-solvability coverage.
+
+![Adventure Workshop designer](workshop-designer.png)
+
+![Compact world notes](workshop-mobile.png)
+
 ## Shared game theme, navigation, and Adventure Journal — v0.12.0
 
 **264 Node tests**, syntax checks, and the **42-file static build** pass. Four

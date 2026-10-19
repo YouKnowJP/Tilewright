@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.13.0 — 2026-10-19
+
+- Add Adventure Workshop to the title, mode preview, and game Menu: a searchable
+  player shelf, draft designer, previews, remixing, and explicit return paths.
+- Author three adventures: The Brassleaf Post, The Borrowed Moon, and Hearthlight
+  Express. Each has dialogue, linked puzzles, specialist tools, and real winning
+  routes on Trail and Nemesis. Alternate routes use supplies/levers, waystones,
+  and a lantern double on a pressure bridge.
+- Create 8–64-cell worlds, copy current terrain, or start from twenty seeded
+  region/mission recipes. Paint 24 object types, terrain/fill/rectangles, and
+  puzzle stamps. Edit keeper dialogue/rewards, four linked channels, bell order,
+  patrol/hunter routes, sight, cover/hazards, rescues, and relic quests.
+- Add eight palettes, specialist/rule choices, story/opening/ending/hints,
+  30-step Undo/Redo, draft autosave, fitted zoom, panning, and keyboard painting.
+  On small screens, details move to a separate dialog.
+- Share versioned adventure files and checksummed LT1 codes. Hosted copies can
+  share smaller preview links. Importing previews a world without changing an
+  open draft or terrain map. No public gallery or upload service is claimed.
+- Record actual creator playtests, replay attached proofs before verification,
+  and offer a solution viewer with step, skip, speed, pause, and restart.
+- Separate player bests/drafts/shelf and per-run learning from existing saves.
+  Bound imports and decoded terrain; report failed saving/clipboard access;
+  retain session data without silently evicting worlds.
+- Add 26 Node checks (290 total), a twelfth browser suite, a Workshop guide,
+  and nine public assets (51-file static build).
+
 ## 0.12.0 — 2026-10-19
 
 - Unify the game board, HUD, buttons, notes, dialogue, forecasts, camp choices,

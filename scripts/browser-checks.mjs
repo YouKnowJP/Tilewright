@@ -8,6 +8,7 @@ import { checkPlayLayout } from './layout-browser-checks.mjs';
 import { checkHorizon } from './horizon-browser-checks.mjs';
 import { checkGuild } from './guild-browser-checks.mjs';
 import { checkFrontMenu } from './front-browser-checks.mjs';
+import { checkWorkshop } from './workshop-browser-checks.mjs';
 import { checkJournal } from './journal-browser-checks.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -284,5 +285,5 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const { chromium } = await import('playwright');
-  console.log(JSON.stringify({ front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
+  console.log(JSON.stringify({ workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
 }
