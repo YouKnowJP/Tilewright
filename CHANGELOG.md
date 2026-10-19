@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.8.0 — 2026-10-19
+
+- Add the Wayfarers’ Guild: six original dispatch maps, open job selection,
+  specialist previews, and 24 independent job/kit/rule best categories.
+- Add Bellrunner’s bounded resonance pulse and Mistweaver’s perception veil,
+  with energy costs, six-turn reuse intervals, visible state, and keyboard B.
+- Add paired waystone travel, destination/next-turn warnings, one-energy turn
+  costs, occupied/blocked landing guards, cargo delivery, and discovered-map pins.
+- Add three optional commendations per job, completion-only records, separate
+  kit/rule bests, and truthful session-only results when browser storage fails.
+- Preserve all existing story and generated expedition behavior; retain rules
+  0.6.0 checkpoint fingerprints and 0.5 migration. Capture six genuine pre-Guild
+  0.6 backups from the committed v0.7 simulation for independent restoration.
+- Add 41 tests (199 total), 24 clean Guild routes / 1,832 turns, 56 jumps,
+  25 tool activations, eight clean alternate key/one-jump routes, and a
+  24,000-input Guild soak (102,000 retained/new inputs).
+- Add a seventh browser suite for complete Guild runs, touch layouts, controls,
+  progress reload, modal/pause isolation, restart, original saves, and storage failures.
+- Record primary developer research and distinguish tested behavior from future
+  ideas, human enjoyment, and kit-balance claims.
+
 ## 0.7.0 — 2026-10-18
 
 - Double the campaign to eighteen missions with The Unwritten Sky, The Amber

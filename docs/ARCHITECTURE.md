@@ -17,6 +17,8 @@ installation, build-time framework, database service, or remote API.
 | `src/adventure.mjs` | Pure turn rules, collision, pickups, puzzles, patrol intent, scoring, exploration, and connected custom expeditions. |
 | `src/adventure-levels.mjs` | Campaign assembly, eighteen stable record identities, and the first six authored maps. |
 | `src/adventure-atlas-levels.mjs` | Nine authored archive, desert, and northern missions with constraint, treasure, courier, rescue, and finale goals. |
+| `src/adventure-tools.mjs` | Specialist validation, power availability, reachable pulse area, and waystone checks/previews. |
+| `src/adventure-guild.mjs` | Six authored Guild jobs, commendation evaluation, and bounded kit/rule best storage. |
 | `src/adventure-art.mjs` | Six chapter palettes, original landscape card art, keeper portraits, and cached cosmetic map recoloring. No top-level DOM access or simulation state. |
 | `src/adventure-sluice-levels.mjs` | Three authored sluice/shutter/rescue missions and their dialogue routes, trades, and epilogues. |
 | `src/adventure-mechanisms.mjs` | Switch conditions, safe state changes, previews, trade availability, and definition validation. |
@@ -327,3 +329,40 @@ continues to write expedition **rules 0.6.0**, with the retained 0.5 migration.
 `story-driver.mjs` and `solve-atlas.mjs` generate witnesses using the public
 reducer; an optional clean-path search rejects damaging candidates rather than
 editing health. All 28 captured routes are independently replayed in tests.
+
+## Guild simulation — v0.8
+
+Guild definitions add paired waystones and an internal `guild` descriptor. Only
+these runs add runtime `guild` state: kit, ready turn, uses, jumps, and veil end.
+Only hunters hit by Pulse gain `dazedUntil`. Existing story/generated runs keep
+their old runtime shapes and deterministic behavior; expedition rules stay
+0.6.0. Six checkpoint fixtures produced with the committed pre-Guild simulation
+verify playing/dialogue/camp/lost/cargo/finish restoration without fingerprint
+rewrites. The retained six 0.5 migration fixtures also pass.
+
+A valid power costs two energy and one turn. Pulse uses a four-step passable
+flood to interrupt nearby hunters’ committed movement/sweeps for activation and
+the next turn. It does not negate contact/fire. Veil blocks new ordinary sight
+and hearing while active, retaining recent leads/current plans; cargo/alarm
+exposes the player. Rejected/cooling powers do not advance time or consume energy.
+
+A waystone’s partner is a unique reciprocal ID. Validation bounds every marker
+and rejects overlap with other interactions, obstructed terrain, and malformed
+pairs. Travel checks destination passability, crates, current hunter occupancy,
+and energy before cloning state. Successful travel collects/reveals the landing,
+advances companion following and the turn once, spends one energy, then resolves
+committed enemies/hazards. Cargo delivery and normal win checks still apply.
+Forecasts inspect the destination without changing fog or any turn state.
+
+`tilewright.guild.v1` stores up to 24 whitelisted job/kit/rule bests with a 16 KB
+read cap. Only finished runs are credited; more commendations outrank score,
+then fewer turns. Repeated results replace a best rather than incrementing a
+farmable total. Failed writes preserve session results and display a warning.
+Guild jobs have no checkpoint/import in this version. The Guild board is a
+third ordinary library view; editor/campaign/expedition state stays separate.
+
+`solve-guild.mjs` uses the public reducer for local crossing planning, including
+charging, avoiding danger, tools, and jumps. It never changes health or runtime
+puzzle flags to obtain a win. Captured routes are independently replayed by the
+Node suite and by real browser controls. Search bounds are not a completeness
+proof for every possible player history.

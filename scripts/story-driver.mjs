@@ -2,8 +2,8 @@
 import { createCampaign } from '../src/adventure-levels.mjs';
 import { createRun, stepRun, resultFor } from '../src/adventure.mjs';
 import { routes, localPath } from './solve-expeditions.mjs';
-export function storyDriver(id, difficulty = 'trail') {
-  let run = createRun(createCampaign().find(stage => stage.id === id), { difficulty }); const actions = [];
+export function storyDriver(id, difficulty = 'trail', definition = null) {
+  let run = createRun(definition || createCampaign().find(stage => stage.id === id), { difficulty }); const actions = [];
   const act = action => {
     const next = stepRun(run, action);
     if (next.damage > run.damage && action.startsWith('interact:') && run.shields && !run.stage.restrictions.noShield) {
@@ -25,7 +25,7 @@ export function storyDriver(id, difficulty = 'trail') {
     }
   };
   const interact = id => {
-    const target = [...run.stage.switches, ...run.stage.relays, ...(run.stage.relic ? [run.stage.relic] : [])].find(item => item.id === id);
+    const target = [...run.stage.switches, ...run.stage.relays, ...(run.stage.waystones || []), ...run.stage.supplies, ...(run.stage.relic ? [run.stage.relic] : [])].find(item => item.id === id);
     go(target);
     for (let attempt = 0; attempt < 20; attempt++) {
       // Interacting also advances the world. If a ward is exhausted, approach
@@ -45,7 +45,7 @@ export function storyDriver(id, difficulty = 'trail') {
       }
       const turn = run.turns; act(`interact:${id}`);
       if (run.turns !== turn) return;
-      if (!/occupied/.test(run.message)) throw Error(`Cannot use ${id}: ${run.message}`);
+      if (!/occupied|occupies/.test(run.message)) throw Error(`Cannot use ${id}: ${run.message}`);
       const options = ['wait', 'shield', 'decoy', 'up', 'right', 'down', 'left'].map(action => ({ action, next: stepRun(run, action) }))
         .filter(({ next }) => next.turns > run.turns && next.status === 'playing' && Math.abs(next.player.x - target.x) + Math.abs(next.player.y - target.y) <= 1)
         .sort((a, b) => a.next.damage - b.next.damage || b.next.health - a.next.health);

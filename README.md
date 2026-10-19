@@ -5,7 +5,8 @@ tile map editor with **Lantern Trails**, an original turn-based puzzle game.
 Explore eighteen handcrafted missions across six illustrated chapters or start a branching expedition of three, six,
 or nine legs. Try daily trails, build a camp toolkit, rescue keepers, deliver
 noisy relics, and outsmart hunters that learn your movement habits. You can also
-explore a world you paint.
+explore a world you paint. The new **Wayfarers’ Guild** adds six dispatches,
+two specialist tools, linked waystones, and optional commendations.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
@@ -132,6 +133,7 @@ editor save. If storage is unavailable, unlocks still work for the session.
 | Throw a decoy / raise a shield | Q / C, or the tactical buttons |
 | Toggle scout hint | H, or Scout hint |
 | Read next-turn threats without moving | V, or Plan |
+| Use a Guild specialist tool | B, or Pulse / Veil (Guild jobs only) |
 | Choose a quest | Choose trail, then a quest card |
 
 **Play your current map** creates a quiet expedition on a snapshot of visible
@@ -147,6 +149,25 @@ Playing never changes map tiles, autosave, or undo history.
 
 See the [atlas chapter guide](docs/ATLAS.md) and [mission guide, sluice walkthrough, and future ideas](docs/MISSIONS.md) for
 walkthrough goals, counterplay, and proposed interactions.
+
+## Take a Guild dispatch
+
+Choose **Guild jobs & specialists** in the adventure library. Six open jobs
+combine new waystones with rescue convoys, treasure routes, relay locks, and
+singing cargo. Choose **Bellrunner** to interrupt nearby hunters with a pulse,
+or **Mistweaver** to conceal movement while evading their last lead. Both tools
+use B or a button, spend two energy, and recharge every six turns. Waystone
+travel uses E, one energy, and one turn; the landing forecast explains threats.
+
+Three optional commendations add route and resource goals. Each specialist and
+rule set keeps its own best: 24 categories and up to 72 commendations. Guild
+bests save on completion; unfinished jobs restart from the beginning. Story
+progress, editor maps, and expedition checkpoints are retained separately.
+
+See the [Guild guide](docs/GUILD.md) for tools, loadouts, portal rules, all six
+jobs, and scoring, and the [developer research](docs/RESEARCH.md) behind them.
+
+![The Wayfarers’ Guild dispatch board](docs/guild-board.png)
 
 ## Play longer expeditions
 
@@ -260,7 +281,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 158 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 199 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -270,15 +291,18 @@ An optional browser regression suite lives in `scripts/browser-checks.mjs`.
 With Playwright separately installed in the development environment and Google
 Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
-it does not modify existing browser maps. It completes all eighteen missions, all 28 new atlas difficulty/choice variants, both difficulty/choice routes in the sluice act,
-no-trade Glasshouse runs, and the Nemesis finales
-and five complete multi-leg expeditions through real keyboard input. It checks
+it does not modify existing browser maps. It completes all eighteen story missions,
+all 28 atlas difficulty/choice variants, all sluice branches and no-trade runs,
+24 Guild specialist/rule combinations plus eight alternate routes, the Nemesis
+finales, and five multi-leg expeditions through real input. It checks
 all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The six suites include `scripts/sluice-browser-checks.mjs` and `scripts/atlas-browser-checks.mjs`. Playwright is not
-needed to run the app or the default checks, and browser tests are not currently run in CI.
+editor history. The seven suites include `scripts/sluice-browser-checks.mjs`,
+`scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
+Playwright is not needed to run the app or the default checks. Browser tests
+are not currently run in CI.
 
 The distributable contains only browser assets, an MIT license, and release
 metadata. Serve `dist/` over HTTP with a static server; development tooling and

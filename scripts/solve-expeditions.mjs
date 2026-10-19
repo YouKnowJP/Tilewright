@@ -33,7 +33,7 @@ class Heap {
 function stateKey(run) {
   return JSON.stringify([run.player, run.turns % 12, run.health, run.energy, run.ward, run.invulnerability, run.noise, run.alarm, run.stun, run.decoys, run.shields,
     run.lure && [run.lure.x, run.lure.y, Math.max(0, run.lure.until - run.turns)], run.carrying, run.cargoPoint, run.cargoDelivered,
-    run.hunters.map(h => [h.x, h.y, h.intent, h.memory, h.lastSeen, h.patrolIndex, h.attack]), run.collectedLanterns, run.collectedKeys, run.collectedCoins, run.collectedHearts, run.usedSupplies, run.openGates, run.switches, run.spentCoins]);
+    run.hunters.map(h => [h.x, h.y, h.intent, h.memory, h.lastSeen, h.patrolIndex, h.attack, h.dazedUntil]), run.collectedLanterns, run.collectedKeys, run.collectedCoins, run.collectedHearts, run.usedSupplies, run.openGates, run.switches, run.spentCoins, run.guild]);
 }
 export function localPath(initial, target, limit = 4000, { clean = false } = {}) {
   // Reverse distances are an admissible movement heuristic, independent of
@@ -47,7 +47,7 @@ export function localPath(initial, target, limit = 4000, { clean = false } = {})
     const key = stateKey(run); if ((best.get(key) ?? Infinity) <= node.actions.length) continue; best.set(key, node.actions.length);
     const nearby = nearbyInteractions(run)[0];
     const actions = ['up', 'right', 'down', 'left', 'dash-up', 'dash-right', 'dash-down', 'dash-left', 'wait', 'shield', 'decoy',
-      ...(nearby?.kind === 'supply' ? [`interact:${nearby.id}`] : [])];
+      ...(run.guild ? ['power'] : []), ...(nearby?.kind === 'supply' ? [`interact:${nearby.id}`] : [])];
     for (const action of actions) {
       if ((action === 'shield' && run.ward > 1) || (action === 'decoy' && run.lure && run.lure.until - run.turns > 2)) continue;
       const next = stepRun(run, action); if (next.turns === run.turns || next.status === 'lost' || (clean && next.damage > initial.damage)) continue;

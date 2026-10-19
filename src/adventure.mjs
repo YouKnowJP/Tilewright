@@ -3,6 +3,7 @@ import { freshMemory, normalizeMemory, learnMove } from './adventure-brain.mjs';
 import { perkEffects } from './adventure-perks.mjs';
 import { planHunters } from './adventure-tactics.mjs';
 import { switchGateOpen, switchChange, choiceProblem, validateMechanisms } from './adventure-mechanisms.mjs';
+import { validateTools, powerProblem, waystoneProblem, pulseCells } from './adventure-tools.mjs';
 
 export const DIRECTIONS = Object.freeze({ up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] });
 export const MAX_HEARTS = 3;
@@ -69,10 +70,11 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   if (loadout && ['health', 'decoys', 'shields'].some(key => !Number.isInteger(loadout[key]) || loadout[key] < (key === 'health' ? 1 : 0) || loadout[key] > 3)) throw new Error('Invalid expedition supplies.');
   stage.sequence = [...(definition.sequence || [])]; stage.requiredRescues = [...(definition.requiredRescues || [])];
   stage.requiredSwitches = [...(definition.requiredSwitches || [])];
+  if (definition.guild) { stage.guild = structuredClone(definition.guild); stage.waystones = structuredClone(definition.waystones || []); }
   if (!stage.start || !stage.exit || !stage.lanterns.length) throw new Error('An adventure needs a start, a beacon, and at least one lantern.');
   const points = [stage.start, stage.exit, ...stage.lanterns, ...stage.keys, ...stage.coins, ...stage.hearts,
     ...stage.crates, ...stage.plates, ...stage.gates, ...stage.enemies.flatMap(enemy => enemy.route),
-    ...stage.npcs, ...stage.relays, ...stage.supplies, ...stage.cover, ...stage.hazards, ...stage.switches, ...stage.hunters.flatMap(hunter => hunter.route), ...(stage.relic ? [stage.relic, stage.delivery] : [])];
+    ...stage.npcs, ...stage.relays, ...stage.supplies, ...stage.cover, ...stage.hazards, ...stage.switches, ...stage.hunters.flatMap(hunter => hunter.route), ...(stage.waystones || []), ...(stage.relic ? [stage.relic, stage.delivery] : [])];
   if (points.some(point => !point || !Number.isInteger(point.x) || !Number.isInteger(point.y) || !inside(map, point))) {
     throw new Error('Adventure markers must be inside the map.');
   }
@@ -81,6 +83,7 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
     throw new Error('Adventure gates need valid keys or pressure plates.');
   }
   validateMechanisms(stage);
+  validateTools(stage);
   if (stage.enemies.some(enemy => enemy.route.length < 2
     || enemy.route.some((point, index) => index && Math.abs(point.x - enemy.route[index - 1].x) + Math.abs(point.y - enemy.route[index - 1].y) !== 1))) {
     throw new Error('Patrol routes must connect adjacent cells.');
@@ -108,7 +111,13 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
     keyCount: 0, health: loadout?.health ?? (hard ? 2 : MAX_HEARTS), energy: MAX_ENERGY, turns: 0, damage: 0, invulnerability: 0,
     status: 'playing', seen: Array(map.width * map.height).fill(false), events: [], message: stage.intro || 'Find the lanterns, then return to the beacon.',
   };
+  if (stage.guild) {
+    run.guild = { kit: stage.guild.kit, readyAt: 0, uses: 0, warps: 0, veilUntil: 0 };
+    run.decoys = stage.guild.kit === 'mistweaver' ? (hard ? 2 : 3) : 1;
+    run.shields = stage.guild.kit === 'mistweaver' ? (hard ? 0 : 1) : (hard ? 1 : 2);
+  }
   if (!canEnter(run, run.player) || stage.crates.some(crate => same(crate, run.player))) throw new Error('The starting cell is blocked.');
+  if (stage.guild && stage.waystones.some(stone => !canEnter(run, stone))) throw Error('Waystones need walkable landing cells.');
   reveal(run, run.player);
   run.hunters = planHunters(run, canEnter);
   return run;
@@ -164,6 +173,7 @@ export function nearbyInteractions(run) {
   return [...run.stage.npcs.map(item => ({ ...item, ...(run.companions.find(companion => companion.id === item.id) || {}), kind: 'npc', label: `Talk to ${item.name}` })),
     ...run.stage.relays.map(item => ({ ...item, kind: 'relay', label: `Ring ${item.name}` })),
     ...run.stage.switches.filter(item => item.operable !== false).map(item => ({ ...item, kind: 'switch', label: `${run.switches[item.id] ? 'Switch off' : 'Switch on'} ${item.name}` })),
+    ...(run.stage.waystones || []).map(item => ({ ...item, kind: 'waystone', label: `Travel from ${item.name}` })),
     ...(run.stage.relic && run.cargoPoint && !run.carrying && !run.cargoDelivered ? [{ ...run.cargoPoint, id: run.stage.relic.id, name: run.stage.relic.name, kind: 'relic', label: 'Pick up the singing relic' }] : []),
     ...run.stage.supplies.filter(item => !run.usedSupplies.includes(item.id)).map(item => ({ ...item, kind: 'supply', label: 'Open trail supplies' }))]
     .filter(item => Math.abs(item.x - run.player.x) + Math.abs(item.y - run.player.y) <= 1)
@@ -211,13 +221,15 @@ export function stepRun(run, action) {
       message: rescued ? `${interaction.name} is safe. Reach the beacon together.` : `You speak with ${interaction.name}.`, events: rescued ? [{ type: 'rescue' }] : [] };
   }
   const dash = action.startsWith('dash-'), direction = dash ? action.slice(5) : action;
-  const moving = Boolean(DIRECTIONS[direction]), tactical = ['decoy', 'shield'].includes(action);
+  const moving = Boolean(DIRECTIONS[direction]), tactical = ['decoy', 'shield', 'power'].includes(action);
   if (!moving && direction !== 'wait' && !interaction && !tactical && action !== 'drop-cargo') return run;
   if (dash && run.stage.restrictions.noDash) return { ...run, events: [], message: 'Measured steps oath: use walking, cover, decoys, and shields.' };
   if (action === 'shield' && run.stage.restrictions.noShield) return { ...run, events: [], message: 'Unwarded oath: use cover, timing, and decoys instead of a shield.' };
   if (action === 'drop-cargo' && !run.carrying) return run;
+  const toolProblem = action === 'power' ? powerProblem(run) : interaction?.kind === 'waystone' ? waystoneProblem(run, interaction, canEnter) : null;
+  if (toolProblem) return { ...run, events: [], message: toolProblem };
   if (dash && (!moving || run.energy < 2)) return { ...run, events: [], message: 'Dash needs two energy. Walk or wait to recharge.' };
-  if (tactical && run[action === 'decoy' ? 'decoys' : 'shields'] < 1) return { ...run, events: [], message: `No ${action === 'decoy' ? 'decoys' : 'shields'} left. Find supplies or ask a trail keeper.` };
+  if (['decoy', 'shield'].includes(action) && run[action === 'decoy' ? 'decoys' : 'shields'] < 1) return { ...run, events: [], message: `No ${action === 'decoy' ? 'decoys' : 'shields'} left. Find supplies or ask a trail keeper.` };
   if (interaction?.kind === 'relay' && run.relayProgress === run.stage.sequence.length) return { ...run, events: [], message: 'The relay network is already powered.' };
   const change = interaction?.kind === 'switch' ? switchChange(run, { [interaction.id]: !run.switches[interaction.id] }) : null;
   if (change?.error) return { ...run, events: [], message: change.error };
@@ -228,6 +240,7 @@ export function stepRun(run, action) {
     collectedCoins: [...run.collectedCoins], collectedHearts: [...run.collectedHearts], usedSupplies: [...run.usedSupplies],
     openGates: [...run.openGates], seen: [...run.seen], events: [], invulnerability: Math.max(0, run.invulnerability - 1),
     noise: Math.max(0, run.noise - 1), alarm: Math.max(0, run.alarm - 1), stun: Math.max(0, run.stun - 1), ward: Math.max(0, run.ward - 1) };
+  if (run.guild) next.guild = { ...run.guild };
   let moved = false, touchedEnemy = false, blocked = '';
   const visited = [];
   if (moving) {
@@ -253,6 +266,19 @@ export function stepRun(run, action) {
       if (same(point, next.stage.exit) && missionComplete(next)) break;
     }
     if (!moved) return { ...run, facing: direction, events: [], message: blocked };
+  } else if (action === 'power') {
+    next.guild.uses++; next.guild.readyAt = run.turns + 6;
+    if (run.guild.kit === 'bellrunner') {
+      const cells = pulseCells(run, canEnter);
+      for (const hunter of next.hunters) if (cells.some(cell => same(cell, hunter))) hunter.dazedUntil = run.turns + 2;
+    } else next.guild.veilUntil = run.turns + 4;
+    next.events.push({ type: run.guild.kit === 'bellrunner' ? 'pulse' : 'veil', ...next.player });
+  } else if (interaction?.kind === 'waystone') {
+    const destination = next.stage.waystones.find(item => item.id === interaction.partner);
+    let following = { ...next.player };
+    for (const companion of next.companions) { const previous = { x: companion.x, y: companion.y }; companion.x = following.x; companion.y = following.y; following = previous; }
+    next.player = { x: destination.x, y: destination.y }; visited.push(next.player); collect(next); reveal(next, next.player); next.guild.warps++;
+    next.events.push({ type: 'waystone', name: destination.name, ...next.player });
   } else if (direction === 'wait') collect(next);
   else if (action === 'decoy') {
     const [dx, dy] = DIRECTIONS[next.facing]; let p = { ...next.player };
@@ -278,7 +304,7 @@ export function stepRun(run, action) {
     }
   }
   next.turns++;
-  next.energy = dash ? run.energy - 2 : moving || direction === 'wait' ? Math.min(MAX_ENERGY, run.energy + next.effects.recharge) : run.energy;
+  next.energy = dash || action === 'power' ? run.energy - 2 : interaction?.kind === 'waystone' ? run.energy - 1 : moving || direction === 'wait' ? Math.min(MAX_ENERGY, run.energy + next.effects.recharge) : run.energy;
   if (moving || direction === 'wait') next.memory = learnMove(run.memory, action);
   if (dash) next.noise = next.effects.dashNoise;
   if (next.carrying) next.noise = Math.max(next.noise, 2);
@@ -288,10 +314,10 @@ export function stepRun(run, action) {
   }
   for (const hunter of next.hunters) {
     const intent = hunter.intent;
-    if (next.stun === 0 && canEnter(next, intent) && !next.crates.some(crate => same(crate, intent))) { hunter.x = intent.x; hunter.y = intent.y; }
+    if (next.stun === 0 && !(next.turns <= hunter.dazedUntil) && canEnter(next, intent) && !next.crates.some(crate => same(crate, intent))) { hunter.x = intent.x; hunter.y = intent.y; }
   }
   touchedEnemy ||= next.enemies.some(enemy => same(enemy.route[enemy.index], next.player)) || next.hunters.some(hunter => same(hunter, next.player));
-  touchedEnemy ||= next.stun === 0 && run.hunters.some(hunter => (hunter.attack || []).some(cell => [...visited, next.player].some(point => same(cell, point))));
+  touchedEnemy ||= next.stun === 0 && run.hunters.some(hunter => !(next.turns <= next.hunters.find(item => item.id === hunter.id)?.dazedUntil) && (hunter.attack || []).some(cell => [...visited, next.player].some(point => same(cell, point))));
   const burned = next.stage.hazards.some(hazard => hazardActive(next, hazard) && [...visited, next.player].some(p => same(p, hazard)));
   if ((touchedEnemy || burned) && run.invulnerability === 0) {
     if (next.ward > 0) next.events.push({ type: 'blocked-hit' });
@@ -310,9 +336,12 @@ export function stepRun(run, action) {
     const lanterns = next.stage.lanterns.length - next.collectedLanterns.length;
     next.message = lanterns ? `The beacon needs ${lanterns} more ${lanterns === 1 ? 'lantern' : 'lanterns'}.` : `Before leaving: ${missing.map(goal => goal.label.toLowerCase()).join('; ')}.`; return next;
   }
-  const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
+  const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const messages = { hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
+    pulse: 'Resonance pulse! Hunters within four reachable steps halt for this turn and the next. Contact and fire still hurt.',
+    veil: 'Mist veil raised. Existing enemy plans still resolve; move away from their last lead. Cargo and alarms reveal you.',
+    waystone: `Waystone crossed to ${event?.name}. One energy spent; enemies moved once.`,
     'blocked-hit': 'Your shield absorbs the hit. Keep moving before it fades.',
     'relay-complete': 'The relay network is powered! Signal gates open and hunters are stunned for three more turns.',
     alarm: 'Wrong relay! The sequence reset and every hunter heard the alarm. Break line of sight.',

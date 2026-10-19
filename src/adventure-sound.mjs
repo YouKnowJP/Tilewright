@@ -12,7 +12,7 @@ export function createAdventureSound() {
     if (!enabled || !context || context.state !== 'running') return;
     const type = events.find(event => ['win', 'relay-complete', 'alarm', 'shield', 'rescue'].includes(event.type))?.type || events.find(event => event.type === 'hurt')?.type
       || events.find(event => event.type === 'lantern')?.type || events[0]?.type;
-    const notes = type === 'relay-complete' || type === 'rescue' ? [392, 523.25, 783.99] : type === 'alarm' ? [220, 164.81, 220] : type === 'shield' ? [392, 659.25] : type === 'win' ? [523.25, 659.25, 783.99, 1046.5] : type === 'lantern' ? [659.25, 783.99, 1046.5]
+    const notes = type === 'waystone' ? [329.63, 493.88, 659.25] : type === 'pulse' ? [261.63, 392] : type === 'veil' ? [440, 349.23] : type === 'relay-complete' || type === 'rescue' ? [392, 523.25, 783.99] : type === 'alarm' ? [220, 164.81, 220] : type === 'shield' ? [392, 659.25] : type === 'win' ? [523.25, 659.25, 783.99, 1046.5] : type === 'lantern' ? [659.25, 783.99, 1046.5]
       : type === 'hurt' ? [146.83, 110] : type === 'key' || type === 'coin' ? [880] : type === 'unlock' ? [392, 523.25] : [];
     try { notes.forEach((frequency, index) => {
       const oscillator = context.createOscillator(), volume = context.createGain();

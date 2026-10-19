@@ -1,4 +1,5 @@
-import { hazardActive, enemyIntent } from './adventure.mjs';
+import { hazardActive, enemyIntent, canEnter } from './adventure.mjs';
+import { kitFor, powerProblem, waystonePreview } from './adventure-tools.mjs';
 const at = point => `column ${point.x + 1}, row ${point.y + 1}`;
 export function threatForecast(run) {
   const near = point => (point.x - run.player.x) ** 2 + (point.y - run.player.y) ** 2 <= run.effects.sightSquared;
@@ -16,6 +17,11 @@ export function threatForecast(run) {
   if (burning.length) lines.push(`Embers burn next turn: ${burning.map(at).join('; ')}.`);
   if (!run.hunters.some(near) && !run.enemies.some(enemy => near(enemy.route[enemy.index])) && !burning.length) lines.push('No visible next-turn enemy or ember warning nearby. Unexplored areas may contain other dangers.');
   for (const item of run.stage.switches.filter(near)) lines.push(`${item.name} at ${at(item)}: ${run.switches[item.id] ? 'on' : 'off'}. ${item.description}`);
+  if (run.guild) {
+    lines.push(`${kitFor(run).power}: ${powerProblem(run) || 'ready; costs two energy and one turn; six-turn recharge.'}`);
+    if (run.guild.veilUntil > run.turns) lines.push(`Mist veil: ${run.guild.veilUntil - run.turns} turns left.${run.carrying || run.alarm ? ' Cargo or alarm reveals you.' : ' Hunters retain their previous lead and committed move.'}`);
+    for (const stone of run.stage.waystones.filter(near)) lines.push(`${stone.name}: ${waystonePreview(run, stone, canEnter, hazardActive)}`);
+  }
   if (run.stage.restrictions.noDash) lines.push('Measured steps oath: dashes are disabled.');
   if (run.stage.restrictions.noShield) lines.push('Unwarded oath: shields are disabled.');
   return lines;

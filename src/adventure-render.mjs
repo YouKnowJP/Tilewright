@@ -22,7 +22,7 @@ export function createAdventureRenderer(canvas, stage) {
 
   function setState(next) {
     previous = state?.player || next.player;
-    if (!state || !same(state.player, next.player)) movedAt = performance.now();
+    if (!state || !same(state.player, next.player) || (state.turns !== next.turns && next.events.some(event => event.type === 'pulse'))) movedAt = performance.now();
     state = next;
   }
 
@@ -41,6 +41,13 @@ export function createAdventureRenderer(canvas, stage) {
     const circle = (color, x, y, radius) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill(); };
     const visible = point => run.seen[point.y * stage.map.width + point.x];
     const active = activePlates(run);
+    for (const stone of stage.waystones || []) {
+      if (!visible(stone)) continue;
+      const x = stone.x * 24, y = stone.y * 24;
+      circle('#aa9fe84d', x + 12, y + 12, 12); rect('#555b7c', x + 2, y + 18, 20, 5);
+      rect('#b5b4dc', x + 3, y + 5, 4, 15); rect('#b5b4dc', x + 17, y + 5, 4, 15); rect('#d8c9ed', x + 5, y + 2, 14, 4);
+      rect('#84dccd', x + 10, y + 8, 4, 9); rect('#f1e6bf', x + 9, y + 11, 6, 3);
+    }
 
     for (const cover of stage.cover) {
       const x = cover.x * 24, y = cover.y * 24;
@@ -201,6 +208,11 @@ export function createAdventureRenderer(canvas, stage) {
       }
     }
     const x = player.x * 24, y = player.y * 24;
+    if (run.guild?.veilUntil > run.turns) { circle(run.carrying || run.alarm ? '#edbb7c66' : '#bedde366', x + 12, y + 12, 17); }
+    if (run.events.some(event => event.type === 'pulse') && (reducedMotion.matches || time - movedAt < 450)) {
+      ctx.strokeStyle = '#d2bcf7'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]);
+      ctx.beginPath(); ctx.arc(x + 12, y + 12, reducedMotion.matches ? 28 : 16 + Math.min(50, (time - movedAt) / 8), 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+    }
     if (run.ward > 0) { circle('#a4e8da44', x + 12, y + 12, 17); ctx.strokeStyle = '#b2edda'; ctx.lineWidth = 2; ctx.strokeRect(x - 1, y - 1, 26, 26); }
     circle('#354f3b55', x + 12, y + 21, 8);
     const blink = run.invulnerability > 0 && !reducedMotion.matches && Math.floor(time / 130) % 2;
@@ -243,6 +255,10 @@ export function createAdventureRenderer(canvas, stage) {
       if (!run.seen[item.y * stage.map.width + item.x]) continue;
       ctx.strokeStyle = '#fff1ce'; ctx.lineWidth = 1;
       ctx.strokeRect(ox + item.x * scale, oy + item.y * scale, Math.max(3, scale), Math.max(3, scale));
+    }
+    for (const stone of stage.waystones || []) {
+      if (!run.seen[stone.y * stage.map.width + stone.x]) continue;
+      ctx.fillStyle = '#d8b9f5'; ctx.fillRect(ox + stone.x * scale, oy + stone.y * scale, Math.max(3, scale), Math.max(3, scale));
     }
     for (const [point, color] of [[stage.exit, '#8de1ba'], [run.player, '#fff2c0']]) {
       ctx.fillStyle = color; ctx.fillRect(ox + point.x * scale, oy + point.y * scale, Math.max(3, scale), Math.max(3, scale));

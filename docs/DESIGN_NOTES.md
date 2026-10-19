@@ -42,3 +42,7 @@ recognizable without changing collision. Threat colors retain their meanings
 across regions. Rule banners explain constraints before a failed action, and
 the small-screen board shrinks on those missions to retain usable controls.
 Optional field goals suggest a second route without blocking completion.
+
+The v0.8 [research notes](RESEARCH.md) connect primary developer sources to
+Guild specialists, energy-competing waystone routes, readable consequences,
+and optional commendations. See the [Guild guide](GUILD.md) for shipped rules.

@@ -7,7 +7,7 @@ They are proposals for this small tool, not claims that Tilewright already
 supports those editors' formats or all their capabilities. The
 [roadmap](../ROADMAP.md) tracks selected work and remaining estimates.
 
-## Delivered through v0.7.0
+## Delivered through v0.8.0
 
 **Finish structural editing.** A map no longer needs to be recreated to change
 its dimensions. Users can anchor retained content, preview cropped occupied
@@ -29,6 +29,11 @@ Keeper portraits, discovered mechanism pins, optional field goals, and visible
 mission constraints support longer runs. Walking-only treasure circuits, a
 shield-free bazaar, four-note locks, and convoy finales vary the decisions. See
 the [atlas guide](ATLAS.md).
+
+**Change the player’s tools.** Six Guild jobs now support Bellrunner’s pulse
+and Mistweaver’s veil, paired waystones, three optional commendations per job,
+and independent kit/rule records. These create 24 result categories across the
+new jobs. See [Guild rules](GUILD.md) and [research and future prototypes](RESEARCH.md).
 
 **Give each return a different route.** Seeded expeditions now connect three,
 six, or nine legs through camp upgrades and route choices. Four regions, six

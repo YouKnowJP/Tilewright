@@ -9,6 +9,7 @@ export function createExpeditionUI({ storage, onRun, onNotice }) {
   let previousMode = 'journey', customSeed = $('#expedition-seed').value, customRules = { length: '6', difficulty: 'trail', vow: 'none' };
   let latestEarned = [];
   function show(tab = 'expeditions') {
+    $('#guild-hub').hidden = true; $('#library-guild').setAttribute('aria-pressed', 'false');
     $('#trail-picker').hidden = tab !== 'story'; $('#expedition-hub').hidden = tab !== 'expeditions';
     $('#library-story').setAttribute('aria-pressed', String(tab === 'story'));
     $('#library-expeditions').setAttribute('aria-pressed', String(tab === 'expeditions'));

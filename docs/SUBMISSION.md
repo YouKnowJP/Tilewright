@@ -48,8 +48,9 @@ code. Resolve uncertain eligibility with the program's General Questions thread.
 ## Factual description to adapt
 
 > Tilewright is a local-first tile map editor for sketching small game worlds
-> and fictional places, with eighteen original Lantern Trails puzzle missions and
-> replayable branching expeditions, daily trails, and camp upgrades.
+> and fictional places, with eighteen original Lantern Trails puzzle missions,
+> six Guild dispatches, specialist tools, waystones, branching expeditions,
+> daily trails, and camp upgrades.
 > It uses JavaScript, HTML, CSS, and Canvas, with painting
 > tools, layers, undo/redo, local saving, JSON/PNG export, and turn-based quests
 > with adaptive local opponents, interactive rescue/relay missions, and crate puzzles. It is newly

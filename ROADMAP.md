@@ -56,6 +56,19 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Guild expansion completed — v0.8
+
+- Six authored dispatches, two active specialist tools, and paired waystone travel.
+- Optional commendations, job previews, energy/cooldown and landing forecasts,
+  and 24 independent kit/rule best categories.
+- Complete public-action witnesses for every job/kit/rule combination, a new
+  24,000-input soak, genuine pre-Guild save checks, and a seventh browser suite.
+- [Primary developer research](docs/RESEARCH.md) and [Guild rules](docs/GUILD.md).
+
+These completed additions are excluded from the remaining editor estimates.
+Specialists in seeded journeys, new enemy archetypes, and voluntary visible
+security escalation remain proposals pending player feedback.
+
 ## Atlas expansion completed — v0.7
 
 - Eighteen authored missions across six illustrated chapters, each with an open entry.

@@ -1,5 +1,69 @@
 # Verification record
 
+## Guild specialists and developer research — v0.8.0
+
+**199 Node tests pass**, syntax checks pass, and the static build contains
+**36 files** including release metadata. Switchback’s independent 42 tests and
+build also pass. The new 24,000-input Guild soak brings the retained/new total
+to **102,000 deterministic exploratory inputs**. Existing 2,304 generated-map
+variants and all 256 expedition upgrade combinations remain green.
+
+The six new Guild jobs have **24 clean public-action witnesses / 1,832 turns**,
+including **56 waystone jumps and 25 tool activations**. Every job finishes with
+three stars and all three optional commendations on both kits and both rule
+sets. Eight additional clean routes verify the key-door option and one-jump
+Sandfold finish on both kits/rules: **32 Guild routes / 2,245 turns** total,
+including valid finishes that decline the Traveler commendation. The solvers
+evaluate real actions; they do not change health, positions,
+resources, gates, or enemy plans to obtain a win. Independent test replay checks
+the results, required rescues/delivery/relays/switches, and retained input maps.
+
+| Guild job | Trail: Bellrunner / Mistweaver | Nemesis: Bellrunner / Mistweaver |
+| --- | --- | --- |
+| The Folded Orchard | 68 / 69 | 66 / 66 |
+| The Borrowed Minute | 70 / 70 | 68 / 71 |
+| Reedglass Evacuation | 59 / 58 | 60 / 61 |
+| The Hushed Folio | 98 / 99 | 104 / 104 |
+| The Sandfold Exchange | 47 / 47 | 48 / 48 |
+| Aurora Dispatch | 113 / 113 | 114 / 111 |
+
+Focused checks cover current/next-turn Pulse interruption, blocked reach through
+walls, expiry, cooldown and energy guards, contact/fire vulnerability, Veil’s
+retained committed move and lead, cargo/alarm exposure, and new sight suppression.
+Waystone tests cover a single paid turn, landing collection/fog/delivery,
+enemy advancement, blocked/occupied/powerless rejection, malformed reciprocal
+pairs, forecast purity, warned landing danger, and optional goals that do not
+lock the exit. Records retain separate kits/rules and prioritize commendations
+without farming cumulative credit. Corrupt/full/blocked storage is guarded.
+
+Six genuine **pre-Guild 0.6 checkpoints**, generated using committed v0.7 source
+in an isolated temporary directory, restore playing, dialogue, camp, loss,
+held cargo, and finish without rewriting their fingerprints. Continued play
+round-trips correctly. The older six 0.5 migration fixtures also pass. Only
+Guild runs gain specialist state; existing story and seeded expedition behavior
+remain unchanged. Package v0.8.0 still uses expedition rules 0.6.0.
+
+All **seven browser suites pass on Chrome 155.0.8059.82**. The Guild suite
+completes all 24 combinations through actual movement/interaction/tool controls,
+checks energy/cooldown display and free forecasts, all saved results after reload,
+shorter alternate routes that preserve a better commendation record, normal
+map/story save retention, B/modal/pause isolation, restart, editor return,
+and session play with blocked or full storage. All six Guild jobs also complete
+cleanly using touch controls at **320, 390, 768, and 1024 × 844 CSS pixels**.
+The checks cover visible entry controls, reduced motion, and no sideways overflow.
+Desktop board, landing forecast, and mobile play screenshots were inspected.
+After the final commendation-preview and minimap-legend refinements, all 32
+Guild routes and the desktop navigation/storage checks were replayed again.
+
+The retained six suites cover all eighteen story missions, all earlier branches,
+four atlas touch widths, the editor, 33 expedition configurations, five long
+journeys, camp/loss recovery, imports/exports, migration, and storage failures.
+No Safari, Firefox, physical-device, full screen-reader, or human balance/
+enjoyment study was performed. The [research notes](RESEARCH.md) describe primary
+sources and the distinction between shipped behavior and future prototypes.
+
+![The new Guild board and separate specialist results](guild-board.png)
+
 ## Atlas expansion — v0.7.0
 
 **158 Node tests pass**, JavaScript syntax checks pass, and the static build

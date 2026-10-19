@@ -45,9 +45,10 @@ export function planHunters(run, canEnter) {
     const passable = p => canEnter(run, p) && !run.crates.some(crate => same(crate, p));
     const distance = Math.abs(run.player.x - from.x) + Math.abs(run.player.y - from.y);
     const covered = run.stage.cover.some(p => same(p, run.player));
-    const sees = distance <= (hunter.vision || 7) + (hard ? 2 : 0) + (phase === 3 ? 1 : 0)
+    const veiled = run.guild && run.turns < run.guild.veilUntil && !run.carrying && !run.alarm;
+    const sees = !veiled && distance <= (hunter.vision || 7) + (hard ? 2 : 0) + (phase === 3 ? 1 : 0)
       && (!covered || distance <= 2 || run.noise > 0) && lineOfSight(from, run.player, passable);
-    const hears = (run.noise > 0 && distance <= 9) || run.alarm > 0;
+    const hears = (!veiled && run.noise > 0 && distance <= 9) || run.alarm > 0;
     hunter.memory = Math.max(0, (hunter.memory || 0) - 1);
     if (sees || hears) { hunter.lastSeen = { ...run.player }; hunter.memory = 5; }
     let target = hunter.lastSeen, mode = hunter.memory ? 'searching' : 'patrolling';
@@ -73,8 +74,8 @@ export function planHunters(run, canEnter) {
       target = hunter.route[hunter.patrolIndex || 0];
     }
     const cadence = hard || phase > 1 ? 4 : 3;
-    if (run.stun > 1 || (run.turns + 1) % cadence === 0) {
-      hunter.intent = from; hunter.mode = run.stun > 1 ? 'stunned' : 'recovering';
+    if (run.turns < hunter.dazedUntil || run.stun > 1 || (run.turns + 1) % cadence === 0) {
+      hunter.intent = from; hunter.mode = run.turns < hunter.dazedUntil ? 'resonance dazed' : run.stun > 1 ? 'stunned' : 'recovering';
     } else if (hunter.boss && phase > 1 && hunter.memory && (run.turns + 1) % 5 === 0) {
       const deltaX = target.x - from.x, deltaY = target.y - from.y;
       const [dx, dy] = Math.abs(deltaX) >= Math.abs(deltaY) ? [Math.sign(deltaX) || 1, 0] : [0, Math.sign(deltaY) || 1];
