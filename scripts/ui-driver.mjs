@@ -4,18 +4,23 @@ export async function enterFirstTrail(page) {
   await page.locator('#adventure[data-view]').waitFor();
   if (await page.locator('#game-layout').isVisible()) return;
   if (await page.locator('#game-title-screen').isVisible()) {
+    if (await page.locator('#front-journal').isVisible()) await page.locator('#journal-back').click();
     if (await page.locator('#title-play').isVisible()) await page.locator('#title-play').click();
     await page.locator('#front-story').click();
   } else if (!await page.locator('#trail-picker').isVisible()) await page.locator('#library-story').click();
-  await page.locator('[data-stage="trail-1"]').click();
+  await page.locator('.atlas-nav button').first().click(); await page.locator('[data-stage="trail-1"]').click();
   await page.locator('#adventure[data-view="play"]').waitFor();
 }
 async function prepareControl(page, selector) {
   const target = page.locator(selector);
   await page.locator('#loading-note[hidden]').waitFor({ state: 'attached' });
+  if (selector === '#mode-create' && !await page.locator('#editor').isVisible()) {
+    if (await page.locator('#game-layout').isVisible()) await page.locator('#game-home').click();
+    else if (await page.locator('#adventure-library').isVisible()) await page.locator('#library-title').click();
+  }
   if (await page.locator('#game-title-screen').isVisible()) {
     if (selector === '#mode-create') {
-      if (!await page.locator('#title-mapmaker').isVisible()) await page.locator('#front-back').click();
+      if (!await page.locator('#title-mapmaker').isVisible()) await page.locator(await page.locator('#front-journal').isVisible() ? '#journal-back' : '#front-back').click();
       await page.locator('#title-mapmaker').click();
     } else {
       const location = await target.evaluate(el => ({ library: Boolean(el.closest('#adventure-library')), hub: el.closest('#guild-hub') ? 'guild' : el.closest('#expedition-hub') ? 'expeditions' : 'story' }));

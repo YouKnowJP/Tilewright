@@ -7,6 +7,7 @@ import { freshMemory, loadMemory, saveMemory, memorySummary } from './adventure-
 import { createExpeditionUI } from './adventure-expedition-ui.mjs';
 import { journeyScore, peekJourney } from './adventure-journey.mjs';
 import { createFrontMenu } from './adventure-front.mjs';
+import { adventureJournal } from './adventure-journal.mjs';
 import { PERKS, VOWS } from './adventure-perks.mjs';
 import { createIcon } from './icons.mjs';
 import { choiceProblem, wallet, mechanismPreview } from './adventure-mechanisms.mjs';
@@ -18,6 +19,7 @@ import { GUILD_KITS, kitFor, powerProblem, powerPreview, liveEcho, waystonePrevi
 export function createAdventureUI({ storage, getMap, backToEditor }) {
   const $ = selector => document.querySelector(selector);
   const canvas = $('#adventure-canvas'), viewport = $('#game-viewport'), campaign = createCampaign();
+  const allJournalJobs = createGuildJobs('echoist'), journalJobs = [...allJournalJobs.slice(6), ...allJournalJobs.slice(0, 6)];
   const sound = createAdventureSound(), systemMotion = matchMedia('(prefers-reduced-motion: reduce)');
   let front;
   const motion = { get matches() { return front?.preferences.motion === 'reduced' || systemMotion.matches; } };
@@ -35,6 +37,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
 
   function frontStyle(view) {
     $('#adventure').dataset.view = view;
+    $('#game-shell-bar').hidden = view !== 'play';
     document.body.classList.toggle('game-front', view !== 'play');
     document.body.classList.toggle('game-title-open', view === 'title');
     document.body.classList.toggle('game-library-open', view === 'library');
@@ -46,6 +49,22 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     front.show({ run, checkpoint: expeditions?.session ? null : peekJourney(storage).header });
     if (!run) $('#adventure').dataset.status = 'idle';
     window.scrollTo(0, 0);
+  }
+  function showJournal() { showTitle(); front.journal(); }
+  function journalDestination(target) {
+    if (target.mode === 'story') {
+      selectedChapter = target.chapter ?? selectedChapter; renderPicker(); expeditions.show('story');
+      const destination = target.stage ? $(`[data-stage="${target.stage}"]`) : $(`#atlas-${CHAPTERS[selectedChapter].id} [data-chapter-start]`);
+      destination.focus({ preventScroll: true }); destination.scrollIntoView({ block: 'nearest' });
+    } else if (target.mode === 'guild') {
+      if (target.kit) selectedKit = target.kit;
+      showGuild(); const destination = target.job ? $(`[data-guild-job="${target.job}"]`) : $('#guild-kit');
+      destination.focus({ preventScroll: true }); destination.scrollIntoView({ block: 'nearest' });
+    } else {
+      expeditions.show();
+      if (target.mode === 'daily') { $('#expedition-mode').value = 'daily'; $('#expedition-mode').dispatchEvent(new Event('change')); }
+      $('#expedition-mode').focus({ preventScroll: true }); $('#expedition-hub').scrollIntoView({ block: 'start' });
+    }
   }
 
   function selectNotes(id, focus = false) {
@@ -99,12 +118,21 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#game-notes-close').addEventListener('click', () => notesDialog.close());
   notesDialog.addEventListener('close', () => { if (active && !outsideBoard()) $('#game-notes-button').focus({ preventScroll: true }); });
   compactNotes.addEventListener('change', placeNotes); placeNotes();
-  $('#library-resume').addEventListener('click', () => { showBoard(); canvas.focus({ preventScroll: true }); });
+  $('#library-resume').addEventListener('click', () => { showBoard(); update(); canvas.focus({ preventScroll: true }); });
   $('#library-title').addEventListener('click', showTitle);
   $('#library-options').addEventListener('click', () => front.settings());
+  $('#library-guide').addEventListener('click', () => front.guide());
+  $('#library-journal').addEventListener('click', showJournal);
+  $('#game-home').addEventListener('click', showTitle);
+  $('#game-result-menu').addEventListener('click', showTitle);
   $('#game-title-menu').addEventListener('click', showTitle);
-  $('#game-settings-button').addEventListener('click', () => { $('#game-menu').open = false; front.settings(); });
-  $('#game-settings-dialog').addEventListener('close', () => { if (active && !outsideBoard()) $('#game-menu summary').focus({ preventScroll: true }); });
+  $('#game-journal-menu').addEventListener('click', showJournal);
+  $('#game-guide-menu').addEventListener('click', () => { $('#game-menu').open = false; front.guide(); });
+  let optionsReturn = null;
+  $('#game-settings-button').addEventListener('click', () => { optionsReturn = $('#game-menu summary'); $('#game-menu').open = false; front.settings(); });
+  $('#game-shell-options').addEventListener('click', () => { optionsReturn = $('#game-shell-options'); front.settings(); });
+  $('#game-settings-dialog').addEventListener('close', () => { if (active && !outsideBoard()) (optionsReturn || $('#game-menu summary')).focus({ preventScroll: true }); });
+  $('#game-guide-dialog').addEventListener('close', () => { if (active && !outsideBoard()) $('#game-menu summary').focus({ preventScroll: true }); });
   document.addEventListener('click', event => { if (!event.target.closest('#game-menu')) $('#game-menu').open = false; });
   $('#game-menu').addEventListener('focusout', event => {
     if (event.relatedTarget && !$('#game-menu').contains(event.relatedTarget)) $('#game-menu').open = false;
@@ -144,6 +172,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       const section = document.createElement('section'); section.className = 'atlas-chapter'; section.id = `atlas-${chapter.id}`;
       section.style.setProperty('--chapter-dark', chapter.dark); section.style.setProperty('--chapter-light', chapter.sky);
       const label = document.createElement('div'); label.className = 'atlas-chapter-heading';
+      const scenery = document.createElement('canvas'); scenery.className = 'chapter-scenery'; scenery.setAttribute('aria-hidden', 'true'); drawAtlasArt(scenery, chapter, 0); label.append(scenery);
       const text = document.createElement('div'), title = document.createElement('h3'); title.textContent = chapter.name; title.tabIndex = -1;
       text.append(Object.assign(document.createElement('p'), { className: 'eyebrow', textContent: `CHAPTER ${String(chapterIndex + 1).padStart(2, '0')} / ${chapter.place.toUpperCase()}` }), title,
         Object.assign(document.createElement('p'), { textContent: chapter.summary }));
@@ -483,6 +512,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     catch (error) { showStatus(error.message, 'warning'); $('#library-notice').textContent = error.message; $('#library-notice').hidden = false; }
   });
   document.addEventListener('keydown', event => {
+    if (active && libraryOpen() && event.key === 'Escape' && !front.dialogOpen && !event.target.closest('input, select, dialog')) { event.preventDefault(); showTitle(); return; }
     if (active && run && !outsideBoard() && !front.dialogOpen && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey && event.target.id === 'game-target' && event.key.toLowerCase() === 'e') {
       event.preventDefault(); canvas.focus({ preventScroll: true }); interact(); return;
     }
@@ -533,6 +563,8 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     onMapmaker: backToEditor,
     onCustomMap() { try { start(createCustomStage(getMap())); } catch (error) { front.notice(error.message); } },
     onPreferences() { if (run) { update(); paint(); } },
+    getJournal() { return { ...adventureJournal({ campaign, jobs: journalJobs, records, guildRecords, book: expeditions.logbook, difficulty, kit: selectedKit }), saveUnavailable: saveFailed || guildSaveFailed || expeditions.checkpointFailed || peekJourney(storage).unavailable }; },
+    onDestination: journalDestination, onChoose: showTitle,
   });
   systemMotion.addEventListener('change', () => { if (run) paint(); });
   renderPicker(); renderGuild();

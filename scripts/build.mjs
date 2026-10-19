@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
-export const PUBLIC_FILES = Object.freeze(['index.html', 'style.css', 'adventure.css', 'front.css', 'icon.svg', 'LICENSE', 'src/adventure-front.mjs', 'src/adventure-preferences.mjs', 'src/adventure-atlas-levels.mjs', 'src/adventure-horizon-levels.mjs', 'src/adventure-art.mjs', 'src/adventure-guild.mjs', 'src/adventure-tools.mjs',
+export const PUBLIC_FILES = Object.freeze(['index.html', 'style.css', 'adventure.css', 'front.css', 'game-theme.css', 'icon.svg', 'LICENSE', 'src/adventure-journal.mjs', 'src/adventure-front.mjs', 'src/adventure-preferences.mjs', 'src/adventure-atlas-levels.mjs', 'src/adventure-horizon-levels.mjs', 'src/adventure-art.mjs', 'src/adventure-guild.mjs', 'src/adventure-tools.mjs',
   'src/bootstrap.mjs', 'src/app.mjs', 'src/model.mjs', 'src/sample.mjs', 'src/render.mjs', 'src/storage.mjs',
   'src/viewport.mjs', 'src/icons.mjs', 'src/operations.mjs', 'src/adventure.mjs', 'src/adventure-levels.mjs', 'src/adventure-mechanisms.mjs', 'src/adventure-intel.mjs', 'src/adventure-sluice-levels.mjs',
   'src/adventure-records.mjs', 'src/adventure-render.mjs', 'src/adventure-sound.mjs', 'src/adventure-ui.mjs', 'src/adventure-brain.mjs', 'src/adventure-tactics.mjs', 'src/adventure-perks.mjs', 'src/adventure-generator.mjs', 'src/adventure-journey.mjs', 'src/adventure-logbook.mjs', 'src/adventure-expedition-ui.mjs']);

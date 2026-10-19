@@ -45,7 +45,8 @@ Volume, motion, and text size are remembered; sound remains off until you choose
 On. The same options are available from the title, adventure library, and game
 Menu. If saving is unavailable, the options still work for the current visit.
 
-**Title screen** in Menu preserves your open trail. **Continue** returns to the
+**Main menu** stays visible above the board and is also available in pause/results,
+the adventure library, and the journal. It preserves your open trail. **Continue** returns to the
 same position and turn. After a reload, a saved expedition has its own **Resume
 expedition** entry; unfinished story/Guild runs still restart rather than claiming
 to have a checkpoint. Mapmaker returns to the editor, with its map and undo retained.
@@ -54,6 +55,21 @@ directly; maps without enough connected land explain what to change.
 
 ![Lantern Trails title screen](docs/title-desktop.png)
 
+**Adventure journal** brings all your progress together: chapter mastery on
+Trail and Nemesis, specialist dispatches and honors, and twelve expedition badges.
+Overview suggests an unfinished story, a specialist goal, and the daily trail.
+Suggestions open the relevant selection screen so you can review it before playing.
+Story chapters and specialists have direct browse buttons. Reading the journal
+never awards progress or changes a saved run. Its tabs and Main menu stay reachable
+while browsing longer collections.
+
+The game uses the same forest-and-brass frames across its board, HUD, quest notes,
+conversations, forecasts, camps, pause, and results. Chapter banners and mode previews
+use original pixel landscapes; buttons, selected states, and navigation share a
+consistent layout. Mapmaker retains the separate editor workspace.
+
+![The Adventure Journal](docs/adventure-journal.png)
+
 The board opens on its own screen after you choose a mission. **Trails** opens the library; choose one
 chapter at a time, or use the Expeditions and Guild tabs. **Back to your trail**
 returns to the same run without spending a turn. Quick starts and custom-map
@@ -61,7 +77,8 @@ play are under **Quick starts & custom map** in the library.
 
 Quest, Map, Notes, and Help tabs group the reading panels. On phones and
 tablets, **Quest & map** opens them in a separate panel; close it with × or Escape.
-**Menu** holds the title screen, options, sound, pause, restart, and the scout hint. The board and movement
+**Menu** holds the main menu, journal, field guide, options, sound, pause, restart,
+and the scout hint. The board and movement
 controls fit standard portrait and desktop screens; short phones and landscape
 use a bounded page scroll so controls remain reachable.
 
@@ -336,7 +353,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 260 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 264 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -354,7 +371,8 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The ten suites include `scripts/front-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
+editor history. The eleven suites include `scripts/front-browser-checks.mjs`,
+`scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
 Playwright is not needed to run the app or the default checks. Browser tests

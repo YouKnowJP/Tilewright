@@ -56,6 +56,19 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Game presentation and journal completed — v0.12
+
+- A shared game theme for board/HUD, all reading panels, dialogue, camp, pause,
+  and results, with aligned mode actions and illustrated chapter banners.
+- Visible Main menu during play and consistent library/journal/guide/options
+  navigation, retaining the open run and editor history.
+- A read-only Adventure Journal with chapter mastery, specialist honors,
+  expedition badges, and attainable replay suggestions that open previews.
+- Sticky journal navigation, keyboard tabs, safe failure paths, and real-progress
+  browser verification alongside retained playthrough checks.
+
+These completed features are excluded from remaining editor estimates.
+
 ## Game front end completed — v0.11
 
 - A title screen and illustrated mode previews before a mission starts.

@@ -26,6 +26,7 @@ installation, build-time framework, database service, or remote API.
 | `src/adventure-intel.mjs` | Read-only, nearby next-turn warnings derived from committed enemy plans and hazard timing. |
 | `src/adventure-ui.mjs` | Mode lifecycle, campaign progression, keyboard/touch controls, HUD, hints, and results. |
 | `src/adventure-front.mjs` | Title, illustrated mode chooser, guide pages, working options, and front-menu focus/navigation. |
+| `src/adventure-journal.mjs` | Read-only chapter/specialist/badge totals and attainable replay suggestions derived from existing records. |
 | `src/adventure-preferences.mjs` | Bounded, guarded volume/motion/reading preferences, separate from game and editor saves. |
 | `src/adventure-render.mjs` | Cached map background, following camera, original sprites, fog, and discovered-map overview. |
 | `src/adventure-records.mjs` | Bounded, validated personal bests stored independently of map saves. |
@@ -100,7 +101,7 @@ Browsing a mode does not advance gameplay or overwrite its checkpoint. A mission
 Guild job, expedition start/resume, or custom-map action explicitly creates or
 restores a run. Input and animation are guarded while the title/library is open,
 and options dialogs block gameplay shortcuts. Dialogs retain native keyboard
-navigation; closing in-game options returns focus to the Menu summary.
+navigation; closing in-game options returns focus to their visible opener.
 
 Returning to the title keeps the in-memory run and its turn/position. Continue
 shows that run before updating pending conversations. A reload offers verified
@@ -116,6 +117,22 @@ effects; reduced motion is shared by both renderer creation paths and honors
 the device preference in System mode. Reading size changes trail feedback,
 conversations, and forecasts. No game/save-format or expedition-rule revision
 is required. Original title and mode artwork is drawn once with Canvas.
+
+`adventure-journal` derives chapter totals, separate Trail/Nemesis stars, each
+specialist's honors, and expedition badges from the existing validated in-memory
+stores. It excludes custom/unknown identities and never writes, credits, or
+migrates progress. This also keeps completed results visible if a write fails.
+Suggestions respect story unlocks, favor unfinished work, and move to another
+specialist after mastery. Opening one only prepares the library/chapter/kit/daily
+form; it never starts or replaces a run. The journal has keyboard-operated tabs,
+one page scroll, and a sticky navigation area. Returning to its main menu resets
+the view while retaining the actual run and expedition session.
+
+`game-theme.css` scopes the shared forest/brass palette, play navigation, dialog
+frames, and journal layout to Play. The visible play bar replaces the editor mode
+switcher in the same vertical space, preserving the fitted board. Main menu is
+available from it and the pause/result overlay. The editor keeps its own palette
+and history. Native dialogues/camps/forecasts keep their existing simulation rules.
 
 ## Adventure simulation and rendering
 

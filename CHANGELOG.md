@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.12.0 — 2026-10-19
+
+- Unify the game board, HUD, buttons, notes, dialogue, forecasts, camp choices,
+  pause, and results under the same forest-and-brass visual theme.
+- Keep Main menu visible during play and add it to pause/results. Provide shared
+  journal, field-guide, and options navigation in the adventure library. Preserve
+  exact Continue, dialog focus, map history, and the fitted play layout.
+- Add an Adventure Journal with chapter mastery, both rule sets' stars, specialist
+  dispatches/honors, twelve earned/unearned badges, and real progress totals.
+- Suggest unfinished stories, specialist goals, and the daily trail. Preview
+  destinations without auto-starting a mission or replacing a checkpoint.
+- Align mode actions, add illustrated chapter banners, and keep journal navigation
+  visible while browsing. Remove remaining badge checklist symbols.
+- Add four read-only progress/recommendation tests (264 total), a native-input
+  journal browser suite, and two public assets (42-file static build).
+
 ## 0.11.0 — 2026-10-19
 
 - Open Play on a full title screen with original moonlit forest artwork. No run

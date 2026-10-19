@@ -8,6 +8,11 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
   let current = null, book = loadLogbook(storage), saved = peekJourney(storage), saveFailed = false, busy = false;
   let previousMode = 'journey', customSeed = $('#expedition-seed').value, customRules = { length: '6', difficulty: 'trail', vow: 'none' };
   let latestEarned = [];
+  function campScrollNote() {
+    const choices = $('.camp-choices');
+    $('#camp-scroll-note').hidden = !$('#camp-dialog').open || choices.scrollHeight <= choices.clientHeight + 1;
+  }
+  new ResizeObserver(campScrollNote).observe($('.camp-choices'));
   function show(tab = 'expeditions') {
     $('#guild-hub').hidden = true; $('#library-guild').setAttribute('aria-pressed', 'false');
     $('#trail-picker').hidden = tab !== 'story'; $('#expedition-hub').hidden = tab !== 'expeditions';
@@ -30,7 +35,8 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
     $('#expedition-totals').textContent = `${book.stats.finishes} ${book.stats.finishes === 1 ? 'expedition' : 'expeditions'} finished · ${book.stats.legs} ${book.stats.legs === 1 ? 'leg' : 'legs'} explored · ${book.stats.biomes.length}/4 regions visited`;
     $('#expedition-badges').replaceChildren(...BADGES.map(badge => {
       const item = document.createElement('div'); item.className = `expedition-badge ${book.badges.includes(badge.id) ? 'earned' : ''}`;
-      item.append(Object.assign(document.createElement('strong'), { textContent: `${book.badges.includes(badge.id) ? '✦' : '○'} ${badge.name}` }), Object.assign(document.createElement('span'), { textContent: badge.description })); return item;
+      item.dataset.earned = String(book.badges.includes(badge.id));
+      item.append(Object.assign(document.createElement('strong'), { textContent: badge.name }), Object.assign(document.createElement('span'), { textContent: `${badge.description}${book.badges.includes(badge.id) ? ' — earned' : ''}` })); return item;
     }));
     const records = [...book.records].sort((a, b) => b.score - a.score).slice(0, 6);
     $('#expedition-bests').replaceChildren(...(records.length ? records.map(record => `${record.config.seed} · ${record.config.length} legs · ${record.config.difficulty} · ${VOWS.find(vow => vow.id === record.config.vow).name}: ${record.score} points, ${record.turns} turns, ${record.retries} retries`)
@@ -124,7 +130,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
     $('#camp-title').textContent = `A fire before leg ${current.leg + 2} of ${current.config.length}`;
     $('#camp-summary').textContent = `One heart restored before departure. Your supplies carry forward. ${journeyScore(current)} points earned so far.`;
     $('#camp-perks').replaceChildren(...choices(offers.perks, 'camp-perk')); $('#camp-routes').replaceChildren(...choices(offers.routes, 'camp-route'));
-    $('#camp-error').hidden = true; $('#camp-dialog').showModal();
+    $('#camp-error').hidden = true; $('#camp-dialog').showModal(); campScrollNote();
   }
   $('#camp-form').addEventListener('submit', event => {
     event.preventDefault();
@@ -140,6 +146,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
   $('#game-expeditions').addEventListener('click', () => show());
   modeChanged(); renderHub();
   return {
+    get logbook() { return book; },
     get session() { return current; },
     get checkpointFailed() { return saveFailed; },
     get earned() { return latestEarned; },

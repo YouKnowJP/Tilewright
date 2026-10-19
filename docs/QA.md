@@ -1,5 +1,53 @@
 # Verification record
 
+## Shared game theme, navigation, and Adventure Journal — v0.12.0
+
+**264 Node tests**, syntax checks, and the **42-file static build** pass. Four
+new journal tests verify separate rule/specialist totals, exclusion of unknown
+records, attainable/unlocked suggestions, movement to other specialists after
+mastery, replay after completion, and unchanged input records/logbook.
+
+All **eleven browser suite families** pass in Chrome 155.0.8059.82 / .85 using
+disposable contexts and visible controls. The title and fitted-play checks cover
+seven viewport sizes; the new journal suite covers 320×740, 390×844, 768×900,
+1440×900, 320×568, and 844×390. It verifies all four tabs, keyboard navigation,
+sticky Main menu access, chapter/specialist/daily previews, no save writes while
+browsing, guide/options return focus, inert gameplay keys off the board, and
+exact run preservation through Main menu, pause, journal, guide, and Continue.
+
+Real story wins, completed Guild dispatches, and finished expedition legs update
+the journal on desktop and phone. Earned badges/results survive reload without
+duplicate credit or changed saves. Blocked storage retains an actual win in the
+session journal with a truthful warning. Camp choices scroll separately from
+the aligned action row; bounds checks verify buttons stay on screen and do not
+cover choices. A real completed leg also verifies the scroll cue after resizing.
+
+The full retained editor, introductory, hard-contract, sluice, expedition,
+atlas, Guild, and Horizon browser suites pass through the new navigation.
+Coverage includes all 24 authored story missions; all 28 atlas and 22 Horizon
+desktop variants; 48 main plus 20 alternate Guild desktop routes; and all nine
+atlas, six Horizon, and eight Guild missions at each of 320/390/768/1024 touch
+widths. Five complete multi-leg journeys, all 33 form configurations, actual
+loss/retry, camps, backup/reload/import, genuine old saves, storage failure,
+dialogue/forecast/pause isolation, and editor/history preservation also pass.
+
+Desktop and phone title, mode cards, chapter banners, Guild, expedition setup,
+board/HUD, notes, dialogue, camp, journal, pause, and results were visually
+inspected. Fixed issues include a hidden return button made visible by display
+styling, inconsistent panel colors, default blue focus outlines, and camp actions
+overlapping the final route. The retained test helper now reaches Mapmaker via
+Main menu and explicitly selects the first chapter when requested.
+
+The journal reads existing stores and introduces no save migration or rule
+change. These checks do not replace physical-device, other-engine, screen-reader,
+or human enjoyment/balance studies.
+
+![The unified game screen on desktop](gameplay-desktop.png)
+
+![The game screen on a phone](gameplay-mobile.png)
+
+![Camp choices and aligned actions](game-camp.png)
+
 ## Title, field guide, and game options — v0.11.0
 
 **260 Node tests**, all JavaScript syntax checks, and the **40-file static build**
