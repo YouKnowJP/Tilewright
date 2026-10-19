@@ -424,7 +424,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     if (expeditions?.session) { const phase = expeditions.session.phase; if (phase === 'camp') expeditions.openCamp(); else if (phase === 'won') expeditions.show(); else expeditions.retry(); return; }
     if (run.guild && run.status === 'won') { showGuild(); $('#guild-jobs button').focus({ preventScroll: true }); return; }
     const index = campaign.findIndex(stage => stage.id === run.stage.id);
-    if (run.status === 'won' && index === campaign.length - 1) { expeditions.show('story'); $('#begin-sluices').focus({ preventScroll: true }); return; }
+    if (run.status === 'won' && index === campaign.length - 1) { expeditions.show('story'); $('.atlas-nav button[aria-pressed="true"]').focus({ preventScroll: true }); return; }
     start(run.status === 'won' && index >= 0 && index < campaign.length - 1 ? campaign[index + 1] : run.stage);
   });
   $('#game-back-editor').addEventListener('click', backToEditor);

@@ -42,7 +42,7 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
       page.on('response', response => { if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`); });
       await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
       const map = await page.evaluate(() => localStorage.getItem('tilewright.document.v1'));
-      assert.equal(await page.locator('.atlas-chapter').count(), 6); assert.equal(await page.locator('.trail-art').count(), 18);
+      assert.equal(await page.locator('.atlas-chapter').count(), 8); assert.equal(await page.locator('.trail-art').count(), 24);
       assert.equal(await page.locator('[data-stage="trail-11"]').isDisabled(), true);
       for (const chapter of ['archive', 'dunes', 'aurora']) {
         await clickControl(page, `[data-chapter-start="${chapter}"]`); assert.equal(await page.locator('#game-turns').textContent(), '0');
@@ -73,11 +73,12 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
         }
         results.push({ mission: fixture.id, difficulty: fixture.difficulty, branch: fixture.branch, turns: fixture.result.turns });
       }
-      assert.match(await page.locator('#game-primary').textContent(), /Return to the trail library/);
-      await clickControl(page, '#game-primary'); assert.equal(await page.locator('#trail-picker').isVisible(), true);
-      assert.match(await page.locator('.atlas-total').textContent(), /27 \/ 54/);
+      assert.match(await page.locator('#game-primary').textContent(), /Next adventure/);
+      await clickControl(page, '#game-primary'); assert.equal(await page.locator('#game-title').textContent(), 'Tideglass Causeway');
+      await clickControl(page, '#game-choose'); assert.equal(await page.locator('#trail-picker').isVisible(), true);
+      assert.match(await page.locator('.atlas-total').textContent(), /27 \/ 72/);
       await page.reload(); assert.equal(await page.locator('[data-stage="trail-18"]').isDisabled(), false);
-      await selectControl(page, '#game-difficulty', 'nemesis'); assert.match(await page.locator('.atlas-total').textContent(), /27 \/ 54/);
+      await selectControl(page, '#game-difficulty', 'nemesis'); assert.match(await page.locator('.atlas-total').textContent(), /27 \/ 72/);
       if (screenshots) { await page.locator('#atlas-archive').evaluate(el => el.scrollIntoView({ block: 'start' })); await page.screenshot({ path: '.playwright-mcp/atlas-chapters.png' }); }
       assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), map); assert.deepEqual(errors, []);
     } finally { await context.close(); }
@@ -96,8 +97,8 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
           await play(page, fixture.actions, true); await won(page, fixture);
           assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
         }
-        await clickControl(page, '#game-primary', true);
-        await page.locator('.atlas-nav button').last().tap();
+        await clickControl(page, '#game-primary', true); await clickControl(page, '#game-choose', true);
+        await page.locator('.atlas-nav button').nth(5).tap();
         assert.equal(await page.evaluate(() => document.activeElement.textContent), 'The Long Dawn');
         if (screenshots && width === 390) {
           await page.screenshot({ path: '.playwright-mcp/atlas-mobile.png' });

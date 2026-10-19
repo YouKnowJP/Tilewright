@@ -2,15 +2,15 @@
 
 **Make a little world. Then go on an adventure.** Tilewright combines a local
 tile map editor with **Lantern Trails**, an original turn-based puzzle game.
-Explore eighteen handcrafted missions across six illustrated chapters or start a branching expedition of three, six,
+Explore twenty-four handcrafted missions across eight illustrated chapters or start a branching expedition of three, six,
 or nine legs. Try daily trails, build a camp toolkit, rescue keepers, deliver
 noisy relics, and outsmart hunters that learn your movement habits. You can also
-explore a world you paint. The new **Wayfarers’ Guild** adds six dispatches,
+explore a world you paint. The **Wayfarers’ Guild** adds six dispatches,
 two specialist tools, linked waystones, and optional commendations.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
-![Focused gameplay with a tabbed quest sidebar](docs/focused-play-desktop.png)
+![The Tideglass Coast, one of two new story chapters](docs/horizon-chapters.png)
 
 ## Run locally
 
@@ -66,16 +66,24 @@ Dialogue and the Plan forecast pause the turn rules. Blocked moves cost nothing.
 | Frostline Post | Deliver a singing message through a frozen listening post without dashing. | 140 |
 | Mirror Reservoir | Align two mirrors, cross three logic bridges, and collect every fragment. | 135 |
 | The Aurora Engine | Restore four lights and notes, rescue two keepers, and bring the aurora heart home. | 220 |
+| Tideglass Causeway | Change the tidal crossings, unlock a sea vault, and find a different route home. | 115 |
+| The Lantern Regatta | Recover six tokens across three islands and ring Shell, Wake, Gale. | 120 |
+| The Last Lighthouse | Rescue Kelp and Mara and return the storm lens through changing crossings. | 165 |
+| Clockvine Gardens | Park both carts on their stops and wake the eastern hedge door. | 105 |
+| The Midnight Market | Walk eight coins home while two wheels change four doors. | 205 |
+| The Orchard That Woke | Ring four bells, rescue two keepers, and return a living clock with an optional cart crossing. | 190 |
 
-The **field atlas** groups missions into six illustrated chapters with region
+The **field atlas** groups missions into eight illustrated chapters with region
 artwork, mechanic tags, individual bests, and chapter stars for each rule set.
 Use the chapter shortcuts or **Begin chapter** to start any region immediately;
 its later missions unlock in order. The archives have violet stone, the Amber
-Road has warm dunes, and the northern trails have snow and blue pines. Keeper
-portraits accompany conversations. Discovered wheels and bells appear on the
+Road has warm dunes, and the northern trails have snow and blue pines. The coast has sea-glass stone and lighthouse artwork; the clockwork gardens have
+brassleaf terrain and clock motifs. Keeper portraits accompany conversations. Discovered wheels and bells appear on the
 minimap, and mission-specific restrictions stay visible above the board.
 Optional field goals invite you to find every treasure, hear every keeper, or
 finish cleanly; these are current-run goals, while stars and bests are saved.
+See [New horizons](docs/HORIZONS.md) for all six coast/garden missions, choices,
+and route advice.
 
 **Begin hard missions** opens the second act immediately. **Play the sluice saga**
 opens the third act at Rainmoss. Each act’s other missions unlock in order. Choose **Nemesis** under Rules to start with two hearts, one
@@ -292,7 +300,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 199 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 224 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -302,7 +310,7 @@ An optional browser regression suite lives in `scripts/browser-checks.mjs`.
 With Playwright separately installed in the development environment and Google
 Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
-it does not modify existing browser maps. It completes all eighteen story missions,
+it does not modify existing browser maps. It completes all twenty-four story missions,
 all 28 atlas difficulty/choice variants, all sluice branches and no-trade runs,
 24 Guild specialist/rule combinations plus eight alternate routes, the Nemesis
 finales, and five multi-leg expeditions through real input. It checks
@@ -310,7 +318,8 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The eight suites include `scripts/layout-browser-checks.mjs`, `scripts/sluice-browser-checks.mjs`,
+editor history. The nine suites include `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
+`scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
 Playwright is not needed to run the app or the default checks. Browser tests
 are not currently run in CI.

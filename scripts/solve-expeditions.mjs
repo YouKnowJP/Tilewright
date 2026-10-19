@@ -31,7 +31,7 @@ class Heap {
   pop() { const list = this.items, first = list[0], last = list.pop(); if (list.length) { let i = 0; while (i * 2 + 1 < list.length) { let child = i * 2 + 1; if (child + 1 < list.length && list[child + 1].cost < list[child].cost) child++; if (list[child].cost >= last.cost) break; list[i] = list[child]; i = child; } list[i] = last; } return first; }
 }
 function stateKey(run) {
-  return JSON.stringify([run.player, run.turns % 12, run.health, run.energy, run.ward, run.invulnerability, run.noise, run.alarm, run.stun, run.decoys, run.shields,
+  return JSON.stringify([run.player, run.crates, run.turns % 12, run.health, run.energy, run.ward, run.invulnerability, run.noise, run.alarm, run.stun, run.decoys, run.shields,
     run.lure && [run.lure.x, run.lure.y, Math.max(0, run.lure.until - run.turns)], run.carrying, run.cargoPoint, run.cargoDelivered,
     run.hunters.map(h => [h.x, h.y, h.intent, h.memory, h.lastSeen, h.patrolIndex, h.attack, h.dazedUntil]), run.collectedLanterns, run.collectedKeys, run.collectedCoins, run.collectedHearts, run.usedSupplies, run.openGates, run.switches, run.spentCoins, run.guild]);
 }

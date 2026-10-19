@@ -16,6 +16,7 @@ installation, build-time framework, database service, or remote API.
 | `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
 | `src/adventure.mjs` | Pure turn rules, collision, pickups, puzzles, patrol intent, scoring, exploration, and connected custom expeditions. |
 | `src/adventure-levels.mjs` | Campaign assembly, eighteen stable record identities, and the first six authored maps. |
+| `src/adventure-horizon-levels.mjs` | Six authored coast/garden missions, including token circuits, changing doors, cart routes, and rescue finales. |
 | `src/adventure-atlas-levels.mjs` | Nine authored archive, desert, and northern missions with constraint, treasure, courier, rescue, and finale goals. |
 | `src/adventure-tools.mjs` | Specialist validation, power availability, reachable pulse area, and waystone checks/previews. |
 | `src/adventure-guild.mjs` | Six authored Guild jobs, commendation evaluation, and bounded kit/rule best storage. |
@@ -393,3 +394,26 @@ details menu, and quick starts/custom-map actions use a library disclosure.
 selection, and responsive node relocation. `ui-driver.mjs` lets the retained
 playthroughs reach controls with visible clicks instead of bypassing hidden UI.
 The simulation, expedition rules 0.6.0, and save formats are unchanged.
+
+
+## Coast and clockwork chapters — v0.9
+
+Campaign IDs now span `trail-1` through `trail-24`; the eight chapter descriptors
+keep three missions per chapter. Missions 19 and 22 are open chapter entries,
+and their final missions replay Nemesis from zero-based indices 18 and 21.
+The last mission returns keyboard focus to its visible chapter button.
+
+The six maps use the existing public rules: switch/plate/key/signal gates,
+ordered relays, carried relics, rescue companions, all-coin requirements,
+no-dash restrictions, and adaptive hunters. No expedition rule or save-format
+revision is required. All 18 prior definitions match SHA-256 fingerprints
+captured from committed v0.8.1 source. All 48 campaign/rule record IDs are
+protected while custom records share the remaining space in the 64-record cap.
+
+Original Canvas motifs and palettes affect only the new `coast` and `clockwork`
+backgrounds; objective and threat colors retain their meanings. The existing
+compact library still shows one chapter at a time. `solve-horizon.mjs` uses
+ordinary public actions, and independent tests replay 22 clean witnesses, all
+choices, both difficulty settings, and the optional upper cart crossing. The
+developer local-search key now includes crate positions. Browser tests verify
+actual interaction controls, progression, layout, and save retention.

@@ -22,9 +22,9 @@ for (const fixture of fixtures) test(`atlas ordinary-action clean win: ${fixture
   if (fixture.id === 'trail-18' && fixture.branch === 1) assert.equal(final.stage.gates.filter(gate => gate.type === 'bridge').every(gate => gateIsOpen(final, gate)), true);
 });
 
-test('six atlas chapters have stable identities, open entry missions, and distinct map geometry', () => {
-  const campaign = createCampaign(); assert.equal(campaign.length, 18); assert.deepEqual(campaign.map(stage => stage.id), CAMPAIGN_IDS);
-  assert.equal(new Set(campaign.map(stage => JSON.stringify(stage.map.layers))).size, 18);
+test('eight atlas chapters have stable identities, open entry missions, and distinct map geometry', () => {
+  const campaign = createCampaign(); assert.equal(campaign.length, 24); assert.deepEqual(campaign.map(stage => stage.id), CAMPAIGN_IDS);
+  assert.equal(new Set(campaign.map(stage => JSON.stringify(stage.map.layers))).size, 24);
   for (const [index, chapter] of CHAPTERS.entries()) {
     const stages = campaign.slice(index * 3, index * 3 + 3);
     assert.equal(stages.length, 3); assert.equal(index === 0 || stages[0].contractStart, true);
@@ -47,7 +47,7 @@ test('mission restrictions reject disabled actions without consuming resources o
 test('36,000 exploratory atlas inputs keep actors on valid floors and retain bounded resources', () => {
   let seed = 7026;
   const pick = size => { seed = Math.imul(seed, 1664525) + 1013904223 >>> 0; return seed % size; };
-  for (const stage of createCampaign().slice(9)) for (const difficulty of ['trail', 'nemesis']) {
+  for (const stage of createCampaign().slice(9, 18)) for (const difficulty of ['trail', 'nemesis']) {
     let run = createRun(stage, { difficulty });
     for (let index = 0; index < 2000; index++) {
       if (run.status !== 'playing') run = createRun(stage, { difficulty, memory: run.memory });

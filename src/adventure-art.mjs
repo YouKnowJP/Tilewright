@@ -7,6 +7,8 @@ export const CHAPTERS = Object.freeze([
   { id: 'archive', name: 'The Unwritten Sky', place: 'The violet archives', summary: 'Borrow a lost story. Return a forgotten star.', sky: '#c7bfdf', far: '#978bb8', ridge: '#69668f', dark: '#373a59', glow: '#f3d99a' },
   { id: 'dunes', name: 'The Amber Road', place: 'Cinder dunes', summary: 'Lost heirlooms, quiet caravans, a furnace choir.', sky: '#f0d29a', far: '#d6ac7a', ridge: '#b97b60', dark: '#6d4e51', glow: '#fff0b6' },
   { id: 'aurora', name: 'The Long Dawn', place: 'The northern lights', summary: 'Follow the aurora. Bring the whole sky home.', sky: '#aeced9', far: '#7fa5bb', ridge: '#567a99', dark: '#304b6a', glow: '#c9f3d9' },
+  { id: 'coast', name: 'The Tideglass Coast', place: 'The sea-glass shores', summary: 'Follow the turning tide. Leave a light for every boat.', sky: '#b5dce0', far: '#75b1ba', ridge: '#4a8598', dark: '#254e67', glow: '#ffe7aa' },
+  { id: 'clockwork', name: 'The Clockwork Orchard', place: 'The brassleaf gardens', summary: 'Wind the forgotten garden. Bring its morning home.', sky: '#dbd3ab', far: '#a7ac7c', ridge: '#788460', dark: '#465b49', glow: '#f6c983' },
 ]);
 export const themeFor = stage => CHAPTERS.find(theme => theme.id === stage.theme) || CHAPTERS[0];
 export function keeperColors(id) {
@@ -34,7 +36,20 @@ export function drawAtlasArt(canvas, theme, variant = 0) {
   poly(theme.far, [[0, 75], [45, 22 + variant * 5], [95, 72], [157, 31], [240, 79], [301, 39], [360, 75], [360, h], [0, h]]);
   poly(theme.ridge, [[0, 93], [58, 69], [120, 88], [205, 60 + variant * 5], [300, 89], [360, 70], [360, h], [0, h]]);
   poly(theme.dark, [[0, 109], [92, 99], [170, 111], [269, 91], [360, 100], [360, h], [0, h]]);
-  if (['archive', 'forge'].includes(theme.id)) {
+  if (theme.id === 'coast') {
+    ctx.fillStyle = theme.dark; ctx.fillRect(43, 42, 20, 65); ctx.fillRect(37, 36, 32, 9);
+    poly(theme.dark, [[36, 36], [53, 19], [70, 36]]);
+    ctx.fillStyle = '#eee4c7'; ctx.fillRect(47, 48, 12, 15); ctx.fillRect(47, 77, 12, 10);
+    ctx.fillStyle = theme.glow; ctx.fillRect(46, 38, 14, 6);
+    poly('#ffe7aa60', [[60, 40], [165, 20], [165, 62], [60, 44]]);
+    ctx.fillStyle = theme.sky; for (let i = 0; i < 5; i++) ctx.fillRect(81 + i * 39, 114 + i % 2 * 5, 27, 2);
+  } else if (theme.id === 'clockwork') {
+    ctx.fillStyle = theme.dark; ctx.fillRect(47, 50, 7, 57); ctx.fillRect(30, 64, 42, 6);
+    ctx.beginPath(); ctx.arc(51, 51, 22, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = theme.glow; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(51, 51, 15, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(51, 39); ctx.lineTo(51, 51); ctx.lineTo(61, 56); ctx.stroke();
+    for (let i = 0; i < 3; i++) { ctx.fillStyle = theme.dark; ctx.fillRect(95 + i * 25, 80 + i % 2 * 8, 5, 31); ctx.fillStyle = theme.glow; ctx.fillRect(90 + i * 25, 77 + i % 2 * 8, 15, 6); }
+  } else if (['archive', 'forge'].includes(theme.id)) {
     for (let i = 0; i < 5; i++) { const x = 24 + i * 27; ctx.fillStyle = theme.dark; ctx.fillRect(x, 49 + i % 2 * 12, 14, 60); ctx.fillRect(x - 3, 47 + i % 2 * 12, 20, 5); ctx.fillStyle = theme.glow; ctx.fillRect(x + 5, 62 + i % 2 * 12, 4, 12); }
   } else if (theme.id === 'dunes') {
     poly(theme.dark, [[38, 106], [79, 49], [120, 106]]); poly(theme.ridge, [[79, 49], [94, 106], [120, 106]]);
@@ -57,6 +72,8 @@ export function decorateMap(canvas, stage) {
   if (!stage.theme) return;
   const theme = themeFor(stage), ctx = canvas.getContext('2d');
   const palettes = {
+    coast: { '80a471': '91b8ac', '709563': '729b93', '91b47f': 'bfd7c5', aab0a2: 'b7c6c5', '8e998d': '8aabb1', '75867b': '658c9a', c8b58e: 'd6c89d', b7a27d: 'c3ad85', dbc9a3: 'eee0b6', '78aebe': '63a8ba', '8dbdca': '9ad1da', '659eaf': '43859d' },
+    clockwork: { '80a471': '9da378', '709563': '7f8b61', '91b47f': 'c2c398', a4bf81: 'b8ba86', '91ae73': '929c68', b7cb91: 'd7cfa0', aab0a2: 'b9a889', '8e998d': '97876b', '75867b': '7a785f', '375f4c': '56674b', '42765b': '718057', '588969': '9eaa6f' },
     archive: { aab0a2: '9794b0', '8e998d': '77778f', '75867b': '626b86', a6b0a0: 'a5aac4', bdc3b1: 'd1cde1', '78aebe': '8a9ec2', '8dbdca': 'b0bdd8', '659eaf': '707fa9' },
     dunes: { '375f4c': '687654', '42765b': '7e915e', '588969': 'a9b87e', '78aebe': '75b8bb', '8dbdca': 'b2d9cf', '659eaf': '4d9eaa' },
     aurora: { '80a471': 'a8c6d2', '709563': '8babbf', '91b47f': 'd8e9e5', a4bf81: 'c4dadc', '91ae73': 'a0bbc8', b7cb91: 'e0efec', '375f4c': '3c6078', '42765b': '537e96', '588969': '98bcc9', '78aebe': '6994b9', '8dbdca': 'a0d3df', '659eaf': '5076a1', aab0a2: 'acbdcc', '8e998d': '839aac', c8b58e: '839fb6', b7a27d: '708ba5', dbc9a3: 'afcbd6' },
@@ -77,7 +94,9 @@ export function decorateMap(canvas, stage) {
     ctx.fillStyle = theme.dark + '45'; ctx.fillRect(px + 3, py + 17, 17, 3);
     ctx.fillStyle = theme.glow + '99';
     // Ground-level marks are traversable decoration, never wall-like props.
-    if (theme.id === 'archive') { ctx.fillRect(px + 5, py + 13, 10, 2); ctx.fillRect(px + 9, py + 9, 2, 9); }
+    if (theme.id === 'coast') { ctx.fillRect(px + 6, py + 11, 11, 2); ctx.fillRect(px + 8, py + 14, 7, 2); }
+    else if (theme.id === 'clockwork') { ctx.fillRect(px + 7, py + 10, 8, 2); ctx.fillRect(px + 7, py + 16, 8, 2); ctx.fillRect(px + 5, py + 12, 2, 4); ctx.fillRect(px + 15, py + 12, 2, 4); }
+    else if (theme.id === 'archive') { ctx.fillRect(px + 5, py + 13, 10, 2); ctx.fillRect(px + 9, py + 9, 2, 9); }
     else if (theme.id === 'dunes') { ctx.fillRect(px + 4, py + 10, 13, 1); ctx.fillRect(px + 8, py + 13, 12, 1); }
     else if (theme.id === 'aurora') { ctx.fillRect(px + 5, py + 12, 3, 2); ctx.fillRect(px + 13, py + 16, 6, 2); }
     else { ctx.fillRect(px + 6, py + 13, 3, 3); ctx.fillRect(px + 14, py + 15, 2, 2); }

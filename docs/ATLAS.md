@@ -1,6 +1,6 @@
 # The field atlas
 
-Eighteen handcrafted missions span six chapters. Open **Trails → Story missions**,
+Twenty-four handcrafted missions span eight chapters. Open **Trails → Story missions**,
 then choose a chapter button. Only that chapter’s three missions are shown.
 Start any chapter with **Begin chapter**, then finish its missions in order.
 Either rule set unlocks the next mission. Chapter selection keeps keyboard focus
@@ -109,3 +109,13 @@ have clean three-star witnesses on Trail and Nemesis.
 The intended variety comes from routes, resource decisions, and changing goals.
 Automated wins establish that the tested routes work; actual enjoyment and
 long-term difficulty balance still need feedback from players.
+
+
+## Chapters 7 and 8: new horizons
+
+The Tideglass Coast adds changing sea crossings, a three-island treasure
+regatta, and a lighthouse convoy finale. The Clockwork Orchard adds cart-held
+hedge doors, a walking midnight market with four changing lanes, and a living
+clock rescue with an optional northern crossing. See the [new chapter guide](HORIZONS.md)
+for all six missions, dialogue choices, and route advice. Both chapters are
+open immediately through their chapter entry missions.

@@ -56,6 +56,18 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## New horizons completed — v0.9
+
+- Six authored coast and clockwork missions: 24 story missions across eight chapters.
+- New original landscape art, terrain palettes, keepers, choice endings, and two finales.
+- A three-island treasure regatta, changing tide routes, cart-held hedge doors,
+  a walking midnight market, convoy rescues, and an optional cart crossing.
+- Both chapter entries open immediately; separate Trail/Nemesis bests are retained.
+- 22 clean route witnesses, a 24,000-input soak, unchanged prior mission hashes,
+  and a ninth browser suite. See [the chapter guide](docs/HORIZONS.md).
+
+These completed levels are excluded from the remaining editor estimates.
+
 ## Guild expansion completed — v0.8
 
 - Six authored dispatches, two active specialist tools, and paired waystone travel.

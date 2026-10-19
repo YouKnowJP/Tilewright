@@ -1,5 +1,48 @@
 # Verification record
 
+## New horizons — v0.9.0
+
+**224 Node tests pass**, along with JavaScript syntax checks and the **37-file
+static build**. Six new authored missions have **22 clean public-action route
+witnesses / 2,419 turns**, covering every new dialogue choice on Trail and Nemesis, all
+required treasure circuits, gates, relays, switches, rescues, and deliveries.
+The final cart-route witnesses both open and actually use the optional northern
+crossing, then finish with its two plates still held. Declining that crossing
+also produces a valid clean finish. No witness edits positions or resources.
+
+| Mission | Trail turns, by choice | Nemesis turns, by choice |
+| --- | --- | --- |
+| 19 | 83 / 83 | 85 / 85 |
+| 20 | 89 | 91 |
+| 21 | 125 / 127 | 123 / 124 |
+| 22 | 50 / 62 | 50 / 63 |
+| 23 | 153 / 153 | 158 / 160 |
+| 24 | 127 / 149 | 128 / 151 |
+
+The new 24,000-input exploratory test brings the retained/new total to
+**126,000 deterministic inputs**. All eighteen pre-expansion mission definitions
+match SHA-256 hashes captured from the committed v0.8.1 source. Tests protect
+all 48 campaign/rule bests during custom-record eviction. Existing checkpoint
+rules and genuine 0.5/0.6 restoration tests still pass.
+
+The ninth browser suite replays the new missions through actual keyboard,
+dialogue, target selection, and touch controls; the original editor map and a
+real introductory-mission best are retained. It checks open chapter entries,
+sequential unlocks, independent Trail/Nemesis results after reload, both finale
+replay invitations, and focus on the visible chapter button after the last win.
+
+The new suite passes on Chrome 155.0.8059.82. All six new missions also finish
+cleanly through touch controls at **320, 390, 768, and 1024 × 844 CSS pixels**:
+**46 new-level browser playthroughs** including the 22 desktop choice/rule
+variants. The retained 28 atlas desktop variants pass, including the transition
+from mission 18 to 19. The seven-size layout suite passes with all eight chapter
+selectors, bounded forecasts, menu actions, notes/focus behavior, and no sideways
+overflow. Desktop artwork, new terrain, and mobile screenshots were inspected.
+Physical devices, Safari, Firefox, a full screen-reader audit, and human
+usability/balance studies remain outside this verification.
+
+![The new clockwork finale](clockwork-desktop.png)
+
 ## Focused play layout — v0.8.1
 
 **199 Node tests**, syntax checks, and the **36-file static build** pass.

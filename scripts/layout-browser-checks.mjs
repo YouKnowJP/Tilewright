@@ -43,7 +43,8 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         await page.locator('#game-choose').click();
         assert.equal(await page.locator('#game-layout').isVisible(), false);
         assert.equal(await page.locator('.atlas-chapter:visible').count(), 1);
-        for (let chapter = 0; chapter < 6; chapter++) {
+        const chapterCount = await page.locator('.atlas-nav button').count();
+        for (let chapter = 0; chapter < chapterCount; chapter++) {
           await page.locator('.atlas-nav button').nth(chapter).click();
           assert.equal(await page.locator('.atlas-chapter:visible').count(), 1);
           assert.equal(await page.locator('.trail-card:visible').count(), 3);

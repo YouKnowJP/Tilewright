@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.9.0 — 2026-10-19
+
+- Add six authored story missions across The Tideglass Coast and The Clockwork
+  Orchard, bringing the campaign to 24 missions in eight chapters.
+- Add changing causeways, a three-island token circuit, a lighthouse convoy,
+  two-cart hedge doors, a walking midnight market, and a living-clock finale.
+- Add original coast/garden Canvas artwork, terrain palettes, new keepers,
+  alternate dialogue loadouts/endings, and two chapter-specific Nemesis replays.
+- Keep the compact one-chapter library and tabbed notes, protect all 48
+  campaign/rule bests within the existing record limit, and preserve old saves.
+- Add 22 clean three-star witnesses covering every new choice on both rules,
+  24,000 exploratory inputs, and committed hashes for all 18 previous missions.
+- Include crate positions in the developer route-search state key; confirm the
+  optional cart witness actually opens and crosses its northern door.
+- Add a ninth browser suite for complete new-mission runs, touch layouts,
+  unlocks, result reloads, record/editor retention, and final return focus.
+
 ## 0.8.1 — 2026-10-19
 
 - Separate active play from the adventure library. Browse one three-mission
