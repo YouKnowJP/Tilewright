@@ -41,7 +41,8 @@ limits, and [design notes](DESIGN_NOTES.md) for the research behind the refineme
 
 ## Play now: the second act
 
-Open **Play adventures → Trails → Quick starts & custom map → Begin hard missions** to start Briarwatch
+Open **Play adventures → Choose your adventure → Story chapters**, then choose
+**02 The Watching Forest → Begin chapter** to start Briarwatch
 without replaying the introductory act. Finishing it unlocks Bellforge, followed
 by the Watcher finale. **Rules** changes restart the current mission. Nemesis
 bests are separate; either rule set can unlock the next mission.

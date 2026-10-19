@@ -1,4 +1,4 @@
-import { clickControl, selectControl } from './ui-driver.mjs';
+import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,7 +44,7 @@ export async function checkGuild(browserType, { baseURL = BASE, channel = 'chrom
         const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
         page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
         page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
-        await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
+        await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
         const original = await page.evaluate(() => [localStorage.getItem('tilewright.document.v1'), localStorage.getItem('tilewright.adventures.v1')]);
         await clickControl(page, '#library-guild'); assert.equal(await page.locator('[data-guild-job]').count(), 8);
         assert.equal(await page.locator('[data-guild-job]:disabled').count(), 0); assert.equal(await page.locator('#guild-kit option').count(), 3);

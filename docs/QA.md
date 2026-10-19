@@ -1,5 +1,46 @@
 # Verification record
 
+## Title, field guide, and game options — v0.11.0
+
+**260 Node tests**, all JavaScript syntax checks, and the **40-file static build**
+pass. Preferences tests cover bounds, malformed/unsupported data, failed storage,
+and separation from map/journey saves. Audio checks cover volume scaling and mute.
+
+The new Chrome 155.0.8059.82 front-menu suite passes at **320×740, 390×844,
+768×900, 1024×768, 1440×900, 320×568, and 844×390**. It verifies a title screen
+without an automatic run, inert gameplay keys while browsing, all four mode
+previews, three guide pages, dialog focus/closing, remembered options, no audio
+autoplay, and exact turn/position preservation through Continue and Mapmaker.
+Custom-map entry works at 390/1440; a real invalid 1×1 map stays in the chooser
+with useful guidance and a working editor exit. A real expedition checkpoint
+resumes at the same position/turn after reload. Explicit native sound on/off and
+blocked-storage/unavailable-audio paths also pass.
+
+The existing seven-size gameplay layout suite and full introductory, editor,
+hard-contract, sluice, and expedition browser suites pass through the new visible
+menus. Coverage includes three-star wins, dialogue choices, map/undo preservation,
+touch input, camp choices, actual loss/retry, checkpoint reload/export/import,
+genuine older saves, and storage failures. Atlas's 28 desktop routes, Horizons'
+22 desktop routes, and all **48 main plus 20 alternate Guild desktop routes**
+pass, including result reload, pause/modal isolation, restart, and editor return.
+These three suites' broader touch coverage retains its earlier version-specific
+scope below. Two additional complete Borrowed Horizon touch runs at 320/390 use
+Large reading and Reduced motion: every feedback message remains unclipped,
+controls stay within 844px, and neither run creates sideways overflow.
+
+Desktop and phone title, mode chooser, library, and options screenshots were
+inspected. A white library panel and muted description contrast were corrected.
+Legacy test helpers now explicitly choose a trail when a control requires a live
+run; the product does not auto-start to accommodate tests. Physical devices,
+other browser engines, screen-reader audits, and human usability studies remain
+outside this verification.
+
+![The game title on a phone](title-mobile.png)
+
+![Illustrated adventure previews](adventure-modes.png)
+
+![Game options on a phone](game-options.png)
+
 ## Game text and symbol-free progress — v0.10.2
 
 The 258 Node tests and 37-file build pass. The seven-size Chrome layout suite

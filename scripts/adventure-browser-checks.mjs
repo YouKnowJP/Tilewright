@@ -1,4 +1,4 @@
-import { clickControl, selectControl } from './ui-driver.mjs';
+import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,7 +13,7 @@ async function playRoute(page, actions) {
 }
 async function openGame(page, baseURL) {
   await page.goto(`${baseURL}/#play`);
-  await page.locator('#adventure[data-status="playing"]').waitFor();
+  await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
   await page.waitForFunction(() => document.querySelector('#adventure-canvas').clientWidth > 0 && document.querySelector('#adventure-library').hidden);
 }
 async function assertLayout(page, width, controlsVisible = false) {
@@ -80,7 +80,7 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
             await clickControl(page, '#game-primary');
           }
         }
-        await page.reload(); await page.locator('#adventure[data-status="playing"]').waitFor();
+        await page.reload(); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
         assert.equal(await page.locator('[data-stage="trail-3"]').isDisabled(), false);
         assert.match(await page.locator('[data-stage="trail-1"]').textContent(), /★★★/);
         await clickControl(page, '#play-custom');

@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.11.0 — 2026-10-19
+
+- Open Play on a full title screen with original moonlit forest artwork. No run
+  is created until a player selects a mission. Preview Story, Guild, Expeditions,
+  and Mapmaker before entering their selection screens.
+- Add a three-page field guide explaining goals, controls, enemy turns, and
+  specialist tools. Restyle adventure selection, menus, and options to match the game.
+- Add working sound on/off, volume, system/reduced motion, and standard/large
+  reading settings. Store bounded preferences separately; audio remains opt-in.
+- Add return-to-title and exact in-memory Continue, plus explicit saved-expedition
+  recovery after reload. Retain editor undo, records, checkpoints, and turn rules.
+- Add preference validation/failure tests and volume checks (260 Node tests).
+  Expand the static build to 40 files and add title/menu browser coverage at seven
+  viewport sizes. Retained browser routes now enter through visible game menus.
+
 ## 0.10.2 — 2026-10-19
 
 - Replace alert-style message panels with a dark, gold-framed game text box and

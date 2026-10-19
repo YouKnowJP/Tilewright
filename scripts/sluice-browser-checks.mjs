@@ -1,4 +1,4 @@
-import { clickControl, selectControl } from './ui-driver.mjs';
+import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -79,7 +79,7 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
       await clickControl(page, '#game-primary');
       assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'playing', 'The sluice finale continues into the archive chapter.');
       await clickControl(page, '#game-choose'); assert.equal(await page.locator('#trail-picker').isVisible(), true);
-      await page.reload(); await page.locator('#adventure[data-status="playing"]').waitFor();
+      await page.reload(); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
       assert.equal(await page.locator('[data-stage="trail-8"]').isDisabled(), false); assert.equal(await page.locator('[data-stage="trail-9"]').isDisabled(), false);
       // A penniless player must not lose a choice or receive goods, and nearby targets must work with keyboard E.
       await clickControl(page, '#begin-sluices');

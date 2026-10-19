@@ -1,4 +1,4 @@
-import { clickControl, selectControl } from './ui-driver.mjs';
+import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -27,7 +27,7 @@ export async function checkContracts(browserType, { baseURL = BASE, channel = 'c
         const page = await context.newPage(), errors = [], failures = [];
         page.on('pageerror', error => errors.push(error.message));
         page.on('response', response => { if (response.status() >= 400) failures.push(response.url()); });
-        await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
+        await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
         assert.equal(await page.locator('[data-stage="trail-4"]').isDisabled(), false, 'Hard missions must be available without repeating the introductory act.');
         await clickControl(page, '#begin-contracts');
         // Dialogue stops game time, has real choices, and cannot be farmed.
@@ -63,7 +63,7 @@ export async function checkContracts(browserType, { baseURL = BASE, channel = 'c
         assert.equal(await page.locator('#game-title').textContent(), 'Briarwatch Rescue');
         assert.equal(await page.locator('#game-difficulty').inputValue(), 'nemesis');
         const learned = await page.evaluate(key => localStorage.getItem(key), memoryKey);
-        await page.reload(); await page.locator('#adventure[data-status="playing"]').waitFor();
+        await page.reload(); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
         assert.equal(await page.evaluate(key => localStorage.getItem(key), memoryKey), learned, 'Learning survives a reload without losing best scores.');
         assert.equal(await page.locator('[data-stage="trail-6"]').isDisabled(), false);
         await selectControl(page, '#game-difficulty', 'nemesis');
@@ -87,7 +87,7 @@ export async function checkContracts(browserType, { baseURL = BASE, channel = 'c
     }
     const context = await browser.newContext({ viewport: { width: 320, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce' });
     try {
-      const page = await context.newPage(); await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
+      const page = await context.newPage(); await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
       await clickControl(page, '#begin-contracts', true); await clickControl(page, '#game-interact', true);
       const dialog = await page.locator('#conversation-dialog').boundingBox();
       assert.ok(dialog.x >= 0 && dialog.x + dialog.width <= 320 && dialog.y >= 0 && dialog.y + dialog.height <= 844);

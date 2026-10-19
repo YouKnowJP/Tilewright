@@ -34,14 +34,34 @@ server is running. Installation as an offline web app is future work.
 ## Play Lantern Trails
 
 Choose **Play adventures**, or open [the game directly](http://127.0.0.1:4174/#play).
-The board opens on its own screen. **Trails** opens the library; choose one
+The game opens on a moonlit **title screen**, without starting a mission.
+**Choose your adventure** previews Story chapters, Guild jobs, Expeditions, and
+Mapmaker. Pick a mode, explore its choices, then select a mission to begin.
+**How to play** introduces the goals, controls, enemy turns, and specialist tools
+in three short pages. You can read them without starting or changing a run.
+
+**Options** controls sound effects, volume, reduced motion, and reading size.
+Volume, motion, and text size are remembered; sound remains off until you choose
+On. The same options are available from the title, adventure library, and game
+Menu. If saving is unavailable, the options still work for the current visit.
+
+**Title screen** in Menu preserves your open trail. **Continue** returns to the
+same position and turn. After a reload, a saved expedition has its own **Resume
+expedition** entry; unfinished story/Guild runs still restart rather than claiming
+to have a checkpoint. Mapmaker returns to the editor, with its map and undo retained.
+Its mode preview also offers **Explore current map** to start your existing world
+directly; maps without enough connected land explain what to change.
+
+![Lantern Trails title screen](docs/title-desktop.png)
+
+The board opens on its own screen after you choose a mission. **Trails** opens the library; choose one
 chapter at a time, or use the Expeditions and Guild tabs. **Back to your trail**
 returns to the same run without spending a turn. Quick starts and custom-map
 play are under **Quick starts & custom map** in the library.
 
 Quest, Map, Notes, and Help tabs group the reading panels. On phones and
 tablets, **Quest & map** opens them in a separate panel; close it with × or Escape.
-**Menu** holds sound, pause, restart, and the scout hint. The board and movement
+**Menu** holds the title screen, options, sound, pause, restart, and the scout hint. The board and movement
 controls fit standard portrait and desktop screens; short phones and landscape
 use a bounded page scroll so controls remain reachable.
 
@@ -205,7 +225,8 @@ jobs, and scoring, and the [developer research](docs/RESEARCH.md) behind them.
 
 ## Play longer expeditions
 
-Choose **Trails → Expeditions & logbook** in Play adventures. Pick a seed, three/six/nine
+Choose **Choose your adventure → Expeditions** on the title screen, or
+**Trails → Expeditions & logbook** during play. Pick a seed, three/six/nine
 legs, Trail or Nemesis, and an optional oath. Each leg changes the region,
 layout, objective, and hunter encounters. Complete lost-light, relay, rescue,
 relic-courier, treasure, and final Watcher missions across four regions.
@@ -315,7 +336,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 258 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 260 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -333,7 +354,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The nine suites include `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
+editor history. The ten suites include `scripts/front-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
 Playwright is not needed to run the app or the default checks. Browser tests

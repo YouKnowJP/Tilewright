@@ -11,6 +11,41 @@ export const CHAPTERS = Object.freeze([
   { id: 'clockwork', name: 'The Clockwork Orchard', place: 'The brassleaf gardens', summary: 'Wind the forgotten garden. Bring its morning home.', sky: '#dbd3ab', far: '#a7ac7c', ridge: '#788460', dark: '#465b49', glow: '#f6c983' },
 ]);
 export const themeFor = stage => CHAPTERS.find(theme => theme.id === stage.theme) || CHAPTERS[0];
+export function drawTitleArt(canvas) {
+  canvas.width = 960; canvas.height = 600;
+  const ctx = canvas.getContext('2d');
+  const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); };
+  rect('#112d36', 0, 0, 960, 600);
+  for (let i = 0; i < 90; i++) rect(i % 3 ? '#7faaa1' : '#e9dca9', (i * 157 + 41) % 960, (i * 73 + 13) % 280, i % 3 ? 2 : 3, 2);
+  for (let y = 0; y < 10; y++) {
+    const inset = [16, 8, 4, 0, 0, 0, 0, 4, 8, 16][y];
+    rect('#f1dfa0', 732 + inset, 67 + y * 5, 50 - inset * 2, 5);
+  }
+  const pine = (x, y, size, color) => {
+    rect('#1b3434', x - size * .07, y, size * .14, size * .5);
+    for (let row = 0; row < 5; row++) rect(color, x - size * (.12 + row * .085), y - size + row * size * .19, size * (.24 + row * .17), size * .24);
+  };
+  for (let layer = 0; layer < 3; layer++) {
+    const ground = 300 + layer * 80, color = ['#24434a', '#224b46', '#193e37'][layer];
+    rect(color, 0, ground, 960, 600 - ground);
+    for (let i = 0; i < 15; i++) pine(i * 77 + (layer % 2) * 30, ground + (i * 17 % 30), 100 + layer * 25 + i % 4 * 18, color);
+  }
+  for (let y = 350; y < 600; y += 12) {
+    const width = 10 + (y - 350) * .38, x = 674 + Math.sin(y / 88) * 48;
+    rect('#877d51', x - width / 2, y, width, 12);
+    if (y % 24) rect('#ae9b64', x - width / 2 + 4, y + 2, Math.max(2, width - 12), 3);
+  }
+  for (const [x, y] of [[664, 354], [725, 442], [652, 532]]) {
+    rect('#d1b265', x - 2, y, 4, 29); rect('#ceb376', x - 9, y - 15, 18, 19);
+    rect('#fff0b1', x - 5, y - 11, 10, 11); rect('#ffe7a333', x - 17, y - 22, 34, 35);
+  }
+  // A keeper and their lantern, looking toward the distant path.
+  rect('#172f2c', 764, 518, 39, 8); rect('#965f47', 769, 488, 25, 29);
+  rect('#d69764', 771, 478, 20, 15); rect('#efc38a', 774, 487, 15, 12);
+  rect('#c48b60', 766, 477, 31, 6); rect('#eac779', 799, 501, 9, 12);
+  rect('#ffefb4', 801, 503, 5, 7); rect('#5b6247', 772, 517, 7, 10); rect('#5b6247', 784, 517, 7, 10);
+  pine(910, 572, 250, '#102c2b'); pine(49, 580, 235, '#102c2b');
+}
 export function keeperColors(id) {
   const index = [...id].reduce((sum, letter) => sum + letter.charCodeAt(0), 0) % 5;
   return [['#547d89', '#a9cfc8'], ['#806283', '#c5abd1'], ['#8b624b', '#e2b78a'], ['#6b7b4e', '#c1d28f'], ['#6b729c', '#b2c6df']][index];

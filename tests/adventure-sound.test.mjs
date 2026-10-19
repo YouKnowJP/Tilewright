@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import { createAdventureSound } from '../src/adventure-sound.mjs';
 
 test('sound is opt-in, can be toggled, releases every oscillator, and recreates a closed context', async () => {
-  const contexts = [], nodes = [];
+  const contexts = [], nodes = [], peaks = [];
   class Audio {
     state = 'suspended'; currentTime = 0; destination = {};
     constructor() { contexts.push(this); }
     async resume() { this.state = 'running'; }
     createOscillator() { const node = { frequency: {}, connect() {}, start() {}, stop() { this.onended(); }, disconnect() { this.disconnected = true; } }; nodes.push(node); return node; }
-    createGain() { const node = { gain: { setValueAtTime() {}, linearRampToValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {}, disconnect() { this.disconnected = true; } }; nodes.push(node); return node; }
+    createGain() { const node = { gain: { setValueAtTime() {}, linearRampToValueAtTime(value) { peaks.push(value); }, exponentialRampToValueAtTime() {} }, connect() {}, disconnect() { this.disconnected = true; } }; nodes.push(node); return node; }
   }
   globalThis.window = { AudioContext: Audio };
   try {
@@ -17,6 +17,10 @@ test('sound is opt-in, can be toggled, releases every oscillator, and recreates 
     assert.equal(await sound.toggle(), true);
     for (const type of ['win', 'relay-complete', 'alarm', 'shield', 'rescue', 'hurt', 'lantern', 'key', 'coin', 'unlock', 'pulse', 'veil', 'waystone', 'echo', 'echo-return', 'echo-fade', 'move']) sound.play([{ type }]);
     assert.ok(nodes.length > 30); assert.ok(nodes.every(node => node.disconnected));
+    sound.setVolume(.4); sound.play([{ type: 'coin' }]); assert.equal(peaks.at(-1), .065 * .4);
+    sound.setVolume(0); const muted = nodes.length; sound.play([{ type: 'coin' }]); assert.equal(nodes.length, muted);
+    sound.setVolume(5); sound.play([{ type: 'coin' }]); assert.equal(peaks.at(-1), .065);
+    sound.setVolume(NaN); sound.play([{ type: 'coin' }]); assert.equal(peaks.at(-1), .065);
     assert.equal(await sound.toggle(), false); const count = nodes.length; sound.play([{ type: 'win' }]); assert.equal(nodes.length, count);
     contexts[0].state = 'closed'; assert.equal(await sound.toggle(), true); assert.equal(contexts.length, 2);
     contexts[1].createOscillator = () => { throw Error('device unavailable'); }; sound.play([{ type: 'win' }]); assert.equal(sound.enabled, false);

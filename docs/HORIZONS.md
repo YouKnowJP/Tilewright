@@ -1,6 +1,6 @@
 # New horizons: the coast and the clockwork gardens
 
-Open **Play adventures → Trails → Story missions**, then choose **07 The
+Open **Play adventures → Choose your adventure → Story chapters**, then choose **07 The
 Tideglass Coast** or **08 The Clockwork Orchard**. Both chapter entries are
 open immediately. Finish their missions in order to unlock the next one.
 Each rule set keeps its own stars, score, and turn best. The campaign now has

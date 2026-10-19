@@ -4,12 +4,12 @@ import { decorateMap, themeFor, keeperColors } from './adventure-art.mjs';
 
 const same = (a, b) => a.x === b.x && a.y === b.y;
 
-export function createAdventureRenderer(canvas, stage) {
+export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPreference } = {}) {
   const background = document.createElement('canvas'); renderMap(background, stage.map); decorateMap(background, stage);
   let columns = Math.min(24, stage.map.width), rows = Math.min(16, stage.map.height);
   let state = null, previous = null, movedAt = 0;
   const near = (a, b) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <= (state?.effects.sightSquared ?? 30);
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const reducedMotion = motionPreference || matchMedia('(prefers-reduced-motion: reduce)');
 
   function resize(width, height) {
     columns = Math.min(stage.map.width, Math.max(8, Math.min(24, Math.floor(width / 28))));

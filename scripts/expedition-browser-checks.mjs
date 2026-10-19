@@ -1,4 +1,4 @@
-import { clickControl, selectControl } from './ui-driver.mjs';
+import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -52,7 +52,7 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
       page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
       page.on('response', response => { if (response.status() >= 400) failures.push(response.url()); });
       await page.clock.setFixedTime(new Date('2026-10-18T12:00:00Z'));
-      await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
+      await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
       const retained = await page.evaluate(() => Object.fromEntries(['tilewright.document.v1', 'tilewright.adventures.v1', 'tilewright.tactics.v1'].map(key => [key, localStorage.getItem(key)])));
       let count = 0;
       for (const mode of ['journey', 'contract']) for (const difficulty of ['trail', 'nemesis']) for (const vow of ['none', 'treasure', 'quiet', 'unwarded']) for (const length of mode === 'journey' ? [3, 6, 9] : [1]) {

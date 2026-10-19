@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
-import { clickControl, selectControl } from './ui-driver.mjs';
+import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 const keys = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'ArrowLeft', wait: 'Space', shield: 'c', decoy: 'q', 'drop-cargo': 'x' };
 async function play(page, actions, touch = false) {
   await page.locator('#adventure-canvas').focus();
@@ -44,7 +44,7 @@ export async function checkHorizon(browserType, { baseURL = 'http://127.0.0.1:41
       const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
       page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
       page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
-      await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
+      await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
       await clickControl(page, '#mode-create'); await page.locator('#map-name').fill('Horizon test map'); await page.locator('#map-name').blur();
       const map = await page.evaluate(() => localStorage.getItem('tilewright.document.v1')); await clickControl(page, '#mode-play');
       await play(page, intro['trail-1']);
@@ -75,7 +75,7 @@ export async function checkHorizon(browserType, { baseURL = 'http://127.0.0.1:41
       }
       await clickControl(page, '#game-primary'); assert.equal(await page.locator('#adventure-library').isVisible(), true);
       assert.equal(await page.evaluate(() => document.activeElement.textContent), '08 The Clockwork Orchard');
-      await page.reload(); await page.locator('#adventure[data-status="playing"]').waitFor();
+      await page.reload(); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
       for (const id of ['trail-21', 'trail-24']) assert.equal(await page.locator(`[data-stage="${id}"]`).isDisabled(), false);
       const data = await page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.adventures.v1')).records);
       for (let n = 19; n <= 24; n++) for (const suffix of ['', '-nemesis']) assert.equal(data[`trail-${n}${suffix}`].stars, 3);
@@ -86,7 +86,7 @@ export async function checkHorizon(browserType, { baseURL = 'http://127.0.0.1:41
       const context = await browser.newContext({ viewport: { width, height: 844 }, reducedMotion: 'reduce', hasTouch: true, isMobile: width < 761 });
       try {
         const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
-        await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
+        await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
         for (let n = 19; n <= 24; n++) {
           const fixture = fixtures.find(fixture => fixture.id === `trail-${n}` && fixture.difficulty === 'trail' && fixture.branch === 0);
           await start(page, fixture, true);

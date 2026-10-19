@@ -1,4 +1,4 @@
-import { clickControl, selectControl } from './ui-driver.mjs';
+import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -40,7 +40,7 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
       const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
       page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
       page.on('response', response => { if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`); });
-      await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
+      await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
       const map = await page.evaluate(() => localStorage.getItem('tilewright.document.v1'));
       assert.equal(await page.locator('.atlas-chapter').count(), 8); assert.equal(await page.locator('.trail-art').count(), 24);
       assert.equal(await page.locator('[data-stage="trail-11"]').isDisabled(), true);

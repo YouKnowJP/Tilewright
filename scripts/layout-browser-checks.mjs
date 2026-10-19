@@ -1,3 +1,4 @@
+import { enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,7 +10,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
       const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce', hasTouch: width < 1001 });
       try {
         const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
-        await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
+        await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
         const bounds = await page.evaluate(() => {
           const rect = id => document.querySelector(id).getBoundingClientRect().toJSON();
           return { width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight,

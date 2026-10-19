@@ -56,6 +56,18 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Game front end completed — v0.11
+
+- A title screen and illustrated mode previews before a mission starts.
+- A short field guide for new players and a shared game-themed options dialog.
+- Functional volume, opt-in sound, reduced motion, and larger reading settings,
+  with guarded preferences separate from game saves.
+- Exact Continue for an open trail, explicit saved-expedition recovery, and
+  preserved editor/map/history behavior when moving between modes.
+- A new title/menu browser suite and retained mode/playthrough checks.
+
+These completed menus are excluded from the remaining editor estimates.
+
 ## Lantern doubles completed — v0.10
 
 - Echoist's cast/return tool holds plates, lures hunters, and creates a timed

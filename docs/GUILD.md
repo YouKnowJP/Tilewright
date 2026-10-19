@@ -1,6 +1,6 @@
 # The Wayfarers’ Guild
 
-Choose **Play adventures → Trails → Guild jobs & specialists**. All eight jobs are open.
+Choose **Play adventures → Choose your adventure → Wayfarers’ Guild**. All eight jobs are open.
 The two new double routes appear first, with Echoist selected for your next job.
 Choose a specialist for the next job, then a job card. The Rules selector offers
 Trail or Nemesis; changing rules restarts the current mission. Changing the

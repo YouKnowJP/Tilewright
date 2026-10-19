@@ -25,6 +25,8 @@ installation, build-time framework, database service, or remote API.
 | `src/adventure-mechanisms.mjs` | Switch conditions, safe state changes, previews, trade availability, and definition validation. |
 | `src/adventure-intel.mjs` | Read-only, nearby next-turn warnings derived from committed enemy plans and hazard timing. |
 | `src/adventure-ui.mjs` | Mode lifecycle, campaign progression, keyboard/touch controls, HUD, hints, and results. |
+| `src/adventure-front.mjs` | Title, illustrated mode chooser, guide pages, working options, and front-menu focus/navigation. |
+| `src/adventure-preferences.mjs` | Bounded, guarded volume/motion/reading preferences, separate from game and editor saves. |
 | `src/adventure-render.mjs` | Cached map background, following camera, original sprites, fog, and discovered-map overview. |
 | `src/adventure-records.mjs` | Bounded, validated personal bests stored independently of map saves. |
 | `src/adventure-brain.mjs` | Bounded action/transition counts, decaying movement predictions, normalization, and isolated local learning persistence. |
@@ -88,6 +90,32 @@ the full workspace width, with palette and settings in separate rows.
 The renderer draws a transparency checkerboard only in editor mode. PNG
 export uses the same tile compositor without editor overlays or background.
 Rectangle previews draw their actual tile content before a single final commit.
+
+## Game entry, menus, and preferences
+
+Entering Play opens the title screen without creating a run. `adventure-ui`
+owns the title/library/board lifecycle; `adventure-front` owns title navigation,
+the illustrated mode chooser, field-guide pages, and native options dialogs.
+Browsing a mode does not advance gameplay or overwrite its checkpoint. A mission,
+Guild job, expedition start/resume, or custom-map action explicitly creates or
+restores a run. Input and animation are guarded while the title/library is open,
+and options dialogs block gameplay shortcuts. Dialogs retain native keyboard
+navigation; closing in-game options returns focus to the Menu summary.
+
+Returning to the title keeps the in-memory run and its turn/position. Continue
+shows that run before updating pending conversations. A reload offers verified
+saved-expedition recovery through the existing checkpoint loader. Unfinished
+story/Guild runs are still session-only; their best results remain separate.
+The editor is retained when changing modes, including its undo history.
+
+`tilewright.preferences.v1` contains only bounded volume, system/reduced motion,
+and standard/large reading settings. Unknown or malformed data falls back safely;
+failed writes leave preferences usable for the visit and show a warning. Audio
+is always opt-in for the current page. The volume setting scales synthesized
+effects; reduced motion is shared by both renderer creation paths and honors
+the device preference in System mode. Reading size changes trail feedback,
+conversations, and forecasts. No game/save-format or expedition-rule revision
+is required. Original title and mode artwork is drawn once with Canvas.
 
 ## Adventure simulation and rendering
 

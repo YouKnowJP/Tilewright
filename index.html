@@ -9,11 +9,12 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="adventure.css">
+  <link rel="stylesheet" href="front.css">
   <script type="module" src="src/bootstrap.mjs"></script>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.10.2</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.11.0</span></a>
     <span class="header-note">A small tool for imaginary places.</span>
     <a class="source-link" href="https://github.com/YouKnowJP/Personal-Project/tree/main/Tilewright" target="_blank" rel="noreferrer">Source code <span aria-hidden="true">↗</span></a>
   </header>
@@ -73,10 +74,35 @@
       <div class="editor-bottom"><p id="status" role="status" aria-live="polite">Welcome to Willowbend. Pick a tile and make it yours.</p><button id="help-button">Keyboard shortcuts <span aria-hidden="true">?</span></button></div>
     </section>
     <section class="adventure" id="adventure" aria-label="Lantern Trails adventure game" hidden>
+      <section id="game-title-screen" class="game-title-screen" aria-label="Lantern Trails title screen">
+        <canvas id="title-scenery" aria-hidden="true"></canvas>
+        <div id="front-home" class="front-panel title-home">
+          <p class="title-kicker">A TILEWRIGHT ADVENTURE</p><h1>Lantern<br><span>Trails</span></h1>
+          <p class="title-story">The woods have lost their light.<br>Leave a little courage along the way.</p>
+          <nav class="title-menu" aria-label="Main menu">
+            <button id="title-continue" class="front-primary" hidden>Continue trail</button>
+            <button id="title-expedition" hidden>Resume expedition</button>
+            <button id="title-play" class="front-primary">Choose your adventure</button>
+            <button id="title-guide">How to play</button><button id="title-settings">Options</button><button id="title-mapmaker">Mapmaker</button>
+          </nav>
+          <p class="title-footnote">A turn-based adventure.<br>Nothing moves until you do.</p>
+        </div>
+        <section id="front-modes" class="front-panel front-modes" hidden aria-labelledby="front-modes-title">
+          <button id="front-back" class="front-back">Back to title</button><p class="title-kicker">CHOOSE A PATH</p>
+          <h2 id="front-modes-title" tabindex="-1">What kind of journey?</h2><p>Explore a world, try a new tool, or make a path of your own.</p>
+          <div class="front-mode-grid">
+            <button id="front-story" data-front-mode="story"><canvas data-mode-art="woodland" aria-hidden="true"></canvas><strong>Story chapters</strong><span>Follow the lost lanterns through forests, shores, and clockwork gardens. A gentle first trail teaches the way.</span><small>24 missions · 8 chapters · Start here</small></button>
+            <button id="front-guild" data-front-mode="guild"><canvas data-mode-art="clockwork" aria-hidden="true"></canvas><strong>Wayfarers’ Guild</strong><span>Choose a specialist. Leave a double, cast a veil, or halt a hunter. Take any job and find your own route.</span><small>8 jobs · 3 specialists · Replay for honors</small></button>
+            <button id="front-expeditions" data-front-mode="expeditions"><canvas data-mode-art="aurora" aria-hidden="true"></canvas><strong>Expeditions</strong><span>Build a toolkit between trails. Make camp, choose the next road, and return to a saved journey.</span><small>Short or long journeys · Daily trails</small></button>
+            <article class="front-mapmaker-card"><canvas data-mode-art="coast" aria-hidden="true"></canvas><strong>Mapmaker</strong><span>Paint a little world, then explore it. Shape a new map in the editor, or enter the world you already have ready.</span><small>Build a world · Play your own map</small><div><button id="front-mapmaker" data-front-mode="mapmaker">Open Mapmaker</button><button id="front-custom">Explore current map</button></div></article>
+          </div>
+          <p id="front-mode-notice" class="front-mode-notice" role="status" hidden></p>
+        </section>
+      </section>
       <div id="adventure-library" hidden>
-      <div class="library-return"><button id="library-resume">← Back to your trail</button><span>Your current run stays here while you browse.</span></div>
+      <div class="library-return"><button id="library-title">Title screen</button><button id="library-options">Options</button><button id="library-resume" hidden>← Back to your trail</button><span id="library-run-note" hidden>Your current run stays here while you browse.</span></div>
       <p id="library-notice" class="library-notice" role="status" hidden></p>
-      <div class="adventure-heading"><div><p class="eyebrow">LANTERN TRAILS</p><h2>Choose your next trail.</h2><p>24 story missions · eight Guild jobs · seeded expeditions</p></div><div class="adventure-options"><label for="game-difficulty">Rules <small>changes restart this mission</small></label><select id="game-difficulty"><option value="trail">Trail · three hearts</option><option value="nemesis">Nemesis · two hearts, smarter hunters</option></select></div></div>
+      <div class="adventure-heading"><div><p class="eyebrow">LANTERN TRAILS</p><h2>Choose your next trail.</h2><p>24 story missions · eight Guild jobs · seeded expeditions</p></div><div class="adventure-options"><label for="game-difficulty">Rules <small id="library-rules-note">choose rules before starting</small></label><select id="game-difficulty"><option value="trail">Trail · three hearts</option><option value="nemesis">Nemesis · two hearts, smarter hunters</option></select></div></div>
       <nav class="adventure-library-tabs" aria-label="Adventure library"><button id="library-story" aria-pressed="true">Story missions</button><button id="library-expeditions" aria-pressed="false">Expeditions &amp; logbook</button><button id="library-guild" aria-pressed="false">Guild jobs &amp; specialists</button></nav>
       <section id="expedition-hub" class="expedition-hub" aria-label="Expedition hub" hidden>
         <div class="expedition-intro"><p class="eyebrow">A DIFFERENT WAY THROUGH THE WOODS</p><h2>A long road. A new story.</h2><p>Choose your seed, make camp, and build a toolkit for the trail. Routes, objectives, regions, and hunters change between legs.</p></div>
@@ -99,9 +125,9 @@
       <div class="trail-picker" id="trail-picker" aria-label="Adventure selection"></div>
       <details class="library-shortcuts"><summary>Quick starts &amp; custom map</summary><div><button id="begin-expedition">Start an expedition</button><button id="begin-contracts">Begin hard missions</button><button id="begin-sluices">Play the sluice saga</button><button id="play-custom">Play your current map <span aria-hidden="true">↗</span></button></div></details>
       </div>
-      <div class="game-layout" id="game-layout">
+      <div class="game-layout" id="game-layout" hidden>
         <section class="game-main" aria-labelledby="game-title">
-          <p class="game-region" id="game-region"></p><p class="game-rule-note" id="game-rule-note" hidden></p><div class="game-toolbar"><div><h3 id="game-title">Candlebrook</h3><p id="game-subtitle">The lost lanterns</p></div><div class="game-toolbar-actions"><button id="game-choose">Trails</button><button id="game-notes-button" aria-controls="game-aside">Quest &amp; map</button><button id="game-inspect">Plan · V</button><details class="game-menu" id="game-menu"><summary>Menu</summary><div><button id="game-hint-button" aria-expanded="false" aria-controls="game-hint">Scout hint</button><button id="game-sound" aria-pressed="false">Sound off</button><button id="game-pause" aria-pressed="false">Pause</button><button id="game-restart">Restart</button></div></details></div></div>
+          <p class="game-region" id="game-region"></p><p class="game-rule-note" id="game-rule-note" hidden></p><div class="game-toolbar"><div><h3 id="game-title">Candlebrook</h3><p id="game-subtitle">The lost lanterns</p></div><div class="game-toolbar-actions"><button id="game-choose">Trails</button><button id="game-notes-button" aria-controls="game-aside">Quest &amp; map</button><button id="game-inspect">Plan · V</button><details class="game-menu" id="game-menu"><summary>Menu</summary><div><button id="game-title-menu">Title screen</button><button id="game-settings-button">Options</button><button id="game-hint-button" aria-expanded="false" aria-controls="game-hint">Scout hint</button><button id="game-sound" aria-pressed="false">Sound off</button><button id="game-pause" aria-pressed="false">Pause</button><button id="game-restart">Restart</button></div></details></div></div>
 
           <div class="game-hud" aria-label="Adventure status"><div><span>HEARTS</span><strong id="game-health" class="resource-meter" role="img" aria-label="Health: 3 of 3"></strong></div><div><span>ENERGY</span><strong id="game-energy" class="resource-meter" role="img" aria-label="Energy: 3 of 3"></strong></div><div><span>LANTERNS</span><strong id="game-lanterns">0/3</strong></div><div><span>KEYS</span><strong id="game-keys">0</strong></div><div><span>TREASURES</span><strong id="game-coins">0/4</strong></div><div><span>TURNS</span><strong id="game-turns">0</strong></div></div>
           <p id="game-expedition-banner" class="game-expedition-banner" hidden></p>
@@ -130,6 +156,22 @@
   <input type="file" id="file-input" accept="application/json,.json" hidden>
   <input id="expedition-file" type="file" accept="application/json,.json" hidden>
   <dialog id="game-notes-dialog" class="game-notes-dialog" aria-labelledby="game-notes-title"></dialog>
+  <dialog id="game-guide-dialog" class="front-dialog" aria-labelledby="guide-page-title">
+    <div class="front-dialog-heading"><p class="title-kicker">A KEEPER’S FIELD GUIDE</p><button id="guide-close" aria-label="Close field guide">Close</button></div>
+    <h2 id="guide-page-title">Bring back the light</h2>
+    <section class="guide-page"><div class="guide-illustration guide-lantern" aria-hidden="true"><span></span></div><p>Explore the map and restore its golden lanterns. When the work is done, return to the turquoise beacon.</p><p>Keepers have stories, supplies, and sometimes a choice to offer. Walk beside one and press <kbd>E</kbd> or use <strong>Interact</strong>.</p><p>Quest holds your mission’s goals. The map grows as you explore. There is no real-time countdown.</p></section>
+    <section class="guide-page" hidden><div class="guide-controls" aria-label="Movement keys"><kbd>↑</kbd><div><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div></div><p>Move with <strong>arrows or WASD</strong>. On a phone, swipe the map or use the direction pad. Walking restores energy.</p><p><strong>Shift + a direction</strong> dashes two cells for two energy. <strong>Space / Wait</strong> lets the world take a turn while you recharge.</p><p>Enemies show their next step in red. Look before moving. <strong>Plan / V</strong> explains threats without spending a turn. Talk, read, or pause for as long as you like.</p></section>
+    <section class="guide-page" hidden><div class="guide-illustration guide-double" aria-hidden="true"><span></span><span></span></div><p><strong>Story</strong> starts with keys, lanterns, and readable patrols. Later chapters add bridges, bells, rescue companions, and singing relics.</p><p><strong>Guild jobs</strong> offer three tools. Bellrunner interrupts hunters; Mistweaver hides new movement; Echoist leaves a double and can return to it. Each tool uses <kbd>B</kbd>.</p><p><strong>Expeditions</strong> link trails through camps and upgrades. Choose Trail for a gentler journey or Nemesis for stronger hunters. Your choices begin on the adventure screen.</p></section>
+    <div class="front-dialog-actions"><button id="guide-back">Previous</button><span id="guide-page-count" aria-live="polite">1 / 3</span><button id="guide-next" class="front-primary">Next</button><button id="guide-choose" class="front-primary" hidden>Choose an adventure</button></div>
+  </dialog>
+  <dialog id="game-settings-dialog" class="front-dialog settings-dialog" aria-labelledby="settings-title">
+    <div class="front-dialog-heading"><p class="title-kicker">MAKE THE TRAIL YOURS</p><button id="settings-close">Back</button></div><h2 id="settings-title">Options</h2>
+    <section class="settings-row"><div><h3>Sound effects</h3><p id="settings-audio-note">A quiet trail. Turn sound on when you are ready.</p></div><div class="option-buttons" aria-label="Sound effects"><button data-sound="off" aria-pressed="true">Off</button><button data-sound="on" aria-pressed="false">On</button></div></section>
+    <section class="settings-row"><div><label for="settings-volume">Volume</label><p>Lantern chimes and trail signals.</p></div><div class="volume-control"><input id="settings-volume" type="range" min="0" max="100" step="5" value="60"><output id="settings-volume-value" for="settings-volume">60%</output></div></section>
+    <section class="settings-row"><div><h3>Motion</h3><p>Reduced motion keeps movement and effects still. System follows your device preference.</p></div><div class="option-buttons" aria-label="Motion"><button data-motion="system" aria-pressed="true">System</button><button data-motion="reduced" aria-pressed="false">Reduced</button></div></section>
+    <section class="settings-row"><div><h3>Reading size</h3><p>For trail messages, conversations, and forecasts.</p></div><div class="option-buttons" aria-label="Reading size"><button data-text-size="standard" aria-pressed="true">Standard</button><button data-text-size="large" aria-pressed="false">Large</button></div></section>
+    <p id="settings-save-note" class="settings-save-note" role="status">Volume, motion, and reading size stay with this browser. Sound starts only when you choose On.</p>
+  </dialog>
   <dialog id="camp-dialog" class="camp-dialog" aria-labelledby="camp-title"><form id="camp-form"><p class="eyebrow">THE WORLD CAN WAIT A LITTLE</p><h2 id="camp-title"></h2><p id="camp-summary"></p><fieldset><legend>Choose something for the road</legend><div id="camp-perks" class="camp-perks"></div></fieldset><fieldset><legend>Choose the next trail</legend><div id="camp-routes" class="camp-routes"></div></fieldset><p id="camp-error" class="expedition-error" role="alert" hidden></p><div class="dialog-actions"><button id="camp-cancel" type="button">Stay by the fire</button><button id="camp-continue" class="primary" type="submit">Continue expedition →</button></div></form></dialog>
   <dialog id="forecast-dialog" class="forecast-dialog" aria-labelledby="forecast-title"><p class="eyebrow">READ THE TRAIL</p><h2 id="forecast-title">Before your next turn</h2><div id="forecast-lines"></div><button id="forecast-close">Back to the board</button></dialog>
   <dialog id="conversation-dialog" class="conversation-dialog" aria-labelledby="conversation-name"><p class="eyebrow">A VOICE ON THE TRAIL</p><canvas id="conversation-portrait" class="keeper-portrait" width="64" height="64" aria-hidden="true"></canvas><h2 id="conversation-name"></h2><div id="conversation-lines"></div><p id="conversation-wallet" hidden></p><div id="conversation-options"></div><button id="conversation-close">Back to the trail</button></dialog>
