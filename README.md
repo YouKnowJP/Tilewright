@@ -46,9 +46,10 @@ controls fit standard portrait and desktop screens; short phones and landscape
 use a bounded page scroll so controls remain reachable.
 
 Gameplay messages stay directly beneath the map, above the movement controls.
-Larger, high-contrast text and clear labels distinguish blocked paths, damage,
-and successful actions. Messages remain until the next action; dialogue and
-Plan forecasts also use larger, darker text.
+A dark, gold-framed text box uses large, high-contrast lettering and in-world
+messages. Quest progress uses words and counts without checkbox symbols.
+Messages remain until the next action; dialogue and Plan forecasts also use
+larger text.
 
 Restore every golden lantern, then reach the turquoise beacon. The world advances after a valid move, wait, or tactical interaction; there is no timer.
 Dialogue and the Plan forecast pause the turn rules. Blocked moves cost nothing.

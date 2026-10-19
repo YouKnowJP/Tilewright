@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.2 — 2026-10-19
+
+- Replace alert-style message panels with a dark, gold-framed game text box and
+  16px monospace lettering. Remove status icons and headings; keep readable
+  contrast, persistent text, and the existing position beneath the map.
+- Use in-world messages for travel, rest, and blocked keepers. Carried relics
+  and audible footsteps retain their distinct warnings.
+- Remove checkmarks, empty circles, and cross/medallion markers from quest notes,
+  side goals, and Guild commendations. Express progress with words and counts.
+- Update browser checks to verify actual completion and earned state instead
+  of matching decorative symbols. Preserve game rules and saved progress.
+
 ## 0.10.1 — 2026-10-19
 
 - Move gameplay feedback directly between the map and controls. Use persistent

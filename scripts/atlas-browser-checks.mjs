@@ -29,7 +29,7 @@ async function won(page, fixture) {
   assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won', `${fixture.id}/${fixture.difficulty}/${fixture.branch}`);
   assert.equal(await page.locator('#game-stars').textContent(), '★★★');
   assert.equal(await page.locator('#game-turns').textContent(), String(fixture.result.turns));
-  assert.match(await page.locator('#game-sidequests').textContent(), /✓ Finish without taking damage/);
+  assert.match(await page.locator('#game-sidequests').textContent(), /Finish without taking damage — complete/);
 }
 export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrome', fixtures, screenshots = false, widths = [320, 390, 768, 1024] } = {}) {
   fixtures ??= JSON.parse(await readFile(new URL('../tests/fixtures/atlas-routes.json', import.meta.url), 'utf8'));
@@ -62,7 +62,7 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
         await won(page, fixture);
         if (fixture.id === 'trail-18') {
           assert.equal(await page.locator('#quest-plates').isVisible(), false);
-          assert.match(await page.locator('#game-sidequests').textContent(), fixture.branch ? /✓ Build the optional weight bridge/ : /○ Build the optional weight bridge/);
+          assert.equal(await page.locator('#game-sidequests p').filter({ hasText: 'Build the optional weight bridge' }).getAttribute('data-complete'), String(Boolean(fixture.branch)));
         }
         const record = await page.evaluate(key => JSON.parse(localStorage.getItem('tilewright.adventures.v1')).records[key], fixture.id + (fixture.difficulty === 'nemesis' ? '-nemesis' : ''));
         assert.equal(record.stars, 3);

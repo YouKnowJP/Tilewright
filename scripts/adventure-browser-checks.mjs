@@ -71,6 +71,7 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
           await playRoute(page, routes[id]);
           assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won', `${id} must finish through real keyboard input.`);
           assert.equal(await page.locator('#game-stars').textContent(), '★★★');
+          assert.doesNotMatch(await page.locator('#game-status, #notes-quest').allTextContents().then(parts => parts.join(' ')), /[✓○✦]/);
           const records = await page.evaluate(key => JSON.parse(localStorage.getItem(key)).records, recordKey);
           assert.equal(records[id].turns, routes[id].length); assert.equal(records[id].stars, 3);
           assert.equal(await page.evaluate(key => localStorage.getItem(key), editorKey), map);

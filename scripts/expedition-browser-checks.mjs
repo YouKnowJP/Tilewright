@@ -189,7 +189,7 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
           }
         }
         assert.ok(dropped); assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won');
-        assert.match(await page.locator('#quest-mission').textContent(), /✓.*relic/i);
+        assert.match(await page.locator('#quest-mission [data-complete="true"]').allTextContents().then(lines => lines.join(' ')), /relic/i);
         if (screenshots && width === 390) await page.screenshot({ path: '.playwright-mcp/expedition-courier-mobile.png' });
         const journey = fixtures.find(item => item.id === 'long-voyage'); await begin(page, journey.config); await replay(page, journey.legs[0].actions);
         await clickControl(page, '#game-primary', true); const box = await page.locator('#camp-dialog').boundingBox();

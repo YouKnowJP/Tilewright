@@ -92,7 +92,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       button.append(art, Object.assign(document.createElement('strong'), { textContent: stage.name }),
         Object.assign(document.createElement('span'), { textContent: stage.subtitle }),
         Object.assign(document.createElement('small'), { className: 'guild-merit-preview', textContent: stage.guild.merits.map(id => MERITS[id]).join(' / ') }),
-        Object.assign(document.createElement('small'), { textContent: record ? `${'✦'.repeat(record.merits)}${'○'.repeat(3 - record.merits)} · ${record.turns} turns · ${record.score} points` : 'Open job · three optional commendations' }));
+        Object.assign(document.createElement('small'), { textContent: record ? `${record.merits}/3 commendations · ${record.turns} turns · ${record.score} points` : 'Open job · three optional commendations' }));
       button.addEventListener('click', () => start(stage)); return button;
     }));
     const matches = Object.entries(guildRecords).filter(([id]) => id.endsWith(`-${selectedKit}-${difficulty}`));
@@ -179,11 +179,15 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     container.replaceChildren(...nodes); container.setAttribute('aria-label', `${heart ? 'Health' : 'Energy'}: ${value} of ${max}`);
   }
 
-  function showStatus(text, tone = 'info', label = 'On the trail') {
+  function showStatus(text, tone = 'info') {
     const status = $('#game-status'); status.dataset.tone = tone;
-    $('#game-status-mark').textContent = tone === 'success' ? '✓' : ['warning', 'danger'].includes(tone) ? '!' : 'i';
-    $('#game-status-label').textContent = label;
     $('#game-status-text').textContent = text;
+  }
+
+  function questEntry(goal) {
+    const entry = document.createElement('p'); entry.dataset.complete = String(goal.done);
+    entry.textContent = `${goal.text || goal.label}${goal.done ? ' — complete' : ''}`;
+    return entry;
   }
 
   function update() {
@@ -205,7 +209,8 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       $('#game-guild-state').textContent = `${preview} Cast ${run.guild.uses} times. ${run.guild.warps} waystone jumps.${kit.id === 'echoist' ? ` ${run.guild.swaps} double returns.` : ''}${run.guild.veilUntil > run.turns ? ` Veil: ${run.guild.veilUntil - run.turns} turns; ${run.carrying || run.alarm ? 'revealed by cargo/alarm' : 'recent leads still persist'}.` : ''}`;
       $('#game-guild-merits').replaceChildren(...guildMerits(run).map(merit => {
         const failed = merit.id === 'clean' && run.damage > 0 || merit.id === 'swift' && run.turns > turnTarget(run);
-        return Object.assign(document.createElement('p'), { className: failed ? 'merit-missed' : '', textContent: `${merit.done ? '✦' : failed ? '×' : '○'} ${merit.label}` });
+        const entry = Object.assign(document.createElement('p'), { className: failed ? 'merit-missed' : '', textContent: `${merit.label}${merit.done ? ' — earned' : failed ? ' — missed' : ''}` });
+        entry.dataset.earned = String(merit.done); return entry;
       }));
     }
     $('#game-rule-note').hidden = !stage.restrictions.noDash && !stage.restrictions.noShield && !stage.requireCoins;
@@ -232,12 +237,12 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#game-keys').textContent = run.keyCount;
     $('#game-coins').textContent = `${run.collectedCoins.length}/${stage.coins.length}`;
     resource($('#game-health'), run.health, MAX_HEARTS, true); resource($('#game-energy'), run.energy, MAX_ENERGY);
-    $('#quest-lanterns').textContent = `${run.collectedLanterns.length === stage.lanterns.length ? '✓' : '○'} Restore ${stage.lanterns.length === 1 ? 'the lantern' : `all ${stage.lanterns.length} lanterns`}`;
+    $('#quest-lanterns').textContent = run.collectedLanterns.length === stage.lanterns.length ? 'Every lantern burns bright.' : `Lanterns alight: ${run.collectedLanterns.length} of ${stage.lanterns.length}.`;
     $('#quest-plates').hidden = !stage.plates.length || Boolean(stage.optionalPlates);
-    $('#quest-plates').textContent = `${activePlates(run).length === stage.plates.length ? '✓' : '○'} Hold ${stage.plates.length} copper ${stage.plates.length === 1 ? 'plate' : 'plates'} with crates`;
+    $('#quest-plates').textContent = activePlates(run).length === stage.plates.length ? 'The copper plates hold the crossing open.' : `Hold ${stage.plates.length} copper ${stage.plates.length === 1 ? 'plate' : 'plates'} with crates.`;
     const extraGoals = missionGoals(run).slice(1);
     $('#quest-mission').hidden = !extraGoals.length;
-    $('#quest-mission').replaceChildren(...extraGoals.map(goal => Object.assign(document.createElement('p'), { textContent: `${goal.done ? '✓' : '○'} ${goal.label}` })));
+    $('#quest-mission').replaceChildren(...extraGoals.map(questEntry));
     const nearby = nearbyInteractions(run);
     const interact = nearby.find(item => item.id === interactionId) || nearby[0]; interactionId = interact?.id || null;
     $('#game-target-wrap').hidden = nearby.length < 2;
@@ -266,21 +271,21 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       ...(stage.npcs.length ? [{ text: `Hear every keeper’s story (${run.talkedTo.length}/${stage.npcs.length})`, done: run.talkedTo.length === stage.npcs.length }] : []),
       { text: `Finish without taking damage${run.status === 'playing' && run.damage === 0 ? ' (clean so far)' : ''}`, done: run.status === 'won' && run.damage === 0 },
     ];
-    $('#game-sidequests').replaceChildren(...sidequests.map(goal => Object.assign(document.createElement('p'), { textContent: `${goal.done ? '✓' : '○'} ${goal.text}` })));
+    $('#game-sidequests').replaceChildren(...sidequests.map(questEntry));
     updateConversation();
-    $('#quest-beacon').textContent = `${run.status === 'won' ? '✓' : '○'} Reach the turquoise beacon`;
+    $('#quest-beacon').textContent = run.status === 'won' ? 'The beacon shines again.' : 'Return to the turquoise beacon.';
     $('#game-hint').hidden = !hintVisible;
     $('#game-hint-text').textContent = scoutHint(run);
     $('#game-hint-button').setAttribute('aria-expanded', String(hintVisible));
     const incoming = boss?.mode === 'charging sweep' && Math.abs(boss.x - run.player.x) + Math.abs(boss.y - run.player.y) <= 7;
     const intro = run.turns === 0 && run.message === stage.intro;
     const progress = run.events.find(event => ['lantern', 'key', 'unlock', 'delivery', 'relay-complete', 'win'].includes(event.type));
-    const warning = !intro && !progress && /blocked|closed|locked|cannot|needs? |no .+ left|occupied|occupies|recharges|oath:/.test(run.message.toLowerCase());
+    const warning = !intro && !progress && /block(?:ed|s)?|closed|locked|cannot|needs? |no .+ left|occupied|occupies|recharges|oath:/.test(run.message.toLowerCase());
     const danger = run.events.some(event => ['hurt', 'alarm'].includes(event.type)) || incoming || run.status === 'lost';
-    const labels = { lantern: 'Lantern restored', key: 'Key found', unlock: 'Gate unlocked', delivery: 'Relic delivered', 'relay-complete': 'Relays powered', win: 'Mission complete' };
-    showStatus(paused ? 'Resume when you are ready. The world waits for you.' : intro ? 'Restore the lanterns. Check Quest for this mission’s other goals.' : `${run.message}${incoming ? ' Watcher sweep incoming: leave the crossed cells!' : ''}`,
-      paused ? 'info' : danger ? 'danger' : warning ? 'warning' : progress ? 'success' : 'info',
-      paused ? 'Paused' : danger ? incoming ? 'Sweep incoming' : 'Watch your step' : warning ? /blocked|closed|locked|cannot move/.test(run.message.toLowerCase()) ? 'Path blocked' : 'Check your next move' : labels[progress?.type] || 'On the trail');
+    const quietStep = run.message === 'Watch the hunters. Use cover, change direction, or create an opening.';
+    const travelText = run.carrying ? 'The relic sings. Hunters can hear it.' : run.noise ? 'Your footsteps echo along the trail.' : 'The trail leads onward.';
+    showStatus(paused ? 'Take a breath. The trail will wait.' : intro ? 'Find the lost lanterns. The beacon is waiting.' : `${quietStep ? travelText : run.message}${incoming ? ' A Watcher sweep is coming. Leave the marked ground!' : ''}`,
+      paused ? 'info' : danger ? 'danger' : warning ? 'warning' : progress ? 'success' : 'info');
     $('#dash-button').classList.toggle('armed', dashArmed); $('#dash-button').setAttribute('aria-pressed', String(dashArmed));
     $('#dash-button').disabled = paused || run.status !== 'playing' || run.energy < 2 || run.stage.restrictions.noDash;
     document.querySelectorAll('[data-move], #game-wait').forEach(button => { button.disabled = paused || run.status !== 'playing'; });
@@ -447,7 +452,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#game-back-editor').addEventListener('click', backToEditor);
   $('#play-custom').addEventListener('click', () => {
     try { start(createCustomStage(getMap())); }
-    catch (error) { showStatus(error.message, 'warning', 'Map needs attention'); $('#library-notice').textContent = error.message; $('#library-notice').hidden = false; }
+    catch (error) { showStatus(error.message, 'warning'); $('#library-notice').textContent = error.message; $('#library-notice').hidden = false; }
   });
   document.addEventListener('keydown', event => {
     if (active && run && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey && event.target.id === 'game-target' && event.key.toLowerCase() === 'e') {

@@ -60,13 +60,11 @@
 .game-controls kbd { margin-left:10px; font-size:8px; color:#8e977c; border:1px solid #dde3d0; padding:2px 4px; border-radius:3px; }
 .game-controls #dash-button.armed { background:#f7e9c5; border-color:#cfb16c; }
 .game-controls>p { margin-left:auto; font-size:9px; line-height:1.9; color:#8d967e; }
-.game-status { --feedback-ink:#203e34; --feedback-paper:#f0f5e8; --feedback-line:#74916a; display:grid; grid-template-columns:28px minmax(0,1fr); align-items:center; gap:10px; min-height:72px; padding:10px 14px; color:var(--feedback-ink); background:var(--feedback-paper); border-block:1px solid var(--feedback-line); border-left:5px solid var(--feedback-line); }
-.game-status[data-tone="warning"] { --feedback-ink:#593715; --feedback-paper:#fff0ca; --feedback-line:#b77a25; }
-.game-status[data-tone="danger"] { --feedback-ink:#79281d; --feedback-paper:#ffebe3; --feedback-line:#bc5844; }
-.game-status[data-tone="success"] { --feedback-ink:#20533b; --feedback-paper:#e8f5e6; --feedback-line:#4f8a5c; }
-.game-status-mark { display:grid; place-items:center; width:28px; height:28px; border:2px solid currentColor; border-radius:50%; font-size:19px; font-weight:800; line-height:1; }
-#game-status-label { display:block; margin-bottom:3px; font-size:12px; font-weight:800; line-height:1.25; }
-#game-status-text { margin:0; font-size:16px; font-weight:600; line-height:1.45; overflow-wrap:anywhere; }
+.game-status { --feedback-ink:#f5ebce; --feedback-paper:#203c36; --feedback-line:#b2a370; min-height:68px; padding:14px 16px; color:var(--feedback-ink); background:var(--feedback-paper); border:2px solid var(--feedback-line); box-shadow:inset 0 0 0 3px var(--feedback-paper),inset 0 0 0 4px #b2a37066; }
+.game-status[data-tone="warning"] { --feedback-ink:#ffe6b2; --feedback-paper:#3b3326; --feedback-line:#c7a365; }
+.game-status[data-tone="danger"] { --feedback-ink:#ffddc6; --feedback-paper:#4c2828; --feedback-line:#c68a70; }
+.game-status[data-tone="success"] { --feedback-ink:#e4f5ce; --feedback-paper:#253f34; --feedback-line:#9eb680; }
+#game-status-text { margin:0; font:500 16px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace; overflow-wrap:anywhere; }
 .game-aside { display:flex; flex-direction:column; gap:16px; min-width:0; }
 .game-aside section { border:1px solid #dce3d2; background:#fffefa; border-radius:8px; padding:19px; }
 .game-aside h3 { font-size:15px; font-weight:500; margin:10px 0; letter-spacing:-.3px; }
@@ -437,7 +435,7 @@ summary:focus-visible,[role="tabpanel"]:focus-visible { outline:3px solid #b67d4
   .playing .tactical-actions { gap:5px; }
   .playing .tactical-actions button { min-height:44px; font-size:10px; padding:7px 3px; }
   .playing .tactical-actions button span { margin-left:3px; min-width:14px; padding:1px; }
-  .playing .game-status { padding:9px 10px; gap:8px; }
+  .playing .game-status { padding:12px; }
   .playing .game-target-wrap { font-size:10px; }
   .playing .game-target-wrap select { min-height:36px; padding:5px 7px; }
   .playing .game-controls>.game-interaction-note:not([hidden]) { font-size:9px; }

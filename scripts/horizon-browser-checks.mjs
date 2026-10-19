@@ -31,8 +31,8 @@ async function won(page, fixture) {
   assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won', `${fixture.id}/${fixture.difficulty}/${fixture.branch}`);
   assert.equal(await page.locator('#game-stars').textContent(), '★★★');
   assert.equal(await page.locator('#game-turns').textContent(), String(fixture.result.turns));
-  assert.match(await page.locator('#game-sidequests').textContent(), /✓ Finish without taking damage/);
-  if (fixture.id === 'trail-24') assert.match(await page.locator('#game-sidequests').textContent(), fixture.branch ? /✓ Build the optional weight bridge/ : /○ Build the optional weight bridge/);
+  assert.match(await page.locator('#game-sidequests').textContent(), /Finish without taking damage — complete/);
+  if (fixture.id === 'trail-24') assert.equal(await page.locator('#game-sidequests p').filter({ hasText: 'Build the optional weight bridge' }).getAttribute('data-complete'), String(Boolean(fixture.branch)));
 }
 export async function checkHorizon(browserType, { baseURL = 'http://127.0.0.1:4174', channel = 'chrome', fixtures, widths = [320, 390, 768, 1024], screenshots = false, onProgress = () => {} } = {}) {
   fixtures ??= JSON.parse(await readFile(new URL('../tests/fixtures/horizon-routes.json', import.meta.url), 'utf8'));

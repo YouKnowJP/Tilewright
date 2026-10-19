@@ -26,8 +26,9 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         // Reach a real blocked cell (Mira), rather than injecting display text.
         await page.locator('#adventure-canvas').focus(); await page.keyboard.press('ArrowLeft');
         assert.equal(await page.locator('#game-turns').textContent(), '0');
-        assert.equal(await page.locator('#game-status-label').textContent(), 'Path blocked');
-        assert.match(await page.locator('#game-status-text').textContent(), /blocked/);
+        assert.match(await page.locator('#game-status-text').textContent(), /Mira blocks the trail/);
+        assert.equal(await page.locator('#game-status-mark, #game-status-label').count(), 0);
+        assert.doesNotMatch(await page.locator('#game-status, #notes-quest').allTextContents().then(parts => parts.join(' ')), /[✓○✦]/);
         const feedback = await page.evaluate(() => {
           const status = document.querySelector('#game-status'), text = document.querySelector('#game-status-text'), style = getComputedStyle(status);
           const light = color => {
@@ -50,12 +51,12 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         assert.ok(await page.locator('#conversation-lines p').first().evaluate(el => parseFloat(getComputedStyle(el).fontSize) >= 16));
         await page.locator('#conversation-close').click();
         await page.locator('#adventure-canvas').focus(); await page.keyboard.press('ArrowLeft');
-        assert.equal(await page.locator('#game-status-label').textContent(), 'Path blocked');
+        assert.match(await page.locator('#game-status-text').textContent(), /Mira blocks the trail/);
         await page.keyboard.press('ArrowUp');
         assert.equal(await page.locator('#game-status').getAttribute('data-tone'), 'info');
         for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowUp');
         await page.keyboard.press('ArrowRight');
-        assert.equal(await page.locator('#game-status-label').textContent(), 'Key found');
+        assert.match(await page.locator('#game-status-text').textContent(), /brass key/);
         assert.equal(await page.locator('#game-status').getAttribute('data-tone'), 'success');
         await page.locator('#game-menu summary').click(); await page.locator('#game-restart').click();
         // Opening menus and reading must never spend a turn.

@@ -1,5 +1,28 @@
 # Verification record
 
+## Game text and symbol-free progress — v0.10.2
+
+The 258 Node tests and 37-file build pass. The seven-size Chrome layout suite
+verifies that the dark game text box has no status icon or alert heading,
+contains no checkbox symbols, keeps 16px text and at least 7:1 contrast, and
+preserves controls, focus, and bounded short-screen scrolling. Blocked keepers,
+repeated input, dialogue, normal travel, and key pickups use real actions.
+
+The complete introductory browser suite passes again, including three-star
+wins, icon-free completed quest notes, saved progress, editor-history isolation,
+touch/swipe, pause, and storage failure. Both new double jobs finish on 320px
+and 390px touch layouts. The completed rescue/delivery job additionally checks
+plain-text goals, earned commendations, and its saved Guild result. Other
+browser helpers now inspect completion metadata rather than decorative glyphs;
+their wider playthrough coverage retains the version-specific scope below.
+
+Messages use a gold-framed, monospace game text box without checkmarks, circles,
+or notification headings. Quest notes and Guild results use words and counts.
+Desktop and phone screenshots were inspected. Saved game state and turn rules
+remain unchanged; no new external fonts, assets, or services are required.
+
+![The in-game message box on a phone](feedback-mobile.png)
+
 ## Readable gameplay feedback — v0.10.1
 
 **258 Node tests**, syntax checks, and the **37-file build** pass. The seven-size

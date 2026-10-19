@@ -28,7 +28,9 @@ async function won(page, fixture) {
   assert.equal(await page.locator('#game-stars').textContent(), '★★★'); assert.equal(await page.locator('#game-turns').textContent(), String(fixture.result.turns));
   const count = fixture.merits.filter(merit => merit.done).length;
   assert.ok((await page.locator('#game-result-text').textContent()).includes(`${count}/3 commendations`));
-  if (count === 3) assert.equal((await page.locator('#game-guild-merits').textContent()).includes('○'), false);
+  assert.equal(await page.locator('#game-guild-merits [data-earned="true"]').count(), count);
+  assert.equal(await page.locator('#quest-mission [data-complete="false"]').count(), 0);
+  assert.doesNotMatch(await page.locator('#game-guild-merits, #notes-quest, #game-status').allTextContents().then(parts => parts.join(' ')), /[✓○✦]/);
 }
 export { start as startGuild, play as playGuild, won as assertGuildWin };
 export async function checkGuild(browserType, { baseURL = BASE, channel = 'chrome', fixtures, alternates, screenshots = false, widths = [320, 390, 768, 1024], onProgress = () => {}, desktop = true } = {}) {

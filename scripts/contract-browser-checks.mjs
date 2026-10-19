@@ -53,7 +53,7 @@ export async function checkContracts(browserType, { baseURL = BASE, channel = 'c
           await playContract(page, routes[id]);
           assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won', `Complete ${id} with real keyboard actions and dialogue choices.`);
           assert.equal(await page.locator('#game-stars').textContent(), '★★★');
-          assert.equal(await page.locator('#quest-mission').textContent().then(text => text.includes('○')), false);
+          assert.equal(await page.locator('#quest-mission [data-complete="false"]').count(), 0);
           assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), map);
           const data = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), memoryKey);
           assert.ok(data.memory.observations > 30);

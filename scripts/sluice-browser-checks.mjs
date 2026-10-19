@@ -66,7 +66,7 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
         }
         assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won', `${fixture.id}/${fixture.difficulty}/${fixture.branch}`);
         assert.equal(await page.locator('#game-stars').textContent(), '★★★'); assert.equal(await page.locator('#game-turns').textContent(), String(fixture.result.turns));
-        assert.equal(await page.locator('#quest-mission').textContent().then(text => text.includes('○')), false);
+        assert.equal(await page.locator('#quest-mission [data-complete="false"]').count(), 0);
         const records = await page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.adventures.v1')).records);
         assert.equal(records[fixture.id + (fixture.difficulty === 'nemesis' ? '-nemesis' : '')].stars, 3);
         if (fixture.id === 'trail-9') { assert.match(await page.locator('#game-result-title').textContent(), /Nobody misses/); assert.match(await page.locator('#game-result-text').textContent(), /Sola and Jun rescued/); }
