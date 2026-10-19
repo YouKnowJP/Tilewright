@@ -16,7 +16,7 @@ for (const fixture of fixtures) test(`sluice saga ordinary-action win: ${fixture
   if (fixture.id === 'trail-8') { assert.equal(final.choices.rook, fixture.branch === 2 ? undefined : fixture.branch ? 'shield' : 'decoys'); assert.equal(final.spentCoins, fixture.branch === 2 ? 0 : fixture.branch ? 1 : 2); }
   if (fixture.id === 'trail-9') { assert.deepEqual([...final.rescued].sort(), ['jun', 'sola']); assert.equal(final.cargoDelivered, true); assert.equal(final.switches.moor, true); assert.equal(final.choices.iona, fixture.branch ? 'prepare' : 'shelter'); }
 });
-test('nine campaign identities are stable and each act can be started without fabricated progress', () => {
+test('eighteen campaign identities are stable and each act can be started without fabricated progress', () => {
   const campaign = createCampaign(); assert.deepEqual(campaign.map(stage => stage.id), CAMPAIGN_IDS);
   assert.equal(campaign[3].contractStart, true); assert.equal(campaign[6].contractStart, true);
   assert.equal(campaign[5].nemesisStart, 3); assert.equal(campaign[8].nemesisStart, 6);

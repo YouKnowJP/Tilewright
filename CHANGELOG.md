@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.7.0 — 2026-10-18
+
+- Double the campaign to eighteen missions with The Unwritten Sky, The Amber
+  Road, and The Long Dawn: nine authored layouts and three new finales.
+- Add walking-only courier/treasure runs, a shield-free bazaar, four-note locks,
+  mirrored logic bridges, reversible archive routes, and optional convoy shortcuts.
+- Replace the flat mission list with a six-chapter illustrated field atlas,
+  direct chapter starts, mechanic tags, and per-rule-set chapter star totals.
+- Add original Canvas landscape artwork, region terrain palettes, matching
+  keeper portraits, discovered mechanism minimap pins, and optional field goals.
+- Show mission constraints above the board; keep narrow-screen tactical controls
+  visible when rule banners are present. Protect all 36 campaign best identities.
+- Preserve editor maps, campaign bests, and expedition replay behavior. Package
+  v0.7.0 retains expedition rules 0.6.0 and the 0.5 save migration.
+- Expand to 158 Node tests, 28 new clean playthroughs / 2,795 turns, 78,000
+  exploratory inputs across retained/new suites, and six browser suites.
+
 ## 0.6.0 — 2026-10-18
 
 - Add a directly accessible third act: Rainmoss Sluice, Glasshouse Concord,

@@ -1,6 +1,8 @@
 import { createDocument } from './model.mjs';
 import { createSluiceSaga } from './adventure-sluice-levels.mjs';
-export const CAMPAIGN_IDS = Object.freeze(Array.from({ length: 9 }, (_, index) => `trail-${index + 1}`));
+import { createAtlasSaga } from './adventure-atlas-levels.mjs';
+import { CHAPTERS } from './adventure-art.mjs';
+export const CAMPAIGN_IDS = Object.freeze(Array.from({ length: 18 }, (_, index) => `trail-${index + 1}`));
 
 function world(width, height, name) {
   const map = createDocument(name, width, height), ground = map.layers[0].tiles, details = map.layers[1].tiles;
@@ -73,6 +75,8 @@ export function createCampaign() {
   stages.push(...createContracts());
   stages[5].actFinal = true; stages[5].nemesisStart = 3;
   stages.push(...createSluiceSaga());
+  stages.push(...createAtlasSaga());
+  stages.forEach((stage, index) => { stage.chapter = Math.floor(index / 3); stage.theme = CHAPTERS[stage.chapter].id; });
   for (const stage of stages) {
     for (const item of [stage.start, stage.exit, ...stage.lanterns, ...stage.keys, ...stage.coins, ...stage.hearts, ...stage.crates, ...stage.plates, ...(stage.npcs || []), ...(stage.relays || []), ...(stage.supplies || []), ...(stage.cover || []), ...(stage.switches || []), ...(stage.relic ? [stage.relic] : [])]) {
       stage.map.layers[1].tiles[item.y * stage.map.width + item.x] = 0;

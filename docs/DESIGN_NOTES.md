@@ -28,3 +28,17 @@ Verification combines deliberately unsuccessful actions, full clean winning
 routes, save migration, generated-map checks, exploratory input sequences, and
 browser navigation/layout tests. The [QA record](QA.md) distinguishes that
 coverage from untested devices and actual player enjoyment or difficulty studies.
+
+The v0.7 atlas expansion applies these existing principles to nine distinct
+authored maps: route reversal, quiet walking circuits, shield-free treasure
+recovery, four-note locks, and convoy delivery. The extra difficulty comes from
+combining readable goals and limited resources. Every new choice branch has a
+clean public-action witness on both rule sets; those witnesses establish
+playability, not a measured difficulty curve or long-term player enjoyment.
+
+The illustrated atlas groups the growing mission list into six regions and
+lets players begin any chapter. Palette changes and worn paths make places
+recognizable without changing collision. Threat colors retain their meanings
+across regions. Rule banners explain constraints before a failed action, and
+the small-screen board shrinks on those missions to retain usable controls.
+Optional field goals suggest a second route without blocking completion.

@@ -1,5 +1,64 @@
 # Verification record
 
+## Atlas expansion — v0.7.0
+
+**158 Node tests pass**, JavaScript syntax checks pass, and the static build
+contains **34 files** including release metadata. Switchback’s independent
+42-test verification and build also pass. The new atlas soak adds 36,000
+inputs to the retained 42,000: **78,000 deterministic exploratory inputs** in
+all, alongside 2,304 generated-map connectivity variants and all 256 upgrade
+combinations.
+
+The nine new authored maps have **28 clean public-action playthroughs / 2,795
+turns**. Every new keeper choice is covered on Trail and Nemesis. These fixtures
+never change positions, inventory, health, puzzle flags, or enemy state to win.
+Their independent Node replay verifies all required coins, rescues, switches,
+relays, deliveries, restrictions, and three-star results.
+
+| Mission | Trail turns: branch A / B | Nemesis turns: branch A / B |
+| --- | --- | --- |
+| Whispering Stacks | 64 / 64 | 64 / 64 |
+| The Ink Market | 137 | 138 |
+| Archivist’s Observatory | 127 | 131 |
+| Cinder Caravan | 53 / 54 | 53 / 54 |
+| The Sunken Bazaar | 82 / 82 | 84 / 84 |
+| The Furnace Choir | 127 | 126 |
+| Frostline Post | 101 / 101 | 100 / 101 |
+| Mirror Reservoir | 96 | 96 |
+| The Aurora Engine | 145 / 162 | 144 / 161 |
+
+All **six optional browser suites pass on Chrome 155.0.8059.82**. The atlas
+suite replays all 28 variants through real movement keys, interaction targets,
+dialogue buttons, valves, relays, rescue, and cargo actions. It checks open
+chapter starts, progression after reload, separate rule-set bests, chapter
+stars, rule banners, disabled dash/shield controls, portrait dialogs, retained
+editor saves, the final library return, and all three new Nemesis invitations.
+The optional weight bridge appears among field goals, rather than the required
+quest checklist; both built and unused routes win cleanly.
+
+Each of the nine new missions also finishes with three stars through touch
+buttons at **320, 390, 768, and 1024 × 844 CSS pixels**. Checks cover forecast
+bounds, visible tactical controls at entry, mission constraints, chapter-jump
+focus, reduced motion, and no horizontal overflow. The first 320-pixel run
+caught a rule banner pushing action buttons below the screen. Constraint
+missions now use a shorter phone board; all four widths pass. A fresh phone
+render and the latest desktop finale were visually inspected after adding
+worn paths, snow palettes, and optional-bridge labeling.
+
+The retained five browser suites pass editor pan/zoom/scroll/export/history,
+all earlier story missions, hard finales, 33 expedition configurations, five
+complete multi-leg journeys, camp and loss recovery, quota/blocked storage,
+backup import/export, six genuine 0.5 migrations, and modal navigation. Package
+v0.7.0 retains expedition rules 0.6.0; generation and simulation are unchanged.
+All 36 campaign best identities survive custom-record eviction.
+
+No Safari, Firefox, physical-device, full screen-reader, or human enjoyment
+study was performed. The checked routes and invariants pass; this is not a
+claim that every possible play history or device is bug-free.
+
+![The illustrated atlas after completed new chapters](atlas-chapters.png)
+![The aurora finale with rescued keepers and a carried heart](aurora-finale.png)
+
 ## Gameplay audit and sluice saga — v0.6.0
 
 **127 Node tests pass** (36 additions), syntax checks pass, and the static build

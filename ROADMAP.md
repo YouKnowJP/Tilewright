@@ -56,6 +56,19 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Atlas expansion completed — v0.7
+
+- Eighteen authored missions across six illustrated chapters, each with an open entry.
+- Violet archive, amber dune, and snow/aurora terrain palettes; keeper portraits.
+- Nine new layouts, walking-only and shield-free missions, full-treasure circuits,
+  route-reversal deliveries, four-note locks, and three larger rescue finales.
+- Optional current-run exploration goals, mechanic tags, chapter stars, and
+  discovered mechanism minimap pins.
+- 28 clean ordinary-action witnesses, a 36,000-input atlas soak, and a sixth
+  browser suite completing all nine new missions at four touch-layout widths.
+
+This completed expansion is excluded from the remaining editor estimates.
+
 ## Earlier game features retained
 
 - Three introductory Lantern Trails quests, stars, and local bests.

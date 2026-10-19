@@ -7,7 +7,7 @@ They are proposals for this small tool, not claims that Tilewright already
 supports those editors' formats or all their capabilities. The
 [roadmap](../ROADMAP.md) tracks selected work and remaining estimates.
 
-## Delivered through v0.6.0
+## Delivered through v0.7.0
 
 **Finish structural editing.** A map no longer needs to be recreated to change
 its dimensions. Users can anchor retained content, preview cropped occupied
@@ -15,12 +15,20 @@ cells, choose fill for new cells, and undo the resize. Layers can be renamed,
 duplicated, reordered, and deleted with confirmation and undo. This closes a
 specific gap in the existing workflow without changing the saved map format.
 
-**Give the worlds a reason to explore.** Lantern Trails now has nine real
+**Give the worlds a reason to explore.** Lantern Trails now has eighteen real
 missions with keys, patrols, dash energy, health, crate-and-plate bridge puzzles,
 fog, hints, treasures, stars, and progression. The harder second act adds local adaptive interception,
 dialogue choices, rescue/following, ordered relays, alarms, timed embers, and
 Nemesis rules. Custom expeditions generate reachable objectives on editor maps. An adventure overview is delivered; an
 editor minimap navigator remains a separate future tool.
+
+**Make the journey feel like distinct places.** Six illustrated atlas chapters
+now provide region artwork, mechanic tags, chapter stars, and open chapter
+entries. Violet stone, warm dunes, and blue snow distinguish nine new maps.
+Keeper portraits, discovered mechanism pins, optional field goals, and visible
+mission constraints support longer runs. Walking-only treasure circuits, a
+shield-free bazaar, four-note locks, and convoy finales vary the decisions. See
+the [atlas guide](ATLAS.md).
 
 **Give each return a different route.** Seeded expeditions now connect three,
 six, or nine legs through camp upgrades and route choices. Four regions, six

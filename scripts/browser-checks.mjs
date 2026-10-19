@@ -3,6 +3,7 @@ import { checkAdventures } from './adventure-browser-checks.mjs';
 import { checkContracts } from './contract-browser-checks.mjs';
 import { checkExpeditions } from './expedition-browser-checks.mjs';
 import { checkSluices } from './sluice-browser-checks.mjs';
+import { checkAtlas } from './atlas-browser-checks.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -278,5 +279,5 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const { chromium } = await import('playwright');
-  console.log(JSON.stringify({ editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium) }, null, 2));
+  console.log(JSON.stringify({ editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium) }, null, 2));
 }

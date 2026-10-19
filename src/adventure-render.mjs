@@ -1,10 +1,11 @@
 import { renderMap, drawTile, TILE_SIZE } from './render.mjs';
 import { activePlates, enemyIntent, gateIsOpen, hazardActive } from './adventure.mjs';
+import { decorateMap, themeFor, keeperColors } from './adventure-art.mjs';
 
 const same = (a, b) => a.x === b.x && a.y === b.y;
 
 export function createAdventureRenderer(canvas, stage) {
-  const background = document.createElement('canvas'); renderMap(background, stage.map);
+  const background = document.createElement('canvas'); renderMap(background, stage.map); decorateMap(background, stage);
   let columns = Math.min(24, stage.map.width), rows = Math.min(16, stage.map.height);
   let state = null, previous = null, movedAt = 0;
   const near = (a, b) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <= (state?.effects.sightSquared ?? 30);
@@ -80,7 +81,8 @@ export function createAdventureRenderer(canvas, stage) {
       const position = run.companions.find(companion => companion.id === npc.id) || npc;
       const x = position.x * 24, y = position.y * 24;
       circle('#354f3b55', x + 12, y + 21, 8);
-      rect('#456f75', x + 6, y + 10, 13, 12); rect('#9cc4b5', x + 8, y + 11, 9, 8);
+      const [coat, scarf] = keeperColors(npc.id);
+      rect(coat, x + 6, y + 10, 13, 12); rect(scarf, x + 8, y + 11, 9, 8);
       rect('#755943', x + 6, y + 4, 13, 8); rect('#edc795', x + 8, y + 7, 9, 6);
       rect(run.rescued.includes(npc.id) ? '#a8e0b8' : '#fff0bc', x + 8, y - 3, 11, 6);
       rect('#497567', x + 10, y - 1, 2, 2); rect('#497567', x + 14, y - 1, 2, 2);
@@ -194,8 +196,8 @@ export function createAdventureRenderer(canvas, stage) {
     }
     for (let y = Math.floor(cameraY); y < Math.min(stage.map.height, Math.ceil(cameraY + rows)); y++) {
       for (let x = Math.floor(cameraX); x < Math.min(stage.map.width, Math.ceil(cameraX + columns)); x++) {
-        if (!run.seen[y * stage.map.width + x]) rect('#142d2c', x * 24, y * 24, 24, 24);
-        else if (!near({ x, y }, run.player)) rect('#17393266', x * 24, y * 24, 24, 24);
+        if (!run.seen[y * stage.map.width + x]) rect(stage.theme ? themeFor(stage).dark : '#142d2c', x * 24, y * 24, 24, 24);
+        else if (!near({ x, y }, run.player)) rect(`${stage.theme ? themeFor(stage).dark : '#173932'}66`, x * 24, y * 24, 24, 24);
       }
     }
     const x = player.x * 24, y = player.y * 24;
@@ -236,6 +238,11 @@ export function createAdventureRenderer(canvas, stage) {
     for (const item of stage.lanterns) {
       if (run.collectedLanterns.includes(item.id) || !run.seen[item.y * stage.map.width + item.x]) continue;
       ctx.fillStyle = '#ffdc77'; ctx.fillRect(ox + item.x * scale, oy + item.y * scale, Math.max(2, scale), Math.max(2, scale));
+    }
+    for (const item of [...stage.switches, ...stage.relays]) {
+      if (!run.seen[item.y * stage.map.width + item.x]) continue;
+      ctx.strokeStyle = '#fff1ce'; ctx.lineWidth = 1;
+      ctx.strokeRect(ox + item.x * scale, oy + item.y * scale, Math.max(3, scale), Math.max(3, scale));
     }
     for (const [point, color] of [[stage.exit, '#8de1ba'], [run.player, '#fff2c0']]) {
       ctx.fillStyle = color; ctx.fillRect(ox + point.x * scale, oy + point.y * scale, Math.max(3, scale), Math.max(3, scale));

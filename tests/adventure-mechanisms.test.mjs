@@ -120,7 +120,7 @@ for (const fixture of legacy) test(`0.5 save migration preserves ${fixture.id}`,
 test('12,000 exploratory inputs on the new missions preserve wallet, resources, reversible floors, and prior state', () => {
   let randomState = 793;
   const random = length => { randomState = Math.imul(randomState, 1664525) + 1013904223 >>> 0; return randomState % length; };
-  for (const stage of createCampaign().slice(6)) for (const difficulty of ['trail', 'nemesis']) {
+  for (const stage of createCampaign().slice(6, 9)) for (const difficulty of ['trail', 'nemesis']) {
     let run = createRun(stage, { difficulty });
     for (let i = 0; i < 2000; i++) {
       if (run.status !== 'playing') run = createRun(stage, { difficulty, memory: run.memory });

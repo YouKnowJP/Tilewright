@@ -15,7 +15,9 @@ installation, build-time framework, database service, or remote API.
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
 | `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
 | `src/adventure.mjs` | Pure turn rules, collision, pickups, puzzles, patrol intent, scoring, exploration, and connected custom expeditions. |
-| `src/adventure-levels.mjs` | Campaign assembly, nine stable record identities, and the first six authored maps. |
+| `src/adventure-levels.mjs` | Campaign assembly, eighteen stable record identities, and the first six authored maps. |
+| `src/adventure-atlas-levels.mjs` | Nine authored archive, desert, and northern missions with constraint, treasure, courier, rescue, and finale goals. |
+| `src/adventure-art.mjs` | Six chapter palettes, original landscape card art, keeper portraits, and cached cosmetic map recoloring. No top-level DOM access or simulation state. |
 | `src/adventure-sluice-levels.mjs` | Three authored sluice/shutter/rescue missions and their dialogue routes, trades, and epilogues. |
 | `src/adventure-mechanisms.mjs` | Switch conditions, safe state changes, previews, trade availability, and definition validation. |
 | `src/adventure-intel.mjs` | Read-only, nearby next-turn warnings derived from committed enemy plans and hazard timing. |
@@ -300,3 +302,28 @@ are rendered through text nodes, never HTML. The build output includes the MIT
 license and release metadata; it excludes tests, examples, server code, and
 project documentation. Public hosting is possible with any static HTTP host
 but has not been deployed as part of this initial implementation.
+
+## Field atlas and visual regions — v0.7
+
+The campaign has six groups of three stable identities. New chapters start at
+10, 13, and 16; each chapter entry is open, and subsequent wins unlock its next
+mission on either rule set. Record eviction protects all 36 Trail/Nemesis
+identities within the existing 64-record limit. The atlas uses ordinary buttons
+and document scrolling, without a nested scroll trap or hidden chapter tab.
+
+Chapter art and portraits use original Canvas primitives. Cached map recoloring
+changes terrain pixels, with subtle traversable ground markings that avoid
+objective cells. Dynamic entities, threat markers, collision, and map files keep
+their meanings. Snow and archive stone have distinct palettes. Reduced motion
+disables card transitions along with existing game animation. Portrait colors
+match each keeper’s in-world coat. Mission constraints appear as a persistent
+rule banner; a smaller narrow-screen board leaves tactical buttons reachable.
+Optional field goals derive from current coins, conversations, and damage. They
+do not add save data or change scoring. Discovered bells/wheels have minimap pins.
+
+The expansion uses existing validated turn mechanics, restrictions, and goals.
+Simulation behavior and expedition generation do not change: package v0.7.0
+continues to write expedition **rules 0.6.0**, with the retained 0.5 migration.
+`story-driver.mjs` and `solve-atlas.mjs` generate witnesses using the public
+reducer; an optional clean-path search rejects damaging candidates rather than
+editing health. All 28 captured routes are independently replayed in tests.

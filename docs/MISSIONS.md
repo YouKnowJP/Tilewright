@@ -121,3 +121,10 @@ Prefer missions that add a decision, relationship, or consequence. More enemies
 and larger maps alone do not create a new kind of play. Continue physical-device,
 assistive-technology, and actual player testing before calling the difficulty
 balanced or the interface fully accessible.
+
+## Atlas chapters 4–6
+
+The campaign now continues through nine additional missions in The Unwritten
+Sky, The Amber Road, and The Long Dawn. See the [atlas walkthrough](ATLAS.md)
+for each route, keeper choice, constraint, bridge truth table, and finale.
+These are playable content, separate from the future proposals above.

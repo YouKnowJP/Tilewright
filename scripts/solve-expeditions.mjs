@@ -35,7 +35,7 @@ function stateKey(run) {
     run.lure && [run.lure.x, run.lure.y, Math.max(0, run.lure.until - run.turns)], run.carrying, run.cargoPoint, run.cargoDelivered,
     run.hunters.map(h => [h.x, h.y, h.intent, h.memory, h.lastSeen, h.patrolIndex, h.attack]), run.collectedLanterns, run.collectedKeys, run.collectedCoins, run.collectedHearts, run.usedSupplies, run.openGates, run.switches, run.spentCoins]);
 }
-export function localPath(initial, target, limit = 4000) {
+export function localPath(initial, target, limit = 4000, { clean = false } = {}) {
   // Reverse distances are an admissible movement heuristic, independent of
   // enemies and hazard timing; every candidate is evaluated by the real rules.
   const map = initial.stage.map, origin = { ...initial, player: target }, distances = routes(origin).distance;
@@ -50,7 +50,7 @@ export function localPath(initial, target, limit = 4000) {
       ...(nearby?.kind === 'supply' ? [`interact:${nearby.id}`] : [])];
     for (const action of actions) {
       if ((action === 'shield' && run.ward > 1) || (action === 'decoy' && run.lure && run.lure.until - run.turns > 2)) continue;
-      const next = stepRun(run, action); if (next.turns === run.turns || next.status === 'lost') continue;
+      const next = stepRun(run, action); if (next.turns === run.turns || next.status === 'lost' || (clean && next.damage > initial.damage)) continue;
       const moves = [...node.actions, action];
       const cost = moves.length + (next.damage - initial.damage) * 22 + Math.max(0, initial.shields - next.shields) * 2
         + Math.max(0, initial.decoys - next.decoys) * 2 + estimate(next);

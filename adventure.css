@@ -240,3 +240,58 @@
   .game-controls>.game-interaction-note:not([hidden]) { display:block; font-size:10px; }
   .game-toolbar-actions { gap:4px; }
 }
+
+/* Illustrated field atlas. All chapters remain reachable without tab trapping
+   or nested scrolling; the chapter shortcuts scroll the document itself. */
+.trail-picker { display:block; padding:24px; border:1px solid #d3dac7; border-radius:12px; background:#f3f3e8; }
+.atlas-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:20px; }
+.atlas-heading h2 { margin:8px 0 0; font-size:24px; font-weight:500; letter-spacing:-.8px; }
+.atlas-total { font:11px/1.7 ui-monospace,monospace; color:#52674f; border:1px solid #cbd5bd; border-radius:30px; padding:10px 15px; background:#fffdf2; }
+.atlas-nav { display:flex; flex-wrap:wrap; gap:6px; padding-bottom:22px; border-bottom:1px solid #d9dece; }
+.atlas-nav button { font-size:11px; min-height:40px; background:#fffdf5; }
+.atlas-chapter { scroll-margin-top:84px; margin-top:26px; }
+.atlas-chapter-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
+.atlas-chapter-heading h3 { font-size:24px; font-weight:500; letter-spacing:-.6px; margin:6px 0; color:var(--chapter-dark); }
+.atlas-chapter-heading p:last-child { color:#6b7c63; font-size:12px; line-height:1.7; }
+.atlas-chapter-heading .eyebrow { font-size:9px; letter-spacing:1.3px; color:#66765e; }
+.atlas-chapter-heading>button { flex-shrink:0; background:var(--chapter-dark); border-color:var(--chapter-dark); color:#fff7dd; min-height:44px; font-size:11px; }
+.atlas-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; }
+.trail-card { display:grid; grid-template-columns:32px minmax(0,1fr); gap:7px 9px; padding:0 0 17px; border-radius:9px; overflow:hidden; background:#fffdf6; transition:transform .15s,box-shadow .15s; align-content:start; }
+.trail-art { grid-column:1 / -1; display:block; width:100%; height:auto; aspect-ratio:360 / 128; image-rendering:pixelated; margin-bottom:7px; }
+.trail-card .trail-number { grid-column:1; grid-row:2 / 6; font-size:18px; padding-left:12px; color:var(--chapter-dark); }
+.trail-card strong,.trail-card .trail-subtitle,.trail-card .trail-progress,.trail-card .trail-tags { grid-column:2; padding-right:12px; }
+.trail-card strong { font-size:14px; line-height:1.4; color:var(--chapter-dark); }
+.trail-card .trail-subtitle { display:block; font-size:11px; color:#65755b; }
+.trail-tags { font-size:9px; line-height:1.7; color:#6d755f; }
+.trail-card .trail-progress { font-size:10px; color:#526846; padding-top:4px; }
+.trail-card:disabled { opacity:.75; filter:saturate(.6); }
+.trail-card:not(:disabled):hover { transform:translateY(-3px); box-shadow:0 9px 18px #273c3420; }
+.trail-card.selected { border-color:var(--chapter-dark); background:#fff9e5; box-shadow:0 0 0 2px var(--chapter-light); }
+.atlas-chapter-progress { color:#617358; font-size:10px; margin-top:12px; padding-bottom:22px; border-bottom:1px dashed #cdd5bf; line-height:1.8; }
+.atlas-chapter:last-child .atlas-chapter-progress { border-bottom:0; padding-bottom:0; }
+.game-main { box-shadow:0 5px 24px #293d3110; }
+.game-region { background:var(--region-color,#294f43); padding:11px 18px; color:#f9edcc; font:10px/1.6 ui-monospace,monospace; letter-spacing:1px; text-transform:uppercase; }
+.game-rule-note { background:#f6e9c6; color:#72562f; padding:10px 18px; font-size:12px; line-height:1.6; border-bottom:1px solid #dfc991; }
+#game-rule-note[hidden] { display:none; }
+.game-exploration-note #game-sidequests p { margin-top:10px; color:#526c49; }
+.game-exploration-note>p:last-child { font-size:10px; margin-top:14px; }
+.keeper-portrait { float:right; width:80px; height:80px; margin:0 0 14px 18px; border-radius:10px; border:3px solid #eee5c9; image-rendering:pixelated; }
+@media(max-width:760px) {
+  .trail-picker { padding:16px 12px; }
+  .atlas-heading h2 { font-size:23px; line-height:1.25; }
+  .atlas-chapter-heading { flex-wrap:wrap; gap:11px; }
+  .atlas-chapter-heading h3 { font-size:23px; }
+  .atlas-nav { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .atlas-nav button { text-align:left; font-size:10px; padding:10px 8px; line-height:1.5; }
+  .atlas-cards { grid-template-columns:minmax(0,1fr); gap:12px; }
+  .trail-card { grid-template-columns:40px minmax(0,1fr); padding-bottom:15px; }
+  .trail-art { max-height:120px; object-fit:cover; }
+  .trail-card strong { font-size:15px; }
+  .trail-card .trail-number { font-size:22px; padding-left:13px; }
+  .trail-card .trail-subtitle { font-size:12px; }
+  .trail-card .trail-progress,.trail-tags { font-size:11px; }
+  .game-region { padding:9px 12px; font-size:9px; }
+  .game-main:has(#game-rule-note:not([hidden])) .game-viewport { height:clamp(200px,26svh,260px); }
+  .game-exploration-note { grid-column:1 / -1; }
+}
+@media(prefers-reduced-motion:reduce) { .trail-card { transition:none; } .trail-card:not(:disabled):hover { transform:none; } }

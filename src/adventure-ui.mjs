@@ -10,6 +10,7 @@ import { PERKS, VOWS } from './adventure-perks.mjs';
 import { createIcon } from './icons.mjs';
 import { choiceProblem, wallet, mechanismPreview } from './adventure-mechanisms.mjs';
 import { threatForecast } from './adventure-intel.mjs';
+import { CHAPTERS, drawAtlasArt, themeFor, drawKeeperPortrait } from './adventure-art.mjs';
 
 export function createAdventureUI({ storage, getMap, backToEditor }) {
   const $ = selector => document.querySelector(selector);
@@ -26,19 +27,44 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   const stageRecord = stage => records[`${stage.id}${difficulty === 'nemesis' ? '-nemesis' : ''}`];
 
   function renderPicker() {
-    $('#trail-picker').replaceChildren(...campaign.map((stage, index) => {
-      const button = document.createElement('button'); button.className = 'trail-card'; button.dataset.stage = stage.id;
-      button.disabled = !stageUnlocked(index); button.classList.toggle('selected', run?.stage.id === stage.id);
-      button.setAttribute('aria-pressed', String(run?.stage.id === stage.id));
-      const number = Object.assign(document.createElement('span'), { className: 'trail-number', textContent: `0${index + 1}` });
-      const title = Object.assign(document.createElement('strong'), { textContent: stage.name });
-      const subtitle = Object.assign(document.createElement('span'), { className: 'trail-subtitle', textContent: stage.subtitle });
-      const record = stageRecord(stage);
-      const progress = Object.assign(document.createElement('span'), { className: 'trail-progress',
-        textContent: !stageUnlocked(index) ? `Finish ${campaign[index - 1].name} to unlock` : record ? `${'★'.repeat(record.stars)} · ${record.turns} turns · ${record.score} points` : stage.contractStart ? 'Open contract · harder missions start here' : 'Unexplored · restore the trail' });
-      button.append(number, title, subtitle, progress);
-      button.addEventListener('click', () => start(stage)); return button;
-    }));
+    const picker = $('#trail-picker'), heading = document.createElement('div'), nav = document.createElement('nav');
+    heading.className = 'atlas-heading'; nav.className = 'atlas-nav'; nav.setAttribute('aria-label', 'Jump to a story chapter');
+    const earned = campaign.reduce((sum, stage) => sum + (stageRecord(stage)?.stars || 0), 0);
+    heading.append(Object.assign(document.createElement('div'), { innerHTML: '<p class="eyebrow">YOUR FIELD ATLAS</p><h2>Eighteen trails. Six worlds. Your way home.</h2>' }),
+      Object.assign(document.createElement('p'), { className: 'atlas-total', textContent: `${earned} / ${campaign.length * 3} stars · ${difficulty === 'nemesis' ? 'Nemesis' : 'Trail'} rules` }));
+    const chapters = CHAPTERS.map((chapter, chapterIndex) => {
+      const section = document.createElement('section'); section.className = 'atlas-chapter'; section.id = `atlas-${chapter.id}`;
+      section.style.setProperty('--chapter-dark', chapter.dark); section.style.setProperty('--chapter-light', chapter.sky);
+      const label = document.createElement('div'); label.className = 'atlas-chapter-heading';
+      const text = document.createElement('div'), title = document.createElement('h3'); title.textContent = chapter.name; title.tabIndex = -1;
+      text.append(Object.assign(document.createElement('p'), { className: 'eyebrow', textContent: `CHAPTER ${String(chapterIndex + 1).padStart(2, '0')} / ${chapter.place.toUpperCase()}` }), title,
+        Object.assign(document.createElement('p'), { textContent: chapter.summary }));
+      const startButton = document.createElement('button'); startButton.textContent = chapterIndex ? 'Begin chapter →' : 'Begin the story →'; startButton.dataset.chapterStart = chapter.id;
+      startButton.addEventListener('click', () => start(campaign[chapterIndex * 3])); label.append(text, startButton);
+      const jump = document.createElement('button'); jump.textContent = `${String(chapterIndex + 1).padStart(2, '0')} ${chapter.name}`;
+      jump.addEventListener('click', () => { section.scrollIntoView({ block: 'start', behavior: motion.matches ? 'auto' : 'smooth' }); title.focus({ preventScroll: true }); }); nav.append(jump);
+      const cards = document.createElement('div'); cards.className = 'atlas-cards';
+      cards.append(...campaign.slice(chapterIndex * 3, chapterIndex * 3 + 3).map(stage => {
+        const index = campaign.indexOf(stage);
+        const button = document.createElement('button'); button.className = 'trail-card'; button.dataset.stage = stage.id;
+        button.disabled = !stageUnlocked(index); button.classList.toggle('selected', run?.stage.id === stage.id);
+        button.setAttribute('aria-pressed', String(run?.stage.id === stage.id));
+        const number = Object.assign(document.createElement('span'), { className: 'trail-number', textContent: String(index + 1).padStart(2, '0') });
+        const art = document.createElement('canvas'); art.className = 'trail-art'; art.setAttribute('aria-hidden', 'true'); drawAtlasArt(art, chapter, index % 3);
+        const title = Object.assign(document.createElement('strong'), { textContent: stage.name });
+        const subtitle = Object.assign(document.createElement('span'), { className: 'trail-subtitle', textContent: stage.subtitle });
+        const record = stageRecord(stage);
+        const progress = Object.assign(document.createElement('span'), { className: 'trail-progress',
+          textContent: !stageUnlocked(index) ? `Finish ${campaign[index - 1].name} to unlock` : record ? `${'★'.repeat(record.stars)} · ${record.turns} turns · ${record.score} points` : 'Unexplored · your next story awaits' });
+        const tags = Object.assign(document.createElement('span'), { className: 'trail-tags', textContent: (stage.tags || [stage.actFinal ? 'Chapter finale' : stage.sequence?.length ? 'Relay puzzle' : 'Lantern quest', stage.hunters?.length ? 'Adaptive hunters' : 'Patrol timing']).join(' / ') });
+        button.append(art, number, title, subtitle, tags, progress);
+        button.addEventListener('click', () => start(stage)); return button;
+      }));
+      const stars = campaign.slice(chapterIndex * 3, chapterIndex * 3 + 3).reduce((sum, stage) => sum + (stageRecord(stage)?.stars || 0), 0);
+      const footer = Object.assign(document.createElement('p'), { className: 'atlas-chapter-progress', textContent: `${stars} / 9 chapter stars · Start any chapter, then unlock its next missions in order.` });
+      section.append(label, cards, footer); return section;
+    });
+    picker.replaceChildren(heading, nav, ...chapters);
   }
 
   function resize() {
@@ -70,6 +96,11 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   function update() {
     if (!run) return;
     const stage = run.stage, result = resultFor(run), index = campaign.findIndex(item => item.id === stage.id);
+    const theme = themeFor(stage);
+    $('.game-main').style.setProperty('--region-color', theme.dark);
+    $('#game-region').textContent = stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
+    $('#game-rule-note').hidden = !stage.restrictions.noDash && !stage.restrictions.noShield && !stage.requireCoins;
+    $('#game-rule-note').textContent = [stage.restrictions.noDash ? 'Walking only: dash is disabled.' : '', stage.restrictions.noShield ? 'Unwarded: shields are disabled.' : '', stage.requireCoins ? 'Recover every coin before leaving.' : ''].filter(Boolean).join(' ');
     $('#game-title').textContent = stage.name;
     $('#game-sound').textContent = sound.enabled ? 'Sound on' : 'Sound off'; $('#game-sound').setAttribute('aria-pressed', String(sound.enabled));
     const journey = expeditions?.session;
@@ -93,7 +124,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#game-coins').textContent = `${run.collectedCoins.length}/${stage.coins.length}`;
     resource($('#game-health'), run.health, MAX_HEARTS, true); resource($('#game-energy'), run.energy, MAX_ENERGY);
     $('#quest-lanterns').textContent = `${run.collectedLanterns.length === stage.lanterns.length ? '✓' : '○'} Restore ${stage.lanterns.length === 1 ? 'the lantern' : `all ${stage.lanterns.length} lanterns`}`;
-    $('#quest-plates').hidden = !stage.plates.length;
+    $('#quest-plates').hidden = !stage.plates.length || Boolean(stage.optionalPlates);
     $('#quest-plates').textContent = `${activePlates(run).length === stage.plates.length ? '✓' : '○'} Hold ${stage.plates.length} copper ${stage.plates.length === 1 ? 'plate' : 'plates'} with crates`;
     const extraGoals = missionGoals(run).slice(1);
     $('#quest-mission').hidden = !extraGoals.length;
@@ -120,6 +151,13 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#game-learning-save').textContent = journey ? 'This expedition keeps its own learned movement history. Campaign memory is retained separately.' : memorySaveFailed ? 'Learning is available for this session; browser saving is unavailable.' : 'Movement habits stay in this browser. Forget them at any time.';
     const entries = stage.npcs.filter(npc => run.talkedTo.includes(npc.id)).map(npc => `${npc.name}: ${run.rescued.includes(npc.id) && npc.after ? npc.after : Object.hasOwn(run.choices, npc.id) ? npc.choices.find(choice => choice.id === run.choices[npc.id]).response : npc.lines.join(' ')}`);
     $('#game-journal').replaceChildren(...(entries.length ? entries : ['Speak to a keeper to record their advice.']).map(text => Object.assign(document.createElement('p'), { textContent: text })));
+    const sidequests = [
+      ...(stage.optionalPlates ? [{ text: 'Build the optional weight bridge', done: activePlates(run).length === stage.plates.length }] : []),
+      ...(stage.coins.length && !stage.requireCoins ? [{ text: `Find every treasure (${run.collectedCoins.length}/${stage.coins.length})`, done: run.collectedCoins.length === stage.coins.length }] : []),
+      ...(stage.npcs.length ? [{ text: `Hear every keeper’s story (${run.talkedTo.length}/${stage.npcs.length})`, done: run.talkedTo.length === stage.npcs.length }] : []),
+      { text: `Finish without taking damage${run.status === 'playing' && run.damage === 0 ? ' (clean so far)' : ''}`, done: run.status === 'won' && run.damage === 0 },
+    ];
+    $('#game-sidequests').replaceChildren(...sidequests.map(goal => Object.assign(document.createElement('p'), { textContent: `${goal.done ? '✓' : '○'} ${goal.text}` })));
     updateConversation();
     $('#quest-beacon').textContent = `${run.status === 'won' ? '✓' : '○'} Reach the turquoise beacon`;
     $('#game-hint').hidden = !hintVisible;
@@ -165,6 +203,8 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
   }
 
+  function journeyLabel() { return expeditions?.session ? 'Beyond the atlas / Seeded expedition' : 'Your own world / Custom adventure'; }
+
   function revealBoard() { requestAnimationFrame(() => { if (active) $('.game-main').scrollIntoView({ block: 'start' }); }); }
 
   function start(stage) {
@@ -196,6 +236,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     if (!active) { if (dialog.open) dialog.close(); return; }
     if (!run.dialogue) { if (dialog.open) { dialog.close(); canvas.focus({ preventScroll: true }); } return; }
     const npc = run.stage.npcs.find(item => item.id === run.dialogue), selected = run.choices[npc.id];
+    drawKeeperPortrait($('#conversation-portrait'), npc, themeFor(run.stage), run.rescued.includes(npc.id));
     $('#conversation-wallet').hidden = !(npc.choices || []).some(choice => choice.cost);
     $('#conversation-wallet').textContent = `Unspent coins: ${wallet(run)}. Trades are optional and each keeper offers one parcel. Supplies are capped at three.`;
     $('#conversation-name').textContent = npc.name;
