@@ -1,6 +1,6 @@
 # A longer way through Lantern Trails
 
-Open **Play adventures → Start an expedition**. All expedition modes are
+Open **Play adventures → Trails → Expeditions & logbook**. All expedition modes are
 available immediately. Story missions and playing your painted map remain
 available in the same game.
 

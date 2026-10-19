@@ -1,5 +1,41 @@
 # Verification record
 
+## Focused play layout — v0.8.1
+
+**199 Node tests**, syntax checks, and the **36-file static build** pass.
+The new layout suite covers **320×740, 390×844, 768×900, 1024×768,
+1440×900, 320×568, and 844×390 CSS pixels** on Chrome 155.0.8059.82.
+Normal portrait/desktop gameplay has no document scrollbar, with the board,
+status, and tactical controls visible. Short and landscape screens use a
+bounded document scroll instead of clipping controls. No sideways overflow
+occurs at the tested sizes.
+
+The checks open every chapter with only its three cards visible, switch all
+notes tabs, exercise Arrow/Home/End focus, close the mobile panel with Escape,
+and cross the responsive breakpoint while preserving the selected map tab.
+Library, Menu, and mobile reading shortcuts consume no turns; returning to the
+board resumes normal input. Direct menu activation checks verify that Pause
+suppresses movement, Restart clears the turn count, and Tab dismisses the menu
+without closing it before a chosen action can activate. Screenshots of desktop and phone play were inspected.
+The retained browser playthroughs navigate the new visible controls through
+`ui-driver.mjs`; they do not click hidden elements or alter game state.
+
+All **eight browser suites pass**: editor, introductory quests, hard contracts,
+expeditions, sluices, atlas, Guild, and the new layout suite. Retained coverage
+includes all eighteen story missions, 28 atlas difficulty/choice variants, all
+sluice branches, 32 Guild routes plus four touch widths, 33 expedition form
+configurations, five complete multi-leg journeys, checkpoints/imports, old-save
+migration, storage failures, opt-in sound, and unchanged editor saves/undo.
+After fixing the menu focus timing, the introductory/hard runs, all 32 desktop
+Guild routes, complete sluice/atlas/expedition suites, editor, and seven-size
+Pause/Restart/focus checks pass again.
+
+The UI change keeps simulation rules, checkpoints, and saved records unchanged.
+Safari, Firefox, physical devices, and a full screen-reader audit remain outside
+this verification. Human usability is not established by automated checks.
+
+![Focused play on desktop](focused-play-desktop.png)
+
 ## Guild specialists and developer research — v0.8.0
 
 **199 Node tests pass**, syntax checks pass, and the static build contains

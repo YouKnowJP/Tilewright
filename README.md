@@ -10,7 +10,7 @@ two specialist tools, linked waystones, and optional commendations.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
-![The field atlas: illustrated chapters, mission routes, and star progress](docs/atlas-chapters.png)
+![Focused gameplay with a tabbed quest sidebar](docs/focused-play-desktop.png)
 
 ## Run locally
 
@@ -32,6 +32,17 @@ server is running. Installation as an offline web app is future work.
 ## Play Lantern Trails
 
 Choose **Play adventures**, or open [the game directly](http://127.0.0.1:4174/#play).
+The board opens on its own screen. **Trails** opens the library; choose one
+chapter at a time, or use the Expeditions and Guild tabs. **Back to your trail**
+returns to the same run without spending a turn. Quick starts and custom-map
+play are under **Quick starts & custom map** in the library.
+
+Quest, Map, Notes, and Help tabs group the reading panels. On phones and
+tablets, **Quest & map** opens them in a separate panel; close it with × or Escape.
+**Menu** holds sound, pause, restart, and the scout hint. The board and movement
+controls fit standard portrait and desktop screens; short phones and landscape
+use a bounded page scroll so controls remain reachable.
+
 Restore every golden lantern, then reach the turquoise beacon. The world advances after a valid move, wait, or tactical interaction; there is no timer.
 Dialogue and the Plan forecast pause the turn rules. Blocked moves cost nothing.
 
@@ -127,14 +138,14 @@ editor save. If storage is unavailable, unlocks still work for the session.
 | Move | Arrow keys / WASD, direction pad, or swipe on the board |
 | Dash | Shift + direction, or Dash followed by a direction |
 | Wait and recharge | Space with the board focused, or Wait |
-| Pause / resume | P / Escape, or Pause |
-| Restart current quest | R, or Restart |
+| Pause / resume | P / Escape, or Menu → Pause |
+| Restart current quest | R, or Menu → Restart |
 | Talk / ring relay / open supplies | E, or Interact |
 | Throw a decoy / raise a shield | Q / C, or the tactical buttons |
-| Toggle scout hint | H, or Scout hint |
+| Toggle scout hint | H, or Menu → Scout hint |
 | Read next-turn threats without moving | V, or Plan |
 | Use a Guild specialist tool | B, or Pulse / Veil (Guild jobs only) |
-| Choose a quest | Choose trail, then a quest card |
+| Choose a quest | Trails → chapter → quest card |
 
 **Play your current map** creates a quiet expedition on a snapshot of visible
 layers, with three reachable lanterns, coins, and a beacon. It uses the largest
@@ -152,7 +163,7 @@ walkthrough goals, counterplay, and proposed interactions.
 
 ## Take a Guild dispatch
 
-Choose **Guild jobs & specialists** in the adventure library. Six open jobs
+Choose **Trails → Guild jobs & specialists** in the adventure library. Six open jobs
 combine new waystones with rescue convoys, treasure routes, relay locks, and
 singing cargo. Choose **Bellrunner** to interrupt nearby hunters with a pulse,
 or **Mistweaver** to conceal movement while evading their last lead. Both tools
@@ -171,7 +182,7 @@ jobs, and scoring, and the [developer research](docs/RESEARCH.md) behind them.
 
 ## Play longer expeditions
 
-Choose **Start an expedition** in Play adventures. Pick a seed, three/six/nine
+Choose **Trails → Expeditions & logbook** in Play adventures. Pick a seed, three/six/nine
 legs, Trail or Nemesis, and an optional oath. Each leg changes the region,
 layout, objective, and hunter encounters. Complete lost-light, relay, rescue,
 relic-courier, treasure, and final Watcher missions across four regions.
@@ -299,7 +310,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The seven suites include `scripts/sluice-browser-checks.mjs`,
+editor history. The eight suites include `scripts/layout-browser-checks.mjs`, `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
 Playwright is not needed to run the app or the default checks. Browser tests
 are not currently run in CI.

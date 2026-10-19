@@ -3,7 +3,7 @@ import { dailySeed, expeditionConfig } from './adventure-generator.mjs';
 import { VOWS } from './adventure-perks.mjs';
 import { BADGES, loadLogbook, creditJourney, saveLogbook } from './adventure-logbook.mjs';
 
-export function createExpeditionUI({ storage, onRun, onNotice }) {
+export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
   const $ = selector => document.querySelector(selector);
   let current = null, book = loadLogbook(storage), saved = peekJourney(storage), saveFailed = false, busy = false;
   let previousMode = 'journey', customSeed = $('#expedition-seed').value, customRules = { length: '6', difficulty: 'trail', vow: 'none' };
@@ -13,7 +13,7 @@ export function createExpeditionUI({ storage, onRun, onNotice }) {
     $('#trail-picker').hidden = tab !== 'story'; $('#expedition-hub').hidden = tab !== 'expeditions';
     $('#library-story').setAttribute('aria-pressed', String(tab === 'story'));
     $('#library-expeditions').setAttribute('aria-pressed', String(tab === 'expeditions'));
-    $('.adventure-heading').scrollIntoView({ block: 'start' });
+    onShow?.(tab);
     if (tab === 'expeditions') renderHub();
   }
   function renderHub() {

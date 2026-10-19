@@ -1,8 +1,9 @@
 # The field atlas
 
-Eighteen handcrafted missions span six chapters. Start any chapter with **Begin
-chapter**, then finish its three missions in order. Either rule set unlocks the
-next mission. Chapter shortcuts move the page to a region, with keyboard focus
+Eighteen handcrafted missions span six chapters. Open **Trails → Story missions**,
+then choose a chapter button. Only that chapter’s three missions are shown.
+Start any chapter with **Begin chapter**, then finish its missions in order.
+Either rule set unlocks the next mission. Chapter selection keeps keyboard focus
 on its title. Stars, score, and turns are separate for Trail and Nemesis.
 
 The First Light introduces keys and crate bridges. The Watching Forest adds

@@ -25,6 +25,61 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'bellrunner', guildSaveFailed = false;
+  let selectedChapter = 0, libraryTab = 'story';
+  const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(max-width: 1000px)');
+  const libraryOpen = () => !$('#adventure-library').hidden;
+
+  function selectNotes(id, focus = false) {
+    for (const tab of document.querySelectorAll('.notes-tabs [role="tab"]')) {
+      const selected = tab.id === `notes-tab-${id}`;
+      tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1;
+      $(`#${tab.getAttribute('aria-controls')}`).hidden = !selected;
+      if (selected && focus) tab.focus({ preventScroll: true });
+    }
+  }
+  function openNotes(id) {
+    if (id) selectNotes(id);
+    if (compactNotes.matches && !notesDialog.open) notesDialog.showModal();
+    $('.notes-tabs [aria-selected="true"]').focus({ preventScroll: true });
+  }
+  function placeNotes() {
+    if (notesDialog.open) notesDialog.close();
+    (compactNotes.matches ? notesDialog : $('#game-layout')).append(notes);
+    resize();
+  }
+  function showLibrary(tab) {
+    libraryTab = tab;
+    if (notesDialog.open) notesDialog.close();
+    $('#game-menu').open = false;
+    $('#adventure-library').hidden = false; $('#game-layout').hidden = true;
+    $('#library-notice').hidden = true;
+    $('#library-resume').textContent = `← Back to ${run?.stage.name || 'your trail'}`;
+    window.scrollTo(0, 0);
+  }
+  function showBoard() {
+    if (notesDialog.open) notesDialog.close();
+    $('#game-menu').open = false;
+    $('#adventure-library').hidden = true; $('#game-layout').hidden = false;
+    window.scrollTo(0, 0); resize(); paint();
+  }
+  document.querySelectorAll('.notes-tabs [role="tab"]').forEach(tab => {
+    tab.addEventListener('click', () => selectNotes(tab.id.slice('notes-tab-'.length)));
+    tab.addEventListener('keydown', event => {
+      const tabs = [...document.querySelectorAll('.notes-tabs [role="tab"]')], index = tabs.indexOf(tab);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1
+        : event.key === 'ArrowRight' ? (index + 1) % tabs.length : event.key === 'ArrowLeft' ? (index + tabs.length - 1) % tabs.length : -1;
+      if (next >= 0) { event.preventDefault(); selectNotes(tabs[next].id.slice('notes-tab-'.length), true); }
+    });
+  });
+  $('#game-notes-button').addEventListener('click', () => openNotes());
+  $('#game-notes-close').addEventListener('click', () => notesDialog.close());
+  notesDialog.addEventListener('close', () => { if (active && !libraryOpen()) $('#game-notes-button').focus({ preventScroll: true }); });
+  compactNotes.addEventListener('change', placeNotes); placeNotes();
+  $('#library-resume').addEventListener('click', () => { showBoard(); canvas.focus({ preventScroll: true }); });
+  document.addEventListener('click', event => { if (!event.target.closest('#game-menu')) $('#game-menu').open = false; });
+  $('#game-menu').addEventListener('focusout', event => {
+    if (event.relatedTarget && !$('#game-menu').contains(event.relatedTarget)) $('#game-menu').open = false;
+  });
 
   function renderGuild() {
     const kit = GUILD_KITS.find(kit => kit.id === selectedKit), jobs = createGuildJobs(selectedKit);
@@ -51,9 +106,9 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
 
   function renderPicker() {
     const picker = $('#trail-picker'), heading = document.createElement('div'), nav = document.createElement('nav');
-    heading.className = 'atlas-heading'; nav.className = 'atlas-nav'; nav.setAttribute('aria-label', 'Jump to a story chapter');
+    heading.className = 'atlas-heading'; nav.className = 'atlas-nav'; nav.setAttribute('aria-label', 'Choose a story chapter');
     const earned = campaign.reduce((sum, stage) => sum + (stageRecord(stage)?.stars || 0), 0);
-    heading.append(Object.assign(document.createElement('div'), { innerHTML: '<p class="eyebrow">YOUR FIELD ATLAS</p><h2>Eighteen trails. Six worlds. Your way home.</h2>' }),
+    heading.append(Object.assign(document.createElement('div'), { innerHTML: '<p class="eyebrow">YOUR FIELD ATLAS</p><h2>Story chapters</h2>' }),
       Object.assign(document.createElement('p'), { className: 'atlas-total', textContent: `${earned} / ${campaign.length * 3} stars · ${difficulty === 'nemesis' ? 'Nemesis' : 'Trail'} rules` }));
     const chapters = CHAPTERS.map((chapter, chapterIndex) => {
       const section = document.createElement('section'); section.className = 'atlas-chapter'; section.id = `atlas-${chapter.id}`;
@@ -65,7 +120,14 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       const startButton = document.createElement('button'); startButton.textContent = chapterIndex ? 'Begin chapter →' : 'Begin the story →'; startButton.dataset.chapterStart = chapter.id;
       startButton.addEventListener('click', () => start(campaign[chapterIndex * 3])); label.append(text, startButton);
       const jump = document.createElement('button'); jump.textContent = `${String(chapterIndex + 1).padStart(2, '0')} ${chapter.name}`;
-      jump.addEventListener('click', () => { section.scrollIntoView({ block: 'start', behavior: motion.matches ? 'auto' : 'smooth' }); title.focus({ preventScroll: true }); }); nav.append(jump);
+      section.hidden = chapterIndex !== selectedChapter;
+      jump.setAttribute('aria-pressed', String(chapterIndex === selectedChapter));
+      jump.addEventListener('click', () => {
+        selectedChapter = chapterIndex;
+        picker.querySelectorAll('.atlas-chapter').forEach((panel, i) => { panel.hidden = i !== selectedChapter; });
+        nav.querySelectorAll('button').forEach((button, i) => button.setAttribute('aria-pressed', String(i === selectedChapter)));
+        title.focus({ preventScroll: true });
+      }); nav.append(jump);
       const cards = document.createElement('div'); cards.className = 'atlas-cards';
       cards.append(...campaign.slice(chapterIndex * 3, chapterIndex * 3 + 3).map(stage => {
         const index = campaign.indexOf(stage);
@@ -98,7 +160,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
 
   function animate(time) {
     frame = null;
-    if (!active || !renderer) return;
+    if (!active || !renderer || libraryOpen()) return;
     if (time - lastDraw > 30) { renderer.draw(time); lastDraw = time; }
     if (!paused && !document.hidden && !motion.matches && (run.status === 'playing' || time - lastAction < 900)) frame = requestAnimationFrame(animate);
   }
@@ -244,24 +306,30 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       $('#game-result-text').textContent = `${kitFor(run).name} · ${merits}/3 commendations · ${result.score + merits * 150} points · ${result.turns} turns. ${merits < 3 ? 'Try a different route or specialist to earn the remaining commendations.' : 'All optional goals met. Try the other specialist or Nemesis for a different run.'}`;
       $('#game-primary').textContent = 'Choose another Guild job';
     }
+    if (result && !paused && (journey ? expeditions.checkpointFailed : run.guild ? guildSaveFailed : saveFailed)) {
+      $('#game-result-text').textContent += ' Saving unavailable. Keep this tab open to retain this result.';
+    }
     $('#game-nemesis').hidden = Boolean(journey) || paused || run.status !== 'won' || !stage.actFinal || difficulty !== 'trail';
     renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
   }
 
   function journeyLabel() { return expeditions?.session ? 'Beyond the atlas / Seeded expedition' : 'Your own world / Custom adventure'; }
 
-  function revealBoard() { requestAnimationFrame(() => { if (active) $('.game-main').scrollIntoView({ block: 'start' }); }); }
+  function revealBoard() { showBoard(); requestAnimationFrame(() => { if (active) { resize(); canvas.focus({ preventScroll: true }); } }); }
 
   function start(stage) {
     expeditions?.suspend(); $('#game-difficulty').disabled = false;
     run = createRun(stage, { memory, difficulty }); paused = false; dashArmed = false; interactionId = null; lastAction = performance.now();
+    const chapterIndex = campaign.findIndex(item => item.id === stage.id);
+    if (chapterIndex >= 0) selectedChapter = Math.floor(chapterIndex / 3);
+    hintVisible = false; selectNotes('quest');
     renderer = createAdventureRenderer(canvas, run.stage); renderPicker(); renderGuild(); resize(); update();
     revealBoard();
   }
 
   function action(direction, dash = false) {
     const conversationAction = direction === 'close-dialogue' || direction.startsWith('choose:');
-    if (!active || !run || (paused && !conversationAction) || run.status !== 'playing') return;
+    if (!active || libraryOpen() || notesDialog.open || !run || (paused && !conversationAction) || run.status !== 'playing') return;
     const input = `${['up', 'right', 'down', 'left'].includes(direction) && (dash || dashArmed) ? 'dash-' : ''}${direction}`;
     if (expeditions?.session) { dashArmed = false; lastAction = performance.now(); expeditions.act(input); return; }
     const before = run;
@@ -309,7 +377,15 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#begin-contracts').addEventListener('click', () => start(campaign[3]));
   $('#begin-sluices').addEventListener('click', () => start(campaign[6]));
   $('#game-nemesis').addEventListener('click', () => { if (run?.status === 'won' && run.stage.actFinal) { difficulty = 'nemesis'; $('#game-difficulty').value = difficulty; start(campaign[run.stage.nemesisStart]); } });
-  $('#game-difficulty').addEventListener('change', event => { if (expeditions?.session) { event.target.value = difficulty; return; } difficulty = event.target.value; if (run) start(run.stage); else renderPicker(); });
+  $('#game-difficulty').addEventListener('change', event => {
+    if (expeditions?.session) { event.target.value = difficulty; return; }
+    difficulty = event.target.value;
+    if (run) {
+      const browsing = libraryOpen(), chapter = selectedChapter; start(run.stage);
+      if (browsing) { selectedChapter = chapter; renderPicker(); if (libraryTab === 'guild') showGuild(); else expeditions.show(libraryTab); }
+    }
+    else { renderPicker(); renderGuild(); }
+  });
   $('#forget-habits').addEventListener('click', () => {
     if (expeditions?.session) { expeditions.act('forget'); return; }
     memory = freshMemory(); memorySaveFailed = !saveMemory(storage, memory); if (run) run = { ...run, memory }; update();
@@ -318,8 +394,8 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#conversation-dialog').addEventListener('cancel', event => { event.preventDefault(); action('close-dialogue'); });
   $('#conversation-dialog').addEventListener('close', () => { if (active && run?.dialogue && !$('#conversation-dialog').open) action('close-dialogue'); });
 
-  function pause() { if (!run || run.status !== 'playing') return; paused = !paused; update(); }
-  function hint() { hintVisible = !hintVisible; update(); }
+  function pause() { if (!run || run.status !== 'playing') return; $('#game-menu').open = false; paused = !paused; update(); }
+  function hint() { hintVisible = !hintVisible; $('#game-menu').open = false; update(); if (hintVisible) openNotes('help'); }
   $('#game-pause').addEventListener('click', pause);
   $('#game-restart').addEventListener('click', () => { if (expeditions?.session) expeditions.retry(); else if (run) start(run.stage); });
   $('#game-hint-button').addEventListener('click', hint);
@@ -338,6 +414,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#game-sound').addEventListener('click', async () => {
     const enabled = await sound.toggle(); $('#game-sound').textContent = enabled ? 'Sound on' : 'Sound off';
     $('#game-sound').setAttribute('aria-pressed', String(enabled));
+    $('#game-menu').open = false;
   });
   $('#dash-button').addEventListener('click', () => { dashArmed = !dashArmed; update(); });
   $('#game-wait').addEventListener('click', () => action('wait'));
@@ -353,13 +430,14 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#game-back-editor').addEventListener('click', backToEditor);
   $('#play-custom').addEventListener('click', () => {
     try { start(createCustomStage(getMap())); }
-    catch (error) { $('#game-status').textContent = error.message; }
+    catch (error) { $('#game-status').textContent = error.message; $('#library-notice').textContent = error.message; $('#library-notice').hidden = false; }
   });
   document.addEventListener('keydown', event => {
     if (active && run && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey && event.target.id === 'game-target' && event.key.toLowerCase() === 'e') {
       event.preventDefault(); canvas.focus({ preventScroll: true }); interact(); return;
     }
-    if (!active || !run || event.ctrlKey || event.metaKey || event.altKey || event.target.closest('input, select, textarea, dialog')) return;
+    if (!active || !run || libraryOpen() || notesDialog.open || event.ctrlKey || event.metaKey || event.altKey || event.target.closest('input, select, textarea, dialog, .game-aside')) return;
+    if ($('#game-menu').open) { if (event.key === 'Escape') { event.preventDefault(); $('#game-menu').open = false; $('#game-menu summary').focus(); } return; }
     const directions = { ArrowUp: 'up', ArrowRight: 'right', ArrowDown: 'down', ArrowLeft: 'left', w: 'up', d: 'right', s: 'down', a: 'left' };
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
     if (directions[key]) {
@@ -387,7 +465,10 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   canvas.addEventListener('pointercancel', () => { pointer = null; });
   document.addEventListener('visibilitychange', () => { if (document.hidden && active && run?.status === 'playing' && !run.dialogue && !paused) { paused = true; update(); } });
   new ResizeObserver(resize).observe(viewport);
-  expeditions = createExpeditionUI({ storage, onNotice: text => { $('#game-status').textContent = text; }, onRun(session, newStage) {
+  expeditions = createExpeditionUI({ storage, onShow: showLibrary, onNotice: text => {
+    $('#game-status').textContent = text;
+    if (libraryOpen()) { $('#library-notice').textContent = text; $('#library-notice').hidden = false; }
+  }, onRun(session, newStage) {
     run = session.run; difficulty = session.config.difficulty; $('#game-difficulty').value = difficulty;
     if (newStage || !renderer || run.stage.id !== $('#adventure').dataset.stage) {
       renderer = createAdventureRenderer(canvas, run.stage); paused = false; dashArmed = false; interactionId = null; renderPicker(); resize(); revealBoard();
@@ -400,7 +481,8 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     enter() { active = true; if (!run) start(campaign[0]); else { paused = false; resize(); update(); revealBoard(); } },
     leave() {
       active = false; pointer = null; dashArmed = false;
-      for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog']) if ($(selector).open) $(selector).close();
+      for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog', '#game-notes-dialog']) if ($(selector).open) $(selector).close();
+      $('#game-menu').open = false;
       if (frame !== null) cancelAnimationFrame(frame); frame = null;
     },
   };

@@ -1,6 +1,6 @@
 # The Wayfarers’ Guild
 
-Choose **Play adventures → Guild jobs & specialists**. All six jobs are open.
+Choose **Play adventures → Trails → Guild jobs & specialists**. All six jobs are open.
 Choose a specialist for the next job, then a job card. The Rules selector offers
 Trail or Nemesis; changing rules restarts the current mission. Changing the
 Guild specialist prepares your next job and leaves the active job’s kit intact.

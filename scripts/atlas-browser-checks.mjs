@@ -1,3 +1,4 @@
+import { clickControl, selectControl } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,20 +9,20 @@ async function play(page, values, touch = false) {
   await page.locator('#adventure-canvas').focus();
   for (const value of values) {
     if (value.startsWith('interact:')) {
-      if (await page.locator('#game-target-wrap').isVisible()) await page.locator('#game-target').selectOption(value.slice(9));
-      if (touch) await page.locator('#game-interact').tap();
+      if (await page.locator('#game-target-wrap').isVisible()) await selectControl(page, '#game-target', value.slice(9));
+      if (touch) await clickControl(page, '#game-interact', true);
       else { await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e'); }
-    } else if (value.startsWith('choose:')) await page.locator(`[data-choice="${value.slice(7)}"]`)[touch ? 'tap' : 'click']();
-    else if (value === 'close-dialogue') await page.locator('#conversation-close')[touch ? 'tap' : 'click']();
-    else if (touch && value.startsWith('dash-')) { await page.locator('#dash-button').tap(); await page.locator(`[data-move="${value.slice(5)}"]`).tap(); }
+    } else if (value.startsWith('choose:')) await clickControl(page, `[data-choice="${value.slice(7)}"]`, touch);
+    else if (value === 'close-dialogue') await clickControl(page, '#conversation-close', touch);
+    else if (touch && value.startsWith('dash-')) { await clickControl(page, '#dash-button', true); await clickControl(page, `[data-move="${value.slice(5)}"]`, true); }
     else if (touch) await page.locator(['up', 'right', 'down', 'left'].includes(value) ? `[data-move="${value}"]` : { wait: '#game-wait', shield: '#game-shield', decoy: '#game-decoy' }[value]).tap();
     else await page.keyboard.press(value.startsWith('dash-') ? `Shift+${keys[value.slice(5)]}` : keys[value]);
   }
 }
 async function start(page, fixture, touch) {
-  await page.locator('#game-difficulty').selectOption(fixture.difficulty);
-  await page.locator('#forget-habits').click();
-  await page.locator(`[data-stage="${fixture.id}"]`)[touch ? 'tap' : 'click']();
+  await selectControl(page, '#game-difficulty', fixture.difficulty);
+  await clickControl(page, '#forget-habits');
+  await clickControl(page, `[data-stage="${fixture.id}"]`, touch);
   assert.equal(await page.locator('#game-turns').textContent(), '0');
 }
 async function won(page, fixture) {
@@ -44,8 +45,8 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
       assert.equal(await page.locator('.atlas-chapter').count(), 6); assert.equal(await page.locator('.trail-art').count(), 18);
       assert.equal(await page.locator('[data-stage="trail-11"]').isDisabled(), true);
       for (const chapter of ['archive', 'dunes', 'aurora']) {
-        await page.locator(`[data-chapter-start="${chapter}"]`).click(); assert.equal(await page.locator('#game-turns').textContent(), '0');
-        await page.locator('#game-interact').click(); assert.equal(await page.locator('#conversation-portrait').isVisible(), true);
+        await clickControl(page, `[data-chapter-start="${chapter}"]`); assert.equal(await page.locator('#game-turns').textContent(), '0');
+        await clickControl(page, '#game-interact'); assert.equal(await page.locator('#conversation-portrait').isVisible(), true);
         const bounds = await page.locator('#conversation-dialog').boundingBox(); assert.ok(bounds.y >= 0 && bounds.y + bounds.height <= 1000);
         await page.keyboard.press('Escape');
       }
@@ -66,17 +67,17 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
         const record = await page.evaluate(key => JSON.parse(localStorage.getItem('tilewright.adventures.v1')).records[key], fixture.id + (fixture.difficulty === 'nemesis' ? '-nemesis' : ''));
         assert.equal(record.stars, 3);
         if (fixture.difficulty === 'trail' && ['trail-12', 'trail-15', 'trail-18'].includes(fixture.id)) {
-          await page.locator('#game-nemesis').click(); assert.equal(await page.locator('#game-difficulty').inputValue(), 'nemesis');
+          await clickControl(page, '#game-nemesis'); assert.equal(await page.locator('#game-difficulty').inputValue(), 'nemesis');
           assert.equal(await page.locator('#game-title').textContent(), { 'trail-12': 'Whispering Stacks', 'trail-15': 'Cinder Caravan', 'trail-18': 'Frostline Post' }[fixture.id]);
           assert.equal(await page.locator('#game-turns').textContent(), '0');
         }
         results.push({ mission: fixture.id, difficulty: fixture.difficulty, branch: fixture.branch, turns: fixture.result.turns });
       }
       assert.match(await page.locator('#game-primary').textContent(), /Return to the trail library/);
-      await page.locator('#game-primary').click(); assert.equal(await page.locator('#trail-picker').isVisible(), true);
+      await clickControl(page, '#game-primary'); assert.equal(await page.locator('#trail-picker').isVisible(), true);
       assert.match(await page.locator('.atlas-total').textContent(), /27 \/ 54/);
       await page.reload(); assert.equal(await page.locator('[data-stage="trail-18"]').isDisabled(), false);
-      await page.locator('#game-difficulty').selectOption('nemesis'); assert.match(await page.locator('.atlas-total').textContent(), /27 \/ 54/);
+      await selectControl(page, '#game-difficulty', 'nemesis'); assert.match(await page.locator('.atlas-total').textContent(), /27 \/ 54/);
       if (screenshots) { await page.locator('#atlas-archive').evaluate(el => el.scrollIntoView({ block: 'start' })); await page.screenshot({ path: '.playwright-mcp/atlas-chapters.png' }); }
       assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), map); assert.deepEqual(errors, []);
     } finally { await context.close(); }
@@ -90,17 +91,17 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
           await start(page, fixture, true);
           await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' }));
           const controls = await page.locator('.tactical-actions').boundingBox(); assert.ok(controls.y + controls.height <= 844, `${id}/${width} controls remain on screen at entry.`);
-          await page.locator('#game-inspect').tap(); const modal = await page.locator('#forecast-dialog').boundingBox();
-          assert.ok(modal.x >= 0 && modal.x + modal.width <= width && modal.y >= 0 && modal.y + modal.height <= 844); await page.locator('#forecast-close').tap();
+          await clickControl(page, '#game-inspect', true); const modal = await page.locator('#forecast-dialog').boundingBox();
+          assert.ok(modal.x >= 0 && modal.x + modal.width <= width && modal.y >= 0 && modal.y + modal.height <= 844); await clickControl(page, '#forecast-close', true);
           await play(page, fixture.actions, true); await won(page, fixture);
           assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
         }
-        await page.locator('#game-primary').tap();
+        await clickControl(page, '#game-primary', true);
         await page.locator('.atlas-nav button').last().tap();
         assert.equal(await page.evaluate(() => document.activeElement.textContent), 'The Long Dawn');
         if (screenshots && width === 390) {
           await page.screenshot({ path: '.playwright-mcp/atlas-mobile.png' });
-          await page.locator('[data-chapter-start="aurora"]').tap();
+          await clickControl(page, '[data-chapter-start="aurora"]', true);
           const fixture = fixtures.find(item => item.id === 'trail-16' && item.difficulty === 'trail' && item.branch === 0);
           await play(page, fixture.actions.slice(0, 12), true); await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' }));
           await page.screenshot({ path: '.playwright-mcp/aurora-mobile.png' });

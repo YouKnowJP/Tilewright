@@ -333,3 +333,146 @@
 
 .guild-job .guild-merit-preview { margin:0 0 10px; color:#5f5a70; }
 .game-guild-kit #game-guild-merits .merit-missed { color:#9e624f; }
+
+/* Focused play: the library and reading panels appear only when requested. */
+#adventure-library[hidden],#game-layout[hidden],.atlas-chapter[hidden],.notes-panel[hidden] { display:none; }
+.playing .site-header,.playing .page-footer { display:none; }
+.playing main { max-width:1456px; padding:12px 3%; }
+.playing .mode-switcher { position:static; width:max-content; height:36px; margin:0 0 12px; padding:3px; border:1px solid #dce2d3; border-radius:7px; background:#e9ede2; box-shadow:none; }
+.playing .mode-switcher button { padding:5px 13px; font-size:11px; }
+.playing .adventure { padding:0; }
+.playing .game-layout { height:calc(100svh - 72px); min-height:620px; grid-template-columns:minmax(0,1fr) 280px; gap:14px; }
+.playing .game-main { display:flex; flex-direction:column; height:100%; min-height:0; }
+.playing .game-region { padding:7px 16px; font-size:9px; line-height:1.4; letter-spacing:.7px; }
+.playing .game-toolbar { padding:12px 14px; gap:10px; flex-shrink:0; }
+.playing .game-toolbar h3 { font-size:18px; margin-bottom:4px; }
+.playing .game-toolbar-actions { align-items:center; flex-wrap:nowrap; gap:5px; }
+.playing .game-toolbar-actions>button,.game-menu summary { min-height:36px; padding:9px 11px; font-size:11px; white-space:nowrap; }
+.game-menu { position:relative; }
+.game-menu summary { list-style:none; cursor:pointer; border:1px solid var(--line); border-radius:6px; background:#fffefa; line-height:1.2; }
+.game-menu summary::-webkit-details-marker { display:none; }
+.game-menu summary::after { content:'⌄'; margin-left:7px; color:#6b7d5d; }
+.game-menu[open] summary { background:#e9efdf; border-color:#9fb18c; }
+.game-menu>div { position:absolute; right:0; top:calc(100% + 6px); z-index:8; width:180px; display:grid; gap:4px; padding:7px; border:1px solid #c5d2bb; border-radius:8px; background:#fffefa; box-shadow:0 8px 24px #142e332e; }
+.game-menu button { text-align:left; min-height:40px; font-size:12px; }
+.playing .game-hud { flex-shrink:0; grid-template-columns:repeat(6,minmax(0,1fr)); }
+.playing .game-hud>div { min-height:49px; gap:5px; padding:6px 3px; border-bottom:0; }
+.playing .game-hud>div:nth-child(3n) { border-right:1px solid #dce4d4; }
+.playing .game-hud>div:last-child { border-right:0; }
+.playing .game-hud>div>span { font-size:8px; letter-spacing:.5px; color:#617451; }
+.playing .game-hud strong { font-size:14px; }
+.playing .game-viewport { flex:1; height:auto; min-height:180px; padding:10px; }
+.playing .game-controls { flex-shrink:0; padding:10px 12px; gap:8px; display:grid; grid-template-columns:116px repeat(2,minmax(66px,1fr)); }
+.playing .direction-pad { grid-template-columns:repeat(3,36px); grid-template-rows:repeat(2,32px); gap:3px; }
+.playing .game-controls>button { min-height:44px; padding:10px; text-align:center; font-size:12px; }
+.playing .game-controls kbd { margin-left:4px; }
+.playing #game-controls-help { display:none; }
+.playing .tactical-actions { grid-column:1 / -1; display:flex; gap:6px; }
+.playing .tactical-actions button { min-height:40px; font-size:11px; overflow-wrap:anywhere; }
+.playing .game-target-wrap,.playing .game-interaction-note { grid-column:1 / -1; }
+.playing .game-controls>.game-interaction-note:not([hidden]) { display:block; margin:0; width:100%; font-size:10px; line-height:1.5; }
+.playing .game-status { min-height:45px; padding:10px 14px; line-height:1.6; flex-shrink:0; color:#4e6847; }
+.playing .game-rule-note { padding:6px 14px; font-size:11px; }
+.playing .game-expedition-banner { padding:6px 14px; margin:0; font-size:10px; }
+.game-aside { display:flex; height:100%; min-height:0; gap:0; overflow:hidden; border:1px solid #cbd8c2; border-radius:10px; background:#fffefa; }
+.notes-heading { display:flex; align-items:center; justify-content:space-between; padding:14px 16px 10px; }
+.notes-heading h3 { margin:0; font-size:15px; font-weight:600; }
+#game-notes-close { display:none; font-size:23px; padding:0; width:40px; height:40px; }
+.notes-tabs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:3px; padding:0 10px 10px; flex-shrink:0; border-bottom:1px solid var(--line); }
+.notes-tabs button { border:0; background:transparent; font-size:11px; min-height:36px; padding:7px 4px; color:#617451; }
+.notes-tabs [aria-selected="true"] { background:#e5edd9; color:#294f43; font-weight:600; }
+.notes-panel { overflow:auto; overscroll-behavior:contain; padding:0 16px 16px; scrollbar-width:thin; min-height:0; }
+.game-aside .notes-panel>section,.game-aside .notes-panel>.game-field-guide { border:0; border-radius:0; padding:17px 0; background:transparent; border-bottom:1px solid var(--line); }
+.game-aside .notes-panel>section:last-child { border:0; padding-bottom:0; }
+.game-aside h3 { margin:8px 0; }
+.game-aside p,.game-aside .game-field-guide p { color:#586d4b; }
+.game-aside .eyebrow { color:#7b876b; font-size:8px; }
+.game-aside .quest-list { margin:14px 0; gap:9px; }
+.game-aside .game-map-note canvas { width:100%; margin:16px auto; }
+.game-aside .game-save-note { font-size:10px; }
+.game-notes-dialog { width:min(480px,calc(100% - 24px)); max-height:calc(100svh - 24px); padding:0; overflow:hidden; border:1px solid #cbd8c2; border-radius:12px; }
+.game-notes-dialog .game-aside { max-height:calc(100svh - 28px); height:680px; border:0; border-radius:0; }
+.game-notes-dialog #game-notes-close { display:block; }
+.game-notes-dialog .notes-panel { flex:1; }
+.library-return { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin:20px 0; }
+.library-return button { background:var(--green); color:#fffdf3; min-height:42px; font-size:12px; }
+.library-return span { font-size:11px; color:#64765b; }
+.adventure-heading { margin-top:18px; }
+.atlas-nav button[aria-pressed="true"] { background:var(--green); border-color:var(--green); color:#fffbea; }
+.atlas-nav { padding-bottom:16px; }
+.atlas-chapter { margin-top:20px; }
+.atlas-chapter-progress { padding-bottom:0; border:0; }
+summary:focus-visible,[role="tabpanel"]:focus-visible { outline:3px solid #b67d4d; outline-offset:2px; }
+@media(min-width:1001px) { #game-notes-button { display:none; } }
+@media(max-width:1000px) {
+  .playing .game-layout { grid-template-columns:minmax(0,1fr); }
+}
+@media(max-width:760px) {
+  .playing main { padding:8px 10px; }
+  .playing .mode-switcher { margin-bottom:8px; }
+  .playing .game-layout { height:calc(100svh - 60px); min-height:620px; }
+  .playing .game-toolbar { padding:10px; gap:8px; }
+  .playing .game-toolbar>div:first-child { width:100%; }
+  .playing .game-toolbar h3 { font-size:16px; margin-bottom:2px; }
+  .playing .game-toolbar p { font-size:10px; }
+  .playing .game-toolbar-actions { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); width:100%; gap:5px; }
+  .playing .game-toolbar-actions>button,.game-menu summary { min-height:40px; font-size:11px; padding:10px 4px; text-align:center; }
+  .playing .game-region { padding:6px 10px; font-size:8px; letter-spacing:.4px; }
+  .playing .game-hud>div { min-height:44px; gap:4px; }
+  .playing .game-hud>div>span { font-size:8px; letter-spacing:0; }
+  .playing .game-hud strong { font-size:12px; }
+  .playing .heart-pip .ui-icon { width:12px; height:12px; }
+  .playing .resource-meter { gap:2px; min-height:14px; }
+  .playing .energy-pip { width:8px; height:11px; }
+  .playing .game-viewport { min-height:170px; padding:8px; }
+  .playing .game-controls { grid-template-columns:138px repeat(2,minmax(0,1fr)); padding:8px; gap:6px; }
+  .playing .direction-pad { grid-template-columns:repeat(3,44px); grid-template-rows:repeat(2,40px); gap:3px; }
+  .playing .game-controls>button { min-height:44px; font-size:11px; padding:8px 4px; }
+  .playing .tactical-actions { gap:5px; }
+  .playing .tactical-actions button { min-height:44px; font-size:10px; padding:7px 3px; }
+  .playing .tactical-actions button span { margin-left:3px; min-width:14px; padding:1px; }
+  .playing .game-status { padding:8px 10px; font-size:11px; line-height:1.6; }
+  .playing .game-target-wrap { font-size:10px; }
+  .playing .game-target-wrap select { min-height:36px; padding:5px 7px; }
+  .playing .game-controls>.game-interaction-note:not([hidden]) { font-size:9px; }
+  .game-aside .notes-panel>section { padding:16px 0; }
+  .adventure-heading h2 { font-size:23px; }
+  .adventure-options { gap:6px; }
+  .adventure-library-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; }
+  .adventure-library-tabs button { font-size:10px; line-height:1.5; padding:10px 6px; }
+  .atlas-heading h2 { font-size:20px; }
+  .atlas-nav { grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; }
+  .atlas-cards { grid-template-columns:minmax(0,1fr); }
+  .trail-card { grid-template-columns:32px minmax(0,1fr); gap:5px 7px; padding:12px 0; }
+  .trail-art { display:none; }
+  .trail-card .trail-number { grid-row:1 / 5; font-size:18px; padding-left:10px; }
+  .trail-card strong { font-size:14px; }
+  .trail-card .trail-subtitle,.trail-card .trail-progress,.trail-tags { font-size:10px; }
+  .guild-job canvas { max-height:72px; object-fit:cover; margin-bottom:10px; }
+  .guild-job { padding-bottom:12px; }
+}
+.library-notice { padding:12px 15px; background:#f7edcf; color:#72562f; border-radius:6px; font-size:12px; line-height:1.6; }
+.library-shortcuts { margin:16px 0 24px; color:#617451; font-size:12px; }
+.library-shortcuts summary { width:max-content; max-width:100%; padding:9px 0; cursor:pointer; }
+.library-shortcuts>div { display:flex; flex-wrap:wrap; gap:7px; padding-top:10px; }
+.library-shortcuts button { font-size:11px; min-height:40px; }
+@media(max-width:760px) {
+  .library-return { margin:12px 0 18px; }
+  .library-return span { display:none; }
+  .adventure-heading { align-items:flex-start; gap:10px; margin-bottom:14px; }
+  .adventure-heading>div:first-child>.eyebrow { display:none; }
+  .adventure-heading h2 { margin:0 0 7px; }
+  .adventure-heading .adventure-options { display:grid; grid-template-columns:110px minmax(0,1fr); width:100%; }
+  .adventure-options label small { line-height:1.4; }
+  .adventure-options select { min-height:40px; padding:8px 5px; font-size:16px; }
+  .atlas-heading { margin-bottom:14px; gap:10px; }
+  .atlas-heading>div>.eyebrow { display:none; }
+  .atlas-heading h2 { margin:0; font-size:18px; }
+  .atlas-total { padding:6px 10px; font-size:10px; }
+}
+.library-return { position:sticky; top:0; z-index:6; padding:8px 0; background:var(--paper); }
+@media(max-width:760px) {
+  .trail-card .trail-subtitle,.trail-card .trail-tags { display:none; }
+  .trail-card .trail-number { grid-row:1 / 3; }
+  .trail-card .trail-progress { padding-top:0; }
+}

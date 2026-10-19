@@ -1,3 +1,4 @@
+import { clickControl, selectControl } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6,20 +7,20 @@ const BASE = 'http://127.0.0.1:4174', recordKey = 'tilewright.guild.v1';
 const keys = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'ArrowLeft', wait: 'Space', decoy: 'q', shield: 'c', power: 'b' };
 async function input(page, value, touch = false) {
   if (value.startsWith('interact:')) {
-    if (await page.locator('#game-target-wrap').isVisible()) await page.locator('#game-target').selectOption(value.slice(9));
-    if (touch) await page.locator('#game-interact').tap();
+    if (await page.locator('#game-target-wrap').isVisible()) await selectControl(page, '#game-target', value.slice(9));
+    if (touch) await clickControl(page, '#game-interact', true);
     else { await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e'); }
-  } else if (value.startsWith('choose:')) await page.locator(`[data-choice="${value.slice(7)}"]`)[touch ? 'tap' : 'click']();
-  else if (value === 'close-dialogue') await page.locator('#conversation-close')[touch ? 'tap' : 'click']();
-  else if (touch && value.startsWith('dash-')) { await page.locator('#dash-button').tap(); await page.locator(`[data-move="${value.slice(5)}"]`).tap(); }
+  } else if (value.startsWith('choose:')) await clickControl(page, `[data-choice="${value.slice(7)}"]`, touch);
+  else if (value === 'close-dialogue') await clickControl(page, '#conversation-close', touch);
+  else if (touch && value.startsWith('dash-')) { await clickControl(page, '#dash-button', true); await clickControl(page, `[data-move="${value.slice(5)}"]`, true); }
   else if (touch) await page.locator(['up', 'right', 'down', 'left'].includes(value) ? `[data-move="${value}"]` : { wait: '#game-wait', decoy: '#game-decoy', shield: '#game-shield', power: '#game-power' }[value]).tap();
   else await page.keyboard.press(value.startsWith('dash-') ? `Shift+${keys[value.slice(5)]}` : keys[value]);
 }
 async function play(page, actions, touch = false) { await page.locator('#adventure-canvas').focus(); for (const action of actions) await input(page, action, touch); }
 async function start(page, fixture, touch = false) {
-  await page.locator('#library-guild')[touch ? 'tap' : 'click'](); await page.locator('#game-difficulty').selectOption(fixture.difficulty);
-  await page.locator('#guild-kit').selectOption(fixture.kit); await page.locator('#forget-habits').click();
-  await page.locator(`[data-guild-job="${fixture.id}"]`)[touch ? 'tap' : 'click']();
+  await clickControl(page, '#library-guild', touch); await selectControl(page, '#game-difficulty', fixture.difficulty);
+  await selectControl(page, '#guild-kit', fixture.kit); await clickControl(page, '#forget-habits');
+  await clickControl(page, `[data-guild-job="${fixture.id}"]`, touch);
   assert.equal(await page.locator('#game-turns').textContent(), '0'); assert.equal(await page.locator('#game-power').isDisabled(), false);
 }
 async function won(page, fixture) {
@@ -41,7 +42,7 @@ export async function checkGuild(browserType, { baseURL = BASE, channel = 'chrom
       page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
       await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-status="playing"]').waitFor();
       const original = await page.evaluate(() => [localStorage.getItem('tilewright.document.v1'), localStorage.getItem('tilewright.adventures.v1')]);
-      await page.locator('#library-guild').click(); assert.equal(await page.locator('[data-guild-job]').count(), 6);
+      await clickControl(page, '#library-guild'); assert.equal(await page.locator('[data-guild-job]').count(), 6);
       assert.equal(await page.locator('[data-guild-job]:disabled').count(), 0); assert.equal(await page.locator('#guild-kit option').count(), 2);
       for (const fixture of fixtures) {
         await start(page, fixture); await page.locator('#adventure-canvas').focus(); let jumps = 0;
@@ -49,7 +50,7 @@ export async function checkGuild(browserType, { baseURL = BASE, channel = 'chrom
           if (action === 'power') { const energy = await page.locator('.energy-pip.filled').count(); await input(page, action); assert.equal(await page.locator('.energy-pip.filled').count(), energy - 2); assert.equal(await page.locator('#game-power').isDisabled(), true); }
           else await input(page, action);
           if (action.startsWith('interact:') && /-(west|east)$/.test(action)) {
-            jumps++; const turn = await page.locator('#game-turns').textContent(); await page.locator('#game-inspect').click();
+            jumps++; const turn = await page.locator('#game-turns').textContent(); await clickControl(page, '#game-inspect');
             assert.match(await page.locator('#forecast-lines').textContent(), /energy|Recharges/); await page.keyboard.press('b'); assert.equal(await page.locator('#game-turns').textContent(), turn); await page.keyboard.press('Escape'); await page.locator('#adventure-canvas').focus();
             if (screenshots && fixture.id === 'guild-6' && fixture.kit === 'mistweaver' && fixture.difficulty === 'nemesis' && jumps === 1) {
               await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' })); await page.screenshot({ path: '.playwright-mcp/guild-tools-desktop.png' });
@@ -69,18 +70,18 @@ export async function checkGuild(browserType, { baseURL = BASE, channel = 'chrom
         const after = await page.evaluate(({ key, id }) => JSON.parse(localStorage.getItem(key)).records[id], { key: recordKey, id: `${fixture.id}-${fixture.kit}-${fixture.difficulty}` });
         assert.deepEqual(after, before); results.push({ alternate: fixture.id, kit: fixture.kit, rules: fixture.difficulty, checks: 'Short route wins without Traveler and retains the higher-commendation best.' });
       }
-      await page.locator('#game-primary').click(); assert.equal(await page.locator('#guild-hub').isVisible(), true); assert.match(await page.locator('#guild-progress').textContent(), /6\/6 jobs.*18\/18 commendations/);
+      await clickControl(page, '#game-primary'); assert.equal(await page.locator('#guild-hub').isVisible(), true); assert.match(await page.locator('#guild-progress').textContent(), /6\/6 jobs.*18\/18 commendations/);
       if (screenshots) { await page.locator('#guild-hub').evaluate(el => el.scrollIntoView({ block: 'start' })); await page.screenshot({ path: '.playwright-mcp/guild-board.png' }); }
       assert.deepEqual(await page.evaluate(() => [localStorage.getItem('tilewright.document.v1'), localStorage.getItem('tilewright.adventures.v1')]), original);
-      await page.reload(); await page.locator('#library-guild').click(); await page.locator('#guild-kit').selectOption('mistweaver'); await page.locator('#game-difficulty').selectOption('nemesis');
+      await page.reload(); await clickControl(page, '#library-guild'); await selectControl(page, '#guild-kit', 'mistweaver'); await selectControl(page, '#game-difficulty', 'nemesis');
       assert.match(await page.locator('#guild-progress').textContent(), /18\/18 commendations/);
       const fixture = fixtures.find(f => f.id === 'guild-1' && f.kit === 'mistweaver' && f.difficulty === 'trail'); await start(page, fixture);
-      await page.locator('#game-interact').click(); await page.keyboard.press('b'); assert.equal(await page.locator('#game-turns').textContent(), '0'); await page.keyboard.press('Escape');
-      await page.locator('#game-pause').click(); assert.equal(await page.locator('#game-power').isDisabled(), true); await page.keyboard.press('b'); assert.equal(await page.locator('#game-turns').textContent(), '0'); await page.locator('#game-pause').click();
+      await clickControl(page, '#game-interact'); await page.keyboard.press('b'); assert.equal(await page.locator('#game-turns').textContent(), '0'); await page.keyboard.press('Escape');
+      await clickControl(page, '#game-pause'); assert.equal(await page.locator('#game-power').isDisabled(), true); await page.keyboard.press('b'); assert.equal(await page.locator('#game-turns').textContent(), '0'); await clickControl(page, '#game-pause');
       await page.locator('#adventure-canvas').focus(); await page.keyboard.press('b'); assert.equal(await page.locator('#game-turns').textContent(), '1'); assert.equal(await page.locator('#game-power').isDisabled(), true);
-      await page.locator('#mode-create').click(); await page.locator('#mode-play').click(); assert.equal(await page.locator('#game-turns').textContent(), '1');
-      await page.locator('#game-restart').click(); assert.equal(await page.locator('#game-turns').textContent(), '0'); assert.equal(await page.locator('#game-power').isDisabled(), false);
-      await page.locator('#library-story').click(); assert.equal(await page.locator('#guild-hub').isVisible(), false); assert.equal(await page.locator('#trail-picker').isVisible(), true);
+      await clickControl(page, '#mode-create'); await clickControl(page, '#mode-play'); assert.equal(await page.locator('#game-turns').textContent(), '1');
+      await clickControl(page, '#game-restart'); assert.equal(await page.locator('#game-turns').textContent(), '0'); assert.equal(await page.locator('#game-power').isDisabled(), false);
+      await clickControl(page, '#library-story'); assert.equal(await page.locator('#guild-hub').isVisible(), false); assert.equal(await page.locator('#trail-picker').isVisible(), true);
       assert.deepEqual(errors, []); results.push({ checks: 'Both kits/rules save separately, all 24 results reload, original saves retained, B/modal/pause isolation, restart and editor return.' });
     } finally { await context.close(); }
     for (const width of widths) {
@@ -109,7 +110,7 @@ export async function checkGuild(browserType, { baseURL = BASE, channel = 'chrom
           Storage.prototype.setItem = function(key, value) { if (failure === 'blocked' || key === 'tilewright.guild.v1') throw Error('quota'); return set.call(this, key, value); };
         }, failure);
         const page = await context.newPage(); await page.goto(`${baseURL}/#play`); const fixture = fixtures[0]; await start(page, fixture); await play(page, fixture.actions); await won(page, fixture);
-        assert.match(await page.locator('#game-save-note').textContent(), /saving unavailable/i); await page.locator('#game-primary').click(); assert.match(await page.locator('#guild-progress').textContent(), /1\/6 jobs.*Saving unavailable/);
+        assert.match(await page.locator('#game-save-note').textContent(), /saving unavailable/i); await clickControl(page, '#game-primary'); assert.match(await page.locator('#guild-progress').textContent(), /1\/6 jobs.*Saving unavailable/);
         results.push({ failure, checks: 'Complete job and commendations remain playable in session with truthful saving warning.' });
       } finally { await context.close(); }
     }

@@ -1,3 +1,4 @@
+import { clickControl, selectControl } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,24 +8,24 @@ const arrows = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'A
 async function action(page, value) {
   if (value.startsWith('interact:')) {
     const id = value.slice(9);
-    if (await page.locator('#game-target-wrap').isVisible()) await page.locator('#game-target').selectOption(id);
+    if (await page.locator('#game-target-wrap').isVisible()) await selectControl(page, '#game-target', id);
     await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e');
-  } else if (value.startsWith('choose:')) await page.locator(`[data-choice="${value.slice(7)}"]`).click();
-  else if (value === 'close-dialogue') await page.locator('#conversation-close').click();
+  } else if (value.startsWith('choose:')) await clickControl(page, `[data-choice="${value.slice(7)}"]`);
+  else if (value === 'close-dialogue') await clickControl(page, '#conversation-close');
   else if (value.startsWith('dash-')) await page.keyboard.press(`Shift+${arrows[value.slice(5)]}`);
   else await page.keyboard.press(arrows[value] || { wait: 'Space', shield: 'c', decoy: 'q', 'drop-cargo': 'x' }[value]);
 }
 async function play(page, actions) { await page.locator('#adventure-canvas').focus(); for (const value of actions) await action(page, value); }
 async function inspect(page) {
-  const turn = await page.locator('#game-turns').textContent(); await page.locator('#game-inspect').click();
+  const turn = await page.locator('#game-turns').textContent(); await clickControl(page, '#game-inspect');
   assert.equal(await page.locator('#forecast-dialog').isVisible(), true); await page.keyboard.press('ArrowRight');
   assert.equal(await page.locator('#game-turns').textContent(), turn); await page.keyboard.press('Escape');
 }
 async function start(page, fixture) {
-  await page.locator('#forget-habits').click();
-  await page.locator('#game-difficulty').selectOption(fixture.difficulty);
-  if (fixture.id === 'trail-7') await page.locator('#begin-sluices').click();
-  else await page.locator(`[data-stage="${fixture.id}"]`).click();
+  await clickControl(page, '#forget-habits');
+  await selectControl(page, '#game-difficulty', fixture.difficulty);
+  if (fixture.id === 'trail-7') await clickControl(page, '#begin-sluices');
+  else await clickControl(page, `[data-stage="${fixture.id}"]`);
   assert.equal(await page.locator('#game-turns').textContent(), '0');
 }
 export async function checkSluices(browserType, { baseURL = BASE, channel = 'chrome', fixtures, legacy, expedition, screenshots = false } = {}) {
@@ -41,16 +42,16 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
       await page.goto(`${baseURL}/#play`); const map = await page.evaluate(() => localStorage.getItem('tilewright.document.v1'));
       // Regression: URL navigation must dismiss native modals and retain the conversation state.
       for (let attempt = 0; attempt < 5; attempt++) {
-        await page.locator('#game-interact').click(); const turn = await page.locator('#game-turns').textContent();
+        await clickControl(page, '#game-interact'); const turn = await page.locator('#game-turns').textContent();
         await page.evaluate(() => { location.hash = ''; }); await page.waitForFunction(() => !document.querySelector('#editor').hidden);
         assert.equal(await page.locator('#conversation-dialog').isVisible(), false);
         await page.getByRole('button', { name: 'Brush (B)', exact: true }).click();
-        await page.locator('#mode-play').click(); assert.equal(await page.locator('#conversation-dialog').isVisible(), true);
+        await clickControl(page, '#mode-play'); assert.equal(await page.locator('#conversation-dialog').isVisible(), true);
         assert.equal(await page.locator('#game-turns').textContent(), turn); await page.keyboard.press('Escape');
       }
-      await inspect(page); await page.locator('#game-inspect').click(); await page.evaluate(() => { location.hash = ''; });
+      await inspect(page); await clickControl(page, '#game-inspect'); await page.evaluate(() => { location.hash = ''; });
       await page.waitForFunction(() => !document.querySelector('#editor').hidden); assert.equal(await page.locator('#forecast-dialog').isVisible(), false);
-      await page.locator('#mode-play').click();
+      await clickControl(page, '#mode-play');
       results.push({ checks: 'Five dialogue/editor/back navigation cycles preserve the conversation without trapping the editor; forecast navigation and Escape consume no turn.' });
       // Play all branches and difficulty variants using only public controls.
       for (const fixture of fixtures) {
@@ -70,17 +71,19 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
         assert.equal(records[fixture.id + (fixture.difficulty === 'nemesis' ? '-nemesis' : '')].stars, 3);
         if (fixture.id === 'trail-9') { assert.match(await page.locator('#game-result-title').textContent(), /Nobody misses/); assert.match(await page.locator('#game-result-text').textContent(), /Sola and Jun rescued/); }
         if (fixture.id === 'trail-9' && fixture.difficulty === 'trail') {
-          await page.locator('#game-nemesis').click(); assert.equal(await page.locator('#game-title').textContent(), 'Rainmoss Sluice'); assert.equal(await page.locator('#game-difficulty').inputValue(), 'nemesis');
+          await clickControl(page, '#game-nemesis'); assert.equal(await page.locator('#game-title').textContent(), 'Rainmoss Sluice'); assert.equal(await page.locator('#game-difficulty').inputValue(), 'nemesis');
         }
         assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), map);
         results.push({ mission: fixture.id, rules: fixture.difficulty, branch: fixture.branch, turns: fixture.result.turns, checks: 'Real-input clean three-star win, valve/relay/cargo/rescue goals, dialogue consequence, independent best, free forecasts, retained editor.' });
       }
-      await page.locator('#game-primary').click(); assert.equal(await page.locator('#trail-picker').isVisible(), true);
+      await clickControl(page, '#game-primary');
+      assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'playing', 'The sluice finale continues into the archive chapter.');
+      await clickControl(page, '#game-choose'); assert.equal(await page.locator('#trail-picker').isVisible(), true);
       await page.reload(); await page.locator('#adventure[data-status="playing"]').waitFor();
       assert.equal(await page.locator('[data-stage="trail-8"]').isDisabled(), false); assert.equal(await page.locator('[data-stage="trail-9"]').isDisabled(), false);
       // A penniless player must not lose a choice or receive goods, and nearby targets must work with keyboard E.
-      await page.locator('#begin-sluices').click();
-      await page.locator('#game-difficulty').selectOption('trail'); await page.locator('#forget-habits').click(); await page.locator('[data-stage="trail-8"]').click();
+      await clickControl(page, '#begin-sluices');
+      await selectControl(page, '#game-difficulty', 'trail'); await clickControl(page, '#forget-habits'); await clickControl(page, '[data-stage="trail-8"]');
       await play(page, ['dash-right', 'right']); // column 7, beside Rook, without collecting either nearby coin.
       await action(page, 'interact:rook');
       assert.equal(await page.locator('[data-choice="decoys"]').isDisabled(), true); assert.equal(await page.locator('[data-choice="shield"]').isDisabled(), true);
@@ -90,13 +93,13 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
       const relicIndex = nearbyFixture.actions.indexOf('interact:relic');
       await play(page, nearbyFixture.actions.slice(0, relicIndex));
       assert.equal(await page.locator('#game-target-wrap').isVisible(), true);
-      await page.locator('#game-target').selectOption('relic'); await page.locator('#game-target').focus(); await page.keyboard.press('e');
+      await selectControl(page, '#game-target', 'relic'); await page.locator('#game-target').focus(); await page.keyboard.press('e');
       assert.equal(await page.locator('#game-cargo').isDisabled(), false);
       // Restore genuine previous-version saves through the file input, then verify immediate migration.
-      await page.locator('#begin-expedition').click();
+      await clickControl(page, '#begin-expedition');
       for (const fixture of legacy) {
-        if (await page.locator('#conversation-dialog').isVisible()) await page.locator('#conversation-close').click();
-        await page.locator('#begin-expedition').click();
+        if (await page.locator('#conversation-dialog').isVisible()) await clickControl(page, '#conversation-close');
+        await clickControl(page, '#begin-expedition');
         const previous = await page.evaluate(() => localStorage.getItem('tilewright.expedition.v1'));
         if (previous && JSON.parse(previous).state.phase !== 'won') page.once('dialog', dialog => dialog.accept());
         await page.locator('#expedition-file').setInputFiles({ name: `${fixture.id}.json`, mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(fixture.checkpoint)) });
@@ -108,35 +111,41 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
       }
       results.push({ checks: 'Unaffordable trade buttons are disabled; all six genuine 0.5 checkpoints import and migrate, including dialogue, camp, loss, held cargo, and finish; new mission unlocks survive reload.' });
       // Camp also has to close on browser navigation without discarding the checkpoint.
-      await page.locator('#begin-expedition').click(); await page.locator('#expedition-length').selectOption('9'); await page.locator('#expedition-seed').fill(expedition.config.seed);
-      await page.locator('#expedition-start').click(); await play(page, expedition.legs[0].actions); await page.locator('#game-primary').click();
+      await clickControl(page, '#begin-expedition'); await selectControl(page, '#expedition-length', '9'); await page.locator('#expedition-seed').fill(expedition.config.seed);
+      await clickControl(page, '#expedition-start'); await play(page, expedition.legs[0].actions); await clickControl(page, '#game-primary');
       await page.evaluate(() => { location.hash = ''; }); await page.waitForFunction(() => !document.querySelector('#editor').hidden);
-      assert.equal(await page.locator('#camp-dialog').isVisible(), false); await page.locator('#mode-play').click(); await page.locator('#game-primary').click();
-      assert.equal(await page.locator('#camp-dialog').isVisible(), true); await page.locator('#camp-cancel').click();
+      assert.equal(await page.locator('#camp-dialog').isVisible(), false); await clickControl(page, '#mode-play'); await clickControl(page, '#game-primary');
+      assert.equal(await page.locator('#camp-dialog').isVisible(), true); await clickControl(page, '#camp-cancel');
       assert.deepEqual(errors, []); assert.deepEqual(failures, []);
     } finally { await context.close(); }
     for (const width of [320, 390, 768, 1024]) {
       const context = await browser.newContext({ viewport: { width, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce' });
       try {
         const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
-        await page.goto(`${baseURL}/#play`); await page.locator('#begin-sluices').tap();
+        await page.goto(`${baseURL}/#play`); await clickControl(page, '#begin-sluices', true);
         await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' }));
         const controls = await page.locator('.tactical-actions').boundingBox(); assert.ok(controls.y + controls.height <= 844, 'New act controls stay visible at entry.');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
-        await page.locator('#game-inspect').tap(); const modal = await page.locator('#forecast-dialog').boundingBox();
+        await clickControl(page, '#game-inspect', true); const modal = await page.locator('#forecast-dialog').boundingBox();
         assert.ok(modal.x >= 0 && modal.x + modal.width <= width && modal.y >= 0 && modal.y + modal.height <= 844);
-        await page.locator('#forecast-close').tap(); await page.locator('#game-interact').tap();
-        await page.locator('[data-choice="supplies"]').tap(); await page.locator('#conversation-close').tap();
-        await page.locator('#game-restart').tap(); await page.locator('#forget-habits').click(); await page.locator('#game-restart').tap();
+        await clickControl(page, '#forecast-close', true); await clickControl(page, '#game-interact', true);
+        await clickControl(page, '[data-choice="supplies"]', true); await clickControl(page, '#conversation-close', true);
+        await clickControl(page, '#game-restart', true); await clickControl(page, '#forget-habits'); await clickControl(page, '#game-restart', true);
         let selections = 0;
         for (const id of ['trail-7', 'trail-8', 'trail-9']) {
-          if (id !== 'trail-7') { await page.locator('#forget-habits').click(); await page.locator('#game-primary').tap(); }
+          if (id !== 'trail-7') { await clickControl(page, '#forget-habits'); await clickControl(page, '#game-primary', true); }
           const fixture = fixtures.find(item => item.id === id && item.difficulty === 'trail' && item.branch === 1);
           await page.locator('#adventure-canvas').focus();
           for (const value of fixture.actions) {
-            if (value.startsWith('interact:') && await page.locator('#game-target-wrap').isVisible()) {
-              await page.locator('#game-target').selectOption(value.slice(9)); await page.locator('#game-target').focus(); await page.keyboard.press('e'); selections++;
-            } else await action(page, value);
+            try {
+              if (value.startsWith('interact:') && await page.locator('#game-target-wrap').isVisible()) {
+                await selectControl(page, '#game-target', value.slice(9)); await page.locator('#game-target').focus(); await page.keyboard.press('e'); selections++;
+              } else await action(page, value);
+            } catch (error) {
+              const state = await page.evaluate(() => ({ title: document.querySelector('#game-title').textContent, turn: document.querySelector('#game-turns').textContent,
+                status: document.querySelector('#game-status').textContent, focus: document.activeElement.id, library: !document.querySelector('#adventure-library').hidden }));
+              throw new Error(`${width}px / ${id} / ${value}: ${JSON.stringify(state)}: ${error.message}`, { cause: error });
+            }
             if (value === 'interact:intake' && screenshots && width === 390) {
               await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' })); await page.screenshot({ path: '.playwright-mcp/sluice-mobile.png' });
             }

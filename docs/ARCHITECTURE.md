@@ -311,7 +311,8 @@ The campaign has six groups of three stable identities. New chapters start at
 10, 13, and 16; each chapter entry is open, and subsequent wins unlock its next
 mission on either rule set. Record eviction protects all 36 Trail/Nemesis
 identities within the existing 64-record limit. The atlas uses ordinary buttons
-and document scrolling, without a nested scroll trap or hidden chapter tab.
+with explicit chapter selection. In v0.8.1, only the selected chapter is
+shown; the other five remain reachable through the chapter buttons.
 
 Chapter art and portraits use original Canvas primitives. Cached map recoloring
 changes terrain pixels, with subtle traversable ground markings that avoid
@@ -366,3 +367,29 @@ charging, avoiding danger, tools, and jumps. It never changes health or runtime
 puzzle flags to obtain a win. Captured routes are independently replayed by the
 Node suite and by real browser controls. Search bounds are not a completeness
 proof for every possible player history.
+
+
+## Focused gameplay navigation — v0.8.1
+
+The library and live board are exclusive views. Returning from the library
+reveals the same reducer state; browsing has no turns. Chapter selection is
+view state, not progression, and all six chapter entries remain reachable.
+Difficulty changes still restart the active mission with an explicit label;
+the current library tab and selected chapter remain visible afterward.
+
+The same quest, minimap, journal/kit, and help DOM nodes sit in a tabbed sidebar
+above 1000 CSS pixels and move into a native modal dialog at narrower widths.
+Resizing closes the dialog, preserves the selected panel, and resizes the
+Canvas camera. Arrow/Home/End navigation follows the tab selection; Escape
+returns focus to the notes button. The library, open notes dialog, and Menu
+block gameplay shortcuts. Closing these views consumes no reducer action.
+
+Flex layout budgets the remaining viewport height for the board. A minimum
+620-pixel layout retains readable controls on short/landscape screens using
+normal document scrolling. Reading panels have a single scroll region; the
+board itself has no nested map scrollbar. Secondary controls use a native
+details menu, and quick starts/custom-map actions use a library disclosure.
+`layout-browser-checks.mjs` verifies scrolling, bounds, keyboard focus, chapter
+selection, and responsive node relocation. `ui-driver.mjs` lets the retained
+playthroughs reach controls with visible clicks instead of bypassing hidden UI.
+The simulation, expedition rules 0.6.0, and save formats are unchanged.

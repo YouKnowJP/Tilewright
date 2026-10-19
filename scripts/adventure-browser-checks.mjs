@@ -1,3 +1,4 @@
+import { clickControl, selectControl } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,7 +14,7 @@ async function playRoute(page, actions) {
 async function openGame(page, baseURL) {
   await page.goto(`${baseURL}/#play`);
   await page.locator('#adventure[data-status="playing"]').waitFor();
-  await page.waitForFunction(() => document.querySelector('#adventure-canvas').clientWidth > 0 && scrollY > 0);
+  await page.waitForFunction(() => document.querySelector('#adventure-canvas').clientWidth > 0 && document.querySelector('#adventure-library').hidden);
 }
 async function assertLayout(page, width, controlsVisible = false) {
   const state = await page.evaluate(() => {
@@ -46,25 +47,26 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
         assert.equal(await page.locator('#editor').isVisible(), false);
         assert.equal(await page.locator('[data-stage="trail-2"]').isDisabled(), true);
         // An actual editor change gives us a saved document and undo step to protect.
-        await page.locator('#mode-create').click();
+        await clickControl(page, '#mode-create');
         await page.locator('#map-name').fill('Adventure test map'); await page.locator('#map-name').blur();
         const map = await page.evaluate(key => localStorage.getItem(key), editorKey);
         assert.ok(map?.includes('Adventure test map'));
-        await page.locator('#mode-play').click();
-        await page.locator('#game-hint-button').click();
+        await clickControl(page, '#mode-play');
+        await clickControl(page, '#game-hint-button');
         assert.ok(await page.locator('#game-hint').isVisible());
         assert.match(await page.locator('#game-hint-text').textContent(), /(?:lantern|key).*lies/);
-        await page.locator('#game-hint-button').click();
-        await page.locator('#game-pause').click();
+        if (await page.locator('#game-notes-dialog').isVisible()) await page.locator('#game-notes-close').click();
+        await clickControl(page, '#game-hint-button');
+        await clickControl(page, '#game-pause');
         await playRoute(page, ['up']); assert.equal(await page.locator('#game-turns').textContent(), '0');
-        await page.locator('#game-primary').click();
+        await clickControl(page, '#game-primary');
         await page.locator('#adventure-canvas').evaluate(el => el.focus({ preventScroll: true }));
         await page.keyboard.press('Shift+ArrowUp');
         assert.equal(await page.locator('#game-turns').textContent(), '1');
         assert.equal(await page.locator('#game-energy').getAttribute('aria-label'), 'Energy: 1 of 3');
-        await page.locator('#game-wait').click();
+        await clickControl(page, '#game-wait');
         assert.equal(await page.locator('#game-energy').getAttribute('aria-label'), 'Energy: 2 of 3');
-        await page.locator('#game-restart').click();
+        await clickControl(page, '#game-restart');
         for (const [index, id] of ['trail-1', 'trail-2', 'trail-3'].entries()) {
           await playRoute(page, routes[id]);
           assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won', `${id} must finish through real keyboard input.`);
@@ -74,26 +76,26 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
           assert.equal(await page.evaluate(key => localStorage.getItem(key), editorKey), map);
           if (index < 2) {
             assert.equal(await page.locator(`[data-stage="trail-${index + 2}"]`).isDisabled(), false);
-            await page.locator('#game-primary').click();
+            await clickControl(page, '#game-primary');
           }
         }
         await page.reload(); await page.locator('#adventure[data-status="playing"]').waitFor();
         assert.equal(await page.locator('[data-stage="trail-3"]').isDisabled(), false);
         assert.match(await page.locator('[data-stage="trail-1"]').textContent(), /★★★/);
-        await page.locator('#play-custom').click();
+        await clickControl(page, '#play-custom');
         assert.equal(await page.locator('#game-title').textContent(), 'Adventure test map');
         assert.match(await page.locator('#game-subtitle').textContent(), /your map/);
         assert.equal(await page.evaluate(key => localStorage.getItem(key), editorKey), map);
-        await page.locator('#mode-create').click();
+        await clickControl(page, '#mode-create');
         assert.equal(await page.locator('#map-name').inputValue(), 'Adventure test map');
         // Reload intentionally clears in-memory undo; create and then protect another edit.
         await page.locator('#map-name').fill('Undo survives play'); await page.locator('#map-name').blur();
-        await page.locator('#mode-play').click(); await playRoute(page, ['right']); await page.locator('#mode-create').click();
-        await page.locator('#undo').click(); assert.equal(await page.locator('#map-name').inputValue(), 'Adventure test map');
-        await page.locator('#new-map').click(); await page.locator('#new-width').fill('1'); await page.locator('#new-height').fill('1');
+        await clickControl(page, '#mode-play'); await playRoute(page, ['right']); await clickControl(page, '#mode-create');
+        await clickControl(page, '#undo'); assert.equal(await page.locator('#map-name').inputValue(), 'Adventure test map');
+        await clickControl(page, '#new-map'); await page.locator('#new-width').fill('1'); await page.locator('#new-height').fill('1');
         page.once('dialog', dialog => dialog.accept()); await page.getByRole('button', { name: 'Create map', exact: true }).click();
-        await page.locator('#mode-play').click(); const title = await page.locator('#game-title').textContent();
-        await page.locator('#play-custom').click();
+        await clickControl(page, '#mode-play'); const title = await page.locator('#game-title').textContent();
+        await clickControl(page, '#play-custom');
         assert.match(await page.locator('#game-status').textContent(), /six connected/);
         assert.equal(await page.locator('#game-title').textContent(), title);
         assert.deepEqual(errors, []); assert.deepEqual(failures, []);
@@ -105,9 +107,9 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
       try {
         const page = await context.newPage(); await openGame(page, baseURL); await assertLayout(page, width, width === 320);
         const before = await page.locator('#game-turns').textContent();
-        await page.locator('[data-move="up"]').tap();
+        await clickControl(page, '[data-move="up"]', true);
         assert.equal(Number(await page.locator('#game-turns').textContent()), Number(before) + 1);
-        await page.locator('#game-restart').click();
+        await clickControl(page, '#game-restart');
         await page.locator('#adventure-canvas').scrollIntoViewIfNeeded();
         const box = await page.locator('#adventure-canvas').boundingBox(), cdp = await context.newCDPSession(page);
         const touch = (type, y) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: type === 'touchEnd' ? [] : [{ x: box.x + box.width / 2, y, id: 1 }] });
@@ -127,10 +129,10 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
       assert.equal(await page.locator('[data-stage="trail-2"]').isDisabled(), false);
       assert.match(await page.locator('#game-save-note').textContent(), /unavailable/);
       results.push({ checks: 'Blocked browser storage still permits wins and session unlocks.' });
-      await page.locator('#mode-create').click(); await page.locator('#new-map').click();
+      await clickControl(page, '#mode-create'); await clickControl(page, '#new-map');
       await page.locator('#new-width').fill('64'); await page.locator('#new-height').fill('64');
       await page.getByRole('button', { name: 'Create map', exact: true }).click();
-      await page.locator('#mode-play').click(); await page.locator('#play-custom').click();
+      await clickControl(page, '#mode-play'); await clickControl(page, '#play-custom');
       assert.match(await page.locator('#game-subtitle').textContent(), /your map/);
       await assertLayout(page, 1280);
       await playRoute(page, ['right', 'down']);

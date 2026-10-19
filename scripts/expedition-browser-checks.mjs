@@ -1,3 +1,4 @@
+import { clickControl, selectControl } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6,24 +7,24 @@ const BASE = 'http://127.0.0.1:4174';
 const checkpointKey = 'tilewright.expedition.v1', logbookKey = 'tilewright.logbook.v1';
 const arrows = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'ArrowLeft' };
 const snapshot = page => page.evaluate(key => localStorage.getItem(key), checkpointKey);
-async function hub(page) { await page.locator('#begin-expedition').click(); }
+async function hub(page) { await clickControl(page, '#begin-expedition'); }
 async function begin(page, config) {
-  await hub(page); await page.locator('#expedition-mode').selectOption(config.mode || 'journey');
+  await hub(page); await selectControl(page, '#expedition-mode', config.mode || 'journey');
   if (config.mode !== 'daily') {
     await page.locator('#expedition-seed').fill(config.seed);
-    if (config.mode !== 'contract') await page.locator('#expedition-length').selectOption(String(config.length || 6));
-    await page.locator('#expedition-difficulty').selectOption(config.difficulty || 'trail');
-    await page.locator('#expedition-vow').selectOption(config.vow || 'none');
+    if (config.mode !== 'contract') await selectControl(page, '#expedition-length', String(config.length || 6));
+    await selectControl(page, '#expedition-difficulty', config.difficulty || 'trail');
+    await selectControl(page, '#expedition-vow', config.vow || 'none');
   }
   const suspended = await snapshot(page);
   if (suspended && JSON.parse(suspended).state.phase !== 'won') page.once('dialog', dialog => dialog.accept());
-  await page.locator('#expedition-start').click();
+  await clickControl(page, '#expedition-start');
   await page.locator('#game-expedition-banner').waitFor();
 }
 async function input(page, action) {
   if (action.startsWith('interact:')) await page.keyboard.press('e');
-  else if (action.startsWith('choose:')) await page.locator(`[data-choice="${action.slice(7)}"]`).click();
-  else if (action === 'close-dialogue') await page.locator('#conversation-close').click();
+  else if (action.startsWith('choose:')) await clickControl(page, `[data-choice="${action.slice(7)}"]`);
+  else if (action === 'close-dialogue') await clickControl(page, '#conversation-close');
   else if (action.startsWith('dash-')) await page.keyboard.press(`Shift+${arrows[action.slice(5)]}`);
   else await page.keyboard.press(arrows[action] || { wait: 'Space', decoy: 'q', shield: 'c', 'drop-cargo': 'x' }[action]);
 }
@@ -32,7 +33,7 @@ async function replay(page, actions) {
   for (const action of actions) await input(page, action);
 }
 async function resume(page) {
-  await hub(page); await page.locator('#expedition-resume').click();
+  await hub(page); await clickControl(page, '#expedition-resume');
   await page.waitForFunction(() => !document.querySelector('#expedition-resume').disabled && !document.querySelector('#game-expedition-banner').hidden);
 }
 function compareCheckpoint(a, b) {
@@ -63,19 +64,19 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
         assert.equal(await page.locator('#game-shield').isDisabled(), vow === 'unwarded'); count++;
       }
       await hub(page); await page.locator('#expedition-seed').fill('saved-custom-seed');
-      await page.locator('#expedition-mode').selectOption('daily');
+      await selectControl(page, '#expedition-mode', 'daily');
       for (const id of ['length', 'difficulty', 'vow', 'surprise']) assert.equal(await page.locator(`#expedition-${id}`).isDisabled(), true);
       assert.equal(await page.locator('#expedition-seed').getAttribute('readonly'), '');
       await begin(page, { mode: 'daily' });
       assert.deepEqual(JSON.parse(await snapshot(page)).state.config, { mode: 'daily', seed: 'daily-2026-10-18', length: 5, difficulty: 'trail', vow: 'none' });
-      await hub(page); await page.locator('#expedition-mode').selectOption('contract');
+      await hub(page); await selectControl(page, '#expedition-mode', 'contract');
       assert.equal(await page.locator('#expedition-seed').inputValue(), 'saved-custom-seed');
       assert.equal(await page.locator('#expedition-difficulty').inputValue(), 'nemesis');
-      await page.locator('#expedition-surprise').click(); assert.match(await page.locator('#expedition-seed').inputValue(), /^trail-/);
-      await page.locator('#expedition-seed').fill('bad<script>'); await page.locator('#expedition-start').click();
+      await clickControl(page, '#expedition-surprise'); assert.match(await page.locator('#expedition-seed').inputValue(), /^trail-/);
+      await page.locator('#expedition-seed').fill('bad<script>'); await clickControl(page, '#expedition-start');
       assert.equal(await page.locator('#expedition-seed').evaluate(el => el.validity.patternMismatch), true);
       const saved = await snapshot(page); await page.locator('#expedition-seed').fill('cancel-replacement');
-      page.once('dialog', dialog => dialog.dismiss()); await page.locator('#expedition-start').click(); compareCheckpoint(saved, await snapshot(page));
+      page.once('dialog', dialog => dialog.dismiss()); await clickControl(page, '#expedition-start'); compareCheckpoint(saved, await snapshot(page));
       assert.deepEqual(errors, []); assert.deepEqual(failures, []);
       results.push({ checks: `${count + 1} form configurations, daily UTC/fixed rules/custom-settings return, surprise seed, invalid seed, replacement cancellation, no runtime/asset/console errors.` });
       // Long runs use only keyboard, real conversation choices, and camp forms.
@@ -88,17 +89,17 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
           const state = JSON.parse(await snapshot(page)).state; assert.equal(state.receipts.length, index + 1);
           if (leg.perk) {
             const campCheckpoint = await snapshot(page);
-            await page.locator('#game-primary').click(); assert.equal(await page.locator('#camp-dialog').isVisible(), true);
+            await clickControl(page, '#game-primary'); assert.equal(await page.locator('#camp-dialog').isVisible(), true);
             if (index === 0) {
-              await page.locator('#camp-cancel').click(); compareCheckpoint(campCheckpoint, await snapshot(page));
-              await page.locator('#game-primary').click(); await page.keyboard.press('Escape'); compareCheckpoint(campCheckpoint, await snapshot(page));
+              await clickControl(page, '#camp-cancel'); compareCheckpoint(campCheckpoint, await snapshot(page));
+              await clickControl(page, '#game-primary'); await page.keyboard.press('Escape'); compareCheckpoint(campCheckpoint, await snapshot(page));
               await page.reload(); await resume(page); compareCheckpoint(campCheckpoint, await snapshot(page));
-              await page.locator('#game-primary').click();
+              await clickControl(page, '#game-primary');
             }
             await page.locator(`input[name="camp-perk"][value="${leg.perk}"]`).check();
             await page.locator(`input[name="camp-route"][value="${leg.route}"]`).check();
             if (screenshots && id === 'long-voyage' && index === 0) await page.screenshot({ path: '.playwright-mcp/expedition-camp-desktop.png' });
-            await page.locator('#camp-continue').click();
+            await clickControl(page, '#camp-continue');
             assert.equal(await page.locator('#game-turns').textContent(), '0');
           } else {
             assert.match(await page.locator('#game-result-title').textContent(), /expedition is complete/);
@@ -114,13 +115,13 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
       assert.deepEqual(errors, []); assert.deepEqual(failures, []);
       // Portable checkpoint: mid-conversation, then a played turn, and all import failure paths.
       await begin(page, { seed: 'portable-save', length: 3 });
-      await page.locator('#game-interact').click(); const dialogueSave = await snapshot(page);
+      await clickControl(page, '#game-interact'); const dialogueSave = await snapshot(page);
       await page.reload(); await resume(page); compareCheckpoint(dialogueSave, await snapshot(page));
       assert.equal(await page.locator('#conversation-dialog').isVisible(), true);
-      await page.locator('[data-choice="decoy"]').click(); await page.locator('#conversation-close').click(); await page.locator('#game-wait').click();
-      const portable = await snapshot(page); await page.locator('#game-pause').click();
+      await clickControl(page, '[data-choice="decoy"]'); await clickControl(page, '#conversation-close'); await clickControl(page, '#game-wait');
+      const portable = await snapshot(page); await clickControl(page, '#game-pause');
       await page.locator('#adventure-canvas').focus(); await page.keyboard.press('ArrowRight'); compareCheckpoint(portable, await snapshot(page));
-      await page.locator('#game-primary').click();
+      await clickControl(page, '#game-primary');
       await hub(page); const [download] = await Promise.all([page.waitForEvent('download'), page.locator('#expedition-export').click()]);
       const chunks = []; for await (const chunk of await download.createReadStream()) chunks.push(chunk);
       const backup = Buffer.concat(chunks).toString('utf8'); compareCheckpoint(portable, backup);
@@ -133,13 +134,13 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
       page.once('dialog', dialog => dialog.dismiss());
       await page.locator('#expedition-file').setInputFiles({ name: 'backup.json', mimeType: 'application/json', buffer: Buffer.from(backup) });
       await page.waitForFunction(() => !document.querySelector('#expedition-import').disabled); compareCheckpoint(portable, await snapshot(page));
-      await page.locator('#mode-create').click(); await page.locator('#mode-play').click(); await hub(page);
-      await page.locator('#library-story').click(); await page.locator('#begin-contracts').click(); await resume(page); compareCheckpoint(portable, await snapshot(page));
-      await page.locator('#game-restart').click(); const retried = JSON.parse(await snapshot(page));
+      await clickControl(page, '#mode-create'); await clickControl(page, '#mode-play'); await hub(page);
+      await clickControl(page, '#library-story'); await clickControl(page, '#begin-contracts'); await resume(page); compareCheckpoint(portable, await snapshot(page));
+      await clickControl(page, '#game-restart'); const retried = JSON.parse(await snapshot(page));
       assert.equal(retried.state.retries, 1); assert.equal(await page.locator('#game-turns').textContent(), '0');
       await page.reload(); await resume(page); compareCheckpoint(JSON.stringify(retried), await snapshot(page));
-      await page.locator('#game-sound').click(); assert.equal(await page.locator('#game-sound').getAttribute('aria-pressed'), 'true');
-      await page.locator('#game-shield').click(); await page.locator('#game-sound').click(); assert.equal(await page.locator('#game-sound').getAttribute('aria-pressed'), 'false');
+      await clickControl(page, '#game-sound'); assert.equal(await page.locator('#game-sound').getAttribute('aria-pressed'), 'true');
+      await clickControl(page, '#game-shield'); await clickControl(page, '#game-sound'); assert.equal(await page.locator('#game-sound').getAttribute('aria-pressed'), 'false');
       const portableContext = await browser.newContext();
       try {
         const other = await portableContext.newPage(); await other.goto(`${baseURL}/#play`); await hub(other);
@@ -149,13 +150,13 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
       assert.deepEqual(errors, []); assert.deepEqual(failures, []);
       results.push({ checks: 'Mid-dialogue reload, pause suppression, JSON download/import in a new context, malformed/oversized/future/tampered import rejection, cancel valid import, story/editor switching, retry/reload, opt-in sound toggle.' });
       const lossFixture = fixtures.find(item => item.id === 'nemesis-journey');
-      await begin(page, lossFixture.config); await replay(page, lossFixture.legs[0].actions); await page.locator('#game-primary').click();
+      await begin(page, lossFixture.config); await replay(page, lossFixture.legs[0].actions); await clickControl(page, '#game-primary');
       await page.locator(`input[name="camp-perk"][value="${lossFixture.legs[0].perk}"]`).check();
-      await page.locator(`input[name="camp-route"][value="${lossFixture.legs[0].route}"]`).check(); await page.locator('#camp-continue').click();
+      await page.locator(`input[name="camp-route"][value="${lossFixture.legs[0].route}"]`).check(); await clickControl(page, '#camp-continue');
       await replay(page, [...lossFixture.legs[1].actions.slice(0, 13), ...Array(19).fill('wait')]);
       assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'lost');
       const lost = await snapshot(page); await page.reload(); await resume(page); compareCheckpoint(lost, await snapshot(page));
-      await page.locator('#game-primary').click(); const recovered = JSON.parse(await snapshot(page)).state;
+      await clickControl(page, '#game-primary'); const recovered = JSON.parse(await snapshot(page)).state;
       assert.equal(recovered.retries, 1); assert.equal(recovered.leg, 1); assert.equal(recovered.receipts.length, 1); assert.equal(recovered.perks.length, 1);
       assert.equal(await page.locator('#game-turns').textContent(), '0'); assert.deepEqual(errors, []);
       results.push({ checks: 'Actual later-leg loss, exact lost-state reload, retry retains the completed leg, camp upgrade, starting supplies, and learned habits.' });
@@ -166,19 +167,19 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
       try {
         const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
         await page.goto(`${baseURL}/#play`); const fixture = fixtures.find(item => item.id === 'contract-trail-unwarded'); await begin(page, fixture.config);
-        await page.locator('#game-interact').tap(); await page.locator('[data-choice="decoy"]').tap(); await page.locator('#conversation-close').tap();
+        await clickControl(page, '#game-interact', true); await clickControl(page, '[data-choice="decoy"]', true); await clickControl(page, '#conversation-close', true);
         await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' }));
         const controls = await page.locator('.tactical-actions').boundingBox(); assert.ok(controls.y + controls.height <= 844, 'Courier controls visible on a narrow phone.');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
-        await page.locator('#game-restart').tap();
+        await clickControl(page, '#game-restart', true);
         // Retry retains learning, so restore the fresh checkpoint using a new ordinary start.
         await begin(page, fixture.config);
         await page.locator('#adventure-canvas').focus(); let dropped = false;
         for (const action of fixture.legs[0].actions) {
           await input(page, action);
           if (!dropped && action === 'interact:relic') {
-            const held = await snapshot(page); await page.locator('#game-cargo').tap();
-            assert.equal(await page.locator('#game-cargo').isDisabled(), true); await page.locator('#game-interact').tap();
+            const held = await snapshot(page); await clickControl(page, '#game-cargo', true);
+            assert.equal(await page.locator('#game-cargo').isDisabled(), true); await clickControl(page, '#game-interact', true);
             assert.equal(await page.locator('#game-cargo').isDisabled(), false);
             // Return to the held checkpoint to keep the golden route's enemy timing; import is verified in the UI.
             await hub(page); page.once('dialog', dialog => dialog.accept());
@@ -191,12 +192,12 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
         assert.match(await page.locator('#quest-mission').textContent(), /✓.*relic/i);
         if (screenshots && width === 390) await page.screenshot({ path: '.playwright-mcp/expedition-courier-mobile.png' });
         const journey = fixtures.find(item => item.id === 'long-voyage'); await begin(page, journey.config); await replay(page, journey.legs[0].actions);
-        await page.locator('#game-primary').tap(); const box = await page.locator('#camp-dialog').boundingBox();
+        await clickControl(page, '#game-primary', true); const box = await page.locator('#camp-dialog').boundingBox();
         assert.ok(box.x >= 0 && box.x + box.width <= width && box.y >= 0 && box.y + box.height <= 844);
         const footer = await page.locator('#camp-continue').boundingBox(); assert.ok(footer.y >= 0 && footer.y + footer.height <= 844, 'Camp departure stays visible while the choices scroll.');
         await page.locator('input[name="camp-perk"][value="restock"]').check(); await page.locator('input[name="camp-route"][value="b"]').check();
         if (screenshots && width === 390) await page.screenshot({ path: '.playwright-mcp/expedition-camp-mobile.png' });
-        await page.locator('#camp-continue').tap(); assert.equal(JSON.parse(await snapshot(page)).state.leg, 1);
+        await clickControl(page, '#camp-continue', true); assert.equal(JSON.parse(await snapshot(page)).state.leg, 1);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width); assert.deepEqual(errors, []);
         results.push({ width, checks: 'Touch dialogue and cargo drop/reclaim, complete courier run, bounded scrollable camp, restock/perilous choice, reduced motion, visible controls and no sideways overflow.' });
       } finally { await context.close(); }
@@ -209,8 +210,8 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
           else Storage.prototype.setItem = function () { throw new DOMException('Quota exceeded', 'QuotaExceededError'); };
         }, failure);
         const page = await context.newPage(), fixture = fixtures.find(item => item.id === 'contract-trail-none');
-        await page.goto(`${baseURL}/#play`); await hub(page); await page.locator('#expedition-mode').selectOption('contract');
-        await page.locator('#expedition-seed').fill(fixture.config.seed); await page.locator('#expedition-start').click();
+        await page.goto(`${baseURL}/#play`); await hub(page); await selectControl(page, '#expedition-mode', 'contract');
+        await page.locator('#expedition-seed').fill(fixture.config.seed); await clickControl(page, '#expedition-start');
         assert.match(await page.locator('#game-save-note').textContent(), /Checkpoint unavailable/);
         await replay(page, fixture.legs[0].actions); assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won');
         await hub(page); const [download] = await Promise.all([page.waitForEvent('download'), page.locator('#expedition-export').click()]);

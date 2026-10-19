@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.8.1 — 2026-10-19
+
+- Separate active play from the adventure library. Browse one three-mission
+  chapter at a time, with a direct return to the unchanged current run.
+- Group quest progress, minimap, kit/journal, and controls into four accessible
+  tabs. Use a compact sidebar on desktop and a separate notes panel on phones.
+- Fit the board and compact controls to normal portrait/desktop viewports; keep
+  a bounded document scroll on short screens. Move secondary actions into Menu
+  and library shortcuts into a disclosure.
+- Block turn shortcuts while browsing or reading mobile notes, retain focus and
+  tab selection across resize, and show custom-map/export notices in the library.
+- Add a focused layout browser suite and adapt all seven retained suites to
+  navigate visible menus, chapters, and notes through the public controls.
+- Fix menu focus transitions so Pause and Restart activate before the menu
+  closes. Recheck keyboard/touch actions, complete mission runs, and checkpoints.
+- Keep simulation rules, authored levels, and save formats unchanged.
+
 ## 0.8.0 — 2026-10-19
 
 - Add the Wayfarers’ Guild: six original dispatch maps, open job selection,
