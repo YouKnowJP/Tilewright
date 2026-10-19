@@ -7,7 +7,7 @@ They are proposals for this small tool, not claims that Tilewright already
 supports those editors' formats or all their capabilities. The
 [roadmap](../ROADMAP.md) tracks selected work and remaining estimates.
 
-## Delivered through v0.5.0
+## Delivered through v0.6.0
 
 **Finish structural editing.** A map no longer needs to be recreated to change
 its dimensions. Users can anchor retained content, preview cropped occupied
@@ -15,7 +15,7 @@ cells, choose fill for new cells, and undo the resize. Layers can be renamed,
 duplicated, reordered, and deleted with confirmation and undo. This closes a
 specific gap in the existing workflow without changing the saved map format.
 
-**Give the worlds a reason to explore.** Lantern Trails now has six real
+**Give the worlds a reason to explore.** Lantern Trails now has nine real
 missions with keys, patrols, dash energy, health, crate-and-plate bridge puzzles,
 fog, hints, treasures, stars, and progression. The harder second act adds local adaptive interception,
 dialogue choices, rescue/following, ordered relays, alarms, timed embers, and
@@ -28,9 +28,16 @@ mission families, noisy courier relics, optional oaths, daily trails, checkpoint
 backups, and twelve badges are playable. See the [expedition guide](EXPEDITIONS.md).
 
 Further gameplay proposals in [mission design and counterplay](MISSIONS.md)
-include branching passwords, reversible flood puzzles, evacuation consequences,
-and resource-priced recovery points. These remain distinct from delivered
+include richer branching passwords, moving-water puzzles beyond the delivered
+sluices, evacuation consequences, and resource-priced recovery points. These remain distinct from delivered
 courier missions, generated contracts, camps, and free current-leg retries.
+
+**Make decisions readable and reversible.** The sluice saga adds route-changing
+valves, cooled ember lanes, an optional trader, and two-keeper delivery. A free
+forecast explains nearby threats; a selector resolves competing interactions.
+All conversations can be reread in the journal. Occupied floors cannot close,
+and full parcels cannot waste coins. These refinements are delivered; richer
+multi-mission relationships and moving-water terrain remain future ideas.
 
 ## Highest-value next steps
 

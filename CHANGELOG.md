@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.6.0 — 2026-10-18
+
+- Add a directly accessible third act: Rainmoss Sluice, Glasshouse Concord,
+  and The Last Ferry, bringing the story to nine missions.
+- Add reversible valves, multi-setting crossings, controllable ember fields,
+  required final switch settings, and protection against closing occupied floors.
+- Add dialogue route choices, optional coin trades, two-person rescue/courier
+  objectives, branch-specific epilogues, and separate act Nemesis invitations.
+- Add a free Plan/V forecast and selectable nearby interactions with keyboard E.
+  Record all spoken keepers in the journal, including those without choices.
+- Fix dialogue trapping the editor after URL navigation; close game modals when
+  leaving Play while retaining conversation/camp progress.
+- Prevent manually bypassing Luma’s exclusive route, block empty paid parcels, preserve all nine normal/Nemesis campaign bests
+  during custom-record eviction, and prevent duplicate leg credit while a
+  completed expedition’s finish token is retained.
+- Preserve genuine 0.5.0 expedition backups through replay/fingerprint migration;
+  save new checkpoints with 0.6.0 rules. Retain version-1 map files.
+- Expand to 127 Node tests, 14 clean new-mission routes, 42,000 exploratory
+  inputs across the retained and new suites, and five browser suites covering
+  all new levels, branches, migration, navigation, and four touch-layout widths.
+- Document the tested limits and design references; keep untested device and
+  long-term enjoyment claims separate from automated verification.
+
 ## 0.5.0 — 2026-10-18
 
 - Add seeded three-, six-, and nine-leg journeys, single contracts, and five-leg

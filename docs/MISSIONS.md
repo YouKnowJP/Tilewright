@@ -1,5 +1,44 @@
 # Mission design and counterplay
 
+## Play now: the sluice saga
+
+Choose **Play the sluice saga** to start Rainmoss without replaying earlier acts.
+Finish it to unlock Glasshouse Concord, then The Last Ferry. Normal and Nemesis
+bests are separate. The finale offers **Replay this act on Nemesis**.
+
+| Mission | Decisions and objectives | Trail / Nemesis targets |
+| --- | --- | --- |
+| Rainmoss Sluice | Ask Luma for a middle ferry route or a decoy/shield. Light three lamps, activate North intake, cross the river, activate South spillway, and return home. Spillway closes the north crossing and cools eastern embers; the south crossing opens. | 95 / 80 |
+| Glasshouse Concord | Glass alone opens the north arch; Moss alone opens the south arch; both open the middle arch. Ring Dew then Sun, activate Cooling vent, restore the lamps, and enter the signal chamber. Rook offers an optional trade. | 110 / 93 |
+| The Last Ferry | Ask Iona for cooled storm lanes or health/a decoy. Take the key, ring Root, cross south, activate Mooring wheel, and ring Tide. Light all lamps, return for Jun and Sola, retrieve the songstone, and deliver it home by the raised north ferry. | 185 / 157 |
+
+Tree groves and stone beds create routes to break sight. Valve previews list
+which crossing cells open/close and which embers change. Player-operated valves can be
+reversed; Luma alone operates the optional reed ferry. A crossing refuses to close if occupied by the player, a companion,
+a crate, or an enemy; no turn is spent on the rejected change. Let the patrol
+clear it before trying again. Required settings appear in the quest checklist.
+
+**Plan / V** explains visible enemy steps, sweeps, and next-turn ember cells
+without advancing time. When several objects are adjacent, select **Nearby
+action** before E/Interact. This matters when a rescued keeper stands beside
+the relic or another keeper. Advice remains in the journal even if no choice
+is made. Dialogue choices also change each mission’s epilogue.
+
+Rook sells two decoys for two coins or one shield for one coin, once. Only
+unspent coins pay for a trade; collected treasure still counts toward goals
+and score. You can decline both trades and finish. A parcel is unavailable
+when its resource is already full. Supplies remain capped at three.
+
+Story missions store unlocks and best results. Mid-mission reload recovery is
+available in seeded expeditions, not authored story missions. The story’s
+Restart/R retries the current mission; normal learning is retained until reset.
+
+Fourteen clean public-action fixtures verify both dialogue branches on both
+difficulties, plus Glasshouse without trading. See [QA](QA.md) for routes and
+limits, and [design notes](DESIGN_NOTES.md) for the research behind the refinement.
+
+![Rainmoss valve preview on a phone](sluice-mobile.png)
+
 ## Play now: the second act
 
 Open **Play adventures → Choose trail → Begin hard missions** to start Briarwatch
@@ -73,7 +112,7 @@ retains upgrades and opponent learning; it is free and has no keeper bargain.
 | Idea | Player interaction and tension | Evidence needed before shipping |
 | --- | --- | --- |
 | The borrowed voice | Negotiate with two keepers for different passwords. One opens a safer route; the other grants supplies for a guarded shortcut. | Both branches must lead to distinct, completable routes; dialogue must reflect the chosen promise. |
-| Flooded archive | Turn pumps to move water between rooms, changing paths and hunter access while recovering pages in a chosen order. | Reversible valves, a clear flood preview, and solvability checks for every reachable water configuration. |
+| Flooded archive expansion | Extend the shipped reversible sluices with multiple water levels and movable waterways while recovering pages in a chosen order. | A clear flood preview and solvability checks across the larger water-state graph; the shipped controls use fixed crossings and ember switches. |
 | The false trail duel | A rival reads repeated route choices. Place false footprints and switch exits to bait an interception, then cross behind it. | Show exactly what the rival observed; compare trained and untrained behavior; ensure every interception has a response window. |
 | Evacuation under the bells | Choose which group to lead first. Each rescue changes available shelters and the next conversation; no one is silently lost to an unseen timer. | Persistent branch consequences, explicit deadlines if used, and accessible warnings before irreversible choices. |
 | Checkpoint bargains | Ask a keeper to create one recovery point at a resource cost; restarting restores puzzle state while the Watcher remembers observed movement. | Clearly distinguish restored mission state from retained learning; test crate/gate restoration and repeated recovery. |

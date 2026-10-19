@@ -2,6 +2,7 @@ import { validateDocument } from './model.mjs';
 import { freshMemory, normalizeMemory, learnMove } from './adventure-brain.mjs';
 import { perkEffects } from './adventure-perks.mjs';
 import { planHunters } from './adventure-tactics.mjs';
+import { switchGateOpen, switchChange, choiceProblem, validateMechanisms } from './adventure-mechanisms.mjs';
 
 export const DIRECTIONS = Object.freeze({ up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] });
 export const MAX_HEARTS = 3;
@@ -28,6 +29,7 @@ export function activePlates(run) {
 }
 
 export function gateIsOpen(run, gate) {
+  if (gate.type === 'switch') return switchGateOpen(run, gate);
   if (gate.type === 'key') return run.openGates.includes(gate.id);
   if (gate.type === 'signal') return run.relayProgress === run.stage.sequence.length;
   const active = activePlates(run);
@@ -38,7 +40,7 @@ export function canEnter(run, point, unlock = false) {
   if (!inside(run.stage.map, point)) return false;
   const gate = run.stage.gates.find(item => same(item, point));
   if (gate) {
-    if (gate.type === 'bridge' || gate.type === 'signal') return gateIsOpen(run, gate);
+    if (['bridge', 'signal', 'switch'].includes(gate.type)) return gateIsOpen(run, gate);
     if (!gateIsOpen(run, gate) && !(unlock && run.keyCount > 0)) return false;
   }
   if (run.stage.npcs.some(npc => !run.rescued.includes(npc.id) && same(npc, point))) return false;
@@ -58,7 +60,7 @@ function reveal(run, point) {
 export function createRun(definition, { memory = freshMemory(), difficulty = 'trail', perks = [], loadout = null } = {}) {
   const map = validateDocument(definition.map);
   const stage = { ...definition, map };
-  for (const name of ['lanterns', 'keys', 'coins', 'hearts', 'crates', 'plates', 'gates', 'enemies', 'npcs', 'relays', 'supplies', 'cover', 'hazards', 'hunters']) {
+  for (const name of ['lanterns', 'keys', 'coins', 'hearts', 'crates', 'plates', 'gates', 'enemies', 'npcs', 'relays', 'supplies', 'cover', 'hazards', 'hunters', 'switches']) {
     stage[name] = structuredClone(definition[name] || []);
   }
   const effects = perkEffects(perks);
@@ -66,17 +68,19 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   stage.restrictions = { noDash: Boolean(definition.restrictions?.noDash), noShield: Boolean(definition.restrictions?.noShield) };
   if (loadout && ['health', 'decoys', 'shields'].some(key => !Number.isInteger(loadout[key]) || loadout[key] < (key === 'health' ? 1 : 0) || loadout[key] > 3)) throw new Error('Invalid expedition supplies.');
   stage.sequence = [...(definition.sequence || [])]; stage.requiredRescues = [...(definition.requiredRescues || [])];
+  stage.requiredSwitches = [...(definition.requiredSwitches || [])];
   if (!stage.start || !stage.exit || !stage.lanterns.length) throw new Error('An adventure needs a start, a beacon, and at least one lantern.');
   const points = [stage.start, stage.exit, ...stage.lanterns, ...stage.keys, ...stage.coins, ...stage.hearts,
     ...stage.crates, ...stage.plates, ...stage.gates, ...stage.enemies.flatMap(enemy => enemy.route),
-    ...stage.npcs, ...stage.relays, ...stage.supplies, ...stage.cover, ...stage.hazards, ...stage.hunters.flatMap(hunter => hunter.route), ...(stage.relic ? [stage.relic, stage.delivery] : [])];
+    ...stage.npcs, ...stage.relays, ...stage.supplies, ...stage.cover, ...stage.hazards, ...stage.switches, ...stage.hunters.flatMap(hunter => hunter.route), ...(stage.relic ? [stage.relic, stage.delivery] : [])];
   if (points.some(point => !point || !Number.isInteger(point.x) || !Number.isInteger(point.y) || !inside(map, point))) {
     throw new Error('Adventure markers must be inside the map.');
   }
-  if (stage.gates.some(gate => !['key', 'bridge', 'signal'].includes(gate.type)
+  if (stage.gates.some(gate => !['key', 'bridge', 'signal', 'switch'].includes(gate.type)
     || (gate.type === 'bridge' && (!gate.plates?.length || gate.plates.some(id => !stage.plates.some(plate => plate.id === id)))))) {
     throw new Error('Adventure gates need valid keys or pressure plates.');
   }
+  validateMechanisms(stage);
   if (stage.enemies.some(enemy => enemy.route.length < 2
     || enemy.route.some((point, index) => index && Math.abs(point.x - enemy.route[index - 1].x) + Math.abs(point.y - enemy.route[index - 1].y) !== 1))) {
     throw new Error('Patrol routes must connect adjacent cells.');
@@ -99,6 +103,7 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
     difficulty: hard ? 'nemesis' : 'trail', memory: normalizeMemory(memory),
     decoys: Math.min(3, (loadout?.decoys ?? (hard ? 1 : 2)) + effects.provision), shields: Math.min(3, (loadout?.shields ?? (hard ? 1 : 2)) + effects.provision), ward: 0, lure: null, noise: 0, stun: 0, alarm: 0,
     choices: {}, rescued: [], companions: [], relayProgress: 0, usedSupplies: [], dialogue: null,
+    switches: Object.fromEntries(stage.switches.map(item => [item.id, item.initial])), spentCoins: 0, talkedTo: [],
     collectedLanterns: [], collectedKeys: [], collectedCoins: [], collectedHearts: [], openGates: [],
     keyCount: 0, health: loadout?.health ?? (hard ? 2 : MAX_HEARTS), energy: MAX_ENERGY, turns: 0, damage: 0, invulnerability: 0,
     status: 'playing', seen: Array(map.width * map.height).fill(false), events: [], message: stage.intro || 'Find the lanterns, then return to the beacon.',
@@ -145,10 +150,12 @@ function blockMessage(run, point) {
   if (gate?.type === 'key' && !gateIsOpen(run, gate)) return 'A locked gate. Find a key first.';
   if (gate?.type === 'signal') return 'A signal gate. Ring the relays in the correct order to open it.';
   if (gate?.type === 'bridge') return 'The crossing is closed. Leave crates on every linked pressure plate.';
+  if (gate?.type === 'switch') return 'This crossing follows the valve settings. Inspect nearby controls and read the scout hint.';
   return 'That way is blocked. Trees, rocks, cabins, and deep water need a different route.';
 }
 
 export function hazardActive(run, hazard, turn = run.turns) {
+  if (hazard.disabledBy && run.switches[hazard.disabledBy]) return false;
   const phase = (turn + (hazard.offset || 0)) % hazard.period;
   return hazard.phases.includes(phase) || (run.difficulty === 'nemesis' && phase === (hazard.phases[0] + hazard.period - 1) % hazard.period);
 }
@@ -156,6 +163,7 @@ export function hazardActive(run, hazard, turn = run.turns) {
 export function nearbyInteractions(run) {
   return [...run.stage.npcs.map(item => ({ ...item, ...(run.companions.find(companion => companion.id === item.id) || {}), kind: 'npc', label: `Talk to ${item.name}` })),
     ...run.stage.relays.map(item => ({ ...item, kind: 'relay', label: `Ring ${item.name}` })),
+    ...run.stage.switches.filter(item => item.operable !== false).map(item => ({ ...item, kind: 'switch', label: `${run.switches[item.id] ? 'Switch off' : 'Switch on'} ${item.name}` })),
     ...(run.stage.relic && run.cargoPoint && !run.carrying && !run.cargoDelivered ? [{ ...run.cargoPoint, id: run.stage.relic.id, name: run.stage.relic.name, kind: 'relic', label: 'Pick up the singing relic' }] : []),
     ...run.stage.supplies.filter(item => !run.usedSupplies.includes(item.id)).map(item => ({ ...item, kind: 'supply', label: 'Open trail supplies' }))]
     .filter(item => Math.abs(item.x - run.player.x) + Math.abs(item.y - run.player.y) <= 1)
@@ -168,6 +176,7 @@ export function missionGoals(run) {
     ...(run.stage.sequence.length ? [{ label: `Power the relay sequence (${run.relayProgress}/${run.stage.sequence.length})`, done: run.relayProgress === run.stage.sequence.length }] : []),
     ...(run.stage.requireCoins ? [{ label: `Recover every coin (${run.collectedCoins.length}/${run.stage.coins.length})`, done: run.collectedCoins.length === run.stage.coins.length }] : []),
     ...(run.stage.relic ? [{ label: 'Deliver the singing relic to the beacon', done: run.cargoDelivered }] : []),
+    ...run.stage.requiredSwitches.map(id => ({ label: `Activate ${run.stage.switches.find(item => item.id === id).name}`, done: run.switches[id] })),
     ...run.stage.requiredRescues.map(id => ({ label: `Return to rescue ${run.stage.npcs.find(npc => npc.id === id).name} after restoring the lights`, done: run.rescued.includes(id) })),
   ];
 }
@@ -179,7 +188,12 @@ function conversation(run, action) {
     const npc = run.stage.npcs.find(item => item.id === run.dialogue);
     const choice = npc.choices?.find(item => item.id === action.slice(7));
     if (!choice || Object.hasOwn(run.choices, npc.id)) return run;
+    const problem = choiceProblem(run, choice);
+    if (problem) return { ...run, events: [], message: problem };
+    const change = switchChange(run, choice.effect?.switches || {});
+    if (change.error) return { ...run, events: [], message: change.error };
     return { ...run, choices: { ...run.choices, [npc.id]: choice.id },
+      switches: change.switches, spentCoins: run.spentCoins + (choice.cost || 0), health: Math.min(MAX_HEARTS, run.health + (choice.effect?.health || 0)),
       decoys: Math.min(3, run.decoys + (choice.effect?.decoys || 0)),
       shields: Math.min(3, run.shields + (choice.effect?.shields || 0)),
       message: choice.response, events: [{ type: 'choice' }] };
@@ -193,7 +207,7 @@ export function stepRun(run, action) {
   const interaction = action.startsWith('interact:') ? nearbyInteractions(run).find(item => item.id === action.slice(9)) : null;
   if (interaction?.kind === 'npc') {
     const rescued = run.stage.requiredRescues.includes(interaction.id) && run.collectedLanterns.length === run.stage.lanterns.length;
-    return { ...run, dialogue: interaction.id, companions: rescued && !run.rescued.includes(interaction.id) ? [...run.companions, { id: interaction.id, x: interaction.x, y: interaction.y }] : run.companions, rescued: rescued ? [...new Set([...run.rescued, interaction.id])] : run.rescued,
+    return { ...run, dialogue: interaction.id, talkedTo: [...new Set([...run.talkedTo, interaction.id])], companions: rescued && !run.rescued.includes(interaction.id) ? [...run.companions, { id: interaction.id, x: interaction.x, y: interaction.y }] : run.companions, rescued: rescued ? [...new Set([...run.rescued, interaction.id])] : run.rescued,
       message: rescued ? `${interaction.name} is safe. Reach the beacon together.` : `You speak with ${interaction.name}.`, events: rescued ? [{ type: 'rescue' }] : [] };
   }
   const dash = action.startsWith('dash-'), direction = dash ? action.slice(5) : action;
@@ -205,6 +219,8 @@ export function stepRun(run, action) {
   if (dash && (!moving || run.energy < 2)) return { ...run, events: [], message: 'Dash needs two energy. Walk or wait to recharge.' };
   if (tactical && run[action === 'decoy' ? 'decoys' : 'shields'] < 1) return { ...run, events: [], message: `No ${action === 'decoy' ? 'decoys' : 'shields'} left. Find supplies or ask a trail keeper.` };
   if (interaction?.kind === 'relay' && run.relayProgress === run.stage.sequence.length) return { ...run, events: [], message: 'The relay network is already powered.' };
+  const change = interaction?.kind === 'switch' ? switchChange(run, { [interaction.id]: !run.switches[interaction.id] }) : null;
+  if (change?.error) return { ...run, events: [], message: change.error };
   const next = { ...run, player: { ...run.player }, crates: run.crates.map(crate => ({ ...crate })),
     companions: run.companions.map(companion => ({ ...companion })),
     enemies: run.enemies.map(enemy => ({ ...enemy })), hunters: run.hunters.map(hunter => ({ ...hunter })),
@@ -248,6 +264,7 @@ export function stepRun(run, action) {
   } else if (action === 'shield') { next.shields--; next.ward = next.effects.shieldTurns; next.events.push({ type: 'shield' }); }
   else if (action === 'drop-cargo') { next.carrying = false; next.cargoPoint = { ...next.player }; next.noise = 0; next.events.push({ type: 'cargo-drop' }); }
   else if (interaction?.kind === 'relic') { next.carrying = true; next.cargoPoint = null; next.events.push({ type: 'cargo' }); }
+  else if (interaction?.kind === 'switch') { next.switches = change.switches; next.events.push({ type: 'switch', name: interaction.name, active: next.switches[interaction.id] }); }
   else if (interaction?.kind === 'supply') {
     next.usedSupplies.push(interaction.id); next.decoys = Math.min(3, next.decoys + 1); next.shields = Math.min(3, next.shields + 1);
     next.health = Math.min(MAX_HEARTS, next.health + 1); next.events.push({ type: 'supply' });
@@ -293,7 +310,7 @@ export function stepRun(run, action) {
     const lanterns = next.stage.lanterns.length - next.collectedLanterns.length;
     next.message = lanterns ? `The beacon needs ${lanterns} more ${lanterns === 1 ? 'lantern' : 'lanterns'}.` : `Before leaving: ${missing.map(goal => goal.label.toLowerCase()).join('; ')}.`; return next;
   }
-  const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
+  const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const messages = { hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
     'blocked-hit': 'Your shield absorbs the hit. Keep moving before it fades.',
@@ -302,6 +319,7 @@ export function stepRun(run, action) {
     relay: `Relay ${next.relayProgress} of ${next.stage.sequence.length} powered.`, supply: 'Supplies found: one heart, a decoy, and a shield charge.',
     decoy: `A false lantern! Nearby hunters follow it for ${next.effects.decoyTurns} turns. Take another route.`, shield: `Shield raised for ${next.effects.shieldTurns} turns, including this one. It blocks wardens, sweeps, and embers.`,
     cargo: 'The relic is singing. Hunters can hear you; press X to set it down and draw them away.',
+    switch: `${event?.name} switched ${event?.active ? 'on' : 'off'}. Check the crossings and ember warnings before moving.`,
     'cargo-drop': 'Relic set down. Its song is a false trail; pick it up again with Interact.', delivery: 'Relic delivered safely! Finish any remaining objectives and reach the beacon.',
     phase: `Lantern restored. Watcher phase ${boss?.phase}: “${boss?.phase === 2 ? 'I have seen that turn before.' : 'Then I will meet you where you always run.'}” Watch for its marked sweep.`,
     lantern: `Lantern lit! ${next.collectedLanterns.length} of ${next.stage.lanterns.length} restored.`,
@@ -333,8 +351,22 @@ export function scoutHint(run) {
   const coin = run.stage.requireCoins && run.stage.coins.find(item => !run.collectedCoins.includes(item.id));
   const cargo = run.stage.relic && !run.cargoDelivered ? run.carrying ? run.stage.delivery : run.cargoPoint : null;
   const key = run.keyCount === 0 && run.stage.gates.some(gate => gate.type === 'key' && !gateIsOpen(run, gate)) ? run.stage.keys.find(item => !run.collectedKeys.includes(item.id)) : null;
-  const target = key || relay || lantern || npc || coin || cargo || run.stage.exit;
-  const label = key ? 'A brass key' : relay ? `The next relay, ${relay.name || relay.id},` : lantern ? 'An unlit lantern' : npc ? npc.name : coin ? 'An unrecovered coin' : cargo ? run.carrying ? 'The relic delivery beacon' : 'The singing relic' : 'The beacon';
+  let mechanism = null;
+  const preferred = key || relay || lantern || npc || coin || cargo || run.stage.exit;
+  if (run.stage.switches.length) {
+    const found = new Set([`${run.player.x},${run.player.y}`]), queue = [run.player];
+    for (const point of queue) for (const [dx, dy] of Object.values(DIRECTIONS)) {
+      const next = { x: point.x + dx, y: point.y + dy }, id = `${next.x},${next.y}`;
+      if (!found.has(id) && canEnter(run, next, true) && !run.crates.some(crate => same(crate, next))) { found.add(id); queue.push(next); }
+    }
+    const reachable = item => found.has(`${item.x},${item.y}`);
+    mechanism = run.stage.switches.find(item => run.stage.requiredSwitches.includes(item.id) && !run.switches[item.id] && reachable(item));
+    if (!mechanism && !reachable(preferred)) mechanism = run.stage.switches.find(item => !run.switches[item.id] && reachable(item)
+      && run.stage.gates.some(gate => gate.type === 'switch' && gate.controls.some(control => control.id === item.id && control.on)));
+    if (mechanism && (key || relay) && reachable(preferred)) mechanism = null;
+  }
+  const target = mechanism || key || relay || lantern || npc || coin || cargo || run.stage.exit;
+  const label = mechanism ? mechanism.name : key ? 'A brass key' : relay ? `The next relay, ${relay.name || relay.id},` : lantern ? 'An unlit lantern' : npc ? npc.name : coin ? 'An unrecovered coin' : cargo ? run.carrying ? 'The relic delivery beacon' : 'The singing relic' : 'The beacon';
   const horizontal = target.x > run.player.x ? 'east' : target.x < run.player.x ? 'west' : '';
   const vertical = target.y > run.player.y ? 'south' : target.y < run.player.y ? 'north' : '';
   return `${run.stage.hint || ''} ${label} lies ${[vertical, horizontal].filter(Boolean).join('-') || 'right here'}.`;

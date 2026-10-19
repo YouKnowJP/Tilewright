@@ -108,12 +108,13 @@ leg cannot be restarted to farm its credit. A lost leg can also be saved and
 resumed. **Forget learned habits** resets this expedition's movement counts;
 it does not erase the route, goals, kit, badges, or campaign profile.
 
-Backups currently require rules version 0.5.0. Journals allow 8,192 meaningful
+New backups use rules version 0.6.0; genuine 0.5.0 backups are verified and
+migrated when loaded. Journals allow 8,192 meaningful
 inputs per leg and imports allow 220 KB; ordinary verified legs take 23–207
 turns. Past the journal limit, continue to the next camp to start a fresh
 checkpoint. Warnings report unavailable saves. Logbook duplicate-credit tokens
-are bounded to the most recent 512 entries; importing a much older completed
-backup can therefore credit it again. Scores and fingerprints are local recovery
+are bounded to the most recent 512 entries; a retained finish token also covers expired leg tokens. Importing an old
+completed backup after its finish token expires can credit it again. Scores and fingerprints are local recovery
 tools, not competition security or cloud synchronization.
 
 ## Try different approaches

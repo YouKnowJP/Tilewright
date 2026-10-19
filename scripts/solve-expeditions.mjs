@@ -4,7 +4,7 @@ import { canEnter, stepRun, nearbyInteractions } from '../src/adventure.mjs';
 import { advanceJourney } from '../src/adventure-journey.mjs';
 const vectors = { up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] };
 const same = (a, b) => a.x === b.x && a.y === b.y;
-function routes(run, target = null) {
+export function routes(run, target = null) {
   const map = run.stage.map, start = run.player.y * map.width + run.player.x;
   const parent = new Int32Array(map.width * map.height).fill(-1), distance = new Int32Array(parent.length).fill(-1), queue = [start];
   parent[start] = start; distance[start] = 0;
@@ -33,9 +33,9 @@ class Heap {
 function stateKey(run) {
   return JSON.stringify([run.player, run.turns % 12, run.health, run.energy, run.ward, run.invulnerability, run.noise, run.alarm, run.stun, run.decoys, run.shields,
     run.lure && [run.lure.x, run.lure.y, Math.max(0, run.lure.until - run.turns)], run.carrying, run.cargoPoint, run.cargoDelivered,
-    run.hunters.map(h => [h.x, h.y, h.intent, h.memory, h.lastSeen, h.patrolIndex, h.attack]), run.collectedLanterns, run.collectedKeys, run.collectedHearts, run.usedSupplies, run.openGates]);
+    run.hunters.map(h => [h.x, h.y, h.intent, h.memory, h.lastSeen, h.patrolIndex, h.attack]), run.collectedLanterns, run.collectedKeys, run.collectedCoins, run.collectedHearts, run.usedSupplies, run.openGates, run.switches, run.spentCoins]);
 }
-function localPath(initial, target, limit = 4000) {
+export function localPath(initial, target, limit = 4000) {
   // Reverse distances are an admissible movement heuristic, independent of
   // enemies and hazard timing; every candidate is evaluated by the real rules.
   const map = initial.stage.map, origin = { ...initial, player: target }, distances = routes(origin).distance;

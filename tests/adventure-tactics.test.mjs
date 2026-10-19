@@ -185,7 +185,7 @@ test('every hard contract is winnable through normal input, dialogue, relays, re
   const { readFile } = await import('node:fs/promises');
   const routes = JSON.parse(await readFile(new URL('fixtures/contract-routes.json', import.meta.url), 'utf8'));
   const expected = [78, 77, 97];
-  for (const [index, definition] of createCampaign().slice(3).entries()) {
+  for (const [index, definition] of createCampaign().slice(3, 6).entries()) {
     const before = JSON.stringify(definition), initial = createRun(definition);
     const won = steps(initial, routes[definition.id]);
     assert.equal(won.status, 'won', definition.name); assert.equal(missionComplete(won), true);
@@ -201,7 +201,7 @@ test('all three contracts remain beatable under Nemesis rules with reinforcement
   const { readFile } = await import('node:fs/promises');
   const routes = JSON.parse(await readFile(new URL('fixtures/nemesis-routes.json', import.meta.url), 'utf8'));
   const turns = [];
-  for (const definition of createCampaign().slice(3)) {
+  for (const definition of createCampaign().slice(3, 6)) {
     const won = steps(createRun(definition, { difficulty: 'nemesis' }), routes[definition.id]);
     assert.equal(won.status, 'won', definition.name); assert.equal(resultFor(won).stars, 3); assert.equal(won.damage, 0);
     assert.equal(won.hunters.length, 3); assert.equal(missionComplete(won), true); turns.push(won.turns);

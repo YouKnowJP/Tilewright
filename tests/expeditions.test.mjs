@@ -151,3 +151,12 @@ test('30,000 varied inputs across seeds, rules, and oaths preserve bounded state
   }
   assert.equal(observed, 30_000);
 });
+
+test('a retained finish token prevents re-crediting imported leg receipts after their individual tokens expire', () => {
+  const receipt = { leg: 0, family: 'courier', biome: 'woodland', score: 500, turns: 60, stars: 3, damage: 0, coins: 6, totalCoins: 6, delivered: true, rescues: 0, relays: 0 };
+  const session = { id: 'finished-history', phase: 'won', config: expeditionConfig({ mode: 'contract', seed: 'history' }), leg: 0, receipts: [receipt], retries: 0 };
+  const complete = creditJourney(emptyLogbook(), session).book;
+  const expired = { ...complete, credited: complete.credited.filter(token => token.endsWith('-finish')) };
+  assert.deepEqual(creditJourney(expired, session).book, expired);
+  assert.deepEqual(creditJourney(expired, { ...session, phase: 'camp' }).book, expired);
+});

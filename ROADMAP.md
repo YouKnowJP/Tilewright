@@ -1,6 +1,6 @@
 # Tilewright roadmap
 
-The current editor, six story missions, and replayable expedition game are usable. These are **unfinished** feature
+The current editor, nine story missions, and replayable expedition game are usable. These are **unfinished** feature
 proposals with planning estimates, not completed work or hours already spent.
 The owner should prioritize the work they actually intend to undertake before
 using this plan in a program submission.
@@ -17,6 +17,20 @@ using this plan in a program submission.
 The previous map-resizing/layer-management milestone is complete in v0.2.0;
 it is excluded from remaining estimates. See [feature ideas](docs/IDEAS.md)
 for the rationale and additional options, which are not commitments or worked hours.
+
+## Available in v0.6.0
+
+- Three more authored missions with reversible sluice/shutter puzzles, controllable
+  embers, route-changing dialogue, coin trades, and a two-keeper courier finale.
+- Free next-turn forecasts, selectable interactions, complete conversation journals,
+  and branch-specific endings.
+- Modal navigation fixes, protected occupied crossings, stock-aware trades,
+  old-save migration, and retained nine-mission bests.
+- Fourteen clean new-mission routes, 127 tests, and full new-act browser play at
+  four touch-layout widths. See [mission design](docs/MISSIONS.md) and
+  [design references](docs/DESIGN_NOTES.md).
+
+This completed game milestone is excluded from the remaining estimates above.
 
 ## Available in v0.5.0
 

@@ -95,12 +95,20 @@ export function createAdventureRenderer(canvas, stage) {
       rect('#635e45', x + 3, y + 14, 18, 7); rect(active.includes(plate.id) ? '#8cc09a' : '#d8a56a', x + 4, y + 12, 16, 6);
       rect('#f1db9a', x + 9, y + 13, 6, 2);
     }
+    for (const item of stage.switches) {
+      if (!visible(item)) continue;
+      const x = item.x * 24, y = item.y * 24, on = run.switches[item.id];
+      rect('#514d43', x + 4, y + 15, 16, 7); rect('#b9aa77', x + 6, y + 13, 12, 6);
+      circle('#4d7776', x + 12, y + 9, 8); circle(on ? '#b4e3c1' : '#f0cf8d', x + 12, y + 9, 5);
+      rect('#35504b', x + (on ? 11 : 7), y + (on ? 4 : 8), on ? 2 : 10, on ? 10 : 2);
+      rect('#ede7bb', x + 10, y + 18, 4, 2);
+    }
     for (const gate of stage.gates) {
       const x = gate.x * 24, y = gate.y * 24, open = gateIsOpen(run, gate) || same(gate, run.player);
-      if (gate.type === 'bridge') {
+      if (gate.type === 'bridge' || (gate.type === 'switch' && gate.appearance === 'sluice')) {
         if (open) drawTile(ctx, 12, x, y);
         else { rect('#426f75', x + 2, y + 8, 20, 2); rect('#c99c65', x + 1, y + 5, 3, 14); rect('#c99c65', x + 20, y + 5, 3, 14); }
-      } else if (gate.type === 'signal' && !open) {
+      } else if ((gate.type === 'signal' || gate.type === 'switch') && !open) {
         rect('#6e657d', x + 2, y + 2, 3, 22); rect('#6e657d', x + 19, y + 2, 3, 22);
         rect('#bcadd7', x + 4, y + 6, 16, 3); rect('#bcadd7', x + 4, y + 16, 16, 3);
         circle('#e8d3ed', x + 12, y + 12, 4);

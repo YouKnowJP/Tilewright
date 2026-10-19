@@ -58,7 +58,7 @@ export async function checkContracts(browserType, { baseURL = BASE, channel = 'c
           assert.ok(data.memory.observations > 30);
           if (id === 'trail-6') assert.match(await page.locator('#game-result-title').textContent(), /Watcher falls silent/);
         }
-        await page.locator('#game-primary').click();
+        await page.locator('#game-nemesis').click();
         assert.equal(await page.locator('#game-title').textContent(), 'Briarwatch Rescue');
         assert.equal(await page.locator('#game-difficulty').inputValue(), 'nemesis');
         const learned = await page.evaluate(key => localStorage.getItem(key), memoryKey);

@@ -2,14 +2,14 @@
 
 **Make a little world. Then go on an adventure.** Tilewright combines a local
 tile map editor with **Lantern Trails**, an original turn-based puzzle game.
-Explore six handcrafted missions or start a branching expedition of three, six,
+Explore nine handcrafted missions or start a branching expedition of three, six,
 or nine legs. Try daily trails, build a camp toolkit, rescue keepers, deliver
 noisy relics, and outsmart hunters that learn your movement habits. You can also
 explore a world you paint.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
-![The Watcher’s Crown with a marked sweep and active shield](docs/watcher.png)
+![The Last Ferry: two rescued keepers, a singing relic, and a changed crossing](docs/sluice-finale.png)
 
 ## Run locally
 
@@ -42,20 +42,31 @@ advances after a valid move or wait; there is no timer. Blocked moves cost nothi
 | Briarwatch Rescue | Evade adaptive hunters, restore the lights, and return to rescue Orin. | 105 |
 | Bellforge Heist | Ring the bells in order, open a signal gate, and cross pulsing embers. | 110 |
 | The Watcher’s Crown | Rescue Sola and silence a three-phase Watcher behind crate, key, and relay locks. | 135 |
+| Rainmoss Sluice | Choose Luma’s route or supplies, restore two pumps, and change river crossings for the return. | 95 |
+| Glasshouse Concord | Reconfigure three arches, cool the ember beds, ring Dew then Sun, and optionally trade coins. | 110 |
+| The Last Ferry | Rescue Jun and Sola, deliver the songstone, change the ferry route, and escape a Watcher. | 185 |
 
-**Begin hard missions** opens the second act immediately. Its other missions
-unlock in order. Choose **Nemesis** under Rules to start with two hearts, one
+**Begin hard missions** opens the second act immediately. **Play the sluice saga**
+opens the new third act at Rainmoss. Each act’s other missions unlock in order. Choose **Nemesis** under Rules to start with two hearts, one
 decoy, and one shield, shorten recovery windows, extend hunter vision, add a
 reinforcement, and make ember pulses more frequent. Introductory patrols become
 adaptive hunters in this mode. Nemesis has separate bests and 85% turn targets.
-Changing rules restarts the mission; the final result screen offers Nemesis too.
+Changing rules restarts the mission; each act finale offers a replay on Nemesis.
 
-**E / Interact** talks to a keeper, rings a nearby bell, or opens supplies.
-Dialogue choices grant a decoy or shield once and record advice in a journal.
+**E / Interact** talks to a keeper, rings a nearby bell, turns a valve, or opens
+supplies. When several objects are nearby, choose **Nearby action**, then E or
+Interact. All spoken advice is recorded in the journal, including conversations
+without a choice. Choices can grant supplies, open a route, or trade unspent
+coins once; trades are optional and retain collected treasure credit.
 Rescue missions require returning to the stranded keeper after lighting every
 lantern; rescued characters follow safely to the beacon. Wrong relay notes reset
 the sequence and raise a six-turn alarm. Completed relays open signal gates
 and briefly stun hunters. Supplies restore a heart, decoy, and shield charge.
+
+**Plan / V** lists nearby enemy steps, marked sweeps, and next-turn ember
+cells without spending a turn. Valve previews explain which crossing cells open
+or close and which embers switch off. Occupied crossings cannot close. Player-operated
+sluice controls are reversible; required final settings appear in the checklist.
 
 Wardens on the introductory Trail missions follow predictable patrols. Red outlined cells show their next step.
 Touching a warden costs a heart, followed by two protected turns to escape.
@@ -101,6 +112,7 @@ editor save. If storage is unavailable, unlocks still work for the session.
 | Talk / ring relay / open supplies | E, or Interact |
 | Throw a decoy / raise a shield | Q / C, or the tactical buttons |
 | Toggle scout hint | H, or Scout hint |
+| Read next-turn threats without moving | V, or Plan |
 | Choose a quest | Choose trail, then a quest card |
 
 **Play your current map** creates a quiet expedition on a snapshot of visible
@@ -114,7 +126,7 @@ Playing never changes map tiles, autosave, or undo history.
 
 ![Dialogue choices on a phone layout](docs/dialogue-mobile.png)
 
-See the [mission guide and future mission ideas](docs/MISSIONS.md) for
+See the [mission guide, sluice walkthrough, and future ideas](docs/MISSIONS.md) for
 walkthrough goals, counterplay, and proposed interactions.
 
 ## Play longer expeditions
@@ -229,7 +241,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 91 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 127 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -239,12 +251,14 @@ An optional browser regression suite lives in `scripts/browser-checks.mjs`.
 With Playwright separately installed in the development environment and Google
 Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
-it does not modify existing browser maps. It completes all six missions and the Nemesis finale
+it does not modify existing browser maps. It completes all nine missions, both difficulty/choice routes in the new act,
+no-trade Glasshouse runs, and the Nemesis finales
 and five complete multi-leg expeditions through real keyboard input. It checks
 all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
-reset, storage failures, and preserved editor history. Playwright is not
+reset, storage failures, old-save migration, modal navigation, and preserved
+editor history. The five suites include `scripts/sluice-browser-checks.mjs`. Playwright is not
 needed to run the app or the default checks, and browser tests are not currently run in CI.
 
 The distributable contains only browser assets, an MIT license, and release

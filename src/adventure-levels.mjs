@@ -1,4 +1,6 @@
 import { createDocument } from './model.mjs';
+import { createSluiceSaga } from './adventure-sluice-levels.mjs';
+export const CAMPAIGN_IDS = Object.freeze(Array.from({ length: 9 }, (_, index) => `trail-${index + 1}`));
 
 function world(width, height, name) {
   const map = createDocument(name, width, height), ground = map.layers[0].tiles, details = map.layers[1].tiles;
@@ -69,8 +71,10 @@ export function createCampaign() {
   stages[1].npcs = [guide('tavi', 'Tavi', 2, 8, 'The bridge keeper points at the copper plate.', 'Leave the crate on the plate. If you push it too far, approach from the other side.')];
   stages[2].npcs = [guide('mira', 'Mira', 2, 11, 'Mira lowers her voice. Something beyond the vault has started watching the trails.', 'Both plates need crates. Find the west-bank key before entering the vault.')];
   stages.push(...createContracts());
+  stages[5].actFinal = true; stages[5].nemesisStart = 3;
+  stages.push(...createSluiceSaga());
   for (const stage of stages) {
-    for (const item of [stage.start, stage.exit, ...stage.lanterns, ...stage.keys, ...stage.coins, ...stage.hearts, ...stage.crates, ...stage.plates, ...(stage.npcs || []), ...(stage.relays || []), ...(stage.supplies || []), ...(stage.cover || [])]) {
+    for (const item of [stage.start, stage.exit, ...stage.lanterns, ...stage.keys, ...stage.coins, ...stage.hearts, ...stage.crates, ...stage.plates, ...(stage.npcs || []), ...(stage.relays || []), ...(stage.supplies || []), ...(stage.cover || []), ...(stage.switches || []), ...(stage.relic ? [stage.relic] : [])]) {
       stage.map.layers[1].tiles[item.y * stage.map.width + item.x] = 0;
     }
     for (const hunter of stage.hunters || []) for (const point of hunter.route) stage.map.layers[1].tiles[point.y * stage.map.width + point.x] = 0;

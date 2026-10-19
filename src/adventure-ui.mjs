@@ -8,6 +8,8 @@ import { createExpeditionUI } from './adventure-expedition-ui.mjs';
 import { journeyScore } from './adventure-journey.mjs';
 import { PERKS, VOWS } from './adventure-perks.mjs';
 import { createIcon } from './icons.mjs';
+import { choiceProblem, wallet, mechanismPreview } from './adventure-mechanisms.mjs';
+import { threatForecast } from './adventure-intel.mjs';
 
 export function createAdventureUI({ storage, getMap, backToEditor }) {
   const $ = selector => document.querySelector(selector);
@@ -18,6 +20,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   let expeditions;
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0, pointer = null;
   let saveFailed = false, hintVisible = false;
+  let interactionId = null;
 
   function stageUnlocked(index) { return index === 0 || campaign[index].contractStart || Boolean(records[campaign[index - 1].id] || records[`${campaign[index - 1].id}-nemesis`]); }
   const stageRecord = stage => records[`${stage.id}${difficulty === 'nemesis' ? '-nemesis' : ''}`];
@@ -95,8 +98,14 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     const extraGoals = missionGoals(run).slice(1);
     $('#quest-mission').hidden = !extraGoals.length;
     $('#quest-mission').replaceChildren(...extraGoals.map(goal => Object.assign(document.createElement('p'), { textContent: `${goal.done ? '✓' : '○'} ${goal.label}` })));
-    const interact = nearbyInteractions(run)[0];
-    $('#game-interact').textContent = interact ? `${interact.kind === 'npc' ? 'Talk:' : interact.kind === 'relay' ? 'Ring:' : interact.kind === 'relic' ? 'Take:' : 'Open:'} ${interact.name || 'supplies'} (E)` : 'Interact (E)';
+    const nearby = nearbyInteractions(run);
+    const interact = nearby.find(item => item.id === interactionId) || nearby[0]; interactionId = interact?.id || null;
+    $('#game-target-wrap').hidden = nearby.length < 2;
+    $('#game-target').replaceChildren(...nearby.map(item => { const option = document.createElement('option'); option.value = item.id; option.textContent = item.label; return option; }));
+    $('#game-target').value = interactionId || ''; $('#game-target').disabled = paused || run.status !== 'playing';
+    $('#game-interaction-note').hidden = interact?.kind !== 'switch';
+    $('#game-interaction-note').textContent = interact?.kind === 'switch' ? mechanismPreview(run, interact) : '';
+    $('#game-interact').textContent = interact ? `${interact.kind === 'npc' ? 'Talk:' : interact.kind === 'relay' ? 'Ring:' : interact.kind === 'relic' ? 'Take:' : interact.kind === 'switch' ? 'Turn:' : 'Open:'} ${interact.name || 'supplies'} (E)` : 'Interact (E)';
     $('#game-interact').setAttribute('aria-label', interact?.label || 'Interact with a nearby keeper, relay, or supplies');
     $('#game-interact').disabled = !interact || paused || run.status !== 'playing';
     $('#game-decoys').textContent = run.decoys; $('#game-shields').textContent = run.shields;
@@ -109,7 +118,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     const cover = stage.cover.some(p => p.x === run.player.x && p.y === run.player.y);
     $('#game-threat').textContent = `${boss ? `Watcher phase ${boss.phase}/3 · ${boss.mode}. ` : run.hunters.length ? `${run.hunters.length} adaptive ${run.hunters.length === 1 ? 'hunter' : 'hunters'} on this trail. ` : 'Patrols follow fixed routes on Trail rules. '}${run.alarm ? `Alarm: ${run.alarm} turns. ` : ''}${run.ward ? `Shield: ${run.ward} turns. ` : ''}${cover ? run.noise ? 'In cover, but still audible.' : 'In fern cover: distant hunters cannot see you.' : run.carrying ? 'Your relic is singing: hunters can hear you.' : run.noise ? 'Your dash can still be heard.' : 'Walk quietly; hunters need sight, sound, or a recent lead.'}`;
     $('#game-learning-save').textContent = journey ? 'This expedition keeps its own learned movement history. Campaign memory is retained separately.' : memorySaveFailed ? 'Learning is available for this session; browser saving is unavailable.' : 'Movement habits stay in this browser. Forget them at any time.';
-    const entries = stage.npcs.filter(npc => Object.hasOwn(run.choices, npc.id)).map(npc => `${npc.name}: ${npc.choices.find(choice => choice.id === run.choices[npc.id]).response}`);
+    const entries = stage.npcs.filter(npc => run.talkedTo.includes(npc.id)).map(npc => `${npc.name}: ${run.rescued.includes(npc.id) && npc.after ? npc.after : Object.hasOwn(run.choices, npc.id) ? npc.choices.find(choice => choice.id === run.choices[npc.id]).response : npc.lines.join(' ')}`);
     $('#game-journal').replaceChildren(...(entries.length ? entries : ['Speak to a keeper to record their advice.']).map(text => Object.assign(document.createElement('p'), { textContent: text })));
     updateConversation();
     $('#quest-beacon').textContent = `${run.status === 'won' ? '✓' : '○'} Reach the turquoise beacon`;
@@ -134,11 +143,13 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       $('#game-result-text').textContent = 'No ticking clock. Plan your next move, then head back out.'; $('#game-primary').textContent = 'Resume adventure';
       $('#game-stars').textContent = '';
     } else if (result) {
-      $('#game-result-eyebrow').textContent = index === 5 ? 'THE SIGNAL IS SILENT' : 'TRAIL RESTORED'; $('#game-result-title').textContent = index === 5 ? 'The Watcher falls silent.' : index === 3 ? 'Orin has a way home.' : index === 4 ? 'The bells sing for the trail.' : 'You brought back the light.';
+      $('#game-result-eyebrow').textContent = index === 5 ? 'THE SIGNAL IS SILENT' : 'TRAIL RESTORED'; $('#game-result-title').textContent = stage.resultTitle || (index === 5 ? 'The Watcher falls silent.' : index === 3 ? 'Orin has a way home.' : index === 4 ? 'The bells sing for the trail.' : 'You brought back the light.');
       $('#game-result-text').textContent = `${run.rescued.length ? `${run.rescued.map(id => stage.npcs.find(npc => npc.id === id).name).join(' and ')} rescued. ` : ''}${result.score} points · ${result.turns} turns · ${run.collectedCoins.length} treasures. ${result.stars === 3 ? 'A perfect three-star trail!' : `Try a clean run in ${turnTarget(run)} turns for three stars.`}`;
+      const epilogue = stage.epilogues?.[run.choices[stage.endingChoice]] || stage.ending;
+      if (epilogue) $('#game-result-text').textContent += ` ${epilogue}`;
       $('#game-stars').textContent = '★'.repeat(result.stars) + '☆'.repeat(3 - result.stars);
       $('#game-stars').setAttribute('aria-label', `${result.stars} of 3 stars`);
-      $('#game-primary').textContent = index === campaign.length - 1 && difficulty === 'trail' ? 'Take on Nemesis →' : index >= 0 && index < campaign.length - 1 ? 'Next adventure →' : 'Play this trail again';
+      $('#game-primary').textContent = index === campaign.length - 1 ? 'Return to the trail library' : index >= 0 && index < campaign.length - 1 ? 'Next adventure →' : 'Play this trail again';
     } else if (run.status === 'lost') {
       $('#game-result-eyebrow').textContent = 'EVERY EXPLORER GETS ANOTHER GO'; $('#game-result-title').textContent = 'A new route awaits.';
       $('#game-result-text').textContent = 'The red outlined cell shows each warden’s next move. Wait for an opening, or dash two tiles before they move.';
@@ -150,6 +161,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       $('#game-result-text').textContent = `${journeyScore(journey)} points · ${journey.receipts.length}/${journey.config.length} legs finished · ${journey.retries} retries. ${journey.phase === 'camp' ? 'Supplies carry forward. Choose a camp upgrade and your next route.' : journey.phase === 'won' ? 'Your route and achievements are recorded in the logbook. Try a new seed, oath, or rule set.' : 'Retry from this leg’s checkpoint. Earlier legs and upgrades are retained; hunters remember the attempt.'}`;
       $('#game-primary').textContent = journey.phase === 'camp' ? 'Make camp →' : journey.phase === 'won' ? 'Choose another expedition' : 'Retry this leg';
     }
+    $('#game-nemesis').hidden = Boolean(journey) || paused || run.status !== 'won' || !stage.actFinal || difficulty !== 'trail';
     renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
   }
 
@@ -157,7 +169,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
 
   function start(stage) {
     expeditions?.suspend(); $('#game-difficulty').disabled = false;
-    run = createRun(stage, { memory, difficulty }); paused = false; dashArmed = false; lastAction = performance.now();
+    run = createRun(stage, { memory, difficulty }); paused = false; dashArmed = false; interactionId = null; lastAction = performance.now();
     renderer = createAdventureRenderer(canvas, run.stage); renderPicker(); resize(); update();
     revealBoard();
   }
@@ -181,24 +193,32 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
 
   function updateConversation() {
     const dialog = $('#conversation-dialog');
+    if (!active) { if (dialog.open) dialog.close(); return; }
     if (!run.dialogue) { if (dialog.open) { dialog.close(); canvas.focus({ preventScroll: true }); } return; }
     const npc = run.stage.npcs.find(item => item.id === run.dialogue), selected = run.choices[npc.id];
+    $('#conversation-wallet').hidden = !(npc.choices || []).some(choice => choice.cost);
+    $('#conversation-wallet').textContent = `Unspent coins: ${wallet(run)}. Trades are optional and each keeper offers one parcel. Supplies are capped at three.`;
     $('#conversation-name').textContent = npc.name;
     const lines = run.rescued.includes(npc.id) && npc.after ? [npc.after] : selected ? [npc.choices.find(choice => choice.id === selected).response] : npc.lines;
     $('#conversation-lines').replaceChildren(...lines.map(text => Object.assign(document.createElement('p'), { textContent: text })));
     $('#conversation-options').replaceChildren(...(selected || run.rescued.includes(npc.id) ? [] : npc.choices || []).map(choice => {
-      const button = document.createElement('button'); button.textContent = choice.label; button.dataset.choice = choice.id;
+      const button = document.createElement('button'), problem = choiceProblem(run, choice);
+      button.textContent = `${choice.label}${problem ? ` · ${problem}` : ''}`; button.dataset.choice = choice.id;
+      button.disabled = Boolean(problem);
       button.addEventListener('click', () => action(`choose:${choice.id}`)); return button;
     }));
     if (!dialog.open) dialog.showModal();
     if (selected) $('#conversation-close').focus({ preventScroll: true });
   }
-  function interact() { const target = run && nearbyInteractions(run)[0]; if (target) action(`interact:${target.id}`); }
+  function interact() { const nearby = run && nearbyInteractions(run); const target = nearby && (nearby.find(item => item.id === interactionId) || nearby[0]); if (target) action(`interact:${target.id}`); }
+  $('#game-target').addEventListener('change', event => { interactionId = event.target.value; update(); });
   $('#game-interact').addEventListener('click', interact);
   $('#game-cargo').addEventListener('click', () => action('drop-cargo'));
   $('#game-decoy').addEventListener('click', () => action('decoy'));
   $('#game-shield').addEventListener('click', () => action('shield'));
   $('#begin-contracts').addEventListener('click', () => start(campaign[3]));
+  $('#begin-sluices').addEventListener('click', () => start(campaign[6]));
+  $('#game-nemesis').addEventListener('click', () => { if (run?.status === 'won' && run.stage.actFinal) { difficulty = 'nemesis'; $('#game-difficulty').value = difficulty; start(campaign[run.stage.nemesisStart]); } });
   $('#game-difficulty').addEventListener('change', event => { if (expeditions?.session) { event.target.value = difficulty; return; } difficulty = event.target.value; if (run) start(run.stage); else renderPicker(); });
   $('#forget-habits').addEventListener('click', () => {
     if (expeditions?.session) { expeditions.act('forget'); return; }
@@ -206,13 +226,20 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   });
   $('#conversation-close').addEventListener('click', () => action('close-dialogue'));
   $('#conversation-dialog').addEventListener('cancel', event => { event.preventDefault(); action('close-dialogue'); });
-  $('#conversation-dialog').addEventListener('close', () => { if (run?.dialogue) action('close-dialogue'); });
+  $('#conversation-dialog').addEventListener('close', () => { if (active && run?.dialogue && !$('#conversation-dialog').open) action('close-dialogue'); });
 
   function pause() { if (!run || run.status !== 'playing') return; paused = !paused; update(); }
   function hint() { hintVisible = !hintVisible; update(); }
   $('#game-pause').addEventListener('click', pause);
   $('#game-restart').addEventListener('click', () => { if (expeditions?.session) expeditions.retry(); else if (run) start(run.stage); });
   $('#game-hint-button').addEventListener('click', hint);
+  function inspect() {
+    if (!active || !run) return;
+    $('#forecast-lines').replaceChildren(...threatForecast(run).map(text => Object.assign(document.createElement('p'), { textContent: text })));
+    $('#forecast-dialog').showModal();
+  }
+  $('#game-inspect').addEventListener('click', inspect);
+  $('#forecast-close').addEventListener('click', () => $('#forecast-dialog').close());
   $('#game-choose').addEventListener('click', () => {
     expeditions.show(expeditions.session ? 'expeditions' : 'story');
     $(expeditions.session ? '#expedition-resume' : '#trail-picker button:not(:disabled)').focus({ preventScroll: true });
@@ -228,7 +255,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     if (paused) { pause(); return; }
     if (expeditions?.session) { const phase = expeditions.session.phase; if (phase === 'camp') expeditions.openCamp(); else if (phase === 'won') expeditions.show(); else expeditions.retry(); return; }
     const index = campaign.findIndex(stage => stage.id === run.stage.id);
-    if (run.status === 'won' && index === campaign.length - 1 && difficulty === 'trail') { difficulty = 'nemesis'; $('#game-difficulty').value = difficulty; start(campaign[3]); return; }
+    if (run.status === 'won' && index === campaign.length - 1) { expeditions.show('story'); $('#begin-sluices').focus({ preventScroll: true }); return; }
     start(run.status === 'won' && index >= 0 && index < campaign.length - 1 ? campaign[index + 1] : run.stage);
   });
   $('#game-back-editor').addEventListener('click', backToEditor);
@@ -237,6 +264,9 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     catch (error) { $('#game-status').textContent = error.message; }
   });
   document.addEventListener('keydown', event => {
+    if (active && run && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey && event.target.id === 'game-target' && event.key.toLowerCase() === 'e') {
+      event.preventDefault(); canvas.focus({ preventScroll: true }); interact(); return;
+    }
     if (!active || !run || event.ctrlKey || event.metaKey || event.altKey || event.target.closest('input, select, textarea, dialog')) return;
     const directions = { ArrowUp: 'up', ArrowRight: 'right', ArrowDown: 'down', ArrowLeft: 'left', w: 'up', d: 'right', s: 'down', a: 'left' };
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
@@ -244,9 +274,9 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
       event.preventDefault();
       if (!event.repeat || performance.now() - lastAction > 130) action(directions[key], event.shiftKey);
     } else if (key === ' ' && !event.target.closest('button')) { event.preventDefault(); if (!event.repeat) action('wait'); }
-    else if (!event.repeat && ['p', 'Escape', 'r', 'h', 'e', 'q', 'c', 'x'].includes(key)) {
+    else if (!event.repeat && ['p', 'Escape', 'r', 'h', 'e', 'q', 'c', 'x', 'v'].includes(key)) {
       event.preventDefault();
-      if (key === 'r') { if (expeditions?.session) expeditions.retry(); else start(run.stage); } else if (key === 'h') hint(); else if (key === 'e') interact();
+      if (key === 'r') { if (expeditions?.session) expeditions.retry(); else start(run.stage); } else if (key === 'h') hint(); else if (key === 'e') interact(); else if (key === 'v') inspect();
       else if (key === 'x') action('drop-cargo'); else if (key === 'q') action('decoy'); else if (key === 'c') action('shield'); else pause();
     } else if (key === 'Enter' && run.status !== 'playing' && !event.target.closest('button')) { event.preventDefault(); $('#game-primary').click(); }
   });
@@ -268,7 +298,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   expeditions = createExpeditionUI({ storage, onNotice: text => { $('#game-status').textContent = text; }, onRun(session, newStage) {
     run = session.run; difficulty = session.config.difficulty; $('#game-difficulty').value = difficulty;
     if (newStage || !renderer || run.stage.id !== $('#adventure').dataset.stage) {
-      renderer = createAdventureRenderer(canvas, run.stage); paused = false; dashArmed = false; renderPicker(); resize(); revealBoard();
+      renderer = createAdventureRenderer(canvas, run.stage); paused = false; dashArmed = false; interactionId = null; renderPicker(); resize(); revealBoard();
     }
     $('#adventure').dataset.stage = run.stage.id; lastAction = performance.now(); if (!newStage) sound.play(run.events); update();
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
@@ -276,6 +306,10 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   renderPicker();
   return {
     enter() { active = true; if (!run) start(campaign[0]); else { paused = false; resize(); update(); revealBoard(); } },
-    leave() { active = false; pointer = null; if (frame !== null) cancelAnimationFrame(frame); frame = null; },
+    leave() {
+      active = false; pointer = null; dashArmed = false;
+      for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog']) if ($(selector).open) $(selector).close();
+      if (frame !== null) cancelAnimationFrame(frame); frame = null;
+    },
   };
 }

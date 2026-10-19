@@ -38,6 +38,8 @@ export function loadLogbook(storage) {
 }
 export function creditJourney(book, session) {
   if (!['camp', 'won'].includes(session.phase)) return { book, earned: [] };
+  // A finish token also covers earlier leg receipts that have left the LRU window.
+  if (book.credited.includes(`${session.id}-finish`)) return { book, earned: [] };
   const next = structuredClone(book), earned = [];
   const award = id => { if (!next.badges.includes(id)) { next.badges.push(id); earned.push(id); } };
   for (const receipt of session.receipts) {

@@ -224,3 +224,19 @@
   .camp-choice span,.camp-choice small { grid-column:2; font-size:11px; }
   .camp-dialog { padding:22px 16px; }
 }
+
+#game-nemesis[hidden],#game-target-wrap[hidden],#game-interaction-note[hidden],#conversation-wallet[hidden] { display:none; }
+.game-target-wrap { width:100%; display:flex; align-items:center; gap:10px; font-size:11px; color:#526e48; }
+.game-target-wrap select { flex:1; min-width:0; min-height:42px; padding:8px; border:1px solid #bacbad; border-radius:5px; background:#fffef7; }
+.game-controls>.game-interaction-note { width:100%; font-size:11px; line-height:1.6; color:#536e4b; margin:0; }
+#conversation-wallet { font-size:12px; color:#536e4b; line-height:1.7; margin:14px 0; }
+.forecast-dialog { width:min(540px,calc(100% - 28px)); }
+.forecast-dialog h2 { margin:12px 0 20px; }
+#forecast-lines p { font-size:13px; line-height:1.8; margin:14px 0; color:#526e48; }
+#forecast-close { position:sticky; bottom:0; min-height:44px; background:#e5edd9; }
+@media(max-width:760px) {
+  .game-target-wrap,.game-controls>.game-interaction-note { grid-column:1 / -1; }
+  .game-target-wrap select { font-size:16px; }
+  .game-controls>.game-interaction-note:not([hidden]) { display:block; font-size:10px; }
+  .game-toolbar-actions { gap:4px; }
+}

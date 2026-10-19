@@ -1,5 +1,73 @@
 # Verification record
 
+## Gameplay audit and sluice saga — v0.6.0
+
+**127 Node tests pass** (36 additions), syntax checks pass, and the static build
+contains 32 public files. The retained 30,000-input expedition soak and a new
+12,000-input exploration test total **42,000 deterministic exploratory inputs**.
+The 2,304 generated-map connectivity variants and all 256 upgrade combinations
+remain green. None of these checks establishes that every possible play history
+or device is bug-free.
+
+The new public-action fixtures complete **14 clean runs / 1,222 turns** without
+changing positions, health, inventory, flags, or enemy state. Both dialogue
+branches are tested on Trail and Nemesis, plus Glasshouse declining both trades.
+
+| New mission | Trail turns: branch A / B | Nemesis turns: branch A / B | Result |
+| --- | --- | --- | --- |
+| Rainmoss Sluice | 68 / 56 | 72 / 60 | No damage, three stars; both route choices and required pumps |
+| Glasshouse Concord | 83 / 67 | 86 / 68 | No damage, three stars; both trades and shutter routes |
+| The Last Ferry | 136 / 139 | 137 / 137 | No damage, three stars; both keepers, delivered relic, signal and ferry |
+
+Glasshouse without buying a parcel also finishes cleanly in **55 Trail / 58
+Nemesis turns**. Unit checks cover all four shutter combinations, hazard
+suppression on the valve’s own turn, reversal, occupied player/crate/companion/
+hunter/patrol guards, required final settings, malformed control references,
+affordable/unaffordable/full-stock trades, retained treasure credit, one-time
+choices, free forecasts, and reachable-control hints. A regression prevents
+Luma’s exclusive ferry route being opened manually after choosing supplies.
+
+The audit reproduced a native-modal trap: leaving Play through URL navigation
+while speaking left a dialogue above the editor; Escape could not close it.
+The fix closes game modals on leave while retaining conversation/camp state.
+Five repeated browser leave/return cycles now pass. Additional fixes record
+keepers without choices, expose competing adjacent interactions, and stop
+expired individual leg tokens being credited again while a finish token remains.
+Campaign-record protection now covers all nine normal/Nemesis mission bests.
+
+Six genuine **0.5.0 checkpoints**, captured before rule changes, verify migration
+of playing, mid-dialogue, camp, lost, carried-relic, and finished runs. Their old
+fingerprints are checked during replay before new 0.6.0 saves are written.
+Continued play and new save/reload round trips preserve their state. Existing
+maps, campaign bests, and learned profiles remain separate.
+
+The optional **Chrome 155.0.8059.82** sluice suite passes all 14 variants through
+actual movement keys, dashes, dialogue buttons, valves, relays, and cargo/rescue
+interactions. It checks both Nemesis invitations, unlocks after reload, declined/
+unaffordable trades, free Plan dialogs, journal advice without a choice, editor
+retention, camp navigation, six legacy file imports, and selecting a relic with
+keyboard E while companions are also adjacent. No runtime, console, or asset
+errors occur in the desktop flow.
+
+At **320, 390, 768, and 1024 × 844 CSS pixels**, each new mission is completed
+with three stars. Emulated touch checks cover dialogue, forecast bounds, reset,
+visible controls at entry, competing interactions, reduced motion, and no
+horizontal overflow. The phone valve preview and desktop finale were visually
+inspected. All earlier editor, introductory, hard-contract, and expedition
+browser suites also pass, including full long journeys, backups, actual loss/
+retry, blocked/full storage, scrolling, PNG export, and real CDP swipes.
+
+Run `npm run test:browser` for all **five** suites, or
+`node scripts/sluice-browser-checks.mjs` for the new act. Playwright and Chrome
+are independently installed; default verification still has no npm dependencies.
+Contexts are disposable and never clear the user’s actual saves. Browser checks
+are not part of the default GitHub Actions matrix.
+
+[Phone valve preview](sluice-mobile.png), [desktop finale](sluice-finale.png),
+[mission guide](MISSIONS.md), and [design references](DESIGN_NOTES.md) document
+the result. Safari, Firefox, physical devices, screen readers, and extended
+human difficulty/enjoyment studies remain untested.
+
 ## Replayable expeditions — v0.5.0
 
 **91 Node tests pass**, including 28 new tests. Syntax checks and the static
@@ -273,8 +341,9 @@ No Safari, Firefox, physical phone/tablet, screen-reader, or extended user
 playtest is claimed. Native download/file-picker behavior, maximum-size
 interactive performance, and cross-browser pointer cancellation need further
 device coverage. New maps currently have a fixed tile size; selections, multiple local projects,
-custom tilesets, custom puzzle authoring, branching dialogue consequences, and
-additional authored campaign content remain unfinished ideas. Six story missions,
+custom tilesets, custom puzzle authoring, richer multi-mission dialogue consequences, and
+additional authored campaign content remain unfinished ideas. Nine story missions,
 seeded branching journeys, daily trails, camps/upgrades, courier missions, oaths,
-checkpoints, adaptive hunters, dialogue/rescues, and Nemesis are implemented.
+checkpoints, reversible sluices, trades, forecasts, adaptive hunters, dialogue/
+rescues, and Nemesis are implemented.
 No physical-device or extended player difficulty/enjoyment study is claimed.

@@ -15,7 +15,10 @@ installation, build-time framework, database service, or remote API.
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
 | `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
 | `src/adventure.mjs` | Pure turn rules, collision, pickups, puzzles, patrol intent, scoring, exploration, and connected custom expeditions. |
-| `src/adventure-levels.mjs` | Six original authored quest definitions and fictional maps. |
+| `src/adventure-levels.mjs` | Campaign assembly, nine stable record identities, and the first six authored maps. |
+| `src/adventure-sluice-levels.mjs` | Three authored sluice/shutter/rescue missions and their dialogue routes, trades, and epilogues. |
+| `src/adventure-mechanisms.mjs` | Switch conditions, safe state changes, previews, trade availability, and definition validation. |
+| `src/adventure-intel.mjs` | Read-only, nearby next-turn warnings derived from committed enemy plans and hazard timing. |
 | `src/adventure-ui.mjs` | Mode lifecycle, campaign progression, keyboard/touch controls, HUD, hints, and results. |
 | `src/adventure-render.mjs` | Cached map background, following camera, original sprites, fog, and discovered-map overview. |
 | `src/adventure-records.mjs` | Bounded, validated personal bests stored independently of map saves. |
@@ -163,6 +166,31 @@ learning available for the session. All normal and Nemesis second-act missions
 have complete real-action fixtures; browser tests replay the dialogue and
 movement through actual controls.
 
+## Reversible mechanisms and conversation state
+
+Authored switches have IDs and initial booleans; switch gates contain explicit
+ID/value conditions. Hazard groups can name a switch that suppresses them.
+The rule layer previews a proposed patch and refuses any closure under a player,
+crate, companion, patrol, or hunter. A successful valve action changes state,
+spends one turn, then resolves enemies/hazards. Rejected changes cost nothing.
+The renderer uses distinct wheel orientations, crossing states, and the existing
+ember warnings; the UI lists the actual opening/closing cell counts.
+
+Coin trades track `spentCoins` independently of collected coin IDs. Cost,
+resource caps, and useful remaining capacity are checked before consuming a
+one-time choice. Free narrative choices remain available at full capacity.
+Route choices can set validated switch states; the same occupancy guard applies.
+Keeper-operated switches can be marked non-operable so an exclusive dialogue
+route cannot be bypassed by manually turning its control.
+Every spoken NPC is stored once in `talkedTo`, independently of accepting a choice.
+The journal renders advice, responses, or a rescued companion’s final line.
+
+The nearby-target selector retains a valid selection and exposes all adjacent
+interactions. Keyboard E works while that selector is focused. Forecasts read
+current plans and next-turn hazard phases without calling the turn reducer.
+Leaving Play closes native game modals without deleting dialogue/camp state;
+a queued close event cannot close a newly restored conversation.
+
 ## Seeded journeys and replay checkpoints
 
 The generator builds a randomized spanning tree over 20 rooms (24 from leg
@@ -194,14 +222,18 @@ meaningful actions. It does not import arbitrary runtime maps or enemy objects.
 Restore validates bounds, regenerates the stage, replays ordinary actions, and
 compares a deterministic state fingerprint/status. Facing-only inputs, dialogue,
 choices, and learning resets are journaled; transient messages/events are
-excluded from the fingerprint. Import is capped at 220 KB and requires rules
-version 0.5.0. Future simulation changes need migration or a deliberate rules
-revision. The fingerprint detects damaged/inconsistent backups, not malicious
+excluded from the fingerprint. Import is capped at 220 KB. New saves use rules version 0.6.0. Genuine
+0.5.0 envelopes replay with unchanged generated layouts; their fingerprint
+comparison excludes the three newly defaulted state fields (`switches`,
+`spentCoins`, `talkedTo`) before writing a 0.6.0 checkpoint. Six captured legacy
+fixtures cover playing, dialogue, camp, loss, carried cargo, and completion.
+Future simulation changes need migration or a deliberate rules revision. The fingerprint detects damaged/inconsistent backups, not malicious
 score editing. Browser owners control their own local data.
 
 `tilewright.logbook.v1` normalizes up to 32 bests and 12 badges, with cumulative
 counters and at most 512 recent credit tokens. Ordinary repeated camp/finish
-resume is idempotent. Importing a completed backup older than the retained token
+resume is idempotent. A retained finish token covers older individual leg
+tokens, including an imported earlier camp from the same completed run. Importing a completed backup older than the retained token
 window can credit it again. Data is bounded rather than a permanent event log.
 Logbook reads are capped at 96 KB. All storage access is guarded. Failed writes
 retain in-session play and expose a backup export warning. The editor map,

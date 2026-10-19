@@ -3,7 +3,7 @@ import { freshMemory, normalizeMemory } from './adventure-brain.mjs';
 import { PERKS, VOWS, validPerks } from './adventure-perks.mjs';
 import { expeditionConfig, generateStage, routeChoices, randomFor, hashSeed } from './adventure-generator.mjs';
 export const JOURNEY_KEY = 'tilewright.expedition.v1';
-export const JOURNEY_RULES = '0.5.0';
+export const JOURNEY_RULES = '0.6.0';
 export const MAX_JOURNAL = 8192;
 const MAX_BYTES = 220_000;
 const phases = ['playing', 'camp', 'won', 'lost'];
@@ -66,8 +66,9 @@ export function retryLeg(session) {
     legMemory: normalizeMemory(session.run.memory) };
   next.run = makeRun(next); return next;
 }
-function fingerprint(run) {
+function fingerprint(run, rules = JOURNEY_RULES) {
   const { stage, walkable, events, message, ...state } = run;
+  if (rules === '0.5.0') { delete state.switches; delete state.spentCoins; delete state.talkedTo; }
   return hashSeed(JSON.stringify(state)).toString(16);
 }
 export function serializeJourney(session) {
@@ -78,7 +79,7 @@ export function serializeJourney(session) {
 function readEnvelope(text) {
   if (typeof text !== 'string' || text.length > MAX_BYTES) throw new Error('The expedition checkpoint is too large.');
   let data; try { data = JSON.parse(text); } catch { throw new Error('The expedition checkpoint is not valid JSON.'); }
-  if (data?.version !== 1 || data.rules !== JOURNEY_RULES || !data.state || typeof data.state !== 'object') throw new Error('This expedition checkpoint uses unsupported rules.');
+  if (data?.version !== 1 || !['0.5.0', JOURNEY_RULES].includes(data.rules) || !data.state || typeof data.state !== 'object') throw new Error('This expedition checkpoint uses unsupported rules.');
   const state = data.state;
   if (!state.config || typeof state.config !== 'object') throw new Error('The expedition checkpoint has no rules.');
   const config = expeditionConfig(state.config);
@@ -103,14 +104,14 @@ function readEnvelope(text) {
   });
   return { state: { id: state.id, config, leg: state.leg, path: state.path, phase: state.phase, perks: [...state.perks],
     legMemory: normalizeMemory(state.legMemory), loadout: { health: state.loadout.health, decoys: state.loadout.decoys, shields: state.loadout.shields },
-    journal: [...state.journal], receipts, retries: state.retries }, fingerprint: data.fingerprint };
+    journal: [...state.journal], receipts, retries: state.retries }, fingerprint: data.fingerprint, rules: data.rules };
 }
 export function restoreJourney(text) {
-  const { state, fingerprint: expected } = readEnvelope(text);
+  const { state, fingerprint: expected, rules } = readEnvelope(text);
   let run = makeRun(state);
   for (const action of state.journal) run = action === 'forget' ? { ...run, memory: freshMemory(), events: [], message: 'The expedition’s learned movement habits were cleared.' } : stepRun(run, action);
   const expectedStatus = ['camp', 'won'].includes(state.phase) ? 'won' : state.phase === 'lost' ? 'lost' : 'playing';
-  if (run.status !== expectedStatus || fingerprint(run) !== expected) throw new Error('The expedition checkpoint could not be verified.');
+  if (run.status !== expectedStatus || fingerprint(run, rules) !== expected) throw new Error('The expedition checkpoint could not be verified.');
   return { ...state, run };
 }
 export function peekJourney(storage) {
