@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.10.1 — 2026-10-19
+
+- Move gameplay feedback directly between the map and controls. Use persistent
+  16px semibold text, strong contrast, a visible marker, and clear labels for
+  blocked paths, unavailable actions, damage, and completed objectives.
+- Keep complete feedback readable without fading or clipping. Use a short
+  opening reminder; the full mission description remains in Quest.
+- Increase dialogue and forecast text to 16px and improve contrast in result
+  panels. Explain how to interact when a keeper blocks the path.
+- Extend the seven-size browser layout check with real blocked movement,
+  contrast/visibility checks, dialogue, repeat attempts, and successful pickups.
+  Preserve turn rules, saves, and the single-screen play layout.
+
 ## 0.10.0 — 2026-10-19
 
 - Add Echoist, a third Guild specialist: cast a six-turn lantern double to hold

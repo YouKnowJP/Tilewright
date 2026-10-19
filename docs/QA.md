@@ -1,5 +1,28 @@
 # Verification record
 
+## Readable gameplay feedback — v0.10.1
+
+**258 Node tests**, syntax checks, and the **37-file build** pass. The seven-size
+Chrome layout suite now reaches a real blocked cell, checks that no turn is
+spent, verifies at least 16px feedback text and a contrast ratio of at least 7:1,
+and confirms the full message fits between the map and reachable controls.
+It tests repeated blocked attempts, dialogue reading, return to play, and a real
+key pickup switching the banner from warning to success. Normal-height layouts
+retain their viewport fit; short phones/landscape retain bounded page scrolling.
+
+The existing introductory browser suite also passes: three complete three-star
+missions on desktop and phone, progression reload, pause/restart, hints, touch
+and swipe, custom maps, failed storage, and preserved editor saves/history.
+The new double missions additionally complete with touch controls at 320 and
+390 pixels. Forecasts, conversations, and result panels remain operable with
+larger text. Desktop and phone blocked-message screenshots were inspected.
+
+This changes feedback presentation and the keeper-block explanation. Simulation
+timing, save formats, and expedition rules remain unchanged. Other browser and
+physical-device coverage retains its version-specific scope below.
+
+![Readable blocked-path feedback on a phone](feedback-mobile.png)
+
 ## Lantern doubles — v0.10.0
 
 **258 Node tests pass**, JavaScript syntax checks pass, and the **37-file static

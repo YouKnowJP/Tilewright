@@ -179,6 +179,13 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     container.replaceChildren(...nodes); container.setAttribute('aria-label', `${heart ? 'Health' : 'Energy'}: ${value} of ${max}`);
   }
 
+  function showStatus(text, tone = 'info', label = 'On the trail') {
+    const status = $('#game-status'); status.dataset.tone = tone;
+    $('#game-status-mark').textContent = tone === 'success' ? '✓' : ['warning', 'danger'].includes(tone) ? '!' : 'i';
+    $('#game-status-label').textContent = label;
+    $('#game-status-text').textContent = text;
+  }
+
   function update() {
     if (!run) return;
     const stage = run.stage, result = resultFor(run), index = campaign.findIndex(item => item.id === stage.id);
@@ -265,7 +272,15 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#game-hint').hidden = !hintVisible;
     $('#game-hint-text').textContent = scoutHint(run);
     $('#game-hint-button').setAttribute('aria-expanded', String(hintVisible));
-    $('#game-status').textContent = paused ? 'Paused. Resume when you are ready; the world only moves when you do.' : `${run.message}${boss?.mode === 'charging sweep' && Math.abs(boss.x - run.player.x) + Math.abs(boss.y - run.player.y) <= 7 ? ' Watcher sweep incoming: leave the crossed cells!' : ''}`;
+    const incoming = boss?.mode === 'charging sweep' && Math.abs(boss.x - run.player.x) + Math.abs(boss.y - run.player.y) <= 7;
+    const intro = run.turns === 0 && run.message === stage.intro;
+    const progress = run.events.find(event => ['lantern', 'key', 'unlock', 'delivery', 'relay-complete', 'win'].includes(event.type));
+    const warning = !intro && !progress && /blocked|closed|locked|cannot|needs? |no .+ left|occupied|occupies|recharges|oath:/.test(run.message.toLowerCase());
+    const danger = run.events.some(event => ['hurt', 'alarm'].includes(event.type)) || incoming || run.status === 'lost';
+    const labels = { lantern: 'Lantern restored', key: 'Key found', unlock: 'Gate unlocked', delivery: 'Relic delivered', 'relay-complete': 'Relays powered', win: 'Mission complete' };
+    showStatus(paused ? 'Resume when you are ready. The world waits for you.' : intro ? 'Restore the lanterns. Check Quest for this mission’s other goals.' : `${run.message}${incoming ? ' Watcher sweep incoming: leave the crossed cells!' : ''}`,
+      paused ? 'info' : danger ? 'danger' : warning ? 'warning' : progress ? 'success' : 'info',
+      paused ? 'Paused' : danger ? incoming ? 'Sweep incoming' : 'Watch your step' : warning ? /blocked|closed|locked|cannot move/.test(run.message.toLowerCase()) ? 'Path blocked' : 'Check your next move' : labels[progress?.type] || 'On the trail');
     $('#dash-button').classList.toggle('armed', dashArmed); $('#dash-button').setAttribute('aria-pressed', String(dashArmed));
     $('#dash-button').disabled = paused || run.status !== 'playing' || run.energy < 2 || run.stage.restrictions.noDash;
     document.querySelectorAll('[data-move], #game-wait').forEach(button => { button.disabled = paused || run.status !== 'playing'; });
@@ -432,7 +447,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   $('#game-back-editor').addEventListener('click', backToEditor);
   $('#play-custom').addEventListener('click', () => {
     try { start(createCustomStage(getMap())); }
-    catch (error) { $('#game-status').textContent = error.message; $('#library-notice').textContent = error.message; $('#library-notice').hidden = false; }
+    catch (error) { showStatus(error.message, 'warning', 'Map needs attention'); $('#library-notice').textContent = error.message; $('#library-notice').hidden = false; }
   });
   document.addEventListener('keydown', event => {
     if (active && run && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey && event.target.id === 'game-target' && event.key.toLowerCase() === 'e') {
@@ -468,7 +483,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   document.addEventListener('visibilitychange', () => { if (document.hidden && active && run?.status === 'playing' && !run.dialogue && !paused) { paused = true; update(); } });
   new ResizeObserver(resize).observe(viewport);
   expeditions = createExpeditionUI({ storage, onShow: showLibrary, onNotice: text => {
-    $('#game-status').textContent = text;
+    showStatus(text);
     if (libraryOpen()) { $('#library-notice').textContent = text; $('#library-notice').hidden = false; }
   }, onRun(session, newStage) {
     run = session.run; difficulty = session.config.difficulty; $('#game-difficulty').value = difficulty;

@@ -163,6 +163,8 @@ function blockMessage(run, point) {
   if (gate?.type === 'signal') return 'A signal gate. Ring the relays in the correct order to open it.';
   if (gate?.type === 'bridge') return run.guild?.kit === 'echoist' ? 'The crossing is closed. Hold each linked pressure plate with a crate or a lantern double.' : 'The crossing is closed. Leave crates on every linked pressure plate.';
   if (gate?.type === 'switch') return 'This crossing follows the valve settings. Inspect nearby controls and read the scout hint.';
+  const keeper = run.stage.npcs.find(npc => !run.rescued.includes(npc.id) && same(npc, point));
+  if (keeper) return `Path blocked by ${keeper.name}. Use Interact (E) to talk, or go around.`;
   return 'That way is blocked. Trees, rocks, cabins, and deep water need a different route.';
 }
 

@@ -45,6 +45,11 @@ tablets, **Quest & map** opens them in a separate panel; close it with × or Esc
 controls fit standard portrait and desktop screens; short phones and landscape
 use a bounded page scroll so controls remain reachable.
 
+Gameplay messages stay directly beneath the map, above the movement controls.
+Larger, high-contrast text and clear labels distinguish blocked paths, damage,
+and successful actions. Messages remain until the next action; dialogue and
+Plan forecasts also use larger, darker text.
+
 Restore every golden lantern, then reach the turquoise beacon. The world advances after a valid move, wait, or tactical interaction; there is no timer.
 Dialogue and the Plan forecast pause the turn rules. Blocked moves cost nothing.
 

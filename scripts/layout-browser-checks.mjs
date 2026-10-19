@@ -23,6 +23,41 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         assert.ok(bounds.canvas.width > 0 && bounds.canvas.height > 0);
         assert.ok(bounds.canvas.left >= bounds.viewport.left && bounds.canvas.right <= bounds.viewport.right);
         assert.ok(bounds.canvas.top >= bounds.viewport.top && bounds.canvas.bottom <= bounds.viewport.bottom);
+        // Reach a real blocked cell (Mira), rather than injecting display text.
+        await page.locator('#adventure-canvas').focus(); await page.keyboard.press('ArrowLeft');
+        assert.equal(await page.locator('#game-turns').textContent(), '0');
+        assert.equal(await page.locator('#game-status-label').textContent(), 'Path blocked');
+        assert.match(await page.locator('#game-status-text').textContent(), /blocked/);
+        const feedback = await page.evaluate(() => {
+          const status = document.querySelector('#game-status'), text = document.querySelector('#game-status-text'), style = getComputedStyle(status);
+          const light = color => {
+            const channels = color.match(/[\d.]+/g).slice(0, 3).map(value => { const s = Number(value) / 255; return s <= .04045 ? s / 12.92 : ((s + .055) / 1.055) ** 2.4; });
+            return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722;
+          };
+          const a = light(style.color), b = light(style.backgroundColor);
+          return { font: parseFloat(getComputedStyle(text).fontSize), contrast: (Math.max(a, b) + .05) / (Math.min(a, b) + .05),
+            status: status.getBoundingClientRect().toJSON(), text: text.getBoundingClientRect().toJSON(), controls: document.querySelector('.game-controls').getBoundingClientRect().toJSON(),
+            width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight, clipped: text.scrollHeight > text.clientHeight };
+        });
+        assert.ok(feedback.font >= 16 && feedback.contrast >= 7, 'Blocked messages need large, high-contrast text.');
+        assert.equal(feedback.clipped, false); assert.ok(feedback.status.bottom <= feedback.controls.top + 1, 'Feedback belongs between the map and controls.');
+        assert.equal(feedback.width, width);
+        if (height >= 740) { assert.equal(feedback.height, height); assert.ok(feedback.controls.bottom <= height); }
+        else assert.ok(feedback.height <= 704);
+        if (screenshots && [390, 1440].includes(width)) await page.screenshot({ path: `.playwright-mcp/feedback-${width}.png`, fullPage: true });
+        // Conversations retain normal interaction and reading consumes no turns.
+        await page.keyboard.press('e'); await page.locator('#conversation-dialog').waitFor();
+        assert.ok(await page.locator('#conversation-lines p').first().evaluate(el => parseFloat(getComputedStyle(el).fontSize) >= 16));
+        await page.locator('#conversation-close').click();
+        await page.locator('#adventure-canvas').focus(); await page.keyboard.press('ArrowLeft');
+        assert.equal(await page.locator('#game-status-label').textContent(), 'Path blocked');
+        await page.keyboard.press('ArrowUp');
+        assert.equal(await page.locator('#game-status').getAttribute('data-tone'), 'info');
+        for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowUp');
+        await page.keyboard.press('ArrowRight');
+        assert.equal(await page.locator('#game-status-label').textContent(), 'Key found');
+        assert.equal(await page.locator('#game-status').getAttribute('data-tone'), 'success');
+        await page.locator('#game-menu summary').click(); await page.locator('#game-restart').click();
         // Opening menus and reading must never spend a turn.
         await page.locator('#game-menu summary').click(); await page.keyboard.press('ArrowUp'); await page.keyboard.press('Escape');
         assert.equal(await page.locator('#game-menu').getAttribute('open'), null);
@@ -79,7 +114,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
           await page.locator('#game-notes-close').click();
         }
         if (screenshots && [390,1440].includes(width)) await page.screenshot({ path: `.playwright-mcp/focused-play-${width}.png` });
-        assert.deepEqual(errors, []); results.push({ width, height, checks: 'Fitted board, visible controls, bounded short-screen scroll, chapter selection, tab keyboard/focus, safe menus/library, responsive notes relocation.' });
+        assert.deepEqual(errors, []); results.push({ width, height, checks: 'Large high-contrast blocked feedback, persistent reading, key pickup feedback, readable dialogue, fitted board, visible controls, bounded scroll, safe menus/library, tab focus, responsive notes.' });
       } finally { await context.close(); }
     }
     return { browser: browser.version(), results };
