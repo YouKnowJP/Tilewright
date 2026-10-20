@@ -96,7 +96,7 @@ through your usual messaging/file service. A friend opens **Workshop → Import 
 play**, chooses the file, or pastes the code. Imports preview before playing or
 adding to the shelf, and never replace an open draft or terrain map.
 
-On a publicly hosted HTTP(S) copy of the game, smaller adventures also support
+On [the public website](https://youknowjp.github.io/Personal-Project/#play), smaller adventures also support
 **Copy play link**. The map travels in the URL fragment and opens a preview.
 Local/private copies use codes/files because a localhost link cannot open your
 computer's game on a friend's device. Detailed worlds may exceed the link or

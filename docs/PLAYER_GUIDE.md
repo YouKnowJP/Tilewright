@@ -5,7 +5,9 @@ journey, or make a world for someone else to discover.
 
 ## Choose your road
 
-Open **Play adventures / Main menu**, or visit `/#play`. The title screen lets
+**[Open the game](https://youknowjp.github.io/Personal-Project/#play)** in your
+browser; no installation or account is needed. On an already open copy, choose
+**Play adventures / Main menu**. The title screen lets
 you look around before starting a mission. **How to play** introduces movement,
 objectives, and specialist tools. **Options** controls sound, reading size, and
 motion. Sound starts only when you choose it.
@@ -82,6 +84,6 @@ current visit can continue, but you should export what you want to keep.
 Expeditions have separate checkpoint backups; the Workshop has separate adventure
 files. Imported adventures preview before playing or adding to your shelf.
 
-This is a local game with portable sharing. It does not require an account or a
-cloud service. Structural checks cannot guarantee every puzzle choice is solvable;
+The game runs in your browser with portable sharing. It does not require an
+account. Structural checks cannot guarantee every puzzle choice is solvable;
 playtest your outward and return routes before asking a friend to follow them.

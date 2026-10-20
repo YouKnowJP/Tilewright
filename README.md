@@ -17,7 +17,23 @@ accounts, or backend.
 
 ![The Tideglass Coast, one of two new story chapters](docs/horizon-chapters.png)
 
-## Run locally
+## Play now
+
+**[Open Lantern Trails](https://youknowjp.github.io/Personal-Project/#play)** —
+play directly in your browser on a computer, tablet, or phone. No download,
+installation, terminal commands, or account is needed. Choose a story, Guild
+job, expedition, or Workshop adventure from the title screen.
+
+Mapmaker and the Adventure Workshop run on the same website. Share smaller
+adventures with a play link, or send an adventure file/code for a friend to
+import. Saves stay in the current browser on the current device; export your
+worlds and checkpoint backups before moving devices or clearing browser data.
+Localhost saves are separate from the public website's saves.
+
+See [hosting and sharing](docs/HOSTING.md) for automatic updates and developer
+publishing details.
+
+## Run locally for development
 
 Install **Node.js 22 or newer**, then run from the repository root:
 
@@ -72,7 +88,7 @@ playtesting, sharing, and storage limits.
 
 ## Play Lantern Trails
 
-Choose **Play adventures**, or open [the game directly](http://127.0.0.1:4174/#play).
+Choose **Play adventures**, or open [the game directly](https://youknowjp.github.io/Personal-Project/#play).
 The game opens on a moonlit **title screen**, without starting a mission.
 **Choose your adventure** previews Story chapters, Guild jobs, Expeditions, and
 Mapmaker. Pick a mode, explore its choices, then select a mission to begin.

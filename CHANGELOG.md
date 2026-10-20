@@ -1,5 +1,16 @@
 # Changelog
 
+## Website publishing — 2026-10-20
+
+- Publish the complete browser game, terrain Mapmaker, and Adventure Workshop
+  on GitHub Pages. Players open a link without cloning or installing anything.
+- Deploy the tested static artifact after all five Tilewright CI jobs pass on
+  `main`. Pull requests and other branches cannot publish the website.
+- Put the public play link first in player documentation and explain portable
+  adventure sharing, browser-local saves, and automatic website updates.
+- Retain game version 0.14.0 and its 54-file distribution; gameplay and save
+  formats are unchanged.
+
 ## 0.14.0 — 2026-10-20
 
 - Bring terrain Mapmaker into the game’s forest-and-brass presentation with a

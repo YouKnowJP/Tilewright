@@ -15,8 +15,11 @@ the program's current rules and supply personal statements in your own words.
 - **Technology:** JavaScript, HTML, CSS, Canvas; Node.js development/test tools.
 - **Purpose:** a local creative tool for authoring fictional tile maps and playing
   original turn-based puzzle adventures.
+- **Browser distribution:** [play on GitHub Pages](https://youknowjp.github.io/Personal-Project/#play),
+  with deployment status in the repository's Tilewright CI workflow. Players
+  need no account or local development setup.
 - **Status:** first implemented with AI assistance on October 18, 2026.
-  No established user base, public deployment, published release, or multi-month
+  No established user base, tagged release, or multi-month
   development record is claimed.
 - **Data:** original fictional artwork and map fixtures; no real customer,
   personal, health, financial, or other regulated records are bundled.
@@ -29,7 +32,7 @@ the program's current rules and supply personal statements in your own words.
 | --- | --- |
 | Personally owned software | Source was created in the personal repository at the user's request. The owner must confirm actual legal ownership and provenance. |
 | Public GitHub repository | Existing public repository; preserve its history and submit its main URL. |
-| Clear README and accepted license | Included with local run instructions, tests, architecture, and MIT license. |
+| Clear README and accepted license | Included with browser play link, local development instructions, tests, architecture, and MIT license. |
 | Real, active history and signs of use | **New project.** One implementation session cannot establish a sustained record. Continue real development and record actual use, issues, and releases over time. |
 | At least 20 hours of planned work | Proposed 23–33 h remaining roadmap, excluding completed layer-management/resizing work. The owner must choose work they truly intend to do. |
 | No disallowed AI or security scope | Creative map editor and puzzle game; no model training, evaluation, inference infrastructure, or offensive tooling. |
