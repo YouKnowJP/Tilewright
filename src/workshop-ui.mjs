@@ -3,32 +3,36 @@ import { loadWorkshop, storeWorkshop, addWorkshopAdventure, loadWorkshopDraft, s
 import { WORLD_REGIONS, WORLD_MISSIONS, seededAdventure, adventureFromMap, workshopShowcases } from './workshop-worlds.mjs';
 import { serializeAdventure, parseAdventure, adventureCode, parseAdventureCode, adventurePlayLink } from './workshop-sharing.mjs';
 import { drawWorkshopWorld } from './workshop-art.mjs';
+import { GUILD_KITS } from './adventure-tools.mjs';
+import { CHAPTERS, drawAtlasArt } from './adventure-art.mjs';
 import { createWorkshopDesigner } from './workshop-designer.mjs';
 import { createRun, stepRun, resultFor } from './adventure.mjs';
 import { freshMemory } from './adventure-brain.mjs';
 import { createAdventureRenderer } from './adventure-render.mjs';
 import { WORKSHOP_CLEARS } from './workshop-clears.mjs';
 
-export function createWorkshopUI({ storage, getMap, onExit, onPlay }) {
+export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, onGuide }) {
   const $ = id => document.getElementById(`ws-${id}`), root = document.getElementById('adventure-workshop');
+  const kitLabel=id=>GUILD_KITS.find(kit=>kit.id===id)?.name||'Wayfarer';
   const restored = loadWorkshop(storage), featured = workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) }));
+  const restoredDraft=loadWorkshopDraft(storage); let draftTouched=Boolean(restoredDraft);
   let entries = restored.entries, bests = loadWorkshopBests(storage), saved = true, preview = null, share = null, activePlay = null, section = 'shelf';
   let token = 0, replay = null, timer = null, shelfFailed = restored.unavailable;
   const verified = new Map();
   const notice = (text,error=false) => { $('status').textContent=text; $('status').dataset.error=String(error); };
-  const designer = createWorkshopDesigner({ initial:loadWorkshopDraft(storage) || blankAdventure(), onChange(pack) { saved=saveWorkshopDraft(storage,pack); draftState(pack); }, notice });
-  function draftState(pack = designer.get()) { $('draft-state').textContent = `${pack.map.width} × ${pack.map.height} · ${pack.markers.length}/128 objects · ${saved ? 'Draft autosaved here' : 'Saving unavailable — export a backup'}${pack.proof ? ` · Creator clear attached (${pack.proof.difficulty})` : ' · Needs a creator playtest'}`; }
+  const designer = createWorkshopDesigner({ initial:restoredDraft || blankAdventure(), onChange(pack) { draftTouched=true; saved=saveWorkshopDraft(storage,pack); draftState(pack); }, notice });
+  function draftState(pack = designer.get()) { $('draft-state').textContent = `${pack.map.width} × ${pack.map.height} · ${pack.markers.length}/128 objects · ${draftTouched ? saved ? 'Draft saved' : 'Saving unavailable — export a backup' : 'A new canvas'}${pack.proof ? ` · Clear attached (${pack.proof.difficulty})` : ' · Playtest to record a clear'}`; }
   const guard = fn => { try { return fn(); } catch(error) { notice(error.message,true); return null; } };
   function close(id) { if ($(id).open) $(id).close(); }
   function stopReplay() { if (timer) clearTimeout(timer); timer=null; if(replay) replay.playing=false; }
-  function hide() { token++; stopReplay(); designer.hide(); for(const id of ['new-dialog','preview-dialog','share-dialog','replay-dialog']) close(id); root.hidden=true; }
+  function hide() { token++; stopReplay(); designer.hide(); for(const id of ['new-dialog','preview-dialog','share-dialog','replay-dialog']) close(id); root.hidden=true; document.body.classList.remove('workshop-designing'); }
   function tab(id) {
-    guard(() => { if (section==='build') designer.get(); section=id;
+    guard(() => { if (section==='build') designer.get(); section=id; $('heading').textContent=id==='build'?'World studio':'Adventure Workshop'; if(id==='build')notice('Choose a quick brush, or open the full palette.'); root.dataset.section=id; document.body.classList.toggle('workshop-designing',id==='build'&&!root.hidden);
       for(const name of ['shelf','build','import']) { $(name).hidden=name!==id; $('tab-'+name).setAttribute('aria-pressed',String(name===id)); }
       if(id==='build') { designer.refresh(); draftState(); } if(id==='shelf') renderShelf();
     });
   }
-  function show(id='shelf') { root.hidden=false; tab(id); if(restored.unavailable) notice('Your saved shelf could not be loaded. Import an exported backup to recover your worlds. Nothing is overwritten until you save or add an adventure.',true); else if(restored.damaged) notice(`${restored.damaged} damaged shelf entries could not be opened. Other worlds remain available.`,true); }
+  function show(id='shelf') { root.hidden=false; tab(id); $('heading').focus({preventScroll:true}); if(restored.unavailable) notice('Your saved shelf could not be loaded. Import an exported backup to recover your worlds. Nothing is overwritten until you save or add an adventure.',true); else if(restored.damaged) notice(`${restored.damaged} damaged shelf entries could not be opened. Other worlds remain available.`,true); }
   function persist() { shelfFailed=!storeWorkshop(storage,entries); renderShelf(); return !shelfFailed; }
   function add(pack) { entries=addWorkshopAdventure(entries,pack); const ok=persist(); notice(ok ? 'Adventure added to your shelf.' : 'Adventure kept in this session. Browser saving is unavailable; download a file to keep it.',!ok); }
   function renderShelf() {
@@ -39,7 +43,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay }) {
     $('adventures').replaceChildren(...matches.map(item=> {
       const {pack}=item, key=adventureKey(pack), card=document.createElement('article'), button=document.createElement('button'), art=document.createElement('canvas'), copy=document.createElement('div');
       card.className='ws-adventure-card'; card.dataset.adventureKey=key; copy.className='ws-card-copy'; art.setAttribute('aria-hidden','true'); drawWorkshopWorld(art,pack,{thumbnail:true});
-      for(const [tag,text,cls] of [['span',item.featured?'FEATURED ADVENTURE':'FROM YOUR SHELF','ws-card-label'],['h4',pack.title,''],['p',pack.description||'A player-made adventure.',''],['small',`By ${pack.author} · ${pack.kit==='none'?'Wayfarer':pack.kit} · ${pack.markers.filter(m=>m.kind==='lantern').length} lanterns${pack.proof?' · Clear attached':''}`,'']]) { const el=document.createElement(tag); el.textContent=text; if(cls)el.className=cls; copy.append(el); }
+      for(const [tag,text,cls] of [['span',item.featured?'FEATURED ADVENTURE':'FROM YOUR SHELF','ws-card-label'],['h4',pack.title,''],['p',pack.description||'A player-made adventure.',''],['small',`By ${pack.author} · ${kitLabel(pack.kit)} · ${pack.markers.filter(m=>m.kind==='lantern').length} lanterns${pack.proof?' · Clear attached':''}`,'']]) { const el=document.createElement(tag); el.textContent=text; if(cls)el.className=cls; copy.append(el); }
       button.append(art,copy); button.onclick=()=>openPreview(pack); card.append(button);
       const actions=document.createElement('div'); actions.className='ws-card-actions';
       const remix=document.createElement('button'); remix.textContent='Remix'; remix.onclick=()=>remixWorld(pack); actions.append(remix);
@@ -63,7 +67,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay }) {
       preview=pack; $('preview-title').textContent=pack.title; $('preview-author').textContent=`By ${pack.author} · ${pack.map.width} × ${pack.map.height}${pack.source?` · ${pack.source}`:''}`;
       $('preview-description').textContent=pack.description||pack.intro; drawWorkshopWorld($('preview-map'),pack,{thumbnail:true});
       const kinds=kind=>pack.markers.filter(m=>m.kind===kind).length;
-      const goals=[`${kinds('lantern')} lanterns to restore`,`${pack.kit==='none'?'Wayfarer':pack.kit} toolkit`,...(['rescue','relic','bell','hunter','watcher'].filter(kinds).map(kind=>`${kinds(kind)} ${ {rescue:'keeper rescues',relic:'relic delivery',bell:'sequence bells',hunter:'adaptive hunters',watcher:'Watcher boss'}[kind]}`)),...(pack.rules.allCoins?['Recover every treasure']:[]),...(pack.rules.noDash?['Walking only']:[]),...(pack.rules.noShield?['No shields']:[])];
+      const goals=[`${kinds('lantern')} lanterns to restore`,`${kitLabel(pack.kit)} toolkit`,...(['rescue','relic','bell','hunter','watcher'].filter(kinds).map(kind=>`${kinds(kind)} ${ {rescue:'keeper rescues',relic:'relic delivery',bell:'sequence bells',hunter:'adaptive hunters',watcher:'Watcher boss'}[kind]}`)),...(pack.rules.allCoins?['Recover every treasure']:[]),...(pack.rules.noDash?['Walking only']:[]),...(pack.rules.noShield?['No shields']:[])];
       $('preview-goals').replaceChildren(...goals.map(text=>Object.assign(document.createElement('span'),{textContent:text})));
       $('preview-clear').textContent=proof?`Creator clear verified · ${pack.proof.difficulty} rules · ${proof.turns} turns. Watch the route if you want a hint. Other choices and Nemesis may play differently.`:report.ready ? 'No creator clear attached. Map checks passed, but linked puzzles still need a completed playtest.' : `This unfinished world needs repairs: ${report.errors.join(' ')} Remix it to open the designer and its Checks panel.`;
       $('preview-play').disabled=!report.ready; $('preview-share').disabled=!report.ready; $('preview-watch').hidden=!proof; $('preview-add').disabled=entries.some(p=>adventureKey(p)===adventureKey(pack));
@@ -71,7 +75,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay }) {
     } catch(error) { if(n===token)notice(error.message,true); }
   }
   function replaceDraft(pack) {
-    if(!confirm('Replace the current workshop draft? Save it to your shelf or download it first if you want to keep it.'))return;
+    if(draftTouched&&!confirm('Replace the current workshop draft? Save it to your shelf or download it first if you want to keep it.'))return;
     close('preview-dialog'); designer.replace(pack); tab('build'); notice('Your new draft is ready. Choose a brush, then shape the next adventure.');
   }
   function remixWorld(pack) { guard(()=>{ designer.get(); replaceDraft(editAdventure(pack,{source:`Remix of ${pack.title} by ${pack.author}`.slice(0,128),author:'A trail keeper'})); }); }
@@ -81,7 +85,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay }) {
       const report=checkAdventure(pack); if(!report.ready)throw Error(report.errors[0]);
       serializeAdventure(pack);
       const proof=await validateProof(pack); if(n!==token||root.hidden)return;
-      share=pack; let code='',codeProblem=''; try { code=adventureCode(pack); } catch(error) { codeProblem=error.message; } const link=playLink(pack);
+      share=pack; drawWorkshopWorld($('share-map'),pack,{thumbnail:true}); let code='',codeProblem=''; try { code=adventureCode(pack); } catch(error) { codeProblem=error.message; } const link=playLink(pack);
       $('share-summary').textContent=`“${pack.title}” by ${pack.author}. Terrain, story, puzzle objects, and the attached clear travel together.`;
       $('share-clear').textContent=proof?`Verified creator clear included · ${pack.proof.difficulty} · ${proof.turns} turns.`:'No creator clear included. Finish a playtest to show friends a proven route.';
       $('copy-code').disabled=!code; $('manual-copy').hidden=!code; $('export-code').value=code; $('copy-link').disabled=!link.url; $('link-note').textContent=link.url?'This play link opens a preview on this hosted copy of the game.':link.reason;
@@ -107,11 +111,16 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay }) {
   function newWorld(){guard(()=>{designer.get();$('new-dialog').showModal();});}
   $('new').onclick=newWorld; $('new-draft').onclick=newWorld;
   for(const [id,items] of [['new-region',WORLD_REGIONS],['new-mission',WORLD_MISSIONS]]) $(id).replaceChildren(...items.map(item=>new Option(item.name,item.id)));
-  $('new-mode').onchange=()=>{ const mode=$('new-mode').value; $('new-dimensions').hidden=mode!=='blank';$('new-seeded').hidden=mode!=='seed';$('new-note').textContent=mode==='current'?'Copy terrain into an independent adventure. The original map and its undo history stay saved.':mode==='seed'?'Choose one of 20 region-and-mission recipes. The same seed and recipe produce the same world.':'Place puzzles, keepers, patrols, and goals. Add a story, then playtest it.'; };
+  function newArt(){ const theme=$('new-mode').value==='seed'?{woodland:'woodland',marsh:'marsh',ruins:'archive',dunes:'dunes'}[$('new-region').value]||'woodland':$('new-mode').value==='current'?'coast':'woodland';drawAtlasArt($('new-art'),CHAPTERS.find(t=>t.id===theme)); }
+  $('new-region').addEventListener('change',newArt); newArt();
+  $('new-mode').onchange=()=>{newArt(); const mode=$('new-mode').value; $('new-dimensions').hidden=mode!=='blank';$('new-seeded').hidden=mode!=='seed';$('new-note').textContent=mode==='current'?'Copy terrain into an independent adventure. The original map and its undo history stay saved.':mode==='seed'?'Choose one of 20 region-and-mission recipes. The same seed and recipe produce the same world.':'Place puzzles, keepers, patrols, and goals. Add a story, then playtest it.'; };
   $('new-form').onsubmit=event=>{event.preventDefault();guard(()=>{
     const mode=$('new-mode').value,pack=mode==='seed'?seededAdventure($('new-seed').value,$('new-region').value,$('new-mission').value,$('new-risk').value==='perilous'):mode==='current'?adventureFromMap(getMap()):blankAdventure(Number($('new-width').value),Number($('new-height').value));
     close('new-dialog');replaceDraft(pack);
   });};
+  drawAtlasArt($('scenery'),CHAPTERS.find(theme=>theme.id==='clockwork'));
+  $('guide').onclick=()=>onGuide?.($('guide')); $('terrain').onclick=()=>guard(()=>{designer.get();onTerrain();});
+  $('banner-create').onclick=newWorld; $('step-design').onclick=()=>designer.panel('adventure',true); $('step-test').onclick=()=>$('test').click(); $('step-share').onclick=()=>$('share').click();
   $('home').onclick=()=>guard(()=>{designer.get();onExit();}); for(const name of ['shelf','build','import'])$('tab-'+name).onclick=()=>tab(name);
   $('search').oninput=renderShelf;$('filter').onchange=renderShelf;
   $('import-file').onclick=()=>{$('file').value='';$('file').click();};
@@ -136,6 +145,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay }) {
   document.addEventListener('keydown',event=>{if(root.hidden||section!=='build'||event.target.closest('input,select,textarea,dialog')||document.querySelector('dialog[open]'))return;if((event.ctrlKey||event.metaKey)&&!event.altKey){const key=event.key.toLowerCase();if(['z','y','s'].includes(key)){event.preventDefault();$(key==='s'?'save':key==='y'||event.shiftKey?'redo':'undo').click();}}});
   renderShelf();draftState();
   return { show,hide,
+    fromTerrain() { $('new-mode').value='current';$('new-mode').dispatchEvent(new Event('change'));newWorld(); },
     async openShared(code){show('import');$('import-code').value=code;try{await openPreview(parseAdventureCode(code));}catch(error){notice(error.message,true);}},
     best:(key,difficulty)=>bests[`${key}-${difficulty}`],
     get saveFailed(){return !saved||shelfFailed;},

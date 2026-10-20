@@ -7,7 +7,7 @@ They are proposals for this small tool, not claims that Tilewright already
 supports those editors' formats or all their capabilities. The
 [roadmap](../ROADMAP.md) tracks selected work and remaining estimates.
 
-## Delivered through v0.10.0
+## Delivered through v0.14.0
 
 **Finish structural editing.** A map no longer needs to be recreated to change
 its dimensions. Users can anchor retained content, preview cropped occupied
@@ -56,6 +56,13 @@ All conversations can be reread in the journal. Occupied floors cannot close,
 and full parcels cannot waste coins. These refinements are delivered; richer
 multi-mission relationships and moving-water terrain remain future ideas.
 
+**Let players author adventures.** The Workshop now paints 24 object types,
+linked puzzles, dialogue, patrols, rescues, and relic quests. It provides three
+featured adventures, twenty seeded recipes, 32-world local shelves, real creator
+clears, replays, and file/code sharing. The creator’s camp unifies both editors,
+adds quick brushes and objective shortcuts, and explains the workflow through
+an illustrated in-game guide. See [the Workshop guide](WORKSHOP.md).
+
 ## Next gameplay concepts to prototype
 
 These ideas are not implemented. Each needs a small authored test before adding
@@ -87,10 +94,10 @@ more interface, content, or persistent progression.
   make previews match the final operation and retain one undo step per stroke.
 - **Terrain connections:** use explicit neighbor-based tile rules to connect
   water banks, paths, or fences. Keep rules deterministic and inspectable.
-- **Adventure authoring:** add explicit spawn, lantern, key, gate, patrol-route,
-  and pressure-plate editing, with playable previews and solvability warnings.
-  Custom map expeditions already work; custom authored puzzles need a separate
-  versioned entity format, validation, and portable export.
+- **Adventure authoring expansion:** the delivered Workshop already includes
+  goals, puzzle links, patrol routes, story editing, checks, and portable exports.
+  Future campaign bundles and custom local tilesets should preserve existing
+  adventures and keep structural checks distinct from a completed playtest.
 - **More campaign variety:** add authored optional paths, crate-reset checkpoints,
   alternative patrol patterns, and additional quest layouts. Verify that each
   teaches a distinct decision rather than increasing map size alone.

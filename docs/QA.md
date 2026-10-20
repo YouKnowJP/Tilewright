@@ -1,5 +1,48 @@
 # Verification record
 
+## Creator’s camp and player readiness — v0.14.0
+
+The release retains **290 passing Node tests**, syntax checks, and a **54-file
+static package**. No gameplay rules, map/progress formats, or expedition
+checkpoint rules change. Runtime assets add the creator stylesheet, native
+Mapmaker shell, and illustrated guide.
+
+The new thirteenth browser suite checks the entire creator journey in Chrome
+155.0.8059.85 at 320×740, 390×900, 768×900, 1024×768, 1440×900, 320×568, and
+844×390. It opens compact palette/settings panels with native controls, paints
+terrain, verifies keyboard focus after palette close, reads all three guide
+chapters without save/gameplay changes, copies terrain into the Workshop,
+paints with quick brushes, exercises Undo/Redo, edits story disclosures, checks
+structure/clear readiness, and returns through Main menu to the retained map.
+Fit shows the complete world without map scrolling; screens have no sideways
+page overflow. Long player titles wrap. Invalid fields in a closed disclosure
+reopen their panel for repair rather than trapping an invisible control.
+
+The retained editor suite exercises every zoom, far-corner painting, native
+touch panning, keyboard cursor visibility, structural layer editing, resizing,
+JSON/PNG exports, and load failure through the new panels. Native nested dialogs
+retain their context; actions outside a compact panel first close it visibly.
+The Workshop suite retains actual wins for all three worlds on both rules,
+alternate crossings, creator-clear/replay, file/code/link import in another
+browser context, all twenty recipes, every object inspector, cancelled strokes,
+failed saving, clipboard fallback, and an unreadable shelf without data loss.
+
+Title, guide, preferences, journal, fitted gameplay, introductory/hard missions,
+sluices, expeditions, atlas, Guild, and Horizon also pass in this release’s
+full browser regression checks. Screenshot review covers both editors, the
+creator’s camp, compact world notes, guides, new/share previews, and gameplay.
+Fixes include grid children growing past a bounded workspace, asynchronous dialog focus return, unbroken player titles, and a false
+“saved” label on an untouched default canvas. Existing-mode selection, title
+behavior, live runs, editor history, and checkpoints remain intact.
+
+These checks establish the listed flows on the tested Chrome builds and sizes.
+They do not claim physical-device, other-engine, screen-reader certification,
+or universal puzzle solvability or player enjoyment.
+
+![The unified Mapmaker](creator-mapmaker-1440.png)
+
+![The focused adventure studio](creator-studio-390.png)
+
 ## Adventure Workshop — v0.13.0
 
 **290 Node tests**, syntax checks, and the **51-file static build** pass.

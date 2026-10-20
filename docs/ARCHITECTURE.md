@@ -561,3 +561,40 @@ rule/content-specific records). Malformed entries are isolated. A full shelf
 requires explicit removal rather than silent eviction. Failed writes return
 session data and truthful export guidance. Existing story, Guild, terrain,
 preferences, and expedition formats/checkpoint rules are unchanged.
+
+## Shared creator presentation and navigation — v0.14
+
+`studio.css` extends the existing game materials to terrain Mapmaker and refines
+the Workshop without changing collision, reducers, learning, map formats, or
+checkpoint rules. Both creation canvases use bounded workspace heights and Fit.
+Advanced reading stays in scrollable notes. Long player text wraps within its
+container; short/landscape screens retain bounded page scroll rather than
+hiding actions below a fixed viewport.
+
+`mapmaker-shell.mjs` moves the existing palette and inspector into native dialogs
+at ≤1100px. Desktop uses the same original controls in the side panels, preserving
+IDs, handlers, values, and history. Native close events restore focus; choosing a
+tile returns focus to the canvas after the dialog closes. Resizing or leaving
+Mapmaker closes its drawers. The core editor still owns all painting, structural
+editing, saving, and exports. Its navigation can open the game title or the
+Workshop; Build adventure preselects the existing terrain-copy creation option
+rather than overwriting a draft or silently starting a run.
+
+`creator-guide.mjs` owns a three-chapter illustrated modal. It reuses original
+atlas art and presents a first trail, linked puzzles, and playtest/sharing steps.
+Guide navigation only changes guide state. It inserts fixed text through DOM
+nodes, uses no storage or gameplay handlers, and returns focus to its opener.
+Existing gameplay guide/preferences remain separate. Their reading-size setting
+also scales the creator guide's body text.
+
+Workshop additions reuse its existing history and validation. Eight quick brushes
+call the same selection path as the full palette; objective counts also select
+goal brushes. Details disclosures group infrequently edited fields. Invalid
+fields open their disclosure and relevant panel before native validity feedback.
+Readiness separates structural checks from an attached creator journal, which
+still requires engine replay before being called verified. A fresh untouched
+canvas is distinguished from a saved draft and needs no replacement confirmation.
+Public assets add one stylesheet and two browser modules; the package has 54
+files, including its build marker and release note. Browser checks navigate the
+visible creator panels before manipulating controls and retain native clicks,
+keyboard actions, imports, downloads, and ordinary-action game playthroughs.

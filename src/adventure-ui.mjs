@@ -17,7 +17,7 @@ import { createGuildJobs, guildMerits, guildRecordId, loadGuild, saveGuild, GUIL
 import { createWorkshopUI } from './workshop-ui.mjs';
 import { GUILD_KITS, kitFor, powerProblem, powerPreview, liveEcho, waystonePreview } from './adventure-tools.mjs';
 
-export function createAdventureUI({ storage, getMap, backToEditor }) {
+export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuide }) {
   const $ = selector => document.querySelector(selector);
   const canvas = $('#adventure-canvas'), viewport = $('#game-viewport'), campaign = createCampaign();
   const allJournalJobs = createGuildJobs('echoist'), journalJobs = [...allJournalJobs.slice(6), ...allJournalJobs.slice(0, 6)];
@@ -281,6 +281,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#game-rule-note').hidden = !stage.restrictions.noDash && !stage.restrictions.noShield && !stage.requireCoins;
     $('#game-rule-note').textContent = [stage.restrictions.noDash ? 'Walking only: dash is disabled.' : '', stage.restrictions.noShield ? 'Unwarded: shields are disabled.' : '', stage.requireCoins ? 'Recover every coin before leaving.' : ''].filter(Boolean).join(' ');
     $('#game-title').textContent = stage.name;
+    $('#game-choose').textContent = stage.workshop ? workshop.returnSection === 'build' ? 'Designer' : 'Player worlds' : 'Trails';
     $('#game-sound').textContent = sound.enabled ? 'Sound on' : 'Sound off'; $('#game-sound').setAttribute('aria-pressed', String(sound.enabled));
     const journey = expeditions?.session;
     $('#game-difficulty').disabled = Boolean(journey);
@@ -577,7 +578,7 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
     $('#adventure').dataset.stage = run.stage.id; lastAction = performance.now(); if (!newStage) sound.play(run.events); update();
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
   } });
-  workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
+  workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide, onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
   front = createFrontMenu({ storage, sound,
     onMode(mode) { if (mode === 'guild') showGuild(); else expeditions.show(mode); },
     onContinue() { paused = false; showBoard(); update(); revealBoard(); },
@@ -592,6 +593,8 @@ export function createAdventureUI({ storage, getMap, backToEditor }) {
   renderPicker(); renderGuild();
   return {
     enter() { active = true; showTitle(); },
+    openWorkshop,
+    useTerrain() { openWorkshop('build'); workshop.fromTerrain(); },
     openShared(code) { openWorkshop('import'); workshop.openShared(code); },
     leave() {
       workshop.hide();

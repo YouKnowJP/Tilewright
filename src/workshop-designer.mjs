@@ -1,6 +1,7 @@
 import { History, TILES, paintCells, floodCells, rectangleCells, lineCells } from './model.mjs';
 import { OBJECTS, CHANNELS, normalizeAdventure, editAdventure, placeObject, checkAdventure, applyStamp } from './workshop-model.mjs';
 import { CHAPTERS } from './adventure-art.mjs';
+import { createIcon } from './icons.mjs';
 import { drawTile } from './render.mjs';
 import { drawWorkshopWorld, drawWorkshopObject } from './workshop-art.mjs';
 
@@ -8,6 +9,7 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
   const $ = id => document.getElementById(`ws-${id}`), canvas = $('canvas'), viewport = $('viewport');
   let history = new History(initial, 30), selected = null, cursor = { x: 0, y: 0 }, brush = { type: 'inspect', name: 'Inspect' };
   let stroke = null, route = false, group = 'Goals', formDirty = false, objectDirty = false, keyboardCorner = null;
+  for(const [id,icon,label]of [['brush','brush','Brushes'],['inspect-tool','pick','Inspect object'],['erase-tool','erase','Erase object'],['pan-tool','pan','Pan world'],['undo','undo','Undo'],['redo','redo','Redo']]){const b=$(id);b.replaceChildren(createIcon(icon));if(['brush','inspect-tool','erase-tool','pan-tool'].includes(id)){const span=document.createElement('span');span.textContent={brush:'Brushes','inspect-tool':'Inspect','erase-tool':'Erase','pan-tool':'Pan'}[id];b.append(span);}b.setAttribute('aria-label',label);b.title=label;}
   const compact = matchMedia('(max-width:1000px)'), inspector = $('inspector'), host = inspector.parentElement;
   const pack = () => history.document;
   function guard(fn) { try { return fn(); } catch (error) { notice(error.message, true); return false; } }
@@ -49,8 +51,14 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
     $('route-note').textContent = `${item.route?.length || 0}/24 waypoints. Routes start here. Patrol paths retrace their steps; each cell must touch the next. Hunters can path between waypoints.`;
     $('route-finish').hidden = !route;
   }
+  const chapterForm=$('props-adventure');
+  chapterForm.addEventListener('invalid',event=>{ const details=event.target.closest('details');if(details)details.open=true;panel('adventure',true); },true);
   function checks() {
     const report = checkAdventure(pack()); $('check-title').textContent = report.ready ? 'Ready for a real playtest' : 'A few things to mend';
+    const readiness=[['World structure',report.ready?'Ready to explore':`${report.errors.length} repairs needed`],['Creator clear',pack().proof?`Attached · ${pack().proof.difficulty} rules`:'Finish a playtest to record one']];
+    $('readiness').replaceChildren(...readiness.map(([heading,text])=>{const item=document.createElement('div'),h=document.createElement('strong'),p=document.createElement('p');h.textContent=heading;p.textContent=text;item.append(h,p);return item;}));
+    const actions=document.createElement('div');actions.className='ws-readiness-actions';for(const [name,id]of [['Playtest this world','test'],['Prepare to share','share']]){const button=document.createElement('button');button.textContent=name;button.type='button';button.disabled=!report.ready;button.onclick=()=>{if($('inspector-dialog').open)$('inspector-dialog').close();$(id).click();};actions.append(button);}$('readiness').append(actions);
+    const goalKinds=['start','lantern','beacon','rescue','relic','bell']; $('quest-strip').replaceChildren(...goalKinds.filter(kind=>['start','lantern','beacon'].includes(kind)||pack().markers.some(m=>m.kind===kind)).map(kind=>{const count=pack().markers.filter(m=>m.kind===kind).length,button=document.createElement('button'),art=document.createElement('canvas');art.width=art.height=24;drawWorkshopObject(art.getContext('2d'),{kind,x:0,y:0});button.append(art,document.createTextNode(`${{start:'Start',lantern:'Lights',beacon:'Beacon',rescue:'Rescue',relic:'Relic',bell:'Bells'}[kind]} · ${count}`));button.title='Paint '+OBJECTS.find(o=>o.id===kind).name;button.onclick=()=>{setBrush({...OBJECTS.find(o=>o.id===kind),type:'object'});canvas.focus({preventScroll:true});};return button;}));
     $('checks').replaceChildren(...[...report.errors.map(text => ({ text, error: true })), ...report.warnings.map(text => ({ text }))].map(item => {
       const p = document.createElement('p'); p.className = 'ws-check-message'; p.dataset.error = String(!!item.error); p.textContent = item.text; return p;
     }));
@@ -58,6 +66,8 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
   function draw() {
     if ($('build').hidden) return;
     drawWorkshopWorld(canvas, stroke?.next || pack(), { selected, cursor, grid: true });
+    const preview=$('active-brush').getContext('2d');preview.clearRect(0,0,24,24);if(brush.type==='terrain')drawTile(preview,brush.id,0,0);else if(brush.type==='object')drawWorkshopObject(preview,{x:0,y:0,kind:brush.id});else{preview.strokeStyle='#e7d29c';preview.lineWidth=2;preview.strokeRect(5,5,14,14);}
+    document.querySelectorAll('[data-ws-quick]').forEach(button=>button.setAttribute('aria-pressed',String(`${brush.type}:${brush.id}`===button.dataset.wsQuick)));
     $('position').textContent = `${cursor.x + 1}, ${cursor.y + 1}`;
     canvas.setAttribute('aria-label', `Adventure designer: ${pack().title}. Column ${cursor.x + 1}, row ${cursor.y + 1}. ${brush.name}. Space paints; arrows move the cursor.`);
     $('brush-label').textContent = route ? 'Draw route · choose land cells, then Finish route' : `${brush.name}${brush.type === 'terrain' ? ` · ${$('paint-mode').selectedOptions[0].textContent} · ${$('layer').selectedOptions[0]?.textContent || ''}` : ''}`;
@@ -176,6 +186,8 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
     } } else if (event.key === 'Escape') { finish(true); keyboardCorner = null; route = false; populateObject(); draw(); }
     else if (event.key === 'Delete' && selected) { event.preventDefault(); $('delete-object').click(); }
   }));
+  const quick=[['terrain',1,'Meadow'],['terrain',3,'Water'],['terrain',7,'Trees'],['object','lantern','Light'],['object','guide','Keeper'],['object','crate','Crate'],['object','plate','Plate'],['object','bridge','Bridge']];
+  $('quick-brushes').replaceChildren(...quick.map(([type,id,name])=>{const button=document.createElement('button'),art=document.createElement('canvas');art.width=art.height=24;button.dataset.wsQuick=`${type}:${id}`;button.title=name;button.setAttribute('aria-label',`${name} quick brush`);if(type==='terrain')drawTile(art.getContext('2d'),id,0,0);else drawWorkshopObject(art.getContext('2d'),{x:0,y:0,kind:id});button.append(art,document.createTextNode(name));button.onclick=()=>{if(type==='terrain'){$('layer').selectedIndex=id<=6?0:Math.min(1,pack().map.layers.length-1);$('layer-visible').checked=pack().map.layers.find(l=>l.id===$('layer').value).visible;}setBrush({type,id,name});canvas.focus({preventScroll:true});};return button;}));
   new ResizeObserver(resize).observe(viewport);
   refresh();
   return { get: () => applyForms(), refresh, draw, panel,

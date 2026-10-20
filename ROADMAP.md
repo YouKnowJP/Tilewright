@@ -1,6 +1,7 @@
 # Tilewright roadmap
 
-The current editor, 24 story missions, eight Guild jobs, and replayable expedition game are usable. These are **unfinished** feature
+The current editor, 24 story missions, eight Guild jobs, three featured Workshop
+adventures, player authoring/sharing, and replayable expedition game are usable. These are **unfinished** feature
 proposals with planning estimates, not completed work or hours already spent.
 The owner should prioritize the work they actually intend to undertake before
 using this plan in a program submission.
@@ -55,6 +56,17 @@ excluded from the remaining estimates above.
 - [Mission guide and further mission concepts](docs/MISSIONS.md), with
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
+
+## Creator’s camp and player readiness completed — v0.14
+
+- A shared game presentation for terrain Mapmaker and adventure creation.
+- Focused canvas layouts, compact palette/settings dialogs, readable fields,
+  persistent Workshop navigation, and direct terrain-to-adventure handoff.
+- Quick brushes, objective shortcuts, folded world/story/challenge settings,
+  separate structure/clear readiness, and illustrated new/share previews.
+- An illustrated three-chapter Creator’s guide and updated player documentation.
+- A thirteenth browser suite covering the creator journey at seven viewport sizes,
+  alongside retained gameplay, editor, sharing, save, and layout checks.
 
 ## Adventure Workshop completed — v0.13
 

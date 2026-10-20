@@ -1,3 +1,4 @@
+import { editorButton, closeEditorPanels, revealEditorControl } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import { checkAdventures } from './adventure-browser-checks.mjs';
 import { checkContracts } from './contract-browser-checks.mjs';
@@ -8,6 +9,7 @@ import { checkPlayLayout } from './layout-browser-checks.mjs';
 import { checkHorizon } from './horizon-browser-checks.mjs';
 import { checkGuild } from './guild-browser-checks.mjs';
 import { checkFrontMenu } from './front-browser-checks.mjs';
+import { checkCreators } from './creator-browser-checks.mjs';
 import { checkWorkshop } from './workshop-browser-checks.mjs';
 import { checkJournal } from './journal-browser-checks.mjs';
 import path from 'node:path';
@@ -40,6 +42,7 @@ function assertFits(state) {
 }
 
 async function clickCell(page, x, y) {
+  await closeEditorPanels(page);
   await page.locator('#viewport').scrollIntoViewIfNeeded();
   const { map, view } = await metrics(page);
   const point = { x: map.left + (x + .5) * map.width / 28, y: map.top + (y + .5) * map.height / 20 };
@@ -79,12 +82,12 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         step = 'far-corner painting';
         let state = await metrics(page);
         assert.ok(state.map.right <= state.view.right && state.map.bottom <= state.view.bottom, 'Scrollbars must reach the far map edges.');
-        await page.getByRole('button', { name: 'Stone tile', exact: true }).click();
+        await editorButton(page, { name: 'Stone tile', exact: true });
         await clickCell(page, 27, 19);
         const saved = () => page.evaluate(() => localStorage.getItem('tilewright.document.v1'));
         assert.equal(JSON.parse(await saved()).layers[0].tiles[559], 6, 'A scrolled and zoomed click must paint the correct cell.');
 
-        await page.getByRole('button', { name: 'Pan map (H)', exact: true }).click();
+        await editorButton(page, { name: 'Pan map (H)', exact: true });
         step = 'panning';
         await page.locator('#viewport').evaluate(element => element.scrollTo(0, 0));
         await page.locator('#viewport').scrollIntoViewIfNeeded();
@@ -105,8 +108,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         state = await metrics(page);
         await page.mouse.move(state.view.left + 100, state.view.top + 100);
         await page.mouse.wheel(0, 120);
-        await page.waitForFunction(previous => scrollY > previous, state.pageY, { timeout: 3000 });
-        assert.ok((await metrics(page)).pageY > state.pageY, 'Wheel scrolling over a fitted map must scroll the page.');
+        if(state.pageHeight>900+2){await page.waitForFunction(previous => scrollY > previous, state.pageY, { timeout: 3000 });assert.ok((await metrics(page)).pageY > state.pageY, 'Wheel scrolling over a fitted map must reach any remaining page content.');}else assert.equal((await metrics(page)).pageY,0,'A fitted creator workspace may fit entirely on screen.');
 
         await page.setViewportSize({ width: width === 390 ? 1024 : 390, height: 900 });
         step = 'resize fit';
@@ -131,45 +133,45 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         await page.goto(baseURL);
         await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
         const saved = () => page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.document.v1')));
-        await page.getByRole('button', { name: 'Select Details layer', exact: true }).click();
+        await editorButton(page, { name: 'Select Details layer', exact: true });
         await page.locator('.layer-controls summary').click();
         const initialViewHeight = (await metrics(page)).view.height;
-        await page.locator('#layer-name').fill('Canopy'); await page.locator('#layer-name').press('Enter');
+        await revealEditorControl(page,page.locator('#layer-name'));await page.locator('#layer-name').fill('Canopy'); await page.locator('#layer-name').press('Enter');
         assert.equal((await saved()).layers[1].name, 'Canopy', 'Layer name must persist.');
-        await page.getByRole('button', { name: 'Duplicate selected layer', exact: true }).click();
+        await editorButton(page, { name: 'Duplicate selected layer', exact: true });
         let map = await saved();
         const copyId = map.layers[2].id;
         assert.equal(map.layers[2].name, 'Canopy copy');
         assert.deepEqual(map.layers[2].tiles, map.layers[1].tiles);
         assert.equal(await page.locator('#raise-layer').isDisabled(), true, 'The front layer cannot move further forward.');
-        await page.getByRole('button', { name: 'Move selected layer backward', exact: true }).click();
+        await editorButton(page, { name: 'Move selected layer backward', exact: true });
         assert.equal((await saved()).layers[1].id, copyId);
-        await page.getByRole('button', { name: 'Move selected layer forward', exact: true }).click();
+        await editorButton(page, { name: 'Move selected layer forward', exact: true });
         assert.equal((await saved()).layers[2].id, copyId);
         const beforeDelete = await saved();
         page.once('dialog', dialog => dialog.dismiss());
-        await page.getByRole('button', { name: 'Delete selected layer', exact: true }).click();
+        await editorButton(page, { name: 'Delete selected layer', exact: true });
         assert.deepEqual(await saved(), beforeDelete, 'Canceling deletion must retain the layer.');
         page.once('dialog', dialog => dialog.accept());
-        await page.getByRole('button', { name: 'Delete selected layer', exact: true }).click();
+        await editorButton(page, { name: 'Delete selected layer', exact: true });
         assert.equal((await saved()).layers.length, 2);
-        await page.getByRole('button', { name: 'Undo', exact: true }).click();
+        await editorButton(page, { name: 'Undo', exact: true });
         assert.deepEqual(await saved(), beforeDelete, 'Undo must restore layer content and order.');
-        await page.getByRole('button', { name: 'Redo', exact: true }).click();
+        await editorButton(page, { name: 'Redo', exact: true });
         assert.equal((await saved()).layers.length, 2);
 
         step = 'layer limits';
-        while ((await saved()).layers.length < 6) await page.getByRole('button', { name: 'Duplicate selected layer', exact: true }).click();
+        while ((await saved()).layers.length < 6) await editorButton(page, { name: 'Duplicate selected layer', exact: true });
         assert.equal(await page.locator('#duplicate-layer').isDisabled(), true);
         assert.equal(await page.locator('#add-layer').isDisabled(), true);
         assert.ok(Math.abs((await metrics(page)).view.height - initialViewHeight) < 1, 'Layer settings must not stretch the canvas.');
         while ((await saved()).layers.length > 1) {
           page.once('dialog', dialog => dialog.accept());
-          await page.getByRole('button', { name: 'Delete selected layer', exact: true }).click();
+          await editorButton(page, { name: 'Delete selected layer', exact: true });
         }
         assert.equal(await page.locator('#delete-layer').isDisabled(), true, 'The final layer cannot be deleted.');
         page.once('dialog', dialog => dialog.accept());
-        await page.getByRole('button', { name: /Open the sample map/ }).click();
+        await editorButton(page, { name: /Open the sample map/ });
         const original = await saved();
 
         step = 'resize preview and cancel';
@@ -177,40 +179,40 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
           await page.locator('#resize-width').fill('30'); await page.locator('#resize-height').fill('22');
           await page.locator('#resize-anchor').selectOption('center'); await page.locator('#resize-fill').selectOption('4');
         };
-        await page.getByRole('button', { name: 'Resize map…', exact: true }).click(); await setResize();
+        await editorButton(page, { name: 'Resize map…', exact: true }); await setResize();
         assert.equal(await page.locator('#resize-preview').getAttribute('width'), '720');
         assert.match(await page.locator('#resize-summary').textContent(), /100 new cells/);
-        await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+        await editorButton(page, { name: 'Cancel', exact: true });
         assert.deepEqual(await saved(), original, 'Preview and cancel must not edit the map.');
 
         step = 'anchored growth and history';
-        await page.getByRole('button', { name: 'Resize map…', exact: true }).click(); await setResize();
-        await page.getByRole('button', { name: 'Resize map', exact: true }).click();
+        await editorButton(page, { name: 'Resize map…', exact: true }); await setResize();
+        await editorButton(page, { name: 'Resize map', exact: true });
         map = await saved(); assert.equal(map.width, 30); assert.equal(map.height, 22);
         for (let i = 0; i < map.layers.length; i++) {
           assert.equal(map.layers[i].tiles[31], original.layers[i].tiles[0], 'Center growth must offset existing tiles.');
           assert.equal(map.layers[i].tiles[0], i === 0 ? 4 : 0, 'Fill must apply only to new back-layer cells.');
         }
         assertFits(await metrics(page));
-        await page.getByRole('button', { name: 'Undo', exact: true }).click(); assert.deepEqual(await saved(), original);
-        await page.getByRole('button', { name: 'Redo', exact: true }).click(); assert.deepEqual(await saved(), map);
+        await editorButton(page, { name: 'Undo', exact: true }); assert.deepEqual(await saved(), original);
+        await editorButton(page, { name: 'Redo', exact: true }); assert.deepEqual(await saved(), map);
 
         step = 'crop preview and restore';
-        await page.getByRole('button', { name: 'Resize map…', exact: true }).click();
+        await editorButton(page, { name: 'Resize map…', exact: true });
         await page.locator('#resize-width').fill('8'); await page.locator('#resize-height').fill('6');
         await page.locator('#resize-anchor').selectOption('bottom-right');
         assert.match(await page.locator('#resize-summary').textContent(), /occupied cells will be cropped/);
         assert.equal(await page.locator('#resize-preview').getAttribute('width'), '192');
-        await page.getByRole('button', { name: 'Resize map', exact: true }).click();
+        await editorButton(page, { name: 'Resize map', exact: true });
         assert.equal((await saved()).width, 8); assertFits(await metrics(page));
-        await page.getByRole('button', { name: 'Undo', exact: true }).click(); assert.deepEqual(await saved(), map);
+        await editorButton(page, { name: 'Undo', exact: true }); assert.deepEqual(await saved(), map);
 
         step = 'invalid resize';
-        await page.getByRole('button', { name: 'Resize map…', exact: true }).click();
+        await editorButton(page, { name: 'Resize map…', exact: true });
         await page.locator('#resize-width').fill('65');
         assert.equal(await page.locator('#apply-resize').isDisabled(), true);
         assert.equal(await page.locator('#resize-error').isVisible(), true);
-        await page.getByRole('button', { name: 'Cancel', exact: true }).click(); assert.deepEqual(await saved(), map);
+        await editorButton(page, { name: 'Cancel', exact: true }); assert.deepEqual(await saved(), map);
         assert.equal((await metrics(page)).pageWidth, width);
         assert.deepEqual(errors, [], 'Structural editing must not cause runtime errors.');
         results.push({ width, checks: 'layer rename/duplicate/order/delete, limits, cancel/undo/redo, resize preview, anchors, fill, crop, validation, stable layout' });
@@ -224,7 +226,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
       await page.goto(baseURL);
       await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
       await page.locator('#zoom').selectOption('2');
-      await page.getByRole('button', { name: 'Pan map (H)', exact: true }).click();
+      await editorButton(page, { name: 'Pan map (H)', exact: true });
       await page.locator('#viewport').evaluate(element => element.scrollTo(0, 0));
       await page.locator('#viewport').scrollIntoViewIfNeeded();
       const view = (await metrics(page)).view, input = await touchContext.newCDPSession(page);
@@ -238,8 +240,8 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
       assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), null, 'Touch panning must not create an edit.');
       await input.detach();
 
-      await page.getByRole('button', { name: 'Brush (B)', exact: true }).click();
-      await page.getByRole('button', { name: 'Stone tile', exact: true }).click();
+      await editorButton(page, { name: 'Brush (B)', exact: true });
+      await editorButton(page, { name: 'Stone tile', exact: true });
       await page.locator('#viewport').evaluate(element => element.scrollTo(0, 0));
       await clickCell(page, 0, 0);
       const beforeArrows = await page.evaluate(() => localStorage.getItem('tilewright.document.v1'));
@@ -251,7 +253,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
       await page.keyboard.press('Space');
       assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.document.v1')).layers[0].tiles[559]), 6);
 
-      const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /Export PNG/ }).click()]);
+      const [download] = await Promise.all([page.waitForEvent('download'), editorButton(page, { name: /Export PNG/ })]);
       const chunks = [];
       for await (const chunk of await download.createReadStream()) chunks.push(chunk);
       const png = Buffer.concat(chunks);
@@ -260,10 +262,10 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
       results.push({ checks: 'Touch panning, keyboard cursor visibility, no accidental edits, full-size PNG at 200% zoom.' });
 
       for (const size of [64, 1]) {
-        await page.getByRole('button', { name: '+ New map', exact: true }).click();
+        await editorButton(page, { name: '+ New map', exact: true });
         await page.locator('#new-width').fill(String(size)); await page.locator('#new-height').fill(String(size));
         page.once('dialog', dialog => dialog.accept());
-        await page.getByRole('button', { name: 'Create map', exact: true }).click();
+        await editorButton(page, { name: 'Create map', exact: true });
         assertFits(await metrics(page));
         if (size === 1) assert.equal((await metrics(page)).map.width, 24, 'Tiny maps must retain their natural pixel size.');
       }
@@ -285,5 +287,5 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const { chromium } = await import('playwright');
-  console.log(JSON.stringify({ workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
+  console.log(JSON.stringify({ creators: await checkCreators(chromium), workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
 }

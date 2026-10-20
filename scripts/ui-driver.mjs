@@ -14,6 +14,7 @@ export async function enterFirstTrail(page) {
 async function prepareControl(page, selector) {
   const target = page.locator(selector);
   await page.locator('#loading-note[hidden]').waitFor({ state: 'attached' });
+  if (await page.locator('#editor').isVisible()) { await revealEditorControl(page,target); if(await target.isVisible())return; }
   if (selector === '#mode-create' && !await page.locator('#editor').isVisible()) {
     if (await page.locator('#game-layout').isVisible()) await page.locator('#game-home').click();
     else if (await page.locator('#adventure-library').isVisible()) await page.locator('#library-title').click();
@@ -79,4 +80,21 @@ export async function clickControl(page, selector, touch = false) {
 }
 export async function selectControl(page, selector, value) {
   await prepareControl(page, selector); await page.locator(selector).selectOption(value);
+}
+
+// Creator panels are separate dialogs on compact screens. Open them using
+// their visible controls before filling a field or choosing a palette item.
+export async function closeEditorPanels(page) {
+  for(const [dialog,button]of [['#maker-palette-dialog','#maker-palette-close'],['#maker-settings-dialog','#maker-settings-close']])if(await page.locator(dialog).isVisible())await page.locator(button).click();
+}
+export async function revealEditorControl(page,target) {
+  const location=await target.evaluate(el=>({panel:el.closest('.palette-panel')?'palette':el.closest('.inspector')?'settings':null,dialog:el.closest('dialog')?.id}));
+  if(location.dialog&&!['maker-palette-dialog','maker-settings-dialog'].includes(location.dialog))return;
+  const panel=location.panel;
+  if(panel){const dialog=page.locator(`#maker-${panel}-dialog`);if(await page.locator(`#maker-${panel}-button`).isVisible()&&!await dialog.isVisible()){await closeEditorPanels(page);await page.locator(`#maker-${panel}-button`).click();}}
+  else await closeEditorPanels(page);
+}
+export async function editorButton(page,options) {
+  const target=page.locator('#editor, #maker-palette-dialog, #maker-settings-dialog, dialog[open]').getByRole('button',{...options,includeHidden:true});
+  await revealEditorControl(page,target);await page.getByRole('button',options).click();
 }

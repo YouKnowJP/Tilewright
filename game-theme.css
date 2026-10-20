@@ -1,4 +1,4 @@
-/* A shared forest-and-brass game shell. The map editor keeps its own palette. */
+/* Shared forest-and-brass game presentation; studio.css extends it to creation. */
 .playing { color-scheme:dark; color:#eee5c7; background:#102b2b; --paper:#102b2b; --white:#193630; --ink:#eee5c7; --muted:#bdcdb5; --line:#526a52; --green:#43543b; --pale:#203d35; }
 .playing .mode-switcher { display:none; }
 .playing button,.playing select,.playing input { color:#eee5c7; }

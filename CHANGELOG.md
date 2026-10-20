@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.14.0 — 2026-10-20
+
+- Bring terrain Mapmaker into the game’s forest-and-brass presentation with a
+  focused canvas, compact palettes/world notes, and visible game navigation.
+- Add Build adventure to copy current terrain into an independent Workshop
+  draft. Preserve the original map, history, campaign records, and checkpoints.
+- Refine the Workshop with a scenic creator’s camp, sticky navigation, eight
+  quick brushes, clickable goal counts, and a Design/Playtest/Share action bar.
+- Fold world/toolkit, story, and challenge settings into smaller sections.
+  Show structural readiness and creator-clear status separately, with direct
+  playtest/share actions and illustrated creation/sharing previews.
+- Add a three-chapter illustrated Creator’s guide available from both editors,
+  a player guide, current screenshots, and corrected authoring documentation.
+- Preserve native keyboard focus after compact palette selection, validate fields
+  within closed details, keep copied layers editable, wrap long player text,
+  and remove unnecessary replacement confirmation for an untouched first draft.
+- Add a thirteenth browser suite for seven-size creator navigation, panels,
+  guide/input isolation, terrain copying, quick brushes/history, story editing,
+  readiness, and saved-data preservation. Retain 290 Node tests; package 54 files.
+
 ## 0.13.0 — 2026-10-19
 
 - Add Adventure Workshop to the title, mode preview, and game Menu: a searchable

@@ -1,3 +1,4 @@
+import { revealEditorControl } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -45,7 +46,7 @@ export async function checkHorizon(browserType, { baseURL = 'http://127.0.0.1:41
       page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
       page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
       await page.goto(`${baseURL}/#play`); await enterFirstTrail(page); await page.locator('#adventure[data-status="playing"]').waitFor();
-      await clickControl(page, '#mode-create'); await page.locator('#map-name').fill('Horizon test map'); await page.locator('#map-name').blur();
+      await clickControl(page, '#mode-create'); await revealEditorControl(page,page.locator('#map-name'));await page.locator('#map-name').fill('Horizon test map'); await page.locator('#map-name').blur();
       const map = await page.evaluate(() => localStorage.getItem('tilewright.document.v1')); await clickControl(page, '#mode-play');
       await play(page, intro['trail-1']);
       const oldBest = await page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.adventures.v1')).records['trail-1']);

@@ -5,7 +5,12 @@ in-game Menu. **Player adventures** holds three featured worlds and up to 32
 worlds saved in this browser. Search by title or creator; preview before playing.
 Trail and Nemesis bests are separate for each version of a world.
 
-![Featured adventures](workshop-shelf.png)
+![The creator’s camp](creator-camp.png)
+
+**Creator’s guide** is available in both Mapmaker and the Workshop. Its three
+illustrated chapters introduce a first trail, a linked crossing, and sharing a
+playtested adventure. The Workshop’s Main menu and section tabs stay reachable
+while browsing a longer shelf.
 
 ## Make a world
 
@@ -14,13 +19,15 @@ Choose **Create adventure**, then start from:
 - A blank world, from 8×8 to 64×64 cells.
 - A seeded adventure: four regions × five mission recipes, with sheltered or
   perilous starting threats. The same seed and recipe reproduce the same map.
-- An independent copy of the current terrain editor map.
+- An independent copy of the current terrain editor map. **Build adventure**
+  in Mapmaker opens this choice directly.
 
 Remix any featured or saved world. The original creator/title are credited in
 the remix's origin text. Creator names are editable credits, not authenticated
-accounts. Replacing a draft asks you to save or export it first.
+accounts. Replacing an existing draft asks you to save or export it first. An untouched
+first canvas does not need a replacement confirmation.
 
-**Choose brush** groups terrain, goals, puzzles, story, threats, and stamps.
+**Brushes** opens the full palette, grouped into terrain, goals, puzzles, story, threats, and stamps.
 Terrain supports brush strokes, flood fill, and rectangles on the selected layer.
 The palette also controls layer visibility, including hidden layers copied from
 the terrain editor.
@@ -34,11 +41,16 @@ coexisting objects. Give keepers dialogue, change puzzle channels, set bell orde
 or draw a threat route. Patrol waypoints must touch edge to edge and retrace at
 the ends; hunters path between their waypoints. Routes have 2–24 waypoints.
 
-**Adventure details** sets the title, creator, opening, ending, hint, eight world
+**World notes → Adventure** sets the title, creator, opening, ending, hint, eight world
 palettes, three-star target, specialist kit, and optional walking-only,
 no-shield, or all-treasure rules. Changes apply on **Apply**, Save, Playtest,
 Share, switching sections, or Main menu. Invalid fields explain what to fix.
-Draft edits autosave separately from the original terrain map.
+Draft edits autosave separately from the original terrain map. **World &
+toolkit**, **Tell the story**, and **Set the challenge** fold less frequent
+settings away. The quick brush row paints common objects immediately; the goal
+strip shows object counts and selects goal brushes. **Design → Playtest → Share**
+provides the main route through creation. Checks reports map structure and an
+attached creator clear separately; an attached clear is verified before sharing.
 
 The map has Fit/100/150/200% zoom, Pan, and 30-step session Undo/Redo. Arrows move
 the canvas cursor; Space/Enter paints. For rectangles, press Space at each corner.
@@ -46,7 +58,7 @@ Escape cancels a stroke/rectangle or ends route drawing. Delete removes the
 selected object. Ctrl/Command Z, Shift Z/Y, and S undo, redo, and save to shelf
 outside text fields/dialogs. On smaller screens, world notes open separately.
 
-![Designing a linked bridge puzzle](workshop-designer.png)
+![Designing a linked bridge puzzle](creator-studio-1440.png)
 
 ## Build an encounter
 
@@ -73,7 +85,7 @@ placement, dialogue choices, and alternate rules.
 ## Playtest and share
 
 **Playtest** starts with fresh learned habits on the rules selected in Adventure
-details: Trail or Nemesis. Finish the actual adventure to
+notes → World & toolkit: Trail or Nemesis. Finish the actual adventure to
 attach a **creator clear** containing up to 2,000 actions. Editing the world
 removes the old clear. Restarts and player adventures each get fresh habits;
 hunters still learn during the run. Campaign habits and expedition checkpoints

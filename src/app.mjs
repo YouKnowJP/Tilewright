@@ -6,6 +6,8 @@ import { TILE_SIZE, drawTile, renderMap } from './render.mjs';
 import { cellAtPoint, fitZoom } from './viewport.mjs';
 import { createIcon } from './icons.mjs';
 import { renameLayer, duplicateLayer, moveLayer, removeLayer, resizeDocument, croppedTileCount } from './operations.mjs';
+import { createCreatorGuide } from './creator-guide.mjs';
+import { createMapmakerShell } from './mapmaker-shell.mjs';
 import { createAdventureUI } from './adventure-ui.mjs';
 
 const $ = selector => document.querySelector(selector);
@@ -454,21 +456,26 @@ initializePalette(); refresh();
 new ResizeObserver(() => layoutCanvas()).observe(viewport);
 announce(restored.error || (restored.document ? 'Your last map was restored from this browser.' : 'Welcome to Willowbend. Pick a tile and make it yours.'));
 
-const adventures = createAdventureUI({ storage, getMap: () => history.document, backToEditor: () => setMode(false) });
+const creatorGuide = createCreatorGuide();
+const adventures = createAdventureUI({ storage, getMap: () => history.document, backToEditor: () => setMode(false), onCreatorGuide: trigger => creatorGuide.open(trigger) });
+const mapmakerShell = createMapmakerShell({ onWorkshop() { setMode(true); adventures.openWorkshop(); }, onUseTerrain() { setMode(true); adventures.useTerrain(); }, onGuide: trigger => creatorGuide.open(trigger) });
 function setMode(play, updateURL = true) {
+  mapmakerShell.close(); creatorGuide.close();
   cancelStroke(); $('#editor').hidden = play; $('#adventure').hidden = !play;
   document.body.classList.toggle('playing', play);
   document.title = play ? 'Tilewright — Lantern Trails' : 'Tilewright — Make a little world';
   $('#mode-create').setAttribute('aria-pressed', String(!play)); $('#mode-play').setAttribute('aria-pressed', String(play));
   const heading = $('#intro-title'), accent = document.createElement('span'); accent.textContent = '.';
-  heading.replaceChildren(document.createTextNode(play ? 'Follow a little adventure' : 'Make a little world'), accent);
+  heading.replaceChildren(document.createTextNode(play ? 'Follow a little adventure' : 'The worldmaker’s table'), accent);
   $('.intro .eyebrow').textContent = play ? 'GATHER LIGHT. OUTSMART THE WARDENS.' : 'YOUR WORLD, ONE TILE AT A TIME';
   $('.intro-description').textContent = play ? 'Story missions, branching expeditions, and a new trail every day. The world moves when you do.'
-    : 'A quiet corner for your next adventure. Paint, experiment, and take it with you.';
+    : 'Paint a place. Give it a story. Leave a light for the next traveller.';
   if (play) adventures.enter(); else { adventures.leave(); layoutCanvas(); }
   if (updateURL) window.history.replaceState(null, '', `${location.pathname}${location.search}${play ? '#play' : ''}`);
 }
 $('#mode-create').addEventListener('click', () => setMode(false));
+$('#intro-title').textContent = 'The worldmaker’s table';
+$('.intro-description').textContent = 'Paint a place. Give it a story. Leave a light for the next traveller.';
 $('#mode-play').addEventListener('click', () => setMode(true));
 function readGameHash() {
   const shared = location.hash.startsWith('#adventure=');

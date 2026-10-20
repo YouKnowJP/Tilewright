@@ -1,3 +1,4 @@
+import { revealEditorControl } from './ui-driver.mjs';
 import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -48,7 +49,7 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
         assert.equal(await page.locator('[data-stage="trail-2"]').isDisabled(), true);
         // An actual editor change gives us a saved document and undo step to protect.
         await clickControl(page, '#mode-create');
-        await page.locator('#map-name').fill('Adventure test map'); await page.locator('#map-name').blur();
+        await revealEditorControl(page,page.locator('#map-name'));await page.locator('#map-name').fill('Adventure test map'); await page.locator('#map-name').blur();
         const map = await page.evaluate(key => localStorage.getItem(key), editorKey);
         assert.ok(map?.includes('Adventure test map'));
         await clickControl(page, '#mode-play');
@@ -90,7 +91,7 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
         await clickControl(page, '#mode-create');
         assert.equal(await page.locator('#map-name').inputValue(), 'Adventure test map');
         // Reload intentionally clears in-memory undo; create and then protect another edit.
-        await page.locator('#map-name').fill('Undo survives play'); await page.locator('#map-name').blur();
+        await revealEditorControl(page,page.locator('#map-name'));await page.locator('#map-name').fill('Undo survives play'); await page.locator('#map-name').blur();
         await clickControl(page, '#mode-play'); await playRoute(page, ['right']); await clickControl(page, '#mode-create');
         await clickControl(page, '#undo'); assert.equal(await page.locator('#map-name').inputValue(), 'Adventure test map');
         await clickControl(page, '#new-map'); await page.locator('#new-width').fill('1'); await page.locator('#new-height').fill('1');

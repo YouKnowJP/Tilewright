@@ -34,6 +34,23 @@ Use an HTTP server; opening `index.html` with `file://` does not support the
 module setup. The editor works without an internet connection while the local
 server is running. Installation as an offline web app is future work.
 
+## A creator’s camp inside the game
+
+Mapmaker, the Workshop, and the playable game now share the forest-and-brass
+presentation. The canvas gets the main workspace; compact screens open palettes
+and world notes separately. **Main menu** and **Adventure Workshop** are always
+available from Mapmaker. **Build adventure** copies the current terrain into a
+Workshop draft while preserving the original map and its history.
+
+The illustrated **Creator’s guide** explains a first trail, linked puzzles, and
+playtesting/sharing. In the Workshop, eight quick brushes and clickable goal
+counts keep common objects nearby. World notes fold into World & toolkit,
+Tell the story, and Set the challenge. Checks separates structural readiness
+from an attached creator clear. The [player guide](docs/PLAYER_GUIDE.md) covers
+starting, playing, creating, and keeping backups.
+
+![The unified terrain workspace](docs/creator-mapmaker-1440.png)
+
 ## Create and share adventures
 
 Open **Adventure Workshop** on the game's title screen. Play three new featured
@@ -51,7 +68,7 @@ service. Your shelf holds up to 32 worlds separately from campaign progress.
 See the [Workshop guide](docs/WORKSHOP.md) for puzzle channels, controls,
 playtesting, sharing, and storage limits.
 
-![Adventure Workshop](docs/workshop-shelf.png)
+![Adventure Workshop](docs/creator-camp.png)
 
 ## Play Lantern Trails
 
@@ -88,7 +105,8 @@ while browsing longer collections.
 The game uses the same forest-and-brass frames across its board, HUD, quest notes,
 conversations, forecasts, camps, pause, and results. Chapter banners and mode previews
 use original pixel landscapes; buttons, selected states, and navigation share a
-consistent layout. Mapmaker retains the separate editor workspace.
+consistent layout. Mapmaker and the Workshop use the same presentation while
+keeping their maps, drafts, and histories separate.
 
 ![The Adventure Journal](docs/adventure-journal.png)
 
@@ -396,7 +414,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The twelve suites include `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The thirteen suites include `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
