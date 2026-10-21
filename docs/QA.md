@@ -1,5 +1,38 @@
 # Verification record
 
+## Training camp and player entry — v0.15.0
+
+**298 Node tests**, syntax checks, and the **57-file static distribution** pass.
+Eight new tests exercise actual tutorial wins, locked crossings, free reading,
+creator milestones, exported proof replay, invalid/immutable painting, proof
+invalidation, independent worlds, and isolated/bounded completion storage.
+
+The new fourteenth browser suite passes in Chrome **156.0.8078.47** at
+1440×900, 390×900, 320×900, 768×900, 1024×900, and 844×390. It checks the bare
+URL opens the title without source links or an automatic run; real keyboard
+and touch tutorial wins; paused Plan/dialogue; exact Continue after training;
+unchanged terrain, story/Guild, learned-memory, Workshop, and checkpoint saves;
+completion after reload; and no sideways page overflow.
+
+At desktop and phone sizes, the creator lesson uses native painting, Undo/Redo,
+story entry, real world validation, an actual win, and a downloaded adventure.
+The exported creator clear is replayed through the engine to another win.
+Editing invalidates checks and the current clear. A cancelled Workshop handoff
+retains the original draft and lesson; an accepted handoff transfers the actual
+world and its proof. Disabled browser saving still permits a complete lesson
+and reports completion as session-only. A separate 320×568 check confirms
+Mira's dialogue fits, remains readable, and closes with Escape.
+
+Retained title/options/navigation, terrain-editor, creator-shell, and responsive
+Workshop suites pass, including startup recovery, downloads, compact panels,
+touch painting, terrain copying, modal focus, and preserved ordinary saves.
+These checks cover the listed Chrome flows; they do not claim universal browser,
+physical-device, or assistive-technology coverage.
+
+![The training camp](training-camp.png)
+
+![A keeper's advice on a short phone screen](training-dialogue.png)
+
 ## Creator’s camp and player readiness — v0.14.0
 
 The release retains **290 passing Node tests**, syntax checks, and a **54-file

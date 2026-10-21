@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#294f43">
   <meta name="description" content="Make a little world. Build tile maps and play Lantern Trails: 24 story missions, eight Guild jobs, and Adventure Workshop: build puzzles, tell stories, playtest, and share your own worlds.">
-  <title>Tilewright — Make a little world</title>
+  <title>Lantern Trails — Play, explore, create</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="adventure.css">
@@ -13,13 +13,15 @@
   <link rel="stylesheet" href="game-theme.css">
   <link rel="stylesheet" href="workshop.css">
   <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="training.css">
   <script type="module" src="src/bootstrap.mjs"></script>
 </head>
-<body>
+<body class="playing game-front game-title-open">
+  <div id="startup-status" class="startup-status" role="status"><img src="icon.svg" width="48" height="48" alt=""><strong>Lighting the trail…</strong><p>Your adventure is on its way.</p><button id="startup-retry" hidden>Try again</button></div>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.14.0</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.15.0</span></a>
     <span class="header-note">LANTERN TRAILS / THE CREATOR’S CAMP</span>
-    <a class="source-link" href="https://github.com/YouKnowJP/Personal-Project/tree/main/Tilewright" target="_blank" rel="noreferrer">Source code <span aria-hidden="true">↗</span></a>
+    <button id="header-training" class="source-link">Training camp</button>
   </header>
   <main>
     <section class="intro" aria-labelledby="intro-title">
@@ -27,7 +29,7 @@
       <div class="local-note"><span class="local-dot"></span><div><strong>Made here. Kept here.</strong><span>No account. Your map stays in this browser.</span></div></div>
     </section>
     <nav class="mode-switcher" aria-label="Tilewright mode"><button id="mode-create" aria-pressed="true">Terrain Mapmaker</button><button id="mode-play" aria-pressed="false">Main menu</button><button id="maker-workshop">Adventure Workshop</button></nav>
-    <section class="editor" id="editor" aria-label="Tile map editor">
+    <section class="editor" id="editor" aria-label="Tile map editor" hidden>
       <div class="document-bar">
         <div class="document-identity"><canvas id="maker-map-emblem" width="40" height="40" aria-hidden="true"></canvas><div><span id="document-title">Willowbend</span><span class="document-meta" id="document-meta">28 × 20 tiles</span></div><span class="save-indicator" id="save-state">Sample map</span></div>
         <div class="document-actions"><button id="maker-use-terrain" class="maker-story-action">Build adventure</button><button id="new-map">+ New map</button><button id="import-map">Import</button><button class="primary" id="export-json">Export JSON <span aria-hidden="true">↗</span></button></div>
@@ -54,7 +56,7 @@
             <div class="history-buttons"><button id="undo" data-icon="undo" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)" disabled></button><button id="redo" data-icon="redo" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)" disabled></button></div>
             <div class="view-controls"><button id="grid-toggle" data-icon="grid" aria-label="Toggle grid" aria-pressed="true" title="Toggle grid (G)"></button><label class="sr-only" for="zoom">Zoom</label><select id="zoom"><option value="fit" selected>Fit map</option><option value="0.25">25%</option><option value="0.5">50%</option><option value="0.75">75%</option><option value="1">100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></div>
           </div>
-          <div class="canvas-viewport" id="viewport" tabindex="0" aria-label="Scrollable map workspace"><div class="canvas-wrap"><canvas id="map" width="672" height="480" tabindex="0" role="img" aria-label="Editable tile map. Arrow keys move the cursor; Space applies the selected tool." aria-describedby="canvas-help"></canvas></div><div class="loading-note" id="loading-note" role="status"><strong>Loading the editor…</strong><p>For a local copy, run <code>npm --prefix Tilewright start</code> and open <a href="http://127.0.0.1:4174">localhost:4174</a>.</p></div></div>
+          <div class="canvas-viewport" id="viewport" tabindex="0" aria-label="Scrollable map workspace"><div class="canvas-wrap"><canvas id="map" width="672" height="480" tabindex="0" role="img" aria-label="Editable tile map. Arrow keys move the cursor; Space applies the selected tool." aria-describedby="canvas-help"></canvas></div><div class="loading-note" id="loading-note" role="status"><strong>Lighting the world…</strong><p>Your map and adventures are loading.</p></div></div>
           <div class="canvas-footer"><span><span class="small-dot"></span><span id="tool-name">Brush</span><span class="footer-separator">/</span><span id="active-layer-label">Ground</span></span><span id="coordinates">X: 00&nbsp; Y: 00</span><span id="map-pixels">672 × 480 px</span></div>
         </div>
         <aside class="inspector" aria-label="Map settings"><div class="maker-settings-heading"><span>WORLD NOTES</span><button id="maker-settings-close" class="maker-panel-close">Close</button></div>
@@ -77,7 +79,7 @@
       </div>
       <div class="editor-bottom"><button id="maker-guide-wide" class="maker-guide-link">Creator’s guide</button><p id="status" role="status" aria-live="polite">Welcome to Willowbend. Pick a tile and make it yours.</p><button id="help-button">Keyboard shortcuts <span aria-hidden="true">?</span></button></div>
     </section>
-    <section class="adventure" id="adventure" aria-label="Lantern Trails adventure game" hidden>
+    <section class="adventure" id="adventure" aria-label="Lantern Trails adventure game">
       <section id="game-title-screen" class="game-title-screen" aria-label="Lantern Trails title screen">
         <canvas id="title-scenery" aria-hidden="true"></canvas>
         <div id="front-home" class="front-panel title-home">
@@ -87,6 +89,7 @@
             <button id="title-continue" class="front-primary" hidden>Continue trail</button>
             <button id="title-expedition" hidden>Resume expedition</button>
             <button id="title-play" class="front-primary">Choose your adventure</button>
+            <button id="title-training">Training camp · Start here</button>
             <button id="title-journal">Adventure journal</button><button id="title-workshop">Adventure Workshop</button>
             <button id="title-guide">How to play</button><button id="title-settings">Options</button><button id="title-mapmaker">Mapmaker</button>
           </nav>
@@ -158,6 +161,38 @@
           <section id="ws-props-checks" class="ws-props" role="tabpanel" aria-labelledby="ws-panel-checks" hidden><h4 id="ws-check-title">Before you set out</h4><div id="ws-readiness" class="ws-readiness"></div><div id="ws-checks"></div><p class="ws-footnote">Map checks find missing goals, broken links, and disconnected objects. A real completed playtest proves a route. Crates, doors, and return trips still need your judgement.</p></section>
         </div></aside></div></section>
         <section id="ws-import" class="ws-section" hidden><div class="ws-section-heading"><div><h3>A story from another keeper.</h3><p>Import an adventure file, paste its code, or paste a play link. Preview it before adding or playing.</p></div></div><div class="ws-import-grid"><div id="ws-drop" class="ws-drop"><p class="title-kicker">A WORLD IN A FILE</p><h4>Bring an adventure</h4><p>Choose a .trail.json file, or drop one here. Terrain, objects, story, and an optional creator clear travel together.</p><button id="ws-import-file">Choose adventure file</button></div><form id="ws-code-form" class="ws-code-form"><label for="ws-import-code">Adventure code or play link</label><textarea id="ws-import-code" rows="7" maxlength="300200" spellcheck="false" placeholder="LT1.…"></textarea><button id="ws-import-code-button" type="submit">Preview adventure</button></form></div><p class="ws-footnote">Importing never replaces your terrain editor map or your current workshop draft. Player adventures contain game data and text, with no scripts or external assets.</p></section>
+      </section>
+      <section id="training-camp" class="training-camp" aria-labelledby="training-heading" hidden>
+        <header class="training-heading"><div><p class="title-kicker">THE WAYFARER’S CAMP</p><h2 id="training-heading" tabindex="-1">Every trail begins here.</h2></div><nav aria-label="Training navigation"><button id="training-lessons">Lessons</button><button id="training-home">Main menu</button></nav></header>
+        <div id="training-library">
+          <p class="training-intro">Learn by doing. A quiet crossing, a world of your own, and a keeper to show you the way.</p>
+          <div class="training-cards">
+            <button data-training-lesson="play"><canvas id="training-play-art" aria-hidden="true"></canvas><span class="title-kicker">01 / YOUR FIRST ADVENTURE</span><strong>First Light Crossing</strong><span>Walk, talk to Mira, open a river door, restore a lantern, and lead a keeper home.</span><small id="training-play-record">About 5 minutes · no enemies or timer</small></button>
+            <button data-training-lesson="create"><canvas id="training-create-art" aria-hidden="true"></canvas><span class="title-kicker">02 / YOUR FIRST WORLD</span><strong>A little island, made by you</strong><span>Paint a crossing, place a light and a keeper, write a story, then playtest and keep your adventure.</span><small id="training-create-record">About 8 minutes · guided practice table</small></button>
+          </div>
+          <p id="training-save-note" class="training-footnote">Practice worlds stay separate from your maps, Workshop draft, campaign, and expedition.</p>
+        </div>
+        <div id="training-lesson" hidden>
+          <div class="training-lesson-heading"><h3 id="training-title"></h3><span id="training-mode-note"></span></div>
+          <div class="training-grid">
+            <div class="training-table">
+              <div id="training-brushes" class="training-brushes" aria-label="Practice brushes" hidden><button data-training-brush="bridge" aria-pressed="true">Bridge</button><button data-training-brush="lantern" aria-pressed="false">Lantern</button><button data-training-brush="guide" aria-pressed="false">Keeper</button><button id="training-undo" disabled>Undo</button><button id="training-redo" disabled>Redo</button></div>
+              <div class="training-map-wrap"><canvas id="training-map" width="240" height="192" tabindex="0" role="img" aria-label="Practice map" aria-describedby="training-instruction training-map-help"></canvas></div>
+              <p id="training-map-help" class="training-map-help">Arrows / WASD to walk · E to interact · Space to wait</p>
+              <p id="training-message" class="training-message" role="status" aria-live="polite"></p>
+              <div id="training-play-controls" class="training-play-controls"><div class="training-dpad" aria-label="Walk"><button data-training-move="up" aria-label="Walk north">↑</button><button data-training-move="left" aria-label="Walk west">←</button><button data-training-move="down" aria-label="Walk south">↓</button><button data-training-move="right" aria-label="Walk east">→</button></div><div class="training-actions"><select id="training-target" aria-label="Nearby action" hidden></select><button id="training-interact">Interact · E</button><button id="training-wait">Wait</button><button id="training-plan">Plan</button></div></div>
+              <dialog id="training-talk" class="front-dialog training-talk" aria-labelledby="training-speaker"><p class="title-kicker">A KEEPER AT THE CROSSING</p><h4 id="training-speaker"></h4><p id="training-dialogue"></p><button id="training-talk-close">Back to the trail</button></dialog>
+              <dialog id="training-plan-copy" class="front-dialog training-plan-copy" aria-label="Reading the trail"><p class="title-kicker">THE WORLD WAITS WHILE YOU READ</p><h3>Look before you move.</h3><p>This practice trail has no enemies. Later trails mark enemy intentions in red. Plan lets you read threats for free; reading, opening menus, and blocked steps spend no turns.</p><button id="training-plan-close">Back to the trail</button></dialog>
+            </div>
+            <div class="training-brief" role="region" aria-label="Your next step"><p id="training-step-count" class="title-kicker"></p><progress id="training-progress" max="6" value="0" aria-label="Lesson progress"></progress><h3 id="training-goal"></h3><p id="training-instruction"></p><button id="training-hint">Show me a hint</button><p id="training-hint-copy" hidden></p></div>
+            <aside class="training-coach" aria-label="Lesson actions"><div id="training-build-actions" hidden><details id="training-story"><summary>Your story</summary><form id="training-story-form"><label for="training-world-title">Adventure title</label><input id="training-world-title" maxlength="64" required value="My first island"><label for="training-opening">Opening story</label><textarea id="training-opening" rows="2" maxlength="800" required></textarea><label for="training-keeper-lines">Keeper’s hint</label><textarea id="training-keeper-lines" rows="2" maxlength="600" required></textarea><button type="submit">Save story</button></form></details><button id="training-check">Check world</button><button id="training-test">Playtest</button><p id="training-check-report" role="status"></p></div>
+              <button id="training-edit" hidden>Return to building</button>
+              <div id="training-keep" hidden><button id="training-download" class="front-primary">Download my world</button><button id="training-copy-link">Copy play link</button><button id="training-workshop">Keep building in Workshop</button><label id="training-link-fallback" hidden>Copy this play link<input id="training-link-text" readonly></label><p id="training-share-note" role="status"></p></div>
+              <div id="training-finish" hidden><p class="training-earned">A new path is yours.</p><button id="training-next" class="front-primary">Build your first world</button><button id="training-story-adventure">Explore story chapters</button></div>
+              <button id="training-restart" class="training-restart">Start this lesson again</button>
+            </aside>
+          </div>
+        </div>
       </section>
       <nav id="game-shell-bar" class="game-shell-bar" aria-label="Game navigation" hidden><span class="game-wordmark">LANTERN <b>TRAILS</b></span><div><button id="game-home">Main menu</button><button id="game-shell-options">Options</button></div></nav>
       <div class="game-layout" id="game-layout" hidden>
@@ -235,6 +270,6 @@
   </dialog>
   <dialog id="new-dialog"><form id="new-form"><span class="eyebrow">A FRESH START</span><h2>Room for a new world.</h2><p>Choose a name and a size. You can export your current map before starting over.</p><label for="new-name">Map name</label><input id="new-name" maxlength="64" value="Untitled world" required><div class="form-row"><div><label for="new-width">Width in tiles</label><input id="new-width" type="number" min="1" max="64" value="28" required></div><div><label for="new-height">Height in tiles</label><input id="new-height" type="number" min="1" max="64" value="20" required></div></div><p class="dialog-note">Up to 64 × 64 tiles. Starts with ground and detail layers.</p><div class="dialog-actions"><button type="button" id="cancel-new">Cancel</button><button class="primary" type="submit">Create map</button></div></form></dialog>
   <dialog id="help-dialog"><span class="eyebrow">LESS CLICKING, MORE MAKING</span><h2>At your fingertips.</h2><dl class="shortcut-list"><dt>Brush / Erase / Fill</dt><dd>B / E / F</dd><dt>Rectangle / Eyedropper</dt><dd>R / I</dd><dt>Pan the map</dt><dd>H, then drag or arrows</dd><dt>Toggle grid</dt><dd>G</dd><dt>Undo</dt><dd>Ctrl or ⌘ Z</dd><dt>Redo</dt><dd>Ctrl or ⌘ Shift Z</dd><dt>Export JSON</dt><dd>Ctrl or ⌘ S</dd><dt>Move map cursor</dt><dd>Arrow keys</dd><dt>Apply tool / rectangle corner</dt><dd>Space or Enter</dd><dt>Cancel current stroke</dt><dd>Esc</dd></dl><p>Tools paint on the selected layer. The eyedropper samples that layer, including empty cells. Select the Details layer for trees, flowers, and cabins. Fit map shows the whole canvas; zoom in and use Pan to reach every corner.</p><form method="dialog"><button class="primary">Back to the map</button></form></dialog>
-  <noscript><p>This editor needs JavaScript enabled. No network service or account is required.</p></noscript>
+  <noscript><p>Lantern Trails needs JavaScript enabled. No network service or account is required.</p></noscript>
 </body>
 </html>

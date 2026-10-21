@@ -10,7 +10,7 @@ installation, build-time framework, database service, or remote API.
 | `src/render.mjs` | Original pixel artwork and compositing into Canvas; optional grid/cursor overlays. |
 | `src/storage.mjs` | Local-storage adapter; reject corrupt saves and report unavailable storage. |
 | `src/app.mjs` | DOM, pointer/keyboard input, stroke previews, history commits, file handling, and downloads. |
-| `src/bootstrap.mjs` | Load the editor and replace a blank canvas with useful startup/error guidance if imports fail. |
+| `src/bootstrap.mjs` | Load the game with a visible startup/retry screen and player-facing error recovery. |
 | `src/viewport.mjs` | Fit-to-workspace geometry and zoom-aware pointer hit testing. |
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
 | `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
@@ -28,6 +28,8 @@ installation, build-time framework, database service, or remote API.
 | `src/adventure-front.mjs` | Title, illustrated mode chooser, guide pages, working options, and front-menu focus/navigation. |
 | `src/adventure-journal.mjs` | Read-only chapter/specialist/badge totals and attainable replay suggestions derived from existing records. |
 | `src/adventure-preferences.mjs` | Bounded, guarded volume/motion/reading preferences, separate from game and editor saves. |
+| `src/training-model.mjs` | Independent practice worlds, real-rule coaching milestones, creator proof preparation, and bounded lesson completion storage. |
+| `src/training-ui.mjs` | Training camp, native keyboard/touch lessons, guided creation/history/story forms, real playtests, portable sharing, and explicit Workshop handoff. |
 | `src/adventure-render.mjs` | Cached map background, following camera, original sprites, fog, and discovered-map overview. |
 | `src/adventure-records.mjs` | Bounded, validated personal bests stored independently of map saves. |
 | `src/adventure-brain.mjs` | Bounded action/transition counts, decaying movement predictions, normalization, and isolated local learning persistence. |

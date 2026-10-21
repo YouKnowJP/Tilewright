@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.15.0 — 2026-10-20
+
+- Open the game’s title screen at the bare website URL. Keep terrain creation
+  available from its menu and explicit `#mapmaker` route. Remove the player UI’s
+  source-code link and provide readable loading/retry guidance without commands.
+- Add Training camp with two hands-on lessons. First Light Crossing uses real
+  movement, conversation, a lever door, lantern restoration, and a keeper rescue.
+- Add a guided creator practice table: paint a bridge, place goals and a keeper,
+  write a story, check routes, complete a playtest, and export an adventure with
+  a real creator-clear replay. Support hosted play links and an explicit handoff
+  into the full Workshop with cancellation-safe draft replacement.
+- Show one coaching objective and map target at a time. Keep instructions above
+  the map on compact screens and put dialogue/Plan in readable paused dialogs.
+- Isolate lesson runs, drafts, and memory from existing game/editor saves. Keep
+  bounded lesson completion separately; report unavailable storage.
+- Add eight engine/storage/proof tests (298 total), a fourteenth browser suite,
+  and three public assets (57-file distribution).
+
 ## Website publishing — 2026-10-20
 
 - Publish the complete browser game, terrain Mapmaker, and Adventure Workshop

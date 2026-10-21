@@ -33,6 +33,26 @@ Localhost saves are separate from the public website's saves.
 See [hosting and sharing](docs/HOSTING.md) for automatic updates and developer
 publishing details.
 
+## Learn by playing
+
+Choose **Training camp · Start here** on the title screen. **First Light
+Crossing** is a real, peaceful tutorial adventure: learn movement, talk to Mira,
+operate a lever, restore a lantern, and bring your companion to the beacon.
+The coach shows one objective at a time, with a marked map target and optional
+hint. Conversations and Plan pause the world.
+
+**A little island, made by you** teaches world creation on a guided practice
+table. Paint a bridge, place a lantern and keeper, write your own story, run
+world checks, and win a real playtest. Download the finished adventure with its
+replayable creator clear, share a hosted play link, or take it to the full
+Workshop. An existing Workshop draft is replaced only after you accept its
+replacement prompt. Lessons preserve the campaign, current run, map/history,
+Workshop shelf/draft, learned habits, and expedition checkpoint.
+
+Completion stays in this browser. Practice drafts last for this visit; keep a
+world by downloading it or explicitly taking it to the Workshop. Both lessons
+can be replayed. See the [tutorial guide](docs/TRAINING.md).
+
 ## Run locally for development
 
 Install **Node.js 22 or newer**, then run from the repository root:
@@ -41,7 +61,8 @@ Install **Node.js 22 or newer**, then run from the repository root:
 npm --prefix Tilewright start
 ```
 
-Open [http://127.0.0.1:4174](http://127.0.0.1:4174). No `npm install`, API key,
+Open [http://127.0.0.1:4174](http://127.0.0.1:4174) for the game’s title
+screen. Mapmaker is available from the menu or `/#mapmaker`. No `npm install`, API key,
 or build step is needed. Stop the server with Ctrl+C. The server binds only to
 the loopback interface. To choose another port, run `PORT=4180 npm start` from
 this directory (in PowerShell, set `$env:PORT=4180` first).
@@ -375,8 +396,7 @@ backup**, and import it to resume elsewhere. Starting, importing, or reopening
 a sample replaces the single local map after confirmation when work exists.
 Undo does not cross document replacement.
 
-The app makes no external requests automatically. The Source code link opens
-GitHub only when selected. Bundled data is fictional artwork; the editor has
+The app makes no automatic requests to external services. Bundled data is fictional artwork; the editor has
 no accounts, analytics, cloud sync, imported personal datasets, or remote AI services.
 Use your own non-sensitive creative material.
 
@@ -409,7 +429,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 290 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 298 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -430,7 +450,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The thirteen suites include `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The fourteen suites include `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.

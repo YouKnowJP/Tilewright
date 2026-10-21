@@ -12,6 +12,13 @@ you look around before starting a mission. **How to play** introduces movement,
 objectives, and specialist tools. **Options** controls sound, reading size, and
 motion. Sound starts only when you choose it.
 
+New here? Choose **Training camp · Start here**. Follow Mira in **First Light
+Crossing** to learn walking, conversations, a lever crossing, lanterns, and
+bringing a keeper home. The second lesson helps you paint and write a real
+adventure, finish its playtest, and keep or share it. The current step stays
+above the map on phones. Practice changes do not affect your existing worlds
+or game progress. [Read about the two lessons](TRAINING.md).
+
 | Road | What awaits |
 | --- | --- |
 | Story chapters | Twenty-four authored missions in eight regions. Begin any chapter; finish its missions in order. |

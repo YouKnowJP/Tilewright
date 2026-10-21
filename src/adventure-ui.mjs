@@ -15,6 +15,7 @@ import { threatForecast } from './adventure-intel.mjs';
 import { CHAPTERS, drawAtlasArt, themeFor, drawKeeperPortrait } from './adventure-art.mjs';
 import { createGuildJobs, guildMerits, guildRecordId, loadGuild, saveGuild, GUILD_IDS, MERITS } from './adventure-guild.mjs';
 import { createWorkshopUI } from './workshop-ui.mjs';
+import { createTrainingUI } from './training-ui.mjs';
 import { GUILD_KITS, kitFor, powerProblem, powerPreview, liveEcho, waystonePreview } from './adventure-tools.mjs';
 
 export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuide }) {
@@ -26,7 +27,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   const motion = { get matches() { return front?.preferences.motion === 'reduced' || systemMotion.matches; } };
   let records = loadRecords(storage), memory = loadMemory(storage), run = null, renderer = null;
   let difficulty = 'trail', memorySaveFailed = false;
-  let expeditions, workshop, workshopActions = [], workshopClearNote = '';
+  let expeditions, workshop, training, workshopActions = [], workshopClearNote = '';
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0, pointer = null;
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
@@ -34,7 +35,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   let selectedChapter = 0, libraryTab = 'story';
   const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(max-width: 1000px)');
   const libraryOpen = () => !$('#adventure-library').hidden;
-  const outsideBoard = () => libraryOpen() || !$('#game-title-screen').hidden || !$('#adventure-workshop').hidden;
+  const outsideBoard = () => libraryOpen() || !$('#game-title-screen').hidden || !$('#adventure-workshop').hidden || !$('#training-camp').hidden;
 
   function frontStyle(view) {
     $('#adventure').dataset.view = view;
@@ -44,6 +45,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     document.body.classList.toggle('game-library-open', view === 'library');
   }
   function showTitle() {
+    training?.hide();
     workshop?.hide();
     for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog', '#game-notes-dialog']) if ($(selector).open) $(selector).close();
     $('#game-menu').open = false; $('#adventure-library').hidden = true; $('#game-layout').hidden = true;
@@ -54,6 +56,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   }
   function showJournal() { showTitle(); front.journal(); }
   function openWorkshop(section = 'shelf') { showTitle(); front.hide(); frontStyle('workshop'); workshop.show(section); }
+  function openTraining() { showTitle(); front.hide(); frontStyle('training'); training.show(); }
   function journalDestination(target) {
     if (target.mode === 'story') {
       selectedChapter = target.chapter ?? selectedChapter; renderPicker(); expeditions.show('story');
@@ -89,6 +92,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     resize();
   }
   function showLibrary(tab) {
+    training?.hide();
     workshop?.hide();
     libraryTab = tab;
     front?.hide(); frontStyle('library');
@@ -102,6 +106,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     window.scrollTo(0, 0);
   }
   function showBoard() {
+    training?.hide();
     workshop?.hide();
     if (!run) { showTitle(); return; }
     front?.hide(); frontStyle('play');
@@ -133,6 +138,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   $('#game-title-menu').addEventListener('click', showTitle);
   $('#game-journal-menu').addEventListener('click', showJournal);
   for (const id of ['title-workshop','front-workshop','game-workshop-menu']) $(`#${id}`).addEventListener('click', () => openWorkshop());
+  $('#title-training').addEventListener('click', openTraining);
   $('#game-guide-menu').addEventListener('click', () => { $('#game-menu').open = false; front.guide(); });
   let optionsReturn = null;
   $('#game-settings-button').addEventListener('click', () => { optionsReturn = $('#game-menu summary'); $('#game-menu').open = false; front.settings(); });
@@ -579,6 +585,8 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
   } });
   workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide, onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
+  training = createTrainingUI({ storage, onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },
+    onWorkshop(pack) { if (!workshop.acceptDraft(pack)) return false; openWorkshop('build'); return true; } });
   front = createFrontMenu({ storage, sound,
     onMode(mode) { if (mode === 'guild') showGuild(); else expeditions.show(mode); },
     onContinue() { paused = false; showBoard(); update(); revealBoard(); },
@@ -594,9 +602,11 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   return {
     enter() { active = true; showTitle(); },
     openWorkshop,
+    openTraining,
     useTerrain() { openWorkshop('build'); workshop.fromTerrain(); },
     openShared(code) { openWorkshop('import'); workshop.openShared(code); },
     leave() {
+      training.hide();
       workshop.hide();
       active = false; pointer = null; dashArmed = false;
       front.close(); front.hide(); frontStyle('play');

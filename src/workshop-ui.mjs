@@ -75,8 +75,8 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
     } catch(error) { if(n===token)notice(error.message,true); }
   }
   function replaceDraft(pack) {
-    if(draftTouched&&!confirm('Replace the current workshop draft? Save it to your shelf or download it first if you want to keep it.'))return;
-    close('preview-dialog'); designer.replace(pack); tab('build'); notice('Your new draft is ready. Choose a brush, then shape the next adventure.');
+    if(draftTouched&&!confirm('Replace the current workshop draft? Save it to your shelf or download it first if you want to keep it.'))return false;
+    close('preview-dialog'); designer.replace(pack); tab('build'); notice('Your new draft is ready. Choose a brush, then shape the next adventure.'); return true;
   }
   function remixWorld(pack) { guard(()=>{ designer.get(); replaceDraft(editAdventure(pack,{source:`Remix of ${pack.title} by ${pack.author}`.slice(0,128),author:'A trail keeper'})); }); }
   async function openShare(pack) {
@@ -145,6 +145,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   document.addEventListener('keydown',event=>{if(root.hidden||section!=='build'||event.target.closest('input,select,textarea,dialog')||document.querySelector('dialog[open]'))return;if((event.ctrlKey||event.metaKey)&&!event.altKey){const key=event.key.toLowerCase();if(['z','y','s'].includes(key)){event.preventDefault();$(key==='s'?'save':key==='y'||event.shiftKey?'redo':'undo').click();}}});
   renderShelf();draftState();
   return { show,hide,
+    acceptDraft: replaceDraft,
     fromTerrain() { $('new-mode').value='current';$('new-mode').dispatchEvent(new Event('change'));newWorld(); },
     async openShared(code){show('import');$('import-code').value=code;try{await openPreview(parseAdventureCode(code));}catch(error){notice(error.message,true);}},
     best:(key,difficulty)=>bests[`${key}-${difficulty}`],

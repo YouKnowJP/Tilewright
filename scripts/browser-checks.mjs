@@ -9,6 +9,7 @@ import { checkPlayLayout } from './layout-browser-checks.mjs';
 import { checkHorizon } from './horizon-browser-checks.mjs';
 import { checkGuild } from './guild-browser-checks.mjs';
 import { checkFrontMenu } from './front-browser-checks.mjs';
+import { checkTraining } from './training-browser-checks.mjs';
 import { checkCreators } from './creator-browser-checks.mjs';
 import { checkWorkshop } from './workshop-browser-checks.mjs';
 import { checkJournal } from './journal-browser-checks.mjs';
@@ -63,7 +64,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         const page = await context.newPage(), errors = [], failedAssets = [];
         page.on('pageerror', error => errors.push(error.message));
         page.on('response', response => { if (response.status() >= 400) failedAssets.push(response.url()); });
-        await page.goto(baseURL);
+        await page.goto(`${baseURL}/#mapmaker`);
         await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
         step = 'initial fit';
         assertFits(await metrics(page));
@@ -130,7 +131,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
       try {
         const page = await context.newPage(), errors = [];
         page.on('pageerror', error => errors.push(error.message));
-        await page.goto(baseURL);
+        await page.goto(`${baseURL}/#mapmaker`);
         await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
         const saved = () => page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.document.v1')));
         await editorButton(page, { name: 'Select Details layer', exact: true });
@@ -223,7 +224,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
     const touchContext = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, acceptDownloads: true });
     try {
       const page = await touchContext.newPage();
-      await page.goto(baseURL);
+      await page.goto(`${baseURL}/#mapmaker`);
       await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
       await page.locator('#zoom').selectOption('2');
       await editorButton(page, { name: 'Pan map (H)', exact: true });
@@ -276,8 +277,8 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
     try {
       const page = await failureContext.newPage();
       await page.route('**/src/app.mjs', route => route.abort());
-      await page.goto(baseURL);
-      await page.getByText('The editor could not load.', { exact: true }).waitFor();
+      await page.goto(`${baseURL}/#mapmaker`);
+      await page.getByText('The game could not load.', { exact: true }).waitFor();
       assert.match(await page.locator('#status').textContent(), /startup failed/);
       results.push({ checks: 'Failed module loading shows a useful error instead of an empty canvas.' });
     } finally { await failureContext.close(); }
@@ -287,5 +288,5 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const { chromium } = await import('playwright');
-  console.log(JSON.stringify({ creators: await checkCreators(chromium), workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
+  console.log(JSON.stringify({ training: await checkTraining(chromium), creators: await checkCreators(chromium), workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
 }

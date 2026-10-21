@@ -9,7 +9,7 @@ export async function checkCreators(browserType,{baseURL='http://127.0.0.1:4174'
   const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce',acceptDownloads:true});
   try{
    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+':'+r.url());});page.on('dialog',d=>d.accept());
-   await page.goto(baseURL);await page.locator('#loading-note').waitFor({state:'hidden'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
+   await page.goto(`${baseURL}/#mapmaker`);await page.locator('#loading-note').waitFor({state:'hidden'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
    assert.equal(await page.locator('#editor').isVisible(),true);assert.equal(await page.locator('.inspector').isVisible(),width>1100);
    await guide(page,width<=1100?'#maker-guide':'#maker-guide-wide');
    await editorButton(page,{name:'Sand tile',exact:true});if(width<=1100)assert.equal(await page.locator('#maker-palette-dialog').isVisible(),false);

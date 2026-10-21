@@ -471,16 +471,17 @@ function setMode(play, updateURL = true) {
   $('.intro-description').textContent = play ? 'Story missions, branching expeditions, and a new trail every day. The world moves when you do.'
     : 'Paint a place. Give it a story. Leave a light for the next traveller.';
   if (play) adventures.enter(); else { adventures.leave(); layoutCanvas(); }
-  if (updateURL) window.history.replaceState(null, '', `${location.pathname}${location.search}${play ? '#play' : ''}`);
+  if (updateURL) window.history.replaceState(null, '', `${location.pathname}${location.search}${play ? '#play' : '#mapmaker'}`);
 }
 $('#mode-create').addEventListener('click', () => setMode(false));
+$('#header-training').addEventListener('click', () => { setMode(true); adventures.openTraining(); });
 $('#intro-title').textContent = 'The worldmaker’s table';
 $('.intro-description').textContent = 'Paint a place. Give it a story. Leave a light for the next traveller.';
 $('#mode-play').addEventListener('click', () => setMode(true));
 function readGameHash() {
   const shared = location.hash.startsWith('#adventure=');
-  setMode(location.hash === '#play' || shared, false);
+  setMode(location.hash !== '#mapmaker', false);
   if (shared) adventures.openShared(location.hash.slice(11));
 }
 window.addEventListener('hashchange', readGameHash);
-if (location.hash === '#play' || location.hash.startsWith('#adventure=')) readGameHash();
+readGameHash();
