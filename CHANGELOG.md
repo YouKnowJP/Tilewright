@@ -8,7 +8,8 @@
   with a controlled cadence. Wait and interaction stay single-press actions.
 - Make controller Back use explicit close/cancel/navigation controls, preventing
   dialogue text such as “bring back the light” from selecting a choice. Support
-  the volume slider and stop controller polling cleanly from menu actions.
+  the volume slider, respect layered preview/share dialogs, and stop controller
+  polling cleanly from menu actions.
 - Return guide/options focus to the correct opener in WebKit and other engines,
   while preserving a newer deliberate focus selection. Protect cancelled
   training paint gestures, including early pointer-capture release.

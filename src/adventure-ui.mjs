@@ -605,7 +605,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     onMove:direction=>action(direction),
   });
   function controllerPress(command) {
-    const dialog=document.querySelector('dialog[open]'),menu=$('#game-menu');
+    const dialog=document.activeElement?.closest('dialog[open]')||document.querySelector('dialog[open]'),menu=$('#game-menu');
     if(!dialog&&training?.control(command))return;
     if(command==='pause'&&!dialog&&!outsideBoard()&&run?.status==='playing'){pause();return;}
     const overlay=!outsideBoard()&&!$('#game-overlay').hidden?$('#game-overlay'):null;

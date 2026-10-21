@@ -721,7 +721,8 @@ introduced. The static allowlist adds three assets (73 packaged files total).
 ## Whole-game audit hardening — v0.20.1
 
 Controller Back resolves explicit close/cancel/navigation controls rather than
-matching narrative text. Range inputs use their step/min/max values and dispatch
+matching narrative text. Layered dialogs resolve from the focused element
+before falling back to an open dialog, preserving native modal order. Range inputs use their step/min/max values and dispatch
 the normal input event, so volume persistence shares the existing path. Polling
 checks its running flag after a dispatched menu action to avoid rescheduling a
 loop that was stopped during that action.

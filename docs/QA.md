@@ -37,6 +37,8 @@ Reproduced and fixed:
   the handler searched button text. Back now closes the actual dialog and
   leaves choices untouched. A still selects the choice deliberately. Controller
   volume adjustment, pause/menu return, and polling shutdown are checked.
+  Layered sharing dialogs route controller input to the focused modal; Back
+  closes Share first and preserves the underlying world preview.
 - WebKit did not consistently return focus to pointer-opened guide/options
   buttons. Explicit opener restoration fixes that without stealing a newer
   canvas focus when the native close event arrives later.
