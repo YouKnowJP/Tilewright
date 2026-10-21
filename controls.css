@@ -1,0 +1,51 @@
+#settings-controls[hidden],#settings-display[hidden] { display:none; }
+.settings-tabs { display:flex; gap:8px; border-bottom:1px solid #667957; padding-bottom:14px; margin-bottom:12px; }
+.settings-tabs button { flex:1; min-height:44px; }
+.settings-tabs [aria-pressed="true"] { color:#fff0bd; background:#51492f; border-color:#d7b875; }
+.control-field { display:block; color:#ffe7af; font:13px/1.7 ui-monospace,monospace; margin:18px 0; min-width:0; }
+.control-field select { display:block; width:100%; min-height:48px; margin-top:8px; padding:10px; border:1px solid #8a9569; border-radius:2px; background:#102c2b; color:#f3e9c9; font:13px/1.5 ui-monospace,monospace; }
+.controls-pair { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.controls-pair .control-field { margin:4px 0; }
+.front-dialog .controls-invitation { color:#ead6a6; font:19px/1.6 Georgia,serif; }
+.front-dialog .controls-help { color:#c4d7b6; font-size:13px; line-height:1.8; }
+.controller-options { padding:12px 0; border-block:1px solid #637451; margin:22px 0; }
+.controller-options summary { color:#f2d8a2; cursor:pointer; min-height:44px; padding:12px 0; }
+.controller-options p { font-size:13px; line-height:1.8; }
+#settings-gamepad-status { border-left:2px solid #b9a268; padding:8px 12px; background:#102c2b; }
+.playing .game-controls>.game-input-strip { grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:38px; }
+.game-input-strip span { color:#dacb99; font:11px/1.5 ui-monospace,monospace; }
+.playing .game-input-strip button { min-height:36px; padding:7px 12px; font-size:11px; }
+.playing .direction-pad { grid-template-columns:repeat(3,44px); grid-template-rows:repeat(2,44px); gap:3px; }
+.playing .direction-pad button { min-height:44px; min-width:44px; touch-action:manipulation; }
+.playing .game-controls { grid-template-columns:138px repeat(2,minmax(0,1fr)); }
+body[data-pad-side="right"] .direction-pad { grid-column:3; grid-row:2; justify-self:end; }
+body[data-pad-side="right"] #dash-button { grid-column:1; grid-row:2; }
+body[data-pad-side="right"] #game-wait { grid-column:2; grid-row:2; }
+body[data-pad-side="right"] .game-controls { grid-template-columns:repeat(2,minmax(0,1fr)) 138px; }
+body[data-controls="swipe"] .game-controls>.direction-pad,body[data-controls="tap"] .game-controls>.direction-pad,body[data-controls="keyboard"] .game-controls>.direction-pad { display:none; }
+body:is([data-controls="swipe"],[data-controls="tap"],[data-controls="keyboard"]) .game-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
+body:is([data-controls="swipe"],[data-controls="tap"],[data-controls="keyboard"]) #dash-button { grid-column:1; grid-row:2; }
+body:is([data-controls="swipe"],[data-controls="tap"],[data-controls="keyboard"]) #game-wait { grid-column:2; grid-row:2; }
+body #adventure-canvas,body #training-map { touch-action:pinch-zoom; }
+body:is([data-controls="pad"],[data-controls="keyboard"]) #adventure-canvas,body:is([data-controls="pad"],[data-controls="keyboard"]) #training-map { touch-action:pan-y pinch-zoom; }
+body[data-controls="tap"] #adventure-canvas { cursor:crosshair; }
+.playing .tactical-actions { flex-wrap:wrap; }
+.playing .tactical-actions button { flex:1 1 68px; min-height:44px; }
+body[data-control-size="large"] .game-controls .direction-pad { grid-template-columns:repeat(3,52px); grid-template-rows:repeat(2,52px); }
+body[data-control-size="large"] .game-controls { grid-template-columns:162px repeat(2,minmax(0,1fr)); }
+body[data-control-size="large"][data-pad-side="right"] .game-controls { grid-template-columns:repeat(2,minmax(0,1fr)) 162px; }
+body[data-control-size="large"]:is([data-controls="swipe"],[data-controls="tap"],[data-controls="keyboard"]) .game-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
+body[data-control-size="large"] .game-controls button,body[data-control-size="large"] .training-play-controls button { min-height:52px; }
+body[data-control-size="large"] .direction-pad button { min-width:52px; }
+.training-control-settings { margin:12px 0; min-height:44px; }
+body[data-controls="keyboard"] .training-dpad,body[data-controls="tap"] .training-dpad,body[data-controls="swipe"] .training-dpad { display:none; }
+body[data-pad-side="right"] .training-dpad { order:2; }
+body[data-control-size="large"] .training-dpad { grid-template-columns:repeat(3,52px); grid-template-rows:repeat(2,52px); }
+.playing main { padding-left:max(10px,env(safe-area-inset-left)); padding-right:max(10px,env(safe-area-inset-right)); padding-bottom:max(12px,env(safe-area-inset-bottom)); }
+.playing .game-layout { height:calc(100vh - 72px); height:calc(100svh - 72px); }
+.front-dialog { max-height:calc(100vh - 24px); max-height:calc(100svh - 24px); }
+.playing button,.playing summary { touch-action:manipulation; }
+@media(min-width:761px) { .playing main { padding-left:max(3%,env(safe-area-inset-left)); padding-right:max(3%,env(safe-area-inset-right)); } }
+@media(max-width:600px) { .controls-pair { grid-template-columns:1fr; gap:8px; }.control-field select { font-size:12px; }.playing .tactical-actions button { flex-basis:74px; } }
+.playing .game-input-strip button { min-height:44px; }
+@media(any-pointer:coarse) { .playing select,.playing textarea,.playing input:not([type="checkbox"]):not([type="range"]),.front-dialog select { font-size:16px; } }

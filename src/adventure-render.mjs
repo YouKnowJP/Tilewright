@@ -20,6 +20,11 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     canvas.style.height = `${Math.max(1, canvas.height * scale)}px`;
   }
 
+  function playerAnchor() {
+    if(!state)return {x:.5,y:.5};
+    const x=state.player.x,y=state.player.y,left=Math.max(0,Math.min(stage.map.width-columns,x-(columns-1)/2)),top=Math.max(0,Math.min(stage.map.height-rows,y-(rows-1)/2));
+    return {x:(x-left+.5)/columns,y:(y-top+.5)/rows};
+  }
   function setState(next) {
     previous = state?.player || next.player;
     if (!state || !same(state.player, next.player) || (state.turns !== next.turns && next.events.some(event => event.type === 'pulse'))) movedAt = performance.now();
@@ -277,5 +282,5 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     ctx.strokeRect(ox + left * scale, oy + top * scale, columns * scale, rows * scale);
   }
 
-  return { resize, setState, draw, drawMinimap };
+  return { playerAnchor, resize, setState, draw, drawMinimap };
 }

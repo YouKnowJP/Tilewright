@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.20.0 — 2026-10-21
+
+- Add a dedicated Controls options page: pad + swipe, pad only, swipe, tap to
+  step relative to the keeper, and keyboard-focus layouts. Changes apply live.
+- Add left/right movement-pad placement, 44/52-pixel targets, arrows with WASD
+  or IJKL, and deliberate one-step keyboard presses with optional held repeat.
+- Add opt-in standard-controller support with status, one action per press,
+  menu/dialog/result navigation, pause, dash, powers, supplies, and cargo.
+  Suppress held controls across connection, blur, hidden tabs, and menu closes.
+- Share movement styles and keyboard settings with both training lessons.
+- Fit every board around the active controls, support rotation and split views,
+  preserve browser pinch zoom, and account for device safe areas. Keep display
+  and sound settings on a separate options page.
+- Fix interrupted pointer capture so cancellation, early capture release, and
+  multi-finger gestures cannot become an accidental step. Add a regression for
+  release before the browser reports capture loss.
+- Migrate old preferences safely and retain session controls if saving fails.
+  Add 11 input/preference tests (420 total), an eighteenth browser-check family,
+  three-engine device coverage, and a 73-file static build.
+
 ## 0.19.0 — 2026-10-20
 
 - Add The Trailhouse, a village hub with twelve keeper commissions across the

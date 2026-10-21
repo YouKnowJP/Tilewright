@@ -1,5 +1,53 @@
 # Verification record
 
+## Device and control choices — v0.20.0
+
+**420 Node tests**, syntax checks, and a **73-file static package** pass.
+Eleven new pure-policy, browser-adapter, and preference cases cover movement
+layouts, deliberate gestures, actual-player tap anchors, standard controller
+mapping, held-input edges, connection/visibility/focus latches, unavailable
+APIs, and old-save defaults. Pointer regressions cover cancellation, multiple
+pointers, lost capture, and capture released before it becomes active.
+
+The eighteenth browser family, `controls-browser-checks.mjs`, passed with
+**Chrome 156.0.8078.47**, **Firefox 156.0**, and **WebKit 26.6** on macOS.
+All used disposable saves and normal UI input. The matrix for each engine:
+320×568, 390×844, 430×932, 768×1024, 820×1180, 1024×768, 1280×720,
+844×390, 568×320, and 600×800, with 2× pixel density for smaller layouts.
+
+- Each engine completes Candlebrook with the saved IJKL keyboard layout,
+  native direction-pad taps, swipes, and player-relative taps. A separate
+  390-pixel phone case completes the mission with swipes after rotation.
+- All five movement styles fit all ten sizes without sideways scrolling.
+  Switching style, size, and side spends no turns. Large direction targets
+  measure at least 52×52; the right-hand pad renders to the right of actions.
+- Rotate each viewport and retain the current turn and position. Wait for the
+  browser’s resize frame before measuring; canvas and controls remain inside
+  the board. Screenshots of phone and tablet play/options were inspected.
+- Real captured mouse gestures followed by pointer cancellation or early
+  capture release spend no turns. Chrome also checks a native CDP two-finger
+  gesture. Chrome phone swipes use CDP touch input; Firefox/WebKit swipes use
+  browser mouse-pointer drags, and map/pad taps use touchscreen emulation.
+- A simulated standard controller exercises the actual browser polling adapter,
+  one action per press, held-button suppression, settings Back without a second
+  wait action, and controller pause/menu navigation. Unit tests additionally
+  cover hidden tabs, unfocused windows, reconnect, disabled polling, and API errors.
+- Preferences persist through reload, old saves receive new defaults, and
+  unavailable reads/writes keep in-session movement styles usable. Training
+  accepts the chosen keyboard layout and hides its pad for tap/swipe modes.
+- Retained Chrome regressions pass: title/settings/Continue, feedback and layout
+  at seven sizes; both full training lessons and portable creator clears;
+  creator guides, editing, history, terrain handoff, protected drafts, and
+  responsive panels; Storybook saves, native/touch chapter wins, authoring,
+  imports, and failures; all twelve Trailhouse commissions on Trail, both
+  festival rules, village/keepsake progress, passports, and remixes.
+
+These are browser-engine and device-layout simulations. WebKit is not a
+branded Safari run; physical iOS/Android devices, physical controllers,
+screen readers, and every browser/OS combination have not been tested.
+The mode remains playable without controller support. No personal browser
+or game save was used for testing.
+
 ## The Trailhouse — v0.19.0
 
 **409 Node tests**, syntax checks, and a **70-file static package** pass.

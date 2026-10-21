@@ -41,3 +41,22 @@ security escalation, distinct portal-guard archetypes, and authored bargains
 that trade an immediate resource for a later route. Those are proposals, not
 features shipped in v0.8. Journey tools would require deliberate checkpoint
 versioning and new long-run compatibility tests.
+
+
+## Device input references — 2026-10-21
+
+- [W3C Pointer Events](https://www.w3.org/TR/pointerevents/) defines capture,
+  cancellation, and declarative touch-action behavior. The shared map adapter
+  cancels interrupted/multiple pointers and requires capture at release. This
+  also handles an early release before capture became active, when a loss event
+  is not emitted. Gesture maps allow browser pinch zoom; pad/keyboard maps also
+  permit vertical page panning.
+- [W3C Gamepad](https://www.w3.org/TR/gamepad/) defines browser discovery,
+  standard mappings, and secure-context access. The implementation supports
+  standard mappings only, treats held states as snapshots, requires a fresh
+  press, and exposes a useful unavailable/unsupported message.
+- [Playwright browser coverage](https://playwright.dev/docs/browsers) explains
+  Chromium, Firefox, and WebKit testing. The WebKit build is not the branded
+  Safari app, and emulated mobile layouts do not replace testing on hardware.
+  QA records the actual engine versions, device sizes, and simulated controller
+  coverage rather than claiming every browser or device has been tested.

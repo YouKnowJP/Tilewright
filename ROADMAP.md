@@ -57,6 +57,17 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Device and control choices completed — v0.20
+
+- Five movement styles, left/right pad placement, larger targets, three keyboard
+  layouts, repeat preference, and optional standard-controller input.
+- Shared training controls, live changes, old-save defaults, gesture cancellation,
+  safe-area/pinch handling, and board fitting across orientation and split views.
+- Chrome, Firefox, and WebKit automation covers phone, tablet, and desktop
+  layouts. Physical-device/controller and screen-reader checks remain part of
+  accessibility refinement above; they are not claimed complete.
+- See [device controls](docs/CONTROLS.md). Existing editor estimates are unchanged.
+
 ## A home between adventures completed — v0.19
 
 - Twelve goal-based commissions reuse original story worlds with alternate

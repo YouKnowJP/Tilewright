@@ -683,3 +683,36 @@ recording to the mode. Adventure UI reuses the objective ribbon and responsive
 board fitting, exposes individual goals in Quest, and returns wins to the hub.
 Rules cannot change mid-attempt. No unfinished-run checkpoint is promised.
 The build allowlist adds five public files, for 70 total packaged files.
+
+
+## Device input and preferences — v0.20
+
+`adventure-controls.mjs` is the pure input policy: keyboard layout resolution,
+style-specific help, cardinal swipe/tap interpretation, standard gamepad
+snapshots, and rising-edge action selection. The player-relative tap origin
+comes from the renderer’s normalized `playerAnchor()`, accounting for the
+camera and map edges. A tap never becomes pathfinding or repeated movement.
+
+`adventure-input.mjs` adapts browser pointer capture and controller polling to
+that policy. It shares map gestures between adventures and training, rejects
+multi-pointer sessions, cancels on visibility/blur, and requires retained
+capture at pointerup. The capture check covers release before gotpointercapture,
+when no lostpointercapture event is dispatched. Controller polling is opt-in,
+standard-mapped, fresh-press only, and reports unsupported/unavailable cases.
+It snapshots held controls while menus block gameplay, preventing a menu-close
+press from becoming a second world action. Hidden tabs, unfocused windows, and reconnections latch
+current controls without replaying them. Leaving the game stops the poll loop.
+
+Preferences keep the existing version-one key and gain validated defaults for
+style, keyboard layout, pad side, target size, held-repeat, and controller enable.
+Old saves retain sound/motion/text values. The front menu applies options and
+notifies the game and training without starting/restarting a run. On-screen
+actions and the Controls shortcut remain available in every style.
+
+`controls.css` follows existing component styles, handles pad placement and
+sizing, permits browser pinch zoom, and includes safe-area/viewport fallbacks.
+Board fitting now measures fixed content in all modes, preserving enough canvas
+height while making every action reachable by one document scroll on short
+screens. ResizeObserver, window, and visual viewport events refresh the canvas;
+no orientation lock, user-agent sniffing, service worker, or runtime package is
+introduced. The static allowlist adds three assets (73 packaged files total).

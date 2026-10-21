@@ -1,3 +1,5 @@
+import { movementKey, controlHelp } from './adventure-controls.mjs';
+import { createMapInput } from './adventure-input.mjs';
 import { practiceWorld, paintPractice, tellPracticeStory, playLessonSteps, creatorLessonSteps, readTraining, saveTraining, practiceClear, PRACTICE_SPOTS } from './training-model.mjs';
 import { adventureStage, checkAdventure, editAdventure } from './workshop-model.mjs';
 import { createRun, stepRun, nearbyInteractions } from './adventure.mjs';
@@ -7,7 +9,7 @@ import { drawWorkshopWorld } from './workshop-art.mjs';
 import { drawAtlasArt, CHAPTERS } from './adventure-art.mjs';
 import { serializeAdventure, adventurePlayLink } from './workshop-sharing.mjs';
 
-export function createTrainingUI({ storage, onHome, onStory, onWorkshop }) {
+export function createTrainingUI({ storage, getPreferences, onControls, onHome, onStory, onWorkshop }) {
   const $ = id => document.getElementById(`training-${id}`), root = $('camp'), canvas = $('map');
   const sessions = new Map(), progress = readTraining(storage);
   let state = null, renderer = null, saveFailed = false, pointer = null, lastStep = '';
@@ -78,7 +80,7 @@ export function createTrainingUI({ storage, onHome, onStory, onWorkshop }) {
     $('mode-note').textContent = editing() ? 'Practice table · marks show where to paint' : `Turn ${state.run.turns} · ${state.run.status === 'won' ? 'Trail restored' : 'No enemies or timer'}`;
     $('brushes').hidden = !editing(); $('build-actions').hidden = !editing();
     $('edit').hidden = state.kind !== 'create' || editing();
-    $('map-help').textContent = editing() ? 'Choose a brush, then tap the marked square. Arrows move the cursor; Space paints.' : 'Arrows / WASD to walk · E to interact · Space to wait · swipe or use the direction pad';
+    $('map-help').textContent = editing() ? 'Choose a brush, then tap the marked square. Your movement keys move the cursor; Space paints.' : controlHelp(getPreferences())+' E interacts; Space waits.';
     const blocked = !editing() && (state.run.status !== 'playing' || Boolean(state.run.dialogue) || state.plan);
     $('play-controls').hidden = editing();
     for (const button of root.querySelectorAll('[data-training-move],#training-wait,#training-plan')) button.disabled = blocked;
@@ -188,7 +190,8 @@ export function createTrainingUI({ storage, onHome, onStory, onWorkshop }) {
   $('workshop').onclick = () => { if (state.won && onWorkshop(state.pack)) keep(); };
   canvas.addEventListener('keydown', event => {
     if (root.hidden || $('lesson').hidden || event.ctrlKey || event.metaKey || event.altKey) return;
-    const direction = { ArrowUp: 'up', ArrowRight: 'right', ArrowDown: 'down', ArrowLeft: 'left' }[event.key] || { w: 'up', d: 'right', s: 'down', a: 'left' }[event.key.toLowerCase()];
+    const direction=movementKey(event.key,getPreferences().keyboardLayout);
+    if(event.repeat&&getPreferences().keyRepeat!=='on')return;
     if (direction) {
       event.preventDefault();
       if (editing()) { const [dx, dy] = { up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] }[direction]; state.cursor = { x: Math.max(0, Math.min(9, state.cursor.x + dx)), y: Math.max(0, Math.min(7, state.cursor.y + dy)) }; draw(); }
@@ -198,18 +201,30 @@ export function createTrainingUI({ storage, onHome, onStory, onWorkshop }) {
   });
   $('talk').addEventListener('cancel', event => { event.preventDefault(); $('talk-close').click(); });
   $('plan-copy').addEventListener('cancel', event => { event.preventDefault(); $('plan-close').click(); });
-  canvas.addEventListener('pointerdown', event => { if (!state) return; pointer = { x: event.clientX, y: event.clientY, id: event.pointerId }; canvas.setPointerCapture(event.pointerId); canvas.focus({ preventScroll: true }); });
+  canvas.addEventListener('pointerdown', event => { if (!state||!editing()||event.button!==0||event.isPrimary===false) { pointer=null;return; } pointer = { x: event.clientX, y: event.clientY, id: event.pointerId }; canvas.setPointerCapture(event.pointerId); canvas.focus({ preventScroll: true }); });
   canvas.addEventListener('pointercancel', () => { pointer = null; });
   canvas.addEventListener('pointerup', event => {
     if (!pointer || pointer.id !== event.pointerId) return;
-    const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y; pointer = null;
+    pointer = null;
     if (editing()) {
       const rect = canvas.getBoundingClientRect(), point = { x: Math.floor((event.clientX - rect.x) * 10 / rect.width), y: Math.floor((event.clientY - rect.y) * 8 / rect.height) };
       paint(point);
-    } else if (Math.max(Math.abs(dx), Math.abs(dy)) > 24) act(Math.abs(dx) > Math.abs(dy) ? dx > 0 ? 'right' : 'left' : dy > 0 ? 'down' : 'up');
+    }
+    if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);
   });
+  const mapInput=createMapInput(canvas,{preferences:getPreferences,enabled:()=>!root.hidden&&!$('lesson').hidden&&state&&!editing()&&state.run.status==='playing'&&!state.run.dialogue&&!state.plan&&!document.querySelector('dialog[open]'),origin:()=>{const rect=canvas.getBoundingClientRect(),point=renderer?.playerAnchor()||{x:.5,y:.5};return {x:rect.left+rect.width*point.x,y:rect.top+rect.height*point.y};},onMove:act});
+  $('controls-settings').onclick=()=>{mapInput.cancel();onControls();};
   return {
+    refresh(){mapInput.cancel();if(state&&!root.hidden)render();},
+    control(command){
+      if(root.hidden||$('lesson').hidden||!state)return false;
+      if(command==='pause'){library();return true;}
+      if(!editing()&&state.run.status!=='playing')return false;
+      if(['up','right','down','left'].includes(command))canvas.dispatchEvent(new KeyboardEvent('keydown',{key:{up:'ArrowUp',right:'ArrowRight',down:'ArrowDown',left:'ArrowLeft'}[command],bubbles:true}));
+      else if(command==='interact'){if(editing())paint(state.cursor);else interact();}else if(command==='back'&&!editing())act('wait');else if(command==='plan'&&!editing())$('plan').click();
+      return true;
+    },
     show() { root.hidden = false; library(); },
-    hide() { root.hidden = true; pointer = null; for (const id of ['talk', 'plan-copy']) if ($(id).open) $(id).close(); },
+    hide() { root.hidden = true; pointer = null; mapInput.cancel(); for (const id of ['talk', 'plan-copy']) if ($(id).open) $(id).close(); },
   };
 }

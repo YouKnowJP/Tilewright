@@ -38,6 +38,15 @@ Localhost saves are separate from the public website's saves.
 See [hosting and sharing](docs/HOSTING.md) for automatic updates and developer
 publishing details.
 
+## Choose how you play
+
+Phones, tablets, and computers can use **Options → Controls** to choose a
+pad, swipe, tap-to-step, or keyboard layout. Put the pad on either side, choose
+larger buttons, and enable optional standard-controller input. Switch during a
+run without restarting. Training uses the same preferences. Portrait, landscape,
+and split-view layouts preserve readable feedback and reachable controls.
+[Device and controls guide](docs/CONTROLS.md).
+
 ## A home between adventures
 
 Choose **The Trailhouse** to earn village light through twelve keeper favors.
@@ -482,7 +491,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 409 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 420 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and

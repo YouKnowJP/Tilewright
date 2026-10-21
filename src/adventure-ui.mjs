@@ -1,3 +1,5 @@
+import { CONTROL_STYLES, movementKey, controlHelp } from './adventure-controls.mjs';
+import { createMapInput, createGamepadInput } from './adventure-input.mjs';
 import { createRun, createCustomStage, stepRun, resultFor, activePlates, scoutHint, MAX_HEARTS, MAX_ENERGY, nearbyInteractions, missionGoals, turnTarget, recordId, canEnter, hazardActive } from './adventure.mjs';
 import { createCampaign } from './adventure-levels.mjs';
 import { createAdventureRenderer } from './adventure-render.mjs';
@@ -28,7 +30,8 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   let records = loadRecords(storage), memory = loadMemory(storage), run = null, renderer = null;
   let difficulty = 'trail', memorySaveFailed = false;
   let expeditions, workshop, training, workshopActions = [], workshopClearNote = '';
-  let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0, pointer = null;
+  let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0;
+  let mapInput,gamepadInput;
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;
@@ -231,14 +234,14 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
 
   function resize() {
     if (!renderer || !active || viewport.clientWidth < 1) return;
-    fitBookBoard();
+    fitBoard();
     renderer.resize(Math.max(80, viewport.clientWidth - 32), Math.max(80, viewport.clientHeight - 32));
     renderer.draw(); renderer.drawMinimap($('#game-minimap'));
   }
 
-  function fitBookBoard() {
+  function fitBoard() {
     const layout=$('#game-layout');
-    if(!(run?.stage.workshop?.storybook || run?.stage.workshop?.trailhouse) || layout.hidden) { layout.style.minHeight=''; return; }
+    if(!run || layout.hidden) { layout.style.minHeight=''; return; }
     const main=$('.game-main'), style=getComputedStyle(main);
     const fixed=[...main.children].filter(element=>element!==viewport).reduce((height,element)=>{
       const css=getComputedStyle(element);return height+(css.display==='none'?0:element.getBoundingClientRect().height+(parseFloat(css.marginTop)||0)+(parseFloat(css.marginBottom)||0));
@@ -441,7 +444,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       $('#game-result-text').textContent += ' Saving unavailable. Keep this tab open to retain this result.';
     }
     $('#game-nemesis').hidden = Boolean(journey) || paused || run.status !== 'won' || !stage.actFinal || difficulty !== 'trail';
-    fitBookBoard();renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
+    fitBoard();renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
   }
 
   function journeyLabel() { return expeditions?.session ? 'Beyond the atlas / Seeded expedition' : 'Your own world / Custom adventure'; }
@@ -556,7 +559,9 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     await front.toggleSound();
     $('#game-menu').open = false;
   });
-  $('#dash-button').addEventListener('click', () => { dashArmed = !dashArmed; update(); });
+  function armDash() { if($('#dash-button').disabled)return; dashArmed = !dashArmed; update(); }
+  $('#dash-button').addEventListener('click', armDash);
+  $('#game-controls-settings').addEventListener('click',()=>{ mapInput?.cancel(); front.settings('controls'); });
   $('#game-wait').addEventListener('click', () => action('wait'));
   document.querySelectorAll('[data-move]').forEach(button => button.addEventListener('click', () => action(button.dataset.move)));
   $('#game-primary').addEventListener('click', () => {
@@ -580,11 +585,11 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     }
     if (!active || !run || outsideBoard() || front.dialogOpen || notesDialog.open || event.ctrlKey || event.metaKey || event.altKey || event.target.closest('input, select, textarea, dialog, .game-aside')) return;
     if ($('#game-menu').open) { if (event.key === 'Escape') { event.preventDefault(); $('#game-menu').open = false; $('#game-menu summary').focus(); } return; }
-    const directions = { ArrowUp: 'up', ArrowRight: 'right', ArrowDown: 'down', ArrowLeft: 'left', w: 'up', d: 'right', s: 'down', a: 'left' };
+    const direction=movementKey(event.key,front.preferences.keyboardLayout);
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
-    if (directions[key]) {
+    if (direction) {
       event.preventDefault();
-      if (!event.repeat || performance.now() - lastAction > 130) action(directions[key], event.shiftKey);
+      if (!event.repeat || front.preferences.keyRepeat==='on' && performance.now() - lastAction > 160) action(direction, event.shiftKey);
     } else if (key === ' ' && !event.target.closest('button')) { event.preventDefault(); if (!event.repeat) action('wait'); }
     else if (!event.repeat && ['p', 'Escape', 'r', 'h', 'e', 'q', 'c', 'x', 'v', 'b'].includes(key)) {
       event.preventDefault();
@@ -592,21 +597,50 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       else if (key === 'b') action('power'); else if (key === 'x') action('drop-cargo'); else if (key === 'q') action('decoy'); else if (key === 'c') action('shield'); else pause();
     } else if (key === 'Enter' && run.status !== 'playing' && !event.target.closest('button')) { event.preventDefault(); $('#game-primary').click(); }
   });
-  canvas.addEventListener('pointerdown', event => {
-    if (event.button !== 0 || pointer) return;
-    pointer = { x: event.clientX, y: event.clientY, id: event.pointerId };
-    canvas.focus({ preventScroll: true }); canvas.setPointerCapture(event.pointerId);
+  mapInput=createMapInput(canvas,{
+    preferences:()=>front.preferences,
+    enabled:()=>active&&!outsideBoard()&&!front.dialogOpen&&!notesDialog.open&&!document.querySelector('dialog[open]')&&!$('#game-menu').open&&!paused&&run?.status==='playing',
+    origin:()=>{const rect=canvas.getBoundingClientRect(),point=renderer?.playerAnchor()||{x:.5,y:.5};return {x:rect.left+rect.width*point.x,y:rect.top+rect.height*point.y};},
+    onMove:direction=>action(direction),
   });
-  canvas.addEventListener('pointerup', event => {
-    if (!pointer || pointer.id !== event.pointerId) return;
-    const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y; pointer = null;
-    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
-    if (Math.max(Math.abs(dx), Math.abs(dy)) < 12) return;
-    action(Math.abs(dx) > Math.abs(dy) ? dx > 0 ? 'right' : 'left' : dy > 0 ? 'down' : 'up');
-  });
-  canvas.addEventListener('pointercancel', () => { pointer = null; });
+  function controllerPress(command) {
+    const dialog=document.querySelector('dialog[open]'),menu=$('#game-menu');
+    if(!dialog&&training?.control(command))return;
+    if(command==='pause'&&!dialog&&!outsideBoard()&&run?.status==='playing'){pause();return;}
+    const overlay=!outsideBoard()&&!$('#game-overlay').hidden?$('#game-overlay'):null;
+    if(dialog||outsideBoard()||menu.open||overlay){
+      const container=dialog||overlay||(menu.open?menu:$('#adventure'));
+      const controls=[...container.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),summary,[tabindex="0"]')].filter(node=>node.getClientRects().length&&!node.closest('[hidden]'));
+      if(!controls.length)return;
+      const current=document.activeElement,index=controls.indexOf(current);
+      if(['up','left','down','right'].includes(command)){
+        if(current?.tagName==='SELECT'&&['left','right'].includes(command)){current.selectedIndex=Math.max(0,Math.min(current.options.length-1,current.selectedIndex+(command==='left'?-1:1)));current.dispatchEvent(new Event('change',{bubbles:true}));}
+        else{const next=controls[(index+(command==='up'||command==='left'?-1:1)+controls.length)%controls.length];next.focus({preventScroll:true});next.scrollIntoView({block:'nearest'});}
+      }else if(command==='interact') (controls.includes(current)?current:controls[0]).click();
+      else if(command==='back'){
+        const back=controls.find(node=>/close|cancel|back|keep my|resume|return to/i.test(node.textContent)||/close/i.test(node.getAttribute('aria-label')||''));
+        if(back)back.click();else if(menu.open)menu.open=false;
+      }
+      return;
+    }
+    if(!run)return;
+    if(command==='pause'){pause();return;}
+    if(run.status!=='playing'){if(command==='interact')$('#game-primary').click();return;}
+    if(paused){if(command==='interact'||command==='back')pause();return;}
+    if(['up','right','down','left'].includes(command))action(command);
+    else if(command==='interact')interact();else if(command==='dash')armDash();else if(command==='back')action('wait');else if(command==='plan')inspect();else action(command==='cargo'?'drop-cargo':command);
+  }
+  function applyControls(preferences){
+    document.body.dataset.controls=preferences.controls;document.body.dataset.padSide=preferences.padSide;document.body.dataset.controlSize=preferences.controlSize;
+    $('#game-input-label').textContent=CONTROL_STYLES[preferences.controls];$('#game-controls-help').textContent=controlHelp(preferences);canvas.title=controlHelp(preferences);
+    mapInput?.cancel();dashArmed=false;training?.refresh();
+    if(preferences.gamepad==='on')gamepadInput?.start();else gamepadInput?.stop();
+    if(run)resize();
+  }
   document.addEventListener('visibilitychange', () => { if (document.hidden && active && run?.status === 'playing' && !run.dialogue && !paused) { paused = true; update(); } });
   new ResizeObserver(resize).observe(viewport);
+  window.visualViewport?.addEventListener('resize',resize);
+  window.addEventListener('resize',resize);
   expeditions = createExpeditionUI({ storage, onShow: showLibrary, onNotice: text => {
     showStatus(text);
     if (libraryOpen()) { $('#library-notice').textContent = text; $('#library-notice').hidden = false; }
@@ -619,7 +653,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
   } });
   workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide, onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
-  training = createTrainingUI({ storage, onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },
+  training = createTrainingUI({ storage, getPreferences:()=>front.preferences, onControls:()=>front.settings('controls'), onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },
     onWorkshop(pack) { if (!workshop.acceptDraft(pack)) return false; openWorkshop('build'); return true; } });
   front = createFrontMenu({ storage, sound,
     onMode(mode) { if (mode === 'guild') showGuild(); else expeditions.show(mode); },
@@ -627,14 +661,16 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     onResumeExpedition() { expeditions.show(); $('#expedition-resume').click(); },
     onMapmaker: backToEditor,
     onCustomMap() { try { start(createCustomStage(getMap())); } catch (error) { front.notice(error.message); } },
-    onPreferences() { if (run) { update(); paint(); } },
+    onPreferences(preferences) { applyControls(preferences); if (run) { update(); paint(); } },
     getJournal() { return { ...adventureJournal({ campaign, jobs: journalJobs, records, guildRecords, book: expeditions.logbook, difficulty, kit: selectedKit }), saveUnavailable: saveFailed || guildSaveFailed || expeditions.checkpointFailed || peekJourney(storage).unavailable }; },
     onDestination: journalDestination, onChoose: showTitle,
   });
+  gamepadInput=createGamepadInput({onPress:controllerPress,onStatus:text=>$('#settings-gamepad-status').textContent=text,enabled:()=>active&&!document.hidden});
+  applyControls(front.preferences);
   systemMotion.addEventListener('change', () => { if (run) paint(); });
   renderPicker(); renderGuild();
   return {
-    enter() { active = true; showTitle(); },
+    enter() { active = true; applyControls(front.preferences); showTitle(); },
     openWorkshop,
     openTraining,
     useTerrain() { openWorkshop('build'); workshop.fromTerrain(); },
@@ -642,7 +678,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     leave() {
       training.hide();
       workshop.hide();
-      active = false; pointer = null; dashArmed = false;
+      active = false; mapInput.cancel(); gamepadInput.stop(); dashArmed = false;
       front.close(); front.hide(); frontStyle('play');
       for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog', '#game-notes-dialog']) if ($(selector).open) $(selector).close();
       $('#game-menu').open = false;
