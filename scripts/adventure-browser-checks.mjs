@@ -113,14 +113,16 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
         assert.equal(Number(await page.locator('#game-turns').textContent()), Number(before) + 1);
         await clickControl(page, '#game-restart');
         await page.locator('#adventure-canvas').scrollIntoViewIfNeeded();
-        const box = await page.locator('#adventure-canvas').boundingBox(), cdp = await context.newCDPSession(page);
-        const touch = (type, y) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: type === 'touchEnd' ? [] : [{ x: box.x + box.width / 2, y, id: 1 }] });
-        await touch('touchStart', box.y + box.height / 2 + 35); await touch('touchMove', box.y + box.height / 2 - 35); await touch('touchEnd');
-        assert.equal(await page.locator('#game-turns').textContent(), '1', 'A real touch swipe must move the explorer.');
+        const box = await page.locator('#adventure-canvas').boundingBox();
+        if(browserType.name()==='chromium'){
+          const cdp=await context.newCDPSession(page),touch=(type,y)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:type==='touchEnd'?[]:[{x:box.x+box.width/2,y,id:1}]});
+          await touch('touchStart',box.y+box.height/2+35);await touch('touchMove',box.y+box.height/2-35);await touch('touchEnd');await cdp.detach();
+        }else{await page.mouse.move(box.x+box.width/2,box.y+box.height/2+35);await page.mouse.down();await page.mouse.move(box.x+box.width/2,box.y+box.height/2-35,{steps:3});await page.mouse.up();}
+        assert.equal(await page.locator('#game-turns').textContent(), '1', 'A map swipe must move the explorer.');
         const current = await page.evaluate(() => scrollY);
         await page.locator('#adventure-canvas').evaluate(el => el.focus({ preventScroll: true }));
         await page.keyboard.press('ArrowUp'); assert.equal(await page.evaluate(() => scrollY), current, 'Arrow gameplay must not scroll the page.');
-        results.push({ width, checks: 'Responsive canvas and controls, reduced motion, touch direction pad and real swipe, no arrow-key page jump.' });
+        results.push({ width, checks: 'Responsive canvas and controls, reduced motion, touch direction pad and map swipe, no arrow-key page jump.' });
       } finally { await context.close(); }
     }
     const context = await browser.newContext();

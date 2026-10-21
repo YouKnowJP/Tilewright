@@ -36,7 +36,7 @@ export function createGamepadInput({onPress,onStatus,enabled,read=()=>{if(!navig
     report(pad?'Controller ready · D-pad or left stick to move.':pads.length?'This controller has no standard mapping. Choose touch or keyboard.':'Connect a controller, then press a button to let the browser discover it.');
     const press=suspended?null:gamepadPress(snapshot,previous);previous=snapshot;suspended=false;
     if(press&&enabled())onPress(press);
-    frame=schedule(tick);
+    if(running)frame=schedule(tick);
   }
   function start(){if(running)return;running=true;previous=null;suspended=false;frame=schedule(tick);}
   function stop(){running=false;previous=null;if(frame!==null)unschedule(frame);frame=null;report('Controller is off. Touch and keyboard remain available.');}

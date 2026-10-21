@@ -25,3 +25,8 @@ test('controller polling latches connections, suppresses held/background inputs,
   pads=[];tick();pads=[pad];tick();assert.equal(presses.length,2);input.stop();assert.equal(next,null);assert.match(statuses.at(-1),/off/);
   blocked=true;input.start();tick();assert.equal(next,null);assert.match(statuses.at(-1),/unavailable/);assert.equal(presses.length,2);
 }));
+test('stopping controller polling from a menu action cannot schedule another frame',()=>browserEnvironment(()=>{
+  const pad={connected:true,mapping:'standard',index:0,id:'standard',buttons:Array.from({length:17},()=>({pressed:false})),axes:[0,0]};let next=null,input,presses=0;
+  input=createGamepadInput({read:()=>[pad],enabled:()=>true,onPress:()=>{presses++;input.stop();},onStatus:()=>{},schedule:fn=>{next=fn;return 1;},unschedule:()=>{next=null;}});
+  const tick=()=>{const fn=next;next=null;fn();};input.start();tick();pad.buttons[1].pressed=true;tick();assert.equal(presses,1);assert.equal(next,null);
+}));

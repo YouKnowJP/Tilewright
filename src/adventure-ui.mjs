@@ -138,8 +138,8 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   compactNotes.addEventListener('change', placeNotes); placeNotes();
   $('#library-resume').addEventListener('click', () => { showBoard(); update(); canvas.focus({ preventScroll: true }); });
   $('#library-title').addEventListener('click', showTitle);
-  $('#library-options').addEventListener('click', () => front.settings());
-  $('#library-guide').addEventListener('click', () => front.guide());
+  $('#library-options').addEventListener('click', () => front.settings('display',$('#library-options')));
+  $('#library-guide').addEventListener('click', () => front.guide($('#library-guide')));
   $('#library-journal').addEventListener('click', showJournal);
   $('#game-home').addEventListener('click', showTitle);
   $('#game-result-menu').addEventListener('click', showTitle);
@@ -148,12 +148,13 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   $('#title-trailhouse').addEventListener('click', () => openWorkshop('house'));
   for (const id of ['title-workshop','front-workshop','game-workshop-menu']) $(`#${id}`).addEventListener('click', () => openWorkshop());
   $('#title-training').addEventListener('click', openTraining);
-  $('#game-guide-menu').addEventListener('click', () => { $('#game-menu').open = false; front.guide(); });
+  $('#game-guide-menu').addEventListener('click', () => { $('#game-menu').open = false; front.guide($('#game-menu summary')); });
   let optionsReturn = null;
-  $('#game-settings-button').addEventListener('click', () => { optionsReturn = $('#game-menu summary'); $('#game-menu').open = false; front.settings(); });
-  $('#game-shell-options').addEventListener('click', () => { optionsReturn = $('#game-shell-options'); front.settings(); });
-  $('#game-settings-dialog').addEventListener('close', () => { if (active && !outsideBoard()) (optionsReturn || $('#game-menu summary')).focus({ preventScroll: true }); });
-  $('#game-guide-dialog').addEventListener('close', () => { if (active && !outsideBoard()) $('#game-menu summary').focus({ preventScroll: true }); });
+  $('#game-settings-button').addEventListener('click', () => { optionsReturn = $('#game-menu summary'); $('#game-menu').open = false; front.settings('display',optionsReturn); });
+  $('#game-shell-options').addEventListener('click', () => { optionsReturn = $('#game-shell-options'); front.settings('display',optionsReturn); });
+  function restoreBoardFocus(dialog,target){const current=document.activeElement;if(active&&!outsideBoard()&&(current===document.body||current===target||dialog.contains(current)))target.focus({preventScroll:true});}
+  $('#game-settings-dialog').addEventListener('close', () => restoreBoardFocus($('#game-settings-dialog'),optionsReturn || $('#game-menu summary')));
+  $('#game-guide-dialog').addEventListener('close', () => restoreBoardFocus($('#game-guide-dialog'),$('#game-menu summary')));
   document.addEventListener('click', event => { if (!event.target.closest('#game-menu')) $('#game-menu').open = false; });
   $('#game-menu').addEventListener('focusout', event => {
     if (event.relatedTarget && !$('#game-menu').contains(event.relatedTarget)) $('#game-menu').open = false;
@@ -561,7 +562,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   });
   function armDash() { if($('#dash-button').disabled)return; dashArmed = !dashArmed; update(); }
   $('#dash-button').addEventListener('click', armDash);
-  $('#game-controls-settings').addEventListener('click',()=>{ mapInput?.cancel(); front.settings('controls'); });
+  $('#game-controls-settings').addEventListener('click',()=>{ optionsReturn=$('#game-controls-settings'); mapInput?.cancel(); front.settings('controls',$('#game-controls-settings')); });
   $('#game-wait').addEventListener('click', () => action('wait'));
   document.querySelectorAll('[data-move]').forEach(button => button.addEventListener('click', () => action(button.dataset.move)));
   $('#game-primary').addEventListener('click', () => {
@@ -615,11 +616,14 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       const current=document.activeElement,index=controls.indexOf(current);
       if(['up','left','down','right'].includes(command)){
         if(current?.tagName==='SELECT'&&['left','right'].includes(command)){current.selectedIndex=Math.max(0,Math.min(current.options.length-1,current.selectedIndex+(command==='left'?-1:1)));current.dispatchEvent(new Event('change',{bubbles:true}));}
+        else if(current?.type==='range'&&['left','right'].includes(command)){const step=Number(current.step)||1;current.value=String(Math.max(Number(current.min)||0,Math.min(Number(current.max)||100,Number(current.value)+(command==='left'?-step:step))));current.dispatchEvent(new Event('input',{bubbles:true}));}
         else{const next=controls[(index+(command==='up'||command==='left'?-1:1)+controls.length)%controls.length];next.focus({preventScroll:true});next.scrollIntoView({block:'nearest'});}
       }else if(command==='interact') (controls.includes(current)?current:controls[0]).click();
       else if(command==='back'){
-        const back=controls.find(node=>/close|cancel|back|keep my|resume|return to/i.test(node.textContent)||/close/i.test(node.getAttribute('aria-label')||''));
-        if(back)back.click();else if(menu.open)menu.open=false;
+        if(dialog){const back=dialog.querySelector('[data-controller-back],button[id$="-close"],button[id$="-cancel"]');if(back&&!back.disabled)back.click();}
+        else if(overlay)$(paused?'#game-primary':'#game-result-menu').click();
+        else if(menu.open){menu.open=false;$('#game-menu summary').focus({preventScroll:true});}
+        else{const back=['#journal-back','#front-back','#ws-home','#training-home','#library-title'].map(selector=>$(selector)).find(node=>node.getClientRects().length&&!node.closest('[hidden]'));back?.click();}
       }
       return;
     }
@@ -653,7 +657,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
   } });
   workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide, onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
-  training = createTrainingUI({ storage, getPreferences:()=>front.preferences, onControls:()=>front.settings('controls'), onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },
+  training = createTrainingUI({ storage, getPreferences:()=>front.preferences, onControls:()=>front.settings('controls',$('#training-controls-settings')), onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },
     onWorkshop(pack) { if (!workshop.acceptDraft(pack)) return false; openWorkshop('build'); return true; } });
   front = createFrontMenu({ storage, sound,
     onMode(mode) { if (mode === 'guild') showGuild(); else expeditions.show(mode); },

@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.20.1 — 2026-10-21
+
+- Audit all game modes, editor tools, sharing, saves, recovery, and responsive
+  views. Add a nineteenth browser-check family for reproduced interface bugs.
+- Fix held training keys scrolling the page; apply held repeat only to movement
+  with a controlled cadence. Wait and interaction stay single-press actions.
+- Make controller Back use explicit close/cancel/navigation controls, preventing
+  dialogue text such as “bring back the light” from selecting a choice. Support
+  the volume slider and stop controller polling cleanly from menu actions.
+- Return guide/options focus to the correct opener in WebKit and other engines,
+  while preserving a newer deliberate focus selection. Protect cancelled
+  training paint gestures, including early pointer-capture release.
+- Fit 320-pixel game navigation labels inside separate buttons. Shorten the
+  narrow world-studio zoom label to Fit. Verify long courier feedback preserves
+  reachable controls through ordinary page scrolling.
+- Refresh stale mapmaker-URL and asynchronous audio test assumptions. Add
+  Firefox/WebKit pointer fallbacks where Chrome-specific touch automation is
+  unavailable, without claiming native device testing.
+- Add clean three-star Nemesis proofs for the first three missions and a
+  polling-stop regression (424 Node tests total). Retain the 73-file build.
+
 ## 0.20.0 — 2026-10-21
 
 - Add a dedicated Controls options page: pad + swipe, pad only, swipe, tap to

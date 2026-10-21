@@ -43,13 +43,13 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
       // Regression: URL navigation must dismiss native modals and retain the conversation state.
       for (let attempt = 0; attempt < 5; attempt++) {
         await clickControl(page, '#game-interact'); const turn = await page.locator('#game-turns').textContent();
-        await page.evaluate(() => { location.hash = ''; }); await page.waitForFunction(() => !document.querySelector('#editor').hidden);
+        await page.evaluate(() => { location.hash = '#mapmaker'; }); await page.waitForFunction(() => !document.querySelector('#editor').hidden);
         assert.equal(await page.locator('#conversation-dialog').isVisible(), false);
         await page.getByRole('button', { name: 'Brush (B)', exact: true }).click();
         await clickControl(page, '#mode-play'); assert.equal(await page.locator('#conversation-dialog').isVisible(), true);
         assert.equal(await page.locator('#game-turns').textContent(), turn); await page.keyboard.press('Escape');
       }
-      await inspect(page); await clickControl(page, '#game-inspect'); await page.evaluate(() => { location.hash = ''; });
+      await inspect(page); await clickControl(page, '#game-inspect'); await page.evaluate(() => { location.hash = '#mapmaker'; });
       await page.waitForFunction(() => !document.querySelector('#editor').hidden); assert.equal(await page.locator('#forecast-dialog').isVisible(), false);
       await clickControl(page, '#mode-play');
       results.push({ checks: 'Five dialogue/editor/back navigation cycles preserve the conversation without trapping the editor; forecast navigation and Escape consume no turn.' });
@@ -113,7 +113,7 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
       // Camp also has to close on browser navigation without discarding the checkpoint.
       await clickControl(page, '#begin-expedition'); await selectControl(page, '#expedition-length', '9'); await page.locator('#expedition-seed').fill(expedition.config.seed);
       await clickControl(page, '#expedition-start'); await play(page, expedition.legs[0].actions); await clickControl(page, '#game-primary');
-      await page.evaluate(() => { location.hash = ''; }); await page.waitForFunction(() => !document.querySelector('#editor').hidden);
+      await page.evaluate(() => { location.hash = '#mapmaker'; }); await page.waitForFunction(() => !document.querySelector('#editor').hidden);
       assert.equal(await page.locator('#camp-dialog').isVisible(), false); await clickControl(page, '#mode-play'); await clickControl(page, '#game-primary');
       assert.equal(await page.locator('#camp-dialog').isVisible(), true); await clickControl(page, '#camp-cancel');
       assert.deepEqual(errors, []); assert.deepEqual(failures, []);

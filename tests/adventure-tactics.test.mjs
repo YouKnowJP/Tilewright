@@ -216,3 +216,10 @@ test('scout advice follows relay and rescue objectives instead of sending an unf
   assert.match(scoutHint(ready), /Orin lies/);
   const heist = createRun(createCampaign()[4]); assert.match(scoutHint(heist), /Copper bell/);
 });
+
+
+for(const id of ['trail-1','trail-2','trail-3'])test(`introductory mission ${id} has a clean, three-star Nemesis route`,async()=>{
+  const {readFile}=await import('node:fs/promises'),routes=JSON.parse(await readFile(new URL('fixtures/nemesis-routes.json',import.meta.url),'utf8'));
+  const definition=createCampaign().find(stage=>stage.id===id),initial=createRun(definition,{difficulty:'nemesis'}),won=steps(initial,routes[id]);
+  assert.equal(won.status,'won');assert.equal(won.damage,0);assert.equal(resultFor(won).stars,3);assert.equal(missionComplete(won),true);assert.equal(initial.turns,0);
+});

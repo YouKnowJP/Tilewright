@@ -716,3 +716,21 @@ height while making every action reachable by one document scroll on short
 screens. ResizeObserver, window, and visual viewport events refresh the canvas;
 no orientation lock, user-agent sniffing, service worker, or runtime package is
 introduced. The static allowlist adds three assets (73 packaged files total).
+
+
+## Whole-game audit hardening — v0.20.1
+
+Controller Back resolves explicit close/cancel/navigation controls rather than
+matching narrative text. Range inputs use their step/min/max values and dispatch
+the normal input event, so volume persistence shares the existing path. Polling
+checks its running flag after a dispatched menu action to avoid rescheduling a
+loop that was stopped during that action.
+
+Guide/options remember their opener and restore it only when focus is still on
+the body, the opener, or the closed dialog. A deliberate newer focus selection
+is retained. Training suppresses native scrolling for handled repeated keys,
+limits repeat to movement, and cancels interrupted creator clicks before paint.
+The new interface browser family exercises these cases and adds native Nemesis
+wins for the introductory trio using literal action witnesses, with no inventory,
+position, or objective mutation. Other audit harnesses now distinguish Chrome
+CDP touch from portable pointer coverage and await asynchronous audio completion.

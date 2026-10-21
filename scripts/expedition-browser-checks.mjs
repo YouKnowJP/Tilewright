@@ -169,7 +169,9 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
         await page.goto(`${baseURL}/#play`); const fixture = fixtures.find(item => item.id === 'contract-trail-unwarded'); await begin(page, fixture.config);
         await clickControl(page, '#game-interact', true); await clickControl(page, '[data-choice="decoy"]', true); await clickControl(page, '#conversation-close', true);
         await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' }));
-        const controls = await page.locator('.tactical-actions').boundingBox(); assert.ok(controls.y + controls.height <= 844, 'Courier controls visible on a narrow phone.');
+        const turnBeforeScroll=await page.locator('#game-turns').textContent();
+        const board=await page.locator('.game-main').boundingBox(),before=await page.locator('.tactical-actions').boundingBox();assert.ok(before.y+before.height<=board.y+board.height+1,'Courier controls remain inside the board, including long messages.');
+        await page.locator('.tactical-actions').scrollIntoViewIfNeeded();const controls=await page.locator('.tactical-actions').boundingBox();assert.ok(controls.y>=0&&controls.y+controls.height<=844,'Courier controls are fully reachable with ordinary page scrolling.');assert.equal(await page.locator('#game-turns').textContent(),turnBeforeScroll);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
         await clickControl(page, '#game-restart', true);
         // Retry retains learning, so restore the fresh checkpoint using a new ordinary start.

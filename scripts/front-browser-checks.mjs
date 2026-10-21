@@ -110,7 +110,7 @@ export async function checkFrontMenu(browserType, { baseURL = 'http://127.0.0.1:
       assert.equal(await page.locator('#game-turns').textContent(), '1'); assert.equal(await page.locator('#adventure-canvas').getAttribute('aria-label'), before);
       await clickControl(page, '#game-title-menu'); await page.locator('#title-settings').click(); await page.locator('[data-sound="on"]').click();
       await page.waitForFunction(() => document.querySelector('[data-sound="on"]').getAttribute('aria-pressed') === 'true');
-      await page.locator('[data-sound="off"]').click(); assert.equal(await page.locator('[data-sound="off"]').getAttribute('aria-pressed'), 'true');
+      await page.locator('[data-sound="off"]').click(); await page.waitForFunction(()=>document.querySelector('[data-sound="off"]').getAttribute('aria-pressed')==='true');
       results.push({ checks: 'A real expedition remains on the title after reload and resumes at its saved turn/position; sound enables only by explicit input and can be switched off.' });
     } finally { await recovery.close(); }
     for (const failure of ['storage', 'audio']) {

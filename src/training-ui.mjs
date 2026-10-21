@@ -12,7 +12,7 @@ import { serializeAdventure, adventurePlayLink } from './workshop-sharing.mjs';
 export function createTrainingUI({ storage, getPreferences, onControls, onHome, onStory, onWorkshop }) {
   const $ = id => document.getElementById(`training-${id}`), root = $('camp'), canvas = $('map');
   const sessions = new Map(), progress = readTraining(storage);
-  let state = null, renderer = null, saveFailed = false, pointer = null, lastStep = '';
+  let state = null, renderer = null, saveFailed = false, pointer = null, lastStep = '', lastKeyboardMove = 0;
   drawAtlasArt($('play-art'), CHAPTERS[0]); drawAtlasArt($('create-art'), CHAPTERS.find(chapter => chapter.id === 'coast'));
 
   const editing = () => state?.kind === 'create' && state.mode === 'build';
@@ -191,9 +191,11 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
   canvas.addEventListener('keydown', event => {
     if (root.hidden || $('lesson').hidden || event.ctrlKey || event.metaKey || event.altKey) return;
     const direction=movementKey(event.key,getPreferences().keyboardLayout);
-    if(event.repeat&&getPreferences().keyRepeat!=='on')return;
+    const handled=direction||event.code==='Space'||event.key==='Enter'||event.key.toLowerCase()==='e';
+    if(handled)event.preventDefault();
+    if(event.repeat&&(!direction||getPreferences().keyRepeat!=='on'||performance.now()-lastKeyboardMove<160))return;
     if (direction) {
-      event.preventDefault();
+      lastKeyboardMove=performance.now();
       if (editing()) { const [dx, dy] = { up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] }[direction]; state.cursor = { x: Math.max(0, Math.min(9, state.cursor.x + dx)), y: Math.max(0, Math.min(7, state.cursor.y + dy)) }; draw(); }
       else act(direction);
     } else if (event.code === 'Space' || event.key === 'Enter') { event.preventDefault(); if (editing()) paint(state.cursor); else act('wait'); }
@@ -202,10 +204,11 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
   $('talk').addEventListener('cancel', event => { event.preventDefault(); $('talk-close').click(); });
   $('plan-copy').addEventListener('cancel', event => { event.preventDefault(); $('plan-close').click(); });
   canvas.addEventListener('pointerdown', event => { if (!state||!editing()||event.button!==0||event.isPrimary===false) { pointer=null;return; } pointer = { x: event.clientX, y: event.clientY, id: event.pointerId }; canvas.setPointerCapture(event.pointerId); canvas.focus({ preventScroll: true }); });
-  canvas.addEventListener('pointercancel', () => { pointer = null; });
+  for(const type of ['pointercancel','lostpointercapture'])canvas.addEventListener(type,()=>{pointer=null;});
+  window.addEventListener('blur',()=>{pointer=null;});window.addEventListener('resize',()=>{pointer=null;});
   canvas.addEventListener('pointerup', event => {
     if (!pointer || pointer.id !== event.pointerId) return;
-    pointer = null;
+    pointer = null;if(!canvas.hasPointerCapture(event.pointerId))return;
     if (editing()) {
       const rect = canvas.getBoundingClientRect(), point = { x: Math.floor((event.clientX - rect.x) * 10 / rect.width), y: Math.floor((event.clientY - rect.y) * 8 / rect.height) };
       paint(point);

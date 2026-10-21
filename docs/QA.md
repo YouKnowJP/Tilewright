@@ -1,5 +1,68 @@
 # Verification record
 
+## Whole-game audit — v0.20.1
+
+**424 Node tests**, syntax checks, and the **73-file static package** pass.
+The complete Chrome audit covers all **19 browser families**: main menu,
+feedback/layout, journal, training, controls, terrain editor, introductory
+adventures, contracts, sluices, atlas chapters, horizon chapters, Guild,
+Workshop, Puzzle Lab, Storybooks, Trailhouse, creator tools, expeditions,
+and the new interface regressions.
+
+Coverage includes actual ordinary-input winning routes, all 24 authored story
+missions, all Guild specialists, dialogue branches, bells/plates/crates,
+rescue/cargo objectives, both rules where authored fixtures apply, complete
+expeditions and camps, daily options, score/unlock persistence, old/corrupt/full
+storage, cancelled imports, backups, replay proofs, creator history and checks,
+whole-book editing/sharing, village purchases, keepsakes, and the festival.
+The first three missions now additionally have clean, three-star Nemesis
+witnesses, replayed natively in every audited browser engine. Every campaign
+mission has a known winning engine route under both rules from fresh hunter
+memory; the UI checks use the ordinary Forget learned habits control.
+
+The expanded cross-engine checks pass in Chrome **156.0.8078.47**, Firefox
+**156.0**, and WebKit **26.6**. Firefox and WebKit repeat menus, layouts,
+controls, introductory adventures, training, Workshop, Storybooks, Trailhouse,
+and the interface regressions. Chrome runs every family. Firefox omits the
+unsupported isMobile emulation flag while retaining touch input and responsive
+viewport sizes. Chrome uses native CDP touch gestures; other engines use
+captured pointer drags/cancellation plus native browser touchscreen taps.
+
+Reproduced and fixed:
+
+- Holding a training movement key scrolled the document while the one-step
+  preference correctly kept the turn unchanged. Native repeated keydown input
+  now preserves both page position and turns; held Wait does not repeat.
+- Controller Back chose Orin’s “I will bring back the light” option because
+  the handler searched button text. Back now closes the actual dialog and
+  leaves choices untouched. A still selects the choice deliberately. Controller
+  volume adjustment, pause/menu return, and polling shutdown are checked.
+- WebKit did not consistently return focus to pointer-opened guide/options
+  buttons. Explicit opener restoration fixes that without stealing a newer
+  canvas focus when the native close event arrives later.
+- A cancelled training-creator pointer could paint after early capture release.
+  Cancelling, losing capture, resizing, or blurring now abandons the paint click.
+- Storybooks/Quest labels overlapped their adjacent buttons at 320 pixels.
+  Labels fit distinct buttons, and the studio’s narrow zoom choice reads Fit.
+
+Test corrections retain current product behavior: #mapmaker opens the editor;
+the bare address opens the title. Sound checks await asynchronous toggle
+completion. Long courier feedback is allowed to extend the document; controls
+must remain inside the board and become fully visible by ordinary page scrolling
+without a turn. These cases do not truncate text or add a nested control scroll.
+
+Fresh visual review includes title, world studio, book authoring, Trailhouse,
+Guild play, control settings, and large right-hand controls at **320, 390, 820,
+and 1440 pixels**, plus campaign/finale/dialog/share/camp screenshots from the
+full suites. Viewport captures avoid full-page sticky-header screenshot artifacts.
+Small-phone and landscape layouts, large reading text, readable blocked
+feedback, modal bounds, native focus, and no sideways document scrolling are
+covered by the retained and new responsive checks.
+
+All browser saves are disposable. These checks establish the listed tested
+behavior, not universal bug absence; physical devices/controllers, screen
+readers, and every possible player-authored puzzle remain outside this audit.
+
 ## Device and control choices — v0.20.0
 
 **420 Node tests**, syntax checks, and a **73-file static package** pass.

@@ -20,7 +20,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         if (height >= 740) {
           assert.equal(bounds.height, height, 'Normal gameplay should fit the viewport without document scrolling.');
           assert.ok(bounds.controls.bottom <= height && bounds.board.bottom <= height);
-        } else assert.ok(bounds.height <= 704, 'Short phones and landscape keep one bounded document scroll.');
+        } else { assert.ok(bounds.height<=bounds.board.bottom+24,'Short screens use one content-sized page scroll without blank overflow.');assert.ok(bounds.controls.bottom<=bounds.board.bottom+1,'The board contains its controls.'); }
         assert.ok(bounds.canvas.width > 0 && bounds.canvas.height > 0);
         assert.ok(bounds.canvas.left >= bounds.viewport.left && bounds.canvas.right <= bounds.viewport.right);
         assert.ok(bounds.canvas.top >= bounds.viewport.top && bounds.canvas.bottom <= bounds.viewport.bottom);
@@ -45,7 +45,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         assert.equal(feedback.clipped, false); assert.ok(feedback.status.bottom <= feedback.controls.top + 1, 'Feedback belongs between the map and controls.');
         assert.equal(feedback.width, width);
         if (height >= 740) { assert.equal(feedback.height, height); assert.ok(feedback.controls.bottom <= height); }
-        else assert.ok(feedback.height <= 704);
+        else assert.ok(feedback.height<=feedback.controls.bottom+24,'Long feedback uses the page without trailing blank overflow.');
         if (screenshots && [390, 1440].includes(width)) await page.screenshot({ path: `.playwright-mcp/feedback-${width}.png`, fullPage: true });
         // Conversations retain normal interaction and reading consumes no turns.
         await page.keyboard.press('e'); await page.locator('#conversation-dialog').waitFor();

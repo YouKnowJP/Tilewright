@@ -53,6 +53,7 @@ specialist powers keep visible buttons in every movement style.
 
 Training uses your selected movement keys and style. When building in the
 training lesson, movement keys move the paint cursor and Space paints.
+Interrupted creator clicks are cancelled rather than painted.
 Creator tools outside training retain their own displayed editing shortcuts.
 
 ## Optional controllers
@@ -79,7 +80,7 @@ Holding a controller button or stick does not repeat turns. Release and press
 again for the next action. On connecting, refocusing, or returning from a hidden
 tab, held controls are ignored until a fresh press. A Back press that closes
 a menu does not also spend a wait turn. In menus use up/down to change focus;
-left/right adjust a focused select. Bottom face chooses it. Pause and result
+left/right adjust a focused select or volume slider. Bottom face chooses it. Pause and result
 panels support the same menu navigation.
 
 The HTTPS play link and localhost preview can use the browser’s Gamepad API.

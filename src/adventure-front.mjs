@@ -4,7 +4,7 @@ import { loadPreferences, savePreferences } from './adventure-preferences.mjs';
 
 export function createFrontMenu({ storage, sound, onMode, onContinue, onResumeExpedition, onMapmaker, onCustomMap, onPreferences, getJournal, onDestination, onChoose }) {
   const $ = selector => document.querySelector(selector);
-  let preferences = loadPreferences(storage), guidePage = 0, soundBusy = false;
+  let preferences = loadPreferences(storage), guidePage = 0, soundBusy = false, guideReturn = null, settingsReturn = null;
   const guide = $('#game-guide-dialog'), settings = $('#game-settings-dialog');
   drawTitleArt($('#title-scenery'));
   document.querySelectorAll('[data-mode-art]').forEach(canvas => drawAtlasArt(canvas, CHAPTERS.find(theme => theme.id === canvas.dataset.modeArt), 0));
@@ -102,7 +102,9 @@ export function createFrontMenu({ storage, sound, onMode, onContinue, onResumeEx
     $('#journal-save-note').textContent = data.saveUnavailable ? 'Your accomplishments are available for this visit. Browser saving is unavailable; keep this tab open.' : 'Your accomplishments stay in this browser. Replay a trail, try another specialist, or follow a new seed.';
     journalTab('overview'); window.scrollTo(0, 0); $('#journal-title').focus({ preventScroll: true });
   }
-  function openGuide() { guidePage = 0; renderGuide(); guide.showModal(); }
+  function restoreFocus(target,dialog) { const current=document.activeElement;if(current!==document.body&&current!==target&&!dialog.contains(current))return;if(target?.getClientRects().length&&!target.closest('[hidden]'))target.focus({preventScroll:true}); }
+  guide.addEventListener('close',()=>restoreFocus(guideReturn,guide));settings.addEventListener('close',()=>restoreFocus(settingsReturn,settings));
+  function openGuide(trigger) { guideReturn=trigger||document.activeElement;guidePage = 0; renderGuide(); guide.showModal(); }
   function renderGuide() {
     document.querySelectorAll('.guide-page').forEach((page, i) => { page.hidden = i !== guidePage; });
     $('#guide-page-count').textContent = `${guidePage + 1} / 3`;
@@ -116,7 +118,7 @@ export function createFrontMenu({ storage, sound, onMode, onContinue, onResumeEx
   $('#title-mapmaker').addEventListener('click', onMapmaker);
   $('#front-custom').addEventListener('click', onCustomMap);
   document.querySelectorAll('[data-front-mode]').forEach(button => button.addEventListener('click', () => button.dataset.frontMode === 'mapmaker' ? onMapmaker() : onMode(button.dataset.frontMode)));
-  $('#title-guide').addEventListener('click', openGuide);
+  $('#title-guide').addEventListener('click',()=>openGuide($('#title-guide')));
   $('#title-journal').addEventListener('click', journal); $('#journal-back').addEventListener('click', home);
   $('#journal-new-expedition').addEventListener('click', () => onDestination({ mode: 'expeditions' }));
   document.querySelectorAll('.journal-tabs button').forEach(tab => {
@@ -131,9 +133,9 @@ export function createFrontMenu({ storage, sound, onMode, onContinue, onResumeEx
   $('#guide-next').addEventListener('click', () => { guidePage++; renderGuide(); });
   $('#guide-choose').addEventListener('click', () => { guide.close(); onChoose(); modes(); });
   $('#guide-close').addEventListener('click', () => guide.close());
-  $('#title-settings').addEventListener('click', () => openSettings());
+  $('#title-settings').addEventListener('click', () => openSettings('display',$('#title-settings')));
   function settingsTab(page) { for(const id of ['display','controls']) { $(`#settings-${id}`).hidden=id!==page; $(`#settings-tab-${id}`).setAttribute('aria-pressed',String(id===page)); } }
-  function openSettings(page='display') { renderSound(); settingsTab(page); settings.showModal(); settings.scrollTop=0; }
+  function openSettings(page='display',trigger) { settingsReturn=trigger||document.activeElement;renderSound(); settingsTab(page); settings.showModal(); settings.scrollTop=0; }
   for(const id of ['display','controls']) $(`#settings-tab-${id}`).addEventListener('click',()=>settingsTab(id));
   for(const [id,field] of [['controls-style','controls'],['keyboard-layout','keyboardLayout'],['pad-side','padSide'],['control-size','controlSize'],['key-repeat','keyRepeat'],['gamepad','gamepad']]) $(`#settings-${id}`).addEventListener('change',event=>remember({[field]:event.target.value}));
   $('#settings-close').addEventListener('click', () => settings.close());
