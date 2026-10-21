@@ -230,8 +230,20 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
 
   function resize() {
     if (!renderer || !active || viewport.clientWidth < 1) return;
+    fitBookBoard();
     renderer.resize(Math.max(80, viewport.clientWidth - 32), Math.max(80, viewport.clientHeight - 32));
     renderer.draw(); renderer.drawMinimap($('#game-minimap'));
+  }
+
+  function fitBookBoard() {
+    const layout=$('#game-layout');
+    if(!run?.stage.workshop?.storybook || layout.hidden) { layout.style.minHeight=''; return; }
+    const main=$('.game-main'), style=getComputedStyle(main);
+    const fixed=[...main.children].filter(element=>element!==viewport).reduce((height,element)=>{
+      const css=getComputedStyle(element);return height+(css.display==='none'?0:element.getBoundingClientRect().height+(parseFloat(css.marginTop)||0)+(parseFloat(css.marginBottom)||0));
+    },0);
+    const minimum=Math.max(620,Math.ceil(fixed+(parseFloat(getComputedStyle(viewport).minHeight)||170)+(parseFloat(style.borderTopWidth)||0)+(parseFloat(style.borderBottomWidth)||0)));
+    const value=`${minimum}px`;if(layout.style.minHeight!==value)layout.style.minHeight=value;
   }
 
   function animate(time) {
@@ -271,7 +283,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     const theme = themeFor(stage), book = workshop.bookStatus(run);
     $('#game-map-legend').textContent = run.guild ? 'Gold is you; turquoise is the beacon. Purple squares are waystones; white outlines are wheels and bells. A pale blue double marks your return point.' : 'Gold is you. Turquoise is the beacon. Outlined squares are discovered wheels and bells.';
     $('.game-main').style.setProperty('--region-color', theme.dark);
-    $('#game-region').textContent = stage.workshop ? `${theme.place} / ${stage.workshop.practice ? 'Practice run' : 'Player adventure'} / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
+    $('#game-region').textContent = book ? stage.workshop.storybook.title : stage.workshop ? `${theme.place} / ${stage.workshop.practice ? 'Practice run' : 'Player adventure'} / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
     document.body.classList.toggle('guild-active', Boolean(run.guild));
     $('#game-power').hidden = !run.guild; $('#game-guild-kit').hidden = !run.guild;
     if (run.guild) {
@@ -297,7 +309,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     const journey = expeditions?.session;
     $('#game-difficulty').disabled = Boolean(journey || book && !libraryOpen());
     $('#game-book-banner').hidden = !book;
-    if(book) { $('#game-book-banner').textContent = `${book.name} · ${book.detail}${book.bonus ? ' · Optional honor' : ''}`; $('#game-book-banner').dataset.missed = String(!book.condition); }
+    if(book) { $('#game-book-banner').textContent = `${book.name} · ${book.detail}`; $('#game-book-banner').dataset.missed = String(!book.condition); }
     $('#game-expedition-banner').hidden = !journey; $('#game-expedition-kit').hidden = !journey;
     document.body.classList.toggle('expedition-active', Boolean(journey));
     if (journey) {
@@ -309,7 +321,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     $('#game-cargo').hidden = !stage.relic; $('#game-cargo').disabled = !run.carrying || paused || run.status !== 'playing';
     $('#game-cargo').textContent = run.cargoDelivered ? 'Relic delivered' : run.carrying ? 'Set relic down (X)' : 'Relic on trail';
     $('#game-restart').disabled = Boolean(journey && ['camp', 'won'].includes(journey.phase) || book && run.status === 'won');
-    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : book ? book.label : stage.workshop ? 'Adventure Workshop' : run.guild ? stage.subtitle : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
+    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : book ? `Chapter ${stage.workshop.storybook.chapter+1}/${stage.workshop.storybook.length}` : stage.workshop ? 'Adventure Workshop' : run.guild ? stage.subtitle : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
     $('#game-story').textContent = stage.intro;
     $('#game-lanterns').textContent = `${run.collectedLanterns.length}/${stage.lanterns.length}`;
     $('#game-turns').textContent = run.turns;
@@ -419,12 +431,12 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       if (stage.workshop.practice) $('#game-result-text').textContent = `Practice complete in ${result.turns} turns. ${workshopClearNote}`;
       $('#game-primary').textContent = workshop.returnSection === 'build' ? 'Return to your designer' : workshop.returnSection === 'lab' ? 'Back to Puzzle Lab' : 'Back to player adventures';
     }
-    if(book && result && !paused) { $('#game-result-eyebrow').textContent = 'A PAGE OF YOUR JOURNEY, RESTORED'; $('#game-result-text').textContent = `${result.score} chapter points · ${result.turns} turns. ${workshopClearNote}`; $('#game-primary').textContent = 'Turn the page →'; }
+    if(book && result && !paused) { $('#game-result-eyebrow').textContent = 'A PAGE OF YOUR JOURNEY, RESTORED'; $('#game-result-text').textContent = `${stage.workshop.source==='Storybook original' ? stage.ending+' ' : ''}${result.score} chapter points · ${result.turns} turns. ${workshopClearNote}`; $('#game-primary').textContent = 'Turn the page →'; }
     if (result && !paused && (book ? !book.saved : stage.workshop ? workshop.saveFailed : journey ? expeditions.checkpointFailed : run.guild ? guildSaveFailed : saveFailed)) {
       $('#game-result-text').textContent += ' Saving unavailable. Keep this tab open to retain this result.';
     }
     $('#game-nemesis').hidden = Boolean(journey) || paused || run.status !== 'won' || !stage.actFinal || difficulty !== 'trail';
-    renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
+    fitBookBoard();renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
   }
 
   function journeyLabel() { return expeditions?.session ? 'Beyond the atlas / Seeded expedition' : 'Your own world / Custom adventure'; }

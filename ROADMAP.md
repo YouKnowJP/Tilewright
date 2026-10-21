@@ -57,6 +57,16 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Original Storybook chapters completed — v0.18
+
+- Two four-chapter stories, eight original maps, recurring keeper dialogue,
+  chapter endings, rereadable restored pages, and book epilogues.
+- Alternate crossings, echo/crate solutions, waystone cargo travel, quiet and
+  guarded-treasure routes, and multi-keeper finales. Real clean winning routes
+  meet both rule sets’ speed targets. Worlds can join custom player books.
+- The three older books remain available. This content expansion does not
+  change the unfinished editor estimates. See [new stories](docs/NEW_STORIES.md).
+
 ## Connected adventures completed — v0.17
 
 - Three Storybooks connect existing Puzzle Lab worlds with new story scenes,

@@ -629,3 +629,28 @@ native downloads, imports, replacement confirmation, and truthful save failure.
 `storybook-worlds.mjs` frames existing Lab worlds with original stories and
 attainable authored turn targets. The ordinary game engine still runs each map.
 The public package adds three modules and one stylesheet (63 total files).
+
+
+## Original story chapters — v0.18
+
+`storybook-adventures.mjs` authors eight distinct 16×12 to 22×16 world layouts
+through the existing adventure schema. `story-adventure-clears.mjs` supplies
+ordinary-action clean routes and pars attained on both rules; it introduces no
+new save schema, hidden gameplay state, or alternate turn engine. Existing
+mechanisms provide dialogue choices, channels, timed doubles, cargo, waystones,
+rescue, cover, and adaptive pursuit. The stealth chapter has a quiet fern route
+and a separately tested guarded-treasure route.
+
+`storybook-worlds.mjs` appends two four-chapter books without changing the older
+books or their keys. The library shows original-story covers first while
+retaining stable IDs. The book creator also receives all eight original worlds
+as independent sources. Completion exposes each original map’s authored ending;
+restored-page disclosures retain its opening and ending using text nodes.
+Public assets add two data modules; the static build contains 65 files.
+
+Book gameplay uses a compact chapter subtitle and goal ribbon. On short screens,
+redundant region metadata is hidden; the book board's minimum height accounts
+for fixed controls, feedback, and the map's minimum size. It grows the ordinary
+page instead of clipping controls into a hidden internal scroll. Non-book modes
+clear that minimum-height override. Native phone checks verify the complete
+control row fits inside the board, including the five-action rescue finale.

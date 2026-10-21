@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
-export const PUBLIC_FILES = Object.freeze(['index.html', 'style.css', 'adventure.css', 'front.css', 'game-theme.css', 'workshop.css', 'storybook.css', 'src/storybook-model.mjs', 'src/storybook-worlds.mjs', 'src/storybook-ui.mjs', 'studio.css', 'training.css', 'src/training-model.mjs', 'src/training-ui.mjs', 'src/creator-guide.mjs', 'src/mapmaker-shell.mjs',
+export const PUBLIC_FILES = Object.freeze(['index.html', 'style.css', 'adventure.css', 'front.css', 'game-theme.css', 'workshop.css', 'storybook.css', 'src/storybook-model.mjs', 'src/storybook-worlds.mjs', 'src/storybook-adventures.mjs', 'src/story-adventure-clears.mjs', 'src/storybook-ui.mjs', 'studio.css', 'training.css', 'src/training-model.mjs', 'src/training-ui.mjs', 'src/creator-guide.mjs', 'src/mapmaker-shell.mjs',
   'src/workshop-model.mjs', 'src/workshop-sharing.mjs', 'src/workshop-library.mjs', 'src/workshop-worlds.mjs', 'src/workshop-art.mjs', 'src/workshop-designer.mjs', 'src/workshop-ui.mjs', 'src/workshop-clears.mjs', 'src/workshop-lab.mjs', 'src/workshop-lab-clears.mjs', 'icon.svg', 'LICENSE', 'src/adventure-journal.mjs', 'src/adventure-front.mjs', 'src/adventure-preferences.mjs', 'src/adventure-atlas-levels.mjs', 'src/adventure-horizon-levels.mjs', 'src/adventure-art.mjs', 'src/adventure-guild.mjs', 'src/adventure-tools.mjs',
   'src/bootstrap.mjs', 'src/app.mjs', 'src/model.mjs', 'src/sample.mjs', 'src/render.mjs', 'src/storage.mjs',
   'src/viewport.mjs', 'src/icons.mjs', 'src/operations.mjs', 'src/adventure.mjs', 'src/adventure-levels.mjs', 'src/adventure-mechanisms.mjs', 'src/adventure-intel.mjs', 'src/adventure-sluice-levels.mjs',

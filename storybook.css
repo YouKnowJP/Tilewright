@@ -60,3 +60,9 @@
 #ws-books[data-reading="true"] .book-camp { margin-top:16px; }
 .book-cover h4,.book-camp h4,.book-chapter h4,.book-cover-copy>p { overflow-wrap:anywhere; }
 @media(max-width:480px) { .book-challenges button:not([aria-pressed="true"]) p { display:none; } .book-challenges strong { font-size:16px; } }
+
+.book-cover-3 { border-left-color:#9fc3ae; background:linear-gradient(135deg,#2c4b42,#18352f); }
+.book-cover-4 { border-left-color:#b2a3ce; background:linear-gradient(135deg,#3c3a55,#1b303b); }
+.book-restored-page { border-top:1px solid #526d4d; }
+#book-receipts .book-page-story { border:0; padding:8px 0; color:#e4e8cc; font:16px/1.8 Georgia,serif; white-space:pre-line; overflow-wrap:anywhere; }
+@media(max-height:700px) { .game-main:has(#game-book-banner:not([hidden])) .game-region { display:none; } }

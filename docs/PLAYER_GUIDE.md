@@ -90,8 +90,9 @@ it through **Workshop → Import & play**. Publicly hosted copies can also make
 smaller play links. A local computer’s address cannot serve as a public play
 link. See [the Workshop guide](WORKSHOP.md) for object rules and limits.
 
-For a longer road, **Workshop → Storybooks** links worlds into a chaptered
-journey. Read each scene, choose an optional promise, and turn the page after
+For a longer road, **Workshop → Storybooks** includes two new four-chapter
+stories with eight original levels, plus three journeys through Puzzle Lab.
+[Meet the keepers and new chapters](NEW_STORIES.md). Read each scene, choose an optional promise, and turn the page after
 finishing. Missing an honor never blocks your story. Bind two to six of your
 own worlds, write scenes, and share a `.storybook.json` file. Camps retain
 completed chapters; reloading restarts the open chapter. [Storybooks guide](STORYBOOKS.md).

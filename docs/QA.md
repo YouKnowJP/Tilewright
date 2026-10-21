@@ -1,5 +1,44 @@
 # Verification record
 
+## Eight original chapters — v0.18.0
+
+**374 Node tests**, syntax checks, and a **65-file static package** pass.
+Thirty-two new content tests cover sixteen clean world/rule wins, eight clean
+alternate-route/rule wins, actual exported-proof replay, original book bundles,
+attainable speed honors, wrong-note recovery, sluice dependencies, echo/crate
+solutions, six waystone jumps with delivered cargo, multi-keeper finales,
+quiet/exposed hunter behavior, and independent world snapshots. The existing
+book tests also add four cases for the two new books on both rules.
+
+The extended Storybooks suite completes all **five books on both rules** with
+native Chrome input: 40 chapter wins, including all sixteen new level/rule
+combinations. It reads original chapter endings and reopens restored pages to
+verify opening scenes and endings. Four alternate solutions on both rules earn
+voice, treasure, or no-power honors through real play. Clean clears, whole-book
+records, and existing-mode saves remain separate.
+
+Two further full touch playthroughs complete The Rainmaker’s Letters at 390×844
+and The Observatory of Borrowed Stars on Nemesis at 320×568, including all eight
+new chapters, dialogue, deliveries, rescues, and final epilogues. Six retained
+responsive widths verify library/creator navigation, every new authoring source,
+shared files, and unchanged ordinary saves. Blocked, quota-like, and damaged
+storage cases remain playable with appropriate feedback.
+
+Screenshot review found a short-phone finale could clip the bottom controls
+and retain an invisible internal scroll. Compact chapter metadata and a board
+minimum based on real controls/feedback fix the issue. Phone assertions now
+verify controls remain inside the board; short displays use ordinary page
+scrolling. Original-game layout and title/options/navigation regressions pass.
+
+This verifies the listed Chrome 156.0.8078.47 flows and sizes; physical devices,
+other engines, assistive-technology certification, and arbitrary player-made
+puzzle solvability remain outside the claim. It does not establish universal
+bug freedom or player enjoyment. Book checkpoints remain at chapter boundaries.
+
+![The new story library](new-story-library.png)
+
+![A rescue finale on a short phone](new-story-finale-phone.png)
+
 ## Storybooks and chapter promises — v0.17.0
 
 **338 Node tests**, syntax checks, and a **63-file static package** pass.

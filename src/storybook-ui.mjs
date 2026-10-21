@@ -23,11 +23,11 @@ export function createStorybookUI({ storage, getWorlds, getDraft, onPlay }) {
   function paragraph(value, cls = '') { const element = document.createElement('p'); element.textContent = value; element.className = cls; return element; }
   function heading(value, tag = 'h4') { return Object.assign(document.createElement(tag), { textContent: value }); }
   function renderCovers() {
-    $('covers').replaceChildren(...books.map((book, index) => {
+    $('covers').replaceChildren(...books.map((book,index)=>({book,index,original:book.chapters.every(chapter=>chapter.world.source==='Storybook original')})).sort((a,b)=>Number(b.original)-Number(a.original)).map(({book,index,original}) => {
       const card = document.createElement('article'), art = document.createElement('canvas'), copy = document.createElement('div'), actions = document.createElement('div');
       card.className = `book-cover book-cover-${index}`; card.dataset.bookCover = String(index); art.setAttribute('aria-hidden', 'true'); drawWorkshopWorld(art, book.chapters[0].world, { thumbnail: true }); copy.className = 'book-cover-copy'; actions.className = 'book-actions';
       const best = state.records[`${bookKey(book)}-${$('rules').value}`];
-      copy.append(paragraph(`${String(index + 1).padStart(2, '0')} / ${book.chapters.length} CHAPTERS`, 'title-kicker'), heading(book.title), paragraph(book.synopsis), paragraph(best ? `Best on ${$('rules').value}: ${best.honors} honors · ${best.score} points` : 'Puzzle Lab worlds woven into a longer journey.', 'ws-footnote'));
+      copy.append(paragraph(`${original?'NEW STORY':String(index + 1).padStart(2, '0')} / ${book.chapters.length}${original?' ORIGINAL':''} CHAPTERS`, 'title-kicker'), heading(book.title), paragraph(book.synopsis), paragraph(best ? `Best on ${$('rules').value}: ${best.honors} honors · ${best.score} points` : original ? 'New maps, keeper stories, and optional paths to explore.' : 'Puzzle Lab worlds woven into a longer journey.', 'ws-footnote'));
       actions.append(button('Read this book', () => startBook(book), 'front-primary'), button('Make your version', () => replaceDraft(book))); copy.append(actions); card.append(art, copy); return card;
     }));
   }
@@ -52,7 +52,9 @@ export function createStorybookUI({ storage, getWorlds, getDraft, onPlay }) {
     $('checkpoint-note').textContent = done ? 'Your full-book best is recorded for this book version and rule set. Try different chapter challenges on your next reading.' : session.phase === 'playing' ? 'This chapter is underway. Entering from here begins it again; completed chapters remain saved. Use Main menu → Continue to return to a run still open in this tab.' : 'Choose one optional challenge. It never blocks the story. Supplies and hunter habits start fresh in each chapter.';
     $('receipts').replaceChildren(...session.receipts.map(receipt => {
       const chapter = session.book.chapters[receipt.chapter], offer = chapterChallenges({ ...bookStage({ ...session, phase: 'interlude', chapter: receipt.chapter }) }, session.difficulty).find(item => item.id === receipt.challenge);
-      return paragraph(`${receipt.chapter + 1}. ${chapter.world.title} · ${receipt.turns} turns · ${receipt.score} points${receipt.challenge === 'wander' ? ' · Story followed' : ` · ${offer.name}: ${receipt.earned ? 'honor earned' : 'another route to try'}`}`);
+      const page=document.createElement('details'),summary=document.createElement('summary');page.className='book-restored-page';
+      summary.textContent=`${receipt.chapter + 1}. ${chapter.world.title} · ${receipt.turns} turns · ${receipt.score} points`;
+      page.append(summary,paragraph(chapter.passage||chapter.world.intro,'book-page-story'),paragraph(chapter.world.ending||'Another light restored.','book-page-story'),paragraph(receipt.challenge === 'wander' ? 'Story followed' : `${offer.name}: ${receipt.earned ? 'honor earned' : 'another route to try'}`));return page;
     }));
     $('receipts-details').hidden = !session.receipts.length;
   }

@@ -13,7 +13,8 @@ The **Adventure Workshop** adds three authored adventures, six playable Puzzle L
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
-creator for portable two-to-six-chapter adventures.
+creator for portable two-to-six-chapter adventures. Two new stories add **eight
+original levels**, recurring keepers, alternate solutions, and readable endings.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
@@ -37,8 +38,12 @@ publishing details.
 
 ## A longer road to make your own
 
-Open **Workshop → Storybooks**. Three books weave Puzzle Lab worlds into
-journeys of three, three, and six chapters, with new connecting scenes. At each
+Open **Workshop → Storybooks**. **The Rainmaker’s Letters** follows Nessa,
+Moss, and Ori through four original maps to bring rain back to a town.
+**The Observatory of Borrowed Stars** adds four more original chapters of echo
+bridges, island travel, stealth, and a shared-star rescue finale. The three
+previous books still weave Puzzle Lab worlds into longer journeys. Read the
+[new stories guide](docs/NEW_STORIES.md) for chapter descriptions and route ideas. At each
 camp, choose an optional promise: a clean finish, a timely arrival, every
 optional treasure or guide, or a puzzle solved without specialist powers.
 Earn honors and bonus points; a missed promise never blocks the story.
@@ -49,7 +54,7 @@ friend to import. Completed chapters save at camp; reloading restarts the open
 chapter. Book bests, creator drafts, and other modes remain separate.
 See the [Storybooks guide](docs/STORYBOOKS.md).
 
-![A chapter camp](docs/storybook-camp.png)
+![The new story library](docs/new-story-library.png)
 
 ## Learn by playing
 
@@ -465,7 +470,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 338 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 374 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and

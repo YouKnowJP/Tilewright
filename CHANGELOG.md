@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.18.0 — 2026-10-20
+
+- Add The Rainmaker’s Letters and The Observatory of Borrowed Stars: two
+  four-chapter stories with eight original maps, recurring keepers, opening
+  scenes, chapter endings, and final epilogues.
+- Add postal deliveries with alternate crossings, a three-bank sluice circuit,
+  a four-note seed orchard, a two-keeper rainseed rescue, echo/crate solutions,
+  three-island waystone travel, a quiet/treasure stealth choice, and a linked
+  counterweight-and-bell finale. Include verified clean clears and attainable
+  speed targets on Trail and Nemesis.
+- Put the new story covers first. Make all eight world snapshots available to
+  custom book authors. Keep the three earlier books and their identities intact.
+- Show original chapter endings on completion. Let players reread completed
+  openings and endings from restored pages at any later camp.
+- Keep short-phone headings and action rows visible; size the book board for
+  its feedback and controls, with one page scroll when necessary.
+- Add 32 level/alternate/format/puzzle tests and four full-book rule cases
+  (374 total). Extend Chrome checks to all five books, alternate solutions,
+  two complete touch stories, and six responsive layouts. Package 65 files.
+
 ## 0.17.0 — 2026-10-20
 
 - Add Storybooks: three connected journeys of three, three, and six chapters

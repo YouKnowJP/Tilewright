@@ -10,6 +10,7 @@ import { createRun, stepRun, resultFor } from './adventure.mjs';
 import { freshMemory } from './adventure-brain.mjs';
 import { createAdventureRenderer } from './adventure-render.mjs';
 import { WORKSHOP_CLEARS } from './workshop-clears.mjs';
+import { STORY_LEVELS, storyAdventure } from './storybook-adventures.mjs';
 import { createStorybookUI } from './storybook-ui.mjs';
 import { LAB_ROOMS, puzzleLabWorld, designSpark, cursorPractice } from './workshop-lab.mjs';
 
@@ -23,7 +24,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   const verified = new Map();
   const notice = (text,error=false) => { $('status').textContent=text; $('status').dataset.error=String(error); };
   const designer = createWorkshopDesigner({ initial:restoredDraft || blankAdventure(), onChange(pack) { draftTouched=true; saved=saveWorkshopDraft(storage,pack); draftState(pack); }, notice });
-  const books = createStorybookUI({ storage, getWorlds: () => [...featured, ...LAB_ROOMS.map(room => puzzleLabWorld(room.id)), ...entries], getDraft: () => designer.get(), onPlay(stage,rules) { activePlay={book:true,origin:'books'}; hide(); onPlay(stage,rules); } });
+  const books = createStorybookUI({ storage, getWorlds: () => [...featured, ...LAB_ROOMS.map(room => puzzleLabWorld(room.id)), ...STORY_LEVELS.map(level => storyAdventure(level.id)), ...entries], getDraft: () => designer.get(), onPlay(stage,rules) { activePlay={book:true,origin:'books'}; hide(); onPlay(stage,rules); } });
   function draftState(pack = designer.get()) { $('draft-state').textContent = `${pack.map.width} × ${pack.map.height} · ${pack.markers.length}/128 objects · ${draftTouched ? saved ? 'Draft saved' : 'Saving unavailable — export a backup' : 'A new canvas'}${pack.proof ? ` · Clear attached (${pack.proof.difficulty})` : ' · Playtest to record a clear'}`; }
   const guard = fn => { try { return fn(); } catch(error) { notice(error.message,true); return null; } };
   function close(id) { if ($(id).open) $(id).close(); }

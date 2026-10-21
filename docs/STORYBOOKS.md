@@ -1,9 +1,11 @@
 # Storybooks: a road between worlds
 
 Choose **Adventure Workshop → Storybooks** from the main menu. Read a book's
-opening scene before entering its first chapter. Three featured books weave
-the six existing Puzzle Lab worlds into journeys of three, three, and six
-chapters, with new connecting stories and tighter speed targets.
+opening scene before entering its first chapter. Five featured books are available.
+**The Rainmaker’s Letters** and **The Observatory of Borrowed Stars** each add
+four original maps and a complete new story. The three earlier books weave the
+six Puzzle Lab worlds into journeys of three, three, and six chapters.
+See [the new story guide](NEW_STORIES.md) for all eight original levels.
 
 At each camp choose one optional promise:
 
@@ -22,13 +24,15 @@ that world's puzzle requires it. The gameplay ribbon tracks your chosen goal;
 **Turn the page** returns to camp after a win. Completed chapter receipts and
 full-book bests are separate from ordinary Workshop results and creator clears.
 Full-book bests favor honors, then points, then fewer turns, separately for
-each book version and Trail/Nemesis rules.
+each book version and Trail/Nemesis rules. **Pages you have restored** also
+lets you open a completed chapter to reread its opening scene and ending.
 
 ## Bind your own journey
 
 Select **Bind your own story** or **Make your version** on a featured book.
 Write a title, creator name, invitation, and ending. Add **two to six worlds**
-from your saved shelf, featured adventures, Puzzle Lab, or current World studio
+from your saved shelf, featured adventures, Puzzle Lab, the eight original
+Storybook levels, or current World studio
 draft. Add a short scene before each chapter, move chapters earlier or later,
 and remove any you no longer need. A world must pass structural checks before
 it can join a book; a completed playtest is still the reliable way to prove its
