@@ -1,5 +1,47 @@
 # Verification record
 
+## The Trailhouse — v0.19.0
+
+**409 Node tests**, syntax checks, and a **70-file static package** pass.
+Thirty-five new model cases execute every commission on Trail and Nemesis,
+exercise alternate-route failures, verify the original festival on both rules,
+and check non-farmable rewards, bests, all six purchases, immutable snapshots,
+locked content, mode/world guards, passport bounds and contradictions, corrupt
+reads, blocked storage, and quota failures.
+
+The new `trailhouse-browser-checks.mjs` is the seventeenth available browser
+family. Chrome 156.0.8078.47 headless used disposable browser contexts and
+normal keyboard, pointer, and touch input; no in-game state was forced to win.
+Responsive cases use a legitimately earned model passport to inspect the full
+village without repeating every purchase at each viewport.
+
+- Desktop: all twelve commissions on both rules, an ordinary world clear that
+  misses its favor, replay without extra light, live goal ribbon and Quest
+  notes, independent bests, and unchanged unrelated browser saves.
+- Restore all six places with the exact earned balance, read all twelve keeper
+  topics, collect six keepsakes, unlock and complete both festival rule sets,
+  collect the seventh keepsake, and check synchronized challenge selectors.
+- Download the actual passport, reload, import in a fresh browser, preview and
+  cancel without mutation, then confirm an exact restore. Reject malformed and
+  oversized files while preserving progress and unrelated saves.
+- Remix a keeper world into the studio, protect an existing draft on cancel,
+  accept a festival remix, and return to the main menu.
+- Layouts at 320×568, 390×900, 768×900, 1024×900, 1440×900, and 844×390.
+  All three hub sections fit without sideways scrolling. Phone village cards
+  use compact rows, and gameplay controls stay inside the fitted game layout.
+  Both phone widths complete a commission and the festival with native taps.
+- Corrupted, blocked, and full Trailhouse storage: the mode starts, remains
+  playable, keeps earned progress during the visit, and explains backup needs.
+- Retained regressions: title/options/Continue and game feedback/layout across
+  seven viewports; Storybook camp reload, native play, authoring, import/export,
+  optional-honor failures, touch gameplay, six layouts, and save failures.
+
+Village and phone screenshots were visually inspected. These checks cover the
+implemented flows and tested Chrome layouts; they do not establish universal
+bug absence, real-device coverage, or screen-reader verification. No unrelated
+project or user browser save was changed.
+
+
 ## Eight original chapters — v0.18.0
 
 **374 Node tests**, syntax checks, and a **65-file static package** pass.

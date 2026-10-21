@@ -57,6 +57,16 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## A home between adventures completed — v0.19
+
+- Twelve goal-based commissions reuse original story worlds with alternate
+  routes, treasure hunts, clean rescues, and specialist restrictions.
+- Six restoration choices, changing village art, twelve conversation topics,
+  seven keepsakes, portable progress passports, and protected studio remixes.
+- An unlockable original festival with songs, a pond crossing, three rescues,
+  optional exploration, and both rule sets. See [The Trailhouse](docs/TRAILHOUSE.md).
+- This expansion is complete and excluded from the unfinished editor estimates.
+
 ## Original Storybook chapters completed — v0.18
 
 - Two four-chapter stories, eight original maps, recurring keeper dialogue,

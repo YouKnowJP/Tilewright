@@ -15,6 +15,8 @@ playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
 creator for portable two-to-six-chapter adventures. Two new stories add **eight
 original levels**, recurring keepers, alternate solutions, and readable endings.
+The **Trailhouse** adds twelve keeper commissions, a village with six restoration
+projects, seven keepsakes, and an unlockable original lantern-festival adventure.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
@@ -25,7 +27,7 @@ accounts, or backend.
 **[Open Lantern Trails](https://youknowjp.github.io/Personal-Project/#play)** —
 play directly in your browser on a computer, tablet, or phone. No download,
 installation, terminal commands, or account is needed. Choose a story, Guild
-job, expedition, or Workshop adventure from the title screen.
+job, expedition, Workshop adventure, or The Trailhouse from the title screen.
 
 Mapmaker and the Adventure Workshop run on the same website. Share smaller
 adventures with a play link, or send an adventure file/code for a friend to
@@ -35,6 +37,16 @@ Localhost saves are separate from the public website's saves.
 
 See [hosting and sharing](docs/HOSTING.md) for automatic updates and developer
 publishing details.
+
+## A home between adventures
+
+Choose **The Trailhouse** to earn village light through twelve keeper favors.
+Try alternate routes, collect guarded treasures, or solve a crossing without
+powers. Restore six places in your own order, talk with their keepers, collect
+keepsakes, and unlock **A Night of Borrowed Lights**, an original festival
+adventure. Remix keeper worlds and the completed festival in the creator studio.
+Download a passport to carry your village to another browser.
+[Trailhouse guide](docs/TRAILHOUSE.md).
 
 ## A longer road to make your own
 
@@ -470,7 +482,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 374 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 409 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and

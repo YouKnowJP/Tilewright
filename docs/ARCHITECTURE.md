@@ -654,3 +654,32 @@ for fixed controls, feedback, and the map's minimum size. It grows the ordinary
 page instead of clipping controls into a hidden internal scroll. Non-book modes
 clear that minimum-height override. Native phone checks verify the complete
 control row fits inside the board, including the five-action rescue finale.
+
+
+## Trailhouse activity hub — v0.19
+
+`trailhouse-content.mjs` defines twelve commissions, six village projects with
+keeper conversations and keepsakes, and an original festival world with a
+verified action journal. Commissions reuse canonical original Storybook world
+snapshots; they add independent completion conditions rather than modifying the
+engine or their source levels. The festival is a separate 18×14 world.
+
+`trailhouse-model.mjs` evaluates actual run state and awards three light once
+per commission across both rules. It verifies canonical world identity, rule
+set, completed status, mode, and optional goals before recording a result.
+Purchases are immutable and cannot exceed earned light. All twelve rewards
+fund all six places exactly; a fully restored village unlocks the festival.
+Progress uses `tilewright.trailhouse.v1`. Strict normalization rejects unknown
+or duplicate IDs, unearned purchases, contradictory results, and invalid bests.
+Portable `lantern-trailhouse` passports are bounded to 30 KB before parsing,
+previewed, and explicitly confirmed before replacing only this mode’s save.
+Unavailable saves keep in-session progress and report the need for a backup.
+
+`trailhouse-ui.mjs` owns hub tabs, commissions, purchases, keeper dialogs,
+keepsakes, and passport controls. `trailhouse-art.mjs` draws original village,
+building, and keepsake art in Canvas. All interactions have HTML labels; Canvas
+illustrations are decorative. Workshop routes playing, remixes, and result
+recording to the mode. Adventure UI reuses the objective ribbon and responsive
+board fitting, exposes individual goals in Quest, and returns wins to the hub.
+Rules cannot change mid-attempt. No unfinished-run checkpoint is promised.
+The build allowlist adds five public files, for 70 total packaged files.

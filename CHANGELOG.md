@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.19.0 — 2026-10-20
+
+- Add The Trailhouse, a village hub with twelve keeper commissions across the
+  eight original Storybook worlds. Specific goals encourage alternate routes,
+  clean treasure hunting, quiet rescues, and crate/double solutions.
+- Award first-clear light once across both rules. Keep separate commission
+  bests, readable in-game goal notes, and helpful missed-favor results.
+- Restore six places in any order; unlock illustrated keepsakes, twelve keeper
+  conversation topics, changing village art, and protected world remixes.
+- Unlock A Night of Borrowed Lights, a new original festival map with ordered
+  bells, a pond crossing, three lights, three rescues, and four optional treasures.
+  Complete it for a seventh keepsake and a festival remix.
+- Add bounded, validated passport downloads and previewed restoration, isolated
+  saves, and playable fallbacks for corrupted or unavailable browser storage.
+- Keep the new hub in three focused sections, with compact phone village cards
+  and one objective ribbon during play. Add a title-screen entrance and full
+  main-menu return paths.
+- Add 35 model tests (409 total), a seventeenth Chrome-check family, and a
+  70-file static package. See the QA log for actual browser coverage.
+
 ## 0.18.0 — 2026-10-20
 
 - Add The Rainmaker’s Letters and The Observatory of Borrowed Stars: two

@@ -1,0 +1,69 @@
+.adventure-workshop[data-section="house"] #ws-banner,.adventure-workshop[data-section="house"]>#ws-status { display:none; }
+.house [hidden],#house-file[hidden] { display:none!important; }
+.house { padding-top:10px; }
+.house h4 { color:#ffe2a5; font:26px/1.25 Georgia,serif; margin:0 0 14px; }
+.house p { line-height:1.8; color:#d0dcc6; }
+.house-hero { display:grid; grid-template-columns:1.2fr 1fr; background:#142f2a; border:1px solid #6d815d; overflow:hidden; }
+.house-hero>canvas { display:block; width:100%; height:100%; min-height:260px; object-fit:cover; image-rendering:pixelated; }
+.house-welcome { padding:26px; align-self:center; }
+.house-welcome h3 { color:#ffe1a7; font:clamp(28px,3.3vw,40px)/1.2 Georgia,serif; margin:10px 0; }
+.house-welcome>p { font-size:13px; }
+.house-welcome strong { display:block; color:#ffe0a0; font:22px Georgia,serif; margin-top:18px; }
+.house-welcome progress { width:100%; height:8px; accent-color:#dac185; }
+.house-tabs { display:flex; gap:8px; padding:20px 0 4px; }
+.house-tabs button { flex:1; min-height:46px; }
+.playing .house-tabs button[aria-pressed="true"] { color:#fff0bd; background:#51492f; border-color:#d7b875; }
+.house-notice { border-left:3px solid #c7ae70; padding:10px 16px; background:#1b3c31; font-size:13px; }
+.house-notice[data-error="true"] { background:#49352c; color:#ffe3ba; }
+.house-board-tools { display:grid; grid-template-columns:1.5fr 1fr; gap:18px; margin:20px 0; }
+.house-commission { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); border:1px solid #78805c; background:#18372f; }
+.house-commission>canvas { display:block; width:100%; height:100%; max-height:520px; min-height:280px; object-fit:contain; image-rendering:pixelated; background:#102b28; padding:16px; }
+.house-job-copy { padding:26px; }
+.house-job-copy h4 { font-size:32px; }
+.house-job-copy>p { font-size:13px; }
+.house .house-world { color:#cab681; font:11px/1.6 ui-monospace,monospace; text-transform:uppercase; letter-spacing:1px; }
+.house .house-goal { color:#fff0c5; font-size:16px; border-left:2px solid #d5b16b; padding-left:14px; }
+.house details summary { cursor:pointer; color:#ead4a1; padding:12px 0; min-height:44px; font-size:13px; }
+.house details>p { font-size:13px; }
+.house .house-reward { color:#bcd0b0; font-size:12px; }
+.house-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.house-actions button { min-height:44px; }
+.house-board-footer { margin-top:14px; }
+.house-board-footer button:last-child { margin-left:auto; }
+.house-section-title { margin:26px 0; max-width:750px; }
+.house-section-title p { font-size:13px; }
+.house-projects,.house-keepsakes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.house-project,.house-keepsake { background:#18372f; border:1px solid #657959; padding:22px; display:flex; flex-direction:column; min-width:0; }
+.house-project>canvas { align-self:center; width:150px; height:125px; image-rendering:pixelated; margin-bottom:12px; }
+.house-project>h4,.house-keepsake>h4 { font-size:24px; }
+.house-project>p:not(.title-kicker),.house-keepsake>p { font-size:13px; margin-bottom:22px; }
+.house-project .house-actions { margin-top:auto; flex-direction:column; }
+.house-actions small,.house-keepsake small { color:#c1cea9; font:11px/1.8 ui-monospace,monospace; }
+.house-festival { padding:26px; border:1px solid #a39260; background:linear-gradient(130deg,#18372f,#303c34); margin-top:24px; }
+.house-festival>p { max-width:720px; font-size:13px; }
+.house-keepsake>canvas { width:120px; height:100px; align-self:center; margin-bottom:20px; image-rendering:pixelated; }
+.house-keepsake[data-unlocked="false"] { background:#152e29; }
+.house-keepsake small { margin-top:auto; }
+.house-passport { border-top:1px solid #5d7353; margin-top:26px; padding:8px 0; }
+.house-dialog p { color:#d5dfc5; font-size:16px; line-height:1.9; }
+.house-dialog h3 { color:#ffe1a7; font:34px Georgia,serif; }
+@media(max-width:900px) { .house-hero { grid-template-columns:1fr 1fr; }.house-welcome { padding:20px; }.house-projects,.house-keepsakes { grid-template-columns:repeat(2,minmax(0,1fr)); }.house-job-copy { padding:20px; } }
+@media(max-width:600px) { .house-hero,.house-commission { grid-template-columns:1fr; }.house-hero>canvas { min-height:0; height:auto; max-height:220px; }.house-welcome { padding:20px; }.house-welcome h3 { font-size:32px; }.house-welcome p { margin:10px 0; }.house-tabs { gap:5px; }.house-tabs button { font-size:11px; padding:9px 6px; }.house-board-tools { grid-template-columns:1fr; gap:12px; }.house-commission>canvas { min-height:0; height:220px; padding:12px; }.house-job-copy h4 { font-size:30px; }.house-projects,.house-keepsakes { grid-template-columns:1fr; }.house-board-footer button { flex:1; }.house-board-footer button:last-child { flex-basis:100%; margin:0; }.house-festival { padding:20px; } }
+
+.house-festival-rules { max-width:340px; margin:0 0 18px; }
+@media(max-width:600px) {
+  .house:not([data-activity="commissions"]) .house-hero { grid-template-columns:90px minmax(0,1fr); }
+  .house:not([data-activity="commissions"]) .house-hero>canvas { height:100%; max-height:none; object-fit:cover; object-position:40% center; }
+  .house:not([data-activity="commissions"]) .house-welcome { padding:16px; }
+  .house:not([data-activity="commissions"]) .house-welcome h3 { font-size:23px; }
+  .house:not([data-activity="commissions"]) .house-welcome>p:first-child,.house:not([data-activity="commissions"]) .house-welcome>p:nth-of-type(2) { display:none; }
+  .house:not([data-activity="commissions"]) .house-welcome strong { font-size:18px; margin-top:12px; }
+  .house-project,.house-keepsake { display:grid; grid-template-columns:64px minmax(0,1fr); column-gap:12px; padding:16px; }
+  .house-project>canvas,.house-keepsake>canvas { grid-column:1; grid-row:1 / span 2; width:64px; height:54px; margin:0; }
+  .house-project>.title-kicker { grid-column:2; margin:0; font-size:9px; }
+  .house-project>h4,.house-keepsake>h4 { grid-column:2; font-size:22px; margin:3px 0 8px; }
+  .house-project>p:not(.title-kicker),.house-keepsake>p { grid-column:1 / -1; font-size:12px; margin:10px 0 14px; }
+  .house-project .house-actions { grid-column:1 / -1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:center; }
+  .house-project .house-actions button { font-size:11px; padding:8px 6px; }
+  .house-keepsake small { grid-column:1 / -1; }
+}
