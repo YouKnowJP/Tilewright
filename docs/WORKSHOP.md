@@ -5,6 +5,12 @@ in-game Menu. **Player adventures** holds three featured worlds and up to 32
 worlds saved in this browser. Search by title or creator; preview before playing.
 Trail and Nemesis bests are separate for each version of a world.
 
+**Puzzle Lab** adds six playable rooms with verified clear replays and a
+different building idea for each one. Choose one room at a time, play it, or
+remix it. The six originals are separate from your saved shelf. **Design sparks**
+pair creative goals with twists; an idea seed makes a prompt reproducible.
+[The Lab guide](PUZZLE_LAB.md) explains its rooms and experiment tools.
+
 ![The creator’s camp](creator-camp.png)
 
 **Creator’s guide** is available in both Mapmaker and the Workshop. Its three
@@ -35,6 +41,18 @@ Objects replace another primary object on their cell; ferns and embers can
 coexist with objects. Placing a new start, beacon, or relic moves the unique one.
 Lantern-grove, supply-camp, and pressure-crossing stamps build small editable
 encounters. Stamps replace their footprint; Undo restores it.
+
+**Remix tools** rotates a quarter turn or mirrors the complete world east/west
+or north/south, including every layer and patrol route. Channels, bell order,
+and object IDs remain connected. The changed version needs a new clear; Undo
+restores its previous layout and attached clear. Review directional hints after
+turning a world. This transforms the whole map, rather than a selected area.
+
+Move the cursor onto open land, then choose **Remix tools → Practise from
+cursor** to test one area. It uses fresh goals, supplies, and local learning.
+Closed gates, crates, keepers, water, and blocked ground cannot be starting
+points. Practice wins and restarts never write bests or creator clears. Return
+to the designer and choose full **Playtest** to verify the real starting route.
 
 **Inspect** selects an object. Select the same cell again to cycle through
 coexisting objects. Give keepers dialogue, change puzzle channels, set bell order,

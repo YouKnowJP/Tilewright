@@ -4,6 +4,7 @@ import { CHAPTERS } from './adventure-art.mjs';
 import { createIcon } from './icons.mjs';
 import { drawTile } from './render.mjs';
 import { drawWorkshopWorld, drawWorkshopObject } from './workshop-art.mjs';
+import { transformAdventure } from './workshop-lab.mjs';
 
 export function createWorkshopDesigner({ initial, onChange, notice }) {
   const $ = id => document.getElementById(`ws-${id}`), canvas = $('canvas'), viewport = $('viewport');
@@ -84,7 +85,7 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
     const old = $('layer').value; $('layer').replaceChildren(...pack().map.layers.map(l => new Option(l.name + (l.visible ? '' : ' (hidden)'), l.id)));
     if (pack().map.layers.some(l => l.id === old)) $('layer').value = old; $('layer-visible').checked = pack().map.layers.find(l => l.id === $('layer').value).visible;
   }
-  function refresh() { layers(); populate(); checks(); resize(); $('draft-title').textContent = pack().title; }
+  function refresh() { cursor = { x: Math.max(0, Math.min(pack().map.width - 1, cursor.x)), y: Math.max(0, Math.min(pack().map.height - 1, cursor.y)) }; layers(); populate(); checks(); resize(); $('draft-title').textContent = pack().title; }
   function commit(next) {
     if (history.commit(next)) { onChange(pack()); refresh(); }
     else draw();
@@ -191,6 +192,8 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
   new ResizeObserver(resize).observe(viewport);
   refresh();
   return { get: () => applyForms(), refresh, draw, panel,
+    get cursor() { return { ...cursor }; },
+    transform(operation) { applyForms(); finish(true); const next = transformAdventure(pack(), operation), point = next.markers.find(marker => marker.id === selected) || next.markers.find(marker => marker.kind === 'start') || { x: 0, y: 0 }; route = false; keyboardCorner = null; cursor = { x: point.x, y: point.y }; commit(next); },
     replace(next) { finish(true); history = new History(normalizeAdventure(next),30); selected=null; route=false; keyboardCorner=null; cursor={x:0,y:0}; refresh(); panel('adventure'); onChange(pack()); },
     attachProof(proof) { history.document = normalizeAdventure({ ...pack(), proof }); onChange(pack()); refresh(); },
     hide() { finish(true); for (const id of ['inspector-dialog','palette-dialog']) if ($(id).open) $(id).close(); },

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.16.0 — 2026-10-20
+
+- Add Puzzle Lab with six complete playable rooms: crate crossings, two-key
+  detours, bell sequences, double/crate alternatives, dialogue/rescue deliveries,
+  and linked ember wheels. Include verified clears and Trail/Nemesis bests.
+- Offer a focused room browser, direct remixing, and reproducible design sparks
+  pairing six creative goals with six twists. Originals remain independent.
+- Add Remix tools to rotate or mirror an entire world, including every layer,
+  object, and patrol route. Preserve channels and IDs, invalidate stale clears,
+  and keep each operation undoable. Bound cursors after rectangular transforms.
+- Add practice from the editor cursor with fresh goals and supplies. Label it
+  unscored, preserve bests/clears on wins and restarts, and keep full Playtest
+  verification separate. Report blocked starts inside the tools dialog.
+- Add 19 engine/export/geometry tests (317 total) and a fifteenth browser suite
+  for real room/alternate wins, transformed wins, practice isolation, history,
+  tall/wide maps, and six touch layouts. Package 59 static files.
+
 ## 0.15.0 — 2026-10-20
 
 - Open the game’s title screen at the bare website URL. Keep terrain creation

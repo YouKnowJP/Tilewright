@@ -30,6 +30,30 @@
 .ws-card-actions { display:flex; gap:7px; padding:0 18px 18px; }
 .ws-card-actions button { flex:1; min-height:40px; font-size:11px; }
 .ws-footnote { color:#bdceb2; font:11px/1.8 ui-monospace,monospace; margin:18px 0 0; overflow-wrap:anywhere; }
+.ws-lab-layout { display:grid; grid-template-columns:minmax(180px,240px) minmax(0,1fr); gap:20px; margin-top:22px; }
+.ws-lab-rooms { display:flex; flex-direction:column; gap:8px; }
+.ws-lab-rooms button { text-align:left; }
+.playing .ws-lab-rooms [aria-pressed=true] { background:#51492f; border-color:#d7b875; color:#fff0bd; }
+.ws-lab-room { display:grid; grid-template-columns:minmax(170px,.85fr) minmax(0,1fr); border:1px solid #8b895c; background:#19372f; min-width:0; }
+.ws-lab-room>canvas { align-self:center; display:block; width:100%; height:auto; image-rendering:pixelated; padding:12px; }
+.ws-lab-copy { padding:22px; min-width:0; }
+.ws-lab-copy h4 { color:#f5dfaa; font:600 29px/1.2 Georgia,serif; margin:10px 0 15px; }
+.ws-lab-copy>p:not(.title-kicker):not(.ws-footnote) { font:16px/1.7 Georgia,serif; color:#d4ddc3; }
+.ws-lab-invitation { padding:14px; border-left:2px solid #d0b374; background:#243f34; }
+.ws-lab-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.ws-lab-actions button { flex:1; }
+.ws-spark { border-top:1px solid #70815a; margin-top:25px; padding-top:18px; color:#d4ddc3; }
+.ws-spark summary { color:#efdaa2; cursor:pointer; font:18px/1.5 Georgia,serif; }
+.ws-spark form { display:flex; align-items:end; gap:8px; margin:18px 0; }
+.ws-spark label { flex:1; max-width:360px; }
+.ws-spark h4 { color:#f5dfaa; font:600 22px/1.4 Georgia,serif; }
+.ws-spark p { line-height:1.7; }
+.ws-remix-art { width:100%; max-height:210px; object-fit:contain; image-rendering:pixelated; background:#102b2b; padding:12px; }
+.ws-transform-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.ws-practice-card { padding:18px; background:#203d33; border:1px solid #8b895c; margin-top:22px; }
+.ws-practice-card h3 { color:#efdaa2; font:600 23px/1.4 Georgia,serif; margin:0 0 10px; }
+@media(max-width:900px) { .ws-lab-layout { grid-template-columns:minmax(0,1fr); } .ws-lab-rooms { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); } .ws-lab-rooms button { font-size:11px; padding:9px; } }
+@media(max-width:600px) { .ws-lab-room { grid-template-columns:minmax(0,1fr); } .ws-lab-room>canvas { max-height:180px; object-fit:contain; } .ws-lab-copy { padding:17px; } .ws-lab-copy h4 { font-size:26px; } .ws-lab-rooms { grid-template-columns:repeat(2,minmax(0,1fr)); } .ws-spark form { flex-wrap:wrap; } .ws-spark label { flex-basis:100%; max-width:none; } .ws-transform-actions { grid-template-columns:minmax(0,1fr); } .ws-remix-art { max-height:130px; } }
 .ws-build-heading { margin-bottom:18px; }
 .ws-build-heading>div:last-child { display:flex; flex-wrap:wrap; justify-content:end; gap:7px; }
 .ws-build-heading button { min-height:44px; font-size:12px; }
@@ -148,3 +172,5 @@
 
 .ws-palette-options .ws-layer-toggle { display:flex; align-items:center; gap:10px; grid-column:1 / -1; margin:0; }
 .ws-layer-toggle input { accent-color:#d9bd79; width:17px; height:17px; }
+
+.adventure-workshop[data-section="lab"] .ws-banner { display:none; }

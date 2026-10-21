@@ -77,6 +77,13 @@ an object to edit its dialogue, channel, or route. World notes group the title,
 invitation, toolkit, story, and challenge settings. Start small: one beginning,
 one lantern, one interesting crossing, and a way home.
 
+Want something to tinker with? **Workshop → Puzzle Lab** has six complete rooms
+to play or remix, plus design sparks for your next idea. **Remix tools** turns
+or mirrors your whole world in one undoable step. Move the editor cursor and
+choose **Practise from cursor** to try a particular area without recording a
+best or changing a creator clear. Full Playtest proves the route from the real
+starting point. [Explore the Lab](PUZZLE_LAB.md).
+
 **Checks** finds missing objectives and broken links. Finish **Playtest** to
 attach a real creator clear, then **Share** a file or code. Your friend imports
 it through **Workshop → Import & play**. Publicly hosted copies can also make

@@ -266,7 +266,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     const theme = themeFor(stage);
     $('#game-map-legend').textContent = run.guild ? 'Gold is you; turquoise is the beacon. Purple squares are waystones; white outlines are wheels and bells. A pale blue double marks your return point.' : 'Gold is you. Turquoise is the beacon. Outlined squares are discovered wheels and bells.';
     $('.game-main').style.setProperty('--region-color', theme.dark);
-    $('#game-region').textContent = stage.workshop ? `${theme.place} / Player adventure / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
+    $('#game-region').textContent = stage.workshop ? `${theme.place} / ${stage.workshop.practice ? 'Practice run' : 'Player adventure'} / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
     document.body.classList.toggle('guild-active', Boolean(run.guild));
     $('#game-power').hidden = !run.guild; $('#game-guild-kit').hidden = !run.guild;
     if (run.guild) {
@@ -283,11 +283,11 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
         entry.dataset.earned = String(merit.done); return entry;
       }));
     }
-    $('#game-guild-kit > p:last-child').textContent = stage.workshop ? 'Optional specialist goals apply to this attempt. Stars and bests save for this world version and rule set.' : 'Finish the job to record commendations. They never block the exit. Bests are separate for each specialist and rule set.';
+    $('#game-guild-kit > p:last-child').textContent = stage.workshop?.practice ? 'Practise with this toolkit freely. This attempt cannot record honors, bests, or a creator clear.' : stage.workshop ? 'Optional specialist goals apply to this attempt. Stars and bests save for this world version and rule set.' : 'Finish the job to record commendations. They never block the exit. Bests are separate for each specialist and rule set.';
     $('#game-rule-note').hidden = !stage.restrictions.noDash && !stage.restrictions.noShield && !stage.requireCoins;
     $('#game-rule-note').textContent = [stage.restrictions.noDash ? 'Walking only: dash is disabled.' : '', stage.restrictions.noShield ? 'Unwarded: shields are disabled.' : '', stage.requireCoins ? 'Recover every coin before leaving.' : ''].filter(Boolean).join(' ');
     $('#game-title').textContent = stage.name;
-    $('#game-choose').textContent = stage.workshop ? workshop.returnSection === 'build' ? 'Designer' : 'Player worlds' : 'Trails';
+    $('#game-choose').textContent = stage.workshop ? workshop.returnSection === 'build' ? 'Designer' : workshop.returnSection === 'lab' ? 'Puzzle Lab' : 'Player worlds' : 'Trails';
     $('#game-sound').textContent = sound.enabled ? 'Sound on' : 'Sound off'; $('#game-sound').setAttribute('aria-pressed', String(sound.enabled));
     const journey = expeditions?.session;
     $('#game-difficulty').disabled = Boolean(journey);
@@ -370,6 +370,8 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       : 'Adventure bests are kept in this browser. Playing never changes your editor map or its undo history.';
     if (run.guild) $('#game-save-note').textContent = guildSaveFailed ? 'Guild saving unavailable. Results remain available for this session.' : 'Guild bests save on completion, separately for each specialist and rule set. An unfinished job restarts from the beginning.';
     if (stage.workshop) $('#game-save-note').textContent = workshop.saveFailed ? 'Workshop saving unavailable. Download your adventure to keep a backup.' : 'Player adventure bests and drafts save separately from the story, Guild, and expeditions.';
+    if (stage.workshop?.practice) { $('#game-best').textContent = 'Practice attempt · bests and creator clear stay unchanged.'; $('#game-save-note').textContent = 'Practise freely. Only a full Playtest from the original starting point can verify this world.'; }
+    $('#game-stars').hidden = Boolean(stage.workshop?.practice);
     $('#adventure').dataset.status = run.status;
     canvas.setAttribute('aria-label', `${stage.name}. ${run.difficulty} rules. Column ${run.player.x + 1}, row ${run.player.y + 1}. Health ${run.health} of 3. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns. ${run.message}`);
     $('#game-overlay').hidden = !paused && run.status === 'playing';
@@ -403,10 +405,11 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       $('#game-primary').textContent = 'Choose another Guild job';
     }
     if (stage.workshop && result && !paused) {
-      $('#game-result-eyebrow').textContent = 'ANOTHER KEEPER’S WORLD, RESTORED';
+      $('#game-result-eyebrow').textContent = stage.workshop.practice ? 'AN EXPERIMENT, COMPLETE' : 'ANOTHER KEEPER’S WORLD, RESTORED';
       $('#game-result-title').textContent = 'A story worth bringing home.';
       $('#game-result-text').textContent = `${result.score} points · ${result.turns} turns · ${result.stars} stars. ${stage.ending || ''}${workshop.returnSection === 'build' ? ` ${workshopClearNote}` : ''}`;
-      $('#game-primary').textContent = workshop.returnSection === 'build' ? 'Return to your designer' : 'Back to player adventures';
+      if (stage.workshop.practice) $('#game-result-text').textContent = `Practice complete in ${result.turns} turns. ${workshopClearNote}`;
+      $('#game-primary').textContent = workshop.returnSection === 'build' ? 'Return to your designer' : workshop.returnSection === 'lab' ? 'Back to Puzzle Lab' : 'Back to player adventures';
     }
     if (result && !paused && (stage.workshop ? workshop.saveFailed : journey ? expeditions.checkpointFailed : run.guild ? guildSaveFailed : saveFailed)) {
       $('#game-result-text').textContent += ' Saving unavailable. Keep this tab open to retain this result.';

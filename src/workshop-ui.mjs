@@ -10,6 +10,7 @@ import { createRun, stepRun, resultFor } from './adventure.mjs';
 import { freshMemory } from './adventure-brain.mjs';
 import { createAdventureRenderer } from './adventure-render.mjs';
 import { WORKSHOP_CLEARS } from './workshop-clears.mjs';
+import { LAB_ROOMS, puzzleLabWorld, designSpark, cursorPractice } from './workshop-lab.mjs';
 
 export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, onGuide }) {
   const $ = id => document.getElementById(`ws-${id}`), root = document.getElementById('adventure-workshop');
@@ -17,7 +18,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   const restored = loadWorkshop(storage), featured = workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) }));
   const restoredDraft=loadWorkshopDraft(storage); let draftTouched=Boolean(restoredDraft);
   let entries = restored.entries, bests = loadWorkshopBests(storage), saved = true, preview = null, share = null, activePlay = null, section = 'shelf';
-  let token = 0, replay = null, timer = null, shelfFailed = restored.unavailable;
+  let token = 0, replay = null, timer = null, shelfFailed = restored.unavailable, labRoom = LAB_ROOMS[0].id, previewOrigin = 'shelf';
   const verified = new Map();
   const notice = (text,error=false) => { $('status').textContent=text; $('status').dataset.error=String(error); };
   const designer = createWorkshopDesigner({ initial:restoredDraft || blankAdventure(), onChange(pack) { draftTouched=true; saved=saveWorkshopDraft(storage,pack); draftState(pack); }, notice });
@@ -25,11 +26,11 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   const guard = fn => { try { return fn(); } catch(error) { notice(error.message,true); return null; } };
   function close(id) { if ($(id).open) $(id).close(); }
   function stopReplay() { if (timer) clearTimeout(timer); timer=null; if(replay) replay.playing=false; }
-  function hide() { token++; stopReplay(); designer.hide(); for(const id of ['new-dialog','preview-dialog','share-dialog','replay-dialog']) close(id); root.hidden=true; document.body.classList.remove('workshop-designing'); }
+  function hide() { token++; stopReplay(); designer.hide(); for(const id of ['new-dialog','preview-dialog','share-dialog','replay-dialog','remix-dialog']) close(id); root.hidden=true; document.body.classList.remove('workshop-designing'); }
   function tab(id) {
-    guard(() => { if (section==='build') designer.get(); section=id; $('heading').textContent=id==='build'?'World studio':'Adventure Workshop'; if(id==='build')notice('Choose a quick brush, or open the full palette.'); root.dataset.section=id; document.body.classList.toggle('workshop-designing',id==='build'&&!root.hidden);
-      for(const name of ['shelf','build','import']) { $(name).hidden=name!==id; $('tab-'+name).setAttribute('aria-pressed',String(name===id)); }
-      if(id==='build') { designer.refresh(); draftState(); } if(id==='shelf') renderShelf();
+    guard(() => { if (section==='build') designer.get(); section=id; $('heading').textContent=id==='build'?'World studio':id==='lab'?'Puzzle Lab':'Adventure Workshop'; if(id==='build')notice('Choose a quick brush, or open the full palette.'); if(id==='lab')notice('Play a room, try another answer, then remix its puzzles into your own adventure.'); root.dataset.section=id; document.body.classList.toggle('workshop-designing',id==='build'&&!root.hidden);
+      for(const name of ['shelf','build','import','lab']) { $(name).hidden=name!==id; $('tab-'+name).setAttribute('aria-pressed',String(name===id)); }
+      if(id==='build') { designer.refresh(); draftState(); } if(id==='shelf') renderShelf(); if(id==='lab')renderLab();
     });
   }
   function show(id='shelf') { root.hidden=false; tab(id); $('heading').focus({preventScroll:true}); if(restored.unavailable) notice('Your saved shelf could not be loaded. Import an exported backup to recover your worlds. Nothing is overwritten until you save or add an adventure.',true); else if(restored.damaged) notice(`${restored.damaged} damaged shelf entries could not be opened. Other worlds remain available.`,true); }
@@ -58,13 +59,13 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
     if(!pack.proof)return null; const id=proofId(pack); if(verified.has(id))return verified.get(id);
     const result=await verifyAdventureProof(pack,()=>new Promise(resolve=>requestAnimationFrame(resolve))); verified.set(id,result); while(verified.size>16)verified.delete(verified.keys().next().value); return result;
   }
-  async function openPreview(input) {
+  async function openPreview(input, origin = 'shelf') {
     const n=++token;
     try {
       const pack=normalizeAdventure(input), report=checkAdventure(pack);
       notice(pack.proof?'Checking the creator’s route…':'Previewing an unverified adventure. Finish it yourself or remix its world.');
       const proof=await validateProof(pack); if(n!==token||root.hidden)return;
-      preview=pack; $('preview-title').textContent=pack.title; $('preview-author').textContent=`By ${pack.author} · ${pack.map.width} × ${pack.map.height}${pack.source?` · ${pack.source}`:''}`;
+      preview=pack; previewOrigin=origin; $('preview-close').textContent=origin==='lab'?'Back to Puzzle Lab':'Back to shelf'; $('preview-title').textContent=pack.title; $('preview-author').textContent=`By ${pack.author} · ${pack.map.width} × ${pack.map.height}${pack.source?` · ${pack.source}`:''}`;
       $('preview-description').textContent=pack.description||pack.intro; drawWorkshopWorld($('preview-map'),pack,{thumbnail:true});
       const kinds=kind=>pack.markers.filter(m=>m.kind===kind).length;
       const goals=[`${kinds('lantern')} lanterns to restore`,`${kitLabel(pack.kit)} toolkit`,...(['rescue','relic','bell','hunter','watcher'].filter(kinds).map(kind=>`${kinds(kind)} ${ {rescue:'keeper rescues',relic:'relic delivery',bell:'sequence bells',hunter:'adaptive hunters',watcher:'Watcher boss'}[kind]}`)),...(pack.rules.allCoins?['Recover every treasure']:[]),...(pack.rules.noDash?['Walking only']:[]),...(pack.rules.noShield?['No shields']:[])];
@@ -97,7 +98,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   $('download').onclick=()=>guard(()=>{ const blob=new Blob([serializeAdventure(share)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a'); a.href=url; a.download=(share.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,50)||'adventure')+'.trail.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); $('share-status').textContent='Adventure file prepared for download.'; });
   $('copy-code').onclick=()=>guard(()=>copy(adventureCode(share)));
   $('copy-link').onclick=()=>guard(()=>{const link=playLink(share);if(link.url)copy(link.url);});
-  $('preview-play').onclick=()=>guard(()=>{ activePlay={pack:preview,test:false}; const selected=$('preview-difficulty').value; hide(); onPlay(adventureStage(preview),selected); });
+  $('preview-play').onclick=()=>guard(()=>{ activePlay={pack:preview,test:false,origin:previewOrigin}; const selected=$('preview-difficulty').value; hide(); onPlay(adventureStage(preview),selected); });
   $('preview-add').onclick=()=>guard(()=>{add(preview);$('preview-add').disabled=true;});
   $('preview-remix').onclick=()=>remixWorld(preview); $('preview-share').onclick=()=>openShare(preview);
   $('save').onclick=()=>guard(()=>add(designer.get()));
@@ -106,6 +107,21 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
     const pack=designer.get(),report=checkAdventure(pack); if(!report.ready){designer.panel('checks',true);throw Error(report.errors[0]);}
     activePlay={pack,test:true}; hide(); onPlay(report.stage,$('test-rules').value);
   });
+  function renderLab() {
+    const room=LAB_ROOMS.find(item=>item.id===labRoom),pack=puzzleLabWorld(labRoom);
+    $('lab-title').textContent=room.title; $('lab-skills').textContent=room.lesson; $('lab-story').textContent=pack.intro; $('lab-idea').textContent=room.idea;
+    drawWorkshopWorld($('lab-art'),pack,{thumbnail:true});
+    for(const button of $('lab-rooms').querySelectorAll('button'))button.setAttribute('aria-pressed',String(button.dataset.labRoom===labRoom));
+    const done=['trail','nemesis'].filter(rule=>bests[`${adventureKey(pack)}-${rule}`]); $('lab-progress').textContent=done.length?`Restored on ${done.join(' and ')} · try another answer or make your own.`:'A complete playable puzzle · Trail or Nemesis · creator clear included';
+  }
+  $('lab-rooms').replaceChildren(...LAB_ROOMS.map((room,index)=>{const button=document.createElement('button');button.dataset.labRoom=room.id;button.textContent=`${String(index+1).padStart(2,'0')} · ${room.title}`;button.onclick=()=>{labRoom=room.id;renderLab();};return button;}));
+  $('lab-play').onclick=()=>openPreview(puzzleLabWorld(labRoom),'lab'); $('lab-remix').onclick=()=>remixWorld(puzzleLabWorld(labRoom));
+  function spark(){guard(()=>{const idea=designSpark($('spark-seed').value);$('spark-title').textContent=idea.title;$('spark-twist').textContent=idea.twist;$('spark-goal').textContent=idea.goal;});}
+  $('spark-form').onsubmit=event=>{event.preventDefault();spark();};$('spark-next').onclick=()=>{$('spark-seed').value=Math.random().toString(36).slice(2,10);spark();};spark();
+  $('remix-tools').onclick=()=>guard(()=>{const pack=designer.get(),point=designer.cursor;drawWorkshopWorld($('remix-art'),pack,{thumbnail:true});$('remix-position').textContent=`Practice cursor: column ${point.x+1}, row ${point.y+1}. Move the cursor on your world before opening these tools.`;$('remix-note').textContent='';$('remix-dialog').showModal();});
+  $('remix-close').onclick=()=>close('remix-dialog');
+  for(const button of document.querySelectorAll('[data-ws-transform]'))button.onclick=()=>guard(()=>{designer.transform(button.dataset.wsTransform);close('remix-dialog');notice('World transformed. Undo restores its previous layout and clear. Review any directional hints, then playtest your new version.');});
+  $('practice').onclick=()=>{try{const pack=designer.get(),report=checkAdventure(pack);if(!report.ready)throw Error(report.errors[0]);const stage=cursorPractice(pack,designer.cursor);activePlay={pack,test:true,practice:true};const rules=$('test-rules').value;hide();onPlay(stage,rules);}catch(error){$('remix-note').textContent=error.message;notice(error.message,true);}};
   for(const id of ['preview','share','new','replay']) $(''+id+'-close')?.addEventListener('click',()=>{close(id+'-dialog');});
   $('new-cancel').onclick=()=>close('new-dialog');
   function newWorld(){guard(()=>{designer.get();$('new-dialog').showModal();});}
@@ -121,7 +137,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   drawAtlasArt($('scenery'),CHAPTERS.find(theme=>theme.id==='clockwork'));
   $('guide').onclick=()=>onGuide?.($('guide')); $('terrain').onclick=()=>guard(()=>{designer.get();onTerrain();});
   $('banner-create').onclick=newWorld; $('step-design').onclick=()=>designer.panel('adventure',true); $('step-test').onclick=()=>$('test').click(); $('step-share').onclick=()=>$('share').click();
-  $('home').onclick=()=>guard(()=>{designer.get();onExit();}); for(const name of ['shelf','build','import'])$('tab-'+name).onclick=()=>tab(name);
+  $('home').onclick=()=>guard(()=>{designer.get();onExit();}); for(const name of ['shelf','build','import','lab'])$('tab-'+name).onclick=()=>tab(name);
   $('search').oninput=renderShelf;$('filter').onchange=renderShelf;
   $('import-file').onclick=()=>{$('file').value='';$('file').click();};
   async function importFile(file){if(!file)return;try{if(file.size>MAX_ADVENTURE_BYTES)throw Error('Adventure files must be smaller than 400 KB.');const pack=parseAdventure(await file.text());await openPreview(pack);}catch(error){notice(error.message,true);}}
@@ -150,8 +166,9 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
     async openShared(code){show('import');$('import-code').value=code;try{await openPreview(parseAdventureCode(code));}catch(error){notice(error.message,true);}},
     best:(key,difficulty)=>bests[`${key}-${difficulty}`],
     get saveFailed(){return !saved||shelfFailed;},
-    get returnSection(){return activePlay?.test?'build':'shelf';},
+    get returnSection(){return activePlay?.test?'build':activePlay?.origin==='lab'?'lab':'shelf';},
     recordWin(run,actions){
+      if(run.stage.workshop.practice || activePlay?.practice)return 'Practice complete. Bests and creator clears are unchanged. Start a full Playtest from the original starting point to verify this world.';
       const result=saveWorkshopBest(storage,bests,run.stage.workshop.key,run.difficulty,resultFor(run));bests=result.records;shelfFailed=!result.saved;
       if(activePlay?.test&&adventureKey(activePlay.pack)===run.stage.workshop.key&&actions.length<=MAX_PROOF_ACTIONS){
         const proof={difficulty:run.difficulty,actions:[...actions]},pack=normalizeAdventure({...activePlay.pack,proof});

@@ -30,6 +30,8 @@ installation, build-time framework, database service, or remote API.
 | `src/adventure-preferences.mjs` | Bounded, guarded volume/motion/reading preferences, separate from game and editor saves. |
 | `src/training-model.mjs` | Independent practice worlds, real-rule coaching milestones, creator proof preparation, and bounded lesson completion storage. |
 | `src/training-ui.mjs` | Training camp, native keyboard/touch lessons, guided creation/history/story forms, real playtests, portable sharing, and explicit Workshop handoff. |
+| `src/workshop-lab.mjs` | Six authored puzzle-room worlds, immutable whole-world transforms, validated cursor-practice stages, and deterministic creative prompts. |
+| `src/workshop-lab-clears.mjs` | Actual winning action journals for the Lab originals, verified and replayed through the shared engine. |
 | `src/adventure-render.mjs` | Cached map background, following camera, original sprites, fog, and discovered-map overview. |
 | `src/adventure-records.mjs` | Bounded, validated personal bests stored independently of map saves. |
 | `src/adventure-brain.mjs` | Bounded action/transition counts, decaying movement predictions, normalization, and isolated local learning persistence. |

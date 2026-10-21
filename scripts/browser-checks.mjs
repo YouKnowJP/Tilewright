@@ -9,6 +9,7 @@ import { checkPlayLayout } from './layout-browser-checks.mjs';
 import { checkHorizon } from './horizon-browser-checks.mjs';
 import { checkGuild } from './guild-browser-checks.mjs';
 import { checkFrontMenu } from './front-browser-checks.mjs';
+import { checkPuzzleLab } from './lab-browser-checks.mjs';
 import { checkTraining } from './training-browser-checks.mjs';
 import { checkCreators } from './creator-browser-checks.mjs';
 import { checkWorkshop } from './workshop-browser-checks.mjs';
@@ -288,5 +289,5 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const { chromium } = await import('playwright');
-  console.log(JSON.stringify({ training: await checkTraining(chromium), creators: await checkCreators(chromium), workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
+  console.log(JSON.stringify({ lab: await checkPuzzleLab(chromium), training: await checkTraining(chromium), creators: await checkCreators(chromium), workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
 }

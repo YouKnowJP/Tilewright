@@ -1,5 +1,36 @@
 # Verification record
 
+## Puzzle Lab and creative experiments — v0.16.0
+
+**317 Node tests**, syntax checks, and a **59-file static package** pass.
+Nineteen new tests cover all six rooms on Trail and Nemesis, portable verified
+clear replays, mapped winning routes after each transform, rectangular/hidden
+layer and patrol-route round trips, immutable editing, alternate solutions,
+bounded cursor practice, and deterministic/varied design sparks.
+
+The fifteenth browser suite uses Chrome **156.0.8078.47**. Native input completes
+all twelve room/rule combinations, the crate alternative to the double crossing,
+and the postkeeper's supplies branch. Each result returns to its Lab room with
+a separate saved best. Browsing rooms and dealing reproducible sparks leave
+saved data unchanged.
+
+Native rotation and both mirrors each produce a new full playtest win. Undo
+restores the previous world and attached clear; Redo restores the transformed
+map. Practice from a different cursor position and its restart retain the draft,
+creator clear, and bests byte-for-byte after a real win. A later full Playtest
+records a normal clear. Blocked starts explain the problem inside the dialog.
+A 64×8 world rotates to 8×64, then Undo/Redo keeps the cursor inside the current
+bounds. This check caught and fixed a rectangular-world cursor issue.
+
+At 320×900, 390×900, 768×900, 1024×900, 1440×900, and 844×390, the Lab supports
+six-room browsing, native touch remix/rotate/undo, a complete touch playtest,
+and editor return without horizontal page overflow. Retained creator and
+responsive Workshop suites also pass. Physical devices, other browser engines,
+screen-reader certification, and every player-authored puzzle remain outside
+this verification claim.
+
+![The Puzzle Lab](puzzle-lab.png)
+
 ## Training camp and player entry — v0.15.0
 
 **298 Node tests**, syntax checks, and the **57-file static distribution** pass.

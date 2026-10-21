@@ -57,6 +57,23 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Creative experiments completed — v0.16
+
+- Six playable/remixable Puzzle Lab rooms, verified route replays, and independent
+  bests on both rules. Include real crate/double and conversation alternatives.
+- Whole-world rotation and both mirrors with routes/layers/links preserved,
+  invalidated stale clears, and Undo/Redo. Selection-region transforms remain
+  part of the unfinished selection milestone above.
+- Unscored cursor practice with fresh goals and no best/clear writes, plus
+  reproducible design sparks. No hosted gallery or campaign-bundle service is
+  claimed. See [Puzzle Lab](docs/PUZZLE_LAB.md).
+
+## Learning completed — v0.15
+
+- Two hands-on lessons teach real gameplay and a create/check/playtest/share
+  journey. Keep practice drafts and completion independent of existing worlds
+  and progress. The website opens on the title screen.
+
 ## Creator’s camp and player readiness completed — v0.14
 
 - A shared game presentation for terrain Mapmaker and adventure creation.

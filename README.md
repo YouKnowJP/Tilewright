@@ -9,7 +9,7 @@ explore a world you paint. The **Wayfarers’ Guild** adds eight dispatches,
 three specialist tools, linked waystones, and optional commendations. The new
 **Echoist** leaves a lantern double to hold a plate, lure a hunter, or return to
 after taking a risky shortcut.
-The **Adventure Workshop** adds three authored adventures, 24 editable object
+The **Adventure Workshop** adds three authored adventures, six playable Puzzle Lab rooms, 24 editable object
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
@@ -89,6 +89,24 @@ starting, playing, creating, and keeping backups.
 ![The unified terrain workspace](docs/creator-mapmaker-1440.png)
 
 ## Create and share adventures
+
+**Workshop → Puzzle Lab** is a new place to experiment. Six complete rooms
+explore crates and pressure bridges, locked detours, bells, lantern doubles,
+keeper choices, relic deliveries, and linked ember wheels. Play on Trail or
+Nemesis, watch a verified route if you need a hint, then remix the room into
+your own independent adventure. A crate and a double offer different answers
+to the same crossing; the postkeeper offers a shortcut or supplies.
+
+**Remix tools** in the World studio rotate or mirror every layer, object, and
+patrol route together. Links stay connected; Undo restores the previous layout
+and clear. Move the map cursor, then use **Practise from cursor** to try a
+particular corner with fresh goals. These unscored attempts preserve bests and
+creator clears. A full Playtest still begins at the world's original start.
+
+The Lab also deals reproducible **design sparks**: creative goals paired with
+a twist, from two-solution bridges to conversations that change the way home.
+Use the same idea seed to revisit a prompt. There is no network generation or
+account requirement. See the [Puzzle Lab guide](docs/PUZZLE_LAB.md).
 
 Open **Adventure Workshop** on the game's title screen. Play three new featured
 worlds, remix them, or start a blank, seeded, or terrain-copy world. Paint
@@ -429,7 +447,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 298 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 317 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -450,7 +468,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The fourteen suites include `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The fifteen suites include `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
