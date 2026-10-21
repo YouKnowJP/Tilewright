@@ -11,6 +11,12 @@ remix it. The six originals are separate from your saved shelf. **Design sparks*
 pair creative goals with twists; an idea seed makes a prompt reproducible.
 [The Lab guide](PUZZLE_LAB.md) explains its rooms and experiment tools.
 
+**Storybooks** links two to six worlds into a portable journey. Play three
+featured books, choose optional chapter challenges, or bind your own snapshots
+with written interludes and an ending. Import/export a whole book in one file;
+its draft and chapter checkpoints are separate from this world shelf.
+[The Storybooks guide](STORYBOOKS.md) explains authoring, honors, and camp saves.
+
 ![The creator’s camp](creator-camp.png)
 
 **Creator’s guide** is available in both Mapmaker and the Workshop. Its three

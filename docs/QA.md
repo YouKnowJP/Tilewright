@@ -1,5 +1,48 @@
 # Verification record
 
+## Storybooks and chapter promises — v0.17.0
+
+**338 Node tests**, syntax checks, and a **63-file static package** pass.
+Twenty-one new tests cover real full-book wins on Trail/Nemesis, attainable
+featured speed targets, earned/missed promises, chapter progression, stale or
+duplicate completion, snapshots, Unicode/RLE bundles, import bounds, isolated
+storage, failed writes, damaged checkpoints, and bounded whole-book bests.
+
+The sixteenth browser suite uses Chrome **156.0.8078.47** and native inputs to
+complete all three featured books on both rules: **24 chapter wins**. It checks
+interludes, honors, separate full-book records, camp reload, open-chapter restart,
+a missed no-power honor, guide promises, portable downloads, and an unchanged
+checkpoint while browsing another mode's rules. Continue returns to the book's
+original rules. Existing-mode storage remains byte-for-byte unchanged.
+
+The authoring flow remixes a book, writes scenes, reorders/removes chapters,
+fills all six slots, reloads the draft, downloads it, and retains it after a
+cancelled or malformed import. Blank titles and cancelled checkpoint replacement
+leave active progress intact; an accepted custom book completes its first chapter.
+A fresh friend browser imports all bundled worlds, chooses Nemesis, and wins a
+chapter using touch. Blocked reads, quota-like failed writes, and damaged saves
+still permit play with accurate feedback.
+
+At 320×900, 390×900, 768×900, 1024×900, 1440×900, and 844×390 the reading screen,
+chapter choices, world builder, and game ribbon have no sideways page overflow.
+Normal-height gameplay keeps its map and controls inside one viewport; landscape
+uses one bounded page scroll. Independent 390×844 and desktop measurements confirm
+that fit. Screenshot review caught and fixed an exposed hidden file input and
+removed redundant chapter-screen copy. Inactive phone challenge cards compact
+their descriptions; the selected promise remains fully readable.
+
+Retained title/options/navigation, creator, and full Workshop suites pass,
+including all six original featured-world/rule playthroughs, all twenty recipes,
+all object inspectors, normal creator clears, exports/imports, and failure cases.
+These checks cover the listed Chrome flows and sizes; they do not establish
+physical-device, other-engine, screen-reader, universal user-puzzle solvability,
+or player-enjoyment certification. Book recovery is explicitly at chapter
+boundaries, and portable book files exclude progress.
+
+![A Storybook chapter camp](storybook-camp.png)
+
+![Storybook gameplay on a phone](storybook-game-phone.png)
+
 ## Puzzle Lab and creative experiments — v0.16.0
 
 **317 Node tests**, syntax checks, and a **59-file static package** pass.

@@ -11,7 +11,9 @@ three specialist tools, linked waystones, and optional commendations. The new
 after taking a risky shortcut.
 The **Adventure Workshop** adds three authored adventures, six playable Puzzle Lab rooms, 24 editable object
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
-playtests, and file/code sharing with other players.
+playtests, and file/code sharing with other players. **Storybooks** connects
+worlds into longer journeys with optional honors, saved chapter camps, and a
+creator for portable two-to-six-chapter adventures.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
@@ -32,6 +34,22 @@ Localhost saves are separate from the public website's saves.
 
 See [hosting and sharing](docs/HOSTING.md) for automatic updates and developer
 publishing details.
+
+## A longer road to make your own
+
+Open **Workshop → Storybooks**. Three books weave Puzzle Lab worlds into
+journeys of three, three, and six chapters, with new connecting scenes. At each
+camp, choose an optional promise: a clean finish, a timely arrival, every
+optional treasure or guide, or a puzzle solved without specialist powers.
+Earn honors and bonus points; a missed promise never blocks the story.
+
+Bind up to six world snapshots into your own book, write the scenes and ending,
+reorder its chapters, and download a self-contained `.storybook.json` for a
+friend to import. Completed chapters save at camp; reloading restarts the open
+chapter. Book bests, creator drafts, and other modes remain separate.
+See the [Storybooks guide](docs/STORYBOOKS.md).
+
+![A chapter camp](docs/storybook-camp.png)
 
 ## Learn by playing
 
@@ -447,7 +465,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 317 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 338 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -468,7 +486,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The fifteen suites include `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The sixteen suites include `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.

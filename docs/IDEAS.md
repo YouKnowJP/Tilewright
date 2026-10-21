@@ -96,8 +96,9 @@ more interface, content, or persistent progression.
   water banks, paths, or fences. Keep rules deterministic and inspectable.
 - **Adventure authoring expansion:** the delivered Workshop already includes
   goals, puzzle links, patrol routes, story editing, checks, and portable exports.
-  Future campaign bundles and custom local tilesets should preserve existing
-  adventures and keep structural checks distinct from a completed playtest.
+  Storybooks now deliver portable campaign bundles. Future branching books
+  and custom local tilesets should preserve existing adventures and keep
+  structural checks distinct from a completed playtest.
 - **More campaign variety:** add authored optional paths, crate-reset checkpoints,
   alternative patrol patterns, and additional quest layouts. Verify that each
   teaches a distinct decision rather than increasing map size alone.

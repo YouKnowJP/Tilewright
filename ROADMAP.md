@@ -57,6 +57,18 @@ excluded from the remaining estimates above.
   concrete interaction and fairness criteria. These ideas are unfinished and
   are not included in the completed features or the estimates above.
 
+## Connected adventures completed — v0.17
+
+- Three Storybooks connect existing Puzzle Lab worlds with new story scenes,
+  chapter promises, attainable speed targets, optional honors, and whole-book
+  bests. Missing an honor does not block progress.
+- Bind two to six world snapshots, write/reorder chapters, remix books, and
+  share self-contained files. Keep one separate book draft and active camp
+  checkpoint, with clear restart and failed-save behavior.
+- This delivers portable campaign bundles, not an online gallery or cloud
+  service. See [Storybooks](docs/STORYBOOKS.md). The editor estimates above
+  remain unchanged.
+
 ## Creative experiments completed — v0.16
 
 - Six playable/remixable Puzzle Lab rooms, verified route replays, and independent

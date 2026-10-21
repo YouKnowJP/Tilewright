@@ -602,3 +602,30 @@ Public assets add one stylesheet and two browser modules; the package has 54
 files, including its build marker and release note. Browser checks navigate the
 visible creator panels before manipulating controls and retain native clicks,
 keyboard actions, imports, downloads, and ordinary-action game playthroughs.
+
+
+## Storybooks — v0.17
+
+`storybook-model.mjs` normalizes two-to-six-chapter bundles, reuses adventure
+RLE encoding/validation, and enforces a 1.6 MB UTF-8 import/export bound. A book
+key includes text, ordering, and world keys; proof journals do not change world
+identity. Author drafts may contain fewer than two chapters until ready to play.
+Snapshots clone worlds rather than mutating the shelf or World studio draft.
+
+An immutable session advances from interlude to playing to the next camp or
+completion. Engine wins must match the current book, world, chapter, promise,
+and rule set before producing a receipt; repeated/stale wins cannot advance it.
+Promises evaluate actual turn, damage, treasure, dialogue, and specialist-use
+state. Missing one affects only the optional honor and 150-point bonus. No
+new restrictions or combat powers can make the ordinary objective unsolvable.
+
+`tilewright.storybooks.v1` owns the book draft, active boundary checkpoint,
+chapter receipts, and up to 32 full-book bests. Its bounded restore checks phase,
+chapter count, receipt metadata, challenge eligibility, and rules. Damaged
+sections are isolated. A reload restarts the open chapter; no per-turn journal
+or cross-chapter supplies/memory is claimed. Portable files exclude progress.
+`storybook-ui.mjs` inserts player text with DOM textContent/value and handles
+native downloads, imports, replacement confirmation, and truthful save failure.
+`storybook-worlds.mjs` frames existing Lab worlds with original stories and
+attainable authored turn targets. The ordinary game engine still runs each map.
+The public package adds three modules and one stylesheet (63 total files).

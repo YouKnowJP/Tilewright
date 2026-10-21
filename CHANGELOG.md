@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.17.0 — 2026-10-20
+
+- Add Storybooks: three connected journeys of three, three, and six chapters
+  through the existing Puzzle Lab worlds, with new interludes and endings.
+- Choose an optional chapter promise: clean finish, tighter turn target,
+  optional treasure, guide conversations, or a solution without specialist
+  powers. Track progress in a readable ribbon, award honors and bonus points,
+  and continue the story even when a promise is missed.
+- Bind two to six world snapshots into a custom book. Write scenes, reorder
+  chapters, remix a featured book, and share self-contained .storybook.json
+  files. Bound imports to 1.6 MB and retain per-world validation and limits.
+- Save chapter-boundary checkpoints, selected promises, chapter receipts, and
+  full-book bests independently from all existing modes. Explain reload/retry
+  behavior and failed storage. Protect populated drafts/checkpoints on replace.
+- Add a focused reading screen, collapsible library, mobile challenge previews,
+  and responsive book creator. Keep the title and existing Workshop navigation.
+- Add 21 engine/format/checkpoint tests (338 total) and a sixteenth Chrome suite
+  covering full books on both rules, missed honors, creator/file workflows,
+  reloads, failed saves, six touch layouts, and isolated ordinary saves.
+  Package 63 static files.
+
 ## 0.16.0 — 2026-10-20
 
 - Add Puzzle Lab with six complete playable rooms: crate crossings, two-key

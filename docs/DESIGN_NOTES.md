@@ -46,3 +46,26 @@ Optional field goals suggest a second route without blocking completion.
 The v0.8 [research notes](RESEARCH.md) connect primary developer sources to
 Guild specialists, energy-competing waystone routes, readable consequences,
 and optional commendations. See the [Guild guide](GUILD.md) for shipped rules.
+
+
+## Connected worlds and voluntary promises — v0.17
+
+Nintendo's official [Super Mario Maker 2 update news](https://supermariomaker.nintendo.com/en_CA/news/)
+describes World Maker, which connects individual courses into shared worlds.
+Subset's [Into the Breach overview](https://www.subsetgames.com/itb.html)
+describes telegraphed attacks that players can analyze and counter. These are
+references for structure and readability, not borrowed maps, characters, or art.
+
+Our design inference is to give existing player worlds a longer context, and
+make each extra goal explicit before committing. Storybooks adds written camps,
+independent world snapshots, optional chapter promises, and a live goal ribbon.
+A missed promise changes honors rather than locking the next chapter. Featured
+speed targets are derived from completed routes and tested on both rule sets.
+A no-power promise encourages alternate solutions, but is voluntary because a
+player-made world may require its specialist power. Files bundle the whole
+journey so friends need neither a repository nor a matching saved shelf.
+
+The first version deliberately uses linear chapters and boundary checkpoints.
+It does not claim a shared gallery, branching campaign authoring, persistent
+companions between worlds, or per-turn book recovery. Those would need their own
+editing, migration, solvability, and failure-recovery work.
