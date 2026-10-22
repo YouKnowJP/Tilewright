@@ -4,14 +4,14 @@ import { LAB_ROOMS } from '../src/workshop-lab.mjs';
 import { LAB_CLEARS } from '../src/workshop-lab-clears.mjs';
 import { MASTERY_KEY, masteryCount, parseMastery } from '../src/workshop-mastery.mjs';
 import { playGuild } from './guild-browser-checks.mjs';
-import { clickControl } from './ui-driver.mjs';
+import { chooseOption, clickControl } from './ui-driver.mjs';
 
 const alternate=JSON.parse(await readFile(new URL('../tests/fixtures/foundry-alternate.json',import.meta.url),'utf8'));
 const saved=page=>page.evaluate(key=>localStorage.getItem(key),MASTERY_KEY);
 const others=page=>page.evaluate(key=>JSON.stringify(Object.entries(localStorage).filter(([id])=>id!==key&&id!=='tilewright.workshop.bests.v1').sort()),MASTERY_KEY);
 async function lab(page){await page.locator('#title-workshop').click();await page.locator('#ws-tab-lab').click();}
 async function select(page,id,rules='trail'){
-  await page.locator(`[data-lab-collection="${LAB_ROOMS.find(room=>room.id===id).afterhours?'afterhours':'foundations'}"]`).click();if(await page.locator('#ws-lab-room-picker').isVisible())await page.locator('#ws-lab-room-picker').selectOption(id);else await page.locator(`[data-lab-room="${id}"]`).click();await page.locator('#ws-lab-rules').selectOption(rules);
+  await page.locator(`[data-lab-collection="${LAB_ROOMS.find(room=>room.id===id).afterhours?'afterhours':'foundations'}"]`).click();if(await page.locator('#ws-lab-room-picker-control').isVisible())await chooseOption(page,'#ws-lab-room-picker',id);else await page.locator(`[data-lab-room="${id}"]`).click();await chooseOption(page,'#ws-lab-rules',rules);
 }
 async function start(page,id,rules){await select(page,id,rules);await page.locator('#ws-lab-play').click();await page.locator('#ws-preview-dialog').waitFor();assert.equal(await page.locator('#ws-preview-difficulty').inputValue(),rules);await page.locator('#ws-preview-play').click();}
 async function finish(page,actions,touch=false){await playGuild(page,actions,touch);assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');assert.match(await page.locator('#game-result-text').textContent(),/seal/);await page.locator('#game-primary').click();await page.locator('#ws-lab').waitFor();}

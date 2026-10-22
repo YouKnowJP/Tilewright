@@ -23,12 +23,12 @@ body {
   margin:0;
 }
 
-button,input,select {
+button,input,:is(select,.game-select-trigger) {
   font:inherit;
   color:inherit;
 }
 
-button,a,input,select,canvas {
+button,a,input,:is(select,.game-select-trigger),canvas {
   -webkit-tap-highlight-color:transparent;
 }
 
@@ -71,12 +71,12 @@ a:hover {
   text-decoration:underline;
 }
 
-button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,canvas:focus-visible,.canvas-viewport:focus-visible {
+button:focus-visible,a:focus-visible,:is(select,.game-select-trigger):focus-visible,input:focus-visible,canvas:focus-visible,.canvas-viewport:focus-visible {
   outline:3px solid #b67d4d;
   outline-offset:3px;
 }
 
-input,select {
+input,:is(select,.game-select-trigger) {
   border:1px solid var(--line);
   border-radius:5px;
   background:var(--white);
@@ -471,7 +471,7 @@ h1>span {
   gap:7px;
 }
 
-.view-controls select {
+.view-controls :is(select,.game-select-trigger) {
   font-size:11px;
   padding:5px 3px;
   width:86px;
@@ -1180,7 +1180,7 @@ dialog>form[method="dialog"] {
   .view-controls {
     margin-left:auto;
   }
-  .view-controls select {
+  .view-controls :is(select,.game-select-trigger) {
     height:36px;
   }
   .canvas-viewport {

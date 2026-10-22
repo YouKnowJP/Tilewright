@@ -39,6 +39,18 @@ specialist powers keep visible buttons in every movement style.
 
 ## Keyboard actions
 
+Dropdowns use the same game interface on every device. Click/tap a field, use
+arrows to explore its choices, then Enter/Space or a tap to choose. Home/End
+reach the ends; Page Up/Down moves through longer lists. Type the start of a
+word to find a choice. Escape or an outside click cancels; Tab closes the list
+and continues to the next control. Choosing a setting never spends a game turn.
+Long lists scroll inside their panel, and hidden/disabled choices cannot be selected.
+
+With a standard controller, focus a dropdown and use the bottom face button to
+open/choose, directions to explore, and Back to cancel only the list. In menus,
+left/right on a closed field changes its choice directly; up/down moves focus.
+The selected value is preserved when you cancel or leave the screen.
+
 | Key | Action |
 | --- | --- |
 | Selected movement keys | One step |

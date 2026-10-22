@@ -278,3 +278,11 @@ paths and existing maps.
 - Compact local-save status and corrupt/full/unavailable-storage fallbacks.
 - This recovery improvement is complete and does not change editor estimates.
   See [Undo and Continue](docs/CONTINUE.md) and the verification record.
+
+## Game dropdowns completed — v0.22.1
+
+- All 40 selectors use shared game-styled HTML choices on every game/editor screen.
+- Keyboard, touch, and standard-controller navigation, cancellation, and focus.
+- Bounded grouped lists, dialog layering, rotation, and matching disabled states.
+- Existing saves and checkpoint rules retained; a browser audit opens every
+  selector in Chrome, Firefox, and WebKit. See the verification record.

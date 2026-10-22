@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { enterFirstTrail } from './ui-driver.mjs';
+import { chooseOption, enterFirstTrail } from './ui-driver.mjs';
 import { parseAdventure } from '../src/workshop-sharing.mjs';
 import { verifyAdventureProof, blankAdventure } from '../src/workshop-model.mjs';
 
@@ -12,7 +12,7 @@ async function walk(page, actions, touch = false) {
   for (const action of actions) {
     if (action === 'close-dialogue') await page.locator('#training-talk-close').click();
     else if (action.startsWith('interact:')) {
-      if (await page.locator('#training-target').isVisible()) await page.locator('#training-target').selectOption(action.slice(9));
+      if (await page.locator('#training-target-control').isVisible()) await chooseOption(page,'#training-target',action.slice(9));
       await page.locator('#training-interact').click();
     } else if (touch) await page.locator(action === 'wait' ? '#training-wait' : `[data-training-move="${action}"]`).tap();
     else { await page.locator('#training-map').focus(); await page.keyboard.press(keys[action]); }

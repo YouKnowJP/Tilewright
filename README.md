@@ -47,6 +47,11 @@ run without restarting. Training uses the same preferences. Portrait, landscape,
 and split-view layouts preserve readable feedback and reachable controls.
 [Device and controls guide](docs/CONTROLS.md).
 
+Every dropdown uses the same forest-and-brass game interface, including its
+open choices. Settings, adventures, and both editors support keyboard, touch,
+and controller selection. Long grouped lists scroll inside their own panel;
+menus fit the screen and stay above their dialog instead of opening an OS picker.
+
 ## Try another answer, then return later
 
 Use **Undo · Z** below the board to revisit up to **60 recent actions**,
@@ -544,7 +549,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The twenty-one browser families include `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The twenty-two browser families include `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { clickControl } from './ui-driver.mjs';
+import { chooseOption, clickControl } from './ui-driver.mjs';
 
 export async function checkFrontMenu(browserType, { baseURL = 'http://127.0.0.1:4174', channel = 'chrome', screenshots = false } = {}) {
   const browser = await browserType.launch({ headless: true, channel }), results = [];
@@ -99,7 +99,7 @@ export async function checkFrontMenu(browserType, { baseURL = 'http://127.0.0.1:
     try {
       const page = await recovery.newPage(); await page.goto(`${baseURL}/#play`); await page.locator('#adventure[data-view="title"]').waitFor();
       await page.locator('#title-play').click(); await page.locator('#front-expeditions').click();
-      await page.locator('#expedition-mode').selectOption('contract'); await page.locator('#expedition-seed').fill('menu-lantern');
+      await chooseOption(page,'#expedition-mode','contract'); await page.locator('#expedition-seed').fill('menu-lantern');
       await page.locator('#expedition-start').click(); await page.locator('#adventure-canvas').focus(); await page.keyboard.press('Space');
       const before = await page.locator('#adventure-canvas').getAttribute('aria-label');
       assert.equal(await page.locator('#game-turns').textContent(), '1');

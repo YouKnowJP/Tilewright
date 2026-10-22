@@ -8,6 +8,7 @@ import { createIcon } from './icons.mjs';
 import { renameLayer, duplicateLayer, moveLayer, removeLayer, resizeDocument, croppedTileCount } from './operations.mjs';
 import { createCreatorGuide } from './creator-guide.mjs';
 import { createMapmakerShell } from './mapmaker-shell.mjs';
+import { installGameDropdowns } from './game-dropdowns.mjs';
 import { createAdventureUI } from './adventure-ui.mjs';
 
 const $ = selector => document.querySelector(selector);
@@ -438,7 +439,7 @@ $('#help-button').addEventListener('click', () => { cancelStroke(); $('#help-dia
 document.addEventListener('keydown', event => {
   if (!$('#adventure').hidden) return;
   if (event.key === 'Escape') { cancelStroke(); return; }
-  if (event.target.closest('input, select, textarea, dialog') || event.altKey) return;
+  if (event.target.closest('[data-game-select], input, select, textarea, dialog') || event.altKey) return;
   const key = event.key.toLowerCase();
   if (event.ctrlKey || event.metaKey) {
     if (key === 'z') { event.preventDefault(); moveHistory(event.shiftKey ? 'redo' : 'undo'); }
@@ -485,3 +486,4 @@ function readGameHash() {
 }
 window.addEventListener('hashchange', readGameHash);
 readGameHash();
+installGameDropdowns();

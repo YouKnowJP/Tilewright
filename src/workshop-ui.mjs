@@ -179,7 +179,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   $('replay-toggle').onclick=()=>{if(replay.playing){stopReplay();replayDraw();}else{replay.playing=true;tick();}};
   $('replay-step').onclick=()=>{stopReplay();replayStep();};$('replay-skip').onclick=()=>{stopReplay();replayStep(20);};$('replay-reset').onclick=replayReset;
   $('replay-dialog').addEventListener('close',stopReplay);new ResizeObserver(replayDraw).observe($('replay-viewport'));
-  document.addEventListener('keydown',event=>{if(root.hidden||section!=='build'||event.target.closest('input,select,textarea,dialog')||document.querySelector('dialog[open]'))return;if((event.ctrlKey||event.metaKey)&&!event.altKey){const key=event.key.toLowerCase();if(['z','y','s'].includes(key)){event.preventDefault();$(key==='s'?'save':key==='y'||event.shiftKey?'redo':'undo').click();}}});
+  document.addEventListener('keydown',event=>{if(root.hidden||section!=='build'||event.target.closest('[data-game-select],input,select,textarea,dialog')||document.querySelector('dialog[open]'))return;if((event.ctrlKey||event.metaKey)&&!event.altKey){const key=event.key.toLowerCase();if(['z','y','s'].includes(key)){event.preventDefault();$(key==='s'?'save':key==='y'||event.shiftKey?'redo':'undo').click();}}});
   renderShelf();draftState();
   return { show,hide,notice,
     runSource(run){

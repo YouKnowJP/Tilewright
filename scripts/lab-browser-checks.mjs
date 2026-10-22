@@ -2,18 +2,18 @@ import assert from 'node:assert/strict';
 import { LAB_ROOMS, transformAdventure } from '../src/workshop-lab.mjs';
 import { LAB_CLEARS } from '../src/workshop-lab-clears.mjs';
 import { playGuild } from './guild-browser-checks.mjs';
-import { clickControl } from './ui-driver.mjs';
+import { chooseOption, clickControl } from './ui-driver.mjs';
 import { blankAdventure, placeObject } from '../src/workshop-model.mjs';
 
 const draftKey = 'tilewright.workshop.draft.v1', bestKey = 'tilewright.workshop.bests.v1';
 const draft = page => page.evaluate(key => JSON.parse(localStorage.getItem(key)), draftKey);
 const saves = page => page.evaluate(() => JSON.stringify(Object.entries(localStorage).sort()));
 async function lab(page) { await page.locator('#title-workshop').click(); await page.locator('#ws-tab-lab').click(); }
-async function selectRoom(page,id) { await page.locator(`[data-lab-collection="${LAB_ROOMS.find(room=>room.id===id).afterhours?'afterhours':'foundations'}"]`).click(); if(await page.locator('#ws-lab-room-picker').isVisible())await page.locator('#ws-lab-room-picker').selectOption(id);else await page.locator(`[data-lab-room="${id}"]`).click(); }
+async function selectRoom(page,id) { await page.locator(`[data-lab-collection="${LAB_ROOMS.find(room=>room.id===id).afterhours?'afterhours':'foundations'}"]`).click(); if(await page.locator('#ws-lab-room-picker-control').isVisible())await chooseOption(page,'#ws-lab-room-picker',id);else await page.locator(`[data-lab-room="${id}"]`).click(); }
 async function playRoom(page, id, difficulty, actions = LAB_CLEARS[id]) {
   await selectRoom(page,id); await page.locator('#ws-lab-play').click(); await page.locator('#ws-preview-dialog').waitFor();
   assert.match(await page.locator('#ws-preview-clear').textContent(), /verified/);
-  await page.locator('#ws-preview-difficulty').selectOption(difficulty); await page.locator('#ws-preview-play').click();
+  await chooseOption(page,'#ws-preview-difficulty',difficulty); await page.locator('#ws-preview-play').click();
   await playGuild(page, actions); assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won');
   assert.equal(await page.locator('#game-primary').textContent(), 'Back to Puzzle Lab');
   await page.locator('#game-primary').click(); await page.locator('#ws-lab').waitFor();

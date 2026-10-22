@@ -1,14 +1,14 @@
 /* Shared forest-and-brass game presentation; studio.css extends it to creation. */
 .playing { color-scheme:dark; color:#eee5c7; background:#102b2b; --paper:#102b2b; --white:#193630; --ink:#eee5c7; --muted:#bdcdb5; --line:#526a52; --green:#43543b; --pale:#203d35; }
 .playing .mode-switcher { display:none; }
-.playing button,.playing select,.playing input { color:#eee5c7; }
+.playing button,.playing :is(select,.game-select-trigger),.playing input { color:#eee5c7; }
 .playing button { background:#203e36; border-color:#7d855c; border-radius:2px; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
 .playing button:hover:not(:disabled) { background:#344c3b; border-color:#e7c47c; }
 .playing button.primary { background:#51492f; border-color:#c8ab68; color:#fff0bd; }
-.playing button:focus-visible,.playing summary:focus-visible,.playing select:focus-visible,.playing input:focus-visible { outline:3px solid #f1d68e; outline-offset:3px; }
+.playing button:focus-visible,.playing summary:focus-visible,.playing :is(select,.game-select-trigger):focus-visible,.playing input:focus-visible { outline:3px solid #f1d68e; outline-offset:3px; }
 .playing [role="tabpanel"]:focus-visible,.playing .camp-choices:focus-visible { outline:2px solid #f1d68e; outline-offset:3px; }
 .playing .atlas-chapter-heading h3:focus { outline:none; }
-.playing select,.playing input:not([type="radio"]):not([type="range"]) { background:#102c2b; border-color:#829066; border-radius:2px; }
+.playing :is(select,.game-select-trigger),.playing input:not([type="radio"]):not([type="range"]) { background:#102c2b; border-color:#829066; border-radius:2px; }
 .playing button:disabled { opacity:.5; }
 .playing .eyebrow { color:#c6b780; }
 .game-shell-bar[hidden],#library-resume[hidden] { display:none; }
@@ -43,7 +43,7 @@
 .playing .game-controls #dash-button.armed,.playing .tactical-actions button.armed { background:#51492f; border-color:#e0bd71; }
 .playing #game-power { color:#f0d8f0; background:#443b4c; border-color:#b79dbb; }
 .playing .game-target-wrap,.playing .game-controls>.game-interaction-note:not([hidden]) { color:#d6dfbf; }
-.playing .game-target-wrap select { background:#102d2b; color:#eee4bc; border-color:#7e8a5d; }
+.playing .game-target-wrap :is(select,.game-select-trigger) { background:#102d2b; color:#eee4bc; border-color:#7e8a5d; }
 .playing .game-rule-note,.playing .game-expedition-banner { background:#3c3e2b; color:#f1dfad; border-color:#8f8c5d; }
 .playing .notes-heading h3 { color:#f4deac; font-family:ui-monospace,monospace; }
 .playing .notes-tabs { border-color:#526a52; }

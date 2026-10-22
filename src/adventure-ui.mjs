@@ -1,3 +1,4 @@
+import { controlDropdown } from './game-dropdowns.mjs';
 import { CONTROL_STYLES, movementKey, controlHelp } from './adventure-controls.mjs';
 import { createMapInput, createGamepadInput } from './adventure-input.mjs';
 import { createRun, createCustomStage, resultFor, activePlates, scoutHint, MAX_HEARTS, MAX_ENERGY, nearbyInteractions, missionGoals, turnTarget, recordId, canEnter, hazardActive } from './adventure.mjs';
@@ -629,12 +630,12 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     catch (error) { showStatus(error.message, 'warning'); $('#library-notice').textContent = error.message; $('#library-notice').hidden = false; }
   });
   document.addEventListener('keydown', event => {
-    if(active&&run&&!outsideBoard()&&!front.dialogOpen&&!event.repeat&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&event.key.toLowerCase()==='z'&&!event.target.closest('input,select,textarea')){const dialog=document.querySelector('dialog[open]');if(!dialog||dialog.id==='conversation-dialog'){event.preventDefault();rewindAction();return;}}
-    if (active && libraryOpen() && event.key === 'Escape' && !front.dialogOpen && !event.target.closest('input, select, dialog')) { event.preventDefault(); showTitle(); return; }
-    if (active && run && !outsideBoard() && !front.dialogOpen && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey && event.target.id === 'game-target' && event.key.toLowerCase() === 'e') {
+    if(active&&run&&!outsideBoard()&&!front.dialogOpen&&!event.repeat&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&event.key.toLowerCase()==='z'&&!event.target.closest('[data-game-select],input,select,textarea')){const dialog=document.querySelector('dialog[open]');if(!dialog||dialog.id==='conversation-dialog'){event.preventDefault();rewindAction();return;}}
+    if (active && libraryOpen() && event.key === 'Escape' && !front.dialogOpen && !event.target.closest('[data-game-select], input, select, dialog')) { event.preventDefault(); showTitle(); return; }
+    if (active && run && !outsideBoard() && !front.dialogOpen && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey && event.target.dataset.gameSelect === 'game-target' && event.key.toLowerCase() === 'e') {
       event.preventDefault(); canvas.focus({ preventScroll: true }); interact(); return;
     }
-    if (!active || !run || outsideBoard() || front.dialogOpen || notesDialog.open || event.ctrlKey || event.metaKey || event.altKey || event.target.closest('input, select, textarea, dialog, .game-aside')) return;
+    if (!active || !run || outsideBoard() || front.dialogOpen || notesDialog.open || event.ctrlKey || event.metaKey || event.altKey || event.target.closest('[data-game-select], input, select, textarea, dialog, .game-aside')) return;
     if ($('#game-menu').open) { if (event.key === 'Escape') { event.preventDefault(); $('#game-menu').open = false; $('#game-menu summary').focus(); } return; }
     const direction=movementKey(event.key,front.preferences.keyboardLayout);
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
@@ -655,6 +656,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     onMove:direction=>action(direction),
   });
   function controllerPress(command) {
+    if(controlDropdown(command))return;
     if(command==='undo'){if(!$('#training-camp').hidden)training.control('undo');else rewindAction();return;}
     const dialog=document.activeElement?.closest('dialog[open]')||document.querySelector('dialog[open]'),menu=$('#game-menu');
     if(!dialog&&training?.control(command))return;

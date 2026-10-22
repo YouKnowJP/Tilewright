@@ -93,7 +93,7 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
       const relicIndex = nearbyFixture.actions.indexOf('interact:relic');
       await play(page, nearbyFixture.actions.slice(0, relicIndex));
       assert.equal(await page.locator('#game-target-wrap').isVisible(), true);
-      await selectControl(page, '#game-target', 'relic'); await page.locator('#game-target').focus(); await page.keyboard.press('e');
+      await selectControl(page, '#game-target', 'relic'); await page.locator('#game-target-control').focus(); await page.keyboard.press('e');
       assert.equal(await page.locator('#game-cargo').isDisabled(), false);
       // Restore genuine previous-version saves through the file input, then verify immediate migration.
       await clickControl(page, '#begin-expedition');
@@ -139,7 +139,7 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
           for (const value of fixture.actions) {
             try {
               if (value.startsWith('interact:') && await page.locator('#game-target-wrap').isVisible()) {
-                await selectControl(page, '#game-target', value.slice(9)); await page.locator('#game-target').focus(); await page.keyboard.press('e'); selections++;
+                await selectControl(page, '#game-target', value.slice(9)); await page.locator('#game-target-control').focus(); await page.keyboard.press('e'); selections++;
               } else await action(page, value);
             } catch (error) {
               const state = await page.evaluate(() => ({ title: document.querySelector('#game-title').textContent, turn: document.querySelector('#game-turns').textContent,

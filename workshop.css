@@ -16,7 +16,7 @@
 .ws-shelf-tools label { min-width:0; max-width:320px; }
 .ws-shelf-tools>span { color:#c1d0b2; font:11px/1.8 ui-monospace,monospace; margin-left:auto; }
 .ws-inspector label,.adventure-workshop label,.ws-new-dialog label,.ws-preview-dialog label,.ws-palette-options label,.ws-code-form>label { display:block; color:#d5dfbd; font:12px/1.7 ui-monospace,monospace; }
-.ws-inspector input:not([type="checkbox"]),.ws-inspector select,.ws-inspector textarea,.adventure-workshop input:not([type="checkbox"]),.adventure-workshop select,.adventure-workshop textarea,.ws-new-dialog input,.ws-new-dialog select,.ws-preview-dialog select,.ws-palette-options select { display:block; width:100%; min-height:42px; margin-top:7px; padding:10px; border:1px solid #839166; border-radius:2px; background:#102c2b; color:#f1e7c8; font:13px/1.6 ui-monospace,monospace; }
+.ws-inspector input:not([type="checkbox"]),.ws-inspector :is(select,.game-select-trigger),.ws-inspector textarea,.adventure-workshop input:not([type="checkbox"]),.adventure-workshop :is(select,.game-select-trigger),.adventure-workshop textarea,.ws-new-dialog input,.ws-new-dialog :is(select,.game-select-trigger),.ws-preview-dialog :is(select,.game-select-trigger),.ws-palette-options :is(select,.game-select-trigger) { display:block; width:100%; min-height:42px; margin-top:7px; padding:10px; border:1px solid #839166; border-radius:2px; background:#102c2b; color:#f1e7c8; font:13px/1.6 ui-monospace,monospace; }
 .playing .adventure-workshop textarea,.playing #ws-export-code { resize:vertical; border:1px solid #839166; background:#102c2b; color:#f1e7c8; border-radius:2px; }
 .ws-adventures { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
 .ws-adventure-card { display:flex; flex-direction:column; min-width:0; border:1px solid #70815a; background:#19372f; }
@@ -79,7 +79,7 @@
 #ws-lab-file[hidden] { display:none!important; }
 #ws-mastery-dialog p { color:#d4ddc3; font-size:16px; line-height:1.8; }
 @media(max-width:600px) { .ws-lab-tools,.ws-mastery-heading { align-items:stretch; flex-direction:column; } .ws-lab-tools>label { width:100%; } .ws-lab-collections>button { flex:1; font-size:11px; padding:9px 6px; } .ws-lab-mastery { padding:16px; } .ws-lab-seals { grid-template-columns:1fr; gap:8px; } .ws-lab-seals article { padding:12px; } .ws-lab-seals h5 { font-size:20px; margin:5px 0; } }
-@media(max-width:600px) { .adventure-workshop .ws-lab-room-picker { display:block; margin-top:14px; } .ws-lab-rooms { display:none!important; } .ws-lab-layout { margin-top:14px; } .ws-lab-room>canvas { max-height:135px; } .ws-lab-room-picker select { font-size:13px; } }
+@media(max-width:600px) { .adventure-workshop .ws-lab-room-picker { display:block; margin-top:14px; } .ws-lab-rooms { display:none!important; } .ws-lab-layout { margin-top:14px; } .ws-lab-room>canvas { max-height:135px; } .ws-lab-room-picker :is(select,.game-select-trigger) { font-size:13px; } }
 .ws-spark { border-top:1px solid #70815a; margin-top:25px; padding-top:18px; color:#d4ddc3; }
 .ws-spark summary { color:#efdaa2; cursor:pointer; font:18px/1.5 Georgia,serif; }
 .ws-spark form { display:flex; align-items:end; gap:8px; margin:18px 0; }
@@ -98,8 +98,8 @@
 .ws-studio { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:15px; align-items:stretch; }
 .ws-workspace { min-width:0; border:1px solid #8d8d5f; background:#193630; display:flex; flex-direction:column; }
 .ws-map-toolbar { display:flex; gap:5px; flex-wrap:wrap; padding:10px; border-bottom:1px solid #617650; align-items:center; }
-.ws-map-toolbar button,.ws-map-toolbar select { min-height:38px; padding:8px; font-size:11px; }
-.ws-map-toolbar select { width:auto; margin:0 0 0 auto; }
+.ws-map-toolbar button,.ws-map-toolbar :is(select,.game-select-trigger) { min-height:38px; padding:8px; font-size:11px; }
+.ws-map-toolbar :is(select,.game-select-trigger) { width:auto; margin:0 0 0 auto; }
 .ws-viewport { position:relative; overflow:auto; height:clamp(380px,62svh,720px); min-width:0; background:#102d2b; overscroll-behavior:contain; scrollbar-color:#738262 #102d2b; }
 .ws-canvas-wrap { width:max-content; min-width:100%; min-height:100%; display:flex; align-items:center; justify-content:center; padding:16px; }
 #ws-canvas { display:block; flex-shrink:0; image-rendering:pixelated; touch-action:none; }
@@ -163,7 +163,7 @@
 .ws-replay-controls { display:flex; gap:7px; align-items:center; flex-wrap:wrap; }
 .ws-replay-controls button { font-size:11px; padding:10px; }
 .ws-replay-controls label { font-size:11px; }
-.ws-replay-controls select { padding:10px; background:#102d2b; border:1px solid #829066; }
+.ws-replay-controls :is(select,.game-select-trigger) { padding:10px; background:#102d2b; border:1px solid #829066; }
 .ws-replay-controls output { font:11px ui-monospace,monospace; color:#d1d9b8; margin-left:auto; }
 .front-mapmaker-card>div { flex-wrap:wrap; }
 .front-mapmaker-card .ws-mode-entry { flex-basis:100%; background:#51492f; border-color:#c8ab68; }
@@ -187,13 +187,13 @@
   .ws-shelf-tools { gap:10px; flex-wrap:wrap; }
   .ws-shelf-tools label:first-child { flex:1; }
   .ws-shelf-tools>span { width:100%; margin:0; }
-  .ws-inspector input:not([type="checkbox"]),.ws-inspector select,.ws-inspector textarea,.adventure-workshop input:not([type="checkbox"]),.adventure-workshop textarea,.adventure-workshop select,.ws-new-dialog input,.ws-new-dialog select { font-size:16px; }
+  .ws-inspector input:not([type="checkbox"]),.ws-inspector :is(select,.game-select-trigger),.ws-inspector textarea,.adventure-workshop input:not([type="checkbox"]),.adventure-workshop textarea,.adventure-workshop :is(select,.game-select-trigger),.ws-new-dialog input,.ws-new-dialog :is(select,.game-select-trigger) { font-size:16px; }
   .ws-adventures { grid-template-columns:minmax(0,1fr); }
   .ws-adventure-card canvas { height:170px; }
   .ws-build-heading>div:last-child { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); width:100%; }
   .ws-build-heading button { padding:9px 4px; font-size:10px; }
   .ws-map-toolbar button { font-size:10px; padding:8px 6px; }
-  .ws-map-toolbar select { font-size:12px; }
+  .ws-map-toolbar :is(select,.game-select-trigger) { font-size:12px; }
   .ws-viewport { height:clamp(300px,48svh,480px); }
   .ws-map-footer { font-size:10px; }
   .ws-brushes { grid-template-columns:repeat(3,minmax(0,1fr)); }

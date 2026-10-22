@@ -131,7 +131,7 @@
 .adventure-options { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:8px; max-width:480px; }
 .adventure-options label { font-size:11px; }
 .adventure-options label small { display:block; font-size:9px; color:var(--muted); margin-top:4px; }
-.adventure-options select { max-width:100%; padding:10px; border:1px solid #ccd8bf; border-radius:5px; background:#fffdf5; font-size:11px; }
+.adventure-options :is(select,.game-select-trigger) { max-width:100%; padding:10px; border:1px solid #ccd8bf; border-radius:5px; background:#fffdf5; font-size:11px; }
 .adventure-options button { font-size:11px; }
 #begin-contracts { background:#294f43; color:#fffbea; }
 .tactical-actions { display:flex; flex-wrap:wrap; width:100%; gap:8px; }
@@ -152,7 +152,7 @@
 .game-viewport { height:clamp(300px,48svh,520px); }
 @media(max-width:760px) {
   .adventure-options { justify-content:flex-start; max-width:100%; }
-  .adventure-options select { font-size:16px; width:100%; }
+  .adventure-options :is(select,.game-select-trigger) { font-size:16px; width:100%; }
   .game-controls .tactical-actions { grid-column:1 / -1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
   .tactical-actions button { font-size:10px; min-height:44px; padding:7px 4px; overflow-wrap:anywhere; }
   .game-controls>p { display:none; }
@@ -173,7 +173,7 @@
 .expedition-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:23px; }
 .expedition-form>div { min-width:0; }
 .expedition-form label { display:block; font-size:11px; color:#6d815f; margin-bottom:7px; }
-.expedition-form select,.expedition-form input { display:block; width:100%; max-width:100%; padding:11px; min-height:42px; border:1px solid #cad7bf; border-radius:5px; background:#fbfcf5; font-size:12px; }
+.expedition-form :is(select,.game-select-trigger),.expedition-form input { display:block; width:100%; max-width:100%; padding:11px; min-height:42px; border:1px solid #cad7bf; border-radius:5px; background:#fbfcf5; font-size:12px; }
 .expedition-form .expedition-seed-field,.expedition-mode-note,.expedition-error,.expedition-hub-actions { grid-column:1 / -1; }
 .expedition-seed-field>div { display:flex; gap:8px; }
 .expedition-seed-field button { flex-shrink:0; font-size:11px; }
@@ -215,7 +215,7 @@
   .expedition-hub { padding:18px 13px; }
   .expedition-intro h2 { font-size:24px; }
   .expedition-form { grid-template-columns:minmax(0,1fr); gap:15px; }
-  .expedition-form select,.expedition-form input { font-size:16px; }
+  .expedition-form :is(select,.game-select-trigger),.expedition-form input { font-size:16px; }
   .expedition-badges { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .expedition-hub-actions button { font-size:11px; }
   .game-expedition-kit { grid-column:1 / -1; }
@@ -231,7 +231,7 @@
 
 #game-nemesis[hidden],#game-target-wrap[hidden],#game-interaction-note[hidden],#conversation-wallet[hidden] { display:none; }
 .game-target-wrap { width:100%; display:flex; align-items:center; gap:10px; font-size:11px; color:#526e48; }
-.game-target-wrap select { flex:1; min-width:0; min-height:42px; padding:8px; border:1px solid #bacbad; border-radius:5px; background:#fffef7; }
+.game-target-wrap :is(select,.game-select-trigger) { flex:1; min-width:0; min-height:42px; padding:8px; border:1px solid #bacbad; border-radius:5px; background:#fffef7; }
 .game-controls>.game-interaction-note { width:100%; font-size:11px; line-height:1.6; color:#536e4b; margin:0; }
 #conversation-wallet { font-size:12px; color:#536e4b; line-height:1.7; margin:14px 0; }
 .forecast-dialog { width:min(540px,calc(100% - 28px)); }
@@ -240,7 +240,7 @@
 #forecast-close { position:sticky; bottom:0; min-height:44px; background:#e5edd9; font-size:14px; }
 @media(max-width:760px) {
   .game-target-wrap,.game-controls>.game-interaction-note { grid-column:1 / -1; }
-  .game-target-wrap select { font-size:16px; }
+  .game-target-wrap :is(select,.game-select-trigger) { font-size:16px; }
   .game-controls>.game-interaction-note:not([hidden]) { display:block; font-size:10px; }
   .game-toolbar-actions { gap:4px; }
 }
@@ -307,7 +307,7 @@
 .guild-heading h2 { font-size:27px; font-weight:500; letter-spacing:-.7px; margin:9px 0; color:#494464; }
 .guild-heading p:last-child,#guild-kit-note,#guild-progress { font-size:12px; line-height:1.8; color:#625f79; }
 .guild-heading label { font-size:11px; min-width:240px; color:#56536c; }
-.guild-heading select { display:block; margin-top:9px; width:100%; padding:12px; border:1px solid #bdb5d0; border-radius:5px; background:#fffdf6; }
+.guild-heading :is(select,.game-select-trigger) { display:block; margin-top:9px; width:100%; padding:12px; border:1px solid #bdb5d0; border-radius:5px; background:#fffdf6; }
 #guild-kit-note { margin-top:18px; padding:14px 16px; border-radius:7px; background:#fffdf5; border:1px solid #d4cede; }
 #guild-progress { margin:16px 0; }
 .guild-jobs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; }
@@ -325,7 +325,7 @@
   .guild-heading { flex-wrap:wrap; gap:16px; }
   .guild-heading h2 { font-size:24px; }
   .guild-heading label { width:100%; min-width:0; }
-  .guild-heading select { font-size:16px; }
+  .guild-heading :is(select,.game-select-trigger) { font-size:16px; }
   .guild-jobs { grid-template-columns:minmax(0,1fr); }
   .guild-job canvas { max-height:120px; object-fit:cover; }
   .guild-active .game-viewport { height:clamp(200px,25svh,250px); }
@@ -437,7 +437,7 @@ summary:focus-visible,[role="tabpanel"]:focus-visible { outline:3px solid #b67d4
   .playing .tactical-actions button span { margin-left:3px; min-width:14px; padding:1px; }
   .playing .game-status { padding:12px; }
   .playing .game-target-wrap { font-size:10px; }
-  .playing .game-target-wrap select { min-height:36px; padding:5px 7px; }
+  .playing .game-target-wrap :is(select,.game-select-trigger) { min-height:36px; padding:5px 7px; }
   .playing .game-controls>.game-interaction-note:not([hidden]) { font-size:9px; }
   .game-aside .notes-panel>section { padding:16px 0; }
   .adventure-heading h2 { font-size:23px; }
@@ -468,7 +468,7 @@ summary:focus-visible,[role="tabpanel"]:focus-visible { outline:3px solid #b67d4
   .adventure-heading h2 { margin:0 0 7px; }
   .adventure-heading .adventure-options { display:grid; grid-template-columns:110px minmax(0,1fr); width:100%; }
   .adventure-options label small { line-height:1.4; }
-  .adventure-options select { min-height:40px; padding:8px 5px; font-size:16px; }
+  .adventure-options :is(select,.game-select-trigger) { min-height:40px; padding:8px 5px; font-size:16px; }
   .atlas-heading { margin-bottom:14px; gap:10px; }
   .atlas-heading>div>.eyebrow { display:none; }
   .atlas-heading h2 { margin:0; font-size:18px; }

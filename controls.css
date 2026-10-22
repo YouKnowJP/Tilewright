@@ -3,7 +3,7 @@
 .settings-tabs button { flex:1; min-height:44px; }
 .settings-tabs [aria-pressed="true"] { color:#fff0bd; background:#51492f; border-color:#d7b875; }
 .control-field { display:block; color:#ffe7af; font:13px/1.7 ui-monospace,monospace; margin:18px 0; min-width:0; }
-.control-field select { display:block; width:100%; min-height:48px; margin-top:8px; padding:10px; border:1px solid #8a9569; border-radius:2px; background:#102c2b; color:#f3e9c9; font:13px/1.5 ui-monospace,monospace; }
+.control-field :is(select,.game-select-trigger) { display:block; width:100%; min-height:48px; margin-top:8px; padding:10px; border:1px solid #8a9569; border-radius:2px; background:#102c2b; color:#f3e9c9; font:13px/1.5 ui-monospace,monospace; }
 .controls-pair { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
 .controls-pair .control-field { margin:4px 0; }
 .front-dialog .controls-invitation { color:#ead6a6; font:19px/1.6 Georgia,serif; }
@@ -46,7 +46,7 @@ body[data-control-size="large"] .training-dpad { grid-template-columns:repeat(3,
 .front-dialog { max-height:calc(100vh - 24px); max-height:calc(100svh - 24px); }
 .playing button,.playing summary { touch-action:manipulation; }
 @media(min-width:761px) { .playing main { padding-left:max(3%,env(safe-area-inset-left)); padding-right:max(3%,env(safe-area-inset-right)); } }
-@media(max-width:600px) { .controls-pair { grid-template-columns:1fr; gap:8px; }.control-field select { font-size:12px; }.playing .tactical-actions button { flex-basis:74px; } }
+@media(max-width:600px) { .controls-pair { grid-template-columns:1fr; gap:8px; }.control-field :is(select,.game-select-trigger) { font-size:12px; }.playing .tactical-actions button { flex-basis:74px; } }
 .playing .game-input-strip button { min-height:44px; }
 .game-input-state { min-width:0; flex:1; }
 .game-input-state>span,.game-input-state>small { display:block; }
@@ -55,7 +55,7 @@ body[data-control-size="large"] .training-dpad { grid-template-columns:repeat(3,
 .game-control-tools { display:flex; gap:6px; flex-shrink:0; }
 .playing .game-control-tools button { padding-inline:9px; }
 #game-undo-result[hidden],#conversation-undo[hidden] { display:none!important; }
-@media(any-pointer:coarse) { .playing select,.playing textarea,.playing input:not([type="checkbox"]):not([type="range"]),.front-dialog select { font-size:16px; } }
+@media(any-pointer:coarse) { .playing :is(select,.game-select-trigger),.playing textarea,.playing input:not([type="checkbox"]):not([type="range"]),.front-dialog :is(select,.game-select-trigger) { font-size:16px; } }
 
 /* Small screens retain distinct, readable navigation labels. */
 @media(max-width:360px) {

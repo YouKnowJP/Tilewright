@@ -1,4 +1,4 @@
-import { editorButton, closeEditorPanels, revealEditorControl } from './ui-driver.mjs';
+import { chooseOption, editorButton, closeEditorPanels, revealEditorControl } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import { checkAdventures } from './adventure-browser-checks.mjs';
 import { checkContracts } from './contract-browser-checks.mjs';
@@ -13,6 +13,7 @@ import { checkInterface } from './interface-browser-checks.mjs';
 import { checkControls } from './controls-browser-checks.mjs';
 import { checkTrailhouse } from './trailhouse-browser-checks.mjs';
 import { checkStorybooks } from './storybook-browser-checks.mjs';
+import { checkDropdowns } from './dropdown-browser-checks.mjs';
 import { checkCheckpoints } from './checkpoint-browser-checks.mjs';
 import { checkMastery } from './mastery-browser-checks.mjs';
 import { checkPuzzleLab } from './lab-browser-checks.mjs';
@@ -79,7 +80,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         const initial = await metrics(page);
         for (const zoom of ['0.25', '0.5', '0.75', '1', '1.25', '1.5', '2']) {
           step = `zoom ${zoom}`;
-          await page.locator('#zoom').selectOption(zoom);
+          await chooseOption(page,'#zoom',zoom);
           const state = await metrics(page);
           assert.ok(Math.abs(state.map.width - 672 * Number(zoom)) < 1, `Correct canvas width at ${zoom}.`);
           assert.ok(Math.abs(state.view.height - initial.view.height) < 1, 'Zoom must not grow the viewport.');
@@ -106,7 +107,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         assert.ok(state.scrollLeft >= 75 && state.scrollTop >= 55, 'Pan must scroll in both directions.');
         assert.equal(await saved(), beforePan, 'Panning must never edit the document.');
 
-        await page.locator('#zoom').selectOption('fit'); assertFits(await metrics(page));
+        await chooseOption(page,'#zoom','fit'); assertFits(await metrics(page));
         step = 'page wheel scrolling';
         await page.evaluate(() => {
           const top = document.querySelector('#viewport').getBoundingClientRect().top + scrollY;
@@ -185,7 +186,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         step = 'resize preview and cancel';
         const setResize = async () => {
           await page.locator('#resize-width').fill('30'); await page.locator('#resize-height').fill('22');
-          await page.locator('#resize-anchor').selectOption('center'); await page.locator('#resize-fill').selectOption('4');
+          await chooseOption(page,'#resize-anchor','center'); await chooseOption(page,'#resize-fill','4');
         };
         await editorButton(page, { name: 'Resize map…', exact: true }); await setResize();
         assert.equal(await page.locator('#resize-preview').getAttribute('width'), '720');
@@ -208,7 +209,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         step = 'crop preview and restore';
         await editorButton(page, { name: 'Resize map…', exact: true });
         await page.locator('#resize-width').fill('8'); await page.locator('#resize-height').fill('6');
-        await page.locator('#resize-anchor').selectOption('bottom-right');
+        await chooseOption(page,'#resize-anchor','bottom-right');
         assert.match(await page.locator('#resize-summary').textContent(), /occupied cells will be cropped/);
         assert.equal(await page.locator('#resize-preview').getAttribute('width'), '192');
         await editorButton(page, { name: 'Resize map', exact: true });
@@ -233,7 +234,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
       const page = await touchContext.newPage();
       await page.goto(`${baseURL}/#mapmaker`);
       await page.waitForFunction(() => document.querySelector('#loading-note').hidden);
-      await page.locator('#zoom').selectOption('2');
+      await chooseOption(page,'#zoom','2');
       await editorButton(page, { name: 'Pan map (H)', exact: true });
       await page.locator('#viewport').evaluate(element => element.scrollTo(0, 0));
       await page.locator('#viewport').scrollIntoViewIfNeeded();
@@ -295,5 +296,5 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const { chromium } = await import('playwright');
-  console.log(JSON.stringify({ checkpoints: await checkCheckpoints(chromium,{channel:'chrome'}), mastery: await checkMastery(chromium,{channel:'chrome'}), interface: await checkInterface(chromium,{channel:'chrome'}), controls: await checkControls(chromium,{channel:'chrome'}), trailhouse: await checkTrailhouse(chromium), storybooks: await checkStorybooks(chromium), lab: await checkPuzzleLab(chromium), training: await checkTraining(chromium), creators: await checkCreators(chromium), workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
+  console.log(JSON.stringify({ dropdowns: await checkDropdowns(chromium,{channel:'chrome'}), checkpoints: await checkCheckpoints(chromium,{channel:'chrome'}), mastery: await checkMastery(chromium,{channel:'chrome'}), interface: await checkInterface(chromium,{channel:'chrome'}), controls: await checkControls(chromium,{channel:'chrome'}), trailhouse: await checkTrailhouse(chromium), storybooks: await checkStorybooks(chromium), lab: await checkPuzzleLab(chromium), training: await checkTraining(chromium), creators: await checkCreators(chromium), workshop: await checkWorkshop(chromium), front: await checkFrontMenu(chromium), journal: await checkJournal(chromium), layout: await checkPlayLayout(chromium), editor: await checkBrowser(chromium), adventures: await checkAdventures(chromium), contracts: await checkContracts(chromium), expeditions: await checkExpeditions(chromium), sluices: await checkSluices(chromium), atlas: await checkAtlas(chromium), guild: await checkGuild(chromium), horizon: await checkHorizon(chromium) }, null, 2));
 }

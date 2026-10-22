@@ -5,7 +5,7 @@ import { LAB_CLEARS } from '../src/workshop-lab-clears.mjs';
 import { STORY_ALTERNATIVES } from '../tests/fixtures/story-alternatives.mjs';
 import { STORY_CLEARS } from '../src/story-adventure-clears.mjs';
 import { playGuild } from './guild-browser-checks.mjs';
-import { enterFirstTrail, clickControl, selectControl } from './ui-driver.mjs';
+import { chooseOption, enterFirstTrail, clickControl, selectControl } from './ui-driver.mjs';
 import { playTraining } from './training-browser-checks.mjs';
 import { blankAdventure, editAdventure } from '../src/workshop-model.mjs';
 import { adventureCode } from '../src/workshop-sharing.mjs';
@@ -30,7 +30,7 @@ async function undoRedo(page,touch=false){
   const journal=data=>data.kind==='trail'?data.actions:JSON.parse(data.checkpoint).state.journal;
   assert.ok(journal(after).length<journal(before).length);assert.ok(afterRun.turns<=beforeRun.turns);await playGuild(page,journal(before).slice(journal(after).length),touch);assert.deepEqual(await saved(page),before);
 }
-async function lab(page,id){await page.locator('#title-workshop').click();await page.locator('#ws-tab-lab').click();if(await page.locator('#ws-lab-room-picker').isVisible())await page.locator('#ws-lab-room-picker').selectOption(id);else{await page.locator(`[data-lab-collection="${['caravan','foundry'].includes(id)?'afterhours':'foundations'}"]`).click();await page.locator(`[data-lab-room="${id}"]`).click();}await page.locator('#ws-lab-play').click();await page.locator('#ws-preview-dialog').waitFor();await page.locator('#ws-preview-play').click();}
+async function lab(page,id){await page.locator('#title-workshop').click();await page.locator('#ws-tab-lab').click();if(await page.locator('#ws-lab-room-picker-control').isVisible())await chooseOption(page,'#ws-lab-room-picker',id);else{await page.locator(`[data-lab-collection="${['caravan','foundry'].includes(id)?'afterhours':'foundations'}"]`).click();await page.locator(`[data-lab-room="${id}"]`).click();}await page.locator('#ws-lab-play').click();await page.locator('#ws-preview-dialog').waitFor();await page.locator('#ws-preview-play').click();}
 async function won(page){assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');assert.equal(await page.locator('#game-undo').isDisabled(),true);assert.equal(await page.locator('#game-undo-result').isVisible(),false);assert.equal(await text(page),null);}
 export async function checkCheckpoints(browserType,{baseURL='http://127.0.0.1:4174',channel,widths=[320,390,820,1440,844],screenshots=false,onProgress=()=>{}}={}){
   const browser=await browserType.launch({headless:true,...(channel?{channel}:{})}),results=[],report=checks=>{results.push({checks});onProgress({checks});};

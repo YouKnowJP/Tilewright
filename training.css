@@ -47,7 +47,7 @@
 .training-dpad [data-training-move=down] { grid-column:2; grid-row:2; }
 .training-dpad [data-training-move=right] { grid-column:3; grid-row:2; }
 .training-actions { display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; }
-.training-actions select { max-width:100%; flex-basis:100%; color:#e9e5cc; background:#17372f; border:1px solid #8a8254; min-height:40px; padding:6px; }
+.training-actions :is(select,.game-select-trigger) { max-width:100%; flex-basis:100%; color:#e9e5cc; background:#17372f; border:1px solid #8a8254; min-height:40px; padding:6px; }
 .training-talk,.training-plan-copy { padding:24px; background:#193630; border:2px solid #d5b871; margin:auto; }
 .training-talk h4 { font:600 23px Georgia,serif; color:#f4deab; margin:0 0 10px; }
 .training-talk p,.training-plan-copy p { font:var(--adventure-text-size,16px)/1.7 Georgia,serif; margin:0 0 14px; }

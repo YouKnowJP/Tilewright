@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.22.1 — 2026-10-22
+
+- Replace all 40 operating-system dropdown pickers with shared game-styled
+  HTML choices: forest panels, brass frames, matching arrows, readable selected
+  and active states, and scrollable grouped lists. Cover gameplay, settings,
+  expeditions, Guild, training, Storybooks, Trailhouse, creators, and replay speed.
+- Support keyboard arrows, Home/End, Page Up/Down, word-prefix search, Enter,
+  Escape, Tab, touch, and standard-controller choose/back/left/right. Keep
+  unconfirmed choices separate from committed values and block gameplay keys
+  while choosing. E still uses a focused nearby-interaction choice.
+- Keep lists above dialogs and within the visible viewport. Fit above or below
+  the field, refit after scrolling/rotation, and dismiss on leaving the screen.
+  Retain a styled dialog-local fallback when the browser lacks the Popover method.
+- Preserve generated options, disabled/hidden fields, forms, saved preferences,
+  and checkpoint rules. Use labelled HTML comboboxes/listboxes with at least
+  44-pixel targets, without new runtime packages.
+- Add a twenty-second browser family auditing every dropdown through real
+  screens. Retained browser tests now choose visible game options. Retain
+  480 model tests and package 80 static files. See QA for tested paths.
+
 ## 0.22.0 — 2026-10-21
 
 - Add up to 60 recent gameplay Undo actions through a visible board button,

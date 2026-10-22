@@ -10,6 +10,7 @@ installation, build-time framework, database service, or remote API.
 | `src/render.mjs` | Original pixel artwork and compositing into Canvas; optional grid/cursor overlays. |
 | `src/storage.mjs` | Local-storage adapter; reject corrupt saves and report unavailable storage. |
 | `src/app.mjs` | DOM, pointer/keyboard input, stroke previews, history commits, file handling, and downloads. |
+| `src/game-dropdowns.mjs` | Shared labelled HTML comboboxes/listboxes, native value bridges, dynamic-option synchronization, viewport fitting, and keyboard/touch/controller choice handling. |
 | `src/bootstrap.mjs` | Load the game with a visible startup/retry screen and player-facing error recovery. |
 | `src/viewport.mjs` | Fit-to-workspace geometry and zoom-aware pointer hit testing. |
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
@@ -805,3 +806,30 @@ imports are bounded, previewed, and protected by the Workshop navigation token
 so an earlier async file read cannot open over a newer screen. Save failures
 retain session progress and explain the available download path. These local
 journals are progress backups, not signed competitive or account records.
+
+## Shared game dropdowns — v0.22.1
+
+`game-dropdowns.mjs` enhances all 40 single-choice selects after application
+initialization. The original control retains its stable ID, options, value,
+form ownership, and event handlers, but is hidden from layout and accessibility.
+A labelled HTML button with combobox semantics occupies its place. Existing
+select layout rules also target `.game-select-trigger`; `dropdowns.css` supplies
+shared game presentation and open-list states. Explicit labels target the new
+button, and meaningful label text becomes its accessible name.
+
+Per-control value/selected-index bridges and option/attribute observers keep
+programmatic restores, generated lists, disabled/hidden fields, and the visible
+label synchronized. Only a committed different choice emits input/change.
+The active choice is separate from the selected value, so Escape, Back, Tab,
+outside clicks, or leaving the screen never commit a speculative selection.
+Text is assigned through textContent. No option label becomes executable markup.
+
+One manual HTML popover hosts the listbox, above the active dialog. A fallback
+uses the same HTML inside the dialog when the Popover method is unavailable.
+Placement measures the trigger and visual viewport, chooses above/below space,
+clamps width/height, and scrolls the option list independently. Scroll, resize,
+visual-viewport, focus, and navigation guards keep the menu attached or dismiss
+it when its field leaves view. Keyboard capture and controller routing consume
+choice input before gameplay handlers; E on the closed game-target selector
+retains its interaction shortcut. At most one choice list is open. Existing
+storage, adventure reducers, and checkpoint rules do not change.

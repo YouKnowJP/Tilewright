@@ -12,7 +12,9 @@ export async function enterFirstTrail(page) {
   await page.locator('#adventure[data-view="play"]').waitFor();
 }
 async function prepareControl(page, selector) {
-  const target = page.locator(selector);
+  const original=page.locator(selector);
+  const select=await original.evaluate(el=>el.matches('select.game-select-source')?el.id:null);
+  const target=select?page.locator(`[data-game-select="${select}"]`):original;
   await page.locator('#loading-note[hidden]').waitFor({ state: 'attached' });
   if (await page.locator('#editor').isVisible()) { await revealEditorControl(page,target); if(await target.isVisible())return; }
   if (selector === '#mode-create' && !await page.locator('#editor').isVisible()) {
@@ -79,7 +81,7 @@ export async function clickControl(page, selector, touch = false) {
   }
 }
 export async function selectControl(page, selector, value) {
-  await prepareControl(page, selector); await page.locator(selector).selectOption(value);
+  await prepareControl(page, selector); await chooseOption(page,selector,value);
 }
 
 // Creator panels are separate dialogs on compact screens. Open them using
@@ -97,4 +99,14 @@ export async function revealEditorControl(page,target) {
 export async function editorButton(page,options) {
   const target=page.locator('#editor, #maker-palette-dialog, #maker-settings-dialog, dialog[open]').getByRole('button',{...options,includeHidden:true});
   await revealEditorControl(page,target);await page.getByRole('button',options).click();
+}
+
+export async function chooseOption(page,selector,choice) {
+  const value=await page.locator(selector).evaluate((select,choice)=>{
+    const option=[...select.options].find((option,index)=>typeof choice==='string'?option.value===choice:choice.label!==undefined?option.label===choice.label:choice.index!==undefined?index===choice.index:option.value===choice.value);
+    if(!option)throw Error('No matching dropdown choice: '+JSON.stringify(choice));return option.value;
+  },choice);
+  const id=await page.locator(selector).getAttribute('id');
+  await page.locator(`[data-game-select="${id}"]`).click();
+  await page.locator(`.game-select-menu [role="option"][data-value=${JSON.stringify(value)}]`).click();
 }

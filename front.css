@@ -85,7 +85,7 @@ body[data-game-motion="reduced"] .adventure *,body[data-game-motion="reduced"] .
 .game-front .expedition-hub,.game-front .guild-hub { color:#e6dfc6; background:#17352f; border-color:#7b825b; border-radius:3px; }
 .game-front #guild-kit-note { background:#102c2b; border-color:#6a7859; color:#dae3c8; }
 .game-front #guild-progress,.game-front .guild-heading p,.game-front .guild-heading label,.game-front .expedition-hub p,.game-front .expedition-form label,.game-front .expedition-logbook { color:#c5d1b8; }
-.game-front select,.game-front input { color:#f1e7c8; background:#102c2b; border-color:#829066; border-radius:2px; }
+.game-front :is(select,.game-select-trigger),.game-front input { color:#f1e7c8; background:#102c2b; border-color:#829066; border-radius:2px; }
 .game-front .library-shortcuts { color:#d8c78f; }
 .game-front .expedition-badge { background:#203d35; border-color:#75845a; color:#bccab0; }
 .game-front .expedition-badge strong,.game-front .expedition-badge span { color:inherit; }

@@ -1,5 +1,43 @@
 # Verification record
 
+## Consistent game dropdowns — v0.22.1
+
+**480 Node tests**, syntax checks, and the **80-file** static build pass.
+The new twenty-second browser family, `dropdown-browser-checks.mjs`, opens
+**all 40 existing selectors through their actual game/editor screens** in
+Chrome **156.0.8078.47**, Firefox **156.0**, and WebKit **26.6**. Every backing
+native select is hidden; only the labelled game combobox is interactive.
+Open lists retain the original choices and preserve unconfirmed values when
+cancelled. Hidden options, disabled fields, groups, generated options, saved
+settings, direct value changes, nested dialogs, and replay-speed choices are
+covered. A simulated missing Popover method still uses the styled HTML list.
+
+All three engines test 320, 390, 820, 1440, and 844×390 viewports, real browser
+touch taps, long grouped room lists, option placement above/below the field,
+rotation, dialog layering, and no sideways overflow. Trigger targets are at
+least 44 pixels. Keyboard checks cover arrows, Home/End, word-prefix search,
+Enter, Escape, and Tab. Controller simulation opens/explores/cancels/chooses a
+list, closes only the choices on Back, changes closed fields with left/right,
+and completes a real story mission without accidental menu turns. Main-game
+and training interaction selectors are reached through actual play, including
+E from a focused gameplay selector and Mira following beside the training lever.
+
+The retained controls family passes at ten sizes in all three engines. Retained
+Chrome checks pass for menus, interface regressions, training/creator handoff,
+world editing and all twenty generated recipes, Lab alternatives/transforms,
+Storybook creation/sharing/recovery, all expedition form configurations and
+multi-leg journeys, exact Continue/Undo, terrain editing/zoom/resize/exports,
+sluice dialogue/interaction variants, and Trailhouse commissions/festival.
+Browser selection helpers now click the visible game options rather than
+programmatically choosing a native select. Existing save formats and adventure
+checkpoint rules remain unchanged.
+
+Visual review covers phone and desktop Options and narrow grouped room menus.
+Full-page screenshot capture can change the viewport and dismiss an off-screen
+anchor, so open-menu images use the actual viewport. Resize assertions wait for
+layout frames. Tests use disposable contexts; physical devices/controllers and
+screen-reader behavior are not claimed as newly verified.
+
 ## Exact Continue and gameplay Undo — v0.22.0
 
 **480 Node tests** pass, with syntax checks and a **78-file** static build.

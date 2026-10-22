@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { clickControl, enterFirstTrail } from './ui-driver.mjs';
+import { chooseOption, clickControl, enterFirstTrail } from './ui-driver.mjs';
 import { startGuild, playGuild, assertGuildWin } from './guild-browser-checks.mjs';
 
 const keys = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'ArrowLeft', wait: 'Space' };
@@ -71,7 +71,7 @@ export async function checkJournal(browserType, { baseURL = 'http://127.0.0.1:41
         await startGuild(page, guild); await playGuild(page, guild.actions); await assertGuildWin(page, guild);
         await page.locator('#game-home').click(); await page.locator('#title-journal').click(); assert.equal(await page.locator('.journal-stat strong').nth(2).textContent(), '3 / 144');
         await page.locator('#journal-tab-expeditions').click(); await page.locator('#journal-new-expedition').click();
-        await page.locator('#expedition-seed').fill(journey.config.seed); await page.locator('#expedition-length').selectOption(String(journey.config.length));
+        await page.locator('#expedition-seed').fill(journey.config.seed); await chooseOption(page,'#expedition-length',String(journey.config.length));
         await page.locator('#expedition-start').click(); await playGuild(page, journey.legs[0].actions);
         assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won'); await page.locator('#game-primary').click();
         assert.equal(await page.locator('#camp-dialog').isVisible(), true);

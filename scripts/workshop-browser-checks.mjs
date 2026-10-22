@@ -1,3 +1,4 @@
+import { chooseOption } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { WORKSHOP_CLEARS } from '../src/workshop-clears.mjs';
@@ -34,7 +35,7 @@ export async function checkWorkshop(browserType,{baseURL=BASE,channel='chrome',s
         while(!await page.locator('#ws-replay-skip').isDisabled())await page.locator('#ws-replay-skip').click();assert.match(await page.locator('#ws-replay-caption').textContent(),/complete/i);
         await page.locator('#ws-replay-close').click();await page.locator('#ws-preview-add').click();
       }
-      await page.locator('#ws-preview-difficulty').selectOption(rules);await page.locator('#ws-preview-play').click();assert.equal(await page.locator('#game-turns').textContent(),'0');
+      await chooseOption(page,'#ws-preview-difficulty',rules);await page.locator('#ws-preview-play').click();assert.equal(await page.locator('#game-turns').textContent(),'0');
       if(i===0)assert.doesNotMatch(await page.locator('#game-sidequests').textContent(),/weight bridge/);
       assert.match(await page.locator('#game-region').textContent(),/Player adventure/);assert.doesNotMatch(await page.locator('#game-region').textContent(),/NaN|Guild job/);
       await playGuild(page,WORKSHOP_CLEARS[i].actions);assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won',pack.title+'/'+rules);
@@ -47,10 +48,10 @@ export async function checkWorkshop(browserType,{baseURL=BASE,channel='chrome',s
     assert.deepEqual(await originals(page),original);assert.equal(await page.evaluate(()=>Object.keys(JSON.parse(localStorage.getItem('tilewright.workshop.bests.v1')).records).length),6);
     await page.locator('#ws-new').click();await page.locator('#ws-new-width').fill('8');await page.locator('#ws-new-height').fill('8');await page.locator('#ws-new-form button[type="submit"]').click();
     await page.locator('#ws-title').fill('The Little Homecoming');await page.locator('#ws-author').fill('A test keeper');await page.locator('#ws-story-details summary').click();await page.locator('#ws-intro').fill('One lamp beyond the orchard. Bring its light home.');await page.locator('#ws-props-adventure button[type="submit"]').click();
-    await chooseBrush(page,'Story','Talking keeper');await cell(page,6,6);await page.locator('#ws-inspect-tool').click();await cell(page,6,6);await page.locator('#ws-object-name').fill('Mira');await page.locator('#ws-object-text').fill('The river remembers every traveller.');await page.locator('#ws-object-reward').selectOption('supplies');await page.locator('#ws-props-object button[type="submit"]').click();
+    await chooseBrush(page,'Story','Talking keeper');await cell(page,6,6);await page.locator('#ws-inspect-tool').click();await cell(page,6,6);await page.locator('#ws-object-name').fill('Mira');await page.locator('#ws-object-text').fill('The river remembers every traveller.');await chooseOption(page,'#ws-object-reward','supplies');await page.locator('#ws-props-object button[type="submit"]').click();
     const draft=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('tilewright.workshop.draft.v1')));
     assert.equal((await draft()).markers.find(m=>m.kind==='guide').name,'Mira');assert.equal(await page.locator('#ws-object-fields .ws-checkbox:visible').count(),0);
-    await chooseBrush(page,'Terrain','Water');await page.locator('#ws-brush').click();await page.locator('#ws-paint-mode').selectOption('rectangle');await page.locator('#ws-palette-close').click();await cell(page,1,1,{dragTo:{x:2,y:2}});assert.equal((await draft()).map.layers[0].tiles[18],3);
+    await chooseBrush(page,'Terrain','Water');await page.locator('#ws-brush').click();await chooseOption(page,'#ws-paint-mode','rectangle');await page.locator('#ws-palette-close').click();await cell(page,1,1,{dragTo:{x:2,y:2}});assert.equal((await draft()).map.layers[0].tiles[18],3);
     await page.locator('#ws-undo').click();assert.notEqual((await draft()).map.layers[0].tiles[18],3);await page.locator('#ws-redo').click();assert.equal((await draft()).map.layers[0].tiles[18],3);await page.locator('#ws-undo').click();
     await chooseBrush(page,'Stamps','Supply camp');await cell(page,4,4);assert.ok((await draft()).markers.some(m=>m.kind==='supplies'));await page.locator('#ws-undo').click();
     await chooseBrush(page,'Threats','Patrol warden');await cell(page,5,6);await page.locator('#ws-inspect-tool').click();await cell(page,5,6);await page.locator('#ws-route').click();await cell(page,4,6);await cell(page,4,5);await page.locator('#ws-route-finish').click();assert.equal((await draft()).markers.find(m=>m.kind==='patrol').route.length,3);await page.locator('#ws-delete-object').click();
@@ -98,12 +99,12 @@ async function recoveryChecks(browser,baseURL) {
   const page=await context.newPage();page.on('dialog',d=>d.accept());await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();
   for (const region of WORLD_REGIONS) for (const mission of WORLD_MISSIONS) {
    await page.locator('#ws-new-draft').isVisible().then(async visible=>{await page.locator(visible?'#ws-new-draft':'#ws-new').click();});
-   await page.locator('#ws-new-mode').selectOption('seed');await page.locator('#ws-new-region').selectOption(region.id);await page.locator('#ws-new-mission').selectOption(mission.id);await page.locator('#ws-new-form button[type="submit"]').click();
+   await chooseOption(page,'#ws-new-mode','seed');await chooseOption(page,'#ws-new-region',region.id);await chooseOption(page,'#ws-new-mission',mission.id);await page.locator('#ws-new-form button[type="submit"]').click();
    assert.equal(await page.locator('#ws-build').isVisible(),true);await notes(page,'checks');assert.match(await page.locator('#ws-check-title').textContent(),/Ready/);
   }
   results.push({checks:'All 20 region/mission recipes created through visible controls'});
-  await page.locator('#ws-new-draft').click();await page.locator('#ws-new-mode').selectOption('current');await page.locator('#ws-new-form button[type="submit"]').click();assert.match(await page.locator('#ws-description').inputValue(),/painted world/);
-  await page.locator('#ws-zoom').selectOption('2');await page.locator('#ws-pan-tool').click();await cell(page,2,2,{dragTo:{x:1,y:1}});await page.locator('#ws-zoom').selectOption('fit');
+  await page.locator('#ws-new-draft').click();await chooseOption(page,'#ws-new-mode','current');await page.locator('#ws-new-form button[type="submit"]').click();assert.match(await page.locator('#ws-description').inputValue(),/painted world/);
+  await chooseOption(page,'#ws-zoom','2');await page.locator('#ws-pan-tool').click();await cell(page,2,2,{dragTo:{x:1,y:1}});await chooseOption(page,'#ws-zoom','fit');
   await notes(page,'adventure');await page.locator('#ws-title').fill('Details saved on leaving');await page.locator('#ws-home').click();await page.locator('#title-workshop').click();await page.locator('#ws-tab-build').click();assert.equal(await page.locator('#ws-title').inputValue(),'Details saved on leaving');
   await page.locator('#ws-tab-import').click();await page.locator('#ws-file').setInputFiles({name:'too-big.json',mimeType:'application/json',buffer:Buffer.alloc(400001)});await page.waitForFunction(()=>document.querySelector('#ws-status').textContent.includes('400 KB'));assert.equal(await page.locator('#ws-preview-dialog').isVisible(),false);
   results.push({checks:'Terrain copy, pan/fit, unapplied form preservation, oversized-file rejection'});
@@ -130,7 +131,7 @@ async function designerChecks(browser,baseURL) {
   if(browser.browserType().name()==='chromium'){const cdp=await context.newCDPSession(page);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x+r.width/2,y:r.y+r.height/2}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});await cdp.detach();}
   else{await page.locator('#ws-canvas').evaluate(node=>node.addEventListener('pointerdown',event=>window.cancelledStroke=event.pointerId,{once:true}));await page.mouse.move(r.x+r.width/2,r.y+r.height/2);await page.mouse.down();await page.locator('#ws-canvas').evaluate(node=>node.dispatchEvent(new PointerEvent('pointercancel',{pointerId:window.cancelledStroke})));await page.mouse.up();}
   assert.equal(await page.evaluate(()=>localStorage.getItem('tilewright.workshop.draft.v1')),before,'Cancelled pointer strokes must not save edits');
-  await page.locator('#ws-panel-adventure').click();await page.locator('#ws-title').fill('A Nemesis creator clear');await page.locator('#ws-world-details summary').click();await page.locator('#ws-test-rules').selectOption('nemesis');await page.locator('#ws-props-adventure button[type="submit"]').click();assert.deepEqual(errors,[]);
+  await page.locator('#ws-panel-adventure').click();await page.locator('#ws-title').fill('A Nemesis creator clear');await page.locator('#ws-world-details summary').click();await chooseOption(page,'#ws-test-rules','nemesis');await page.locator('#ws-props-adventure button[type="submit"]').click();assert.deepEqual(errors,[]);
   return [{checks:'All 24 object inspectors hide irrelevant settings; layer visibility, cancelled pointer stroke, and Nemesis playtest controls'}];
  } finally { await context.close(); }
 }
