@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.23.0 — 2026-10-22
+
+- Add Options → Saved data with a confirmed fresh start. Erase all game-owned
+  progress, creations, drafts, training, options, and learned habits, including
+  legacy save versions. Return to the main menu without resuming an old run.
+  Keep other games' browser data and downloaded files outside the reset scope.
+- Download/restore the complete saved game in one bounded, portable JSON file.
+  Review replacement before restoring; reject invalid, oversized, foreign, or
+  coordination-key entries. Keep existing mode/world imports and save formats.
+- Verify resets/restores and roll back failed changes. Offer the pre-change
+  recovery archive if the browser also refuses rollback writes. Preserve
+  cancellation, navigation guards for late file reads, and session-only notices.
+- Coordinate other open tabs through a guarded save session, preventing stale
+  in-memory progress from recreating erased saves. Provide an explicit recovery
+  path for an interrupted update. Keep the safe Cancel default on reopened
+  WebKit confirmation dialogs without stealing a deliberate newer focus.
+- Add 17 storage/session cases (497 total), a twenty-third browser family,
+  and two public modules (82 packaged files). See QA for actual coverage.
+
 ## 0.22.1 — 2026-10-22
 
 - Replace all 40 operating-system dropdown pickers with shared game-styled

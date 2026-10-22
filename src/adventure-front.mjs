@@ -1,11 +1,14 @@
+import { createSaveDataUI } from './save-data-ui.mjs';
 import { CHAPTERS, drawAtlasArt, drawTitleArt } from './adventure-art.mjs';
 import { controlHelp } from './adventure-controls.mjs';
 import { loadPreferences, savePreferences } from './adventure-preferences.mjs';
 
-export function createFrontMenu({ storage, sound, onMode, onContinue, onResumeExpedition, onMapmaker, onCustomMap, onPreferences, getJournal, onDestination, onChoose }) {
+export function createFrontMenu({ storage, sound, saveSession, onSaveReload, onMode, onContinue, onResumeExpedition, onMapmaker, onCustomMap, onPreferences, getJournal, onDestination, onChoose }) {
   const $ = selector => document.querySelector(selector);
   let preferences = loadPreferences(storage), guidePage = 0, soundBusy = false, guideReturn = null, settingsReturn = null;
   const guide = $('#game-guide-dialog'), settings = $('#game-settings-dialog');
+  const saveData=createSaveDataUI({session:saveSession,onComplete:onSaveReload});
+  settings.addEventListener('close',()=>saveData.close());
   drawTitleArt($('#title-scenery'));
   document.querySelectorAll('[data-mode-art]').forEach(canvas => drawAtlasArt(canvas, CHAPTERS.find(theme => theme.id === canvas.dataset.modeArt), 0));
   function applyPreferences() {
@@ -134,9 +137,9 @@ export function createFrontMenu({ storage, sound, onMode, onContinue, onResumeEx
   $('#guide-choose').addEventListener('click', () => { guide.close(); onChoose(); modes(); });
   $('#guide-close').addEventListener('click', () => guide.close());
   $('#title-settings').addEventListener('click', () => openSettings('display',$('#title-settings')));
-  function settingsTab(page) { for(const id of ['display','controls']) { $(`#settings-${id}`).hidden=id!==page; $(`#settings-tab-${id}`).setAttribute('aria-pressed',String(id===page)); } }
+  function settingsTab(page) { $('#settings-save-note').hidden=page==='data';saveData.close();if(page==='data')saveData.open(); for(const id of ['display','controls','data']) { $(`#settings-${id}`).hidden=id!==page; $(`#settings-tab-${id}`).setAttribute('aria-pressed',String(id===page)); } }
   function openSettings(page='display',trigger) { settingsReturn=trigger||document.activeElement;renderSound(); settingsTab(page); settings.showModal(); settings.scrollTop=0; }
-  for(const id of ['display','controls']) $(`#settings-tab-${id}`).addEventListener('click',()=>settingsTab(id));
+  for(const id of ['display','controls','data']) $(`#settings-tab-${id}`).addEventListener('click',()=>settingsTab(id));
   for(const [id,field] of [['controls-style','controls'],['keyboard-layout','keyboardLayout'],['pad-side','padSide'],['control-size','controlSize'],['key-repeat','keyRepeat'],['gamepad','gamepad']]) $(`#settings-${id}`).addEventListener('change',event=>remember({[field]:event.target.value}));
   $('#settings-close').addEventListener('click', () => settings.close());
   document.querySelectorAll('[data-sound]').forEach(button => button.addEventListener('click', () => toggleSound(button.dataset.sound === 'on')));
@@ -149,7 +152,7 @@ export function createFrontMenu({ storage, sound, onMode, onContinue, onResumeEx
   applyPreferences(); renderSound(); renderGuide();
   return {
     get preferences() { return preferences; },
-    get dialogOpen() { return guide.open || settings.open; },
+    get dialogOpen() { return guide.open || settings.open || $('#save-dialog').open; },
     notice(text) { $('#front-mode-notice').textContent = text; $('#front-mode-notice').hidden = false;$('#title-save-note').textContent=text;$('#title-save-note').hidden=false; },
     toggleSound,
     journal, guide: openGuide, modes,

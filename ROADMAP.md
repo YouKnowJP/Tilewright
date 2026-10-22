@@ -286,3 +286,12 @@ paths and existing maps.
 - Bounded grouped lists, dialog layering, rotation, and matching disabled states.
 - Existing saves and checkpoint rules retained; a browser audit opens every
   selector in Chrome, Firefox, and WebKit. See the verification record.
+
+## Fresh starts and complete backups completed — v0.23
+
+- Saved-data Options page: full backup, previewed restore, and confirmed erasure.
+- Start at the main menu with no personal progress, worlds, drafts, habits, or options.
+- Preserve other games and downloaded files; validate imports and recover failures.
+- Guard old open tabs against resurrecting erased progress; recover interrupted updates.
+- Portable restoration is verified with actual resumed wins in independent browsers.
+  See [Saved data](docs/SAVED_DATA.md) and QA.

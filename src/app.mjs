@@ -8,6 +8,7 @@ import { createIcon } from './icons.mjs';
 import { renameLayer, duplicateLayer, moveLayer, removeLayer, resizeDocument, croppedTileCount } from './operations.mjs';
 import { createCreatorGuide } from './creator-guide.mjs';
 import { createMapmakerShell } from './mapmaker-shell.mjs';
+import { createSaveSession } from './save-data.mjs';
 import { installGameDropdowns } from './game-dropdowns.mjs';
 import { createAdventureUI } from './adventure-ui.mjs';
 
@@ -15,7 +16,18 @@ const $ = selector => document.querySelector(selector);
 const canvas = $('#map');
 const viewport = $('#viewport');
 const zoomControl = $('#zoom');
-const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value), removeItem:key=>localStorage.removeItem(key) };
+const nativeStorage={getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value),removeItem:key=>localStorage.removeItem(key),key:index=>localStorage.key(index),get length(){return localStorage.length;}};
+const reloadGame=()=>location.replace(location.pathname);
+const syncDialog=$('#save-sync-dialog');let syncTimer=null;
+syncDialog.addEventListener('cancel',event=>event.preventDefault());
+const saveSession=createSaveSession(nativeStorage,pending=>{
+  clearTimeout(syncTimer);
+  if(pending){$('#save-sync-reload').disabled=true;if(!syncDialog.open)syncDialog.showModal();syncTimer=setTimeout(()=>{$('#save-sync-copy').textContent='If the other tab has stopped responding, recover the latest data saved in this browser and reload. This recovery does not erase your files.';$('#save-sync-reload').textContent='Recover and reload';$('#save-sync-reload').disabled=false;},5000);}
+  else{document.body.inert=true;queueMicrotask(reloadGame);}
+});
+$('#save-sync-reload').onclick=()=>{try{saveSession.recoverInterrupted();reloadGame();}catch(error){$('#save-sync-copy').textContent=error.message;}};
+const storage=saveSession.storage;
+window.addEventListener('storage',event=>saveSession.storageChanged(event));
 const restored = loadDocument(storage);
 let history = new History(restored.document || createSample());
 let activeLayer = history.document.layers[0].id;
@@ -458,7 +470,7 @@ new ResizeObserver(() => layoutCanvas()).observe(viewport);
 announce(restored.error || (restored.document ? 'Your last map was restored from this browser.' : 'Welcome to Willowbend. Pick a tile and make it yours.'));
 
 const creatorGuide = createCreatorGuide();
-const adventures = createAdventureUI({ storage, getMap: () => history.document, backToEditor: () => setMode(false), onCreatorGuide: trigger => creatorGuide.open(trigger) });
+const adventures = createAdventureUI({ storage, saveSession, onSaveReload:reloadGame, getMap: () => history.document, backToEditor: () => setMode(false), onCreatorGuide: trigger => creatorGuide.open(trigger) });
 const mapmakerShell = createMapmakerShell({ onWorkshop() { setMode(true); adventures.openWorkshop(); }, onUseTerrain() { setMode(true); adventures.useTerrain(); }, onGuide: trigger => creatorGuide.open(trigger) });
 function setMode(play, updateURL = true) {
   mapmakerShell.close(); creatorGuide.close();

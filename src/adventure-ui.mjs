@@ -23,7 +23,7 @@ import { GUILD_KITS, kitFor, powerProblem, powerPreview, liveEcho, waystonePrevi
 import { beginRewind, advanceRewind, undoRewind, canRewind, loadTrail, storeTrail, clearTrail, serializeTrail, serializeExpeditionTrail, restoreTrail } from './adventure-rewind.mjs';
 import { ordinarySource } from './adventure-resume.mjs';
 
-export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuide }) {
+export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, backToEditor, onCreatorGuide }) {
   const $ = selector => document.querySelector(selector);
   const canvas = $('#adventure-canvas'), viewport = $('#game-viewport'), campaign = createCampaign();
   const allJournalJobs = createGuildJobs('echoist'), journalJobs = [...allJournalJobs.slice(6), ...allJournalJobs.slice(0, 6)];
@@ -717,7 +717,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
   training = createTrainingUI({ storage, getPreferences:()=>front.preferences, onControls:()=>front.settings('controls',$('#training-controls-settings')), onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },
     onWorkshop(pack) { if (!workshop.acceptDraft(pack)) return false; openWorkshop('build'); return true; } });
-  front = createFrontMenu({ storage, sound,
+  front = createFrontMenu({ storage, sound, saveSession, onSaveReload,
     onMode(mode) { if (mode === 'guild') showGuild(); else expeditions.show(mode); },
     onContinue:continueTrail,
     onResumeExpedition() { expeditions.show(); $('#expedition-resume').click(); },

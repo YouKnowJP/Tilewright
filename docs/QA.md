@@ -1,5 +1,50 @@
 # Verification record
 
+## Fresh starts and complete game backups — v0.23.0
+
+**497 Node tests**, syntax checks, and the **82-file** static package pass.
+Seventeen new storage/session cases cover all owned save versions, exact raw
+UTF-8 backup recovery, malformed/oversized/foreign/future/duplicate archive
+rejection, metadata exclusion, complete reset and replacement, failed initial
+reads/writes, silent deletion failure, exact rollback, refused rollback writes,
+recovery archives, stale-tab write prevention, changing/ready generations,
+interrupted-update recovery, and continued saving after a restored rollback.
+
+The twenty-third browser family, `save-data-browser-checks.mjs`, passes in
+Chrome **156.0.8078.47**, Firefox **156.0**, and WebKit **26.6**. It creates real
+story progress, a named creator draft, an unfinished caravan, and training
+practice before downloading a native complete backup. Cancel/Escape leaves
+the exact save unchanged. Confirmed reset returns to the bare-path title with
+no player save or Continue entry. A second old tab reloads, cannot recreate the
+erased run, and can start fresh. Restoration replaces the exact original files,
+refreshes the other tab, and finishes the restored caravan through real input.
+A separate browser context imports an actual downloaded backup, resumes turn
+eight, and wins while leaving the source browser unchanged.
+
+Failure checks exercise invalid/oversized/late imports, a failed deletion with
+exact rollback and continued gameplay, refused rollback writes followed by a
+native recovery download/reload/import, and an interrupted generation recovered
+without erasing player files. Other-game storage is retained. Controller tests
+verify default Cancel, Back cancellation, and deliberate confirmation. WebKit
+needed a guarded next-frame focus restoration when a dialog was reopened;
+the fix defaults to Cancel without stealing a deliberate newer focus.
+
+All three engines repeat 320, 390, 820, 1440, and 844×390 layouts with readable
+confirmation copy, 44-pixel new actions, touch confirmation, real new gameplay,
+and no sideways scrolling. Manual visual review covers phone saved-data and
+confirmation screens. Retained Chrome checks pass for front menus/options,
+interface regressions, both training lessons, Workshop creation/sharing/storage
+fallbacks, Storybook play/author/import/recovery, Lab transforms/practice, exact
+Continue/Undo across supported modes, and the ten-size controls family.
+
+All reset tests use disposable browser contexts; existing player browser data
+is not used or erased. A non-player generation marker remains after reset for
+cross-tab coordination and is excluded from backups and player-save counts.
+This coordination protects copies running v0.23 or later; older open copies
+should be refreshed before saved-data management is used.
+Physical devices, real controllers, and screen readers are not newly verified.
+See [Saved data](SAVED_DATA.md) for scope, recovery, and backup limits.
+
 ## Consistent game dropdowns — v0.22.1
 
 **480 Node tests**, syntax checks, and the **80-file** static build pass.

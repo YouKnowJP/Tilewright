@@ -116,3 +116,19 @@ support so an exported game world can carry usable artwork. The minimap is a
 small independent navigation improvement once actual larger-map use justifies
 it. Keep confirmation, undo, import validation, local backups, and responsive
 rendering as acceptance criteria for every new workflow.
+
+## Priorities after the fresh-start review — v0.23
+
+Complete backup/restore and a confirmed fresh start are now delivered. The next
+three improvements would build on the existing game rather than add another
+large mode menu:
+
+| Priority | Concrete player benefit | First useful version |
+| --- | --- | --- |
+| Separate save profiles | Try a clean run or let someone else play without erasing a personal village and worlds. | Two or three named profiles, each with its own progress/creations, a clear active-profile label, and explicit backup/switch/delete. Preserve current saves as the first profile. |
+| A useful post-run review | Understand a lost heart or compare alternate solutions instead of seeing only the final score. | Optional last-route replay, damage/choice markers, comparison with one saved best route, and one specific attainable next goal. Reuse verified action journals without awarding progress during replay. |
+| Branching Storybooks | Give repeat journeys different consequences and help creators tell longer stories. | One visible camp choice that selects the next world or changes its ally/objective; author both branches, preview consequences, and verify each route plus backup recovery. Keep existing linear books compatible. |
+
+These are proposals, not additional features included in v0.23. Profiles should
+come first because they let players explore a fresh beginning without making
+backup files their everyday way to switch adventures.

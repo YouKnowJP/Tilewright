@@ -102,6 +102,11 @@ reload. [Storybooks guide](STORYBOOKS.md).
 
 ## Keep the stories you make
 
+Open **Options → Saved data** to download or restore the complete game in one
+backup file. To begin again with no saved progress, worlds, drafts, habits, or
+options, choose **Start a fresh game…** and confirm the erasure. Cancel preserves
+the current game. Download a backup first to keep it. [Saved-data guide](SAVED_DATA.md).
+
 Maps, drafts, shelves, and bests stay in this browser. Keep downloaded backups
 before clearing browser data or moving devices. A saving warning means your
 current visit can continue, but you should export what you want to keep.

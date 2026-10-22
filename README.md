@@ -47,6 +47,15 @@ run without restarting. Training uses the same preferences. Portrait, landscape,
 and split-view layouts preserve readable feedback and reachable controls.
 [Device and controls guide](docs/CONTROLS.md).
 
+## A fresh beginning, when you want one
+
+**Options → Saved data** now offers a complete game backup, restoration, and
+**Start a fresh game…**. The confirmed fresh start erases this browser's saved
+progress, personal worlds, drafts, learned habits, and options, then returns to
+the main menu. Download a backup first if you want to keep the old game.
+Other open tabs refresh so they cannot bring erased progress back. Other games
+and downloaded files stay untouched. [Saved-data guide](docs/SAVED_DATA.md).
+
 Every dropdown uses the same forest-and-brass game interface, including its
 open choices. Settings, adventures, and both editors support keyboard, touch,
 and controller selection. Long grouped lists scroll inside their own panel;
@@ -528,7 +537,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 480 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 497 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -549,7 +558,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The twenty-two browser families include `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The twenty-three browser families include `scripts/save-data-browser-checks.mjs`, `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.

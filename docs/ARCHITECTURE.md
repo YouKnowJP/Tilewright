@@ -9,6 +9,8 @@ installation, build-time framework, database service, or remote API.
 | `src/sample.mjs` | Deterministic, fictional Willowbend map authored with the built-in palette. |
 | `src/render.mjs` | Original pixel artwork and compositing into Canvas; optional grid/cursor overlays. |
 | `src/storage.mjs` | Local-storage adapter; reject corrupt saves and report unavailable storage. |
+| `src/save-data.mjs` | Bounded full-game archives, namespace-scoped replacement/rollback, and generation-guarded browser save sessions. |
+| `src/save-data-ui.mjs` | Saved-data page actions, backup downloads, previewed restoration, confirmed reset, and failure/recovery dialogs. |
 | `src/app.mjs` | DOM, pointer/keyboard input, stroke previews, history commits, file handling, and downloads. |
 | `src/game-dropdowns.mjs` | Shared labelled HTML comboboxes/listboxes, native value bridges, dynamic-option synchronization, viewport fitting, and keyboard/touch/controller choice handling. |
 | `src/bootstrap.mjs` | Load the game with a visible startup/retry screen and player-facing error recovery. |
@@ -833,3 +835,34 @@ it when its field leaves view. Keyboard capture and controller routing consume
 choice input before gameplay handlers; E on the closed game-target selector
 retains its interaction shortcut. At most one choice list is open. Existing
 storage, adventure reducers, and checkpoint rules do not change.
+
+## Complete backups and fresh starts — v0.23
+
+`save-data.mjs` snapshots all `tilewright.` keys, including unknown older save
+versions, while excluding `tilewright.save-generation.v1`. Complete archives
+use format `lantern-trails-save`, version 1, an ISO creation time, and up to 256
+unique key/string-value pairs within 12 MB of UTF-8 JSON. Parsing rejects
+foreign keys and attempts to supply the generation key. Individual existing
+mode validators still own the contents when the game reloads; archive parsing
+never evaluates code. Archives include persisted data, not unsaved runtime state.
+
+Replacement captures a pre-change recovery archive before deleting anything.
+It writes a changing-generation marker, replaces only owned player keys, verifies
+exact keys/values, and finishes a ready-generation marker. Failed replacement
+attempts an exact rollback and retains the old archive if writes also fail.
+Other-origin/game keys are never cleared. No call uses localStorage.clear().
+
+`app.mjs` gives every mode a shared guarded storage facade. Reads/writes from
+stale generations fail before old in-memory data can be saved. Storage events
+show a waiting dialog during an update and reload other tabs when it completes.
+An interrupted update offers explicit coordination recovery after five seconds;
+this changes no player file. The generation marker is technical coordination
+metadata and is not a player save or part of an exported archive.
+
+`save-data-ui.mjs` confirms replacement/reset with Cancel as the safe default,
+checks file size before reading, invalidates late reads on navigation, and
+provides recovery download/reload controls after a failed rollback. Successful
+operations reload the bare game path, clearing old mapmaker/shared-world URL
+fragments and all runtime histories. Saved-data management is available from
+ordinary Options on title or gameplay. Existing adventure checkpoint rules
+remain 0.22.0, so this UI/storage expansion does not invalidate current runs.
