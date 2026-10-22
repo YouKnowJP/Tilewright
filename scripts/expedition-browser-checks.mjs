@@ -214,7 +214,8 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
         const page = await context.newPage(), fixture = fixtures.find(item => item.id === 'contract-trail-none');
         await page.goto(`${baseURL}/#play`); await hub(page); await selectControl(page, '#expedition-mode', 'contract');
         await page.locator('#expedition-seed').fill(fixture.config.seed); await clickControl(page, '#expedition-start');
-        assert.match(await page.locator('#game-save-note').textContent(), /Checkpoint unavailable/);
+        assert.match(await page.locator('#game-save-note').textContent(), /Latest moves could not be saved/);
+        assert.equal(await page.locator('#game-checkpoint-state').textContent(), 'Session only');
         await replay(page, fixture.legs[0].actions); assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won');
         await hub(page); const [download] = await Promise.all([page.waitForEvent('download'), page.locator('#expedition-export').click()]);
         assert.match(download.suggestedFilename(), /^tilewright-expedition-/);

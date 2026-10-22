@@ -61,10 +61,14 @@ Up to six chapters fit in a **1.6 MB** book; each world retains its existing
 400 KB limit. The file includes the book, **not play progress**. Download as
 many books as you want, then import them when you want to revisit one.
 
-Progress saves **between chapters**. Reloading restarts the open chapter,
-retaining completed chapters and its selected promise. Within the same tab,
-**Main menu → Continue trail** returns to the still-open run. Every chapter
-starts with fresh supplies and hunter habits; a retry starts that chapter over.
+Completed chapter progress saves **at camp**. The latest open adventure also
+keeps its exact board, supplies, hunter habits, and Undo history across reloads.
+Use **Main menu → Continue trail** or **Resume chapter** to return. Starting a
+different adventure replaces this latest-trail slot; the book still keeps its
+completed chapters and selected promise, and offers **Restart chapter** if its
+exact run is no longer available. Every new chapter starts with fresh supplies
+and hunter habits; a retry starts that chapter over. Accepting a replacement
+book retires the old book's exact Continue slot. Cancelling retains it.
 Failed browser saving is reported, and books remain playable for the visit.
 Keep the tab open to retain session-only progress, and download any book you
 want to keep before clearing browser data.

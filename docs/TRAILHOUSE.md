@@ -58,8 +58,10 @@ rule set or remix your own festival after completing it.
 
 Completed commissions, purchases, and bests save in this browser separately
 from maps, Storybooks, campaign progress, and expeditions. An unfinished
-attempt restarts after reloading. Opening the game never automatically starts
-a commission.
+attempt uses the universal latest-trail checkpoint. **Continue trail** restores
+its exact board and Undo history after reload, including festival attempts.
+Starting another adventure replaces this latest-trail slot while retaining
+village progress. Opening the game never automatically starts a commission.
 
 Open **Your Trailhouse passport → Download passport** for a portable backup.
 In another browser, choose **Restore passport**, review the incoming progress,

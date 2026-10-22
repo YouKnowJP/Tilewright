@@ -5,9 +5,9 @@ in-game Menu. **Player adventures** holds three featured worlds and up to 32
 worlds saved in this browser. Search by title or creator; preview before playing.
 Trail and Nemesis bests are separate for each version of a world.
 
-**Puzzle Lab** adds six playable rooms with verified clear replays and a
+**Puzzle Lab** adds twelve playable rooms with verified clear replays and a
 different building idea for each one. Choose one room at a time, play it, or
-remix it. The six originals are separate from your saved shelf. **Design sparks**
+remix it. The twelve originals are separate from your saved shelf. **Design sparks**
 pair creative goals with twists; an idea seed makes a prompt reproducible.
 [The Lab guide](PUZZLE_LAB.md) explains its rooms and experiment tools.
 
@@ -17,6 +17,12 @@ chapter challenges, or bind your own snapshots
 with written interludes and an ending. Import/export a whole book in one file;
 its draft and chapter checkpoints are separate from this world shelf.
 [The Storybooks guide](STORYBOOKS.md) explains authoring, honors, and camp saves.
+
+**Undo · Z** revisits recent gameplay actions during a world or playtest.
+**Continue trail** restores your latest attempt exactly after reload. Creator
+clears record the surviving route after Undo. Restoring an earlier playtest never
+overwrites a newer draft or attaches that earlier clear to it. Cursor-practice
+recovery stays unscored. [Undo and Continue](CONTINUE.md).
 
 ![The creator’s camp](creator-camp.png)
 

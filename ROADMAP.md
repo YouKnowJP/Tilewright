@@ -266,3 +266,15 @@ paths and existing maps.
 - Compact room selection and folded goals on phones, with original bests retained.
 - This content expansion is complete and does not change the editor estimates.
   See [Puzzle Lab](docs/PUZZLE_LAB.md) and the verification record.
+
+## Undo and exact Continue completed — v0.22
+
+- Up to 60 recent gameplay Undo actions, including choices and hunter memory.
+- Exact latest-adventure Continue across reloads, with verified input replay
+  and Undo history. Completed awards and expedition camp transitions stay final.
+- Matching Storybook chapter resume, creator-proof route truncation, and
+  protection for newer drafts and replacement-book ownership.
+- Independent saved practice for both lessons, including unfinished creator text.
+- Compact local-save status and corrupt/full/unavailable-storage fallbacks.
+- This recovery improvement is complete and does not change editor estimates.
+  See [Undo and Continue](docs/CONTINUE.md) and the verification record.

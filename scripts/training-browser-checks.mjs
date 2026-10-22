@@ -4,7 +4,7 @@ import { enterFirstTrail } from './ui-driver.mjs';
 import { parseAdventure } from '../src/workshop-sharing.mjs';
 import { verifyAdventureProof, blankAdventure } from '../src/workshop-model.mjs';
 
-const savedKeys = ['tilewright.document.v1', 'tilewright.adventures.v1', 'tilewright.expedition.v1', 'tilewright.tactics.v1', 'tilewright.guild.v1', 'tilewright.workshop.draft.v1', 'tilewright.workshop.v1'];
+const savedKeys = ['tilewright.trail.checkpoint.v1', 'tilewright.document.v1', 'tilewright.adventures.v1', 'tilewright.expedition.v1', 'tilewright.tactics.v1', 'tilewright.guild.v1', 'tilewright.workshop.draft.v1', 'tilewright.workshop.v1'];
 const saves = page => page.evaluate(keys => keys.map(key => localStorage.getItem(key)), savedKeys);
 const keys = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'ArrowLeft', wait: 'Space' };
 export { walk as playTraining, createWorld as buildTrainingWorld };

@@ -48,6 +48,13 @@ body[data-control-size="large"] .training-dpad { grid-template-columns:repeat(3,
 @media(min-width:761px) { .playing main { padding-left:max(3%,env(safe-area-inset-left)); padding-right:max(3%,env(safe-area-inset-right)); } }
 @media(max-width:600px) { .controls-pair { grid-template-columns:1fr; gap:8px; }.control-field select { font-size:12px; }.playing .tactical-actions button { flex-basis:74px; } }
 .playing .game-input-strip button { min-height:44px; }
+.game-input-state { min-width:0; flex:1; }
+.game-input-state>span,.game-input-state>small { display:block; }
+.game-input-state>small { color:#b9d5ac; font:10px/1.5 ui-monospace,monospace; }
+.game-input-state>[data-error="true"] { color:#ffcf98; }
+.game-control-tools { display:flex; gap:6px; flex-shrink:0; }
+.playing .game-control-tools button { padding-inline:9px; }
+#game-undo-result[hidden],#conversation-undo[hidden] { display:none!important; }
 @media(any-pointer:coarse) { .playing select,.playing textarea,.playing input:not([type="checkbox"]):not([type="range"]),.front-dialog select { font-size:16px; } }
 
 /* Small screens retain distinct, readable navigation labels. */

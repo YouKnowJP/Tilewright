@@ -14,7 +14,7 @@ const $ = selector => document.querySelector(selector);
 const canvas = $('#map');
 const viewport = $('#viewport');
 const zoomControl = $('#zoom');
-const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
+const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value), removeItem:key=>localStorage.removeItem(key) };
 const restored = loadDocument(storage);
 let history = new History(restored.document || createSample());
 let activeLayer = history.document.layers[0].id;

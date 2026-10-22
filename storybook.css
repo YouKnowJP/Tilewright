@@ -55,7 +55,7 @@
 @media(max-width:760px) { .ws-navigation { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); } .ws-navigation button { font-size:11px; min-height:44px; } .book-library-heading,.book-builder-heading { flex-wrap:wrap; } .book-library-heading label { width:100%; max-width:none; } .book-camp-copy { padding:18px; } .book-passage { font-size:17px; } .book-form { grid-template-columns:minmax(0,1fr); } .book-add-world { flex-wrap:wrap; } .book-add-world label { flex-basis:100%; } .book-chapter { grid-template-columns:minmax(0,1fr); padding:16px; } .book-chapter>canvas { max-height:120px; object-fit:contain; } .game-book-banner { font-size:11px; } }
 @media(max-width:480px) { .book-cover { display:block; } .book-cover>canvas { height:120px; width:100%; } .book-cover-copy { padding:17px; } .book-cover h4 { font-size:26px; } .book-challenges { grid-template-columns:minmax(0,1fr); } .book-camp-art { flex-direction:column; gap:0; } .book-camp-art canvas { max-height:120px; } .book-camp-copy>.book-actions { flex-direction:column; align-items:stretch; } .book-builder-actions>button { width:100%; } }
 
-.adventure-workshop[data-section="books"]>#ws-status,#book-notice:empty { display:none; }
+.adventure-workshop[data-section="books"]>#ws-status:not([data-error="true"]),#book-notice:empty { display:none; }
 #ws-books[data-reading="true"]>.ws-section-heading>div:first-child { display:none; }
 #ws-books[data-reading="true"] .book-camp { margin-top:16px; }
 .book-cover h4,.book-camp h4,.book-chapter h4,.book-cover-copy>p { overflow-wrap:anywhere; }

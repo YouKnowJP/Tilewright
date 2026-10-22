@@ -48,8 +48,8 @@ export async function checkStorybooks(browserType,{baseURL='http://127.0.0.1:417
       await newBook(page,0,'trail');await page.locator('#book-continue').click();await finish(page,LAB_CLEARS.counterweight);
       await page.reload();await openBooks(page);assert.match(await page.locator('#book-camp-kicker').textContent(),/CHAPTER 2/);
       await page.locator('[data-book-challenge="resourceful"]').click();await page.locator('#book-continue').click();await playGuild(page,['right']);
-      await page.reload();await openBooks(page);assert.equal(await page.locator('#book-continue').textContent(),'Restart chapter 2');
-      await page.locator('#book-continue').click();assert.equal(await page.locator('#game-turns').textContent(),'0');await finish(page,LAB_CLEARS.footstep);
+      await page.reload();await openBooks(page);assert.equal(await page.locator('#book-continue').textContent(),'Resume chapter 2');
+      await page.locator('#book-continue').click();await page.waitForFunction(()=>document.querySelector('#adventure').dataset.status==='playing'&&document.querySelector('#game-turns').textContent==='1');await finish(page,LAB_CLEARS.footstep.slice(1));
       assert.equal((await saved(page)).session.receipts[1].earned,false);assert.match(await page.locator('#book-camp-kicker').textContent(),/CHAPTER 3/);
       await page.locator('[data-book-challenge="voices"]').click();if(screenshots)await page.screenshot({path:'.playwright-mcp/storybook-camp-desktop.png',fullPage:true});
       const download=page.waitForEvent('download');await page.locator('#book-active-download').click();exported=await readFile(await(await download).path(),'utf8');assert.equal(parseBook(exported).chapters.length,3);
@@ -57,7 +57,7 @@ export async function checkStorybooks(browserType,{baseURL='http://127.0.0.1:417
       await page.locator('#ws-home').click();await page.locator('#title-play').click();await page.locator('#front-story').click();assert.equal(await page.locator('#game-difficulty').isDisabled(),false);await page.locator('#game-difficulty').selectOption('nemesis');
       assert.equal(JSON.stringify((await saved(page)).session),checkpoint);await page.locator('#library-resume').click();assert.equal(await page.locator('#game-difficulty').inputValue(),'trail');assert.equal(await page.locator('#game-difficulty').isDisabled(),true);await page.locator('#game-primary').click();
       assert.equal(await otherSaves(page),originals);
-      report({checks:'Camp reload, mid-chapter restart, missed no-power honor, guide challenge, portable download, other-mode rule selection, and unchanged-rule Continue.'});
+      report({checks:'Camp reload, exact mid-chapter recovery, missed no-power honor, guide challenge, portable download, other-mode rule selection, and unchanged-rule Continue.'});
       // Builder edits survive reload. Reorder, remove, duplicate, all six slots, and cancelled replacement.
       await page.locator('#book-active-remix').click();await page.locator('#book-title').fill('The keeper’s own road');await page.locator('#book-synopsis').fill('<b>Only a story, never markup.</b>');
       await page.locator('[data-book-chapter="0"] textarea').fill('A new opening, written by a keeper.');await page.locator('[aria-label="Move chapter 1 later"]').click();

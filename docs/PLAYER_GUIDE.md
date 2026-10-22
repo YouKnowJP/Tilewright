@@ -29,8 +29,10 @@ or game progress. [Read about the two lessons](TRAINING.md).
 
 Main menu preserves the current trail while you browse. **Continue** returns to
 that trail. **Adventure journal** shows story stars, Guild honors, expedition
-badges, and suggestions. After a reload, unfinished story, Guild, and player
-adventures restart; expeditions have their own saved checkpoint.
+badges, and suggestions. After a reload, **Continue trail** restores the exact
+latest adventure and up to 60 recent Undo actions. Use **Undo · Z** to try another
+answer, including after a loss. Completed rewards and camp transitions cannot
+be undone. Training keeps its own practice saves. [Saving guide](CONTINUE.md).
 
 ## Bring back the light
 
@@ -95,7 +97,8 @@ stories with eight original levels, plus three journeys through Puzzle Lab.
 [Meet the keepers and new chapters](NEW_STORIES.md). Read each scene, choose an optional promise, and turn the page after
 finishing. Missing an honor never blocks your story. Bind two to six of your
 own worlds, write scenes, and share a `.storybook.json` file. Camps retain
-completed chapters; reloading restarts the open chapter. [Storybooks guide](STORYBOOKS.md).
+completed chapters; **Resume chapter** restores the exact latest adventure after
+reload. [Storybooks guide](STORYBOOKS.md).
 
 ## Keep the stories you make
 

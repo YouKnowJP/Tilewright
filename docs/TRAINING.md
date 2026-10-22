@@ -52,8 +52,12 @@ checks and creator clear; check and win the changed version before sharing it.
 
 Lesson completion is stored under `tilewright.training.v1`. If browser storage
 is unavailable, the lessons still work for the visit and the camp reports the
-limitation. Practice drafts themselves last for the current visit. Download
-your world or take it to the Workshop before reloading or closing the tab.
+limitation. Each lesson also keeps a separate saved practice across reloads:
+the current board, painting history, unfinished story fields, and playtest route.
+Choose that lesson again to return; **Start this lesson again** replaces its
+practice with a fresh lesson while retaining the completion record. Use
+**Undo action · Z** during play; painting Undo/Redo remain separate tools.
+Download your world or take it to the Workshop for a portable copy.
 
 The camp does not change your terrain map, its undo/redo history, ordinary open
 run, campaign/Guild records, learned habits, Workshop shelf/draft, or expedition

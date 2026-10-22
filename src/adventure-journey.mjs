@@ -66,6 +66,14 @@ export function retryLeg(session) {
     legMemory: normalizeMemory(session.run.memory) };
   next.run = makeRun(next); return next;
 }
+export function journeyUndoFrames(session,limit=60){
+  let run=makeRun(session);const frames=[];
+  for(let i=0;i<session.journal.length;i++){
+    if(i>=session.journal.length-limit)frames.push({run,length:i,action:session.journal[i]});
+    run=session.journal[i]==='forget'?{...run,memory:freshMemory(),events:[],message:'The expedition’s learned movement habits were cleared.'}:stepRun(run,session.journal[i]);
+  }
+  return frames;
+}
 function fingerprint(run, rules = JOURNEY_RULES) {
   const { stage, walkable, events, message, ...state } = run;
   if (rules === '0.5.0') { delete state.switches; delete state.spentCoins; delete state.talkedTo; }

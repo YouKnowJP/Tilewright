@@ -2,31 +2,35 @@ import { movementKey, controlHelp } from './adventure-controls.mjs';
 import { createMapInput } from './adventure-input.mjs';
 import { practiceWorld, paintPractice, tellPracticeStory, playLessonSteps, creatorLessonSteps, readTraining, saveTraining, practiceClear, PRACTICE_SPOTS } from './training-model.mjs';
 import { adventureStage, checkAdventure, editAdventure } from './workshop-model.mjs';
-import { createRun, stepRun, nearbyInteractions } from './adventure.mjs';
+import { createRun, nearbyInteractions } from './adventure.mjs';
 import { createAdventureRenderer } from './adventure-render.mjs';
 import { freshMemory } from './adventure-brain.mjs';
 import { drawWorkshopWorld } from './workshop-art.mjs';
 import { drawAtlasArt, CHAPTERS } from './adventure-art.mjs';
 import { serializeAdventure, adventurePlayLink } from './workshop-sharing.mjs';
+import { beginRewind, advanceRewind, undoRewind, canRewind } from './adventure-rewind.mjs';
+import { readPractice, savePractice, restorePractice } from './training-checkpoint.mjs';
 
 export function createTrainingUI({ storage, getPreferences, onControls, onHome, onStory, onWorkshop }) {
   const $ = id => document.getElementById(`training-${id}`), root = $('camp'), canvas = $('map');
   const sessions = new Map(), progress = readTraining(storage);
-  let state = null, renderer = null, saveFailed = false, pointer = null, lastStep = '', lastKeyboardMove = 0;
+  let state = null, renderer = null, saveFailed = false, pointer = null, lastStep = '', lastKeyboardMove = 0,loadToken=0,practiceFailed=false;
   drawAtlasArt($('play-art'), CHAPTERS[0]); drawAtlasArt($('create-art'), CHAPTERS.find(chapter => chapter.id === 'coast'));
 
   const editing = () => state?.kind === 'create' && state.mode === 'build';
   const steps = () => state.kind === 'play' ? playLessonSteps(state.run) : creatorLessonSteps(state.pack, state);
   const message = text => { $('message').textContent = text; };
+  function persistPractice(){if(!state)return;state.uiForm=editing()&&state.storyDirty?{title:$('world-title').value,opening:$('opening').value,dialogue:$('keeper-lines').value}:null;practiceFailed=!savePractice(storage,state);}
   function record(kind) {
     if (progress[kind]) return;
     progress[kind] = true; saveFailed = !saveTraining(storage, progress); renderRecords();
   }
   function renderRecords() {
-    for (const kind of ['play', 'create']) $(kind + '-record').textContent = progress[kind] ? 'Lesson complete · revisit any time' : `${kind === 'play' ? 'About 5' : 'About 8'} minutes · ${kind === 'play' ? 'no enemies or timer' : 'guided practice table'}`;
-    $('save-note').textContent = saveFailed ? 'This visit keeps your lesson progress. Browser saving is unavailable; download any world you want to keep.' : 'Practice drafts last for this visit. Keep a world by downloading it or taking it to the Workshop. Your existing maps and progress stay separate; lesson completion stays in this browser.';
+    for (const kind of ['play', 'create']) $(kind + '-record').textContent = readPractice(storage,kind)?`Continue saved practice${progress[kind]?' · lesson complete':''}`:progress[kind] ? 'Lesson complete · revisit any time' : `${kind === 'play' ? 'About 5' : 'About 8'} minutes · ${kind === 'play' ? 'no enemies or timer' : 'guided practice table'}`;
+    $('save-note').textContent = saveFailed||practiceFailed ? 'This visit keeps your lesson progress. Browser saving is unavailable; download any world you want to keep.' : 'Each lesson keeps its own saved practice. Choose it again to return after reload. Download a world to move it to another browser. Your main adventure and original worlds stay separate.';
   }
   function library() {
+    loadToken++;
     $('library').hidden = false; $('lesson').hidden = true; $('lessons').hidden = true;
     renderRecords(); $('heading').focus({ preventScroll: true }); window.scrollTo(0, 0);
   }
@@ -35,19 +39,23 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
     $('keeper-lines').value = state.pack.markers.find(marker => marker.kind === 'guide')?.text || '';
     state.storyDirty = false;
   }
-  function start(kind, reset = false) {
+  async function start(kind, reset = false) {
+    const token=++loadToken;let recovery='';
+    if(!reset&&!sessions.has(kind)){const saved=readPractice(storage,kind);if(saved)try{const restored=await restorePractice(saved,kind,()=>new Promise(resolve=>requestAnimationFrame(resolve)));if(token!==loadToken||root.hidden)return;sessions.set(kind,restored);recovery='Your saved practice is ready.';}catch{recovery='The earlier practice could not be restored. A fresh lesson is ready; your other adventures are retained.';}}
+    if(token!==loadToken||root.hidden)return;
     if (reset || !sessions.has(kind)) {
       const pack = practiceWorld(kind);
       sessions.set(kind, { kind, pack, mode: kind === 'play' ? 'play' : 'build', run: kind === 'play' ? createRun(adventureStage(pack), { memory: freshMemory() }) : null,
         brush: 'bridge', cursor: { ...PRACTICE_SPOTS.bridge }, history: [pack], index: 0, checked: false, won: false, shared: false, actions: [], storyDirty: false, plan: false });
     }
     state = sessions.get(kind); state.plan = false; lastStep = ''; renderer = null;
+    if(state.run&&!state.rewind)state.rewind=beginRewind(state.run,{kind:'world',world:state.pack,origin:kind==='create'?'build':'shelf'});
     $('library').hidden = true; $('lesson').hidden = false; $('lessons').hidden = false;
     $('title').textContent = kind === 'play' ? 'First Light Crossing' : 'A little island, made by you';
     $('hint-copy').hidden = true; $('share-note').textContent = ''; $('link-fallback').hidden = true;
     $('check-report').textContent = ''; $('story').open = false;
-    if (kind === 'create') formValues();
-    render(); message(editing() ? 'Your starting point and beacon are ready. Make a crossing to the island.' : state.run.message);
+    if (kind === 'create') {const unfinished=state.uiForm;formValues();if(unfinished){$('world-title').value=unfinished.title;$('opening').value=unfinished.opening;$('keeper-lines').value=unfinished.dialogue;state.storyDirty=true;}}
+    render(); message(recovery||(editing() ? 'Your starting point and beacon are ready. Make a crossing to the island.' : state.run.message));
     window.scrollTo(0, 0); canvas.focus({ preventScroll: true });
   }
   function draw() {
@@ -80,8 +88,9 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
     $('mode-note').textContent = editing() ? 'Practice table · marks show where to paint' : `Turn ${state.run.turns} · ${state.run.status === 'won' ? 'Trail restored' : 'No enemies or timer'}`;
     $('brushes').hidden = !editing(); $('build-actions').hidden = !editing();
     $('edit').hidden = state.kind !== 'create' || editing();
-    $('map-help').textContent = editing() ? 'Choose a brush, then tap the marked square. Your movement keys move the cursor; Space paints.' : controlHelp(getPreferences())+' E interacts; Space waits.';
+    $('map-help').textContent = editing() ? 'Choose a brush, then tap the marked square. Your movement keys move the cursor; Space paints.' : controlHelp(getPreferences())+' E interacts; Space waits; Z undoes the last action.';
     const blocked = !editing() && (state.run.status !== 'playing' || Boolean(state.run.dialogue) || state.plan);
+    $('undo-action').hidden=editing();$('undo-action').disabled=editing()||!canRewind(state.rewind);
     $('play-controls').hidden = editing();
     for (const button of root.querySelectorAll('[data-training-move],#training-wait,#training-plan')) button.disabled = blocked;
     const nearby = !editing() ? nearbyInteractions(state.run) : [];
@@ -106,10 +115,13 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
       catch (error) { $('copy-link').disabled = true; $('share-note').textContent = error.message; }
     }
     if (finished) record(state.kind);
+    persistPractice();
+    $('mode-note').textContent=`${editing()?'Practice table':state.run.status==='won'?'Trail restored':`Turn ${state.run.turns}`} · ${practiceFailed?'Session only':'Saved here'}`;
     draw();
   }
   function change(pack, { restoreForm = false } = {}) {
     state.pack = editAdventure(pack, {}); state.checked = false; state.won = false; state.shared = false;
+    state.run=null;state.rewind=null;state.actions=[];
     state.history = state.history.slice(0, state.index + 1); state.history.push(state.pack);
     if (state.history.length > 30) state.history.shift(); state.index = state.history.length - 1;
     if (restoreForm) formValues(); $('check-report').textContent = ''; render();
@@ -121,13 +133,14 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
   }
   function act(action) {
     if (!state || editing() || state.plan || $('lesson').hidden) return;
-    const before = state.run; state.run = stepRun(before, action);
-    if (state.run !== before && state.actions.length <= 2000) state.actions.push(action);
+    const before = state.run;state.rewind=advanceRewind(state.rewind,action);state.run=state.rewind.run;state.actions=state.rewind.actions;
     if (state.run.status === 'won' && before.status !== 'won' && state.kind === 'create') { state.won = true; state.pack = practiceClear(state.pack, state.actions); }
     render(); message(state.run.message);
     if (state.run.status === 'won') (state.kind === 'play' ? $('next') : $('download')).focus({ preventScroll: true });
   }
   function interact() { const target = $('target').value; if (target) act(`interact:${target}`); }
+  function undoAction(){const dialog=document.querySelector('dialog[open]');if(root.hidden||$('lesson').hidden||dialog&&dialog.id!=='training-talk'||!state||editing()||!canRewind(state.rewind))return;state.rewind=undoRewind(state.rewind);state.run=state.rewind.run;state.actions=state.rewind.actions;state.plan=false;renderer=null;render();message(`Last action undone. Back to turn ${state.run.turns}.`);if(!state.run.dialogue)canvas.focus({preventScroll:true});}
+  $('undo-action').onclick=undoAction;
   function keep(session = state) { session.shared = true; record('create'); if (session === state && !root.hidden) render(); }
   $('home').onclick = onHome; $('lessons').onclick = library;
   for (const button of root.querySelectorAll('[data-training-lesson]')) button.onclick = () => start(button.dataset.trainingLesson);
@@ -138,6 +151,7 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
   for (const [id, delta] of [['undo', -1], ['redo', 1]]) $(id).onclick = () => {
     const index = state.index + delta; if (index < 0 || index >= state.history.length) return;
     state.index = index; state.pack = state.history[index]; state.checked = state.won = state.shared = false;
+    state.run=null;state.rewind=null;state.actions=[];
     formValues(); $('check-report').textContent = ''; render(); message('Practice edit restored.'); canvas.focus({ preventScroll: true });
   };
   $('story-form').oninput = () => { state.storyDirty = true; state.checked = false; render(); };
@@ -161,6 +175,7 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
   $('test').onclick = () => {
     if ($('test').disabled) return;
     state.run = createRun(adventureStage(state.pack), { memory: freshMemory() }); state.actions = []; state.mode = 'play'; state.plan = false; renderer = null;
+    state.rewind=beginRewind(state.run,{kind:'world',world:state.pack,origin:'build'});
     render(); message(state.run.message); canvas.focus({ preventScroll: true });
   };
   $('edit').onclick = () => { state.mode = 'build'; state.plan = false; renderer = null; render(); message('Back at your practice table. Editing your world removes its previous creator clear.'); canvas.focus({ preventScroll: true }); };
@@ -191,15 +206,16 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
   canvas.addEventListener('keydown', event => {
     if (root.hidden || $('lesson').hidden || event.ctrlKey || event.metaKey || event.altKey) return;
     const direction=movementKey(event.key,getPreferences().keyboardLayout);
-    const handled=direction||event.code==='Space'||event.key==='Enter'||event.key.toLowerCase()==='e';
+    const handled=direction||event.code==='Space'||event.key==='Enter'||['e','z'].includes(event.key.toLowerCase());
     if(handled)event.preventDefault();
     if(event.repeat&&(!direction||getPreferences().keyRepeat!=='on'||performance.now()-lastKeyboardMove<160))return;
     if (direction) {
       lastKeyboardMove=performance.now();
-      if (editing()) { const [dx, dy] = { up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] }[direction]; state.cursor = { x: Math.max(0, Math.min(9, state.cursor.x + dx)), y: Math.max(0, Math.min(7, state.cursor.y + dy)) }; draw(); }
+      if (editing()) { const [dx, dy] = { up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] }[direction]; state.cursor = { x: Math.max(0, Math.min(9, state.cursor.x + dx)), y: Math.max(0, Math.min(7, state.cursor.y + dy)) }; persistPractice();draw(); }
       else act(direction);
     } else if (event.code === 'Space' || event.key === 'Enter') { event.preventDefault(); if (editing()) paint(state.cursor); else act('wait'); }
     else if (event.key.toLowerCase() === 'e' && !editing()) { event.preventDefault(); interact(); }
+    else if(event.key.toLowerCase()==='z'&&!editing())undoAction();
   });
   $('talk').addEventListener('cancel', event => { event.preventDefault(); $('talk-close').click(); });
   $('plan-copy').addEventListener('cancel', event => { event.preventDefault(); $('plan-close').click(); });
@@ -221,6 +237,7 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
     refresh(){mapInput.cancel();if(state&&!root.hidden)render();},
     control(command){
       if(root.hidden||$('lesson').hidden||!state)return false;
+      if(command==='undo'){undoAction();return true;}
       if(command==='pause'){library();return true;}
       if(!editing()&&state.run.status!=='playing')return false;
       if(['up','right','down','left'].includes(command))canvas.dispatchEvent(new KeyboardEvent('keydown',{key:{up:'ArrowUp',right:'ArrowRight',down:'ArrowDown',left:'ArrowLeft'}[command],bubbles:true}));
@@ -228,6 +245,6 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
       return true;
     },
     show() { root.hidden = false; library(); },
-    hide() { root.hidden = true; pointer = null; mapInput.cancel(); for (const id of ['talk', 'plan-copy']) if ($(id).open) $(id).close(); },
+    hide() { loadToken++;root.hidden = true; pointer = null; mapInput.cancel(); for (const id of ['talk', 'plan-copy']) if ($(id).open) $(id).close(); },
   };
 }

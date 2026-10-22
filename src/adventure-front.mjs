@@ -150,17 +150,19 @@ export function createFrontMenu({ storage, sound, onMode, onContinue, onResumeEx
   return {
     get preferences() { return preferences; },
     get dialogOpen() { return guide.open || settings.open; },
-    notice(text) { $('#front-mode-notice').textContent = text; $('#front-mode-notice').hidden = false; },
+    notice(text) { $('#front-mode-notice').textContent = text; $('#front-mode-notice').hidden = false;$('#title-save-note').textContent=text;$('#title-save-note').hidden=false; },
     toggleSound,
     journal, guide: openGuide, modes,
     settings: openSettings,
-    show({ run, checkpoint }) {
+    show({ run, checkpoint, resume }) {
+      $('#title-save-note').hidden=true;
       $('#game-title-screen').hidden = false;
       const c = getJournal().counts;
       $('#title-progress').textContent = c.story || c.honors || c.badges ? `${c.story}/${c.storyTotal} stories restored · ${c.honors} Guild honors · ${c.badges} expedition badges` : '24 stories · 3 specialists · a new expedition each day';
-      $('#title-continue').hidden = !run;
-      $('#title-continue').textContent = run ? `${run.status === 'playing' ? 'Continue' : 'Return to'} ${run.stage.name}` : 'Continue trail';
-      $('#title-expedition').hidden = !checkpoint;
+      $('#title-continue').hidden = !run&&!resume;
+      $('#title-continue').textContent = run ? `${run.status === 'playing' ? 'Continue' : 'Return to'} ${run.stage.name}` : resume?`${resume.status==='playing'?'Continue':'Return to'} ${resume.name}`:'Continue trail';
+      $('#title-continue').title=resume?`Saved turn ${resume.turns} · ${resume.difficulty} rules`:'Return to your open trail';
+      $('#title-expedition').hidden = !checkpoint||resume?.kind==='expedition';
       $('#title-expedition').textContent = checkpoint ? `${checkpoint.phase === 'won' ? 'View expedition finish' : checkpoint.phase === 'camp' ? 'Return to camp' : 'Resume expedition'} · leg ${checkpoint.leg + 1} of ${checkpoint.config.length}` : 'Resume expedition';
       home();
     },

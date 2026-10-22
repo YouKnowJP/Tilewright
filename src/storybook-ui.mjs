@@ -3,7 +3,7 @@ import { featuredBooks } from './storybook-worlds.mjs';
 import { adventureKey } from './workshop-model.mjs';
 import { drawWorkshopWorld } from './workshop-art.mjs';
 
-export function createStorybookUI({ storage, getWorlds, getDraft, onPlay }) {
+export function createStorybookUI({ storage, getWorlds, getDraft, onPlay, onResume, canResume=()=>false, onReplace }) {
   const $ = id => document.getElementById(`book-${id}`), books = featuredBooks(), state = loadBooks(storage);
   let failed = state.unavailable || state.damaged, selected = 'wander', composing = false, sources = [];
   const notice = (message, error = false) => { $('notice').textContent = message; $('notice').dataset.error = String(error); };
@@ -17,7 +17,7 @@ export function createStorybookUI({ storage, getWorlds, getDraft, onPlay }) {
   }
   function startBook(book, difficulty = $('rules').value) {
     if (state.session && state.session.phase !== 'won' && !confirm('Start a new storybook? This replaces your active book checkpoint. Your saved worlds and storybook draft stay safe.')) return;
-    state.session = beginBook(book, difficulty); selected = 'wander'; composing = false; persist(); render(); $('camp-heading').focus({ preventScroll: true });
+    const next=beginBook(book,difficulty);if(state.session)onReplace?.(bookKey(state.session.book));state.session=next; selected = 'wander'; composing = false; persist(); render(); $('camp-heading').focus({ preventScroll: true });
   }
   function button(label, fn, cls = '') { const element = document.createElement('button'); element.textContent = label; element.onclick = () => guard(fn); if (cls) element.className = cls; return element; }
   function paragraph(value, cls = '') { const element = document.createElement('p'); element.textContent = value; element.className = cls; return element; }
@@ -48,8 +48,9 @@ export function createStorybookUI({ storage, getWorlds, getDraft, onPlay }) {
         element.append(heading(offer.name, 'strong'), paragraph(offer.description), paragraph(offer.bonus ? 'Optional honor · +150 points' : 'A relaxed chapter', 'book-reward')); return element;
       }));
     }
-    $('continue').hidden = done; $('continue').textContent = session.phase === 'playing' ? `Restart chapter ${session.chapter + 1}` : `Enter chapter ${session.chapter + 1}`;
-    $('checkpoint-note').textContent = done ? 'Your full-book best is recorded for this book version and rule set. Try different chapter challenges on your next reading.' : session.phase === 'playing' ? 'This chapter is underway. Entering from here begins it again; completed chapters remain saved. Use Main menu → Continue to return to a run still open in this tab.' : 'Choose one optional challenge. It never blocks the story. Supplies and hunter habits start fresh in each chapter.';
+    const resumable=session.phase==='playing'&&canResume(bookStage(session),session.difficulty);
+    $('continue').hidden = done; $('continue').textContent = session.phase === 'playing' ? `${resumable?'Resume':'Restart'} chapter ${session.chapter + 1}` : `Enter chapter ${session.chapter + 1}`;
+    $('checkpoint-note').textContent = done ? 'Your full-book best is recorded for this book version and rule set. Try different chapter challenges on your next reading.' : resumable?'Resume chapter returns to your current position and choices. The board shows whether browser saving is available.':session.phase === 'playing' ? 'This chapter is underway, but another adventure has the active Continue slot. Restart this chapter to begin it again; completed chapters remain saved.' : 'Choose one optional challenge. It never blocks the story. Supplies and hunter habits start fresh in each chapter.';
     $('receipts').replaceChildren(...session.receipts.map(receipt => {
       const chapter = session.book.chapters[receipt.chapter], offer = chapterChallenges({ ...bookStage({ ...session, phase: 'interlude', chapter: receipt.chapter }) }, session.difficulty).find(item => item.id === receipt.challenge);
       const page=document.createElement('details'),summary=document.createElement('summary');page.className='book-restored-page';
@@ -90,6 +91,7 @@ export function createStorybookUI({ storage, getWorlds, getDraft, onPlay }) {
   $('active-download').onclick = () => guard(() => download(state.session.book));
   $('active-remix').onclick = () => guard(() => replaceDraft(state.session.book));
   $('continue').onclick = () => guard(() => {
+    if(state.session.phase==='playing'&&canResume(bookStage(state.session),state.session.difficulty)){onResume();return;}
     if (state.session.phase === 'interlude') state.session = chooseChapter(state.session,selected);
     persist(); onPlay(bookStage(state.session),state.session.difficulty);
   });
@@ -98,6 +100,11 @@ export function createStorybookUI({ storage, getWorlds, getDraft, onPlay }) {
   saveNote();
   return {
     show() { render(); },
+    runSource(run){
+      const expected=state.session?.phase==='playing'?bookStage(state.session):null;
+      if(!expected||run.difficulty!==state.session.difficulty||expected.workshop.key!==run.stage.workshop.key||JSON.stringify(expected.workshop.storybook)!==JSON.stringify(run.stage.workshop.storybook))throw Error('This saved chapter belongs to an earlier storybook. Open Storybooks to continue your current book.');
+      return {kind:'book',world:state.session.book.chapters[state.session.chapter].world,meta:expected.workshop.storybook};
+    },
     get failed() { return failed; },
     status(run) { if (!run.stage.workshop?.storybook) return null; const meta = run.stage.workshop.storybook, challenge = challengeProgress(run,meta.challenge); return { ...challenge, label: `${meta.title} · Chapter ${meta.chapter + 1}/${meta.length}`, saved: !failed }; },
     recordWin(run) { return guard(() => { state.session = finishChapter(state.session,run); state.records = recordBook(state.records,state.session); persist(); const progress = challengeProgress(run,run.stage.workshop.storybook.challenge); return progress.bonus ? progress.earned ? `${progress.name}: honor earned. +150 points.` : `${progress.name}: another route to try. Your story continues.` : 'Another chapter of your story, restored.'; }) || 'This chapter belongs to an earlier book. Return to Storybooks to continue your active story.'; },

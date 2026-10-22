@@ -104,9 +104,9 @@ export async function checkFrontMenu(browserType, { baseURL = 'http://127.0.0.1:
       const before = await page.locator('#adventure-canvas').getAttribute('aria-label');
       assert.equal(await page.locator('#game-turns').textContent(), '1');
       await page.reload(); await page.locator('#adventure[data-view="title"]').waitFor();
-      assert.equal(await page.locator('#title-continue').isVisible(), false); assert.equal(await page.locator('#title-expedition').isVisible(), true);
+      assert.equal(await page.locator('#title-continue').isVisible(), true); assert.equal(await page.locator('#title-expedition').isVisible(), false);
       assert.equal(await page.locator('#game-layout').isVisible(), false);
-      await page.locator('#title-expedition').click(); await page.locator('#adventure[data-view="play"]').waitFor();
+      await page.locator('#title-continue').click(); await page.locator('#adventure[data-view="play"]').waitFor();
       assert.equal(await page.locator('#game-turns').textContent(), '1'); assert.equal(await page.locator('#adventure-canvas').getAttribute('aria-label'), before);
       await clickControl(page, '#game-title-menu'); await page.locator('#title-settings').click(); await page.locator('[data-sound="on"]').click();
       await page.waitForFunction(() => document.querySelector('[data-sound="on"]').getAttribute('aria-pressed') === 'true');

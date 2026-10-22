@@ -48,6 +48,7 @@ specialist powers keep visible buttons in every movement style.
 | Q / C | Decoy / shield |
 | B / X | Specialist power / drop cargo |
 | V / H | Plan / scout hint |
+| Z | Undo the last gameplay action, up to 60 recent actions |
 | P or Escape | Pause/resume on the board |
 | R | Restart the current attempt |
 
@@ -75,6 +76,12 @@ controllers; touch and keyboard remain available at all times.
 | View / Select | Plan |
 | Menu / Start | Pause; in training, return to the lesson chooser |
 | Left-stick press | Drop cargo |
+| Right-stick press | Undo the last gameplay action |
+
+Undo is also available below the map, in Menu, in conversations, and after a
+lost attempt. It cannot undo a completed reward or expedition camp transition.
+Training has its own **Undo action** button; the creator's painting Undo remains
+separate. [Undo and Continue](CONTINUE.md) explains exact reload recovery.
 
 Holding a controller button or stick does not repeat turns. Release and press
 again for the next action. On connecting, refocusing, or returning from a hidden

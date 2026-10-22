@@ -47,6 +47,20 @@ run without restarting. Training uses the same preferences. Portrait, landscape,
 and split-view layouts preserve readable feedback and reachable controls.
 [Device and controls guide](docs/CONTROLS.md).
 
+## Try another answer, then return later
+
+Use **Undo · Z** below the board to revisit up to **60 recent actions**,
+including a mistake that ended an attempt. Crates, choices, supplies, companions,
+and learned hunter habits return with you. Try a different route without
+restarting the whole puzzle. Completed rewards and camp transitions stay final.
+
+**Main menu → Continue trail** now restores your exact latest adventure after
+reloading, including its Undo history. Story, Guild, Lab, player worlds,
+Storybooks, Trailhouse, expeditions, and custom terrain adventures are supported.
+Both training lessons keep separate saved practice. A compact **Saved here**
+or **Session only** label explains whether your latest moves are stored.
+See [Undo and Continue](docs/CONTINUE.md) for saving limits and recovery.
+
 ## The Lab stays open after hours
 
 Choose **Workshop → Puzzle Lab → After hours** for six new original adventures:
@@ -85,8 +99,9 @@ Earn honors and bonus points; a missed promise never blocks the story.
 
 Bind up to six world snapshots into your own book, write the scenes and ending,
 reorder its chapters, and download a self-contained `.storybook.json` for a
-friend to import. Completed chapters save at camp; reloading restarts the open
-chapter. Book bests, creator drafts, and other modes remain separate.
+friend to import. Completed chapters save at camp; **Resume chapter** restores
+the exact open chapter when it is your latest saved adventure. Book bests,
+creator drafts, and other modes remain separate.
 See the [Storybooks guide](docs/STORYBOOKS.md).
 
 ![The new story library](docs/new-story-library.png)
@@ -107,9 +122,10 @@ Workshop. An existing Workshop draft is replaced only after you accept its
 replacement prompt. Lessons preserve the campaign, current run, map/history,
 Workshop shelf/draft, learned habits, and expedition checkpoint.
 
-Completion stays in this browser. Practice drafts last for this visit; keep a
-world by downloading it or explicitly taking it to the Workshop. Both lessons
-can be replayed. See the [tutorial guide](docs/TRAINING.md).
+Completion and each lesson's practice now stay in this browser across reloads,
+including unfinished story text and playtests. Keep a portable world by downloading
+it or explicitly taking it to the Workshop. Both lessons can be restarted.
+See the [tutorial guide](docs/TRAINING.md).
 
 ## Run locally for development
 
@@ -199,9 +215,10 @@ Menu. If saving is unavailable, the options still work for the current visit.
 
 **Main menu** stays visible above the board and is also available in pause/results,
 the adventure library, and the journal. It preserves your open trail. **Continue** returns to the
-same position and turn. After a reload, a saved expedition has its own **Resume
-expedition** entry; unfinished story/Guild runs still restart rather than claiming
-to have a checkpoint. Mapmaker returns to the editor, with its map and undo retained.
+same position and turn, including after reload. Starting a different adventure
+replaces this single latest-trail checkpoint; completed progress and creator
+drafts remain separate. An expedition also retains its existing backup/resume
+slot. Mapmaker returns to the editor, with its map and undo retained during the visit.
 Its mode preview also offers **Explore current map** to start your existing world
 directly; maps without enough connected land explain what to change.
 
@@ -230,7 +247,7 @@ play are under **Quick starts & custom map** in the library.
 
 Quest, Map, Notes, and Help tabs group the reading panels. On phones and
 tablets, **Quest & map** opens them in a separate panel; close it with × or Escape.
-**Menu** holds the main menu, journal, field guide, options, sound, pause, restart,
+**Menu** holds the main menu, journal, field guide, options, sound, pause, Undo, restart,
 and the scout hint. The board and movement
 controls fit standard portrait and desktop screens; short phones and landscape
 use a bounded page scroll so controls remain reachable.
@@ -381,8 +398,9 @@ travel uses E, one energy, and one turn; the landing forecast explains threats.
 
 Three optional commendations add route and resource goals. Each specialist and
 rule set keeps its own best: 48 categories and up to 144 commendations. Guild
-bests save on completion; unfinished jobs restart from the beginning. Story
-progress, editor maps, and expedition checkpoints are retained separately.
+bests save on completion; **Continue trail** restores an unfinished job with its
+specialist and supplies. Story progress, editor maps, and expedition checkpoints
+are retained separately.
 
 Start with **The Glasshouse Double**, a plate-bridge lesson, then **The Borrowed
 Horizon**, a lighthouse rescue with a memory lens, ordered bells, and a choice
@@ -505,7 +523,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 443 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 480 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -526,7 +544,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The sixteen suites include `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The twenty-one browser families include `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.

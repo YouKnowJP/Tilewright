@@ -118,8 +118,10 @@ Each job keeps an independent best for three kits and both rule sets: **48 bests
 and up to 144 commendations**. Best results prioritize more commendations, then
 score, then fewer turns. There is no cumulative farming counter: replaying the
 same result does not create extra progress. Your bests use a separate bounded
-browser save. Unfinished jobs restart from the beginning; there is no Guild
-checkpoint or export in this release. Expedition checkpoints remain separate.
+browser save. An unfinished job uses the universal latest-trail checkpoint:
+**Continue trail** restores its exact board, selected specialist, supplies, and
+Undo history after reload. There is no portable Guild-progress export.
+Expedition checkpoints remain separate.
 If storage is unavailable, play and Guild bests remain available for the session
 with a warning. Keep the tab open if you want to retain that session.
 

@@ -16,7 +16,7 @@ import { createStorybookUI } from './storybook-ui.mjs';
 import { LAB_ROOMS, puzzleLabWorld, designSpark, cursorPractice } from './workshop-lab.mjs';
 import { MASTERY_REWARDS, MAX_MASTERY_BYTES, loadMastery, saveMastery, masteryCount, masteryGoals, recordMastery, serializeMastery, parseMastery } from './workshop-mastery.mjs';
 
-export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, onGuide }) {
+export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, onGuide, onResume, canResumeBook, onReplaceBook }) {
   const $ = id => document.getElementById(`ws-${id}`), root = document.getElementById('adventure-workshop');
   const kitLabel=id=>GUILD_KITS.find(kit=>kit.id===id)?.name||'Wayfarer';
   const restored = loadWorkshop(storage), featured = workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) }));
@@ -27,7 +27,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   const loadedMastery=loadMastery(storage);let mastery=loadedMastery.state,masteryFailed=loadedMastery.failed,labCollection='foundations',importedMastery=null;
   const notice = (text,error=false) => { $('status').textContent=text; $('status').dataset.error=String(error); };
   const designer = createWorkshopDesigner({ initial:restoredDraft || blankAdventure(), onChange(pack) { draftTouched=true; saved=saveWorkshopDraft(storage,pack); draftState(pack); }, notice });
-  const books = createStorybookUI({ storage, getWorlds: () => [...featured, ...LAB_ROOMS.map(room => puzzleLabWorld(room.id)), ...STORY_LEVELS.map(level => storyAdventure(level.id)), ...entries], getDraft: () => designer.get(), onPlay(stage,rules) { activePlay={book:true,origin:'books'}; hide(); onPlay(stage,rules); } });
+  const books = createStorybookUI({ storage, onResume, onReplace:onReplaceBook, canResume:canResumeBook, getWorlds: () => [...featured, ...LAB_ROOMS.map(room => puzzleLabWorld(room.id)), ...STORY_LEVELS.map(level => storyAdventure(level.id)), ...entries], getDraft: () => designer.get(), onPlay(stage,rules) { activePlay={book:true,origin:'books'}; hide(); onPlay(stage,rules); } });
   const house = createTrailhouseUI({ storage, onPlay(stage,rules) { activePlay={house:true}; hide(); onPlay(stage,rules); }, onRemix(pack) { house.hide(); return replaceDraft(editAdventure(pack,{source:`Remix of ${pack.title} by ${pack.author}`.slice(0,128),author:'A trail keeper'})); } });
   function draftState(pack = designer.get()) { $('draft-state').textContent = `${pack.map.width} × ${pack.map.height} · ${pack.markers.length}/128 objects · ${draftTouched ? saved ? 'Draft saved' : 'Saving unavailable — export a backup' : 'A new canvas'}${pack.proof ? ` · Clear attached (${pack.proof.difficulty})` : ' · Playtest to record a clear'}`; }
   const guard = fn => { try { return fn(); } catch(error) { notice(error.message,true); return null; } };
@@ -37,7 +37,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   function tab(id) {
     guard(() => { if (section==='build') designer.get(); section=id; $('heading').textContent=id==='build'?'World studio':id==='lab'?'Puzzle Lab':id==='books'?'Storybooks':id==='house'?'The Trailhouse':'Adventure Workshop'; if(id==='build')notice('Choose a quick brush, or open the full palette.'); if(id==='lab')notice('Play a room, try another answer, then remix its puzzles into your own adventure.'); root.dataset.section=id; document.body.classList.toggle('workshop-designing',id==='build'&&!root.hidden);
       for(const name of ['shelf','build','import','lab','books','house']) { $(name).hidden=name!==id; $('tab-'+name).setAttribute('aria-pressed',String(name===id)); }
-      if(id==='build') { designer.refresh(); draftState(); } if(id==='shelf') renderShelf(); if(id==='lab')renderLab(); if(id==='books')books.show(); if(id==='house')house.show();
+      if(id==='build') { designer.refresh(); draftState(); } if(id==='shelf') renderShelf(); if(id==='lab')renderLab(); if(id==='books'){notice('');books.show();} if(id==='house')house.show();
     });
   }
   function show(id='shelf') { root.hidden=false; tab(id); $('heading').focus({preventScroll:true}); if(restored.unavailable) notice('Your saved shelf could not be loaded. Import an exported backup to recover your worlds. Nothing is overwritten until you save or add an adventure.',true); else if(restored.damaged) notice(`${restored.damaged} damaged shelf entries could not be opened. Other worlds remain available.`,true); }
@@ -181,7 +181,20 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   $('replay-dialog').addEventListener('close',stopReplay);new ResizeObserver(replayDraw).observe($('replay-viewport'));
   document.addEventListener('keydown',event=>{if(root.hidden||section!=='build'||event.target.closest('input,select,textarea,dialog')||document.querySelector('dialog[open]'))return;if((event.ctrlKey||event.metaKey)&&!event.altKey){const key=event.key.toLowerCase();if(['z','y','s'].includes(key)){event.preventDefault();$(key==='s'?'save':key==='y'||event.shiftKey?'redo':'undo').click();}}});
   renderShelf();draftState();
-  return { show,hide,
+  return { show,hide,notice,
+    runSource(run){
+      if(run.stage.workshop.storybook)return books.runSource(run);
+      if(run.stage.workshop.trailhouse)return {kind:'house',id:run.stage.workshop.trailhouse.id};
+      if(run.stage.workshop.lab)return {kind:'lab',id:run.stage.workshop.lab};
+      if(!activePlay?.pack||adventureKey(activePlay.pack)!==run.stage.workshop.key)throw Error('This adventure has no saved world snapshot.');
+      return {kind:'world',world:activePlay.pack,origin:activePlay.test?'build':'shelf',...(activePlay.practice?{practice:run.stage.start}:{})};
+    },
+    resumeRun(source,run){
+      if(source.kind==='book'){books.runSource(run);activePlay={book:true,origin:'books'};}
+      else if(source.kind==='house'){house.resumeRun(run);activePlay={house:true};}
+      else if(source.kind==='lab'){labRoom=source.id;labCollection=LAB_ROOMS.find(room=>room.id===labRoom).afterhours?'afterhours':'foundations';$('lab-rules').value=run.difficulty;activePlay={pack:puzzleLabWorld(labRoom),test:false,origin:'lab'};}
+      else if(source.kind==='world')activePlay={pack:source.world,test:source.origin==='build',practice:Boolean(source.practice),origin:source.origin};
+    },
     acceptDraft: replaceDraft,
     fromTerrain() { $('new-mode').value='current';$('new-mode').dispatchEvent(new Event('change'));newWorld(); },
     async openShared(code){show('import');$('import-code').value=code;try{await openPreview(parseAdventureCode(code));}catch(error){notice(error.message,true);}},

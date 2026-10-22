@@ -19,7 +19,7 @@ use a downloaded `.trail.json` file or `LT1` code, which a friend imports throug
 **Adventure Workshop → Import & play**. There is no public gallery or upload
 service.
 
-Maps, shelves, progress, options, and expedition checkpoints stay in the current
+Maps, shelves, progress, options, training practice, and adventure checkpoints stay in the current
 browser on the current device. They do not sync between devices or transfer
 automatically from a local development copy. Keep exported world/checkpoint
 backups before clearing browser data or switching browsers.

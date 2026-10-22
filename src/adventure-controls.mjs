@@ -21,11 +21,11 @@ export function gamepadSnapshot(pad) {
   const pressed=index=>Boolean(pad.buttons?.[index]?.pressed||pad.buttons?.[index]?.value>.5),x=pad.axes?.[0]||0,y=pad.axes?.[1]||0;
   const directions=[pressed(12)?'up':null,pressed(15)?'right':null,pressed(13)?'down':null,pressed(14)?'left':null].filter(Boolean);
   if(!directions.length&&Math.max(Math.abs(x),Math.abs(y))>=.65)directions.push(Math.abs(x)>Math.abs(y)?x>0?'right':'left':y>0?'down':'up');
-  return {id:`${pad.index}:${pad.id}`,held:[...directions,...[[0,'interact'],[1,'back'],[2,'power'],[3,'dash'],[4,'decoy'],[5,'shield'],[8,'plan'],[9,'pause'],[10,'cargo']].filter(([index])=>pressed(index)).map(([,action])=>action)]};
+  return {id:`${pad.index}:${pad.id}`,held:[...directions,...[[0,'interact'],[1,'back'],[2,'power'],[3,'dash'],[4,'decoy'],[5,'shield'],[8,'plan'],[9,'pause'],[10,'cargo'],[11,'undo']].filter(([index])=>pressed(index)).map(([,action])=>action)]};
 }
 export function gamepadPress(snapshot,previous) {
   if(!snapshot||!previous||snapshot.id!==previous.id)return null;
   const fresh=snapshot.held.filter(action=>!previous.held.includes(action));
   // One deliberate input per frame. A held stick/button never repeats turns.
-  return ['pause','back','plan','up','right','down','left','interact','dash','power','decoy','shield','cargo'].find(action=>fresh.includes(action))||null;
+  return ['pause','back','plan','undo','up','right','down','left','interact','dash','power','decoy','shield','cargo'].find(action=>fresh.includes(action))||null;
 }

@@ -1,4 +1,4 @@
-import { createJourney, advanceJourney, campOffers, leaveCamp, retryLeg, journeyScore, peekJourney, loadJourney, saveJourney, serializeJourney, restoreJourney } from './adventure-journey.mjs';
+import { createJourney, advanceJourney, campOffers, leaveCamp, retryLeg, journeyScore, peekJourney, loadJourney, saveJourney, serializeJourney, restoreJourney, journeyUndoFrames } from './adventure-journey.mjs';
 import { dailySeed, expeditionConfig } from './adventure-generator.mjs';
 import { VOWS } from './adventure-perks.mjs';
 import { BADGES, loadLogbook, creditJourney, saveLogbook } from './adventure-logbook.mjs';
@@ -8,6 +8,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
   let current = null, book = loadLogbook(storage), saved = peekJourney(storage), saveFailed = false, busy = false;
   let previousMode = 'journey', customSeed = $('#expedition-seed').value, customRules = { length: '6', difficulty: 'trail', vow: 'none' };
   let latestEarned = [];
+  let undoFrames=[];
   function campScrollNote() {
     const choices = $('.camp-choices');
     $('#camp-scroll-note').hidden = !$('#camp-dialog').open || choices.scrollHeight <= choices.clientHeight + 1;
@@ -51,6 +52,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
     renderHub();
   }
   function commit(session, newStage = false) {
+    if(newStage)undoFrames=journeyUndoFrames(session);
     current = session; persist(session); onRun(session, newStage);
   }
   function configFromForm() {
@@ -152,7 +154,10 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
     get earned() { return latestEarned; },
     show, openCamp,
     suspend() { if (current) persist(current); current = null; },
-    act(action) { if (!current) return; const next = advanceJourney(current, action); if (next !== current) commit(next); },
+    get canUndo(){return Boolean(current&&['playing','lost'].includes(current.phase)&&undoFrames.length);},
+    undo(){if(!current||!['playing','lost'].includes(current.phase)||!undoFrames.length)return;let frame=undoFrames.pop();while(frame.action==='close-dialogue'&&undoFrames.length)frame=undoFrames.pop();latestEarned=[];commit({...current,run:frame.run,journal:current.journal.slice(0,frame.length),phase:'playing'});},
+    restore(session){latestEarned=[];commit(session,true);},
+    act(action) { if (!current) return; const next = advanceJourney(current, action); if (next !== current) {if(next.journal.length>current.journal.length)undoFrames=[...undoFrames,{run:current.run,length:current.journal.length,action}].slice(-60);commit(next);} },
     retry() { if (!current) return; const next = retryLeg(current); if (next !== current) { latestEarned = []; commit(next, true); } },
   };
 }

@@ -89,6 +89,11 @@ not required unlocks or permanent combat advantages.
 
 ## Stop, resume, recover
 
+**Main menu → Continue trail** restores the exact latest adventure after reload,
+including an expedition. Its recent **Undo · Z** history also returns; a loss
+can be undone, while leg completion and camp departure stay final. The separate
+expedition checkpoint below remains available even after playing another mode.
+
 The game checkpoints meaningful actions, including dialogue choices, after each
 input. Reload, open the expedition hub, and select **Resume expedition** or
 **Return to camp**. Switching to story, a painted map, or Create retains the

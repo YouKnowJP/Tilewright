@@ -1,5 +1,54 @@
 # Verification record
 
+## Exact Continue and gameplay Undo — v0.22.0
+
+**480 Node tests** pass, with syntax checks and a **78-file** static build.
+The 37 added model cases cover exact intermediate recovery and resumed wins
+in all twelve Lab rooms on both rules, full prior-state Undo, dialogue choices,
+real loss recovery, completed-win boundaries, the 60-frame limit after reload,
+all source families, current-leg expedition frames, controller edges, invalid
+or oversized checkpoints, storage isolation, and separate lesson recovery.
+Creator practice covers history, unfinished forms, partial and completed
+playtests, actual proof verification, corruption, and failed saving.
+
+The new twenty-first browser family, `checkpoint-browser-checks.mjs`, passes
+in Chrome **156.0.8078.47**, Firefox **156.0**, and WebKit **26.6**. All use
+ordinary input for an exact saved story/Guild run, a companion-and-cargo caravan,
+reconsidered dialogue rewards, Lab seals, resumed creator proof, a newer-draft
+conflict, unscored cursor practice, a Storybook chapter, book replacement/cancel,
+visible damaged-chapter recovery followed by a real restart/win, Trailhouse
+commission credit, an expedition camp boundary, an actual lost imported world,
+both training lessons, unfinished creator text, and resumed training playtests.
+Fault injection covers corrupt, blocked, and quota-limited checkpoint storage.
+Reload deliberately leaves the title idle until Continue is chosen.
+
+Chrome repeats 320, 390, 820, 1440, and 844×390 layouts; Firefox and WebKit
+repeat 320, 390, and 820. Native browser touch input completes the narrow-world
+runs, including Undo after reload. Both new utility buttons retain at least
+44-pixel targets without sideways scrolling. The existing controls family also
+passes in all three engines at ten portrait, landscape, tablet, split-view,
+and desktop sizes, with five styles, 52-pixel controls, and simulated standard
+controller polling. Right-stick Undo is single-press and cannot change the
+main or training board behind Options. Held controls stay isolated across close.
+
+Retained Chrome suites pass for menus/guide/options, interface regressions,
+both tutorials and explicit creator handoff, Lab alternate routes/transforms/
+painting history/practice, Workshop authoring/sharing/import/save failures,
+and Storybook playing/authoring/recovery. The book suite completes Copperlight
+Caravan; all five books are not claimed newly replayed in this release. The
+full expedition family passes its forms, multi-leg journeys, camps/upgrades,
+backup export/import, real loss/retry, and failed-storage paths. Trailhouse
+checks clear all twelve commissions under both rules, restore the village,
+play both festival rules, and test passport/recovery and narrow touch layouts.
+
+Testing caught missing checkpoint removal through the application storage
+adapter, a hidden Storybook recovery message, training Undo behind Options,
+and Lab goals describing village rewards. These are fixed. Visual inspection
+covers the compact Undo/save row and readable phone/desktop gameplay. Model
+and browser tests use disposable contexts and saves. Physical devices,
+real controllers, screen readers, every player-authored puzzle, and universal
+bug absence are not claimed. [Player behavior and limits](CONTINUE.md).
+
 ## After-hours adventures and Lab mastery — v0.21.0
 
 **443 Node tests** pass, with syntax validation and a **75-file** static build.

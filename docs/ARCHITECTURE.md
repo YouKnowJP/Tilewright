@@ -25,10 +25,13 @@ installation, build-time framework, database service, or remote API.
 | `src/adventure-mechanisms.mjs` | Switch conditions, safe state changes, previews, trade availability, and definition validation. |
 | `src/adventure-intel.mjs` | Read-only, nearby next-turn warnings derived from committed enemy plans and hazard timing. |
 | `src/adventure-ui.mjs` | Mode lifecycle, campaign progression, keyboard/touch controls, HUD, hints, and results. |
+| `src/adventure-resume.mjs` | Rebuild known stage families and validated portable snapshots with their original mode ownership. |
+| `src/adventure-rewind.mjs` | Bounded Undo frames, recorded inputs, exact validated checkpoint replay, checksums, and guarded local storage. |
 | `src/adventure-front.mjs` | Title, illustrated mode chooser, guide pages, working options, and front-menu focus/navigation. |
 | `src/adventure-journal.mjs` | Read-only chapter/specialist/badge totals and attainable replay suggestions derived from existing records. |
 | `src/adventure-preferences.mjs` | Bounded, guarded volume/motion/reading preferences, separate from game and editor saves. |
 | `src/training-model.mjs` | Independent practice worlds, real-rule coaching milestones, creator proof preparation, and bounded lesson completion storage. |
+| `src/training-checkpoint.mjs` | Separate bounded practice snapshots, construction history/form recovery, and verified lesson replay. |
 | `src/training-ui.mjs` | Training camp, native keyboard/touch lessons, guided creation/history/story forms, real playtests, portable sharing, and explicit Workshop handoff. |
 | `src/workshop-lab.mjs` | Six authored puzzle-room worlds, immutable whole-world transforms, validated cursor-practice stages, and deterministic creative prompts. |
 | `src/workshop-lab-clears.mjs` | Actual winning action journals for the Lab originals, verified and replayed through the shared engine. |
@@ -109,8 +112,8 @@ navigation; closing in-game options returns focus to their visible opener.
 
 Returning to the title keeps the in-memory run and its turn/position. Continue
 shows that run before updating pending conversations. A reload offers verified
-saved-expedition recovery through the existing checkpoint loader. Unfinished
-story/Guild runs are still session-only; their best results remain separate.
+latest-adventure recovery, including recent Undo history, only after Continue
+is selected. Story/Guild best results remain separate.
 The editor is retained when changing modes, including its undo history.
 
 `tilewright.preferences.v1` contains only bounded volume, system/reduced motion,
@@ -409,7 +412,8 @@ Forecasts inspect the destination without changing fog or any turn state.
 read cap. Only finished runs are credited; more commendations outrank score,
 then fewer turns. Repeated results replace a best rather than incrementing a
 farmable total. Failed writes preserve session results and display a warning.
-Guild jobs have no checkpoint/import in this version. The Guild board is a
+Guild jobs use the universal latest-trail checkpoint as of v0.22, without a
+portable Guild-progress import. The Guild board is a
 third ordinary library view; editor/campaign/expedition state stays separate.
 
 `solve-guild.mjs` uses the public reducer for local crossing planning, including
@@ -622,8 +626,10 @@ new restrictions or combat powers can make the ordinary objective unsolvable.
 `tilewright.storybooks.v1` owns the book draft, active boundary checkpoint,
 chapter receipts, and up to 32 full-book bests. Its bounded restore checks phase,
 chapter count, receipt metadata, challenge eligibility, and rules. Damaged
-sections are isolated. A reload restarts the open chapter; no per-turn journal
-or cross-chapter supplies/memory is claimed. Portable files exclude progress.
+sections are isolated. As of v0.22, a separate universal checkpoint restores
+the exact latest open chapter; this requires matching active book/chapter/rules
+ownership. Otherwise the existing boundary save restarts that chapter.
+Supplies/memory do not cross chapters. Portable files exclude progress.
 `storybook-ui.mjs` inserts player text with DOM textContent/value and handles
 native downloads, imports, replacement confirmation, and truthful save failure.
 `storybook-worlds.mjs` frames existing Lab worlds with original stories and
@@ -681,8 +687,47 @@ building, and keepsake art in Canvas. All interactions have HTML labels; Canvas
 illustrations are decorative. Workshop routes playing, remixes, and result
 recording to the mode. Adventure UI reuses the objective ribbon and responsive
 board fitting, exposes individual goals in Quest, and returns wins to the hub.
-Rules cannot change mid-attempt. No unfinished-run checkpoint is promised.
+Rules cannot change mid-attempt. As of v0.22, unfinished attempts use the
+universal checkpoint, including festival ownership validation.
 The build allowlist adds five public files, for 70 total packaged files.
+
+## Exact latest-trail recovery and Undo — v0.22
+
+`adventure-rewind.mjs` owns a single independent
+`tilewright.trail.checkpoint.v1` slot. An envelope records rules version 0.22.0,
+a normalized source, initial local hunter memory, meaningful engine inputs,
+display metadata, and a state checksum. `adventure-resume.mjs` reconstructs
+canonical story/Guild/Lab/Trailhouse definitions, validates custom terrain or
+portable worlds, and restores Book metadata or unscored cursor-practice origins.
+It does not accept an arbitrary serialized runtime stage. Continue reconstructs
+with the public reducer, yields every 32 actions, checks the final state, then
+reconnects the mode owner without granting rewards during replay.
+
+The slot is capped at 650,000 UTF-8 bytes and ordinary journals at 8,192 inputs.
+Runtime history retains only the last 60 immutable prior-state frames. Undo
+truncates the surviving journal and restores local hunter memory; free dialogue
+closing folds into the preceding action. Workshop creator clears use that
+surviving route. A restored earlier playtest cannot alter a newer draft or attach
+its proof there. Completed wins cannot be undone or reloaded for another award.
+Expeditions retain their existing 0.6.0 verified checkpoint and camp receipts;
+the universal slot wraps it, while current-leg history is rebuilt by replay.
+Leg completion/camp departure form a hard Undo boundary.
+
+Writes are read back before Saved here is shown. Failure keeps current play
+and Undo available with Session only; the last successfully stored checkpoint
+may remain. Won ordinary runs remove their unfinished slot. Corruption is
+reported without deleting other saves. Asynchronous restores use navigation
+tokens; front controls remain inert while the ordinary run is reconstructed.
+The checksum detects accidental mismatches, not hostile local tampering; all
+gameplay and scores are local to the player's browser.
+
+`training-checkpoint.mjs` owns separate `tilewright.training.play.v1` and
+`tilewright.training.create.v1` practice slots, each capped at 300,000 bytes.
+Restore checks lesson identity, world/history consistency, typed form bounds,
+structural checks, actual replay, and completion state. It retains completed
+lesson proof states and at most 30 painting snapshots. Existing completion
+records and the main adventure remain separate. No browser data sync or new
+portable progress format is added. See [player saving behavior](CONTINUE.md).
 
 
 ## Device input and preferences — v0.20

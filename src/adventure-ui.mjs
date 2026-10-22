@@ -1,6 +1,6 @@
 import { CONTROL_STYLES, movementKey, controlHelp } from './adventure-controls.mjs';
 import { createMapInput, createGamepadInput } from './adventure-input.mjs';
-import { createRun, createCustomStage, stepRun, resultFor, activePlates, scoutHint, MAX_HEARTS, MAX_ENERGY, nearbyInteractions, missionGoals, turnTarget, recordId, canEnter, hazardActive } from './adventure.mjs';
+import { createRun, createCustomStage, resultFor, activePlates, scoutHint, MAX_HEARTS, MAX_ENERGY, nearbyInteractions, missionGoals, turnTarget, recordId, canEnter, hazardActive } from './adventure.mjs';
 import { createCampaign } from './adventure-levels.mjs';
 import { createAdventureRenderer } from './adventure-render.mjs';
 import { createAdventureSound } from './adventure-sound.mjs';
@@ -19,6 +19,8 @@ import { createGuildJobs, guildMerits, guildRecordId, loadGuild, saveGuild, GUIL
 import { createWorkshopUI } from './workshop-ui.mjs';
 import { createTrainingUI } from './training-ui.mjs';
 import { GUILD_KITS, kitFor, powerProblem, powerPreview, liveEcho, waystonePreview } from './adventure-tools.mjs';
+import { beginRewind, advanceRewind, undoRewind, canRewind, loadTrail, storeTrail, clearTrail, serializeTrail, serializeExpeditionTrail, restoreTrail } from './adventure-rewind.mjs';
+import { ordinarySource } from './adventure-resume.mjs';
 
 export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuide }) {
   const $ = selector => document.querySelector(selector);
@@ -35,6 +37,8 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;
+  let rewind=null,checkpointFailed=false,checkpointError='',restoring=false,restoreToken=0;
+  const savedTrail=loadTrail(storage);
   let selectedChapter = 0, libraryTab = 'story';
   const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(max-width: 1000px)');
   const libraryOpen = () => !$('#adventure-library').hidden;
@@ -53,7 +57,8 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog', '#game-notes-dialog']) if ($(selector).open) $(selector).close();
     $('#game-menu').open = false; $('#adventure-library').hidden = true; $('#game-layout').hidden = true;
     frontStyle('title');
-    front.show({ run, checkpoint: expeditions?.session ? null : peekJourney(storage).header });
+    front.show({ run, resume:!run&&savedTrail.data?{...savedTrail.data.header,kind:savedTrail.data.kind}:null, checkpoint: expeditions?.session ? null : peekJourney(storage).header });
+    if(!run&&savedTrail.error)front.notice(savedTrail.unavailable?'Browser saving is unavailable. You can play and Undo during this visit; keep this page open to retain your place.':'Your unfinished trail could not be read. Completed progress and your worlds are still available.');
     if (!run) $('#adventure').dataset.status = 'idle';
     window.scrollTo(0, 0);
   }
@@ -281,6 +286,41 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     entry.textContent = `${goal.text || goal.label}${goal.done ? ' — complete' : ''}`;
     return entry;
   }
+  function checkpoint(){
+    try{
+      if(expeditions?.session)checkpointFailed=!storeTrail(storage,serializeExpeditionTrail(expeditions.session));
+      else if(run?.status==='won'){checkpointFailed=!clearTrail(storage);savedTrail.data=null;}
+      else if(rewind)checkpointFailed=!storeTrail(storage,serializeTrail(rewind));
+      checkpointError=checkpointFailed?'Latest moves could not be saved. Keep this page open; Continue still works during this visit.':'';
+    }catch(error){checkpointFailed=true;checkpointError=error.message;}
+  }
+  function rewindAction(){
+    if(!active||outsideBoard()||front.dialogOpen||notesDialog.open||!run||run.status==='won')return;
+    const dialog=document.querySelector('dialog[open]');if(dialog&&dialog.id!=='conversation-dialog')return;
+    if(expeditions?.session){if(!expeditions.canUndo)return;expeditions.undo();}
+    else{if(!canRewind(rewind))return;rewind=undoRewind(rewind);run=rewind.run;workshopActions=[...rewind.actions];if(!run.stage.workshop){memory=run.memory;memorySaveFailed=!saveMemory(storage,memory);}}
+    mapInput?.cancel();dashArmed=false;paused=false;interactionId=null;$('#game-menu').open=false;checkpoint();update();
+    showStatus(`Last action undone. Back to turn ${run.turns}.`);if(!run.dialogue)canvas.focus({preventScroll:true});
+  }
+  async function continueTrail(){
+    if(restoring)return;
+    if(run){paused=false;showBoard();update();revealBoard();return;}
+    const loaded=loadTrail(storage);if(!loaded.data){front.notice(loaded.error||'No unfinished trail is available. Choose an adventure to begin.');return;}
+    const token=++restoreToken;restoring=true;$('#game-title-screen').inert=true;$('#adventure-workshop').inert=true;
+    try{
+      front.notice('Returning to your saved trail…');await new Promise(resolve=>requestAnimationFrame(resolve));
+      const restored=await restoreTrail(loaded.data,()=>new Promise(resolve=>requestAnimationFrame(resolve)));
+      if(token!==restoreToken||!active)return;
+      if(restored.session){rewind=null;expeditions.restore(restored.session);return;}
+      const trail=restored.trail;if(trail.run.stage.workshop)workshop.resumeRun(trail.source,trail.run);
+      expeditions.suspend();rewind=trail;run=trail.run;workshopActions=[...trail.actions];workshopClearNote='';difficulty=run.difficulty;$('#game-difficulty').value=difficulty;
+      if(!run.stage.workshop){memory=run.memory;memorySaveFailed=!saveMemory(storage,memory);}
+      if(run.guild)selectedKit=run.guild.kit;
+      const index=campaign.findIndex(stage=>stage.id===run.stage.id);if(index>=0)selectedChapter=Math.floor(index/3);
+      paused=false;dashArmed=false;interactionId=null;hintVisible=false;selectNotes('quest');renderer=createAdventureRenderer(canvas,run.stage,{reducedMotion:motion});renderPicker();renderGuild();checkpoint();showBoard();update();revealBoard();
+    }catch(error){const note=`${error.message} Your completed progress and worlds are retained.`;savedTrail.data=null;savedTrail.error=error.message;front.notice(note);if(!$('#adventure-workshop').hidden){workshop.show('books');workshop.notice(note,true);}}
+    finally{restoring=false;$('#game-title-screen').inert=false;$('#adventure-workshop').inert=false;}
+  }
 
   function update() {
     if (!run) return;
@@ -369,7 +409,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       { text: `Finish without taking damage${run.status === 'playing' && run.damage === 0 ? ' (clean so far)' : ''}`, done: run.status === 'won' && run.damage === 0 },
     ];
     $('#game-commission').hidden = !(house || lab) || !(house || lab).goals.length;
-    if(house || lab) { const activity=house||lab; $('#game-commission-title').textContent=activity.name; $('#game-commission-goals').replaceChildren(...activity.goals.map(goal=>questEntry({text:goal.label,done:goal.done}))); }
+    if(house || lab) { const activity=house||lab; $('#game-commission-title').textContent=activity.name;$('#game-commission .eyebrow').textContent=lab?'YOUR LAB CHALLENGES':'YOUR KEEPER’S COMMISSION';$('#game-commission-note').textContent=lab?'Restore the world to collect fulfilled seals. Different routes can earn different seals over separate runs.':'Fulfill these goals and restore the world to earn village light. You can retry another route at any time.'; $('#game-commission-goals').replaceChildren(...activity.goals.map(goal=>questEntry({text:goal.label,done:goal.done}))); }
     $('#game-sidequests').replaceChildren(...sidequests.map(questEntry));
     if (!outsideBoard()) updateConversation();
     $('#quest-beacon').textContent = run.status === 'won' ? 'The beacon shines again.' : 'Return to the turquoise beacon.';
@@ -390,15 +430,21 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     document.querySelectorAll('[data-move], #game-wait').forEach(button => { button.disabled = paused || run.status !== 'playing'; });
     $('#game-pause').textContent = paused ? 'Resume' : 'Pause'; $('#game-pause').setAttribute('aria-pressed', String(paused));
     $('#game-pause').disabled = run.status !== 'playing';
+    const undoReady=expeditions?.session?expeditions.canUndo:canRewind(rewind);
+    for(const id of ['game-undo','game-undo-menu','game-undo-result','conversation-undo'])$('#'+id).disabled=!undoReady;
+    $('#game-undo-result').hidden=run.status!=='lost'||!undoReady;$('#conversation-undo').hidden=!undoReady;
+    $('#game-checkpoint-state').textContent=run.status==='won'?'Trail restored':checkpointFailed?'Session only':'Saved here';
+    $('#game-checkpoint-state').dataset.error=String(checkpointFailed);$('#game-checkpoint-state').title=checkpointError||`Continue returns to turn ${run.turns} in this browser, including after reload.`;
     const best = stage.workshop ? workshop.best(stage.workshop.key, run.difficulty) : journey ? null : run.guild ? guildRecords[guildRecordId(run)] : records[recordId(run)];
     $('#game-best').textContent = journey ? 'View expedition bests and badges in the logbook.' : best ? `${run.guild && !stage.workshop ? `${best.merits}/3 commendations` : '★'.repeat(best.stars)} · ${best.score} points · ${best.turns} turns` : 'No finish yet. Your first adventure starts here.';
     $('#game-save-note').textContent = journey ? expeditions.checkpointFailed ? 'Checkpoint unavailable. Keep this tab open or export an expedition backup.' : 'Expedition checkpoint saved. Campaign maps, bests, and learned habits are kept separately.' : saveFailed ? 'Browser saving is unavailable. Unlocks and bests remain available for this session. Your editor map is untouched.'
       : 'Adventure bests are kept in this browser. Playing never changes your editor map or its undo history.';
-    if (run.guild) $('#game-save-note').textContent = guildSaveFailed ? 'Guild saving unavailable. Results remain available for this session.' : 'Guild bests save on completion, separately for each specialist and rule set. An unfinished job restarts from the beginning.';
+    if (run.guild) $('#game-save-note').textContent = guildSaveFailed ? 'Guild saving unavailable. Results remain available for this session.' : 'Guild bests save on completion, separately for each specialist and rule set.';
     if (stage.workshop) $('#game-save-note').textContent = workshop.saveFailed ? 'Workshop saving unavailable. Download your adventure to keep a backup.' : 'Player adventure bests and drafts save separately from the story, Guild, and expeditions.';
     if (stage.workshop?.practice) { $('#game-best').textContent = 'Practice attempt · bests and creator clear stay unchanged.'; $('#game-save-note').textContent = 'Practise freely. Only a full Playtest from the original starting point can verify this world.'; }
-    if(house) { $('#game-best').textContent='Your commission bests and keepsakes live at the Trailhouse.'; $('#game-save-note').textContent=house.saved?'Completed commissions save to your Trailhouse passport. Reloading restarts an unfinished attempt.':'Trailhouse saving unavailable. Keep this tab open and download a passport from the hub.'; }
-    if(book) { $('#game-best').textContent = 'Your chapter scores and optional honors are collected in Storybooks.'; $('#game-save-note').textContent = book.saved ? 'Completed chapters save at camp. Reloading restarts this chapter with fresh supplies and hunter habits.' : 'Storybook saving unavailable. Keep this tab open and download the book to retain its worlds.'; }
+    if(house) { $('#game-best').textContent='Your commission bests and keepsakes live at the Trailhouse.'; $('#game-save-note').textContent=house.saved?'Completed commissions save to your Trailhouse passport.':'Trailhouse saving unavailable. Keep this tab open and download a passport from the hub.'; }
+    if(book) { $('#game-best').textContent = 'Your chapter scores and optional honors are collected in Storybooks.'; $('#game-save-note').textContent = book.saved ? 'Completed chapters save at camp. Each new chapter begins with fresh supplies and hunter habits.' : 'Storybook saving unavailable. Keep this tab open and download the book to retain its worlds.'; }
+    if(run.status!=='won')$('#game-save-note').textContent=`${checkpointFailed?checkpointError:'Your current position and choices are saved in this browser. Main menu → Continue returns here after reload.'} Undo restores up to 60 recent actions, including hunter memory. Completed rewards and camp transitions cannot be undone.`;
     $('#game-stars').hidden = Boolean(stage.workshop?.practice);
     $('#adventure').dataset.status = run.status;
     canvas.setAttribute('aria-label', `${stage.name}. ${run.difficulty} rules. Column ${run.player.x + 1}, row ${run.player.y + 1}. Health ${run.health} of 3. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns. ${run.message}`);
@@ -453,9 +499,11 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   function revealBoard() { showBoard(); requestAnimationFrame(() => { if (active) { resize(); canvas.focus({ preventScroll: true }); } }); }
 
   function start(stage) {
+    restoreToken++;
     expeditions?.suspend(); $('#game-difficulty').disabled = false;
     workshopActions = []; workshopClearNote = '';
     run = createRun(stage, { memory: stage.workshop ? freshMemory() : memory, difficulty }); paused = false; dashArmed = false; interactionId = null; lastAction = performance.now();
+    rewind=beginRewind(run,stage.workshop?workshop.runSource(run):ordinarySource(run));checkpoint();
     const chapterIndex = campaign.findIndex(item => item.id === stage.id);
     if (chapterIndex >= 0) selectedChapter = Math.floor(chapterIndex / 3);
     hintVisible = false; selectNotes('quest');
@@ -469,9 +517,9 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     const input = `${['up', 'right', 'down', 'left'].includes(direction) && (dash || dashArmed) ? 'dash-' : ''}${direction}`;
     if (expeditions?.session) { dashArmed = false; lastAction = performance.now(); expeditions.act(input); return; }
     const before = run;
-    run = stepRun(run, `${['up', 'right', 'down', 'left'].includes(direction) && (dash || dashArmed) ? 'dash-' : ''}${direction}`);
+    rewind=advanceRewind(rewind,input);run=rewind.run;
     dashArmed = false; lastAction = performance.now(); if (run !== before) sound.play(run.events);
-    if (run.stage.workshop && workshopActions.length <= 2000) workshopActions.push(input);
+    if(run.stage.workshop)workshopActions=rewind.actions;
     if (!run.stage.workshop && run.memory !== memory) { memory = run.memory; memorySaveFailed = !saveMemory(storage, memory); }
     if (run.status === 'won' && before.status !== 'won') {
       if (run.stage.workshop) workshopClearNote = workshop.recordWin(run, workshopActions);
@@ -479,7 +527,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       else { const saved = saveResult(storage, records, recordId(run), resultFor(run)); records = saved.records; saveFailed = !saved.saved; }
       renderPicker();
     }
-    update();
+    checkpoint();update();
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
   }
 
@@ -531,7 +579,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   $('#forget-habits').addEventListener('click', () => {
     if (run?.stage.workshop) return;
     if (expeditions?.session) { expeditions.act('forget'); return; }
-    memory = freshMemory(); memorySaveFailed = !saveMemory(storage, memory); if (run) run = { ...run, memory }; update();
+    memory = freshMemory(); memorySaveFailed = !saveMemory(storage, memory); if (run&&rewind) {rewind=advanceRewind(rewind,'forget');run=rewind.run;checkpoint();} update();
   });
   $('#conversation-close').addEventListener('click', () => action('close-dialogue'));
   $('#conversation-dialog').addEventListener('cancel', event => { event.preventDefault(); action('close-dialogue'); });
@@ -540,6 +588,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   function pause() { if (!run || run.status !== 'playing') return; $('#game-menu').open = false; paused = !paused; update(); }
   function hint() { hintVisible = !hintVisible; $('#game-menu').open = false; update(); if (hintVisible) openNotes('help'); }
   $('#game-pause').addEventListener('click', pause);
+  for(const id of ['game-undo','game-undo-menu','game-undo-result','conversation-undo'])$('#'+id).addEventListener('click',rewindAction);
   function restart() { if (expeditions?.session) expeditions.retry(); else if ((run?.stage.workshop?.storybook || run?.stage.workshop?.trailhouse) && run.status === 'won') openWorkshop(run.stage.workshop.trailhouse?'house':'books'); else if (run) start(run.stage); }
   $('#game-restart').addEventListener('click', restart);
   $('#game-hint-button').addEventListener('click', hint);
@@ -580,6 +629,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     catch (error) { showStatus(error.message, 'warning'); $('#library-notice').textContent = error.message; $('#library-notice').hidden = false; }
   });
   document.addEventListener('keydown', event => {
+    if(active&&run&&!outsideBoard()&&!front.dialogOpen&&!event.repeat&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&event.key.toLowerCase()==='z'&&!event.target.closest('input,select,textarea')){const dialog=document.querySelector('dialog[open]');if(!dialog||dialog.id==='conversation-dialog'){event.preventDefault();rewindAction();return;}}
     if (active && libraryOpen() && event.key === 'Escape' && !front.dialogOpen && !event.target.closest('input, select, dialog')) { event.preventDefault(); showTitle(); return; }
     if (active && run && !outsideBoard() && !front.dialogOpen && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey && event.target.id === 'game-target' && event.key.toLowerCase() === 'e') {
       event.preventDefault(); canvas.focus({ preventScroll: true }); interact(); return;
@@ -605,6 +655,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     onMove:direction=>action(direction),
   });
   function controllerPress(command) {
+    if(command==='undo'){if(!$('#training-camp').hidden)training.control('undo');else rewindAction();return;}
     const dialog=document.activeElement?.closest('dialog[open]')||document.querySelector('dialog[open]'),menu=$('#game-menu');
     if(!dialog&&training?.control(command))return;
     if(command==='pause'&&!dialog&&!outsideBoard()&&run?.status==='playing'){pause();return;}
@@ -636,7 +687,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   }
   function applyControls(preferences){
     document.body.dataset.controls=preferences.controls;document.body.dataset.padSide=preferences.padSide;document.body.dataset.controlSize=preferences.controlSize;
-    $('#game-input-label').textContent=CONTROL_STYLES[preferences.controls];$('#game-controls-help').textContent=controlHelp(preferences);canvas.title=controlHelp(preferences);
+    $('#game-input-label').textContent=CONTROL_STYLES[preferences.controls];$('#game-controls-help').textContent=controlHelp(preferences)+' Z undoes the last action.';canvas.title=$('#game-controls-help').textContent;
     mapInput?.cancel();dashArmed=false;training?.refresh();
     if(preferences.gamepad==='on')gamepadInput?.start();else gamepadInput?.stop();
     if(run)resize();
@@ -649,19 +700,24 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     showStatus(text);
     if (libraryOpen()) { $('#library-notice').textContent = text; $('#library-notice').hidden = false; }
   }, onRun(session, newStage) {
+    rewind=null;
     run = session.run; difficulty = session.config.difficulty; $('#game-difficulty').value = difficulty;
     if (newStage || !renderer || run.stage.id !== $('#adventure').dataset.stage) {
       renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion }); paused = false; dashArmed = false; interactionId = null; renderPicker(); resize(); revealBoard();
     }
-    $('#adventure').dataset.stage = run.stage.id; lastAction = performance.now(); if (!newStage) sound.play(run.events); update();
+    $('#adventure').dataset.stage = run.stage.id; lastAction = performance.now();checkpoint(); if (!newStage) sound.play(run.events); update();
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
   } });
-  workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide, onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
+  workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide,
+    onResume:continueTrail,
+    onReplaceBook(key){const current=run?.stage.workshop?.storybook?.key;if((run?current:savedTrail.data?.source?.meta?.key)!==key)return;if(current===key){run=null;rewind=null;workshopActions=[];}clearTrail(storage);savedTrail.data=null;},
+    canResumeBook(stage,rules){const meta=run?.stage.workshop?.storybook,source=savedTrail.data?.source;return Boolean(run?run.status!=='won'&&run.difficulty===rules&&JSON.stringify(meta)===JSON.stringify(stage.workshop.storybook):source?.kind==='book'&&savedTrail.data.header.difficulty===rules&&JSON.stringify(source.meta)===JSON.stringify(stage.workshop.storybook));},
+    onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
   training = createTrainingUI({ storage, getPreferences:()=>front.preferences, onControls:()=>front.settings('controls',$('#training-controls-settings')), onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },
     onWorkshop(pack) { if (!workshop.acceptDraft(pack)) return false; openWorkshop('build'); return true; } });
   front = createFrontMenu({ storage, sound,
     onMode(mode) { if (mode === 'guild') showGuild(); else expeditions.show(mode); },
-    onContinue() { paused = false; showBoard(); update(); revealBoard(); },
+    onContinue:continueTrail,
     onResumeExpedition() { expeditions.show(); $('#expedition-resume').click(); },
     onMapmaker: backToEditor,
     onCustomMap() { try { start(createCustomStage(getMap())); } catch (error) { front.notice(error.message); } },
@@ -680,6 +736,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     useTerrain() { openWorkshop('build'); workshop.fromTerrain(); },
     openShared(code) { openWorkshop('import'); workshop.openShared(code); },
     leave() {
+      restoreToken++;
       training.hide();
       workshop.hide();
       active = false; mapInput.cancel(); gamepadInput.stop(); dashArmed = false;

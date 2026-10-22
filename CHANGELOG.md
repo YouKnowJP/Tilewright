@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.22.0 — 2026-10-21
+
+- Add up to 60 recent gameplay Undo actions through a visible board button,
+  Z, Menu, conversations, loss results, and standard-controller right-stick
+  press. Restore the complete prior state, including hunter memory, choices,
+  companions, cargo, crates, and supplies. Keep completed awards and camp
+  transitions final; maintain independent editor Undo/Redo.
+- Save the exact latest adventure across reloads. Continue stays on the title
+  until selected, validates its source, replays the recorded inputs, and checks
+  the reconstructed state. Restore recent Undo history as part of recovery.
+  Support story, Guild, custom terrain, Lab, player worlds/playtests, practice,
+  Storybooks, Trailhouse, and expeditions without replacing their progress saves.
+- Resume matching Storybook chapters directly from camp. Preserve replacement
+  confirmation and reject stale chapter ownership. Reconnect creator playtests
+  without overwriting a newer draft; record only the surviving proof route.
+- Give each training lesson its own saved practice, construction history,
+  unfinished story fields, and partial playtest. Keep the ordinary adventure
+  checkpoint separate and offer an explicit lesson restart.
+- Add compact Saved here / Session only feedback, verified storage writes,
+  bounded checkpoint sizes/journals, graceful corrupt/unavailable-storage
+  handling, and async-navigation guards. Add no runtime dependencies.
+- Keep recovery errors visible in Storybooks, block training Undo behind
+  Options, and give Lab goals their own seal explanation instead of village rewards.
+- Add 37 model cases (480 total), a twenty-first browser family for exact
+  recovery and Undo, controller/modal regressions, and three public modules
+  (78-file static package). See the verification record for tested paths.
+
 ## 0.21.0 — 2026-10-21
 
 - Add six original after-hours Puzzle Lab adventures: a locksmith’s delivery,
