@@ -1,5 +1,48 @@
 # Verification record
 
+## After-hours adventures and Lab mastery — v0.21.0
+
+**443 Node tests** pass, with syntax validation and a **75-file** static build.
+Nineteen new model/level cases add six actual new-world clears under both
+rules, cumulative progress, all 72 attainable seals, distinct reward thresholds,
+unchanged original room identities, bounded journals, rejected invalid awards,
+and corrupt/unavailable storage. The expanded transform check rotates and
+mirrors all twelve actual winning routes, including dash directions. Every
+new creator clear survives portable export and real engine verification.
+
+The twentieth browser family, `mastery-browser-checks.mjs`, passes in Chrome
+156.0.8078.47, Firefox 156.0, and WebKit 26.6. Each engine completes all six
+new rooms on Trail and Nemesis using ordinary keyboard actions. They also
+verify the permanent-crate alternative, cumulative/nonfarmable seals, live
+Quest goals, selected-rule previews, Lab return, missing-seal suggestions,
+native journal download/reload, fresh-context import/cancellation/restoration,
+invalid and oversized files, and fallback progress for corrupt, blocked, and
+full storage. Other modes' saves and the original Workshop draft stay isolated.
+
+The final journal-navigation guard and artifact presentation repeat native
+Trail wins in all three engines. A deliberately held file-read promise finishes
+after Main menu is chosen; no stale restoration dialog may reopen. Chrome
+repeats 320, 390, 820, 1440, and 844×390 layouts, with ordinary touch wins on
+phones including the ferry, floodgate circuit, and complete caravan finale.
+Firefox and WebKit repeat 320, 390, and 820 layouts. No sideways document
+scrolling or gameplay controls outside the board is observed. Phone room
+selection uses a native picker; wide layouts show six room cards and hide
+the phone-only picker. Detailed seals and discoveries fold away.
+
+Retained Chrome suites pass for the title/guide/options/Continue, interface
+regressions and early Nemesis wins, both training lessons, Lab alternatives,
+transform/Undo/Redo/practice, Workshop creation/sharing/recovery, and the
+Storybook player/creator/import/recovery flows. The focused book run completes
+the original three-chapter Copperlight Caravan; the previously audited five
+books are retained, rather than all claimed newly replayed here. New-world
+sources are also available in the book author on phone and desktop.
+
+Visual review covers the two room collections, folded and expanded seals,
+four illustrated discoveries, phone gameplay and control fit, and desktop
+alignment. All browser contexts and saves are disposable. This establishes
+these tested paths; physical devices/controllers, screen readers, every
+possible creative world, and universal bug absence are not claimed.
+
 ## Whole-game audit — v0.20.1
 
 **424 Node tests**, syntax checks, and the **73-file static package** pass.

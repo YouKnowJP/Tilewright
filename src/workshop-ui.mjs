@@ -2,7 +2,7 @@ import { blankAdventure, normalizeAdventure, editAdventure, adventureKey, advent
 import { loadWorkshop, storeWorkshop, addWorkshopAdventure, loadWorkshopDraft, saveWorkshopDraft, loadWorkshopBests, saveWorkshopBest } from './workshop-library.mjs';
 import { WORLD_REGIONS, WORLD_MISSIONS, seededAdventure, adventureFromMap, workshopShowcases } from './workshop-worlds.mjs';
 import { serializeAdventure, parseAdventure, adventureCode, parseAdventureCode, adventurePlayLink } from './workshop-sharing.mjs';
-import { drawWorkshopWorld } from './workshop-art.mjs';
+import { drawWorkshopWorld, drawLabDiscovery } from './workshop-art.mjs';
 import { GUILD_KITS } from './adventure-tools.mjs';
 import { CHAPTERS, drawAtlasArt } from './adventure-art.mjs';
 import { createWorkshopDesigner } from './workshop-designer.mjs';
@@ -14,6 +14,7 @@ import { STORY_LEVELS, storyAdventure } from './storybook-adventures.mjs';
 import { createTrailhouseUI } from './trailhouse-ui.mjs';
 import { createStorybookUI } from './storybook-ui.mjs';
 import { LAB_ROOMS, puzzleLabWorld, designSpark, cursorPractice } from './workshop-lab.mjs';
+import { MASTERY_REWARDS, MAX_MASTERY_BYTES, loadMastery, saveMastery, masteryCount, masteryGoals, recordMastery, serializeMastery, parseMastery } from './workshop-mastery.mjs';
 
 export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, onGuide }) {
   const $ = id => document.getElementById(`ws-${id}`), root = document.getElementById('adventure-workshop');
@@ -23,6 +24,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   let entries = restored.entries, bests = loadWorkshopBests(storage), saved = true, preview = null, share = null, activePlay = null, section = 'shelf';
   let token = 0, replay = null, timer = null, shelfFailed = restored.unavailable, labRoom = LAB_ROOMS[0].id, previewOrigin = 'shelf';
   const verified = new Map();
+  const loadedMastery=loadMastery(storage);let mastery=loadedMastery.state,masteryFailed=loadedMastery.failed,labCollection='foundations',importedMastery=null;
   const notice = (text,error=false) => { $('status').textContent=text; $('status').dataset.error=String(error); };
   const designer = createWorkshopDesigner({ initial:restoredDraft || blankAdventure(), onChange(pack) { draftTouched=true; saved=saveWorkshopDraft(storage,pack); draftState(pack); }, notice });
   const books = createStorybookUI({ storage, getWorlds: () => [...featured, ...LAB_ROOMS.map(room => puzzleLabWorld(room.id)), ...STORY_LEVELS.map(level => storyAdventure(level.id)), ...entries], getDraft: () => designer.get(), onPlay(stage,rules) { activePlay={book:true,origin:'books'}; hide(); onPlay(stage,rules); } });
@@ -31,7 +33,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   const guard = fn => { try { return fn(); } catch(error) { notice(error.message,true); return null; } };
   function close(id) { if ($(id).open) $(id).close(); }
   function stopReplay() { if (timer) clearTimeout(timer); timer=null; if(replay) replay.playing=false; }
-  function hide() { token++; stopReplay(); designer.hide(); house.hide(); for(const id of ['new-dialog','preview-dialog','share-dialog','replay-dialog','remix-dialog']) close(id); root.hidden=true; document.body.classList.remove('workshop-designing'); }
+  function hide() { token++; stopReplay(); designer.hide(); house.hide(); for(const id of ['new-dialog','preview-dialog','share-dialog','replay-dialog','remix-dialog','mastery-dialog']) close(id); root.hidden=true; document.body.classList.remove('workshop-designing'); }
   function tab(id) {
     guard(() => { if (section==='build') designer.get(); section=id; $('heading').textContent=id==='build'?'World studio':id==='lab'?'Puzzle Lab':id==='books'?'Storybooks':id==='house'?'The Trailhouse':'Adventure Workshop'; if(id==='build')notice('Choose a quick brush, or open the full palette.'); if(id==='lab')notice('Play a room, try another answer, then remix its puzzles into your own adventure.'); root.dataset.section=id; document.body.classList.toggle('workshop-designing',id==='build'&&!root.hidden);
       for(const name of ['shelf','build','import','lab','books','house']) { $(name).hidden=name!==id; $('tab-'+name).setAttribute('aria-pressed',String(name===id)); }
@@ -77,7 +79,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
       $('preview-goals').replaceChildren(...goals.map(text=>Object.assign(document.createElement('span'),{textContent:text})));
       $('preview-clear').textContent=proof?`Creator clear verified · ${pack.proof.difficulty} rules · ${proof.turns} turns. Watch the route if you want a hint. Other choices and Nemesis may play differently.`:report.ready ? 'No creator clear attached. Map checks passed, but linked puzzles still need a completed playtest.' : `This unfinished world needs repairs: ${report.errors.join(' ')} Remix it to open the designer and its Checks panel.`;
       $('preview-play').disabled=!report.ready; $('preview-share').disabled=!report.ready; $('preview-watch').hidden=!proof; $('preview-add').disabled=entries.some(p=>adventureKey(p)===adventureKey(pack));
-      $('preview-difficulty').value='trail'; $('preview-dialog').showModal(); notice('Choose your rules, set out, or remix this world.');
+      $('preview-difficulty').value=origin==='lab'?$('lab-rules').value:'trail'; $('preview-dialog').showModal(); notice('Choose your rules, set out, or remix this world.');
     } catch(error) { if(n===token)notice(error.message,true); }
   }
   function replaceDraft(pack) {
@@ -103,7 +105,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   $('download').onclick=()=>guard(()=>{ const blob=new Blob([serializeAdventure(share)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a'); a.href=url; a.download=(share.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,50)||'adventure')+'.trail.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); $('share-status').textContent='Adventure file prepared for download.'; });
   $('copy-code').onclick=()=>guard(()=>copy(adventureCode(share)));
   $('copy-link').onclick=()=>guard(()=>{const link=playLink(share);if(link.url)copy(link.url);});
-  $('preview-play').onclick=()=>guard(()=>{ activePlay={pack:preview,test:false,origin:previewOrigin}; const selected=$('preview-difficulty').value; hide(); onPlay(adventureStage(preview),selected); });
+  $('preview-play').onclick=()=>guard(()=>{ activePlay={pack:preview,test:false,origin:previewOrigin}; const selected=$('preview-difficulty').value,stage=adventureStage(preview);if(previewOrigin==='lab'){stage.workshop.lab=labRoom;$('lab-rules').value=selected;} hide(); onPlay(stage,selected); });
   $('preview-add').onclick=()=>guard(()=>{add(preview);$('preview-add').disabled=true;});
   $('preview-remix').onclick=()=>remixWorld(preview); $('preview-share').onclick=()=>openShare(preview);
   $('save').onclick=()=>guard(()=>add(designer.get()));
@@ -114,13 +116,27 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   });
   function renderLab() {
     const room=LAB_ROOMS.find(item=>item.id===labRoom),pack=puzzleLabWorld(labRoom);
-    $('lab-title').textContent=room.title; $('lab-skills').textContent=room.lesson; $('lab-story').textContent=pack.intro; $('lab-idea').textContent=room.idea;
+    $('lab-room-picker').value=labRoom; $('lab-title').textContent=room.title; $('lab-skills').textContent=room.lesson; $('lab-story').textContent=pack.intro; $('lab-idea').textContent=room.idea;
     drawWorkshopWorld($('lab-art'),pack,{thumbnail:true});
-    for(const button of $('lab-rooms').querySelectorAll('button'))button.setAttribute('aria-pressed',String(button.dataset.labRoom===labRoom));
+    for(const button of $('lab-rooms').querySelectorAll('button')){button.setAttribute('aria-pressed',String(button.dataset.labRoom===labRoom));button.hidden=Boolean(LAB_ROOMS.find(room=>room.id===button.dataset.labRoom).afterhours)!==(labCollection==='afterhours');}
+    for(const button of document.querySelectorAll('[data-lab-collection]'))button.setAttribute('aria-pressed',String(button.dataset.labCollection===labCollection));
     const done=['trail','nemesis'].filter(rule=>bests[`${adventureKey(pack)}-${rule}`]); $('lab-progress').textContent=done.length?`Restored on ${done.join(' and ')} · try another answer or make your own.`:'A complete playable puzzle · Trail or Nemesis · creator clear included';
+    const owned=mastery.records[`${labRoom}-${$('lab-rules').value}`]||[];$('lab-challenges-title').textContent=`Room seals · ${owned.length}/3 collected on ${$('lab-rules').value}`;
+    $('lab-seals').replaceChildren(...masteryGoals(labRoom).map(goal=>{const entry=document.createElement('article'),name=document.createElement('h5'),detail=document.createElement('p'),status=document.createElement('span');entry.dataset.sealed=String(owned.includes(goal.id));name.textContent=goal.name;detail.textContent=goal.detail;status.textContent=owned.includes(goal.id)?'SEALED':'STILL TO DISCOVER';entry.append(status,name,detail);return entry;}));
+    const count=masteryCount(mastery),next=MASTERY_REWARDS.find(item=>count<item.at);$('lab-collection-count').textContent=`${count}/72 seals · ${next?`${next.at-count} to ${next.name}`:'The tinkerer’s sky is yours'}`;$('lab-seal-count').value=count;
+    $('lab-rewards').replaceChildren(...MASTERY_REWARDS.map((item,index)=>{const entry=document.createElement('article'),art=document.createElement('canvas'),name=document.createElement('h5'),story=document.createElement('p');entry.dataset.sealed=String(count>=item.at);art.setAttribute('aria-hidden','true');drawLabDiscovery(art,index,count>=item.at);name.textContent=item.name;story.textContent=count>=item.at?item.story:`${item.at} seals to discover`;entry.append(art,name,story);return entry;}));
+    $('lab-save-note').textContent=masteryFailed?'Seal saving is unavailable or the saved journal could not be read. You can keep earning for this visit; download your journal before leaving.':'Seals add up across finished runs. Trail and Nemesis have separate sets. Remixes and practice do not award Lab seals. Download your journal before moving devices.';
   }
   $('lab-rooms').replaceChildren(...LAB_ROOMS.map((room,index)=>{const button=document.createElement('button');button.dataset.labRoom=room.id;button.textContent=`${String(index+1).padStart(2,'0')} · ${room.title}`;button.onclick=()=>{labRoom=room.id;renderLab();};return button;}));
+  for(const [label,afterhours]of [['The first bench',false],['After hours',true]]){const group=document.createElement('optgroup');group.label=label;for(const room of LAB_ROOMS.filter(room=>Boolean(room.afterhours)===afterhours))group.append(new Option(room.title,room.id));$('lab-room-picker').append(group);}
+  $('lab-room-picker').onchange=()=>{labRoom=$('lab-room-picker').value;labCollection=LAB_ROOMS.find(room=>room.id===labRoom).afterhours?'afterhours':'foundations';renderLab();};
   $('lab-play').onclick=()=>openPreview(puzzleLabWorld(labRoom),'lab'); $('lab-remix').onclick=()=>remixWorld(puzzleLabWorld(labRoom));
+  for(const button of document.querySelectorAll('[data-lab-collection]'))button.onclick=()=>{labCollection=button.dataset.labCollection;labRoom=LAB_ROOMS.find(room=>Boolean(room.afterhours)===(labCollection==='afterhours')).id;renderLab();};
+  $('lab-rules').onchange=renderLab;
+  $('lab-next-seal').onclick=()=>{const choices=LAB_ROOMS.flatMap(room=>['trail','nemesis'].map(rule=>({room,rule}))),current=choices.findIndex(item=>item.room.id===labRoom&&item.rule===$('lab-rules').value);let next;for(let step=1;step<=choices.length;step++){const item=choices[(current+step)%choices.length];if((mastery.records[`${item.room.id}-${item.rule}`]||[]).length<3){next=item;break;}}if(!next){notice('Every seal is in your journal. Try a new answer or remix a room for someone else.');return;}labRoom=next.room.id;labCollection=next.room.afterhours?'afterhours':'foundations';$('lab-rules').value=next.rule;renderLab();$('lab-title').scrollIntoView({block:'nearest'});};
+  $('lab-export').onclick=()=>guard(()=>{const url=URL.createObjectURL(new Blob([serializeMastery(mastery)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='my-puzzle-lab.seals.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notice('Seal journal prepared for download.');});
+  $('lab-import').onclick=()=>{$('lab-file').value='';$('lab-file').click();};$('lab-file').onchange=async()=>{const file=$('lab-file').files[0];if(!file)return;const n=++token;importedMastery=null;notice('Reading your seal journal…');try{if(file.size>MAX_MASTERY_BYTES)throw Error('Choose a seal journal smaller than 12 KB.');const parsed=parseMastery(await file.text());if(n!==token||root.hidden||section!=='lab')return;importedMastery=parsed;$('mastery-summary').textContent=`Restore ${masteryCount(importedMastery)}/72 seals in place of the ${masteryCount(mastery)} seals in this browser? This replaces only the Puzzle Lab seal journal. Your worlds, drafts, best scores, and other journeys stay in place.`;$('mastery-dialog').showModal();}catch(error){if(n===token&&!root.hidden&&section==='lab')notice(error.message,true);}};
+  $('mastery-cancel').onclick=()=>{importedMastery=null;close('mastery-dialog');};$('mastery-confirm').onclick=()=>guard(()=>{if(!importedMastery)throw Error('Choose a seal journal first.');mastery=importedMastery;importedMastery=null;masteryFailed=!saveMastery(storage,mastery);close('mastery-dialog');renderLab();notice(masteryFailed?'Seal journal restored for this visit. Download it before leaving.':'Seal journal restored.');});
   function spark(){guard(()=>{const idea=designSpark($('spark-seed').value);$('spark-title').textContent=idea.title;$('spark-twist').textContent=idea.twist;$('spark-goal').textContent=idea.goal;});}
   $('spark-form').onsubmit=event=>{event.preventDefault();spark();};$('spark-next').onclick=()=>{$('spark-seed').value=Math.random().toString(36).slice(2,10);spark();};spark();
   $('remix-tools').onclick=()=>guard(()=>{const pack=designer.get(),point=designer.cursor;drawWorkshopWorld($('remix-art'),pack,{thumbnail:true});$('remix-position').textContent=`Practice cursor: column ${point.x+1}, row ${point.y+1}. Move the cursor on your world before opening these tools.`;$('remix-note').textContent='';$('remix-dialog').showModal();});
@@ -173,12 +189,14 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
     get saveFailed(){return !saved||shelfFailed;},
     trailhouseStatus: run => house.status(run),
     bookStatus: run => books.status(run),
+    labStatus(run){const id=run?.stage.workshop?.lab;if(!id)return null;const owned=mastery.records[`${id}-${run.difficulty}`]||[],goals=masteryGoals(id,run);return {name:'Puzzle Lab seals',detail:`${owned.length}/3 collected · ${run.difficulty}`,condition:true,goals:goals.map(goal=>({label:`${goal.name} · ${goal.detail}${owned.includes(goal.id)?' — in your journal':goal.missed?' — try another run':''}`,done:owned.includes(goal.id)||goal.done}))};},
     get returnSection(){return activePlay?.house?'house':activePlay?.book?'books':activePlay?.test?'build':activePlay?.origin==='lab'?'lab':'shelf';},
     recordWin(run,actions){
       if(run.stage.workshop.trailhouse)return house.recordWin(run);
       if(run.stage.workshop.storybook)return books.recordWin(run);
       if(run.stage.workshop.practice || activePlay?.practice)return 'Practice complete. Bests and creator clears are unchanged. Start a full Playtest from the original starting point to verify this world.';
       const result=saveWorkshopBest(storage,bests,run.stage.workshop.key,run.difficulty,resultFor(run));bests=result.records;shelfFailed=!result.saved;
+      if(run.stage.workshop.lab){const outcome=recordMastery(mastery,run);mastery=outcome.state;masteryFailed=!saveMastery(storage,mastery);return `${outcome.earned.length?`${outcome.earned.length} new ${outcome.earned.length===1?'seal':'seals'} for your journal.`:'Your seals are safe. Try another answer for the missing ones.'} ${masteryCount(mastery)}/72 collected.${outcome.rewards.map(item=>` ${item.name} discovered: ${item.story}`).join('')}${masteryFailed?' Saving is unavailable; download your seal journal before leaving.':''}`;}
       if(activePlay?.test&&adventureKey(activePlay.pack)===run.stage.workshop.key&&actions.length<=MAX_PROOF_ACTIONS){
         const proof={difficulty:run.difficulty,actions:[...actions]},pack=normalizeAdventure({...activePlay.pack,proof});
         // The journal was just played by the engine from fresh memory to this win.

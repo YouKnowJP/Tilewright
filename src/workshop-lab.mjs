@@ -1,6 +1,7 @@
 import { blankAdventure, editAdventure, normalizeAdventure, adventureStage } from './workshop-model.mjs';
 import { createRun, canEnter } from './adventure.mjs';
 import { LAB_CLEARS } from './workshop-lab-clears.mjs';
+import { AFTERHOURS_ROOMS, afterHoursWorld } from './workshop-afterhours.mjs';
 
 export const LAB_ROOMS = Object.freeze([
   { id: 'counterweight', title: 'Counterweight Creek', theme: 'marsh', lesson: 'Crates & pressure bridges', idea: 'Make a second crossing that can be held open by a lantern double instead of a crate.' },
@@ -9,10 +10,12 @@ export const LAB_ROOMS = Object.freeze([
   { id: 'footstep', title: 'The Borrowed Footstep', theme: 'aurora', lesson: 'Lantern doubles & alternate solutions', idea: 'Solve this with a double, then try the crate. Build another puzzle with two different answers.' },
   { id: 'tidekeeper', title: 'Parcel for the Tidekeeper', theme: 'coast', lesson: 'Dialogue, rescue & delivery', idea: 'Give the keeper a meaningful route-or-supplies choice, then write two hints for the journey home.' },
   { id: 'emberclock', title: 'The Emberclock Orchard', theme: 'dunes', lesson: 'Linked levers & cooled embers', idea: 'Change one channel and study which doors and embers respond. Keep the return route open.' },
+  ...AFTERHOURS_ROOMS,
 ]);
 
 export function puzzleLabWorld(id) {
   const room = LAB_ROOMS.find(item => item.id === id); if (!room) throw Error('Choose a known puzzle room.');
+  if(room.afterhours)return afterHoursWorld(room,LAB_CLEARS[id]);
   const base = blankAdventure(12, 10), map = base.map;
   map.layers[0].tiles.fill(1);
   for (let y = 1; y < 9; y++) map.layers[0].tiles[y * 12 + 6] = 3;

@@ -9,8 +9,9 @@ const draftKey = 'tilewright.workshop.draft.v1', bestKey = 'tilewright.workshop.
 const draft = page => page.evaluate(key => JSON.parse(localStorage.getItem(key)), draftKey);
 const saves = page => page.evaluate(() => JSON.stringify(Object.entries(localStorage).sort()));
 async function lab(page) { await page.locator('#title-workshop').click(); await page.locator('#ws-tab-lab').click(); }
+async function selectRoom(page,id) { await page.locator(`[data-lab-collection="${LAB_ROOMS.find(room=>room.id===id).afterhours?'afterhours':'foundations'}"]`).click(); if(await page.locator('#ws-lab-room-picker').isVisible())await page.locator('#ws-lab-room-picker').selectOption(id);else await page.locator(`[data-lab-room="${id}"]`).click(); }
 async function playRoom(page, id, difficulty, actions = LAB_CLEARS[id]) {
-  await page.locator(`[data-lab-room="${id}"]`).click(); await page.locator('#ws-lab-play').click(); await page.locator('#ws-preview-dialog').waitFor();
+  await selectRoom(page,id); await page.locator('#ws-lab-play').click(); await page.locator('#ws-preview-dialog').waitFor();
   assert.match(await page.locator('#ws-preview-clear').textContent(), /verified/);
   await page.locator('#ws-preview-difficulty').selectOption(difficulty); await page.locator('#ws-preview-play').click();
   await playGuild(page, actions); assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won');
@@ -44,7 +45,7 @@ export async function checkPuzzleLab(browserType, { baseURL = 'http://127.0.0.1:
       try {
         const page = await context.newPage(), errors = []; page.on('pageerror', e => errors.push(e.message)); page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
         await page.goto(baseURL); await lab(page); const original = await saves(page);
-        for (const room of LAB_ROOMS) await page.locator(`[data-lab-room="${room.id}"]`).click();
+        for (const room of LAB_ROOMS) await selectRoom(page,room.id);
         await page.locator('.ws-spark summary').click(); await page.locator('#ws-spark-seed').fill('lantern-boat'); await page.locator('#ws-spark-form button[type="submit"]').click();
         const spark = await page.locator('#ws-spark-title').textContent(); await page.locator('#ws-spark-next').click();
         await page.locator('#ws-spark-seed').fill('lantern-boat'); await page.locator('#ws-spark-form button[type="submit"]').click(); assert.equal(await page.locator('#ws-spark-title').textContent(), spark);
@@ -57,7 +58,7 @@ export async function checkPuzzleLab(browserType, { baseURL = 'http://127.0.0.1:
         await playRoom(page, 'footstep', 'trail', ['up', 'up', 'up', 'right', 'right', 'down', 'down', 'right', 'down', 'right', 'right', 'right', 'down', 'down']);
         const supplies = LAB_CLEARS.tidekeeper.map(action => action === 'choose:route' ? 'choose:shield' : action); supplies.splice(supplies.indexOf('close-dialogue') + 1, 0, 'interact:ferry');
         await playRoom(page, 'tidekeeper', 'trail', supplies);
-        await page.locator('[data-lab-room="counterweight"]').click(); await page.locator('#ws-lab-remix').click(); await page.locator('#ws-build').waitFor();
+        await page.locator('[data-lab-collection="foundations"]').click(); await page.locator('[data-lab-room="counterweight"]').click(); await page.locator('#ws-lab-remix').click(); await page.locator('#ws-build').waitFor();
         await page.locator('#ws-test').click(); await playGuild(page, LAB_CLEARS.counterweight); await page.locator('#game-primary').click();
         const baseline = await draft(page); assert.ok(baseline.proof);
         for (const operation of ['rotate', 'mirror-x', 'mirror-y']) {
@@ -84,15 +85,15 @@ export async function checkPuzzleLab(browserType, { baseURL = 'http://127.0.0.1:
       const context = await browser.newContext({ viewport: { width, height: width === 844 ? 390 : 900 }, hasTouch: true, reducedMotion: 'reduce' });
       try {
         const page = await context.newPage(), errors = []; page.on('pageerror', e => errors.push(e.message));
-        await page.goto(baseURL); await lab(page); assert.equal(await page.locator('[data-lab-room]').count(), 6);
-        for (const room of LAB_ROOMS) await page.locator(`[data-lab-room="${room.id}"]`).tap();
+        await page.goto(baseURL); await lab(page); assert.equal(await page.locator('[data-lab-room]').count(), 12);
+        for (const room of LAB_ROOMS) await selectRoom(page,room.id);
         if (screenshots && width === 390) await page.screenshot({ path: '.playwright-mcp/puzzle-lab-390.png', fullPage: true });
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
-        await page.locator('[data-lab-room="counterweight"]').tap(); await page.locator('#ws-lab-remix').tap(); await cursorTo(page, 2, 5);
+        await selectRoom(page,'counterweight'); await page.locator('#ws-lab-remix').tap(); await cursorTo(page, 2, 5);
         await page.locator('#ws-remix-tools').tap(); await page.locator('[data-ws-transform="rotate"]').tap(); assert.equal((await draft(page)).map.width, 10); await page.locator('#ws-undo').tap();
         await page.locator('#ws-test').tap(); await playGuild(page, LAB_CLEARS.counterweight, true); assert.equal(await page.locator('#adventure').getAttribute('data-status'), 'won'); await page.locator('#game-primary').tap();
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width); assert.deepEqual(errors, []);
-        const result = { width, checks: 'Six-room navigation, responsive preview, touch remix/rotate/undo, actual touch playtest win, retained editor return, no horizontal overflow' }; results.push(result); onProgress(result);
+        const result = { width, checks: 'Twelve-room navigation in two collections, responsive preview, touch remix/rotate/undo, actual touch playtest win, retained editor return, no horizontal overflow' }; results.push(result); onProgress(result);
       } finally { await context.close(); }
     }
     results.push(await checkLongWorld(browser, baseURL));

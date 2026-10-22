@@ -285,7 +285,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
   function update() {
     if (!run) return;
     const stage = run.stage, result = resultFor(run), index = campaign.findIndex(item => item.id === stage.id);
-    const theme = themeFor(stage), book = workshop.bookStatus(run), house = workshop.trailhouseStatus(run);
+    const theme = themeFor(stage), book = workshop.bookStatus(run), house = workshop.trailhouseStatus(run), lab = workshop.labStatus(run);
     $('#game-map-legend').textContent = run.guild ? 'Gold is you; turquoise is the beacon. Purple squares are waystones; white outlines are wheels and bells. A pale blue double marks your return point.' : 'Gold is you. Turquoise is the beacon. Outlined squares are discovered wheels and bells.';
     $('.game-main').style.setProperty('--region-color', theme.dark);
     $('#game-region').textContent = house ? `The Trailhouse / ${house.keeper}` : book ? stage.workshop.storybook.title : stage.workshop ? `${theme.place} / ${stage.workshop.practice ? 'Practice run' : 'Player adventure'} / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
@@ -313,8 +313,8 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     $('#game-sound').textContent = sound.enabled ? 'Sound on' : 'Sound off'; $('#game-sound').setAttribute('aria-pressed', String(sound.enabled));
     const journey = expeditions?.session;
     $('#game-difficulty').disabled = Boolean(journey || (book || house) && !libraryOpen());
-    $('#game-book-banner').hidden = !(book || house);
-    if(book || house) { const activity=house||book; $('#game-book-banner').textContent = `${activity.name} · ${activity.detail}`; $('#game-book-banner').dataset.missed = String(!activity.condition); }
+    $('#game-book-banner').hidden = !(book || house || lab);
+    if(book || house || lab) { const activity=house||book||lab; $('#game-book-banner').textContent = `${activity.name} · ${activity.detail}`; $('#game-book-banner').dataset.missed = String(!activity.condition); }
     $('#game-expedition-banner').hidden = !journey; $('#game-expedition-kit').hidden = !journey;
     document.body.classList.toggle('expedition-active', Boolean(journey));
     if (journey) {
@@ -368,8 +368,8 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
       ...(stage.npcs.length ? [{ text: `Hear every keeper’s story (${run.talkedTo.length}/${stage.npcs.length})`, done: run.talkedTo.length === stage.npcs.length }] : []),
       { text: `Finish without taking damage${run.status === 'playing' && run.damage === 0 ? ' (clean so far)' : ''}`, done: run.status === 'won' && run.damage === 0 },
     ];
-    $('#game-commission').hidden = !house || !house.goals.length;
-    if(house) { $('#game-commission-title').textContent=house.name; $('#game-commission-goals').replaceChildren(...house.goals.map(goal=>questEntry({text:goal.label,done:goal.done}))); }
+    $('#game-commission').hidden = !(house || lab) || !(house || lab).goals.length;
+    if(house || lab) { const activity=house||lab; $('#game-commission-title').textContent=activity.name; $('#game-commission-goals').replaceChildren(...activity.goals.map(goal=>questEntry({text:goal.label,done:goal.done}))); }
     $('#game-sidequests').replaceChildren(...sidequests.map(questEntry));
     if (!outsideBoard()) updateConversation();
     $('#quest-beacon').textContent = run.status === 'won' ? 'The beacon shines again.' : 'Return to the turquoise beacon.';
@@ -435,7 +435,7 @@ export function createAdventureUI({ storage, getMap, backToEditor, onCreatorGuid
     if (stage.workshop && result && !paused) {
       $('#game-result-eyebrow').textContent = stage.workshop.practice ? 'AN EXPERIMENT, COMPLETE' : 'ANOTHER KEEPER’S WORLD, RESTORED';
       $('#game-result-title').textContent = 'A story worth bringing home.';
-      $('#game-result-text').textContent = `${result.score} points · ${result.turns} turns · ${result.stars} stars. ${stage.ending || ''}${workshop.returnSection === 'build' ? ` ${workshopClearNote}` : ''}`;
+      $('#game-result-text').textContent = `${result.score} points · ${result.turns} turns · ${result.stars} stars. ${stage.ending || ''}${workshop.returnSection === 'build' || lab ? ` ${workshopClearNote}` : ''}`;
       if (stage.workshop.practice) $('#game-result-text').textContent = `Practice complete in ${result.turns} turns. ${workshopClearNote}`;
       $('#game-primary').textContent = workshop.returnSection === 'build' ? 'Return to your designer' : workshop.returnSection === 'lab' ? 'Back to Puzzle Lab' : 'Back to player adventures';
     }

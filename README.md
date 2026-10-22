@@ -9,7 +9,7 @@ explore a world you paint. The **Wayfarers’ Guild** adds eight dispatches,
 three specialist tools, linked waystones, and optional commendations. The new
 **Echoist** leaves a lantern double to hold a plate, lure a hunter, or return to
 after taking a risky shortcut.
-The **Adventure Workshop** adds three authored adventures, six playable Puzzle Lab rooms, 24 editable object
+The **Adventure Workshop** adds three authored adventures, twelve playable Puzzle Lab rooms, 24 editable object
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
@@ -46,6 +46,20 @@ larger buttons, and enable optional standard-controller input. Switch during a
 run without restarting. Training uses the same preferences. Portrait, landscape,
 and split-view layouts preserve readable feedback and reachable controls.
 [Device and controls guide](docs/CONTROLS.md).
+
+## The Lab stays open after hours
+
+Choose **Workshop → Puzzle Lab → After hours** for six new original adventures:
+a locksmith’s delivery, a double-or-crate foundry, a waystone ferry, a four-note
+floodgate circuit, a guarded night shift, and a caravan rescue finale.
+All twelve Lab rooms now offer **72 optional seals** across Trail and Nemesis.
+Collect them over separate finished runs, discover four illustrated artifacts,
+and use **Find a missing seal** to choose your next goal. A missed seal never
+blocks the beacon. Download or restore a separate seal journal for another device.
+Every new world can be remixed, shared, or included in a custom Storybook.
+See [Puzzle Lab](docs/PUZZLE_LAB.md).
+
+![After-hours adventures in Puzzle Lab](docs/afterhours-lab.png)
 
 ## A home between adventures
 
@@ -134,7 +148,7 @@ starting, playing, creating, and keeping backups.
 
 ## Create and share adventures
 
-**Workshop → Puzzle Lab** is a new place to experiment. Six complete rooms
+**Workshop → Puzzle Lab** is a new place to experiment. Twelve complete rooms
 explore crates and pressure bridges, locked detours, bells, lantern doubles,
 keeper choices, relic deliveries, and linked ember wheels. Play on Trail or
 Nemesis, watch a verified route if you need a hint, then remix the room into
@@ -491,7 +505,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 424 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 443 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and

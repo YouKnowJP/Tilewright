@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.21.0 — 2026-10-21
+
+- Add six original after-hours Puzzle Lab adventures: a locksmith’s delivery,
+  an echo/crate foundry, a cargo-and-rescue waystone ferry, a four-bell floodgate
+  circuit, an adaptive-sentinel night shift, and a linked caravan finale.
+  Each has a real clean creator clear under both Trail and Nemesis rules.
+- Add 72 optional seals across all twelve rooms and both rules. Accumulate
+  different answers across runs, discover four illustrated artifacts, and find
+  an unfinished challenge. Missing a seal never blocks an ordinary world clear.
+- Show a compact gameplay ribbon and readable optional goals. Keep room and
+  rule selection synchronized with previews and results. Split the room browser
+  into two collections; use a compact room picker and folded challenge details
+  on phones. Preserve the original six world identities and their saved bests.
+- Add a separate, bounded seal journal with native downloads, previewed/cancellable
+  restoration, invalid-file rejection, save-failure fallbacks, and protection
+  against late file reads opening a dialog after leaving the Lab.
+- Make every new world available to remixes, portable sharing, and custom books.
+  Include a permanent-crate foundry solution alongside its temporary-double clear.
+- Add 19 model/level cases (443 total), a twentieth browser-check family, and
+  two public modules (75-file static package). See QA for actual browser coverage.
+
 ## 0.20.1 — 2026-10-21
 
 - Audit all game modes, editor tools, sharing, saves, recovery, and responsive

@@ -11,15 +11,15 @@ for (const room of LAB_ROOMS) for (const difficulty of ['trail', 'nemesis']) tes
   const run = LAB_CLEARS[room.id].reduce(stepRun, createRun(adventureStage(pack), { difficulty }));
   assert.equal(run.status, 'won'); assert.equal(run.damage, 0); assert.ok(run.turns <= pack.par);
 });
-test('all six original room clears survive portable export and actual engine verification', async () => {
-  assert.equal(LAB_ROOMS.length, 6);
+test('all twelve original room clears survive portable export and actual engine verification', async () => {
+  assert.equal(LAB_ROOMS.length, 12);
   for (const room of LAB_ROOMS) assert.equal((await verifyAdventureProof(parseAdventure(serializeAdventure(puzzleLabWorld(room.id))))).status, 'won');
 });
 test('rotated and mirrored rooms retain their real winning routes and stable puzzle links', () => {
   for (const room of LAB_ROOMS) for (const operation of ['rotate', 'mirror-x', 'mirror-y']) {
     const original = puzzleLabWorld(room.id), transformed = transformAdventure(original, operation);
     const mapping = operation === 'rotate' ? { up: 'right', right: 'down', down: 'left', left: 'up' } : operation === 'mirror-x' ? { left: 'right', right: 'left' } : { up: 'down', down: 'up' };
-    const run = LAB_CLEARS[room.id].map(action => mapping[action] || action).reduce(stepRun, createRun(adventureStage(transformed)));
+    const run = LAB_CLEARS[room.id].map(action => action.startsWith('dash-') ? `dash-${mapping[action.slice(5)] || action.slice(5)}` : mapping[action] || action).reduce(stepRun, createRun(adventureStage(transformed)));
     assert.equal(run.status, 'won', `${room.id}/${operation}`); assert.equal(transformed.proof, undefined);
     assert.deepEqual(transformed.markers.map(marker => [marker.id, marker.channel, marker.order]), original.markers.map(marker => [marker.id, marker.channel, marker.order]));
   }

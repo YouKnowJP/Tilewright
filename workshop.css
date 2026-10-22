@@ -42,6 +42,44 @@
 .ws-lab-invitation { padding:14px; border-left:2px solid #d0b374; background:#243f34; }
 .ws-lab-actions { display:flex; flex-wrap:wrap; gap:8px; }
 .ws-lab-actions button { flex:1; }
+.ws-lab-tools,.ws-lab-collections,.ws-mastery-heading { display:flex; gap:10px; align-items:center; justify-content:space-between; }
+.ws-lab-collections button { min-height:44px; }
+.playing .ws-lab-collections [aria-pressed="true"] { background:#51492f; border-color:#d7b875; color:#fff0bd; }
+.ws-lab-tools>label { width:150px; flex-shrink:0; }
+.ws-lab-mastery { margin-top:22px; border:1px solid #78855f; padding:22px; background:linear-gradient(120deg,#1d3d33,#243c35); }
+.ws-lab-mastery h4 { color:#f5dfaa; font:26px/1.3 Georgia,serif; margin:4px 0 10px; }
+.ws-mastery-heading p { color:#d4ddc3; line-height:1.7; font-size:13px; }
+.ws-mastery-heading>button { flex-shrink:0; }
+.ws-lab-seals { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:18px 0; }
+.ws-lab-seals article { border:1px solid #66795a; background:#16342e; padding:16px; min-width:0; }
+.ws-lab-seals article[data-sealed="true"] { border-color:#d6b76e; background:linear-gradient(125deg,#354a34,#263b32); }
+.ws-lab-seals span { color:#bfcbaa; font:10px/1.5 ui-monospace,monospace; letter-spacing:1px; }
+.ws-lab-seals [data-sealed="true"] span { color:#f3d18b; }
+.ws-lab-seals h5 { color:#ffe3a9; font:21px/1.3 Georgia,serif; margin:9px 0; }
+.ws-lab-seals p { color:#d4ddc3; font:13px/1.8 ui-monospace,monospace; margin:0; overflow-wrap:anywhere; }
+.ws-lab-mastery>label { color:#efdaa2; font-size:12px; line-height:1.7; }
+.ws-lab-mastery progress { display:block; width:100%; height:8px; accent-color:#d7b875; margin:10px 0 18px; }
+.ws-lab-journal summary { color:#efdaa2; cursor:pointer; padding:12px 0; min-height:44px; font-size:14px; }
+.ws-lab-journal p { color:#c2d1b5; line-height:1.8; font-size:13px; }
+.ws-lab-journal [data-sealed="true"] { color:#ffe0a0; }
+#ws-lab-rewards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:12px 0; }
+#ws-lab-rewards article { border:1px solid #61745a; padding:12px; min-width:0; background:#18342e; }
+#ws-lab-rewards [data-sealed="true"] { border-color:#d0b577; }
+#ws-lab-rewards canvas { display:block; width:96px; max-width:100%; height:auto; margin:auto; image-rendering:pixelated; }
+#ws-lab-rewards h5 { color:#e8d4a3; font:19px/1.3 Georgia,serif; margin:12px 0 6px; }
+#ws-lab-rewards p { font-size:12px; margin:0; }
+@media(max-width:900px) { #ws-lab-rewards { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:420px) { #ws-lab-rewards article { display:grid; grid-template-columns:64px minmax(0,1fr); column-gap:10px; } #ws-lab-rewards { grid-template-columns:1fr; } #ws-lab-rewards canvas { grid-row:span 2; width:64px; align-self:center; } #ws-lab-rewards h5 { margin-top:0; } }
+.adventure-workshop[data-section="lab"]>#ws-status:not([data-error="true"]) { display:none; }
+.adventure-workshop .ws-lab-room-picker { display:none; }
+.ws-lab-remix-idea { margin:12px 0; }
+.ws-lab-remix-idea>summary,#ws-lab-challenges>summary { color:#efdaa2; cursor:pointer; min-height:44px; padding:12px 0; font-size:14px; line-height:1.7; }
+.ws-lab-remix-idea p { font:16px/1.8 Georgia,serif; color:#d4ddc3; }
+#ws-lab-challenges { margin-bottom:12px; }
+#ws-lab-file[hidden] { display:none!important; }
+#ws-mastery-dialog p { color:#d4ddc3; font-size:16px; line-height:1.8; }
+@media(max-width:600px) { .ws-lab-tools,.ws-mastery-heading { align-items:stretch; flex-direction:column; } .ws-lab-tools>label { width:100%; } .ws-lab-collections>button { flex:1; font-size:11px; padding:9px 6px; } .ws-lab-mastery { padding:16px; } .ws-lab-seals { grid-template-columns:1fr; gap:8px; } .ws-lab-seals article { padding:12px; } .ws-lab-seals h5 { font-size:20px; margin:5px 0; } }
+@media(max-width:600px) { .adventure-workshop .ws-lab-room-picker { display:block; margin-top:14px; } .ws-lab-rooms { display:none!important; } .ws-lab-layout { margin-top:14px; } .ws-lab-room>canvas { max-height:135px; } .ws-lab-room-picker select { font-size:13px; } }
 .ws-spark { border-top:1px solid #70815a; margin-top:25px; padding-top:18px; color:#d4ddc3; }
 .ws-spark summary { color:#efdaa2; cursor:pointer; font:18px/1.5 Georgia,serif; }
 .ws-spark form { display:flex; align-items:end; gap:8px; margin:18px 0; }

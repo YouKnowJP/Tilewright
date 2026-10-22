@@ -1,6 +1,18 @@
 import { drawTile } from './render.mjs';
 import { CHAPTERS } from './adventure-art.mjs';
 export const CHANNEL_COLORS = Object.freeze({ amber: '#efc47a', jade: '#8ed8ae', violet: '#c3a2e4', blue: '#8acddd' });
+export function drawLabDiscovery(canvas,index,unlocked){
+  canvas.width=96;canvas.height=72;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
+  const colors=unlocked?['#efbf72','#a5e1d2','#c0a7eb','#ffe5a0']:['#687d6a','#6f8175','#6c7a76','#7b8067'];
+  const pixel=(x,y,w,h,color=colors[index])=>{ctx.fillStyle=color;ctx.fillRect(x,y,w,h);};
+  const diamond=(x,y,r,color)=>{ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x,y-r);ctx.lineTo(x+r,y);ctx.lineTo(x,y+r);ctx.lineTo(x-r,y);ctx.closePath();ctx.fill();};
+  pixel(0,0,96,72,'#12302c');pixel(10,59,76,2,'#41594b');
+  if(index===0){diamond(48,32,23,'#72553b');diamond(48,32,17,colors[0]);pixel(45,18,6,28,'#fff0b4');pixel(34,29,28,6,'#fff0b4');}
+  if(index===1){diamond(48,32,27,'#476d64');diamond(48,32,23,colors[1]);diamond(48,32,16,'#173e36');diamond(48,22,9,colors[1]);diamond(48,42,9,'#dce9b6');pixel(46,30,4,4,'#fff0b4');}
+  if(index===2){diamond(37,33,22,'#67567d');diamond(56,28,22,colors[2]);diamond(56,28,13,'#e2d1f7');pixel(27,54,43,3,colors[2]);pixel(33,48,31,3,'#a5d9d0');}
+  if(index===3){for(const [x,y]of [[21,28],[37,18],[56,20],[74,31]]){pixel(x,y+4,2,20,'#677f71');diamond(x+1,y,6,colors[3]);pixel(x,y-2,2,5,'#fff5ce');}pixel(20,48,58,2,'#cfb67c');pixel(32,54,35,2,'#cfb67c');}
+  if(!unlocked){ctx.fillStyle='#12302c77';ctx.fillRect(0,0,96,72);}
+}
 export function drawWorkshopObject(ctx, item, size = 24) {
   ctx.save(); ctx.translate(item.x * size, item.y * size); ctx.scale(size / 24, size / 24);
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';

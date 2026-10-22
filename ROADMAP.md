@@ -256,3 +256,13 @@ model work, inference infrastructure, offensive security tooling, account
 services, or processing of other people's personal or regulated records is
 planned. Future library and tileset work must preserve explicit backup/export
 paths and existing maps.
+
+
+## After-hours Lab completed — v0.21
+
+- Six original playable/remixable adventures, including a caravan rescue finale.
+- Twelve Lab rooms with 72 cumulative optional seals across both rules,
+  four illustrated discoveries, a missing-goal finder, and portable seal journals.
+- Compact room selection and folded goals on phones, with original bests retained.
+- This content expansion is complete and does not change the editor estimates.
+  See [Puzzle Lab](docs/PUZZLE_LAB.md) and the verification record.

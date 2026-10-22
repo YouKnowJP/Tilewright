@@ -735,3 +735,28 @@ The new interface browser family exercises these cases and adds native Nemesis
 wins for the introductory trio using literal action witnesses, with no inventory,
 position, or objective mutation. Other audit harnesses now distinguish Chrome
 CDP touch from portable pointer coverage and await asynchronous audio completion.
+
+
+## After-hours Lab and cumulative seals — v0.21
+
+`workshop-afterhours.mjs` authors six distinct 16×12 to 22×14 worlds using the
+existing adventure schema and turn engine. Ordinary-action journals in
+`workshop-lab-clears.mjs` and a permanent-crate alternate prove actual clean
+wins. Original room identities are unchanged. New snapshots are ordinary
+portable worlds, also supplied to custom book authors and remix tools.
+
+`workshop-mastery.mjs` owns bounded `tilewright.lab.mastery.v1` records: three
+seal IDs per room/rule pair, at most 24 pairs. Only won original Lab stages
+with matching world keys and explicit launch metadata can award seals. Practice,
+books, other modes, and remixes are rejected. Set unions preserve earlier
+solutions; distinct threshold crossings produce four collection discoveries.
+Pure tests earn all 72 seals from real wins, including alternate solutions.
+
+The Lab renderer uses native DOM text and bespoke canvas artifacts. Six room
+buttons per collection become a compact native picker on phones; signature
+details and backups fold away. One game ribbon and the existing Quest pane
+show optional goals without adding another gameplay scroll area. Journal
+imports are bounded, previewed, and protected by the Workshop navigation token
+so an earlier async file read cannot open over a newer screen. Save failures
+retain session progress and explain the available download path. These local
+journals are progress backups, not signed competitive or account records.
