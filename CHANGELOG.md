@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.24.1 — 2026-10-23
+
+- Fix WebKit phone overflow in restored Trailhouse commission selectors. Let
+  grid tracks and labels shrink with the viewport while retaining readable
+  game dropdowns. Verify long restored labels and full touch play.
+- Keep Mapmaker keyboard help inside the editor, removing unrelated painting
+  instructions from game-menu accessibility trees while preserving the map’s
+  accessible description.
+- Add the twenty-fifth browser family for every preference value, sound, volume
+  limits, large text, persistence, arrows-only input, movement-repeat on/off,
+  non-repeating Wait, and training on short screens.
+- Correct browser-test assumptions about asynchronous audio startup and public
+  play-link availability. Record the full-game and published-site audit in QA.
+
 ## 0.24.0 — 2026-10-23
 
 - Add three named save journeys with separate progress, worlds, settings,

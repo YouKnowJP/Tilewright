@@ -8,6 +8,7 @@ export async function checkInterface(browserType,{baseURL='http://127.0.0.1:4174
  try{
   const context=await browser.newContext({viewport:{width:320,height:568},hasTouch:true,reducedMotion:'reduce'});context.setDefaultTimeout(15_000);
   try{const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(baseURL);
+   assert.equal(await page.locator('#canvas-help').isVisible(),false,'Editor-only help must not be exposed on the game menu.');await page.locator('#title-mapmaker').click();assert.equal(await page.locator('#canvas-help').isVisible(),true);assert.equal(await page.locator('#canvas-help').evaluate(node=>node.closest('#editor')?.id),'editor');assert.equal(await page.locator('#map').getAttribute('aria-describedby'),'canvas-help');await page.locator('#mode-play').click();assert.equal(await page.locator('#canvas-help').isVisible(),false);report('Mapmaker keyboard help belongs to the editor and leaves the game menu accessibility tree.');
    await page.locator('#title-guide').click();await page.keyboard.press('Escape');await page.waitForFunction(()=>document.activeElement.id==='title-guide');
    await page.locator('#title-settings').click();await page.keyboard.press('Escape');await page.waitForFunction(()=>document.activeElement.id==='title-settings');
    await enterFirstTrail(page);await page.locator('#game-controls-settings').click();await page.locator('#settings-close').click();await page.waitForFunction(()=>document.activeElement.id==='game-controls-settings');

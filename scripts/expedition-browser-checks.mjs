@@ -139,8 +139,8 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
       await clickControl(page, '#game-restart'); const retried = JSON.parse(await snapshot(page));
       assert.equal(retried.state.retries, 1); assert.equal(await page.locator('#game-turns').textContent(), '0');
       await page.reload(); await resume(page); compareCheckpoint(JSON.stringify(retried), await snapshot(page));
-      await clickControl(page, '#game-sound'); assert.equal(await page.locator('#game-sound').getAttribute('aria-pressed'), 'true');
-      await clickControl(page, '#game-shield'); await clickControl(page, '#game-sound'); assert.equal(await page.locator('#game-sound').getAttribute('aria-pressed'), 'false');
+      await clickControl(page, '#game-sound'); await page.waitForFunction(()=>document.querySelector('#game-sound').getAttribute('aria-pressed')==='true');
+      await clickControl(page, '#game-shield'); await clickControl(page, '#game-sound'); await page.waitForFunction(()=>document.querySelector('#game-sound').getAttribute('aria-pressed')==='false');
       const portableContext = await browser.newContext();
       try {
         const other = await portableContext.newPage(); await other.goto(`${baseURL}/#play`); await hub(other);

@@ -1,5 +1,21 @@
 # Verification record
 
+## Full-game audit and responsive fixes — v0.24.1
+
+All **25 Chrome browser families**, **516 Node tests**, syntax checks, and the
+**83-file** package pass. Firefox and WebKit repeat ten core feature/settings
+families, including full Trailhouse play and recovery. Published-site checks
+exercise actual wins, creator workflows, native backups, and restored journeys.
+
+The audit fixes WebKit phone overflow in restored commission selectors
+(460px content on a 320px screen) and scopes Mapmaker keyboard instructions to
+the editor’s accessibility tree. The new settings matrix checks every preference
+value, sound/volume, large text, persistence, arrows-only input, held movement,
+non-repeating Wait, and training at four viewport sizes in three engines.
+
+See the [full audit record](audits/2026-10-23.md) for coverage, observed failures,
+fixes, live verification, and the limits of emulated-device/controller testing.
+
 ## Separate save journeys — v0.24.0
 
 **516 Node tests**, syntax checks, and the **83-file** static package pass.

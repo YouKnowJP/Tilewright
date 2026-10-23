@@ -15,7 +15,8 @@
 .playing .house-tabs button[aria-pressed="true"] { color:#fff0bd; background:#51492f; border-color:#d7b875; }
 .house-notice { border-left:3px solid #c7ae70; padding:10px 16px; background:#1b3c31; font-size:13px; }
 .house-notice[data-error="true"] { background:#49352c; color:#ffe3ba; }
-.house-board-tools { display:grid; grid-template-columns:1.5fr 1fr; gap:18px; margin:20px 0; }
+.house-board-tools { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:18px; margin:20px 0; }
+.house-board-tools>label { min-width:0; }
 .house-commission { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); border:1px solid #78805c; background:#18372f; }
 .house-commission>canvas { display:block; width:100%; height:100%; max-height:520px; min-height:280px; object-fit:contain; image-rendering:pixelated; background:#102b28; padding:16px; }
 .house-job-copy { padding:26px; }
@@ -48,7 +49,7 @@
 .house-dialog p { color:#d5dfc5; font-size:16px; line-height:1.9; }
 .house-dialog h3 { color:#ffe1a7; font:34px Georgia,serif; }
 @media(max-width:900px) { .house-hero { grid-template-columns:1fr 1fr; }.house-welcome { padding:20px; }.house-projects,.house-keepsakes { grid-template-columns:repeat(2,minmax(0,1fr)); }.house-job-copy { padding:20px; } }
-@media(max-width:600px) { .house-hero,.house-commission { grid-template-columns:1fr; }.house-hero>canvas { min-height:0; height:auto; max-height:220px; }.house-welcome { padding:20px; }.house-welcome h3 { font-size:32px; }.house-welcome p { margin:10px 0; }.house-tabs { gap:5px; }.house-tabs button { font-size:11px; padding:9px 6px; }.house-board-tools { grid-template-columns:1fr; gap:12px; }.house-commission>canvas { min-height:0; height:220px; padding:12px; }.house-job-copy h4 { font-size:30px; }.house-projects,.house-keepsakes { grid-template-columns:1fr; }.house-board-footer button { flex:1; }.house-board-footer button:last-child { flex-basis:100%; margin:0; }.house-festival { padding:20px; } }
+@media(max-width:600px) { .house-hero,.house-commission { grid-template-columns:1fr; }.house-hero>canvas { min-height:0; height:auto; max-height:220px; }.house-welcome { padding:20px; }.house-welcome h3 { font-size:32px; }.house-welcome p { margin:10px 0; }.house-tabs { gap:5px; }.house-tabs button { font-size:11px; padding:9px 6px; }.house-board-tools { grid-template-columns:minmax(0,1fr); gap:12px; }.house-commission>canvas { min-height:0; height:220px; padding:12px; }.house-job-copy h4 { font-size:30px; }.house-projects,.house-keepsakes { grid-template-columns:1fr; }.house-board-footer button { flex:1; }.house-board-footer button:last-child { flex-basis:100%; margin:0; }.house-festival { padding:20px; } }
 
 .house-festival-rules { max-width:340px; margin:0 0 18px; }
 @media(max-width:600px) {

@@ -498,6 +498,13 @@ order. Moving an opaque terrain layer in front of objects can cover them.
 Deleting requires confirmation and can be undone; the final layer is retained.
 Names, ordering, and resized content remain compatible with version-1 JSON maps.
 
+## Full-game verification
+
+The v0.24.1 audit rechecks every browser-test family, real mission wins, creator
+workflows, settings, saves, and responsive layouts. It fixes Trailhouse phone
+scrolling in WebKit and keeps Mapmaker keyboard help out of game menus.
+See the [audit record](docs/audits/2026-10-23.md) for coverage and testing limits.
+
 ## Your work and backups
 
 The editor automatically saves one map in this browser's `localStorage` after
@@ -566,7 +573,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The twenty-four browser families include `scripts/save-profiles-browser-checks.mjs`, `scripts/save-data-browser-checks.mjs`, `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The twenty-five browser families include `scripts/settings-browser-checks.mjs`, `scripts/save-profiles-browser-checks.mjs`, `scripts/save-data-browser-checks.mjs`, `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
