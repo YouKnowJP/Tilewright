@@ -1,5 +1,13 @@
 # Verification record
 
+## Delayed-startup recovery — v0.24.2
+
+A deliberately delayed application-module request shows a safe Retry after
+15 seconds without changing saves. Releasing the request completes startup,
+clears the notice, and permits real gameplay. The full front-menu family
+including this new case passes in Chrome, Firefox, and WebKit. A failed load
+continues to use its explicit error/retry message. See the full audit below.
+
 ## Full-game audit and responsive fixes — v0.24.1
 
 All **25 Chrome browser families**, **516 Node tests**, syntax checks, and the

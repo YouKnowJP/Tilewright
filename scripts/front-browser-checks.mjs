@@ -129,6 +129,14 @@ export async function checkFrontMenu(browserType, { baseURL = 'http://127.0.0.1:
         assert.deepEqual(errors, []); results.push({ failure, checks: 'Title, options, mode choice and gameplay remain usable with a truthful failure message.' });
       } finally { await context.close(); }
     }
+    const delayed=await browser.newContext({viewport:{width:390,height:844}});delayed.setDefaultTimeout(20000);
+    let release;
+    try{
+      const page=await delayed.newPage(),gate=new Promise(resolve=>release=resolve);await page.route('**/src/app.mjs',async route=>{await gate;await route.continue();});await page.goto(`${baseURL}/#play`,{waitUntil:'commit'});
+      await page.locator('#startup-retry').waitFor({state:'visible',timeout:20000});assert.match(await page.locator('#startup-status').textContent(),/still loading/);assert.equal(await page.evaluate(()=>localStorage.getItem('tilewright.adventures.v1')),null);
+      release();await page.locator('#loading-note[hidden]').waitFor({state:'attached'});assert.equal(await page.locator('#startup-status').isVisible(),false);await page.locator('#title-play').click();await page.locator('#front-story').click();await page.locator('[data-stage="trail-1"]').click();await page.locator('#adventure-canvas').focus();await page.keyboard.press('ArrowUp');assert.equal(await page.locator('#game-turns').textContent(),'1');
+      results.push({checks:'A stalled module offers safe Retry after 15 seconds; a late successful load clears the notice and actual gameplay works without erasing saves.'});
+    }finally{release?.();await delayed.close();}
     return { browser: browser.version(), results };
   } finally { await browser.close(); }
 }

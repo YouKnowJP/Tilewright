@@ -500,9 +500,10 @@ Names, ordering, and resized content remain compatible with version-1 JSON maps.
 
 ## Full-game verification
 
-The v0.24.1 audit rechecks every browser-test family, real mission wins, creator
+The v0.24.2 audit rechecks every browser-test family, real mission wins, creator
 workflows, settings, saves, and responsive layouts. It fixes Trailhouse phone
-scrolling in WebKit and keeps Mapmaker keyboard help out of game menus.
+scrolling in WebKit, keeps Mapmaker keyboard help out of game menus, and offers
+a safe Retry if startup is delayed.
 See the [audit record](docs/audits/2026-10-23.md) for coverage and testing limits.
 
 ## Your work and backups

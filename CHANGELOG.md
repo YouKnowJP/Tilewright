@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.24.2 — 2026-10-23
+
+- Offer a safe Retry after 15 seconds when startup is still waiting for a
+  module. A late successful load clears the notice automatically; a failed
+  load retains the existing error message. Never erase player data.
+- Add a delayed-module browser regression in Chrome, Firefox, and WebKit.
+  Verify the recovery notice, retained saves, automatic completion, and actual
+  new gameplay after releasing the request.
+
 ## 0.24.1 — 2026-10-23
 
 - Fix WebKit phone overflow in restored Trailhouse commission selectors. Let
