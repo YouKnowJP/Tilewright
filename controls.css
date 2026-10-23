@@ -74,3 +74,39 @@ body[data-control-size="large"] .training-dpad { grid-template-columns:repeat(3,
 #save-error,#save-status[data-error="true"] { color:#ffcfaa; }
 #save-error[hidden],#save-recovery[hidden],#save-reload[hidden],#save-cancel[hidden] { display:none!important; }
 @media(max-width:380px) { .settings-tabs { gap:5px; }.settings-tabs button { font-size:11px; padding-inline:7px; }.save-data-card { padding:14px; } }
+
+/* Each saved journey is a lantern at camp, with the active one lit. */
+.title-home .title-profile { display:block; max-width:100%; min-height:44px; margin-top:14px; padding:8px 12px; border:1px solid #758767; border-radius:3px; color:#f4dca6; background:#15352edb; font:12px/1.6 ui-monospace,monospace; overflow-wrap:anywhere; text-align:left; }
+.title-home .title-profile:hover { background:#21483b; border-color:#d9bc7f; }
+.journey-manager { margin:20px 0; }
+.journey-manager>h4 { color:#f4dda8; font:600 20px/1.4 Georgia,serif; margin-bottom:12px; }
+.journey-list { display:grid; gap:10px; }
+.journey-card { position:relative; min-width:0; padding:14px 14px 14px 58px; border:1px solid #677c68; background:#102c2b; }
+.journey-card.journey-current { border-color:#d8b575; background:linear-gradient(120deg,#293f2f,#102c2b); box-shadow:inset 3px 0 #d8b575; }
+.journey-card h5 { margin:0; color:#f4dda8; font:600 20px/1.4 Georgia,serif; overflow-wrap:anywhere; }
+.front-dialog .journey-state { margin:3px 0 10px; font-size:12px; color:#bbd0b8; }
+.journey-current .journey-state { color:#f1d596; }
+.journey-sigil { position:absolute; top:17px; left:14px; display:grid; place-items:center; width:30px; height:38px; color:#c1ccb3; border:1px solid #839172; border-radius:9px 9px 4px 4px; font:16px Georgia,serif; }
+.journey-current .journey-sigil { color:#ffe7af; border-color:#deb879; box-shadow:0 0 16px #d9b36e32; background:#a3823529; }
+.journey-card details { margin-top:10px; }
+.journey-card summary { min-height:44px; display:list-item; align-content:center; padding:10px 0; color:#c7d3bd; cursor:pointer; font-size:13px; }
+.journey-card details .save-data-actions { margin-top:8px; }
+.journey-name-field { display:block; margin:18px 0; color:#f4dda8; font-size:14px; }
+.journey-name-field input { display:block; width:100%; min-height:48px; margin-top:8px; padding:10px 12px; border:1px solid #a4a47d; border-radius:3px; color:#fff2cf; background:#102c2b; font:16px/1.5 Georgia,serif; }
+.journey-name-field[hidden] { display:none!important; }
+.journey-name-field input:focus-visible { outline:2px solid #f2d28f; outline-offset:3px; }
+.front-dialog .save-data-page h3 { margin:16px 0 8px; font-size:24px; }
+.front-dialog .save-data-page>p:not(.title-kicker) { margin:8px 0 14px; }
+.journey-manager>h4 { margin:12px 0; font-size:18px; }
+.journey-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:0 10px; align-items:start; }
+.journey-card h5 { font-size:18px; }
+.journey-card .journey-state { grid-column:1; margin-bottom:0; }
+.journey-card>.save-data-actions { grid-column:2; grid-row:1 / 3; align-self:center; }
+.journey-card>.save-data-actions button { flex:0 1 auto; padding:10px; font-size:12px; }
+.journey-card details { grid-column:1 / -1; margin-top:0; }
+@media(max-width:360px) {
+  .journey-card { padding-left:48px; gap:0 6px; }
+  .journey-sigil { left:10px; width:27px; }
+  .journey-card h5 { font-size:17px; }
+  .journey-card>.save-data-actions button { max-width:86px; }
+}

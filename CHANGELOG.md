@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.24.0 — 2026-10-23
+
+- Add three named save journeys with separate progress, worlds, settings,
+  learned habits, and exact unfinished-trail checkpoints. Preserve existing
+  saves as First journey without rewriting their contents.
+- Add a main-menu journey entry and game-styled lantern cards with active-first
+  ordering, creation, switching, renaming, inactive backups, and confirmed
+  removal. Keep active journey removal unavailable.
+- Scope backup, restore, and fresh start to one journey. Retain v0.23 backup
+  compatibility and preserve every other journey during replacement.
+- Verify and roll back journey-list/deletion failures; retain a recovery archive
+  for removed files. Serialize save management through the browser lock when
+  available, cancel queued actions safely, and reload stale tabs after switching.
+- Add 19 storage tests (516 total), a twenty-fourth browser family, and one
+  public module (83 packaged files). See QA for measured coverage.
+
 ## 0.23.0 — 2026-10-22
 
 - Add Options → Saved data with a confirmed fresh start. Erase all game-owned

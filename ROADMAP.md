@@ -295,3 +295,14 @@ paths and existing maps.
 - Guard old open tabs against resurrecting erased progress; recover interrupted updates.
 - Portable restoration is verified with actual resumed wins in independent browsers.
   See [Saved data](docs/SAVED_DATA.md) and QA.
+
+
+## Separate journeys completed — v0.24
+
+- Three named save slots, clear active lantern, and direct main-menu management.
+- Separate progress, creator work, settings, habits, and unfinished trails.
+- Keep original saves in place; switch without copying or rewriting them.
+- Per-journey backup/restore/reset, rename, and confirmed inactive deletion.
+- Verified rollback/recovery, stale-tab protection, and serialized management.
+- Next candidates: useful post-run route reviews and branching Storybook camps.
+  See [Saved data](docs/SAVED_DATA.md) and QA for scope and verification.

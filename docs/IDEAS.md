@@ -129,6 +129,9 @@ large mode menu:
 | A useful post-run review | Understand a lost heart or compare alternate solutions instead of seeing only the final score. | Optional last-route replay, damage/choice markers, comparison with one saved best route, and one specific attainable next goal. Reuse verified action journals without awarding progress during replay. |
 | Branching Storybooks | Give repeat journeys different consequences and help creators tell longer stories. | One visible camp choice that selects the next world or changes its ally/objective; author both branches, preview consequences, and verify each route plus backup recovery. Keep existing linear books compatible. |
 
-These are proposals, not additional features included in v0.23. Profiles should
-come first because they let players explore a fresh beginning without making
-backup files their everyday way to switch adventures.
+Separate save profiles are delivered in **v0.24** as three named journeys,
+with isolated progress/creations/settings, a clear current lantern, safe switching,
+and per-journey backup/reset/removal. Existing saves become First journey.
+Post-run reviews and branching Storybooks remain proposals. Route reviews are
+the next useful gameplay improvement: give a player one understandable decision
+to try differently, while keeping ordinary play and rewards unchanged.

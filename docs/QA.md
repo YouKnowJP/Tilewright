@@ -1,5 +1,43 @@
 # Verification record
 
+## Separate save journeys — v0.24.0
+
+**516 Node tests**, syntax checks, and the **83-file** static package pass.
+Nineteen new storage cases cover the virtual first journey without migration,
+separate logical/physical keys, exact switching, portable per-journey backups,
+legacy archive compatibility, scoped resets/restores, renaming and duplicate
+names, the three-slot limit, protected active deletion, inactive namespace
+removal, removal of the original slot, quota/read-only/silent failures, exact
+catalogue/file rollback, recovery archives, stale tabs, metadata notifications,
+and corrupt/unsupported catalogue rejection without erasure.
+
+The twenty-fourth browser family, `save-profiles-browser-checks.mjs`, exercises
+actual story play, a named creator draft, separate control preferences, turn-eight
+resume and wins in two journeys, native backups, isolated fresh start/restore,
+creation/cancellation, names, the slot limit, inactive backup/deletion, and slot
+reuse. An older open tab follows the new journey. Two tabs confirming together
+serialize management without overwriting the winning request. Cancelling a
+queued request does nothing later. A real storage failure leaves the original
+run playable; a deletion plus failed rollback produces the correct recovery
+file, which is restored into its affected journey before real play continues.
+
+Chrome **156.0.8078.47**, Firefox **156.0**, and WebKit **26.6** cover these flows
+and 320×568, 390×844, 820×1000, 1440×1000, and 844×390 layouts. Checks include
+44-pixel touch actions, long/multilingual names, default Cancel, actual switching
+and gameplay, runtime errors, and horizontal overflow. Manual image review
+covers phone journey cards and name entry. A Firefox native-lock callback
+reported a handled cancellation as a page error; returning cancellation/error
+results across that callback fixes it while retaining visible failure handling.
+
+The existing full backup/reset/restore family passes in all three engines,
+including controller cancellation/confirmation, failed rollback/recovery,
+interrupted saves, native downloads, and actual resumed wins. Retained Chrome
+checks cover title/options, interface fixes, both training lessons, exact
+Continue/Undo across supported modes, Puzzle Lab, Storybooks, and Workshop.
+All destructive cases use disposable contexts, never existing player saves.
+These checks do not establish physical-device, real-controller, or screen-reader
+coverage. See [Saved data](SAVED_DATA.md) for per-journey scope and recovery.
+
 ## Fresh starts and complete game backups — v0.23.0
 
 **497 Node tests**, syntax checks, and the **82-file** static package pass.

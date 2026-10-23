@@ -47,14 +47,22 @@ run without restarting. Training uses the same preferences. Portrait, landscape,
 and split-view layouts preserve readable feedback and reachable controls.
 [Device and controls guide](docs/CONTROLS.md).
 
-## A fresh beginning, when you want one
+## Three journeys, one camp
 
-**Options → Saved data** now offers a complete game backup, restoration, and
-**Start a fresh game…**. The confirmed fresh start erases this browser's saved
-progress, personal worlds, drafts, learned habits, and options, then returns to
-the main menu. Download a backup first if you want to keep the old game.
-Other open tabs refresh so they cannot bring erased progress back. Other games
-and downloaded files stay untouched. [Saved-data guide](docs/SAVED_DATA.md).
+Choose the named journey button on the main menu, or **Options → Saved data**.
+Keep **three named journeys**, each with separate progress, worlds, settings,
+learned habits, and unfinished trails. Existing saves remain **First journey**;
+**Begin a new journey…** starts fresh while keeping that original game.
+Switch back to resume its saved checkpoint. All open tabs follow the selected
+journey. Rename the current journey, or use an inactive journey’s **Manage**
+menu to download its backup or confirm its removal.
+
+**Download game backup** keeps the current journey in a portable file.
+**Restore game backup** and **Start a fresh game…** change only that journey;
+the others stay saved. Refresh older open copies before managing journeys.
+Other games and downloaded files stay untouched. Saves remain on this device
+and browser; download each journey separately before moving or clearing data.
+[Saved-data guide](docs/SAVED_DATA.md).
 
 Every dropdown uses the same forest-and-brass game interface, including its
 open choices. Settings, adventures, and both editors support keyboard, touch,
@@ -537,7 +545,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 497 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 516 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -558,7 +566,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The twenty-three browser families include `scripts/save-data-browser-checks.mjs`, `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The twenty-four browser families include `scripts/save-profiles-browser-checks.mjs`, `scripts/save-data-browser-checks.mjs`, `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.

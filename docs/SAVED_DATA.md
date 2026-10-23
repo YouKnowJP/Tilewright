@@ -1,47 +1,73 @@
-# Back up your game or begin again
+# Your journeys, backups, and fresh starts
 
-Open **Options → Saved data** from the main menu or during a game.
-Refresh older open copies of the game before resetting or restoring; cross-tab
-protection is available in v0.23 and later.
+Choose the **named journey button** on the main menu or **Options → Saved data**
+from the menu or a game. Refresh older open copies before managing journeys;
+the separate-journey manager is available in **v0.24 and later**.
 
-**Download game backup** keeps the data currently saved in this browser in a
-single `lantern-trails-save.json` file. It includes story/Guild records, your
-latest adventure, expeditions, Lab seals, Storybooks, Trailhouse progress,
-training practice, personal worlds, terrain maps, drafts, learned habits, and
-options. Changes that could not be saved for this visit are not included.
-Keep the downloaded file somewhere you can find again.
+## Keep three separate adventures
 
-**Restore game backup** lets you choose that file on this or another browser.
-Review its creation date, then choose **Replace data & restore**. This replaces
-the current game's saved data; download a current backup first if you want to
-keep both. Cancel leaves your game unchanged. Worlds and bests load using their
-normal validators; the latest unfinished adventure still uses exact Continue.
-The file limit is **12 MB**. Individual adventure/Storybook files still belong
-in their usual import screens, rather than the complete-game restore screen.
+Existing saves remain **First journey**, with no migration or erasure.
+**Begin a new journey…** lets you name a fresh adventure while keeping the old
+one. Each journey has its own story/Guild progress, latest trail, expeditions,
+Lab seals, Storybooks, Trailhouse, training, personal worlds, terrain maps,
+drafts, learned habits, and display/control options.
+
+**Open journey** returns to its main menu; Continue resumes its saved trail.
+All open game tabs in the same browser follow the selected journey. Switching
+keeps persisted data; changes that could not be saved for this visit are not
+carried over. Each journey uses the same browser storage quota.
+
+Rename the current journey with **Rename**. On an inactive journey, **Manage**
+offers its backup and confirmed removal. The active journey cannot be removed;
+open another journey first. Three slots are available. Names can contain up to
+32 characters and must be different. Profiles are local saves, with no accounts
+or online synchronization.
+
+## Keep a portable copy
+
+**Download game backup** keeps the current journey’s saved data in a single
+`lantern-trails-save.json` file. An inactive journey’s **Manage → Download backup**
+keeps that journey instead. Download each journey separately to keep all three.
+Names and the journey list are not part of the file. Changes that could not be
+saved for this visit are not included. Keep each file somewhere you can find it.
+
+**Restore game backup** lets you choose a file from this or another browser,
+including an older v0.23 backup. Review its date and the named destination,
+then choose **Replace data & restore**. This replaces only the current journey;
+other journeys stay saved. To retain both versions, create a new journey first
+and restore into that slot. Cancel leaves all saves unchanged.
+
+Worlds and bests load using their normal validators; unfinished adventures still
+use exact Continue. The file limit is **12 MB**. Individual adventure/Storybook
+files belong in their usual import screens rather than the full-journey restore
+screen. Localhost and the public website keep separate saves.
 
 ## Start with no saved progress
 
-Choose **Start a fresh game…**, read the confirmation, then choose
+Choose **Start a fresh game…**, read the named journey confirmation, then choose
 **Erase saves & start fresh**. The safe default is **Keep my current game**;
-Escape and controller Back cancel. The game erases all of its saved progress,
-creations, drafts, learned habits, and options in this browser, then returns
-to the main menu. Begin the first story or revisit Training camp. Built-in
-adventures remain available; no previous personal game is resumed automatically.
+Escape and controller Back cancel. The game erases that journey’s progress,
+creations, drafts, training, learned habits, and options, including older save
+versions, then returns to the main menu. Its name and your other journeys remain.
+Begin the first story or revisit Training camp; no old personal run resumes.
 
-Reset includes older game-save versions. Other games/websites and downloaded
-files are untouched. This affects only the current browser and device; it does
-not reset another device or synchronize saves online. An existing backup can
-restore the erased data, so delete unwanted downloaded backups separately.
+Other games/websites and downloaded files are untouched. This affects only the
+current browser and device. An existing backup can restore erased data, so delete
+unwanted downloaded files separately. Removing an inactive journey erases its
+name and saved files; download its backup first if you might return.
 
 ## If a browser operation fails
 
-The game checks the requested changes and attempts to restore the previous
-snapshot if a reset/restore fails. A failed change is reported instead of
-claiming success. If the browser also refuses recovery writes, download the
-offered **recovery backup** before reloading, then restore that file when saving
-is available again. The recovery copy stays in the open tab until you leave.
+The game verifies changes and attempts to restore the previous snapshot when
+replacement or journey management fails. It reports failure instead of claiming
+success. If the browser also refuses recovery writes, download the offered
+**recovery backup** before reloading, then restore that journey file when saving
+is available again. If removal failed, open the affected journey (or a new empty
+slot if it is missing) before restoring its recovery file. This preserves the
+other journeys. The recovery copy stays in the open tab until you leave.
 
-Other open tabs refresh when a reset/restore finishes, preventing their old
-in-memory progress from recreating erased saves. An interrupted update shows
-a waiting screen with explicit recovery after a short delay. Recovery reloads
-the latest available data without erasing additional player files.
+Other open tabs refresh after save management, preventing stale progress from
+recreating erased saves or overwriting another journey. Current browsers also
+serialize management actions with a browser-wide lock. An interrupted update
+shows a waiting screen with explicit recovery after a short delay. Recovery
+reloads the latest available data without erasing additional player files.

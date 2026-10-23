@@ -9,6 +9,7 @@ installation, build-time framework, database service, or remote API.
 | `src/sample.mjs` | Deterministic, fictional Willowbend map authored with the built-in palette. |
 | `src/render.mjs` | Original pixel artwork and compositing into Canvas; optional grid/cursor overlays. |
 | `src/storage.mjs` | Local-storage adapter; reject corrupt saves and report unavailable storage. |
+| `src/save-profiles.mjs` | Three-slot catalogue validation, journey action plans, names, and logical-to-physical save namespaces. |
 | `src/save-data.mjs` | Bounded full-game archives, namespace-scoped replacement/rollback, and generation-guarded browser save sessions. |
 | `src/save-data-ui.mjs` | Saved-data page actions, backup downloads, previewed restoration, confirmed reset, and failure/recovery dialogs. |
 | `src/app.mjs` | DOM, pointer/keyboard input, stroke previews, history commits, file handling, and downloads. |
@@ -838,8 +839,9 @@ storage, adventure reducers, and checkpoint rules do not change.
 
 ## Complete backups and fresh starts — v0.23
 
-`save-data.mjs` snapshots all `tilewright.` keys, including unknown older save
-versions, while excluding `tilewright.save-generation.v1`. Complete archives
+`save-data.mjs` snapshots the current journey’s logical `tilewright.` keys,
+including unknown older save versions, while excluding generation/profile
+metadata and other journey namespaces. Complete archives
 use format `lantern-trails-save`, version 1, an ISO creation time, and up to 256
 unique key/string-value pairs within 12 MB of UTF-8 JSON. Parsing rejects
 foreign keys and attempts to supply the generation key. Individual existing
@@ -866,3 +868,38 @@ operations reload the bare game path, clearing old mapmaker/shared-world URL
 fragments and all runtime histories. Saved-data management is available from
 ordinary Options on title or gameplay. Existing adventure checkpoint rules
 remain 0.22.0, so this UI/storage expansion does not invalidate current runs.
+
+
+## Separate save journeys — v0.24
+
+`save-profiles.mjs` owns a bounded version-1 catalogue at `tilewright.profiles.v1`
+with `activeId` and up to three unique `{id,name}` entries. With no catalogue,
+the original unprefixed saves are a virtual **First journey**; reading this
+state writes nothing. Names are normalized, trimmed, limited to 32 characters,
+and unique ignoring case. Unsupported/malformed catalogues fail closed without
+erasing data. Journey IDs are `original` or UUIDs; no user name becomes a path.
+
+Every mode continues to use its existing logical save keys through the shared
+session facade. Original saves keep their physical keys; another journey’s
+`tilewright.foo.v1` lives at `tilewright.profile.<uuid>.foo.v1`. Switching changes
+only the catalogue, avoiding copies, migration, and duplicate save payloads.
+Snapshots, replacement, rollback, and portable archives operate on one journey;
+archives keep their v1 logical-key format and reject catalogue/namespace keys.
+Names and the catalogue are not included in a journey backup. The browser quota
+is shared, and modes retain their existing session-only saving fallbacks.
+
+Create, switch, rename, and inactive deletion verify metadata and use the same
+generation guard as reset/restore. Deletion snapshots its target before removing
+files; failures restore catalogue/files or retain a portable recovery archive.
+The active journey cannot be removed. Successful management reloads the bare
+main-menu path. Other tabs reload into the selected journey and cannot save an
+old in-memory run into its namespace. Different journeys are not played at once
+in different tabs of the same browser profile.
+
+The UI serializes management through a named Web Lock when available, checks
+its navigation token again inside the lock, and discards cancelled queued work.
+Exceptions are returned across the native lock callback rather than thrown there,
+which avoids Firefox reporting a handled cancellation as a page error. Browsers
+without that API retain synchronous verified operations and generation guards.
+Ordinary gameplay saves remain synchronous and do not use this management lock.
+Older clients must be refreshed before using the expanded save manager.

@@ -1,6 +1,6 @@
 {
   "name": "tilewright",
-  "version": "0.23.0",
+  "version": "0.24.0",
   "private": true,
   "type": "module",
   "description": "A local-first tile map editor and original turn-based puzzle adventure game.",

@@ -136,6 +136,8 @@ export function createFrontMenu({ storage, sound, saveSession, onSaveReload, onM
   $('#guide-next').addEventListener('click', () => { guidePage++; renderGuide(); });
   $('#guide-choose').addEventListener('click', () => { guide.close(); onChoose(); modes(); });
   $('#guide-close').addEventListener('click', () => guide.close());
+  $('#title-profile').addEventListener('click',()=>openSettings('data',$('#title-profile')));
+  try { const catalog=saveSession.profiles(),name=catalog.profiles.find(item=>item.id===catalog.activeId).name;$('#title-profile').textContent=`${name} · Change journey`;$('#title-profile').setAttribute('aria-label',`Manage journeys. Current journey: ${name}`); } catch { $('#title-profile').textContent='Journeys · Saving unavailable'; }
   $('#title-settings').addEventListener('click', () => openSettings('display',$('#title-settings')));
   function settingsTab(page) { $('#settings-save-note').hidden=page==='data';saveData.close();if(page==='data')saveData.open(); for(const id of ['display','controls','data']) { $(`#settings-${id}`).hidden=id!==page; $(`#settings-tab-${id}`).setAttribute('aria-pressed',String(id===page)); } }
   function openSettings(page='display',trigger) { settingsReturn=trigger||document.activeElement;renderSound(); settingsTab(page); settings.showModal(); settings.scrollTop=0; }
