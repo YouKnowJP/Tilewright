@@ -1,11 +1,14 @@
 # Storybooks: a road between worlds
 
 Choose **Adventure Workshop → Storybooks** from the main menu. Read a book's
-opening scene before entering its first chapter. Five featured books are available.
+opening scene before entering its first chapter. Six featured books are available.
 **The Rainmaker’s Letters** and **The Observatory of Borrowed Stars** each add
 four original maps and a complete new story. The three earlier books weave the
 six Puzzle Lab worlds into journeys of three, three, and six chapters.
 See [the new story guide](NEW_STORIES.md) for all eight original levels.
+**The Keeper’s Promise** adds five more original worlds across two three-chapter
+roads, a real camp decision, and separate endings. Its [player and creator
+guide](KEEPERS-PROMISE.md) also explains custom forward links and endings.
 
 At each camp choose one optional promise:
 
@@ -31,7 +34,7 @@ lets you open a completed chapter to reread its opening scene and ending.
 
 Select **Bind your own story** or **Make your version** on a featured book.
 Write a title, creator name, invitation, and ending. Add **two to six worlds**
-from your saved shelf, featured adventures, Puzzle Lab, the eight original
+from your saved shelf, featured adventures, Puzzle Lab, the thirteen original
 Storybook levels, or current World studio
 draft. Add a short scene before each chapter, move chapters earlier or later,
 and remove any you no longer need. A world must pass structural checks before
@@ -75,3 +78,7 @@ want to keep before clearing browser data.
 
 Sharing is by portable file; this release does not provide an online gallery,
 cloud saves, or automatic transfer between devices.
+
+Branching books use format v2 with optional forward chapter links, route choices,
+and route-specific endings. Linear v1 books retain their existing identity and
+save compatibility. See [the branching creator guide](KEEPERS-PROMISE.md#write-branching-adventures).

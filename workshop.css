@@ -212,3 +212,5 @@
 .ws-layer-toggle input { accent-color:#d9bd79; width:17px; height:17px; }
 
 .adventure-workshop[data-section="lab"] .ws-banner { display:none; }
+
+#ws-discovery-tools[hidden] { display:none; }

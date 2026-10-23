@@ -6,7 +6,8 @@ export function threatForecast(run) {
   const lines = [`You: ${at(run.player)}. Health ${run.health}/3; energy ${run.energy}/3.`,
     run.carrying ? 'The carried relic is audible. Set it down with X to create a false trail.' : 'Waiting spends a turn. Reading this forecast does not.'];
   for (const hunter of run.hunters.filter(near)) {
-    lines.push(`${hunter.boss ? 'Watcher' : 'Hunter'} at ${at(hunter)}: ${hunter.mode}; next step ${at(hunter.intent)}.`);
+    lines.push(`${hunter.name || (hunter.boss ? 'Watcher' : 'Hunter')} at ${at(hunter)}: ${hunter.mode}; next step ${at(hunter.intent)}.`);
+    if (hunter.tactic) lines.push(`${hunter.name}: ${hunter.tactic.line} The marked move and sweep are already committed.`);
     if (hunter.attack.length) lines.push(`Marked sweep: ${hunter.attack.map(at).join('; ')}. Leave these cells or shield before acting.`);
   }
   for (const enemy of run.enemies) {

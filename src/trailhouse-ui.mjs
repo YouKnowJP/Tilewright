@@ -1,3 +1,5 @@
+import { readMemories, villageScene, keeperMemory, decorateVillage } from './trail-memories.mjs';
+import { drawKeeperPortrait, CHAPTERS } from './adventure-art.mjs';
 import { COMMISSIONS, PROJECTS, commissionWorld, festivalWorld } from './trailhouse-content.mjs';
 import { loadTrailhouse, saveTrailhouse, availableGlow, festivalReady, buildProject, trailhouseStage, commissionGoals, finishCommission, serializePassport, parsePassport, MAX_PASSPORT_BYTES } from './trailhouse-model.mjs';
 import { drawVillage, drawProject, drawKeepsake } from './trailhouse-art.mjs';
@@ -20,7 +22,8 @@ export function createTrailhouseUI({storage,onPlay,onRemix}){
     for(const option of $('job').options){const item=COMMISSIONS.find(job=>job.id===option.value);option.textContent=`${item.keeper} · ${item.title}${state.completed.includes(item.id)?' · Restored':''}`;}
   }
   function render(){
-    drawVillage($('village-art'),state);$('balance').textContent=`${availableGlow(state)} light to spend`;$('totals').textContent=`${state.completed.length}/12 commissions · ${state.built.length}/6 places restored`;$('village-progress').value=state.built.length;
+    const memories=readMemories(storage),scene=villageScene(memories);drawVillage($('village-art'),{...state,decoration:memories.decoration});$('scene-title').textContent=scene.title;$('scene-text').textContent=scene.text;
+    $('decoration').replaceChildren(new Option('Warm lanterns','lanterns'),...(memories.events.includes('ferry')?[new Option('Copper ferries · earned on the river road','ferry')]:[]),...(memories.events.includes('workshop')?[new Option('Paper stars · earned on the workshop road','stars')]:[]));$('decoration').value=memories.decoration;$('balance').textContent=`${availableGlow(state)} light to spend`;$('totals').textContent=`${state.completed.length}/12 commissions · ${state.built.length}/6 places restored`;$('village-progress').value=state.built.length;
     $('projects').replaceChildren(...PROJECTS.map((project,index)=>{
       const built=state.built.includes(project.id),card=node('article','','house-project'),art=document.createElement('canvas');card.dataset.project=project.id;art.setAttribute('aria-hidden','true');drawProject(art,index,built);
       card.append(art,node('p',project.keeper,'title-kicker'),node('h4',project.name),node('p',project.description));const actions=node('div','','house-actions');
@@ -34,7 +37,7 @@ export function createTrailhouseUI({storage,onPlay,onRemix}){
     $('festival-play').disabled=!festivalReady(state);$('festival-remix').hidden=!festival;$('festival-note').textContent=festivalReady(state)?festival?'The festival’s ribbon is yours. Revisit the celebration or make your own.':'The whole village is ready. Ring the festival song and bring the keepers together in a new adventure.':`Restore ${6-state.built.length} more ${6-state.built.length===1?'place':'places'} to open a new festival adventure.`;
     renderBoard();tab(section);saveNote();if(lastResult)notice(lastResult);
   }
-  function visit(project){visitor=project;$('keeper-title').textContent=project.keeper;$('keeper-place').textContent=project.name;$('keeper-speech').textContent=project.town;$('keeper-dialog').showModal();}
+  function visit(project){visitor=project;$('keeper-title').textContent=project.keeper;$('keeper-place').textContent=project.name;drawKeeperPortrait($('keeper-portrait'),{id:project.keeper.toLowerCase(),name:project.keeper},CHAPTERS.find(chapter=>chapter.id==='woodland'),true);$('keeper-speech').textContent=project.town;$('keeper-dialog').showModal();}
   function hide(){for(const id of ['keeper-dialog','restore-dialog'])if($(id).open)$(id).close();}
   $('job').replaceChildren(...COMMISSIONS.map(job=>new Option(`${job.keeper} · ${job.title}`,job.id)));$('job').onchange=()=>{selected=$('job').value;renderBoard();};$('rules').onchange=()=>{$('festival-rules').value=$('rules').value;renderBoard();};$('festival-rules').onchange=()=>{$('rules').value=$('festival-rules').value;renderBoard();};
   for(const [id,delta]of [['previous',-1],['next',1]])$(id).onclick=()=>{const index=COMMISSIONS.findIndex(job=>job.id===selected);selected=COMMISSIONS[(index+delta+COMMISSIONS.length)%COMMISSIONS.length].id;renderBoard();};
@@ -43,6 +46,8 @@ export function createTrailhouseUI({storage,onPlay,onRemix}){
   $('play').onclick=()=>guard(()=>{lastResult='';onPlay(trailhouseStage(state,selected),$('rules').value);});
   $('festival-play').onclick=()=>guard(()=>{lastResult='';onPlay(trailhouseStage(state,'festival'),$('festival-rules').value);});
   $('festival-remix').onclick=()=>guard(()=>onRemix(festivalWorld()));
+  $('decoration').onchange=()=>{const ok=decorateVillage(storage,$('decoration').value);render();notice(ok?'A little of your journey, brought home.':'Decoration is available for this visit; browser saving is unavailable.',!ok);};
+  $('keeper-memory').onclick=()=>{$('keeper-speech').textContent=keeperMemory(visitor.keeper,readMemories(storage));};
   $('keeper-town').onclick=()=>{$('keeper-speech').textContent=visitor.town;};$('keeper-road').onclick=()=>{$('keeper-speech').textContent=visitor.road;};$('keeper-close').onclick=()=>$('keeper-dialog').close();
   $('export').onclick=()=>guard(()=>{const url=URL.createObjectURL(new Blob([serializePassport(state)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='my-trailhouse.passport.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notice('Passport prepared for download. Restore it in the Trailhouse on another browser.');});
   $('import').onclick=()=>{$('file').value='';$('file').click();};$('file').onchange=async()=>{const file=$('file').files[0];if(!file)return;try{if(file.size>MAX_PASSPORT_BYTES)throw Error('Choose a passport smaller than 30 KB.');imported=parsePassport(await file.text());$('restore-summary').textContent=`This passport has ${imported.completed.length}/12 commissions, ${imported.built.length}/6 restored places, and ${availableGlow(imported)} unspent light. Restoring replaces only your Trailhouse progress. Your current Trailhouse has ${state.completed.length} commissions and ${state.built.length} restored places. Other worlds and game modes stay separate.`;$('restore-dialog').showModal();}catch(error){notice(error.message,true);}};

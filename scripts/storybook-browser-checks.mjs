@@ -11,7 +11,7 @@ import { playGuild } from './guild-browser-checks.mjs';
 import { chooseOption, clickControl } from './ui-driver.mjs';
 
 const saved = page => page.evaluate(key => JSON.parse(localStorage.getItem(key)),BOOK_KEY);
-const otherSaves = page => page.evaluate(key => JSON.stringify(Object.entries(localStorage).filter(([name])=>name!==key).sort()),BOOK_KEY);
+const otherSaves = page => page.evaluate(key => JSON.stringify(Object.entries(localStorage).filter(([name])=>name!==key&&!['tilewright.route.reviews.v1','tilewright.village.memories.v1'].includes(name)).sort()),BOOK_KEY);
 async function openBooks(page) { await page.locator('#title-workshop').click(); await page.locator('#ws-tab-books').click(); }
 async function newBook(page,index,difficulty) {
   if (await page.locator('#book-more-books').getAttribute('open') === null) await page.locator('#book-more-books>summary').click();
@@ -31,13 +31,14 @@ export async function checkStorybooks(browserType,{baseURL='http://127.0.0.1:417
       const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));page.on('response',response=>{if(response.status()>=400)errors.push(response.url());});
       await page.goto(baseURL);await openBooks(page);const originals=await otherSaves(page);
       for(const [index,book] of featuredBooks().entries()) for(const difficulty of ['trail','nemesis']) {
+        if(book.chapters.some(chapter=>chapter.routes))continue; // Branches and terminal choices are exercised by expansion-browser-checks.
         if(!fullBooks && (index!==0||difficulty!=='trail'))continue;
         await newBook(page,index,difficulty);
         assert.match(await page.locator('#book-passage').textContent(),new RegExp(book.chapters[0].passage.slice(0,12)));
         for(const chapter of book.chapters) {
           await page.locator('[data-book-challenge="clean"]').click();await page.locator('#book-continue').click();
           assert.equal(await page.locator('#game-difficulty').isDisabled(),true);assert.match(await page.locator('#game-book-banner').textContent(),/Untouched light/);
-          await finish(page,chapter.world.proof.actions,false,chapter.world.source==='Storybook original'?chapter.world.ending:'');assert.match(await page.locator('#book-tally').textContent(),/honors/);
+          await finish(page,chapter.world.proof.actions,false,chapter.world.source==='Storybook original'?chapter.world.ending:'');assert.match(await page.locator('#book-tally').textContent(),/honors?/);
         }
         const state=await saved(page);assert.equal(state.session.phase,'won');assert.equal(state.session.receipts.filter(receipt=>receipt.earned).length,book.chapters.length);
         assert.equal(await page.locator('#book-continue').isVisible(),false);assert.equal(await otherSaves(page),originals);

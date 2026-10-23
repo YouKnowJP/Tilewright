@@ -1,6 +1,6 @@
 import { validateDocument } from './model.mjs';
 import { freshMemory, normalizeMemory, learnMove } from './adventure-brain.mjs';
-import { perkEffects } from './adventure-perks.mjs';
+import { perkEffects, PERKS } from './adventure-perks.mjs';
 import { planHunters } from './adventure-tactics.mjs';
 import { switchGateOpen, switchChange, choiceProblem, validateMechanisms } from './adventure-mechanisms.mjs';
 import { validateTools, powerProblem, powerCost, liveEcho, waystoneProblem, pulseCells } from './adventure-tools.mjs';
@@ -67,6 +67,7 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
     stage[name] = structuredClone(definition[name] || []);
   }
   const effects = perkEffects(perks);
+  if (perks.some(id=>{const kit=PERKS.find(perk=>perk.id===id).kit;return kit&&kit!==definition.guild?.kit;})) throw Error('Specialist relics must match the chosen toolkit.');
   stage.relic = definition.relic ? structuredClone(definition.relic) : null; stage.delivery = definition.delivery ? { ...definition.delivery } : null;
   stage.restrictions = { noDash: Boolean(definition.restrictions?.noDash), noShield: Boolean(definition.restrictions?.noShield) };
   if (loadout && ['health', 'decoys', 'shields'].some(key => !Number.isInteger(loadout[key]) || loadout[key] < (key === 'health' ? 1 : 0) || loadout[key] > 3)) throw new Error('Invalid expedition supplies.');
@@ -116,8 +117,10 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   if (stage.guild) {
     run.guild = { kit: stage.guild.kit, readyAt: 0, uses: 0, warps: 0, veilUntil: 0 };
     if (stage.guild.kit === 'echoist') Object.assign(run.guild, { echo: null, swaps: 0 });
-    run.decoys = stage.guild.kit === 'mistweaver' ? (hard ? 2 : 3) : 1;
-    run.shields = stage.guild.kit === 'mistweaver' ? (hard ? 0 : 1) : (hard ? 1 : 2);
+    if (!loadout) {
+      run.decoys = stage.guild.kit === 'mistweaver' ? (hard ? 2 : 3) : 1;
+      run.shields = stage.guild.kit === 'mistweaver' ? (hard ? 0 : 1) : (hard ? 1 : 2);
+    }
   }
   if (!canEnter(run, run.player) || stage.crates.some(crate => same(crate, run.player))) throw new Error('The starting cell is blocked.');
   if (stage.guild && stage.waystones.some(stone => !canEnter(run, stone))) throw Error('Waystones need walkable landing cells.');
@@ -276,15 +279,17 @@ export function stepRun(run, action) {
       let following = { ...next.player };
       for (const companion of next.companions) { const previous = { x: companion.x, y: companion.y }; companion.x = following.x; companion.y = following.y; following = previous; }
       next.player = { x: run.guild.echo.x, y: run.guild.echo.y }; next.guild.echo = null; next.guild.swaps++;
+      if(next.effects.returnWard)next.ward=Math.max(next.ward,next.effects.returnWard);
       visited.push(next.player); collect(next); reveal(next, next.player);
       next.events.push({ type: 'echo-return', ...next.player });
     } else {
-      next.guild.uses++; next.guild.readyAt = run.turns + 6;
+      next.guild.uses++; next.guild.readyAt = run.turns + (next.effects.powerRecharge || 6);
       if (run.guild.kit === 'bellrunner') {
         const cells = pulseCells(run, canEnter);
-        for (const hunter of next.hunters) if (cells.some(cell => same(cell, hunter))) hunter.dazedUntil = run.turns + 2;
-      } else if (run.guild.kit === 'mistweaver') next.guild.veilUntil = run.turns + 4;
-      else next.guild.echo = { x: next.player.x, y: next.player.y, until: run.turns + 7 };
+        for (const hunter of next.hunters) if (cells.some(cell => same(cell, hunter))) hunter.dazedUntil = run.turns + (next.effects.pulseTurns || 2);
+        if(next.effects.pulseWard)next.ward=Math.max(next.ward,next.effects.pulseWard);
+      } else if (run.guild.kit === 'mistweaver') next.guild.veilUntil = run.turns + (next.effects.veilTurns || 4);
+      else next.guild.echo = { x: next.player.x, y: next.player.y, until: run.turns + (next.effects.echoTurns || 6) + 1 };
       next.events.push({ type: run.guild.kit === 'bellrunner' ? 'pulse' : run.guild.kit === 'mistweaver' ? 'veil' : 'echo', ...next.player });
     }
   } else if (interaction?.kind === 'waystone') {
@@ -356,10 +361,10 @@ export function stepRun(run, action) {
   const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const messages = { hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
-    pulse: 'Resonance pulse! Hunters within four reachable steps halt for this turn and the next. Contact and fire still hurt.',
+    pulse: next.effects.powerRecharge ? `Resonance pulse! Nearby hunters halt for ${next.effects.pulseTurns} turns.${next.effects.pulseWard ? ' A two-turn ward protects you too.' : ' Contact and fire still hurt.'}` : 'Resonance pulse! Hunters within four reachable steps halt for this turn and the next. Contact and fire still hurt.',
     veil: 'Mist veil raised. Existing enemy plans still resolve; move away from their last lead. Cargo and alarms reveal you.',
-    echo: 'Double cast! Six more turns to lure hunters or hold a plate. B returns to it for one energy. Check Plan before returning.',
-    'echo-return': 'Returned to your double. One energy spent; the double dissolves and enemies take their turn.',
+    echo: next.effects.echoTurns ? `Double cast! ${next.effects.echoTurns} more turns to lure hunters or hold a plate. Returning costs ${next.effects.returnEnergy} energy. Check Plan before returning.` : 'Double cast! Six more turns to lure hunters or hold a plate. B returns to it for one energy. Check Plan before returning.',
+    'echo-return': next.effects.returnEnergy ? `Returned to your double. ${next.effects.returnEnergy} energy spent; the double dissolves.${next.effects.returnWard?' A two-turn ward protects this landing.':' Enemies take their turn.'}` : 'Returned to your double. One energy spent; the double dissolves and enemies take their turn.',
     'echo-fade': 'Your double has faded or a hunter reached it. Check pressure crossings before moving.',
     waystone: `Waystone crossed to ${event?.name}. One energy spent; enemies moved once.`,
     'blocked-hit': 'Your shield absorbs the hit. Keep moving before it fades.',

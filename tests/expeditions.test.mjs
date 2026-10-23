@@ -71,7 +71,7 @@ test('courier relics can be carried, dropped as audible distractions, reclaimed,
 });
 
 test('all eight camp upgrades have their advertised mechanical effects and respect resource caps', () => {
-  assert.equal(PERKS.length, 8); assert.throws(() => perkEffects(['unknown'])); assert.throws(() => perkEffects(['quiet', 'quiet']));
+  assert.equal(PERKS.filter(perk=>!perk.kit).length, 8); assert.throws(() => perkEffects(['unknown'])); assert.throws(() => perkEffects(['quiet', 'quiet']));
   const quiet = stepRun(createRun(definition(), { perks: ['quiet'] }), 'dash-right'); assert.equal(quiet.noise, 1);
   const charge = createRun(definition(), { perks: ['charge'] }); assert.equal(stepRun({ ...charge, energy: 0 }, 'wait').energy, 2);
   const ward = stepRun(createRun(definition(), { perks: ['ward'] }), 'shield'); assert.equal(ward.ward, 4);

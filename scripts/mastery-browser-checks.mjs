@@ -8,7 +8,7 @@ import { chooseOption, clickControl } from './ui-driver.mjs';
 
 const alternate=JSON.parse(await readFile(new URL('../tests/fixtures/foundry-alternate.json',import.meta.url),'utf8'));
 const saved=page=>page.evaluate(key=>localStorage.getItem(key),MASTERY_KEY);
-const others=page=>page.evaluate(key=>JSON.stringify(Object.entries(localStorage).filter(([id])=>id!==key&&id!=='tilewright.workshop.bests.v1').sort()),MASTERY_KEY);
+const others=page=>page.evaluate(key=>JSON.stringify(Object.entries(localStorage).filter(([id])=>id!==key&&!['tilewright.workshop.bests.v1','tilewright.route.reviews.v1','tilewright.village.memories.v1'].includes(id)).sort()),MASTERY_KEY);
 async function lab(page){await page.locator('#title-workshop').click();await page.locator('#ws-tab-lab').click();}
 async function select(page,id,rules='trail'){
   await page.locator(`[data-lab-collection="${LAB_ROOMS.find(room=>room.id===id).afterhours?'afterhours':'foundations'}"]`).click();if(await page.locator('#ws-lab-room-picker-control').isVisible())await chooseOption(page,'#ws-lab-room-picker',id);else await page.locator(`[data-lab-room="${id}"]`).click();await chooseOption(page,'#ws-lab-rules',rules);

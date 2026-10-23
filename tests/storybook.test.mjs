@@ -12,7 +12,7 @@ const book = () => normalizeBook({ title: 'Letters across the creek', author: 'A
 const memoryStorage = () => { const values = new Map(); return { getItem: key => values.get(key) || null, setItem: (key,value) => values.set(key,value), values }; };
 function winChapter(session, actions) { return actions.reduce(stepRun, createRun(bookStage(session), { difficulty: session.difficulty })); }
 
-for (const featured of featuredBooks()) for (const difficulty of ['trail','nemesis']) test(`${featured.title}: full ${difficulty} book, camps, optional honors, portable checkpoint`, () => {
+for (const featured of featuredBooks().filter(book=>!book.chapters.some(chapter=>chapter.routes))) for (const difficulty of ['trail','nemesis']) test(`${featured.title}: full ${difficulty} book, camps, optional honors, portable checkpoint`, () => {
   const storage = memoryStorage(); let session = beginBook(parseBook(serializeBook(featured)),difficulty);
   for (const chapter of featured.chapters) {
     session = chooseChapter(session,'clean'); const before = structuredClone(session), run = winChapter(session,chapter.world.proof.actions);
@@ -40,7 +40,7 @@ test('book files enforce chapter count, format, text, terrain, total bytes, and 
   const good = book();
   for (const chapters of [[],good.chapters.slice(0,1),Array(7).fill(good.chapters[0])]) assert.throws(()=>normalizeBook({...good,chapters}),/two|six/);
   for (const field of ['title','author','synopsis','ending']) assert.throws(()=>normalizeBook({...good,[field]:'x'.repeat(900)}),/characters/);
-  assert.throws(()=>parseBook('broken'),/JSON/); assert.throws(()=>parseBook(' '.repeat(MAX_BOOK_BYTES+1)),/1.6 MB/); assert.throws(()=>parseBook(JSON.stringify({...good,version:2})),/storybook/);
+  assert.throws(()=>parseBook('broken'),/JSON/); assert.throws(()=>parseBook(' '.repeat(MAX_BOOK_BYTES+1)),/1.6 MB/); assert.throws(()=>parseBook(JSON.stringify({...good,version:3})),/storybook/);
   const encoded = JSON.parse(serializeBook(good)); encoded.chapters[0].world.map.layers[0].runs=[1,1_000_000]; assert.throws(()=>parseBook(JSON.stringify(encoded)),/bounds/);
   assert.throws(()=>normalizeBook({...good,chapters:[{world:{...good.chapters[0].world,markers:[]}},good.chapters[1]]}),/starting point|lantern/);
   assert.throws(()=>beginBook(good,'impossible'),/Trail/);

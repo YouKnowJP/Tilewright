@@ -1,5 +1,6 @@
 import { createDocument } from './model.mjs';
 import { VOWS } from './adventure-perks.mjs';
+import { GUILD_KITS } from './adventure-tools.mjs';
 export const BIOMES = Object.freeze([
   { id: 'woodland', name: 'Foxglove Wood', ground: 2, wall: 7, floor: 1 },
   { id: 'marsh', name: 'Rainmoss Fen', ground: 3, wall: 0, floor: 2 },
@@ -35,7 +36,8 @@ export function expeditionConfig(input = {}) {
   const vow = mode === 'daily' ? 'none' : input.vow ?? 'none';
   if (!['trail', 'nemesis'].includes(difficulty) || !VOWS.some(item => item.id === vow)) throw new Error('Choose known expedition rules and an oath.');
   if (mode === 'daily' && (!/^daily-\d{4}-\d{2}-\d{2}$/.test(seed) || !Number.isFinite(new Date(seed.slice(6)).valueOf()) || new Date(seed.slice(6)).toISOString().slice(0, 10) !== seed.slice(6))) throw new Error('Daily trails use a UTC date seed.');
-  return { mode, seed, length, difficulty, vow };
+  if (input.kit !== undefined && input.kit !== 'none' && !GUILD_KITS.some(kit=>kit.id===input.kit)) throw Error('Choose a known expedition specialist.');
+  return { mode, seed, length, difficulty, vow, ...(mode !== 'daily' && input.kit && input.kit !== 'none' ? {kit:input.kit} : {}) };
 }
 export function routePreview(config, leg, path) {
   const random = randomFor(`${config.seed}|${leg}|${path}|preview`);

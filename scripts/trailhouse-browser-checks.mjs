@@ -10,7 +10,7 @@ import { chooseOption, clickControl } from './ui-driver.mjs';
 const alternate=new Set(['own-crossing','shore-shells','lasting-memory','paper-stars']);
 const route=job=>alternate.has(job.id)?STORY_ALTERNATIVES[job.world]:STORY_CLEARS[job.world].actions;
 const saved=page=>page.evaluate(key=>localStorage.getItem(key),TRAILHOUSE_KEY);
-const others=page=>page.evaluate(key=>JSON.stringify(Object.entries(localStorage).filter(([name])=>name!==key).sort()),TRAILHOUSE_KEY);
+const others=page=>page.evaluate(key=>JSON.stringify(Object.entries(localStorage).filter(([name])=>name!==key&&!['tilewright.route.reviews.v1','tilewright.village.memories.v1'].includes(name)).sort()),TRAILHOUSE_KEY);
 async function home(page){await page.locator('#title-trailhouse').click();await page.locator('#ws-house').waitFor();}
 async function accept(page,job,rules='trail'){await page.locator('#house-tab-commissions').click();await chooseOption(page,'#house-job',job.id);await chooseOption(page,'#house-rules',rules);await page.locator('#house-play').click();await page.locator('#game-layout').waitFor();}
 async function finish(page,actions,touch=false){await playGuild(page,actions,touch);assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');assert.equal(await page.locator('#game-primary').textContent(),'Return to the Trailhouse');await page.locator('#game-primary').click();}

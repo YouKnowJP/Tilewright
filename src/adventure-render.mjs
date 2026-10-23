@@ -197,10 +197,11 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
       ctx.strokeStyle = hunter.mode === 'distracted' ? '#84d3c5' : '#e18d82'; ctx.lineWidth = 2; ctx.setLineDash([3, 2]);
       ctx.strokeRect(hunter.intent.x * 24 + 2, hunter.intent.y * 24 + 2, 20, 20); ctx.setLineDash([]);
       circle('#37364955', x + 12, y + 21, 10);
-      rect(hunter.boss ? '#654b77' : '#526580', x + 3, y + 9, 18, 12);
-      rect(hunter.boss ? '#a384b0' : '#8ba3ad', x + 5, y + 5, 14, 12);
+      rect(hunter.rival ? '#695174' : hunter.boss ? '#654b77' : '#526580', x + 3, y + 9, 18, 12);
+      rect(hunter.rival ? '#c1a0bb' : hunter.boss ? '#a384b0' : '#8ba3ad', x + 5, y + 5, 14, 12);
       rect('#f8d3a4', x + 7, y + 11, 3, 3); rect('#f8d3a4', x + 15, y + 11, 3, 3);
       rect('#403d50', x + 8, y + 12, 2, 2); rect('#403d50', x + 16, y + 12, 2, 2);
+      if (hunter.rival) { rect('#f0cd85',x+2,y+2,4,9);rect('#f0cd85',x+18,y+2,4,9);rect('#ffe8b0',x+10,y+18,5,3); }
       if (hunter.boss) {
         rect('#deb975', x + 5, y + 1, 14, 5);
         for (let i = 0; i < hunter.phase; i++) rect('#fff0bc', x + 6 + i * 5, y - 2, 3, 5);

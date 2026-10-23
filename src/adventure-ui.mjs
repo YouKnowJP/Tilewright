@@ -1,3 +1,5 @@
+import { createReviewUI } from './adventure-review-ui.mjs';
+import { rememberTrail } from './trail-memories.mjs';
 import { controlDropdown } from './game-dropdowns.mjs';
 import { CONTROL_STYLES, movementKey, controlHelp } from './adventure-controls.mjs';
 import { createMapInput, createGamepadInput } from './adventure-input.mjs';
@@ -39,7 +41,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;
   let rewind=null,checkpointFailed=false,checkpointError='',restoring=false,restoreToken=0;
-  const savedTrail=loadTrail(storage);
+  const savedTrail=loadTrail(storage), reviews=createReviewUI({storage});
   let selectedChapter = 0, libraryTab = 'story';
   const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(max-width: 1000px)');
   const libraryOpen = () => !$('#adventure-library').hidden;
@@ -329,7 +331,8 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     const theme = themeFor(stage), book = workshop.bookStatus(run), house = workshop.trailhouseStatus(run), lab = workshop.labStatus(run);
     $('#game-map-legend').textContent = run.guild ? 'Gold is you; turquoise is the beacon. Purple squares are waystones; white outlines are wheels and bells. A pale blue double marks your return point.' : 'Gold is you. Turquoise is the beacon. Outlined squares are discovered wheels and bells.';
     $('.game-main').style.setProperty('--region-color', theme.dark);
-    $('#game-region').textContent = house ? `The Trailhouse / ${house.keeper}` : book ? stage.workshop.storybook.title : stage.workshop ? `${theme.place} / ${stage.workshop.practice ? 'Practice run' : 'Player adventure'} / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
+    const journey = expeditions?.session;
+    $('#game-region').textContent = journey ? `Seeded expedition / ${kitFor(run)?.name||'Wayfarer'}` : house ? `The Trailhouse / ${house.keeper}` : book ? stage.workshop.storybook.title : stage.workshop ? `${theme.place} / ${stage.workshop.practice ? 'Practice run' : 'Player adventure'} / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
     document.body.classList.toggle('guild-active', Boolean(run.guild));
     $('#game-power').hidden = !run.guild; $('#game-guild-kit').hidden = !run.guild;
     if (run.guild) {
@@ -338,21 +341,21 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       $('#game-power').textContent = echo ? `Return · ${echo.until - run.turns}` : `${kit.id === 'bellrunner' ? 'Pulse' : kit.id === 'mistweaver' ? 'Veil' : 'Double'}${remaining ? ` · ${remaining}` : ' · B'}`;
       $('#game-power').disabled = Boolean(problem) || paused || run.status !== 'playing';
       $('#game-power').setAttribute('aria-label', `${kit.power}. ${preview}`);
-      $('#game-guild-description').textContent = `${kit.name}: ${kit.description}`;
+      $('#game-guild-description').textContent = `${kit.name}: ${journey?kit.description.replace(/ Start with more (?:shields|decoys)\./g,''):kit.description}${journey?.perks.some(id=>PERKS.find(perk=>perk.id===id).kit)?' Camp relics change these base values; your exact current power is described below.':''}`;
       $('#game-guild-state').textContent = `${preview} Cast ${run.guild.uses} times. ${run.guild.warps} waystone jumps.${kit.id === 'echoist' ? ` ${run.guild.swaps} double returns.` : ''}${run.guild.veilUntil > run.turns ? ` Veil: ${run.guild.veilUntil - run.turns} turns; ${run.carrying || run.alarm ? 'revealed by cargo/alarm' : 'recent leads still persist'}.` : ''}`;
+      $('#game-guild-merits').hidden=Boolean(journey);
       $('#game-guild-merits').replaceChildren(...guildMerits(run).map(merit => {
         const failed = merit.id === 'clean' && run.damage > 0 || merit.id === 'swift' && run.turns > turnTarget(run);
         const entry = Object.assign(document.createElement('p'), { className: failed ? 'merit-missed' : '', textContent: `${merit.label}${merit.done ? ' — earned' : failed ? ' — missed' : ''}` });
         entry.dataset.earned = String(merit.done); return entry;
       }));
     }
-    $('#game-guild-kit > p:last-child').textContent = stage.workshop?.practice ? 'Practise with this toolkit freely. This attempt cannot record honors, bests, or a creator clear.' : stage.workshop ? 'Optional specialist goals apply to this attempt. Stars and bests save for this world version and rule set.' : 'Finish the job to record commendations. They never block the exit. Bests are separate for each specialist and rule set.';
+    $('#game-guild-kit > p:last-child').textContent = journey ? 'Specialist powers and camp relics shape this expedition. Your build and supplies carry between legs.' : stage.workshop?.practice ? 'Practise with this toolkit freely. This attempt cannot record honors, bests, or a creator clear.' : stage.workshop ? 'Optional specialist goals apply to this attempt. Stars and bests save for this world version and rule set.' : 'Finish the job to record commendations. They never block the exit. Bests are separate for each specialist and rule set.';
     $('#game-rule-note').hidden = !stage.restrictions.noDash && !stage.restrictions.noShield && !stage.requireCoins;
     $('#game-rule-note').textContent = [stage.restrictions.noDash ? 'Walking only: dash is disabled.' : '', stage.restrictions.noShield ? 'Unwarded: shields are disabled.' : '', stage.requireCoins ? 'Recover every coin before leaving.' : ''].filter(Boolean).join(' ');
     $('#game-title').textContent = stage.name;
-    $('#game-choose').textContent = house ? 'Trailhouse' : book ? 'Storybooks' : stage.workshop ? workshop.returnSection === 'build' ? 'Designer' : workshop.returnSection === 'lab' ? 'Puzzle Lab' : 'Player worlds' : 'Trails';
+    $('#game-choose').textContent = journey ? 'Expeditions' : house ? 'Trailhouse' : book ? 'Storybooks' : stage.workshop ? workshop.returnSection === 'build' ? 'Designer' : workshop.returnSection === 'lab' ? 'Puzzle Lab' : 'Player worlds' : 'Trails';
     $('#game-sound').textContent = sound.enabled ? 'Sound on' : 'Sound off'; $('#game-sound').setAttribute('aria-pressed', String(sound.enabled));
-    const journey = expeditions?.session;
     $('#game-difficulty').disabled = Boolean(journey || (book || house) && !libraryOpen());
     $('#game-book-banner').hidden = !(book || house || lab);
     if(book || house || lab) { const activity=house||book||lab; $('#game-book-banner').textContent = `${activity.name} · ${activity.detail}`; $('#game-book-banner').dataset.missed = String(!activity.condition); }
@@ -361,13 +364,13 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if (journey) {
       const oath = VOWS.find(item => item.id === journey.config.vow);
       $('#game-expedition-banner').textContent = `Leg ${journey.leg + 1}/${journey.config.length} · ${journey.config.seed} · ${oath.name} · ${journeyScore(journey)} points · ${journey.retries} retries`;
-      $('#game-perks').replaceChildren(...(journey.perks.length ? journey.perks.map(id => PERKS.find(perk => perk.id === id).name) : ['Your first camp upgrade awaits.']).map(text => Object.assign(document.createElement('p'), { textContent: text })));
+      $('#game-perks').replaceChildren(...(journey.perks.length ? journey.perks.map(id => {const perk=PERKS.find(perk=>perk.id===id);return `${perk.name} · ${perk.description}`;}) : ['Your first camp upgrade awaits.']).map(text => Object.assign(document.createElement('p'), { textContent: text })));
       $('#game-expedition-earned').textContent = expeditions.earned.length ? `New logbook badges: ${expeditions.earned.length}. View them in the expedition hub.` : expeditions.checkpointFailed ? 'Checkpoint unavailable. Export a backup from the hub to keep this run.' : 'Checkpoint saved after each turn. Export a backup from the expedition hub.';
     }
     $('#game-cargo').hidden = !stage.relic; $('#game-cargo').disabled = !run.carrying || paused || run.status !== 'playing';
     $('#game-cargo').textContent = run.cargoDelivered ? 'Relic delivered' : run.carrying ? 'Set relic down (X)' : 'Relic on trail';
     $('#game-restart').disabled = Boolean(journey && ['camp', 'won'].includes(journey.phase) || (book || house) && run.status === 'won');
-    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : house ? (stage.workshop.trailhouse.festival ? 'Lantern festival' : 'Keeper commission') : book ? `Chapter ${stage.workshop.storybook.chapter+1}/${stage.workshop.storybook.length}` : stage.workshop ? 'Adventure Workshop' : run.guild ? stage.subtitle : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
+    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : house ? (stage.workshop.trailhouse.festival ? 'Lantern festival' : 'Keeper commission') : book ? stage.workshop.storybook.page?`Page ${stage.workshop.storybook.page} / branching story`:`Chapter ${stage.workshop.storybook.chapter+1}/${stage.workshop.storybook.length}` : stage.workshop ? 'Adventure Workshop' : run.guild ? stage.subtitle : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
     $('#game-story').textContent = stage.intro;
     $('#game-lanterns').textContent = `${run.collectedLanterns.length}/${stage.lanterns.length}`;
     $('#game-turns').textContent = run.turns;
@@ -398,7 +401,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#game-learning').textContent = memorySummary(run.memory);
     const boss = run.hunters.find(hunter => hunter.boss);
     const cover = stage.cover.some(p => p.x === run.player.x && p.y === run.player.y);
-    $('#game-threat').textContent = `${boss ? `Watcher phase ${boss.phase}/3 · ${boss.mode}. ` : run.hunters.length ? `${run.hunters.length} adaptive ${run.hunters.length === 1 ? 'hunter' : 'hunters'} on this trail. ` : 'Patrols follow fixed routes on Trail rules. '}${run.alarm ? `Alarm: ${run.alarm} turns. ` : ''}${run.ward ? `Shield: ${run.ward} turns. ` : ''}${cover ? run.noise ? 'In cover, but still audible.' : 'In fern cover: distant hunters cannot see you.' : run.carrying ? 'Your relic is singing: hunters can hear you.' : run.noise ? 'Your dash can still be heard.' : 'Walk quietly; hunters need sight, sound, or a recent lead.'}`;
+    $('#game-threat').textContent = `${run.hunters.find(hunter=>hunter.tactic)?.tactic.line||''} ${boss ? `Watcher phase ${boss.phase}/3 · ${boss.mode}. ` : run.hunters.length ? `${run.hunters.length} adaptive ${run.hunters.length === 1 ? 'hunter' : 'hunters'} on this trail. ` : 'Patrols follow fixed routes on Trail rules. '}${run.alarm ? `Alarm: ${run.alarm} turns. ` : ''}${run.ward ? `Shield: ${run.ward} turns. ` : ''}${cover ? run.noise ? 'In cover, but still audible.' : 'In fern cover: distant hunters cannot see you.' : run.carrying ? 'Your relic is singing: hunters can hear you.' : run.noise ? 'Your dash can still be heard.' : 'Walk quietly; hunters need sight, sound, or a recent lead.'}`;
     $('#forget-habits').disabled = Boolean(stage.workshop);
     $('#game-learning-save').textContent = stage.workshop ? 'Hunters learn during this adventure. Every restart begins with fresh habits, so shared routes can be replayed fairly.' : journey ? 'This expedition keeps its own learned movement history. Campaign memory is retained separately.' : memorySaveFailed ? 'Learning is available for this session; browser saving is unavailable.' : 'Movement habits stay in this browser. Forget them at any time.';
     const entries = stage.npcs.filter(npc => run.talkedTo.includes(npc.id)).map(npc => `${npc.name}: ${run.rescued.includes(npc.id) && npc.after ? npc.after : Object.hasOwn(run.choices, npc.id) ? npc.choices.find(choice => choice.id === run.choices[npc.id]).response : npc.lines.join(' ')}`);
@@ -440,7 +443,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#game-best').textContent = journey ? 'View expedition bests and badges in the logbook.' : best ? `${run.guild && !stage.workshop ? `${best.merits}/3 commendations` : '★'.repeat(best.stars)} · ${best.score} points · ${best.turns} turns` : 'No finish yet. Your first adventure starts here.';
     $('#game-save-note').textContent = journey ? expeditions.checkpointFailed ? 'Checkpoint unavailable. Keep this tab open or export an expedition backup.' : 'Expedition checkpoint saved. Campaign maps, bests, and learned habits are kept separately.' : saveFailed ? 'Browser saving is unavailable. Unlocks and bests remain available for this session. Your editor map is untouched.'
       : 'Adventure bests are kept in this browser. Playing never changes your editor map or its undo history.';
-    if (run.guild) $('#game-save-note').textContent = guildSaveFailed ? 'Guild saving unavailable. Results remain available for this session.' : 'Guild bests save on completion, separately for each specialist and rule set.';
+    if (run.guild && !journey) $('#game-save-note').textContent = guildSaveFailed ? 'Guild saving unavailable. Results remain available for this session.' : 'Guild bests save on completion, separately for each specialist and rule set.';
     if (stage.workshop) $('#game-save-note').textContent = workshop.saveFailed ? 'Workshop saving unavailable. Download your adventure to keep a backup.' : 'Player adventure bests and drafts save separately from the story, Guild, and expeditions.';
     if (stage.workshop?.practice) { $('#game-best').textContent = 'Practice attempt · bests and creator clear stay unchanged.'; $('#game-save-note').textContent = 'Practise freely. Only a full Playtest from the original starting point can verify this world.'; }
     if(house) { $('#game-best').textContent='Your commission bests and keepsakes live at the Trailhouse.'; $('#game-save-note').textContent=house.saved?'Completed commissions save to your Trailhouse passport.':'Trailhouse saving unavailable. Keep this tab open and download a passport from the hub.'; }
@@ -473,7 +476,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       $('#game-result-text').textContent = `${journeyScore(journey)} points · ${journey.receipts.length}/${journey.config.length} legs finished · ${journey.retries} retries. ${journey.phase === 'camp' ? 'Supplies carry forward. Choose a camp upgrade and your next route.' : journey.phase === 'won' ? 'Your route and achievements are recorded in the logbook. Try a new seed, oath, or rule set.' : 'Retry from this leg’s checkpoint. Earlier legs and upgrades are retained; hunters remember the attempt.'}`;
       $('#game-primary').textContent = journey.phase === 'camp' ? 'Make camp →' : journey.phase === 'won' ? 'Choose another expedition' : 'Retry this leg';
     }
-    if (run.guild && !paused && result) {
+    if (run.guild && !journey && !paused && result) {
       const merits = guildMerits(run).filter(merit => merit.done).length;
       $('#game-result-eyebrow').textContent = 'GUILD DISPATCH COMPLETE'; $('#game-result-title').textContent = `${merits === 3 ? 'An exemplary dispatch.' : 'A job worth telling.'}`;
       $('#game-result-text').textContent = `${kitFor(run).name} · ${merits}/3 commendations · ${result.score + merits * 150} points · ${result.turns} turns. ${merits < 3 ? 'Try a different route or specialist to earn the remaining commendations.' : 'All optional goals met. Try another specialist or Nemesis for a different run.'}`;
@@ -491,6 +494,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if (result && !paused && (house ? !house.saved : book ? !book.saved : stage.workshop ? workshop.saveFailed : journey ? expeditions.checkpointFailed : run.guild ? guildSaveFailed : saveFailed)) {
       $('#game-result-text').textContent += ' Saving unavailable. Keep this tab open to retain this result.';
     }
+    $('#game-review').hidden=Boolean(run.stage.workshop?.practice)||paused||run.status==='playing'||!reviews.hasRun(run);
     $('#game-nemesis').hidden = Boolean(journey) || paused || run.status !== 'won' || !stage.actFinal || difficulty !== 'trail';
     fitBoard();renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
   }
@@ -522,6 +526,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     dashArmed = false; lastAction = performance.now(); if (run !== before) sound.play(run.events);
     if(run.stage.workshop)workshopActions=rewind.actions;
     if (!run.stage.workshop && run.memory !== memory) { memory = run.memory; memorySaveFailed = !saveMemory(storage, memory); }
+    if(run.status!=='playing'&&before.status==='playing'){reviews.captureTrail(rewind);if(run.status==='won'&&!run.stage.workshop?.practice)rememberTrail(storage,run.rescued);}
     if (run.status === 'won' && before.status !== 'won') {
       if (run.stage.workshop) workshopClearNote = workshop.recordWin(run, workshopActions);
       else if (run.guild) { const saved = saveGuild(storage, guildRecords, run, resultFor(run).score); guildRecords = saved.records; guildSaveFailed = !saved.saved; renderGuild(); }
@@ -602,7 +607,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   $('#forecast-close').addEventListener('click', () => $('#forecast-dialog').close());
   $('#game-choose').addEventListener('click', () => {
     if (run?.stage.workshop) { openWorkshop(run.stage.workshop.trailhouse ? 'house' : run.stage.workshop.storybook ? 'books' : workshop.returnSection); return; }
-    if (run?.guild) { showGuild(); $('#guild-jobs button').focus({ preventScroll: true }); return; }
+    if (run?.guild && !expeditions.session) { showGuild(); $('#guild-jobs button').focus({ preventScroll: true }); return; }
     expeditions.show(expeditions.session ? 'expeditions' : 'story');
     $(expeditions.session ? '#expedition-resume' : '#trail-picker button:not(:disabled)').focus({ preventScroll: true });
   });
@@ -702,6 +707,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     showStatus(text);
     if (libraryOpen()) { $('#library-notice').textContent = text; $('#library-notice').hidden = false; }
   }, onRun(session, newStage) {
+    if(session.run.status!=='playing'&&(newStage||run?.status==='playing'))reviews.captureJourney(session);
     rewind=null;
     run = session.run; difficulty = session.config.difficulty; $('#game-difficulty').value = difficulty;
     if (newStage || !renderer || run.stage.id !== $('#adventure').dataset.stage) {

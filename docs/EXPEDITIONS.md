@@ -4,6 +4,12 @@ Open **Play adventures → Choose your adventure → Expeditions**. All expediti
 available immediately. Story missions and playing your painted map remain
 available in the same game.
 
+Version 0.25 adds **Trail specialist** selection and six matching relics that
+interact with pulse, veil, and double/return powers. See the [build guide](KEEPERS-PROMISE.md#build-an-expedition-toolkit).
+Classic Wayfarer expeditions remain available, and daily trails use the same
+Wayfarer toolkit for everyone. Specialist choices are included in checkpoint
+verification and personal-record identities.
+
 ## Choose a run
 
 | Mode | What to expect |

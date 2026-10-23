@@ -1,12 +1,13 @@
 import { createJourney, advanceJourney, campOffers, leaveCamp, retryLeg, journeyScore, peekJourney, loadJourney, saveJourney, serializeJourney, restoreJourney, journeyUndoFrames } from './adventure-journey.mjs';
 import { dailySeed, expeditionConfig } from './adventure-generator.mjs';
-import { VOWS } from './adventure-perks.mjs';
+import { GUILD_KITS } from './adventure-tools.mjs';
+import { VOWS, PERKS } from './adventure-perks.mjs';
 import { BADGES, loadLogbook, creditJourney, saveLogbook } from './adventure-logbook.mjs';
 
 export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
   const $ = selector => document.querySelector(selector);
   let current = null, book = loadLogbook(storage), saved = peekJourney(storage), saveFailed = false, busy = false;
-  let previousMode = 'journey', customSeed = $('#expedition-seed').value, customRules = { length: '6', difficulty: 'trail', vow: 'none' };
+  let previousMode = 'journey', customSeed = $('#expedition-seed').value, customRules = { length: '6', difficulty: 'trail', vow: 'none', kit:'none' };
   let latestEarned = [];
   let undoFrames=[];
   function campScrollNote() {
@@ -40,7 +41,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
       item.append(Object.assign(document.createElement('strong'), { textContent: badge.name }), Object.assign(document.createElement('span'), { textContent: `${badge.description}${book.badges.includes(badge.id) ? ' — earned' : ''}` })); return item;
     }));
     const records = [...book.records].sort((a, b) => b.score - a.score).slice(0, 6);
-    $('#expedition-bests').replaceChildren(...(records.length ? records.map(record => `${record.config.seed} · ${record.config.length} legs · ${record.config.difficulty} · ${VOWS.find(vow => vow.id === record.config.vow).name}: ${record.score} points, ${record.turns} turns, ${record.retries} retries`)
+    $('#expedition-bests').replaceChildren(...(records.length ? records.map(record => `${record.config.seed} · ${record.config.length} legs · ${record.config.difficulty} · ${GUILD_KITS.find(kit=>kit.id===record.config.kit)?.name||'Wayfarer'} · ${VOWS.find(vow => vow.id === record.config.vow).name}: ${record.score} points, ${record.turns} turns, ${record.retries} retries`)
       : ['Finish an expedition to record a personal best.']).map(text => Object.assign(document.createElement('p'), { textContent: text })));
   }
   function persist(session) {
@@ -57,7 +58,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
   }
   function configFromForm() {
     return expeditionConfig({ mode: $('#expedition-mode').value, seed: $('#expedition-seed').value,
-      length: Number($('#expedition-length').value), difficulty: $('#expedition-difficulty').value, vow: $('#expedition-vow').value });
+      length: Number($('#expedition-length').value), difficulty: $('#expedition-difficulty').value, vow: $('#expedition-vow').value, kit: $('#expedition-kit').value });
   }
   function replacementAllowed() {
     return !(current && current.phase !== 'won') && !(saved.header && saved.header.phase !== 'won') && !(saved.error && !saved.unavailable)
@@ -68,15 +69,16 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
     if (previousMode === 'journey' || previousMode === 'contract') {
       customSeed = $('#expedition-seed').value;
       customRules = { length: previousMode === 'journey' ? $('#expedition-length').value : customRules.length,
-        difficulty: $('#expedition-difficulty').value, vow: $('#expedition-vow').value };
+        difficulty: $('#expedition-difficulty').value, vow: $('#expedition-vow').value, kit:$('#expedition-kit').value };
     }
+    $('#expedition-kit').disabled=mode==='daily'; $('#expedition-kit').value=mode==='daily'?'none':customRules.kit;
     $('#expedition-seed').readOnly = mode === 'daily'; $('#expedition-surprise').disabled = mode === 'daily';
     $('#expedition-length').disabled = mode !== 'journey'; $('#expedition-difficulty').disabled = mode === 'daily'; $('#expedition-vow').disabled = mode === 'daily';
     $('#expedition-seed').value = mode === 'daily' ? dailySeed() : customSeed;
     $('#expedition-length').value = mode === 'daily' ? '5' : mode === 'contract' ? '1' : customRules.length;
     $('#expedition-difficulty').value = mode === 'daily' ? 'trail' : customRules.difficulty;
     $('#expedition-vow').value = mode === 'daily' ? 'none' : customRules.vow;
-    $('#expedition-mode-note').textContent = mode === 'daily' ? 'One UTC date seed, five legs, Trail rules, and no oath. Route and camp choices are yours.'
+    $('#expedition-mode-note').textContent = mode === 'daily' ? 'One UTC date seed, five legs, Trail rules, no oath, and the same Wayfarer kit. Route and camp choices are yours.'
       : mode === 'contract' ? 'A single complete contract on a seeded map. Change the seed for another world.'
         : 'A longer journey with a checkpoint, route choices, camp upgrades, and a final Watcher crossing.';
     previousMode = mode;
@@ -130,7 +132,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
       return label;
     });
     $('#camp-title').textContent = `A fire before leg ${current.leg + 2} of ${current.config.length}`;
-    $('#camp-summary').textContent = `One heart restored before departure. Your supplies carry forward. ${journeyScore(current)} points earned so far.`;
+    $('#camp-summary').textContent = `One heart restored before departure. Your supplies carry forward. ${journeyScore(current)} points earned so far. ${GUILD_KITS.find(kit=>kit.id===current.config.kit)?.name||'Wayfarer'}${current.perks.length?' · '+current.perks.map(id=>PERKS.find(perk=>perk.id===id)?.name||id).join(' / '):''}.`;
     $('#camp-perks').replaceChildren(...choices(offers.perks, 'camp-perk')); $('#camp-routes').replaceChildren(...choices(offers.routes, 'camp-route'));
     $('#camp-error').hidden = true; $('#camp-dialog').showModal(); campScrollNote();
   }

@@ -38,6 +38,7 @@ export function normalizeAdventure(input) {
       channel: CHANNELS.includes(value.channel) ? value.channel : 'amber', order: integer(value.order ?? 1, 1, 8, 'Bell order'),
       initial: value.initial === true, required: value.required === true, reward: ['advice', 'supplies', 'route'].includes(value.reward) ? value.reward : 'advice',
       nemesisOnly: value.nemesisOnly === true, vision: integer(value.vision ?? 6, 3, 10, 'Hunter vision'), offset: integer(value.offset ?? 0, 0, 3, 'Ember offset') };
+    if (value.rival === 'listener' && ['hunter','watcher'].includes(item.kind)) item.rival = 'listener';
     if (['patrol', 'hunter', 'watcher'].includes(item.kind)) {
       if (!Array.isArray(value.route) || value.route.length > 24) throw Error('Threat routes support up to 24 waypoints.');
       item.route = value.route.map(p => point(p, map));
@@ -125,7 +126,7 @@ export function adventureStage(input) {
     crates: by('crate').map(position), plates: by('plate').map(position), gates, switches, relays, sequence: relays.map(item => item.id),
     requiredSwitches: by('lever').filter(item => item.required).map(item => item.id), requiredRescues: by('rescue').map(item => item.id), npcs,
     supplies: by('supplies').map(position), cover: by('fern').map(position), hazards, optionalPlates: true,
-    enemies: by('patrol').map(item => ({ id: item.id, route: item.route })), hunters: [...by('hunter'), ...by('watcher')].map(item => ({ id: item.id, route: item.route, vision: item.vision, nemesisOnly: item.nemesisOnly, boss: item.kind === 'watcher' })),
+    enemies: by('patrol').map(item => ({ id: item.id, route: item.route })), hunters: [...by('hunter'), ...by('watcher')].map(item => ({ id: item.id, route: item.route, vision: item.vision, nemesisOnly: item.nemesisOnly, boss: item.kind === 'watcher', ...(item.rival ? {rival:item.rival,name:item.name || 'Vesper, the Listener'} : {}) })),
     restrictions: { noDash: pack.rules.noDash, noShield: pack.rules.noShield }, requireCoins: pack.rules.allCoins,
     relic: by('relic')[0] ? { ...position(by('relic')[0]), name: by('relic')[0].name || 'Singing relic' } : null,
     delivery: by('relic').length ? position(by('beacon')[0]) : null, workshop: { key: adventureKey(pack), author: pack.author, source: pack.source } };

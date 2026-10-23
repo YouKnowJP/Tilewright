@@ -1,3 +1,4 @@
+import { captureAssembly, pasteAssembly, loadAssemblies, saveAssemblies, MAX_ASSEMBLIES } from './workshop-assemblies.mjs';
 import { History, TILES, paintCells, floodCells, rectangleCells, lineCells } from './model.mjs';
 import { OBJECTS, CHANNELS, normalizeAdventure, editAdventure, placeObject, checkAdventure, applyStamp } from './workshop-model.mjs';
 import { CHAPTERS } from './adventure-art.mjs';
@@ -6,9 +7,10 @@ import { drawTile } from './render.mjs';
 import { drawWorkshopWorld, drawWorkshopObject } from './workshop-art.mjs';
 import { transformAdventure } from './workshop-lab.mjs';
 
-export function createWorkshopDesigner({ initial, onChange, notice }) {
+export function createWorkshopDesigner({ storage, initial, onChange, notice }) {
   const $ = id => document.getElementById(`ws-${id}`), canvas = $('canvas'), viewport = $('viewport');
   let history = new History(initial, 30), selected = null, cursor = { x: 0, y: 0 }, brush = { type: 'inspect', name: 'Inspect' };
+  const loadedAssemblies=loadAssemblies(storage);let assemblies=loadedAssemblies.items,area=null;
   let stroke = null, route = false, group = 'Goals', formDirty = false, objectDirty = false, keyboardCorner = null;
   for(const [id,icon,label]of [['brush','brush','Brushes'],['inspect-tool','pick','Inspect object'],['erase-tool','erase','Erase object'],['pan-tool','pan','Pan world'],['undo','undo','Undo'],['redo','redo','Redo']]){const b=$(id);b.replaceChildren(createIcon(icon));if(['brush','inspect-tool','erase-tool','pan-tool'].includes(id)){const span=document.createElement('span');span.textContent={brush:'Brushes','inspect-tool':'Inspect','erase-tool':'Erase','pan-tool':'Pan'}[id];b.append(span);}b.setAttribute('aria-label',label);b.title=label;}
   const compact = matchMedia('(max-width:1000px)'), inspector = $('inspector'), host = inspector.parentElement;
@@ -45,6 +47,7 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
     const item = pack().markers.find(m => m.id === selected); selected = item?.id || null;
     $('object-empty').hidden = Boolean(item); $('object-fields').hidden = !item; objectDirty = false;
     if (!item) return;
+    $('object-rival').value = item.rival || 'none';
     $('object-kind').textContent = OBJECTS.find(o => o.id === item.kind).name + ` · ${item.x + 1}, ${item.y + 1}`;
     for (const id of ['name', 'text', 'channel', 'order', 'reward', 'vision', 'offset']) $('object-' + id).value = item[id];
     for (const [id, key] of [['initial', 'initial'], ['required', 'required'], ['nemesis', 'nemesisOnly']]) $('object-' + id).checked = item[key];
@@ -67,6 +70,7 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
   function draw() {
     if ($('build').hidden) return;
     drawWorkshopWorld(canvas, stroke?.next || pack(), { selected, cursor, grid: true });
+    if(area&&brush.type==='capture'){const ctx=canvas.getContext('2d');ctx.fillStyle='#e9c67b33';ctx.strokeStyle='#ffe2a0';ctx.lineWidth=2;ctx.fillRect(area.x*24,area.y*24,area.width*24,area.height*24);ctx.strokeRect(area.x*24+1,area.y*24+1,area.width*24-2,area.height*24-2);}
     const preview=$('active-brush').getContext('2d');preview.clearRect(0,0,24,24);if(brush.type==='terrain')drawTile(preview,brush.id,0,0);else if(brush.type==='object')drawWorkshopObject(preview,{x:0,y:0,kind:brush.id});else{preview.strokeStyle='#e7d29c';preview.lineWidth=2;preview.strokeRect(5,5,14,14);}
     document.querySelectorAll('[data-ws-quick]').forEach(button=>button.setAttribute('aria-pressed',String(`${brush.type}:${brush.id}`===button.dataset.wsQuick)));
     $('position').textContent = `${cursor.x + 1}, ${cursor.y + 1}`;
@@ -104,7 +108,7 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
   }
   function readObject() {
     if (!$('props-object').reportValidity()) throw Error('Complete the selected object’s details.');
-    return { name: $('object-name').value, text: $('object-text').value, channel: $('object-channel').value, reward: $('object-reward').value,
+    return { rival: $('object-rival').value, name: $('object-name').value, text: $('object-text').value, channel: $('object-channel').value, reward: $('object-reward').value,
       order: Number($('object-order').value), vision: Number($('object-vision').value), offset: Number($('object-offset').value),
       initial: $('object-initial').checked, required: $('object-required').checked, nemesisOnly: $('object-nemesis').checked };
   }
@@ -141,6 +145,7 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
   $('route-finish').onclick = () => { route = false; populateObject(); draw(); };
   function at(event) { const r = canvas.getBoundingClientRect(); return { x: Math.max(0, Math.min(pack().map.width - 1, Math.floor((event.clientX - r.left) / r.width * pack().map.width))), y: Math.max(0, Math.min(pack().map.height - 1, Math.floor((event.clientY - r.top) / r.height * pack().map.height))) }; }
   function operation(base, p, start = p) {
+    if(brush.type==='capture'){area={x:Math.min(start.x,p.x),y:Math.min(start.y,p.y),width:Math.abs(start.x-p.x)+1,height:Math.abs(start.y-p.y)+1};return base;}
     if (brush.type === 'erase') return editAdventure(base, { markers: base.markers.filter(m => m.x !== p.x || m.y !== p.y) });
     if (brush.type === 'object') return placeObject(base, brush.id, p.x, p.y);
     if (brush.type === 'stamp') return applyStamp(base, brush.id, p.x, p.y);
@@ -176,17 +181,40 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
     if (brush.type === 'terrain' && $('paint-mode').value === 'brush') { stroke.next = editAdventure(stroke.next, { map:paintCells(stroke.next.map, $('layer').value, lineCells(previous,cursor), brush.id) }); draw(); return; }
     stroke.next = operation(brush.type === 'terrain' && $('paint-mode').value === 'rectangle' ? stroke.base : stroke.next, cursor, stroke.start); draw();
   }));
-  function finish(cancel = false) { if (!stroke) return; const old = stroke; stroke = null; if (canvas.hasPointerCapture(old.id)) canvas.releasePointerCapture(old.id); if (!cancel) commit(old.next); else draw(); }
+  function finish(cancel = false) { if (!stroke) return; const old = stroke; stroke = null; if (canvas.hasPointerCapture(old.id)) canvas.releasePointerCapture(old.id); if (!cancel) { if(brush.type==='capture'){openAssemblies(true);return;} commit(old.next); } else {if(brush.type==='capture')area=null;draw();} }
   canvas.addEventListener('pointerup', () => finish()); canvas.addEventListener('pointercancel', () => finish(true)); canvas.addEventListener('lostpointercapture', () => finish(true));
   canvas.addEventListener('keydown', event => guard(() => {
     const directions = { ArrowUp:[0,-1],ArrowRight:[1,0],ArrowDown:[0,1],ArrowLeft:[-1,0] };
     if (directions[event.key]) { event.preventDefault(); const [dx,dy] = directions[event.key]; cursor = { x:Math.max(0,Math.min(pack().map.width-1,cursor.x+dx)),y:Math.max(0,Math.min(pack().map.height-1,cursor.y+dy)) }; draw(); revealCursor(); }
     else if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); applyForms(); if (route) addRoute(cursor); else if (brush.type === 'inspect') select(cursor); else if (brush.type !== 'pan') {
-      if (brush.type === 'terrain' && $('paint-mode').value === 'rectangle' && !keyboardCorner) { keyboardCorner = { ...cursor }; notice('First corner set. Move to the opposite corner and press Space.'); }
-      else { commit(operation(pack(), cursor, keyboardCorner || cursor)); keyboardCorner = null; }
-    } } else if (event.key === 'Escape') { finish(true); keyboardCorner = null; route = false; populateObject(); draw(); }
+      if ((brush.type === 'capture' || brush.type === 'terrain' && $('paint-mode').value === 'rectangle') && !keyboardCorner) { keyboardCorner = { ...cursor }; notice('First corner set. Move to the opposite corner and press Space.'); }
+      else { commit(operation(pack(), cursor, keyboardCorner || cursor)); keyboardCorner = null; if(brush.type==='capture')openAssemblies(true); }
+    } } else if (event.key === 'Escape') { finish(true); keyboardCorner = null; route = false; if(brush.type==='capture'){area=null;brush={type:'inspect',name:'Inspect'};} populateObject(); draw(); }
     else if (event.key === 'Delete' && selected) { event.preventDefault(); $('delete-object').click(); }
   }));
+  function assemblyNote(text,error=false){$('assembly-notice').textContent=text;$('assembly-notice').dataset.error=String(error);}
+  function assemblyGuard(fn){try{return fn();}catch(error){assemblyNote(error.message,true);return false;}}
+  function openAssemblies(captured=false){
+    applyForms();const b=area||{...cursor,width:Math.min(3,pack().map.width-cursor.x),height:Math.min(3,pack().map.height-cursor.y)};
+    for(const [id,value] of [['x',b.x+1],['y',b.y+1],['width',b.width],['height',b.height]])$('assembly-'+id).value=value;
+    $('assembly-x').max=pack().map.width;$('assembly-y').max=pack().map.height;
+    $('assembly-position').textContent=`Place at column ${cursor.x+1}, row ${cursor.y+1}. Move the map cursor before opening assemblies to change this position.`;
+    $('assembly-items').replaceChildren(...assemblies.map((assembly,index)=>{
+      const card=document.createElement('article'),title=document.createElement('h3'),detail=document.createElement('p'),place=document.createElement('button'),remove=document.createElement('button'),art=document.createElement('canvas');
+      title.textContent=assembly.name;detail.textContent=`${assembly.map.width} × ${assembly.map.height} · ${assembly.markers.length} objects`;
+      const ctx=art.getContext('2d');art.width=assembly.map.width*12;art.height=assembly.map.height*12;ctx.scale(.5,.5);for(const layer of assembly.map.layers)if(layer.visible)layer.tiles.forEach((tile,i)=>drawTile(ctx,tile,i%assembly.map.width*24,Math.floor(i/assembly.map.width)*24));for(const item of assembly.markers)drawWorkshopObject(ctx,item);art.setAttribute('aria-hidden','true');
+      place.textContent='Place at cursor';place.onclick=()=>assemblyGuard(()=>{commit(pasteAssembly(pack(),assembly,cursor,Number($('assembly-rotation').value)));$('assemblies-dialog').close();setBrush({type:'inspect',name:'Inspect'});notice('Assembly placed with fresh object IDs and independent puzzle channels. Undo restores the whole placement.');canvas.focus({preventScroll:true});});
+      remove.textContent='Remove';remove.onclick=()=>{if(!confirm(`Remove the saved assembly “${assembly.name}”? Placed copies stay in their worlds.`))return;assemblies=assemblies.filter((_,i)=>i!==index);const ok=saveAssemblies(storage,assemblies);openAssemblies();assemblyNote(ok?'Assembly removed.':'Removed for this visit; saving is unavailable.',!ok);};card.append(art,title,detail,place,remove);return card;
+    }));
+    if(!assemblies.length)$('assembly-items').textContent='Your reusable puzzles will appear here. Capture a small area to begin.';
+    assemblyNote(loadedAssemblies.failed?'Saved assemblies could not be read. Your world draft is safe.':`${assemblies.length}/${MAX_ASSEMBLIES} personal assemblies · included in journey backups`,loadedAssemblies.failed);
+    if(!$('assemblies-dialog').open)$('assemblies-dialog').showModal();
+    if(captured)$('assemblies-dialog').querySelector('details').open=true;
+  }
+  $('assemblies').onclick=()=>guard(openAssemblies);
+  $('assemblies-close').onclick=()=>{$('assemblies-dialog').close();setBrush({type:'inspect',name:'Inspect'});canvas.focus({preventScroll:true});};
+  $('assembly-select').onclick=()=>{$('assemblies-dialog').close();area=null;setBrush({type:'capture',name:'Select assembly · drag an area, or choose two corners with Space'});canvas.focus({preventScroll:true});notice('Drag across the puzzle to capture it. Keyboard: Space sets the first corner; move and press Space again. Include all linked objects and patrol waypoints.');};
+  $('assembly-form').onsubmit=event=>{event.preventDefault();assemblyGuard(()=>{if(assemblies.length>=MAX_ASSEMBLIES)throw Error('All twelve assembly slots are in use. Remove an assembly to make room.');const bounds={x:Number($('assembly-x').value)-1,y:Number($('assembly-y').value)-1,width:Number($('assembly-width').value),height:Number($('assembly-height').value)},assembly=captureAssembly(pack(),bounds,$('assembly-name').value);assemblies=[...assemblies,assembly];const ok=saveAssemblies(storage,assemblies);openAssemblies();$('assemblies-dialog').querySelector('details').open=false;assemblyNote(ok?'Assembly saved. Its linked puzzles receive fresh channels when placed.':'Assembly kept for this visit. Browser saving is unavailable.',!ok);});};
   const quick=[['terrain',1,'Meadow'],['terrain',3,'Water'],['terrain',7,'Trees'],['object','lantern','Light'],['object','guide','Keeper'],['object','crate','Crate'],['object','plate','Plate'],['object','bridge','Bridge']];
   $('quick-brushes').replaceChildren(...quick.map(([type,id,name])=>{const button=document.createElement('button'),art=document.createElement('canvas');art.width=art.height=24;button.dataset.wsQuick=`${type}:${id}`;button.title=name;button.setAttribute('aria-label',`${name} quick brush`);if(type==='terrain')drawTile(art.getContext('2d'),id,0,0);else drawWorkshopObject(art.getContext('2d'),{x:0,y:0,kind:id});button.append(art,document.createTextNode(name));button.onclick=()=>{if(type==='terrain'){$('layer').selectedIndex=id<=6?0:Math.min(1,pack().map.layers.length-1);$('layer-visible').checked=pack().map.layers.find(l=>l.id===$('layer').value).visible;}setBrush({type,id,name});canvas.focus({preventScroll:true});};return button;}));
   new ResizeObserver(resize).observe(viewport);
@@ -196,6 +224,6 @@ export function createWorkshopDesigner({ initial, onChange, notice }) {
     transform(operation) { applyForms(); finish(true); const next = transformAdventure(pack(), operation), point = next.markers.find(marker => marker.id === selected) || next.markers.find(marker => marker.kind === 'start') || { x: 0, y: 0 }; route = false; keyboardCorner = null; cursor = { x: point.x, y: point.y }; commit(next); },
     replace(next) { finish(true); history = new History(normalizeAdventure(next),30); selected=null; route=false; keyboardCorner=null; cursor={x:0,y:0}; refresh(); panel('adventure'); onChange(pack()); },
     attachProof(proof) { history.document = normalizeAdventure({ ...pack(), proof }); onChange(pack()); refresh(); },
-    hide() { finish(true); for (const id of ['inspector-dialog','palette-dialog']) if ($(id).open) $(id).close(); },
+    hide() { finish(true); for (const id of ['inspector-dialog','palette-dialog','assemblies-dialog']) if ($(id).open) $(id).close(); },
   };
 }

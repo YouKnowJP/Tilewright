@@ -13,12 +13,20 @@ The **Adventure Workshop** adds three authored adventures, twelve playable Puzzl
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
-creator for portable two-to-six-chapter adventures. Two new stories add **eight
-original levels**, recurring keepers, alternate solutions, and readable endings.
+creator for portable two-to-six-world adventures. Three original Storybooks add
+**thirteen levels**, recurring keepers, alternate solutions, and readable endings.
+**The Keeper’s Promise** adds five worlds across two branching roads: restore a
+ferry or a workshop, then follow that choice to its own reunion and ending.
 The **Trailhouse** adds twelve keeper commissions, a village with six restoration
 projects, seven keepsakes, and an unlockable original lantern-festival adventure.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
+
+Version 0.25 adds specialist Expedition builds with six interacting relics,
+Vesper’s announced learned counters, twelve personal puzzle-assembly slots,
+a curated Trailboard with bookmarks, completed-route reviews and fastest-finish
+comparisons, and village scenes and decorations earned through your stories.
+See [the new activities and creator guide](docs/KEEPERS-PROMISE.md).
 
 ![The Tideglass Coast, one of two new story chapters](docs/horizon-chapters.png)
 
@@ -574,7 +582,9 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The twenty-five browser families include `scripts/settings-browser-checks.mjs`, `scripts/save-profiles-browser-checks.mjs`, `scripts/save-data-browser-checks.mjs`, `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
+editor history. The twenty-seven browser families include two new activity and
+detailed-interaction suites in `scripts/expansion-browser-checks.mjs`, plus
+`scripts/settings-browser-checks.mjs`, `scripts/save-profiles-browser-checks.mjs`, `scripts/save-data-browser-checks.mjs`, `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
 `scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
 `scripts/sluice-browser-checks.mjs`,
 `scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.

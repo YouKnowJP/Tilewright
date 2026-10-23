@@ -1,6 +1,7 @@
 import { puzzleLabWorld } from './workshop-lab.mjs';
 import { storyAdventure } from './storybook-adventures.mjs';
 import { normalizeBook } from './storybook-model.mjs';
+import { promiseBook } from './storybook-promise.mjs';
 
 export function featuredBooks() {
   // These pars leave the recorded clean route attainable on both rule sets.
@@ -38,5 +39,6 @@ export function featuredBooks() {
       original('constellation','A note from Ilex leads to a garden the old sentinel still patrols. The apprentice hid the stars here, afraid that returning them would leave the town dark. The sentinel knows every straight path and learns repeated footsteps. It knows very little about waiting, ferns, or choosing the long way around. Sable leaves you a field pack. Find Ilex after both lights are restored. This time, let the missing person choose to come home.'),
       original('everyone','Ilex brings a paper star to the last crossing. Eid carries the ledger. Neither knows how to finish the promise alone. Sable points to the bells on three banks: Keeper, Neighbor, Stranger. “A sky is not a collection,” she says. “It is something we share.” Leave both counterweights where they can help the return journey. Cool the far bridge, restore the lights, and bring Eid back with the star that has room for everyone.'),
     ] }),
+    promiseBook(),
   ];
 }

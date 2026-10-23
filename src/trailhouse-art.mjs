@@ -24,6 +24,8 @@ export function drawVillage(canvas,state){
   const positions=[[120,179],[292,150],[453,156],[600,184],[241,274],[492,274]],ids=['post','canal','garden','archive','observatory','studio'];
   positions.forEach(([x,y],i)=>house(ctx,x,y,built.has(ids[i]),i));
   for(let i=0;i<6;i++){const x=[83,200,377,555,314,610][i],y=[246,123,244,133,302,291][i];rect('#7d8261',x,y,3,20);rect(built.size>i?palette.light:'#55634b',x-4,y-6,11,11);if(built.size>i){ctx.fillStyle='#ffe2a01b';ctx.beginPath();ctx.arc(x+1,y,22,0,Math.PI*2);ctx.fill();}}
+  if(state.decoration==='ferry'){for(const [x,y] of [[130,325],[530,325]]){rect('#e2bb76',x,y-4,34,7);rect('#af8957',x+5,y+3,24,4);rect('#f2d79c',x+16,y-16,2,12);rect('#d9c591',x+18,y-14,13,9);}}
+  if(state.decoration==='stars'){ctx.strokeStyle='#b5a1b8';ctx.beginPath();ctx.moveTo(80,95);ctx.quadraticCurveTo(350,155,640,95);ctx.stroke();for(let i=0;i<13;i++){const x=90+i*43,y=103+Math.sin(i/12*Math.PI)*26;rect('#dac0e6',x,y,8,8);rect('#f7dfae',x+3,y-4,2,16);rect('#f7dfae',x-4,y+3,16,2);}}
   if(built.size===6){ctx.strokeStyle='#d8bf88';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(80,110);ctx.lineTo(640,110);ctx.stroke();for(let i=0;i<18;i++)rect(['#cca1a7','#b0c6a2','#e9cc88'][i%3],87+i*31,111,14,13);}
 }
 export function drawProject(canvas,index,built=true){canvas.width=120;canvas.height=100;const ctx=canvas.getContext('2d');ctx.fillStyle='#15332f';ctx.fillRect(0,0,120,100);house(ctx,54,52,built,index);}

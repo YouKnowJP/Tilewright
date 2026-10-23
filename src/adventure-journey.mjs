@@ -8,8 +8,12 @@ export const MAX_JOURNAL = 8192;
 const MAX_BYTES = 220_000;
 const phases = ['playing', 'camp', 'won', 'lost'];
 const initialLoadout = config => ({ health: config.difficulty === 'nemesis' ? 2 : 3, decoys: config.difficulty === 'nemesis' ? 1 : 2, shields: config.difficulty === 'nemesis' ? 1 : 2 });
-const makeRun = session => createRun(generateStage(session.config, session.leg, session.path), { memory: session.legMemory,
-  difficulty: session.config.difficulty, perks: session.perks, loadout: session.loadout });
+export const journeyStartRun = session => {
+  const stage=generateStage(session.config,session.leg,session.path);
+  if(session.config.kit){stage.guild={kit:session.config.kit,merits:['clean','treasure','power']};stage.waystones=[];}
+  return createRun(stage,{memory:session.legMemory,difficulty:session.config.difficulty,perks:session.perks,loadout:session.loadout});
+};
+const makeRun = journeyStartRun;
 export function createJourney(input, id = `run-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`) {
   const config = expeditionConfig(input);
   if (!/^[a-z0-9-]{1,48}$/.test(id)) throw new Error('Invalid expedition identity.');
@@ -44,9 +48,12 @@ export function advanceJourney(session, action) {
 export function campOffers(session) {
   if (session.phase !== 'camp') return { perks: [], routes: [] };
   const random = randomFor(`${session.config.seed}|${session.path}|${session.leg}|camp`);
-  const available = PERKS.filter(perk => !session.perks.includes(perk.id));
+  const available = PERKS.filter(perk => !session.perks.includes(perk.id) && (!perk.kit || perk.kit === session.config.kit));
   for (let i = available.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [available[i], available[j]] = [available[j], available[i]]; }
-  return { perks: [...available.slice(0, 2), { id: 'restock', name: 'Rest and restock', description: 'Recover an extra heart, decoy, and shield now.' }],
+  // A specialist always sees one matching relic while there is one left to find.
+  const relic=available.find(perk=>perk.kit===session.config.kit), picks=available.slice(0,2);
+  if(relic&&!picks.includes(relic))picks[picks.length-1]=relic;
+  return { perks: [...picks, { id: 'restock', name: 'Rest and restock', description: 'Recover an extra heart, decoy, and shield now.' }],
     routes: routeChoices(session.config, session.leg + 1, session.path) };
 }
 export function leaveCamp(session, perkId, routeCode) {
@@ -93,10 +100,10 @@ function readEnvelope(text) {
   const config = expeditionConfig(state.config);
   if (!/^[a-z0-9-]{1,48}$/.test(state.id) || !Number.isInteger(state.leg) || state.leg < 0 || state.leg >= config.length
     || typeof state.path !== 'string' || !/^[sb]+$/.test(state.path) || state.path.length !== state.leg + 1
-    || !phases.includes(state.phase) || !validPerks(state.perks) || state.perks.length > state.leg
+    || !phases.includes(state.phase) || !validPerks(state.perks) || state.perks.length > state.leg || state.perks.some(id=>PERKS.find(perk=>perk.id===id).kit && PERKS.find(perk=>perk.id===id).kit!==config.kit)
     || !Number.isInteger(state.retries) || state.retries < 0 || state.retries > 100_000
     || !Array.isArray(state.journal) || state.journal.length > MAX_JOURNAL
-    || state.journal.some(action => typeof action !== 'string' || !/^(?:up|down|left|right|wait|dash-(?:up|down|left|right)|decoy|shield|drop-cargo|close-dialogue|forget|(?:interact|choose):[a-z0-9-]{1,40})$/.test(action))
+    || state.journal.some(action => typeof action !== 'string' || !/^(?:up|down|left|right|wait|dash-(?:up|down|left|right)|decoy|shield|power|drop-cargo|close-dialogue|forget|(?:interact|choose):[a-z0-9-]{1,40})$/.test(action))
     || !Array.isArray(state.receipts) || state.receipts.length !== state.leg + Number(['camp', 'won'].includes(state.phase))
     || !state.loadout || ['health', 'decoys', 'shields'].some(key => !Number.isInteger(state.loadout[key]) || state.loadout[key] < (key === 'health' ? 1 : 0) || state.loadout[key] > 3)) {
     throw new Error('The expedition checkpoint has invalid progress.');

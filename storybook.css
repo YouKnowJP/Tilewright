@@ -66,3 +66,22 @@
 .book-restored-page { border-top:1px solid #526d4d; }
 #book-receipts .book-page-story { border:0; padding:8px 0; color:#e4e8cc; font:16px/1.8 Georgia,serif; white-space:pre-line; overflow-wrap:anywhere; }
 @media(max-height:700px) { .game-main:has(#game-book-banner:not([hidden])) .game-region { display:none; } }
+
+.book-routes { display:grid; gap:12px; margin:18px 0; }
+.book-routes button { text-align:left; padding:18px; border:1px solid #d4b575; background:linear-gradient(130deg,#314e48,#152e31); color:#fff0ca; border-radius:10px; min-width:0; }
+.book-routes strong { font-family:Georgia,serif; font-size:1.18rem; }
+.book-routes p { margin:8px 0 0; color:#dfdec1; line-height:1.5; }
+.book-road-editor { margin:14px 0; padding:12px; border:1px solid #8b987944; border-radius:8px; }
+.book-road-editor summary { color:#f1d799; cursor:pointer; margin-bottom:10px; }
+.book-road-editor label { display:grid; gap:6px; margin:10px 0; min-width:0; }
+.book-road-editor input,.book-road-editor textarea { box-sizing:border-box; width:100%; min-width:0; }
+
+.book-cover-5 { border-left-color:#e0c785; background:linear-gradient(135deg,#3b4b39,#19383a); }
+@media(max-width:600px){
+  #ws-books[data-phase="choice"]>.ws-section-heading { display:none; }
+  #ws-books[data-phase="choice"] .book-camp-art { flex-direction:row; gap:12px; padding:12px; }
+  #ws-books[data-phase="choice"] .book-camp-art canvas { max-width:86px; max-height:64px; }
+  #ws-books[data-phase="choice"] .book-camp-art p { text-align:left; margin:0; font-size:10px; }
+  #ws-books[data-phase="choice"] .book-camp h4 { font-size:25px; margin:8px 0 12px; }
+  #ws-books[data-phase="choice"] .book-passage { font-size:16px; line-height:1.65; }
+}

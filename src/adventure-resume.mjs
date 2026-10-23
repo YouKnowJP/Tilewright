@@ -33,7 +33,8 @@ export function resumeDefinition(input,difficulty='trail'){
     }else{
       const meta=input.meta;
       if(!meta||!/^book-[0-9a-f]{8}$/.test(meta.key)||typeof meta.title!=='string'||!meta.title.length||meta.title.length>64||!Number.isInteger(meta.length)||meta.length<2||meta.length>6||!Number.isInteger(meta.chapter)||meta.chapter<0||meta.chapter>=meta.length||!chapterChallenges(stage,difficulty).some(item=>item.id===meta.challenge))throw Error('This saved chapter has invalid storybook details.');
-      source.meta={key:meta.key,title:meta.title,chapter:meta.chapter,length:meta.length,challenge:meta.challenge};stage.workshop.storybook=source.meta;
+      if(meta.page!==undefined&&(!Number.isInteger(meta.page)||meta.page<1||meta.page>meta.length))throw Error('This saved story page is invalid.');
+      source.meta={key:meta.key,title:meta.title,chapter:meta.chapter,length:meta.length,challenge:meta.challenge,...(meta.page!==undefined?{page:meta.page}:{})};stage.workshop.storybook=source.meta;
     }
   }
   if(!stage)throw Error('This adventure is unavailable in the current game version.');

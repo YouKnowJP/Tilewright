@@ -6,9 +6,15 @@ proposals with planning estimates, not completed work or hours already spent.
 The owner should prioritize the work they actually intend to undertake before
 using this plan in a program submission.
 
+Version 0.25 delivers branching Storybooks, specialist Expedition relic builds,
+a named readable rival, personal World studio puzzle assemblies, curated
+discovery/bookmarks, completed-run reviews, and reactive Trailhouse scenes.
+Open community publishing, cloud saves, and general terrain-editor selection
+remain future work. See [the delivered feature guide](docs/KEEPERS-PROMISE.md).
+
 | Priority | Work ahead | Estimate | Acceptance criteria |
 | --- | --- | --- | --- |
-| 1 | Selection and reusable stamps | 6–8 h | Select a rectangular region across chosen layers; copy, cut, paste, move, and rotate it; preview placement; make each operation undoable; handle boundaries and transparent cells with focused tests. |
+| 1 | General terrain-editor selection | 6–8 h | Extend the delivered World studio puzzle assemblies to Terrain Mapmaker selection, cut, move, transparent paste, and placement previews; retain atomic history and boundary checks. |
 | 2 | Custom tilesets | 6–9 h | Import a bounded, user-owned PNG atlas; choose tile size; store portable tileset metadata; render and export consistently; reject oversized or corrupt images; document artwork licensing responsibilities. |
 | 3 | Local project library and recovery | 5–7 h | Keep multiple named maps in IndexedDB; duplicate, rename, and delete them; provide backup/export and recovery after failed writes or version upgrades; test storage unavailability and migration. |
 | 4 | Accessibility and input refinement | 3–5 h | Test screen readers and actual touch devices; improve keyboard layer navigation and tile descriptions; add configurable shortcuts; validate the existing pan/fit controls with assistive technology and real devices. |

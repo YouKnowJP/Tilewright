@@ -132,6 +132,9 @@ large mode menu:
 Separate save profiles are delivered in **v0.24** as three named journeys,
 with isolated progress/creations/settings, a clear current lantern, safe switching,
 and per-journey backup/reset/removal. Existing saves become First journey.
-Post-run reviews and branching Storybooks remain proposals. Route reviews are
-the next useful gameplay improvement: give a player one understandable decision
-to try differently, while keeping ordinary play and rewards unchanged.
+Post-run reviews and branching Storybooks are delivered in **v0.25**, together
+with specialist Expedition builds, Vesper’s visible learned counters, reusable
+World studio puzzle assemblies, a curated Trailboard, and reactive village
+scenes. See the [delivered feature guide](KEEPERS-PROMISE.md). Open community
+publishing, general Terrain Mapmaker selection, and optional cloud saves remain
+future work.

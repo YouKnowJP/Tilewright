@@ -7,6 +7,12 @@ export const PERKS = Object.freeze([
   { id: 'scout', name: 'Scout glass', description: 'Reveal a wider circle of the map.' },
   { id: 'sturdy', name: 'Second wind', description: 'Gain one extra protected turn after taking damage.' },
   { id: 'decoy', name: 'Echo lantern', description: 'Decoys distract enemies for seven following turns.' },
+  { id: 'chorus', kit: 'bellrunner', name: 'Lingering chorus', description: 'Pulse dazes for three turns; casting recharges in eight turns. Combine with a Resonant buckle for protected crossings.' },
+  { id: 'resonant-ward', kit: 'bellrunner', name: 'Resonant buckle', description: 'Pulse also wards you for two turns, but casting costs all three energy.' },
+  { id: 'soft-step', kit: 'mistweaver', name: 'Long dusk ribbon', description: 'Veil lasts six turns; ordinary decoys last only three. Echo lantern restores their longer lifetime.' },
+  { id: 'moon-thread', kit: 'mistweaver', name: 'Moon thread', description: 'Veil recharges in four turns, but lasts one turn less. Combine with Long dusk ribbon for longer cover.' },
+  { id: 'anchor', kit: 'echoist', name: 'Memory anchor', description: 'Doubles last ten turns. Returning costs two energy instead of one.' },
+  { id: 'afterglow', kit: 'echoist', name: 'Homeward afterglow', description: 'Returning to a double grants a two-turn ward; casting recharges in eight turns. The ward protects the return itself.' },
 ]);
 export const VOWS = Object.freeze([
   { id: 'none', name: 'Open trail', description: 'Use every tool at your disposal.', bonus: 0 },
@@ -21,5 +27,11 @@ export function perkEffects(perks = []) {
   const has = id => perks.includes(id);
   return { dashNoise: has('quiet') ? 1 : 3, recharge: has('charge') ? 2 : 1, shieldTurns: has('ward') ? 4 : 3,
     lanternHealing: has('forager') ? 1 : 0, provision: has('provision') ? 1 : 0,
-    sightSquared: has('scout') ? 49 : 30, protection: has('sturdy') ? 1 : 0, decoyTurns: has('decoy') ? 7 : 5 };
+    sightSquared: has('scout') ? 49 : 30, protection: has('sturdy') ? 1 : 0, decoyTurns: has('decoy') ? 7 : has('soft-step') ? 3 : 5,
+    ...(has('chorus') || has('resonant-ward') || has('soft-step') || has('moon-thread') || has('anchor') || has('afterglow') ? {
+      powerRecharge: has('chorus') || has('afterglow') ? 8 : has('moon-thread') ? 4 : 6,
+      powerEnergy: has('resonant-ward') ? 3 : 2, pulseTurns: has('chorus') ? 3 : 2, pulseWard: has('resonant-ward') ? 2 : 0,
+      veilTurns: (has('soft-step') ? 6 : 4) - Number(has('moon-thread')), echoTurns: has('anchor') ? 10 : 6,
+      returnEnergy: has('anchor') ? 2 : 1, returnWard: has('afterglow') ? 2 : 0,
+    } : {}) };
 }

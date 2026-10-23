@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.25.0 — 2026-10-23
+
+- Add The Keeper’s Promise: five original worlds, two three-chapter routes,
+  separate endings, real camp decisions, readable page numbering, and checked
+  clean clears on Trail and Nemesis.
+- Extend Storybook authoring with forward links, player choices, and custom
+  endings. Export branching books as format v2 while retaining v1 books,
+  records, and checkpoints. Validate saved routes against their chapter receipts.
+- Bring all three specialists into Expeditions with six matching camp relics:
+  longer pulses and protective resonance, interacting veil timing, extended
+  doubles and protected returns. Preserve carried supplies and classic seeded
+  runs; daily trails retain the shared Wayfarer kit.
+- Add Vesper, the Listener, with a distinct appearance and counters based on
+  observed movement. Show committed cutoffs and sweeps in Plan; cover, decoys,
+  mist, recovery turns, and alternate paths remain useful. Creators can assign
+  the personality to their own hunters.
+- Add personal rectangular puzzle assemblies with terrain, routes, quarter-turn
+  rotation, fresh object IDs, independent channels, paired waystones, bounded
+  saves, and atomic Undo/Redo. Reject clipped routes and partial linked puzzles.
+- Add the curated Trailboard, mood filters, bookmarks, credits, and existing
+  creator-clear previews. Friend sharing remains available through files,
+  codes, and play links; this release does not introduce open public uploads.
+- Add results-screen and Adventure-journal route reviews with recorded-action
+  scrubbing, important moments, one actionable suggestion, and personal fastest
+  comparisons. Replays retain original fog, supplies, and hunter memory, and
+  award no progress. Retain four recent adventures within a bounded archive.
+- Let Trailhouse keepers remember real rescues and completed story roads. Add
+  return-visit scenes, keeper portraits, and earned copper-ferry/paper-star
+  village decorations, stored separately for each named journey.
+
 ## 0.24.2 — 2026-10-23
 
 - Offer a safe Retry after 15 seconds when startup is still waiting for a

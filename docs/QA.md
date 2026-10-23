@@ -1,5 +1,14 @@
 # Verification record
 
+## Branching adventures and creative tools — v0.25.0
+
+564 tests pass. The release adds five original worlds, branching book authoring,
+specialist Expedition relics, Vesper’s readable counters, personal puzzle
+assemblies, curated discovery/bookmarks, route reviews, and reactive village
+scenes. The new features receive Chrome, Firefox, and WebKit gameplay checks,
+alongside the existing browser regression families. See the [full feature and
+release audit](audits/2026-10-23-keepers-promise.md) for coverage, reruns, and limits.
+
 ## Delayed-startup recovery — v0.24.2
 
 A deliberately delayed application-module request shows a safe Retry after
