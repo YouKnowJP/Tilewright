@@ -98,7 +98,7 @@ export async function checkStorybooks(browserType,{baseURL='http://127.0.0.1:417
     if(fullBooks)for(const index of [3,4]){
       const width=index===3?390:320,height=index===3?844:568,context=await contextFor({viewport:{width,height},hasTouch:true,isMobile:true}),book=featuredBooks()[index];
       try{
-        const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(baseURL);await openBooks(page);assert.equal(await page.locator('#book-covers>article').first().getAttribute('data-book-cover'),'3');await newBook(page,index,index===3?'trail':'nemesis');
+        const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(baseURL);await openBooks(page);assert.equal(await page.locator('#book-covers>article').first().getAttribute('data-book-cover'),'6');await newBook(page,index,index===3?'trail':'nemesis');
         for(const [chapterIndex,chapter]of book.chapters.entries()){
           await fits(page);if(screenshots&&chapterIndex===0){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`.playwright-mcp/new-story-${index}-camp-${width}.png`,fullPage:true});}
           await page.locator('[data-book-challenge="clean"]').tap();await page.locator('#book-continue').tap();await fits(page);await page.waitForFunction(()=>{const board=document.querySelector('.game-main'),controls=document.querySelector('.game-controls');return board.scrollHeight<=board.clientHeight+1&&controls.getBoundingClientRect().bottom<=board.getBoundingClientRect().bottom+1;});

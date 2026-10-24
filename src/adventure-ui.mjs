@@ -1,3 +1,4 @@
+import { MAP_KEY, surroundings } from './adventure-accessibility.mjs';
 import { createReviewUI } from './adventure-review-ui.mjs';
 import { rememberTrail } from './trail-memories.mjs';
 import { controlDropdown } from './game-dropdowns.mjs';
@@ -41,7 +42,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;
   let rewind=null,checkpointFailed=false,checkpointError='',restoring=false,restoreToken=0;
-  const savedTrail=loadTrail(storage), reviews=createReviewUI({storage});
+  const savedTrail=loadTrail(storage), reviews=createReviewUI({storage,getPreferences:()=>front?.preferences||{}});
   let selectedChapter = 0, libraryTab = 'story';
   const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(max-width: 1000px)');
   const libraryOpen = () => !$('#adventure-library').hidden;
@@ -241,6 +242,12 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     picker.replaceChildren(heading, nav, ...chapters);
   }
 
+  function readingLines(target){
+    if(!run)return;const view=surroundings(run),previous=target.querySelector('details'),expanded=previous?previous.open:target.id==='forecast-reading-lines';
+    const position=Object.assign(document.createElement('p'),{textContent:view.position}),directions=document.createElement('ul'),landmarks=document.createElement('details'),summary=Object.assign(document.createElement('summary'),{textContent:`Discovered landmarks (${view.landmarks.length})`});
+    directions.className='reading-directions';directions.append(...view.directions.map(text=>Object.assign(document.createElement('li'),{textContent:text})));landmarks.open=expanded;landmarks.append(summary,...view.landmarks.map(text=>Object.assign(document.createElement('p'),{textContent:text})));target.replaceChildren(position,directions,landmarks);
+  }
+  function updateReadingView(){if(!run)return;$('#game-reading-view').hidden=front?.preferences.readingView!=='on';if(!$('#game-reading-view').hidden)readingLines($('#game-reading-lines'));readingLines($('#notes-reading-lines'));}
   function resize() {
     if (!renderer || !active || viewport.clientWidth < 1) return;
     fitBoard();
@@ -250,7 +257,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
 
   function fitBoard() {
     const layout=$('#game-layout');
-    if(!run || layout.hidden) { layout.style.minHeight=''; return; }
+    if(!run || layout.hidden || !$('#game-overlay').hidden) { layout.style.minHeight=''; return; }
     const main=$('.game-main'), style=getComputedStyle(main);
     const fixed=[...main.children].filter(element=>element!==viewport).reduce((height,element)=>{
       const css=getComputedStyle(element);return height+(css.display==='none'?0:element.getBoundingClientRect().height+(parseFloat(css.marginTop)||0)+(parseFloat(css.marginBottom)||0));
@@ -320,7 +327,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       if(!run.stage.workshop){memory=run.memory;memorySaveFailed=!saveMemory(storage,memory);}
       if(run.guild)selectedKit=run.guild.kit;
       const index=campaign.findIndex(stage=>stage.id===run.stage.id);if(index>=0)selectedChapter=Math.floor(index/3);
-      paused=false;dashArmed=false;interactionId=null;hintVisible=false;selectNotes('quest');renderer=createAdventureRenderer(canvas,run.stage,{reducedMotion:motion});renderPicker();renderGuild();checkpoint();showBoard();update();revealBoard();
+      paused=false;dashArmed=false;interactionId=null;hintVisible=false;selectNotes('quest');renderer=createAdventureRenderer(canvas,run.stage,{reducedMotion:motion,preferences:()=>front.preferences});renderPicker();renderGuild();checkpoint();showBoard();update();revealBoard();
     }catch(error){const note=`${error.message} Your completed progress and worlds are retained.`;savedTrail.data=null;savedTrail.error=error.message;front.notice(note);if(!$('#adventure-workshop').hidden){workshop.show('books');workshop.notice(note,true);}}
     finally{restoring=false;$('#game-title-screen').inert=false;$('#adventure-workshop').inert=false;}
   }
@@ -329,7 +336,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if (!run) return;
     const stage = run.stage, result = resultFor(run), index = campaign.findIndex(item => item.id === stage.id);
     const theme = themeFor(stage), book = workshop.bookStatus(run), house = workshop.trailhouseStatus(run), lab = workshop.labStatus(run);
-    $('#game-map-legend').textContent = run.guild ? 'Gold is you; turquoise is the beacon. Purple squares are waystones; white outlines are wheels and bells. A pale blue double marks your return point.' : 'Gold is you. Turquoise is the beacon. Outlined squares are discovered wheels and bells.';
+    $('#game-map-legend').textContent = run.guild ? 'White diamond: you. H: home beacon. T: travel stones. Outlined squares: wheels and bells. The pale double marks your return point.' : 'White diamond: you. H: home beacon. Outlined squares: discovered wheels and bells.';
     $('.game-main').style.setProperty('--region-color', theme.dark);
     const journey = expeditions?.session;
     $('#game-region').textContent = journey ? `Seeded expedition / ${kitFor(run)?.name||'Wayfarer'}` : house ? `The Trailhouse / ${house.keeper}` : book ? stage.workshop.storybook.title : stage.workshop ? `${theme.place} / ${stage.workshop.practice ? 'Practice run' : 'Player adventure'} / ${stage.workshop.author}` : run.guild ? `${theme.place} / Guild job ${GUILD_IDS.indexOf(stage.id) + 1} / ${kitFor(run).name}` : stage.theme ? `${theme.place} / Chapter ${stage.chapter + 1}` : journeyLabel();
@@ -416,7 +423,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if(house || lab) { const activity=house||lab; $('#game-commission-title').textContent=activity.name;$('#game-commission .eyebrow').textContent=lab?'YOUR LAB CHALLENGES':'YOUR KEEPER’S COMMISSION';$('#game-commission-note').textContent=lab?'Restore the world to collect fulfilled seals. Different routes can earn different seals over separate runs.':'Fulfill these goals and restore the world to earn village light. You can retry another route at any time.'; $('#game-commission-goals').replaceChildren(...activity.goals.map(goal=>questEntry({text:goal.label,done:goal.done}))); }
     $('#game-sidequests').replaceChildren(...sidequests.map(questEntry));
     if (!outsideBoard()) updateConversation();
-    $('#quest-beacon').textContent = run.status === 'won' ? 'The beacon shines again.' : 'Return to the turquoise beacon.';
+    $('#quest-beacon').textContent = run.status === 'won' ? 'The beacon shines again.' : 'Return to the home beacon (H with map symbols).';
     $('#game-hint').hidden = !hintVisible;
     $('#game-hint-text').textContent = scoutHint(run);
     $('#game-hint-button').setAttribute('aria-expanded', String(hintVisible));
@@ -426,7 +433,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     const warning = !intro && !progress && /block(?:ed|s)?|closed|locked|cannot|needs? |no .+ left|occupied|occupies|recharges|oath:/.test(run.message.toLowerCase());
     const danger = run.events.some(event => ['hurt', 'alarm'].includes(event.type)) || incoming || run.status === 'lost';
     const quietStep = run.message === 'Watch the hunters. Use cover, change direction, or create an opening.';
-    const travelText = run.carrying ? 'The relic sings. Hunters can hear it.' : run.noise ? 'Your footsteps echo along the trail.' : 'The trail leads onward.';
+    const travelText = run.carrying ? run.hunters.length ? 'The relic sings. Hunters can hear it.' : 'The relic sings. Bring it home to the beacon.' : run.noise ? 'Your footsteps echo along the trail.' : 'The trail leads onward.';
     showStatus(paused ? 'Take a breath. The trail will wait.' : intro ? 'Find the lost lanterns. The beacon is waiting.' : `${quietStep ? travelText : run.message}${incoming ? ' A Watcher sweep is coming. Leave the marked ground!' : ''}`,
       paused ? 'info' : danger ? 'danger' : warning ? 'warning' : progress ? 'success' : 'info');
     $('#dash-button').classList.toggle('armed', dashArmed); $('#dash-button').setAttribute('aria-pressed', String(dashArmed));
@@ -451,7 +458,8 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if(run.status!=='won')$('#game-save-note').textContent=`${checkpointFailed?checkpointError:'Your current position and choices are saved in this browser. Main menu → Continue returns here after reload.'} Undo restores up to 60 recent actions, including hunter memory. Completed rewards and camp transitions cannot be undone.`;
     $('#game-stars').hidden = Boolean(stage.workshop?.practice);
     $('#adventure').dataset.status = run.status;
-    canvas.setAttribute('aria-label', `${stage.name}. ${run.difficulty} rules. Column ${run.player.x + 1}, row ${run.player.y + 1}. Health ${run.health} of 3. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns. ${run.message}`);
+    updateReadingView();
+    canvas.setAttribute('aria-label', `${stage.name}. ${run.difficulty} rules. Column ${run.player.x + 1}, row ${run.player.y + 1}. Health ${run.health} of 3. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns. ${quietStep?travelText:run.message}`);
     $('#game-overlay').hidden = !paused && run.status === 'playing';
     if (paused) {
       $('#game-result-eyebrow').textContent = 'A MOMENT ON THE TRAIL'; $('#game-result-title').textContent = 'Take a breather.';
@@ -512,7 +520,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     const chapterIndex = campaign.findIndex(item => item.id === stage.id);
     if (chapterIndex >= 0) selectedChapter = Math.floor(chapterIndex / 3);
     hintVisible = false; selectNotes('quest');
-    renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion }); renderPicker(); renderGuild(); resize(); update();
+    renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion, preferences:()=>front.preferences }); renderPicker(); renderGuild(); resize(); update();
     revealBoard();
   }
 
@@ -600,6 +608,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   $('#game-hint-button').addEventListener('click', hint);
   function inspect() {
     if (!active || !run) return;
+    readingLines($('#forecast-reading-lines'));$('#forecast-map-key').textContent=MAP_KEY;
     $('#forecast-lines').replaceChildren(...threatForecast(run).map(text => Object.assign(document.createElement('p'), { textContent: text })));
     $('#forecast-dialog').showModal();
   }
@@ -700,7 +709,8 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if(run)resize();
   }
   document.addEventListener('visibilitychange', () => { if (document.hidden && active && run?.status === 'playing' && !run.dialogue && !paused) { paused = true; update(); } });
-  new ResizeObserver(resize).observe(viewport);
+  let resizeFrame=0;
+  new ResizeObserver(()=>{if(!resizeFrame)resizeFrame=requestAnimationFrame(()=>{resizeFrame=0;resize();});}).observe(viewport);
   window.visualViewport?.addEventListener('resize',resize);
   window.addEventListener('resize',resize);
   expeditions = createExpeditionUI({ storage, onShow: showLibrary, onNotice: text => {
@@ -711,12 +721,12 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     rewind=null;
     run = session.run; difficulty = session.config.difficulty; $('#game-difficulty').value = difficulty;
     if (newStage || !renderer || run.stage.id !== $('#adventure').dataset.stage) {
-      renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion }); paused = false; dashArmed = false; interactionId = null; renderPicker(); resize(); revealBoard();
+      renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion, preferences:()=>front.preferences }); paused = false; dashArmed = false; interactionId = null; renderPicker(); resize(); revealBoard();
     }
     $('#adventure').dataset.stage = run.stage.id; lastAction = performance.now();checkpoint(); if (!newStage) sound.play(run.events); update();
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
   } });
-  workshop = createWorkshopUI({ storage, getMap, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide,
+  workshop = createWorkshopUI({ storage, getMap, getPreferences:()=>front?.preferences||{}, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide,
     onResume:continueTrail,
     onReplaceBook(key){const current=run?.stage.workshop?.storybook?.key;if((run?current:savedTrail.data?.source?.meta?.key)!==key)return;if(current===key){run=null;rewind=null;workshopActions=[];}clearTrail(storage);savedTrail.data=null;},
     canResumeBook(stage,rules){const meta=run?.stage.workshop?.storybook,source=savedTrail.data?.source;return Boolean(run?run.status!=='won'&&run.difficulty===rules&&JSON.stringify(meta)===JSON.stringify(stage.workshop.storybook):source?.kind==='book'&&savedTrail.data.header.difficulty===rules&&JSON.stringify(source.meta)===JSON.stringify(stage.workshop.storybook));},
@@ -728,8 +738,9 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     onContinue:continueTrail,
     onResumeExpedition() { expeditions.show(); $('#expedition-resume').click(); },
     onMapmaker: backToEditor,
+    onPeaceful(){openWorkshop('books');document.querySelector('[data-peaceful-book] button')?.focus({preventScroll:true});document.querySelector('[data-peaceful-book]')?.scrollIntoView({block:'center'});},
     onCustomMap() { try { start(createCustomStage(getMap())); } catch (error) { front.notice(error.message); } },
-    onPreferences(preferences) { applyControls(preferences); if (run) { update(); paint(); } },
+    onPreferences(preferences) { applyControls(preferences);training?.refreshPreferences();workshop?.refreshPreferences(); if (run) { update(); paint(); } },
     getJournal() { return { ...adventureJournal({ campaign, jobs: journalJobs, records, guildRecords, book: expeditions.logbook, difficulty, kit: selectedKit }), saveUnavailable: saveFailed || guildSaveFailed || expeditions.checkpointFailed || peekJourney(storage).unavailable }; },
     onDestination: journalDestination, onChoose: showTitle,
   });

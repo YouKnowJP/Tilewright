@@ -13,14 +13,23 @@ The **Adventure Workshop** adds three authored adventures, twelve playable Puzzl
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
-creator for portable two-to-six-world adventures. Three original Storybooks add
-**thirteen levels**, recurring keepers, alternate solutions, and readable endings.
+creator for portable two-to-six-world adventures. Four original Storybooks add
+**nineteen levels**, recurring keepers, alternate solutions, and readable endings.
 **The Keeper’s Promise** adds five worlds across two branching roads: restore a
 ferry or a workshop, then follow that choice to its own reunion and ending.
 The **Trailhouse** adds twelve keeper commissions, a village with six restoration
 projects, seven keepsakes, and an unlockable original lantern-festival adventure.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
+
+Version 0.26 adds **The Welcome Lanterns**, six peaceful chapters with no enemies
+or burning tiles, plus an Accessibility page: large and extra-large reading,
+high contrast, letter labels and numbered mechanism links, closer map sizes,
+and a text description of neighboring tiles and discovered landmarks. A single
+clearer-trail preset makes the main changes; every setting can be chosen separately.
+Find the peaceful book through Accessibility or Workshop → Storybooks; play its
+chapters separately through Trailboard → Peaceful. See the
+[accessibility and peaceful-adventure guide](docs/ACCESSIBILITY.md).
 
 Version 0.25 adds specialist Expedition builds with six interacting relics,
 Vesper’s announced learned counters, twelve personal puzzle-assembly slots,

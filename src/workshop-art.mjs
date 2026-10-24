@@ -1,3 +1,5 @@
+import { walkableCells } from './adventure.mjs';
+import { CHANNEL_NUMBERS, drawCueBadge } from './adventure-accessibility.mjs';
 import { drawTile } from './render.mjs';
 import { CHAPTERS } from './adventure-art.mjs';
 export const CHANNEL_COLORS = Object.freeze({ amber: '#efc47a', jade: '#8ed8ae', violet: '#c3a2e4', blue: '#8acddd' });
@@ -40,6 +42,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
     case 'patrol': case 'hunter': case 'watcher': rect(item.kind === 'watcher' ? '#786a8b' : '#a76c61', 4, 6, 16, 16); rect('#473f4c', 6, 9, 12, 6); rect('#ffe2a0', 7, 10, 3, 3); rect('#ffe2a0', 14, 10, 3, 3); if (item.kind === 'watcher') { rect('#d3b2db', 3, 1, 4, 7); rect('#d3b2db', 17, 1, 4, 7); } break;
   }
   ctx.restore();
+  if(['plate','bridge','lever','door','waystone','ember'].includes(item.kind))drawCueBadge(ctx,item,CHANNEL_NUMBERS[item.channel]||'1','',size);
 }
 export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = null, cursor = null, grid = false } = {}) {
   const map = pack.map, size = thumbnail ? Math.min(24, 360 / map.width, 240 / map.height) : 24, width = Math.ceil(map.width * size), height = Math.ceil(map.height * size);
@@ -47,6 +50,9 @@ export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = 
   const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, width, height); ctx.fillStyle = '#173932'; ctx.fillRect(0, 0, width, height);
   for (const layer of map.layers) if (layer.visible) for (let y = 0; y < map.height; y++) for (let x = 0; x < map.width; x++) drawTile(ctx, layer.tiles[y * map.width + x], x * size, y * size, size, x * 7 + y * 3);
   const theme = CHAPTERS.find(theme => theme.id === pack.theme) || CHAPTERS[0]; ctx.fillStyle = `${theme.ridge}32`; ctx.fillRect(0, 0, width, height);
+  if(typeof document!=='undefined'&&document.body?.dataset.gameContrast==='high'){
+    const walkable=walkableCells(map);for(let y=0;y<map.height;y++)for(let x=0;x<map.width;x++){const open=walkable[y*map.width+x];ctx.fillStyle=open?'#13262c':'#576572';ctx.fillRect(x*size,y*size,size,size);ctx.strokeStyle=open?'#3f5860':'#d3e0e8';ctx.lineWidth=.5;ctx.strokeRect(x*size+.5,y*size+.5,size-1,size-1);}
+  }
   if (grid) { ctx.strokeStyle = '#17393235'; ctx.lineWidth = 1; ctx.beginPath(); for (let x = 0; x <= map.width; x++) { ctx.moveTo(x * size, 0); ctx.lineTo(x * size, height); } for (let y = 0; y <= map.height; y++) { ctx.moveTo(0, y * size); ctx.lineTo(width, y * size); } ctx.stroke(); }
   for (const item of [...pack.markers.filter(m => ['fern', 'ember'].includes(m.kind)), ...pack.markers.filter(m => !['fern', 'ember'].includes(m.kind))]) drawWorkshopObject(ctx, item, size);
   const object = pack.markers.find(m => m.id === selected);

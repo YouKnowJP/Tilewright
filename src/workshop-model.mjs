@@ -1,3 +1,4 @@
+import { CHANNEL_NUMBERS } from './adventure-accessibility.mjs';
 import { createDocument, validateDocument, paintCells } from './model.mjs';
 import { createRun, stepRun, walkableCells } from './adventure.mjs';
 import { freshMemory } from './adventure-brain.mjs';
@@ -119,7 +120,8 @@ export function adventureStage(input) {
   });
   const hazards = by('ember').map(item => ({ ...position(item), period: 4, phases: [2, 3], offset: item.offset, ...(leverFor(item.channel) ? { disabledBy: leverFor(item.channel).id } : {}) }));
   const waystones = by('waystone').map(item => ({ ...position(item), name: item.name || `${item.channel} waystone`, partner: by('waystone').find(other => other.id !== item.id && other.channel === item.channel)?.id }));
-  const stage = { id: adventureKey(pack), name: pack.title, subtitle: pack.description || `A player adventure by ${pack.author}`, theme: pack.theme, map: pack.map,
+  const cueChannels=Object.fromEntries(pack.markers.filter(item=>['plate','bridge','lever','door','waystone','ember'].includes(item.kind)).map(item=>[item.id,CHANNEL_NUMBERS[item.channel]||'1']));
+  const stage = { cueChannels, id: adventureKey(pack), name: pack.title, subtitle: pack.description || `A player adventure by ${pack.author}`, theme: pack.theme, map: pack.map,
     start: position(by('start')[0]), exit: position(by('beacon')[0]), par: pack.par, intro: pack.intro || 'Restore every lantern, complete your quest, and reach the beacon.',
     hint: pack.hint || 'Read Quest for your goals. Plan reveals committed threats. Ask nearby keepers for advice.', ending: pack.ending,
     lanterns: by('lantern').map(position), keys: by('key').map(position), coins: by('coin').map(position), hearts: by('heart').map(position),

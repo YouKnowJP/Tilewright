@@ -62,14 +62,14 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
     if (root.hidden || $('lesson').hidden || !state) return;
     if (editing()) drawWorkshopWorld(canvas, state.pack, { grid: true, cursor: state.cursor });
     else {
-      renderer ??= createAdventureRenderer(canvas, state.run.stage, { reducedMotion: { matches: true } });
-      renderer.resize(600, 480); renderer.setState(state.run); renderer.draw();
+      renderer ??= createAdventureRenderer(canvas, state.run.stage, { reducedMotion: { matches: true }, preferences:getPreferences });
+      renderer.setState(state.run);const width=Math.max(200,canvas.parentElement.clientWidth||600);renderer.resize(width,Math.max(240,width*.8));renderer.draw();
       canvas.style.width = '100%'; canvas.style.height = 'auto';
     }
     const target = steps().find(step => !step.done)?.target;
     if (target) {
       const ctx = canvas.getContext('2d'); ctx.strokeStyle = '#fff0ac'; ctx.lineWidth = 2;
-      ctx.setLineDash([4, 2]); ctx.strokeRect(target.x * 24 + 2, target.y * 24 + 2, 20, 20); ctx.setLineDash([]);
+      ctx.setLineDash([4, 2]); ctx.strokeRect((editing()?target.x*24:renderer.projectPoint(target).x)+2,(editing()?target.y*24:renderer.projectPoint(target).y)+2,20,20); ctx.setLineDash([]);
     }
     canvas.setAttribute('aria-label', editing() ? `Practice world, 10 columns and 8 rows. ${state.brush} brush. Cursor column ${state.cursor.x + 1}, row ${state.cursor.y + 1}. Arrows move the cursor; Space paints.` : `${state.run.stage.name}. Player column ${state.run.player.x + 1}, row ${state.run.player.y + 1}. Turn ${state.run.turns}. ${state.run.status}.`);
   }
@@ -234,6 +234,7 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
   const mapInput=createMapInput(canvas,{preferences:getPreferences,enabled:()=>!root.hidden&&!$('lesson').hidden&&state&&!editing()&&state.run.status==='playing'&&!state.run.dialogue&&!state.plan&&!document.querySelector('dialog[open]'),origin:()=>{const rect=canvas.getBoundingClientRect(),point=renderer?.playerAnchor()||{x:.5,y:.5};return {x:rect.left+rect.width*point.x,y:rect.top+rect.height*point.y};},onMove:act});
   $('controls-settings').onclick=()=>{mapInput.cancel();onControls();};
   return {
+    refreshPreferences(){draw();},
     refresh(){mapInput.cancel();if(state&&!root.hidden)render();},
     control(command){
       if(root.hidden||$('lesson').hidden||!state)return false;

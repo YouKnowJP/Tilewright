@@ -1,3 +1,4 @@
+import { welcomeBook } from './storybook-welcome.mjs';
 import { puzzleLabWorld } from './workshop-lab.mjs';
 import { storyAdventure } from './storybook-adventures.mjs';
 import { normalizeBook } from './storybook-model.mjs';
@@ -40,5 +41,6 @@ export function featuredBooks() {
       original('everyone','Ilex brings a paper star to the last crossing. Eid carries the ledger. Neither knows how to finish the promise alone. Sable points to the bells on three banks: Keeper, Neighbor, Stranger. “A sky is not a collection,” she says. “It is something we share.” Leave both counterweights where they can help the return journey. Cool the far bridge, restore the lights, and bring Eid back with the star that has room for everyone.'),
     ] }),
     promiseBook(),
+    welcomeBook(),
   ];
 }

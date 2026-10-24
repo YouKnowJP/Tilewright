@@ -18,7 +18,7 @@ import { createStorybookUI } from './storybook-ui.mjs';
 import { LAB_ROOMS, puzzleLabWorld, designSpark, cursorPractice } from './workshop-lab.mjs';
 import { MASTERY_REWARDS, MAX_MASTERY_BYTES, loadMastery, saveMastery, masteryCount, masteryGoals, recordMastery, serializeMastery, parseMastery } from './workshop-mastery.mjs';
 
-export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, onGuide, onResume, canResumeBook, onReplaceBook }) {
+export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onExit, onPlay, onTerrain, onGuide, onResume, canResumeBook, onReplaceBook }) {
   const $ = id => document.getElementById(`ws-${id}`), root = document.getElementById('adventure-workshop');
   const kitLabel=id=>GUILD_KITS.find(kit=>kit.id===id)?.name||'Wayfarer';
   const restored = loadWorkshop(storage), featured = workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) }));
@@ -183,7 +183,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
   function replayStep(count=1){if(!replay)return;for(let i=0;i<count&&replay.index<replay.pack.proof.actions.length;i++)replay.run=stepRun(replay.run,replay.pack.proof.actions[replay.index++]);if(replay.index===replay.pack.proof.actions.length)stopReplay();replayDraw();}
   function tick(){if(!replay?.playing)return;replayStep();if(replay.playing)timer=setTimeout(tick,500/Number($('replay-speed').value));}
   function replayReset(){stopReplay();if(!replay)return;replay.run=createRun(adventureStage(replay.pack),{difficulty:replay.pack.proof.difficulty,memory:freshMemory()});replay.index=0;replayDraw();}
-  $('preview-watch').onclick=()=>{replay={pack:preview};$('replay-title').textContent=preview.title;$('replay-dialog').showModal();replay.renderer=createAdventureRenderer($('replay-canvas'),adventureStage(preview),{reducedMotion:{matches:true}});replayReset();};
+  $('preview-watch').onclick=()=>{replay={pack:preview};$('replay-title').textContent=preview.title;$('replay-dialog').showModal();replay.renderer=createAdventureRenderer($('replay-canvas'),adventureStage(preview),{reducedMotion:{matches:true},preferences:getPreferences});replayReset();};
   $('replay-toggle').onclick=()=>{if(replay.playing){stopReplay();replayDraw();}else{replay.playing=true;tick();}};
   $('replay-step').onclick=()=>{stopReplay();replayStep();};$('replay-skip').onclick=()=>{stopReplay();replayStep(20);};$('replay-reset').onclick=replayReset;
   $('replay-dialog').addEventListener('close',stopReplay);new ResizeObserver(replayDraw).observe($('replay-viewport'));
@@ -211,6 +211,7 @@ export function createWorkshopUI({ storage, getMap, onExit, onPlay, onTerrain, o
     trailhouseStatus: run => house.status(run),
     bookStatus: run => books.status(run),
     labStatus(run){const id=run?.stage.workshop?.lab;if(!id)return null;const owned=mastery.records[`${id}-${run.difficulty}`]||[],goals=masteryGoals(id,run);return {name:'Puzzle Lab seals',detail:`${owned.length}/3 collected · ${run.difficulty}`,condition:true,goals:goals.map(goal=>({label:`${goal.name} · ${goal.detail}${owned.includes(goal.id)?' — in your journal':goal.missed?' — try another run':''}`,done:owned.includes(goal.id)||goal.done}))};},
+    refreshPreferences(){if(!root.hidden){if(section==='build')designer.draw();if(section==='shelf')renderShelf();if(section==='lab')renderLab();}},
     get returnSection(){return activePlay?.house?'house':activePlay?.book?'books':activePlay?.test?'build':activePlay?.origin==='lab'?'lab':'shelf';},
     recordWin(run,actions){
       if(!run.stage.workshop?.practice)rememberTrail(storage,run.rescued);

@@ -1,11 +1,12 @@
 export const PREFERENCES_KEY = 'tilewright.preferences.v1';
-export const DEFAULT_PREFERENCES = Object.freeze({ volume: 60, motion: 'system', text: 'standard', controls:'auto', keyboardLayout:'wasd', padSide:'left', controlSize:'comfortable', keyRepeat:'off', gamepad:'off' });
+export const DEFAULT_PREFERENCES = Object.freeze({ volume: 60, motion: 'system', text: 'standard', controls:'auto', keyboardLayout:'wasd', padSide:'left', controlSize:'comfortable', keyRepeat:'off', gamepad:'off', contrast:'standard', mapCues:'off', mapZoom:'standard', readingView:'off' });
 export function normalizePreferences(value) {
   const option=(field,values)=>values.includes(value?.[field])?value[field]:DEFAULT_PREFERENCES[field];
   return {
     volume: Number.isInteger(value?.volume) && value.volume >= 0 && value.volume <= 100 ? value.volume : DEFAULT_PREFERENCES.volume,
     motion: ['system', 'reduced'].includes(value?.motion) ? value.motion : DEFAULT_PREFERENCES.motion,
-    text: ['standard', 'large'].includes(value?.text) ? value.text : DEFAULT_PREFERENCES.text,
+    text: ['standard', 'large', 'largest'].includes(value?.text) ? value.text : DEFAULT_PREFERENCES.text,
+    contrast:option('contrast',['standard','high']),mapCues:option('mapCues',['off','on']),mapZoom:option('mapZoom',['standard','large','largest']),readingView:option('readingView',['off','on']),
     controls:option('controls',['auto','pad','swipe','tap','keyboard']),
     keyboardLayout:option('keyboardLayout',['wasd','ijkl','arrows']),
     padSide:option('padSide',['left','right']),controlSize:option('controlSize',['comfortable','large']),

@@ -1,10 +1,11 @@
+import { boardWindow, drawMapCues, drawCueBadge } from './adventure-accessibility.mjs';
 import { renderMap, drawTile, TILE_SIZE } from './render.mjs';
 import { activePlates, enemyIntent, gateIsOpen, hazardActive } from './adventure.mjs';
 import { decorateMap, themeFor, keeperColors } from './adventure-art.mjs';
 
 const same = (a, b) => a.x === b.x && a.y === b.y;
 
-export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPreference } = {}) {
+export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPreference, preferences = () => ({}) } = {}) {
   const background = document.createElement('canvas'); renderMap(background, stage.map); decorateMap(background, stage);
   let columns = Math.min(24, stage.map.width), rows = Math.min(16, stage.map.height);
   let state = null, previous = null, movedAt = 0;
@@ -12,9 +13,8 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
   const reducedMotion = motionPreference || matchMedia('(prefers-reduced-motion: reduce)');
 
   function resize(width, height) {
-    columns = Math.min(stage.map.width, Math.max(8, Math.min(24, Math.floor(width / 28))));
-    rows = Math.min(stage.map.height, Math.max(7, Math.min(16, Math.floor(height / 28))));
-    canvas.width = columns * TILE_SIZE; canvas.height = rows * TILE_SIZE;
+    ({columns,rows}=boardWindow(stage.map,width,height,preferences().mapZoom));
+    if(canvas.width!==columns*TILE_SIZE)canvas.width=columns*TILE_SIZE;if(canvas.height!==rows*TILE_SIZE)canvas.height=rows*TILE_SIZE;
     const scale = Math.min(width / canvas.width, height / canvas.height);
     canvas.style.width = `${Math.max(1, canvas.width * scale)}px`;
     canvas.style.height = `${Math.max(1, canvas.height * scale)}px`;
@@ -42,6 +42,13 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     ctx.fillStyle = '#173932'; ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.save(); ctx.translate(-Math.round(cameraX * TILE_SIZE), -Math.round(cameraY * TILE_SIZE));
     ctx.drawImage(background, 0, 0);
+    if(preferences().contrast==='high') {
+      for(let y=Math.floor(cameraY);y<Math.min(stage.map.height,Math.ceil(cameraY+rows));y++)for(let x=Math.floor(cameraX);x<Math.min(stage.map.width,Math.ceil(cameraX+columns));x++){
+        const open=run.walkable[y*stage.map.width+x]||stage.gates.some(g=>g.x===x&&g.y===y);
+        ctx.fillStyle=open?'#13262c':'#576572';ctx.fillRect(x*24,y*24,24,24);ctx.strokeStyle=open?'#3f5860':'#d3e0e8';ctx.lineWidth=1;ctx.strokeRect(x*24+.5,y*24+.5,23,23);
+        if(!open){ctx.beginPath();ctx.moveTo(x*24+4,y*24+17);ctx.lineTo(x*24+17,y*24+4);ctx.stroke();}
+      }
+    }
     const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
     const circle = (color, x, y, radius) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill(); };
     const visible = point => run.seen[point.y * stage.map.width + point.x];
@@ -213,6 +220,7 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
         else if (!near({ x, y }, run.player)) rect(`${stage.theme ? themeFor(stage).dark : '#173932'}66`, x * 24, y * 24, 24, 24);
       }
     }
+    if(preferences().mapCues==='on')drawMapCues(ctx,run);
     const echo = run.guild?.echo;
     if (echo && echo.until > run.turns) {
       const ex = echo.x * 24, ey = echo.y * 24;
@@ -241,6 +249,7 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     }
     if (run.carrying) { rect('#b9dfe0', x + 1, y + 10, 5, 10); rect('#f3e5b7', x + 2, y + 12, 3, 4); }
     rect('#f7d47b', x + 17, y + 15, 4, 5); ctx.globalAlpha = 1;
+    if(preferences().contrast==='high'||preferences().mapCues==='on'){ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.strokeRect(x+1,y+1,22,22);drawCueBadge(ctx,{x:player.x,y:player.y},'Y');}
     if (run.events.some(event => ['lantern', 'win'].includes(event.type)) && time - movedAt < 550 && !reducedMotion.matches) {
       const spread = (time - movedAt) / 35;
       for (let i = 0; i < 6; i++) {
@@ -272,16 +281,19 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     }
     for (const stone of stage.waystones || []) {
       if (!run.seen[stone.y * stage.map.width + stone.x]) continue;
-      ctx.fillStyle = '#d8b9f5'; ctx.fillRect(ox + stone.x * scale, oy + stone.y * scale, Math.max(3, scale), Math.max(3, scale));
+      ctx.fillStyle='#071619';ctx.fillRect(ox+stone.x*scale-1,oy+stone.y*scale-2,9,10);ctx.fillStyle='#ffffff';ctx.font='bold 9px sans-serif';ctx.textAlign='left';ctx.fillText('T',ox+stone.x*scale,oy+stone.y*scale+6);
     }
     for (const [point, color] of [[stage.exit, '#8de1ba'], ...(run.guild?.echo ? [[run.guild.echo, '#b6f6f1']] : []), [run.player, '#fff2c0']]) {
       ctx.fillStyle = color; ctx.fillRect(ox + point.x * scale, oy + point.y * scale, Math.max(3, scale), Math.max(3, scale));
     }
+    ctx.fillStyle='#071619';ctx.fillRect(ox+stage.exit.x*scale-2,oy+stage.exit.y*scale-2,9,10);ctx.fillStyle='#ffffff';ctx.font='bold 9px sans-serif';ctx.textAlign='left';ctx.fillText('H',ox+stage.exit.x*scale-1,oy+stage.exit.y*scale+6);
+    const px=ox+(run.player.x+.5)*scale,py=oy+(run.player.y+.5)*scale;ctx.fillStyle='#ffffff';ctx.strokeStyle='#071619';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px,py-5);ctx.lineTo(px+5,py);ctx.lineTo(px,py+5);ctx.lineTo(px-5,py);ctx.closePath();ctx.fill();ctx.stroke();
     ctx.strokeStyle = '#fff0b380'; ctx.lineWidth = 1;
     const left = Math.max(0, Math.min(stage.map.width - columns, run.player.x - (columns - 1) / 2));
     const top = Math.max(0, Math.min(stage.map.height - rows, run.player.y - (rows - 1) / 2));
     ctx.strokeRect(ox + left * scale, oy + top * scale, columns * scale, rows * scale);
   }
 
-  return { playerAnchor, resize, setState, draw, drawMinimap };
+  function projectPoint(point){return {x:(point.x-Math.max(0,Math.min(stage.map.width-columns,state.player.x-(columns-1)/2)))*24,y:(point.y-Math.max(0,Math.min(stage.map.height-rows,state.player.y-(rows-1)/2)))*24};}
+  return { projectPoint, playerAnchor, resize, setState, draw, drawMinimap };
 }

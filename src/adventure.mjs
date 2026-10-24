@@ -360,19 +360,20 @@ export function stepRun(run, action) {
   }
   const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
+  const hunted=next.hunters.length>0,threatened=hunted||next.enemies.length>0;
   const messages = { hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
     pulse: next.effects.powerRecharge ? `Resonance pulse! Nearby hunters halt for ${next.effects.pulseTurns} turns.${next.effects.pulseWard ? ' A two-turn ward protects you too.' : ' Contact and fire still hurt.'}` : 'Resonance pulse! Hunters within four reachable steps halt for this turn and the next. Contact and fire still hurt.',
     veil: 'Mist veil raised. Existing enemy plans still resolve; move away from their last lead. Cargo and alarms reveal you.',
     echo: next.effects.echoTurns ? `Double cast! ${next.effects.echoTurns} more turns to lure hunters or hold a plate. Returning costs ${next.effects.returnEnergy} energy. Check Plan before returning.` : 'Double cast! Six more turns to lure hunters or hold a plate. B returns to it for one energy. Check Plan before returning.',
     'echo-return': next.effects.returnEnergy ? `Returned to your double. ${next.effects.returnEnergy} energy spent; the double dissolves.${next.effects.returnWard?' A two-turn ward protects this landing.':' Enemies take their turn.'}` : 'Returned to your double. One energy spent; the double dissolves and enemies take their turn.',
     'echo-fade': 'Your double has faded or a hunter reached it. Check pressure crossings before moving.',
-    waystone: `Waystone crossed to ${event?.name}. One energy spent; enemies moved once.`,
+    waystone: `Waystone crossed to ${event?.name}. One energy spent.${threatened?' Enemies moved once.':' Walk or wait to recharge.'}`,
     'blocked-hit': 'Your shield absorbs the hit. Keep moving before it fades.',
-    'relay-complete': 'The relay network is powered! Signal gates open and hunters are stunned for three more turns.',
-    alarm: 'Wrong relay! The sequence reset and every hunter heard the alarm. Break line of sight.',
+    'relay-complete': hunted?'The relay network is powered! Signal gates open and hunters are stunned for three more turns.':'The melody is complete! Signal gates are open.',
+    alarm: hunted?'Wrong relay! The sequence reset and every hunter heard the alarm. Break line of sight.':'The melody has restarted. Begin again at note 1; the order is written in Quest.',
     relay: `Relay ${next.relayProgress} of ${next.stage.sequence.length} powered.`, supply: 'Supplies found: one heart, a decoy, and a shield charge.',
     decoy: `A false lantern! Nearby hunters follow it for ${next.effects.decoyTurns} turns. Take another route.`, shield: `Shield raised for ${next.effects.shieldTurns} turns, including this one. It blocks wardens, sweeps, and embers.`,
-    cargo: 'The relic is singing. Hunters can hear you; press X to set it down and draw them away.',
+    cargo: hunted?'The relic is singing. Hunters can hear you; press X to set it down and draw them away.':'The relic is singing. Bring it to its delivery beacon. X sets it down.',
     switch: `${event?.name} switched ${event?.active ? 'on' : 'off'}. Check the crossings and ember warnings before moving.`,
     'cargo-drop': 'Relic set down. Its song is a false trail; pick it up again with Interact.', delivery: 'Relic delivered safely! Finish any remaining objectives and reach the beacon.',
     phase: `Lantern restored. Watcher phase ${boss?.phase}: “${boss?.phase === 2 ? 'I have seen that turn before.' : 'Then I will meet you where you always run.'}” Watch for its marked sweep.`,
@@ -380,8 +381,8 @@ export function stepRun(run, action) {
     key: 'A brass key. It opens one locked gate.', unlock: 'Gate unlocked. A new part of the trail awaits.',
     push: activePlates(next).length ? 'Pressure plate held. Keep the crate in place to hold the crossing open.' : 'Crate moved. Push it onto a copper pressure plate.',
     heart: 'One heart restored.', coin: next.stage.requireCoins ? 'A trail coin! Recover every coin before leaving this trail.' : 'A trail coin! Optional treasures improve your score.' };
-  next.message = event ? messages[event.type] : direction === 'wait' ? 'You wait. Enemies move and energy recharges.'
-    : dash ? 'A quick dash! Hunters nearby can hear it. Walk or wait to recharge.' : 'Watch the hunters. Use cover, change direction, or create an opening.';
+  next.message = event ? messages[event.type] : direction === 'wait' ? threatened?'You wait. Enemies move and energy recharges.':'You wait. Energy recharges; the trail waits with you.'
+    : dash ? hunted?'A quick dash! Hunters nearby can hear it. Walk or wait to recharge.':'A quick dash! Walk or wait to recharge.' : hunted?'Watch the hunters. Use cover, change direction, or create an opening.':threatened?'Read the next-step markers. Walk or wait to recharge.':'The trail leads onward. Take your time.';
   return next;
 }
 
