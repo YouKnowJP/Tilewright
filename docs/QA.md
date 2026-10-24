@@ -436,9 +436,9 @@ other engines, assistive-technology certification, and arbitrary player-made
 puzzle solvability remain outside the claim. It does not establish universal
 bug freedom or player enjoyment. Book checkpoints remain at chapter boundaries.
 
-![The new story library](new-story-library.png)
+![The new story library](screenshots/new-story-library.png)
 
-![A rescue finale on a short phone](new-story-finale-phone.png)
+![A rescue finale on a short phone](screenshots/new-story-finale-phone.png)
 
 ## Storybooks and chapter promises — v0.17.0
 
@@ -479,9 +479,9 @@ physical-device, other-engine, screen-reader, universal user-puzzle solvability,
 or player-enjoyment certification. Book recovery is explicitly at chapter
 boundaries, and portable book files exclude progress.
 
-![A Storybook chapter camp](storybook-camp.png)
+![A Storybook chapter camp](screenshots/storybook-camp.png)
 
-![Storybook gameplay on a phone](storybook-game-phone.png)
+![Storybook gameplay on a phone](screenshots/storybook-game-phone.png)
 
 ## Puzzle Lab and creative experiments — v0.16.0
 
@@ -512,7 +512,7 @@ responsive Workshop suites also pass. Physical devices, other browser engines,
 screen-reader certification, and every player-authored puzzle remain outside
 this verification claim.
 
-![The Puzzle Lab](puzzle-lab.png)
+![The Puzzle Lab](screenshots/puzzle-lab.png)
 
 ## Training camp and player entry — v0.15.0
 
@@ -543,9 +543,9 @@ touch painting, terrain copying, modal focus, and preserved ordinary saves.
 These checks cover the listed Chrome flows; they do not claim universal browser,
 physical-device, or assistive-technology coverage.
 
-![The training camp](training-camp.png)
+![The training camp](screenshots/training-camp.png)
 
-![A keeper's advice on a short phone screen](training-dialogue.png)
+![A keeper's advice on a short phone screen](screenshots/training-dialogue.png)
 
 ## Creator’s camp and player readiness — v0.14.0
 
@@ -586,9 +586,9 @@ These checks establish the listed flows on the tested Chrome builds and sizes.
 They do not claim physical-device, other-engine, screen-reader certification,
 or universal puzzle solvability or player enjoyment.
 
-![The unified Mapmaker](creator-mapmaker-1440.png)
+![The unified Mapmaker](screenshots/creator-mapmaker-1440.png)
 
-![The focused adventure studio](creator-studio-390.png)
+![The focused adventure studio](screenshots/creator-studio-390.png)
 
 ## Adventure Workshop — v0.13.0
 
@@ -635,9 +635,9 @@ and saves retain their versions; no public upload/gallery service is implied.
 These tests do not establish physical-device, other-engine, screen-reader,
 human enjoyment, or universal puzzle-solvability coverage.
 
-![Adventure Workshop designer](workshop-designer.png)
+![Adventure Workshop designer](screenshots/workshop-designer.png)
 
-![Compact world notes](workshop-mobile.png)
+![Compact world notes](screenshots/workshop-mobile.png)
 
 ## Shared game theme, navigation, and Adventure Journal — v0.12.0
 
@@ -681,11 +681,11 @@ The journal reads existing stores and introduces no save migration or rule
 change. These checks do not replace physical-device, other-engine, screen-reader,
 or human enjoyment/balance studies.
 
-![The unified game screen on desktop](gameplay-desktop.png)
+![The unified game screen on desktop](screenshots/gameplay-desktop.png)
 
-![The game screen on a phone](gameplay-mobile.png)
+![The game screen on a phone](screenshots/gameplay-mobile.png)
 
-![Camp choices and aligned actions](game-camp.png)
+![Camp choices and aligned actions](screenshots/game-camp.png)
 
 ## Title, field guide, and game options — v0.11.0
 
@@ -722,11 +722,11 @@ run; the product does not auto-start to accommodate tests. Physical devices,
 other browser engines, screen-reader audits, and human usability studies remain
 outside this verification.
 
-![The game title on a phone](title-mobile.png)
+![The game title on a phone](screenshots/title-mobile.png)
 
-![Illustrated adventure previews](adventure-modes.png)
+![Illustrated adventure previews](screenshots/adventure-modes.png)
 
-![Game options on a phone](game-options.png)
+![Game options on a phone](screenshots/game-options.png)
 
 ## Game text and symbol-free progress — v0.10.2
 
@@ -749,7 +749,7 @@ or notification headings. Quest notes and Guild results use words and counts.
 Desktop and phone screenshots were inspected. Saved game state and turn rules
 remain unchanged; no new external fonts, assets, or services are required.
 
-![The in-game message box on a phone](feedback-mobile.png)
+![The in-game message box on a phone](screenshots/feedback-mobile.png)
 
 ## Readable gameplay feedback — v0.10.1
 
@@ -772,7 +772,7 @@ This changes feedback presentation and the keeper-block explanation. Simulation
 timing, save formats, and expedition rules remain unchanged. Other browser and
 physical-device coverage retains its version-specific scope below.
 
-![Readable blocked-path feedback on a phone](feedback-mobile.png)
+![Readable blocked-path feedback on a phone](screenshots/feedback-mobile.png)
 
 ## Lantern doubles — v0.10.0
 
@@ -819,7 +819,7 @@ browser coverage; other story/expedition browser suites retain their earlier
 version-specific results below. Physical devices, other browsers, screen-reader
 audits, and human balance studies remain outside this verification.
 
-![The double route on a phone](echo-bridge-mobile.png)
+![The double route on a phone](screenshots/echo-bridge-mobile.png)
 
 ## New horizons — v0.9.0
 
@@ -862,7 +862,7 @@ overflow. Desktop artwork, new terrain, and mobile screenshots were inspected.
 Physical devices, Safari, Firefox, a full screen-reader audit, and human
 usability/balance studies remain outside this verification.
 
-![The new clockwork finale](clockwork-desktop.png)
+![The new clockwork finale](screenshots/clockwork-desktop.png)
 
 ## Focused play layout — v0.8.1
 
@@ -898,7 +898,7 @@ The UI change keeps simulation rules, checkpoints, and saved records unchanged.
 Safari, Firefox, physical devices, and a full screen-reader audit remain outside
 this verification. Human usability is not established by automated checks.
 
-![Focused play on desktop](focused-play-desktop.png)
+![Focused play on desktop](screenshots/focused-play-desktop.png)
 
 ## Guild specialists and developer research — v0.8.0
 
@@ -962,7 +962,7 @@ No Safari, Firefox, physical-device, full screen-reader, or human balance/
 enjoyment study was performed. The [research notes](RESEARCH.md) describe primary
 sources and the distinction between shipped behavior and future prototypes.
 
-![The new Guild board and separate specialist results](guild-board.png)
+![The new Guild board and separate specialist results](screenshots/guild-board.png)
 
 ## Atlas expansion — v0.7.0
 
@@ -1020,8 +1020,8 @@ No Safari, Firefox, physical-device, full screen-reader, or human enjoyment
 study was performed. The checked routes and invariants pass; this is not a
 claim that every possible play history or device is bug-free.
 
-![The illustrated atlas after completed new chapters](atlas-chapters.png)
-![The aurora finale with rescued keepers and a carried heart](aurora-finale.png)
+![The illustrated atlas after completed new chapters](screenshots/atlas-chapters.png)
+![The aurora finale with rescued keepers and a carried heart](screenshots/aurora-finale.png)
 
 ## Gameplay audit and sluice saga — v0.6.0
 
@@ -1081,12 +1081,12 @@ browser suites also pass, including full long journeys, backups, actual loss/
 retry, blocked/full storage, scrolling, PNG export, and real CDP swipes.
 
 Run `npm run test:browser` for all **five** suites, or
-`node scripts/sluice-browser-checks.mjs` for the new act. Playwright and Chrome
+`node scripts/browser/sluice-browser-checks.mjs` for the new act. Playwright and Chrome
 are independently installed; default verification still has no npm dependencies.
 Contexts are disposable and never clear the user’s actual saves. Browser checks
 are not part of the default GitHub Actions matrix.
 
-[Phone valve preview](sluice-mobile.png), [desktop finale](sluice-finale.png),
+[Phone valve preview](screenshots/sluice-mobile.png), [desktop finale](screenshots/sluice-finale.png),
 [mission guide](MISSIONS.md), and [design references](DESIGN_NOTES.md) document
 the result. Safari, Firefox, physical devices, screen readers, and extended
 human difficulty/enjoyment studies remain untested.
@@ -1147,11 +1147,11 @@ scrollable camp. Departure buttons stay visible while choices scroll. Testing
 caught and corrected an oversized tablet board. All prior editor, six-story,
 Nemesis, scrolling, swipe, resize, layer, export, and failed-startup suites also
 pass. Run `npm run test:browser` for all four suites, or
-`node scripts/expedition-browser-checks.mjs` for expeditions, with independently
+`node scripts/browser/expedition-browser-checks.mjs` for expeditions, with independently
 installed Playwright and Chrome. Browser checks remain separate from default CI.
 
-[Generated expedition](expedition.png), [hub/logbook](expedition-hub.png), and
-[phone camp](expedition-camp-mobile.png) show real UI after ordinary inputs.
+[Generated expedition](screenshots/expedition.png), [hub/logbook](screenshots/expedition-hub.png), and
+[phone camp](screenshots/expedition-camp-mobile.png) show real UI after ordinary inputs.
 The [expedition guide](EXPEDITIONS.md) documents controls, goals, scores,
 checkpoint compatibility and bounds. Coverage is evidence for tested inputs;
 it cannot guarantee every possible seed, device, or strategy is bug-free.
@@ -1198,13 +1198,13 @@ and the page does not overflow sideways. Prior editor, introductory-adventure,
 scrolling, resize/layer, PNG, failed-startup, and storage-failure suites also pass.
 
 At v0.4.0, `npm run test:browser` covered the three existing suites; use
-`node scripts/contract-browser-checks.mjs` for the new mission checks, with
+`node scripts/browser/contract-browser-checks.mjs` for the new mission checks, with
 Playwright separately installed and Chrome available. Browser tests use isolated
 contexts and never clear existing user saves. Default Node verification still
 needs no installed packages.
 
-[Desktop Watcher](watcher.png), [phone Watcher](watcher-mobile.png), and
-[phone dialogue](dialogue-mobile.png) screenshots are captured after real input,
+[Desktop Watcher](screenshots/watcher.png), [phone Watcher](screenshots/watcher-mobile.png), and
+[phone dialogue](screenshots/dialogue-mobile.png) screenshots are captured after real input,
 including the Nemesis shield and incoming marked sweep. Existing fictional
 editor and introductory campaign screenshots remain as historical records.
 
@@ -1244,10 +1244,10 @@ The adventure checks cover:
 The existing five-width editor, scrolling, layer/resize, touch, keyboard, PNG,
 and startup-failure checks also pass. Run `npm run test:browser` with an
 independently installed Playwright and Chrome; game-only checks are available
-through `node scripts/adventure-browser-checks.mjs`. The application and Node
+through `node scripts/browser/adventure-browser-checks.mjs`. The application and Node
 checks still require no npm packages. All browser contexts are disposable.
 
-[Desktop adventure](adventure.png) and [phone adventure](adventure-mobile.png)
+[Desktop adventure](screenshots/adventure.png) and [phone adventure](screenshots/adventure-mobile.png)
 screenshots show Copper Crossing reached through normal keyboard play.
 Synthesized sound is opt-in; audible quality and physical-device audio playback
 have not been assessed by automation.
@@ -1282,7 +1282,7 @@ The Node suite now has **19 passing tests**, including fit geometry at multiple
 document/view sizes and coordinate mapping at every supported zoom. Server
 tests verify successful loading of every public asset, including startup modules.
 
-The reusable `scripts/browser-checks.mjs` suite passed in isolated headless
+The reusable `scripts/browser/checks.mjs` suite passed in isolated headless
 Chrome 155.0.8059.82 at **320, 390, 768, 1024, and 1440 CSS pixels**. It verifies:
 
 - All four map edges are visible on initial load and after resizing.
@@ -1301,7 +1301,7 @@ Chrome 155.0.8059.82 at **320, 390, 768, 1024, and 1440 CSS pixels**. It verifie
 - An intentionally failed application-module request displays startup guidance
   instead of leaving an empty map with no explanation.
 
-Updated [desktop](tilewright.png) and [phone](tilewright-mobile.png) screenshots
+Updated [desktop](screenshots/tilewright.png) and [phone](screenshots/tilewright-mobile.png) screenshots
 show the untouched fictional map. Browser checks remain separate from default
 Node verification and CI. They use disposable contexts, not existing user saves.
 

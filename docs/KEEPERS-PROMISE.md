@@ -9,7 +9,7 @@ through a key-and-bell workshop to Vesper’s listening garden. Each route plays
 three of the book’s five worlds and has its own ending. Both rules are available;
 chapter honors stay optional. Replay the book to see the other road.
 
-![Choose which promise to carry](keepers-promise-choice.png)
+![Choose which promise to carry](screenshots/keepers-promise-choice.png)
 
 Choices and completed chapters save at camp. Continue also retains the exact
 unfinished chapter. Finished pages remain readable in the book’s restored pages.

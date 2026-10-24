@@ -24,7 +24,7 @@ clears record the surviving route after Undo. Restoring an earlier playtest neve
 overwrites a newer draft or attaches that earlier clear to it. Cursor-practice
 recovery stays unscored. [Undo and Continue](CONTINUE.md).
 
-![The creator’s camp](creator-camp.png)
+![The creator’s camp](screenshots/creator-camp.png)
 
 **Creator’s guide** is available in both Mapmaker and the Workshop. Its three
 illustrated chapters introduce a first trail, a linked crossing, and sharing a
@@ -89,7 +89,7 @@ Escape cancels a stroke/rectangle or ends route drawing. Delete removes the
 selected object. Ctrl/Command Z, Shift Z/Y, and S undo, redo, and save to shelf
 outside text fields/dialogs. On smaller screens, world notes open separately.
 
-![Designing a linked bridge puzzle](creator-studio-1440.png)
+![Designing a linked bridge puzzle](screenshots/creator-studio-1440.png)
 
 ## Build an encounter
 

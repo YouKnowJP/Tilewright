@@ -32,7 +32,7 @@ route to Mara and the signal-locked haven. Tala can cool Breakwater remotely,
 or give you a larger kit while you find the southern pump. Both keepers need
 all four lamps before they will follow. The carried lens attracts hunters.
 
-![The Tideglass chapter in the library](horizon-chapters.png)
+![The Tideglass chapter in the library](screenshots/horizon-chapters.png)
 
 ## Chapter 8: The Clockwork Orchard
 
@@ -63,7 +63,7 @@ can take her kit and find its wheel. Two western carts can also open an
 optional northern crossing. This crossing is an alternate approach, not a
 required exit goal. Read the next-step markers before pushing near a hunter.
 
-![The living clock and its garden](clockwork-desktop.png)
+![The living clock and its garden](screenshots/clockwork-desktop.png)
 
 Nemesis starts with fewer supplies, adds a hunter, and uses 85% of the Trail
 turn targets. The new finales offer a Nemesis replay from their own chapter

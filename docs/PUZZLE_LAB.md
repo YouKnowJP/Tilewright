@@ -64,7 +64,7 @@ Replacing an existing draft still asks you first. Change its terrain, object
 positions, story, linked channels, specialist kit, or rules. A remix needs its
 own full playtest; it cannot inherit the original room's verified route.
 
-![Puzzle Lab](puzzle-lab.png)
+![Puzzle Lab](screenshots/puzzle-lab.png)
 
 ## Turn the world around
 
@@ -94,7 +94,7 @@ at the original starting point and can record a valid creator clear.
 If the cursor is on water, a wall, a crate, a keeper, or a closed gate, the tools
 dialog explains what to change. Move it to open land and try again.
 
-![Remix and practice tools](remix-tools.png)
+![Remix and practice tools](screenshots/remix-tools.png)
 
 ## Deal a design spark
 

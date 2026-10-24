@@ -11,7 +11,7 @@ rescues, relays, embers, and adaptive hunters. The Sluice Saga changes crossings
 and offers consequential route choices. Their walkthroughs remain in the
 [mission guide](MISSIONS.md). The new chapters follow below.
 
-![Violet archives and the amber road in the field atlas](atlas-chapters.png)
+![Violet archives and the amber road in the field atlas](screenshots/atlas-chapters.png)
 
 ## Chapter 4: The Unwritten Sky
 
@@ -92,7 +92,7 @@ needs to be on for the final goal, and both Root/Frost must precede Star/Dawn.
 The northern route is viable without moving either weight. Both approaches
 have clean three-star witnesses on Trail and Nemesis.
 
-![A walking-only northern delivery with its rule banner and touch controls](aurora-mobile.png)
+![A walking-only northern delivery with its rule banner and touch controls](screenshots/aurora-mobile.png)
 
 ## Make another run different
 

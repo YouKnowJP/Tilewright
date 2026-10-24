@@ -37,7 +37,7 @@ Fourteen clean public-action fixtures verify both dialogue branches on both
 difficulties, plus Glasshouse without trading. See [QA](QA.md) for routes and
 limits, and [design notes](DESIGN_NOTES.md) for the research behind the refinement.
 
-![Rainmoss valve preview on a phone](sluice-mobile.png)
+![Rainmoss valve preview on a phone](screenshots/sluice-mobile.png)
 
 ## Play now: the second act
 

@@ -43,7 +43,7 @@ a curated Trailboard with bookmarks, completed-route reviews and fastest-finish
 comparisons, and village scenes and decorations earned through your stories.
 See [the new activities and creator guide](docs/KEEPERS-PROMISE.md).
 
-![The Tideglass Coast, one of two new story chapters](docs/horizon-chapters.png)
+![The Tideglass Coast, one of two new story chapters](docs/screenshots/horizon-chapters.png)
 
 ## Play now
 
@@ -118,7 +118,7 @@ blocks the beacon. Download or restore a separate seal journal for another devic
 Every new world can be remixed, shared, or included in a custom Storybook.
 See [Puzzle Lab](docs/PUZZLE_LAB.md).
 
-![After-hours adventures in Puzzle Lab](docs/afterhours-lab.png)
+![After-hours adventures in Puzzle Lab](docs/screenshots/afterhours-lab.png)
 
 ## A home between adventures
 
@@ -149,7 +149,7 @@ the exact open chapter when it is your latest saved adventure. Book bests,
 creator drafts, and other modes remain separate.
 See the [Storybooks guide](docs/STORYBOOKS.md).
 
-![The new story library](docs/new-story-library.png)
+![The new story library](docs/screenshots/new-story-library.png)
 
 ## Learn by playing
 
@@ -205,7 +205,7 @@ Tell the story, and Set the challenge. Checks separates structural readiness
 from an attached creator clear. The [player guide](docs/PLAYER_GUIDE.md) covers
 starting, playing, creating, and keeping backups.
 
-![The unified terrain workspace](docs/creator-mapmaker-1440.png)
+![The unified terrain workspace](docs/screenshots/creator-mapmaker-1440.png)
 
 ## Create and share adventures
 
@@ -242,7 +242,7 @@ service. Your shelf holds up to 32 worlds separately from campaign progress.
 See the [Workshop guide](docs/WORKSHOP.md) for puzzle channels, controls,
 playtesting, sharing, and storage limits.
 
-![Adventure Workshop](docs/creator-camp.png)
+![Adventure Workshop](docs/screenshots/creator-camp.png)
 
 ## Play Lantern Trails
 
@@ -267,7 +267,7 @@ slot. Mapmaker returns to the editor, with its map and undo retained during the 
 Its mode preview also offers **Explore current map** to start your existing world
 directly; maps without enough connected land explain what to change.
 
-![Lantern Trails title screen](docs/title-desktop.png)
+![Lantern Trails title screen](docs/screenshots/title-desktop.png)
 
 **Adventure journal** brings all your progress together: chapter mastery on
 Trail and Nemesis, specialist dispatches and honors, and twelve expedition badges.
@@ -283,7 +283,7 @@ use original pixel landscapes; buttons, selected states, and navigation share a
 consistent layout. Mapmaker and the Workshop use the same presentation while
 keeping their maps, drafts, and histories separate.
 
-![The Adventure Journal](docs/adventure-journal.png)
+![The Adventure Journal](docs/screenshots/adventure-journal.png)
 
 The board opens on its own screen after you choose a mission. **Trails** opens the library; choose one
 chapter at a time, or use the Expeditions and Guild tabs. **Back to your trail**
@@ -424,7 +424,7 @@ plus 20% room for exploration. Custom expeditions have no wardens or authored
 gate puzzles. Editing or renaming a map creates a new expedition identity.
 Playing never changes map tiles, autosave, or undo history.
 
-![Dialogue choices on a phone layout](docs/dialogue-mobile.png)
+![Dialogue choices on a phone layout](docs/screenshots/dialogue-mobile.png)
 
 See the [atlas chapter guide](docs/ATLAS.md) and [mission guide, sluice walkthrough, and future ideas](docs/MISSIONS.md) for
 walkthrough goals, counterplay, and proposed interactions.
@@ -454,7 +454,7 @@ between remote rain and supplies. Both jobs also work with Pulse and Veil.
 See the [Guild guide](docs/GUILD.md) for tools, loadouts, portal rules, all eight
 jobs, and scoring, and the [developer research](docs/RESEARCH.md) behind them.
 
-![The Wayfarers’ Guild dispatch board](docs/guild-board.png)
+![The Wayfarers’ Guild dispatch board](docs/screenshots/guild-board.png)
 
 ## Play longer expeditions
 
@@ -476,7 +476,7 @@ choices. Resume after reloading, retry a lost leg without losing earlier wins,
 or export/import an expedition backup. Maps and campaign saves are retained.
 **X / Set relic down** drops carried cargo as a distraction; **E** retrieves it.
 
-![A generated expedition with its quest checklist](docs/expedition.png)
+![A generated expedition with its quest checklist](docs/screenshots/expedition.png)
 
 See the [expedition guide](docs/EXPEDITIONS.md) for every mode, mission, upgrade,
 oath, score rule, checkpoint limit, and ideas for your next run.
@@ -513,7 +513,7 @@ preview shows the resulting map and reports occupied cells that would be lost,
 including hidden layers. **Cancel** leaves the map untouched; **Resize map**
 applies one undoable change and resets the view to Fit map.
 
-![Resize preview with crop information](docs/resize-preview.png)
+![Resize preview with crop information](docs/screenshots/resize-preview.png)
 
 Layer settings apply to the selected layer. Duplicating makes an independent
 copy immediately in front of the source; moving a layer changes compositing
@@ -576,13 +576,13 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 516 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 585 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
 26 on Linux, plus Node 24 on macOS and Windows.
 
-An optional browser regression suite lives in `scripts/browser-checks.mjs`.
+An optional browser regression suite lives in `scripts/browser/checks.mjs`.
 With Playwright separately installed in the development environment and Google
 Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
@@ -597,14 +597,19 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The twenty-seven browser families include two new activity and
-detailed-interaction suites in `scripts/expansion-browser-checks.mjs`, plus
-`scripts/settings-browser-checks.mjs`, `scripts/save-profiles-browser-checks.mjs`, `scripts/save-data-browser-checks.mjs`, `scripts/dropdown-browser-checks.mjs`, `scripts/checkpoint-browser-checks.mjs`, `scripts/mastery-browser-checks.mjs`, `scripts/storybook-browser-checks.mjs`, `scripts/lab-browser-checks.mjs`, `scripts/training-browser-checks.mjs`, `scripts/creator-browser-checks.mjs`, `scripts/workshop-browser-checks.mjs`, `scripts/front-browser-checks.mjs`,
-`scripts/journal-browser-checks.mjs`, `scripts/horizon-browser-checks.mjs`, `scripts/layout-browser-checks.mjs`,
-`scripts/sluice-browser-checks.mjs`,
-`scripts/atlas-browser-checks.mjs`, and `scripts/guild-browser-checks.mjs`.
+editor history. The twenty-nine browser families include route-review and
+accessibility checks, two activity and
+detailed-interaction suites in `scripts/browser/expansion-browser-checks.mjs`, plus
+`scripts/browser/settings-browser-checks.mjs`, `scripts/browser/save-profiles-browser-checks.mjs`, `scripts/browser/save-data-browser-checks.mjs`, `scripts/browser/dropdown-browser-checks.mjs`, `scripts/browser/checkpoint-browser-checks.mjs`, `scripts/browser/mastery-browser-checks.mjs`, `scripts/browser/storybook-browser-checks.mjs`, `scripts/browser/lab-browser-checks.mjs`, `scripts/browser/training-browser-checks.mjs`, `scripts/browser/creator-browser-checks.mjs`, `scripts/browser/workshop-browser-checks.mjs`, `scripts/browser/front-browser-checks.mjs`,
+`scripts/browser/journal-browser-checks.mjs`, `scripts/browser/horizon-browser-checks.mjs`, `scripts/browser/layout-browser-checks.mjs`,
+`scripts/browser/sluice-browser-checks.mjs`,
+`scripts/browser/atlas-browser-checks.mjs`, and `scripts/browser/guild-browser-checks.mjs`.
 Playwright is not needed to run the app or the default checks. Browser tests
 are not currently run in CI.
+
+The [tooling guide](scripts/README.md) explains browser checks and route
+generators. The [documentation index](docs/README.md) links every player and
+technical guide; curated images live in `docs/screenshots/`.
 
 The distributable contains only browser assets, an MIT license, and release
 metadata. Serve `dist/` over HTTP with a static server; development tooling and

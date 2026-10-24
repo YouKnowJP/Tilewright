@@ -6,7 +6,7 @@ Choose a specialist for the next job, then a job card. The Rules selector offers
 Trail or Nemesis; changing rules restarts the current mission. Changing the
 Guild specialist prepares your next job and leaves the active job’s kit intact.
 
-![The Guild dispatch board](guild-board.png)
+![The Guild dispatch board](screenshots/guild-board.png)
 
 ## Three different tools
 
@@ -47,7 +47,7 @@ The two new jobs’ pressure bridges keep an occupied cell open until the player
 crate, companion, or enemy leaves it, so a fading double cannot remove the floor
 under someone. Empty cells still close; plan the remaining crossing carefully.
 
-![A double holds the glasshouse plate while its keeper crosses](echo-bridge-desktop.png)
+![A double holds the glasshouse plate while its keeper crosses](screenshots/echo-bridge-desktop.png)
 
 ## Fold a path with waystones
 
@@ -104,7 +104,7 @@ For Borrowed Horizon, the west key opens the lighthouse door at column 25,
 row 6. Restore all four lights before returning to Neri. Cool Rain before the
 southern ember lane if you chose supplies, and bring the lens to the west beacon.
 
-![A Guild waystone landing and its forecast](guild-tools-desktop.png)
+![A Guild waystone landing and its forecast](screenshots/guild-tools-desktop.png)
 
 ## Keep another reason to return
 

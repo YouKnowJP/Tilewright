@@ -33,9 +33,9 @@ The Switchback harness controls the browser clock while sending real keyboard, b
 
 ## Visual evidence
 
-- [Plan at extra-large reading on a phone](../plan-layout-check.png)
-- [Route-review regression](../review-damage-check.png)
-- [Switchback landscape play](../../../Switchback/docs/recheck-landscape.png)
-- [Switchback phone result and menus](../../../Switchback/docs/recheck-phone.png)
+- [Plan at extra-large reading on a phone](../screenshots/plan-layout-check.png)
+- [Route-review regression](../screenshots/review-damage-check.png)
+- [Switchback landscape play](../../../Switchback/docs/screenshots/recheck-landscape.png)
+- [Switchback phone result and menus](../../../Switchback/docs/screenshots/recheck-phone.png)
 
 Browser emulation and engine checks do not certify every physical device, assistive technology, or future browser release. Actual phone/tablet hardware and full screen-reader play remain separate testing needs. No remaining failures were found in the scenarios listed above; this is not a claim that every possible bug has been ruled out.

@@ -59,7 +59,7 @@ completed capture form so saved assemblies remain easy to find. The usual
 local address, `127.0.0.1:4174`, is restarted with the new asset allowlist and
 passes an actual chapter clear and crossroads capture.
 
-![The actual branching camp](../keepers-promise-choice.png)
+![The actual branching camp](../screenshots/keepers-promise-choice.png)
 
 ## Practical limits
 
