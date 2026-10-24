@@ -11,7 +11,7 @@ npm run verify
 | --- | --- |
 | [check.mjs](check.mjs) | Recursively checks syntax in source, tests, and tools. |
 | [build.mjs](build.mjs) | Packages only the explicit public-file allowlist into `dist/`. |
-| [browser/checks.mjs](browser/checks.mjs) | Entry point for all 29 optional live browser-check families. |
+| [browser/checks.mjs](browser/checks.mjs) | Entry point for all 30 optional live browser-check families. |
 | [browser/](browser/) | Feature-specific checks and shared UI/capture helpers. |
 | [solvers/](solvers/) | Developer witness generators; produce ordinary input journals through the public rules. |
 

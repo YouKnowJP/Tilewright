@@ -1,7 +1,7 @@
 # Storybooks: a road between worlds
 
 Choose **Adventure Workshop → Storybooks** from the main menu. Read a book's
-opening scene before entering its first chapter. Six featured books are available.
+opening scene before entering its first chapter. Eight featured books are available.
 **The Rainmaker’s Letters** and **The Observatory of Borrowed Stars** each add
 four original maps and a complete new story. The three earlier books weave the
 six Puzzle Lab worlds into journeys of three, three, and six chapters.
@@ -11,6 +11,11 @@ roads, a real camp decision, and separate endings. Its [player and creator
 guide](KEEPERS-PROMISE.md) also explains custom forward links and endings.
 
 **The Welcome Lanterns** adds six peaceful chapters with no enemies or burning tiles. Use Accessibility → Find the peaceful storybook, or choose its cover in the library. See the [accessibility guide](ACCESSIBILITY.md) for reading sizes, map symbols, and controls.
+
+**The Lanternfair Letters** adds four peaceful chapters about a missing pattern,
+a ribbon crossing, a written bell song, and a shared parade. Its worlds also
+appear in Discover and the book creator. Visit **Your traveler** to customize
+your character and find the book. See the [traveler and festival guide](TRAVELER.md).
 
 At each camp choose one optional promise:
 
@@ -36,7 +41,7 @@ lets you open a completed chapter to reread its opening scene and ending.
 
 Select **Bind your own story** or **Make your version** on a featured book.
 Write a title, creator name, invitation, and ending. Add **two to six worlds**
-from your saved shelf, featured adventures, Puzzle Lab, the nineteen original
+from your saved shelf, featured adventures, Puzzle Lab, the twenty-three original
 Storybook levels, or current World studio
 draft. Add a short scene before each chapter, move chapters earlier or later,
 and remove any you no longer need. A world must pass structural checks before

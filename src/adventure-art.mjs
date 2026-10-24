@@ -1,3 +1,4 @@
+import { drawTraveler } from './traveler-art.mjs';
 // Original canvas scenery shared by the atlas and game. Purely cosmetic:
 // collision, fog, objectives, and saved expedition fingerprints stay unchanged.
 export const CHAPTERS = Object.freeze([
@@ -11,7 +12,7 @@ export const CHAPTERS = Object.freeze([
   { id: 'clockwork', name: 'The Clockwork Orchard', place: 'The brassleaf gardens', summary: 'Wind the forgotten garden. Bring its morning home.', sky: '#dbd3ab', far: '#a7ac7c', ridge: '#788460', dark: '#465b49', glow: '#f6c983' },
 ]);
 export const themeFor = stage => CHAPTERS.find(theme => theme.id === stage.theme) || CHAPTERS[0];
-export function drawTitleArt(canvas) {
+export function drawTitleArt(canvas,preferences={}) {
   canvas.width = 960; canvas.height = 600;
   const ctx = canvas.getContext('2d');
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); };
@@ -39,11 +40,12 @@ export function drawTitleArt(canvas) {
     rect('#d1b265', x - 2, y, 4, 29); rect('#ceb376', x - 9, y - 15, 18, 19);
     rect('#fff0b1', x - 5, y - 11, 10, 11); rect('#ffe7a333', x - 17, y - 22, 34, 35);
   }
-  // A keeper and their lantern, looking toward the distant path.
-  rect('#172f2c', 764, 518, 39, 8); rect('#965f47', 769, 488, 25, 29);
-  rect('#d69764', 771, 478, 20, 15); rect('#efc38a', 774, 487, 15, 12);
-  rect('#c48b60', 766, 477, 31, 6); rect('#eac779', 799, 501, 9, 12);
-  rect('#ffefb4', 801, 503, 5, 7); rect('#5b6247', 772, 517, 7, 10); rect('#5b6247', 784, 517, 7, 10);
+  if(preferences.campSky==='sunrise')rect('#edaf9866',0,0,960,600);
+  if(preferences.campSky==='starfall'){
+    rect('#30377944',0,0,960,600);ctx.fillStyle='#89d4c333';ctx.beginPath();ctx.moveTo(420,0);ctx.lineTo(580,100);ctx.lineTo(770,18);ctx.lineTo(880,0);ctx.lineTo(760,60);ctx.lineTo(580,150);ctx.closePath();ctx.fill();
+    for(let i=0;i<12;i++)rect('#f6dfac',480+i*37,32+(i*51)%230,3,3);
+  }
+  ctx.save();ctx.translate(764,484);ctx.scale(1.65,1.65);drawTraveler(ctx,0,0,preferences,{facing:'up'});ctx.restore();
   pine(910, 572, 250, '#102c2b'); pine(49, 580, 235, '#102c2b');
 }
 export function keeperColors(id) {

@@ -1,8 +1,10 @@
+import { DEFAULT_TRAVELER,normalizeTraveler } from './traveler-art.mjs';
 export const PREFERENCES_KEY = 'tilewright.preferences.v1';
-export const DEFAULT_PREFERENCES = Object.freeze({ volume: 60, motion: 'system', text: 'standard', controls:'auto', keyboardLayout:'wasd', padSide:'left', controlSize:'comfortable', keyRepeat:'off', gamepad:'off', contrast:'standard', mapCues:'off', mapZoom:'standard', readingView:'off' });
+export const DEFAULT_PREFERENCES = Object.freeze({ ...DEFAULT_TRAVELER,volume: 60, motion: 'system', text: 'standard', controls:'auto', keyboardLayout:'wasd', padSide:'left', controlSize:'comfortable', keyRepeat:'off', gamepad:'off', contrast:'standard', mapCues:'off', mapZoom:'standard', readingView:'off' });
 export function normalizePreferences(value) {
   const option=(field,values)=>values.includes(value?.[field])?value[field]:DEFAULT_PREFERENCES[field];
   return {
+    ...normalizeTraveler(value),
     volume: Number.isInteger(value?.volume) && value.volume >= 0 && value.volume <= 100 ? value.volume : DEFAULT_PREFERENCES.volume,
     motion: ['system', 'reduced'].includes(value?.motion) ? value.motion : DEFAULT_PREFERENCES.motion,
     text: ['standard', 'large', 'largest'].includes(value?.text) ? value.text : DEFAULT_PREFERENCES.text,

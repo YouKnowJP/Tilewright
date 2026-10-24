@@ -903,3 +903,26 @@ which avoids Firefox reporting a handled cancellation as a page error. Browsers
 without that API retain synchronous verified operations and generation guards.
 Ordinary gameplay saves remain synchronous and do not use this management lock.
 Older clients must be refreshed before using the expanded save manager.
+
+
+## Traveler appearance and Lanternfair — v0.27
+
+`traveler-art.mjs` owns bounded cosmetic choices, six immutable outfit presets,
+name normalization, and the shared original pixel traveler/portrait renderer.
+`traveler-ui.mjs` manages the tent, real HTML dropdowns, previews, presets,
+shuffle/reset, and the festival shortcut. Preferences keep format v1: missing
+fields gain defaults, unsupported choices normalize safely, and the whole record
+remains within the existing size bound. The journey storage adapter and complete
+backups retain their existing ownership rules.
+
+Adventure, training, and review renderers read the current preferences without
+adding appearance to engine state, checkpoints, learned behavior, or scoring.
+Title art accepts the chosen traveler and a static backdrop. Lantern halo is
+optional and disabled in high contrast; threat colors and map cues are retained.
+
+`storybook-lanternfair.mjs` supplies four independent authored worlds and ordinary
+walking/interaction proof journals. The existing Storybook lifecycle owns camps,
+honors, continuation, export, and remixes. Stable earlier book positions and
+world identities are unchanged; the festival is appended to the library and
+added to the curated Trailboard. `traveler-browser-checks.mjs` exercises all
+choices and actual complete chapters through the shipped UI.

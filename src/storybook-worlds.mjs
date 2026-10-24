@@ -1,3 +1,4 @@
+import { lanternfairBook } from './storybook-lanternfair.mjs';
 import { welcomeBook } from './storybook-welcome.mjs';
 import { puzzleLabWorld } from './workshop-lab.mjs';
 import { storyAdventure } from './storybook-adventures.mjs';
@@ -42,5 +43,6 @@ export function featuredBooks() {
     ] }),
     promiseBook(),
     welcomeBook(),
+    lanternfairBook(),
   ];
 }

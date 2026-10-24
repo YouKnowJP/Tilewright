@@ -13,14 +13,19 @@ The **Adventure Workshop** adds three authored adventures, twelve playable Puzzl
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
-creator for portable two-to-six-world adventures. Four original Storybooks add
-**nineteen levels**, recurring keepers, alternate solutions, and readable endings.
+creator for portable two-to-six-world adventures. Five original Storybooks add
+**twenty-three levels**, recurring keepers, alternate solutions, and readable endings.
 **The Keeper’s Promise** adds five worlds across two branching roads: restore a
 ferry or a workshop, then follow that choice to its own reunion and ending.
 The **Trailhouse** adds twelve keeper commissions, a village with six restoration
 projects, seven keepsakes, and an unlockable original lantern-festival adventure.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
+
+Version 0.27 adds **Your traveler**: six outfit presets, custom name, clothing,
+skin tones, hair, headwear, lanterns, and camp scenery. **The Lanternfair Letters**
+adds four peaceful original chapters to play and remix. See the
+[traveler and festival guide](docs/TRAVELER.md).
 
 Version 0.26.1 fixes route-review damage reporting on a winning move, including
 long routes that exceed the timeline’s display limit. The full browser audit
@@ -576,7 +581,7 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 585 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 598 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
@@ -597,7 +602,7 @@ all 33 expedition form configurations, camps/upgrades, checkpoint recovery,
 backup import/export, actual loss/retry, unlocks, touch/swipe controls, responsive
 rendering, dialogue choices, rescue/relay objectives, local learning, memory
 reset, storage failures, old-save migration, modal navigation, and preserved
-editor history. The twenty-nine browser families include route-review and
+editor history. The thirty browser families include traveler customization, route-review, and
 accessibility checks, two activity and
 detailed-interaction suites in `scripts/browser/expansion-browser-checks.mjs`, plus
 `scripts/browser/settings-browser-checks.mjs`, `scripts/browser/save-profiles-browser-checks.mjs`, `scripts/browser/save-data-browser-checks.mjs`, `scripts/browser/dropdown-browser-checks.mjs`, `scripts/browser/checkpoint-browser-checks.mjs`, `scripts/browser/mastery-browser-checks.mjs`, `scripts/browser/storybook-browser-checks.mjs`, `scripts/browser/lab-browser-checks.mjs`, `scripts/browser/training-browser-checks.mjs`, `scripts/browser/creator-browser-checks.mjs`, `scripts/browser/workshop-browser-checks.mjs`, `scripts/browser/front-browser-checks.mjs`,

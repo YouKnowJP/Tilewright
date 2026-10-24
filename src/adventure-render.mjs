@@ -1,3 +1,4 @@
+import { drawTraveler } from './traveler-art.mjs';
 import { boardWindow, drawMapCues, drawCueBadge } from './adventure-accessibility.mjs';
 import { renderMap, drawTile, TILE_SIZE } from './render.mjs';
 import { activePlates, enemyIntent, gateIsOpen, hazardActive } from './adventure.mjs';
@@ -239,16 +240,7 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     circle('#354f3b55', x + 12, y + 21, 8);
     const blink = run.invulnerability > 0 && !reducedMotion.matches && Math.floor(time / 130) % 2;
     ctx.globalAlpha = blink ? .55 : 1;
-    rect('#4c5b50', x + 7, y + 18, 4, 5); rect('#4c5b50', x + 14, y + 18, 4, 5);
-    rect('#b36d4d', x + 6, y + 11, 13, 10); rect('#dfa16e', x + 7, y + 11, 10, 7);
-    rect('#a36246', x + 5, y + 4, 15, 10); rect('#e5aa75', x + 7, y + 3, 11, 5);
-    rect('#f5d7a0', x + 8, y + 8, 9, 6);
-    if (run.facing !== 'up') {
-      rect('#3a4d42', x + (run.facing === 'left' ? 8 : 10), y + 10, 2, 2);
-      rect('#3a4d42', x + (run.facing === 'right' ? 16 : 14), y + 10, 2, 2);
-    }
-    if (run.carrying) { rect('#b9dfe0', x + 1, y + 10, 5, 10); rect('#f3e5b7', x + 2, y + 12, 3, 4); }
-    rect('#f7d47b', x + 17, y + 15, 4, 5); ctx.globalAlpha = 1;
+    drawTraveler(ctx,x,y,preferences(),{facing:run.facing,carrying:run.carrying});ctx.globalAlpha = 1;
     if(preferences().contrast==='high'||preferences().mapCues==='on'){ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.strokeRect(x+1,y+1,22,22);drawCueBadge(ctx,{x:player.x,y:player.y},'Y');}
     if (run.events.some(event => ['lantern', 'win'].includes(event.type)) && time - movedAt < 550 && !reducedMotion.matches) {
       const spread = (time - movedAt) / 35;

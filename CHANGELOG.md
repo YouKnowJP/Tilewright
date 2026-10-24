@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.27.0 — 2026-10-24
+
+- Add the Traveler’s Tent: six outfit presets; custom name, coat, scarf, skin,
+  hair color/style, headwear, and lantern; a turning preview; shuffle and reset.
+- Carry the chosen traveler into adventures, training, playtests, and reviews.
+  Keep appearance with each journey and its backups without changing game rules.
+- Add forest, rose-dawn, and starfall title scenery and optional steady lantern
+  glow. Preserve high contrast, map cues, motion preferences, and hazard colors.
+- Add The Lanternfair Letters, four peaceful original chapters with optional
+  treasure, keeper dialogue, key/weight/bell puzzles, and a parade homecoming.
+  Include the worlds in Discover, remixing, and custom Storybook authoring.
+- Add checks for every appearance choice, old saves, portable chapter clears,
+  no-turn changes, browser persistence, responsive layouts, and actual play.
+
 ## 0.25.0 — 2026-10-23
 
 - Add The Keeper’s Promise: five original worlds, two three-chapter routes,

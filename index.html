@@ -19,12 +19,13 @@
   <link rel="stylesheet" href="controls.css">
   <link rel="stylesheet" href="dropdowns.css">
   <link rel="stylesheet" href="accessibility.css">
+  <link rel="stylesheet" href="traveler.css">
   <script type="module" src="src/bootstrap.mjs"></script>
 </head>
 <body class="playing game-front game-title-open">
   <div id="startup-status" class="startup-status" role="status"><img src="icon.svg" width="48" height="48" alt=""><strong>Lighting the trail…</strong><p>Your adventure is on its way.</p><button id="startup-retry" hidden>Try again</button></div>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.26.1</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.27.0</span></a>
     <span class="header-note">LANTERN TRAILS / THE CREATOR’S CAMP</span>
     <button id="header-training" class="source-link">Training camp</button>
   </header>
@@ -100,7 +101,7 @@
             <button id="title-guide">How to play</button><button id="title-settings">Options</button><button id="title-accessibility">Accessibility</button><button id="title-mapmaker">Mapmaker</button>
           </nav>
           <p class="title-footnote">A turn-based adventure. Nothing moves until you do.</p>
-          <button id="title-profile" class="title-profile" aria-label="Manage journeys">First journey · Change journey</button><p id="title-progress" class="title-progress"></p><p id="title-save-note" class="title-footnote" role="status" hidden></p>
+          <button id="title-traveler" class="title-profile title-traveler">Your traveler</button><button id="title-profile" class="title-profile" aria-label="Manage journeys">First journey · Change journey</button><p id="title-progress" class="title-progress"></p><p id="title-save-note" class="title-footnote" role="status" hidden></p>
         </div>
         <section id="front-modes" class="front-panel front-modes" hidden aria-labelledby="front-modes-title">
           <button id="front-back" class="front-back">Main menu</button><p class="title-kicker">CHOOSE A PATH</p>
@@ -273,12 +274,19 @@
     <div class="front-dialog-actions"><button id="guide-back">Previous</button><span id="guide-page-count" aria-live="polite">1 / 3</span><button id="guide-next" class="front-primary">Next</button><button id="guide-choose" class="front-primary" hidden>Choose an adventure</button></div>
   </dialog>
   <dialog id="game-settings-dialog" class="front-dialog settings-dialog" aria-labelledby="settings-title">
-    <div class="front-dialog-heading"><p class="title-kicker">MAKE THE TRAIL YOURS</p><button id="settings-close">Back</button></div><h2 id="settings-title">Options</h2><nav class="settings-tabs" aria-label="Options pages"><button id="settings-tab-display" aria-pressed="true">Display &amp; sound</button><button id="settings-tab-access" aria-pressed="false">Accessibility</button><button id="settings-tab-controls" aria-pressed="false">Controls</button><button id="settings-tab-data" aria-pressed="false">Saved data</button></nav><div id="settings-display">
+    <div class="front-dialog-heading"><p class="title-kicker">MAKE THE TRAIL YOURS</p><button id="settings-close">Back</button></div><h2 id="settings-title">Options</h2><nav class="settings-tabs" aria-label="Options pages"><button id="settings-tab-display" aria-pressed="true">Display &amp; sound</button><button id="settings-tab-traveler" aria-pressed="false">Your traveler</button><button id="settings-tab-access" aria-pressed="false">Accessibility</button><button id="settings-tab-controls" aria-pressed="false">Controls</button><button id="settings-tab-data" aria-pressed="false">Saved data</button></nav><div id="settings-display">
     <section class="settings-row"><div><h3>Sound effects</h3><p id="settings-audio-note">A quiet trail. Turn sound on when you are ready.</p></div><div class="option-buttons" aria-label="Sound effects"><button data-sound="off" aria-pressed="true">Off</button><button data-sound="on" aria-pressed="false">On</button></div></section>
     <section class="settings-row"><div><label for="settings-volume">Volume</label><p>Lantern chimes and trail signals.</p></div><div class="volume-control"><input id="settings-volume" type="range" min="0" max="100" step="5" value="60"><output id="settings-volume-value" for="settings-volume">60%</output></div></section>
     <section class="settings-row"><div><h3>Motion</h3><p>Reduced motion keeps movement and effects still. System follows your device preference.</p></div><div class="option-buttons" aria-label="Motion"><button data-motion="system" aria-pressed="true">System</button><button data-motion="reduced" aria-pressed="false">Reduced</button></div></section>
     <section class="settings-row"><div><h3>Reading size</h3><p>Larger menus, messages, conversations, and forecasts.</p></div><div class="option-buttons" aria-label="Reading size"><button data-text-size="standard" aria-pressed="true">Standard</button><button data-text-size="large" aria-pressed="false">Large</button><button data-text-size="largest" aria-pressed="false">Extra large</button></div></section>
-    </div><section id="settings-access" hidden aria-label="Accessibility options">
+    </div><section id="settings-traveler" hidden aria-labelledby="traveler-heading">
+      <div class="traveler-intro"><div class="traveler-portrait"><canvas id="traveler-preview" width="160" height="160" role="img" aria-label="Your traveler preview"></canvas><button id="traveler-turn">Turn preview</button></div><div><p class="title-kicker">THE TRAVELER’S TENT</p><h3 id="traveler-heading">Your trail kit</h3><p>Dress for the road ahead. Every look is yours from the beginning.</p><p class="ws-footnote">Outfits follow you into adventures, training, and playtests. Changing your look never spends a turn.</p></div></div>
+      <fieldset class="traveler-presets"><legend>A look for every road</legend><div id="traveler-outfits" class="traveler-outfits"></div></fieldset>
+      <details id="traveler-tailoring"><summary>Tailor your own look</summary><label class="control-field" for="traveler-name">Traveler name<input id="traveler-name" aria-describedby="traveler-name-help" maxlength="48" autocomplete="off" spellcheck="false" placeholder="Rowan"></label><p id="traveler-name-help" class="controls-help">Up to 24 characters. Your name stays with this journey.</p><div id="traveler-fields" class="traveler-fields"></div></details>
+      <fieldset class="traveler-camp"><legend>Light and atmosphere</legend><div id="traveler-atmosphere" class="traveler-fields"></div><p class="controls-help">Camp backdrops change the title scenery. Lantern glow stays gentle and still; high contrast removes the halo.</p></fieldset>
+      <p id="traveler-description" class="traveler-description"></p><div class="traveler-actions"><button id="traveler-shuffle">Surprise outfit</button><button id="traveler-reset">Original look</button></div>
+      <article class="traveler-invitation"><p class="title-kicker">FOUR NEW ROADS TO THE FAIR</p><h3>The Lanternfair Letters</h3><p>Find a missing pattern, carry ribbons across the river, ring the fitting-room song, and bring the parade home. Four peaceful chapters with optional challenges.</p><button id="traveler-festival" class="front-primary">Find the Lanternfair story</button></article>
+    </section><section id="settings-access" hidden aria-label="Accessibility options">
       <div class="access-welcome"><h3>A trail that fits you</h3><p>Take your time. The world moves only when you act. Reading, opening menus, and thinking never use a turn.</p><button id="settings-clearer" class="front-primary">Use clearer trail preset</button><p>Larger text and buttons, high contrast, map labels, a closer map, and reduced motion. Read surroundings in Plan, or turn on the optional view below. Change any choice below.</p></div>
       <label class="control-field" for="settings-reading-size">Reading size<select id="settings-reading-size"><option value="standard">Standard</option><option value="large">Large · menus 16 px / messages 18 px</option><option value="largest">Extra large · menus 20 px / messages 22 px</option></select></label>
       <label class="control-field" for="settings-contrast">Contrast<select id="settings-contrast"><option value="standard">Original woodland colors</option><option value="high">High contrast · clear paths and solid panels</option></select></label>

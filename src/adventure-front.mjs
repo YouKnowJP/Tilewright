@@ -1,21 +1,23 @@
+import { createTravelerUI } from './traveler-ui.mjs';
 import { MAP_KEY } from './adventure-accessibility.mjs';
 import { createSaveDataUI } from './save-data-ui.mjs';
 import { CHAPTERS, drawAtlasArt, drawTitleArt } from './adventure-art.mjs';
 import { controlHelp } from './adventure-controls.mjs';
-import { loadPreferences, savePreferences } from './adventure-preferences.mjs';
+import { loadPreferences, savePreferences,normalizePreferences } from './adventure-preferences.mjs';
 
-export function createFrontMenu({ storage, sound, saveSession, onSaveReload, onMode, onContinue, onResumeExpedition, onMapmaker, onCustomMap, onPreferences, getJournal, onDestination, onChoose, onPeaceful }) {
+export function createFrontMenu({ storage, sound, saveSession, onSaveReload, onMode, onContinue, onResumeExpedition, onMapmaker, onCustomMap, onPreferences, getJournal, onDestination, onChoose, onPeaceful,onFestival }) {
   const $ = selector => document.querySelector(selector);
   let preferences = loadPreferences(storage), guidePage = 0, soundBusy = false, guideReturn = null, settingsReturn = null;
   const guide = $('#game-guide-dialog'), settings = $('#game-settings-dialog');
   const saveData=createSaveDataUI({session:saveSession,onComplete:onSaveReload});
   settings.addEventListener('close',()=>saveData.close());
-  drawTitleArt($('#title-scenery'));
+  const traveler=createTravelerUI({getPreferences:()=>preferences,onChange:remember,onFestival:()=>{settings.close();onFestival?.();}});
   document.querySelectorAll('[data-mode-art]').forEach(canvas => drawAtlasArt(canvas, CHAPTERS.find(theme => theme.id === canvas.dataset.modeArt), 0));
   function applyPreferences() {
     sound.setVolume(preferences.volume / 100);
     document.body.dataset.gameMotion = preferences.motion;
     document.body.dataset.gameText=preferences.text;document.body.dataset.gameContrast=preferences.contrast;
+    document.body.dataset.gameCamp=preferences.campSky;drawTitleArt($('#title-scenery'),preferences);traveler.render();
     $('#settings-map-key').textContent=MAP_KEY;
     document.body.style.setProperty('--adventure-text-size', preferences.text === 'largest' ? '22px' : preferences.text === 'large' ? '18px' : '16px');
     $('#settings-volume').value = preferences.volume; $('#settings-volume-value').textContent = `${preferences.volume}%`;
@@ -26,7 +28,7 @@ export function createFrontMenu({ storage, sound, saveSession, onSaveReload, onM
     onPreferences?.(preferences);
   }
   function remember(patch) {
-    preferences = { ...preferences, ...patch }; applyPreferences();
+    preferences = normalizePreferences({ ...preferences, ...patch }); applyPreferences();
     $('#settings-save-note').textContent = savePreferences(storage, preferences) ? 'Your options are saved for your next visit.' : 'Your options work for this visit. Saving is unavailable.';
   }
   function renderSound() {
@@ -146,9 +148,10 @@ export function createFrontMenu({ storage, sound, saveSession, onSaveReload, onM
   $('#settings-access-reset').addEventListener('click',()=>remember({text:'standard',contrast:'standard',mapCues:'off',mapZoom:'standard',motion:'system',readingView:'off',controlSize:'comfortable'}));
   $('#settings-peaceful').addEventListener('click',()=>{settings.close();onPeaceful?.();});
   $('#title-settings').addEventListener('click', () => openSettings('display',$('#title-settings')));
-  function settingsTab(page) { $('#settings-save-note').hidden=page==='data';saveData.close();if(page==='data')saveData.open(); for(const id of ['display','access','controls','data']) { $(`#settings-${id}`).hidden=id!==page; $(`#settings-tab-${id}`).setAttribute('aria-pressed',String(id===page)); } }
+  $('#title-traveler').addEventListener('click',()=>openSettings('traveler',$('#title-traveler')));
+  function settingsTab(page) { $('#settings-save-note').hidden=page==='data';saveData.close();if(page==='data')saveData.open(); for(const id of ['display','access','controls','traveler','data']) { $(`#settings-${id}`).hidden=id!==page; $(`#settings-tab-${id}`).setAttribute('aria-pressed',String(id===page)); } }
   function openSettings(page='display',trigger) { settingsReturn=trigger||document.activeElement;renderSound(); settingsTab(page); settings.showModal(); settings.scrollTop=0; }
-  for(const id of ['display','access','controls','data']) $(`#settings-tab-${id}`).addEventListener('click',()=>settingsTab(id));
+  for(const id of ['display','access','controls','traveler','data']) $(`#settings-tab-${id}`).addEventListener('click',()=>settingsTab(id));
   for(const [id,field] of [['controls-style','controls'],['keyboard-layout','keyboardLayout'],['pad-side','padSide'],['control-size','controlSize'],['key-repeat','keyRepeat'],['gamepad','gamepad'],['reading-size','text'],['contrast','contrast'],['map-cues','mapCues'],['map-zoom','mapZoom'],['reading-view','readingView']]) $(`#settings-${id}`).addEventListener('change',event=>remember({[field]:event.target.value}));
   $('#settings-close').addEventListener('click', () => settings.close());
   document.querySelectorAll('[data-sound]').forEach(button => button.addEventListener('click', () => toggleSound(button.dataset.sound === 'on')));

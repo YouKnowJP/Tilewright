@@ -1,5 +1,17 @@
 # Verification record
 
+## Traveler’s Tent and Lanternfair — v0.27.0
+
+598 Node checks pass. The new browser family covers every appearance and
+atmosphere choice, outfit presets, names, saved looks, live renderer updates,
+large text, high contrast, and no-turn changes. All four peaceful chapters are
+played through real controls on Trail and Nemesis, with complete treasure,
+keeper conversations, optional honors, and saved camps. Chrome checks phone,
+tablet, desktop, and landscape layouts; Firefox and WebKit repeat phone/tablet
+cases. Seven affected existing browser families were also rechecked.
+See the [detailed release audit](audits/2026-10-24-traveler-lanternfair.md).
+
+
 ## Branching adventures and creative tools — v0.25.0
 
 564 tests pass. The release adds five original worlds, branching book authoring,
