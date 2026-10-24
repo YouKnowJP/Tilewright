@@ -29,16 +29,18 @@ export function reviewStart(review){
   const {stage}=resumeDefinition(data.source,review.difficulty);return {run:createRun(stage,{memory:data.memory,difficulty:review.difficulty}),actions:data.actions};
 }
 export async function inspectReview(review,yieldFrame=()=>Promise.resolve()){
-  const seed=reviewStart(review),moments=[];let run=seed.run;
+  const seed=reviewStart(review),moments=[],essential=new Set();let run=seed.run,firstHurt=null;
+  const remember=(moment,required=false)=>{if(moments.length<60)moments.push(moment);else if(required){const index=moments.findLastIndex(item=>!essential.has(item));if(index>=0)moments[index]=moment;}if(required)essential.add(moment);};
   for(const [index,action] of seed.actions.entries()){
     if(run.status!=='playing')throw Error('This review continues past its ending.');const before=run;run=replayAction(run,action);
-    const important=run.events.find(event=>event.type==='win')||run.events.find(event=>event.type==='hurt')||run.events.find(event=>['hurt','lantern','delivery','relay-complete','win','power','pulse','veil','echo','echo-return'].includes(event.type));
-    if(moments.length<60&&(important||action.startsWith('choose:')))moments.push({index:index+1,turn:run.turns,label:action.startsWith('choose:')?'Keeper choice':important.type==='hurt'?'Damage taken':important.type==='win'?'Beacon restored':run.message});
+    const major=run.events.filter(event=>['hurt','win'].includes(event.type));
+    if(major.length)for(const event of major){const moment={index:index+1,turn:run.turns,label:event.type==='hurt'?'Damage taken':'Beacon restored'},first=event.type==='hurt'&&!firstHurt;if(first)firstHurt=moment;remember(moment,first||event.type==='win');}
+    else if(action.startsWith('choose:')||run.events.some(event=>['lantern','delivery','relay-complete','power','pulse','veil','echo','echo-return'].includes(event.type)))remember({index:index+1,turn:run.turns,label:action.startsWith('choose:')?'Keeper choice':run.message});
     if(run===before)throw Error('This review contains an action that cannot be replayed.');
     if(index%32===31)await yieldFrame();
   }
   if(run.status!==review.status||run.turns!==review.turns||runFingerprint(run)!==review.fingerprint)throw Error('This recorded route no longer matches the current adventure.');
-  const result=resultFor(run),firstHurt=moments.find(moment=>moment.label==='Damage taken');
+  moments.sort((a,b)=>a.index-b.index||Number(a.label==='Beacon restored')-Number(b.label==='Beacon restored'));const result=resultFor(run);
   const tip=firstHurt?`At turn ${firstHurt.turn}, a hit interrupted this route. Try opening Plan before that turn, then test cover, a shield, or a different crossing.`:run.status==='lost'?'Watch the final marked enemy step. Try changing direction or offering a decoy before entering that cell.':run.turns>turnTarget(run)?`A clean route is already within reach. Compare your detours with the ${turnTarget(run)}-turn three-star target.`:run.collectedCoins.length<run.stage.coins.length?'The main route is complete. Try a treasure detour on your next visit; you can keep this route as a reference.':'A clean route worth remembering. Try another specialist, chapter promise, or rule set for a different solution.';
   return {seed,moments,run,result,tip};
 }

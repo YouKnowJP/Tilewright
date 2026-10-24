@@ -10,6 +10,8 @@ See [the new story guide](NEW_STORIES.md) for all eight original levels.
 roads, a real camp decision, and separate endings. Its [player and creator
 guide](KEEPERS-PROMISE.md) also explains custom forward links and endings.
 
+**The Welcome Lanterns** adds six peaceful chapters with no enemies or burning tiles. Use Accessibility → Find the peaceful storybook, or choose its cover in the library. See the [accessibility guide](ACCESSIBILITY.md) for reading sizes, map symbols, and controls.
+
 At each camp choose one optional promise:
 
 | Promise | How to earn its honor |
@@ -34,7 +36,7 @@ lets you open a completed chapter to reread its opening scene and ending.
 
 Select **Bind your own story** or **Make your version** on a featured book.
 Write a title, creator name, invitation, and ending. Add **two to six worlds**
-from your saved shelf, featured adventures, Puzzle Lab, the thirteen original
+from your saved shelf, featured adventures, Puzzle Lab, the nineteen original
 Storybook levels, or current World studio
 draft. Add a short scene before each chapter, move chapters earlier or later,
 and remove any you no longer need. A world must pass structural checks before

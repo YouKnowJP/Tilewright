@@ -18,7 +18,7 @@ export const VOWS = Object.freeze([
   { id: 'none', name: 'Open trail', description: 'Use every tool at your disposal.', bonus: 0 },
   { id: 'treasure', name: 'Treasure oath', description: 'Recover every coin before leaving each leg.', bonus: 150 },
   { id: 'quiet', name: 'Measured steps', description: 'No dashes. Cover and supplies matter more.', bonus: 175 },
-  { id: 'unwarded', name: 'Unwarded', description: 'No shields. Dodge, distract, and time your crossings.', bonus: 200 },
+  { id: 'unwarded', name: 'Unwarded', description: 'Shield charges are disabled. Specialist wards still work; dodge, distract, and time your crossings.', bonus: 200 },
 ]);
 export const validPerks = values => Array.isArray(values) && values.length <= PERKS.length
   && new Set(values).size === values.length && values.every(id => PERKS.some(perk => perk.id === id));

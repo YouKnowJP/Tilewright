@@ -359,7 +359,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     }
     $('#game-guild-kit > p:last-child').textContent = journey ? 'Specialist powers and camp relics shape this expedition. Your build and supplies carry between legs.' : stage.workshop?.practice ? 'Practise with this toolkit freely. This attempt cannot record honors, bests, or a creator clear.' : stage.workshop ? 'Optional specialist goals apply to this attempt. Stars and bests save for this world version and rule set.' : 'Finish the job to record commendations. They never block the exit. Bests are separate for each specialist and rule set.';
     $('#game-rule-note').hidden = !stage.restrictions.noDash && !stage.restrictions.noShield && !stage.requireCoins;
-    $('#game-rule-note').textContent = [stage.restrictions.noDash ? 'Walking only: dash is disabled.' : '', stage.restrictions.noShield ? 'Unwarded: shields are disabled.' : '', stage.requireCoins ? 'Recover every coin before leaving.' : ''].filter(Boolean).join(' ');
+    $('#game-rule-note').textContent = [stage.restrictions.noDash ? 'Walking only: dash is disabled.' : '', stage.restrictions.noShield ? 'Unwarded: shield charges are disabled.' : '', stage.requireCoins ? 'Recover every coin before leaving.' : ''].filter(Boolean).join(' ');
     $('#game-title').textContent = stage.name;
     $('#game-choose').textContent = journey ? 'Expeditions' : house ? 'Trailhouse' : book ? 'Storybooks' : stage.workshop ? workshop.returnSection === 'build' ? 'Designer' : workshop.returnSection === 'lab' ? 'Puzzle Lab' : 'Player worlds' : 'Trails';
     $('#game-sound').textContent = sound.enabled ? 'Sound on' : 'Sound off'; $('#game-sound').setAttribute('aria-pressed', String(sound.enabled));
@@ -610,7 +610,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if (!active || !run) return;
     readingLines($('#forecast-reading-lines'));$('#forecast-map-key').textContent=MAP_KEY;
     $('#forecast-lines').replaceChildren(...threatForecast(run).map(text => Object.assign(document.createElement('p'), { textContent: text })));
-    $('#forecast-dialog').showModal();
+    $('#forecast-dialog').showModal();$('#forecast-dialog').scrollTop=0;
   }
   $('#game-inspect').addEventListener('click', inspect);
   $('#forecast-close').addEventListener('click', () => $('#forecast-dialog').close());

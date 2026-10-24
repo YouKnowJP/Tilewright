@@ -7,3 +7,19 @@ test('fastest route is retained beside a slower last attempt; review shelf is ca
 test('tampered or oversized journals reject and ongoing/practice attempts cannot become completed reviews',async()=>{const review=trailReview(trail());for(const action of ['execute:evil','right;script','power()']){const bad=structuredClone(review);bad.payload.actions[0]=action;await assert.rejects(inspectReview(bad),/invalid/);}const bad=structuredClone(review);bad.payload.actions[0]='wait';await assert.rejects(inspectReview(bad),/match|ending/);const large=structuredClone(review);large.payload.actions=Array(8193).fill('wait');assert.throws(()=>reviewStart(large),/invalid/);const unfinished=trail();unfinished.run={...unfinished.run,status:'playing'};assert.throws(()=>trailReview(unfinished),/Finish/);});
 test('expedition result reviews reconstruct the current leg with its original learned habits and specialist',async()=>{const fixtures=JSON.parse(readFileSync(new URL('fixtures/expedition-routes.json',import.meta.url),'utf8')),f=fixtures.find(item=>item.id==='measured-steps');let session=createJourney({...f.config,kit:'echoist'});session=f.legs[0].actions.reduce(advanceJourney,session);const analysis=await inspectReview(journeyReview(session));assert.equal(analysis.run.status,'won');assert.equal(analysis.run.guild.kit,'echoist');assert.deepEqual(analysis.run,session.run);});
 test('review archive limits count UTF-8 bytes and a refused archive leaves other progress intact',()=>{const store=disk(),review=trailReview(trail());review.payload.note='月'.repeat(400000);const items=recordReview([],review);assert.equal(saveReviews(store,items),false);assert.equal(store.values.get('tilewright.adventures.v1'),'keep-progress');assert.equal(loadReviews(store).length,0);});
+
+
+test('damage on the winning action remains visible and never receives a clean-route hint',async()=>{
+ const {blankAdventure,editAdventure}=await import('../src/workshop-model.mjs');
+ const world=editAdventure(blankAdventure(8,8),{title:'The last crossing',markers:[{kind:'start',id:'start',x:2,y:4},{kind:'beacon',id:'home',x:4,y:4},{kind:'lantern',id:'light',x:3,y:4},{kind:'patrol',id:'patrol',x:4,y:3,route:[{x:4,y:3},{x:4,y:4}]}]});
+ const attempt=['right','right'].reduce(advanceRewind,beginRewind(createRun(adventureStage(world)),{kind:'world',origin:'shelf',world}));
+ assert.equal(attempt.run.status,'won');assert.equal(attempt.run.damage,1);assert.ok(attempt.run.events.some(event=>event.type==='hurt'));assert.ok(attempt.run.events.some(event=>event.type==='win'));
+ const analysis=await inspectReview(trailReview(attempt));assert.ok(analysis.moments.some(moment=>moment.label==='Damage taken'&&moment.turn===2));assert.ok(analysis.moments.some(moment=>moment.label==='Beacon restored'&&moment.turn===2));assert.match(analysis.tip,/turn 2.*hit/);assert.doesNotMatch(analysis.tip,/clean route/);
+});
+
+test('a long review retains the first damage and the ending after its sixty-moment limit',async()=>{
+ const {blankAdventure,editAdventure}=await import('../src/workshop-model.mjs');
+ const world=editAdventure(blankAdventure(8,8),{title:'A long pulse trail',kit:'bellrunner',markers:[{kind:'start',id:'start',x:2,y:4},{kind:'beacon',id:'home',x:4,y:4},{kind:'lantern',id:'light',x:3,y:4},{kind:'patrol',id:'patrol',x:4,y:3,route:[{x:4,y:3},{x:4,y:4}]}]});
+ const attempt=[...Array.from({length:65},()=>['power','wait','wait','wait','wait','wait']).flat(),'right','right'].reduce(advanceRewind,beginRewind(createRun(adventureStage(world)),{kind:'world',origin:'shelf',world}));
+ assert.equal(attempt.run.status,'won');assert.equal(attempt.run.damage,1);const analysis=await inspectReview(trailReview(attempt));assert.equal(analysis.moments.length,60);assert.ok(analysis.moments.some(m=>m.label==='Damage taken'));assert.equal(analysis.moments.at(-1).label,'Beacon restored');assert.match(analysis.tip,/hit interrupted/);
+});

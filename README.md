@@ -22,6 +22,12 @@ projects, seven keepsakes, and an unlockable original lantern-festival adventure
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
+Version 0.26.1 fixes route-review damage reporting on a winning move, including
+long routes that exceed the timeline’s display limit. The full browser audit
+rechecked all game modes, editors, settings, dropdowns, and saved-game flows.
+Plan’s Back button now stays in its header without covering larger text.
+See the [complete verification record](docs/audits/2026-10-24-full-recheck.md).
+
 Version 0.26 adds **The Welcome Lanterns**, six peaceful chapters with no enemies
 or burning tiles, plus an Accessibility page: large and extra-large reading,
 high contrast, letter labels and numbered mechanism links, closer map sizes,

@@ -24,6 +24,6 @@ export function threatForecast(run) {
     for (const stone of run.stage.waystones.filter(near)) lines.push(`${stone.name}: ${waystonePreview(run, stone, canEnter, hazardActive)}`);
   }
   if (run.stage.restrictions.noDash) lines.push('Measured steps oath: dashes are disabled.');
-  if (run.stage.restrictions.noShield) lines.push('Unwarded oath: shields are disabled.');
+  if (run.stage.restrictions.noShield) lines.push('Unwarded oath: shield charges are disabled. Specialist wards still work.');
   return lines;
 }
