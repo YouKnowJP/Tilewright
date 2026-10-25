@@ -59,6 +59,11 @@ contexts assert no JavaScript errors, failed game assets, or horizontal overflow
 Final cooperative-toolbar changes are repeated in the relevant phone, creator,
 large-reading, and controller scenarios across all three engines.
 
+The published website also passes all seven new-content scenarios, and all
+103 public assets match the tested package by SHA-256. Hosted Continue checks
+wait for the restored board before reading its HUD, so an asynchronous replay
+cannot be mistaken for missing state.
+
 ## Visual review and fixes
 
 Inspected captures of the real phone board, practice modal, cooperative board,
