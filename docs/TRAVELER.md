@@ -56,3 +56,19 @@ The four maps are ordinary portable worlds. **Make your version** copies the
 book for editing; share the result through the existing file, code, or play-link
 tools. See [Storybooks](STORYBOOKS.md), [saved-data help](SAVED_DATA.md), and
 [accessibility options](ACCESSIBILITY.md).
+
+## Keep your favorite looks
+
+Open **Your saved looks** in the tent. Name a place, then choose **Save current
+look**. Three looks can be kept with each journey. **Wear this look** restores
+its coat, scarf, skin, hair, headwear, and lantern while keeping your current
+traveler name and camp settings.
+
+**Replace saved look** updates that place. **Undo last saved-look change** brings
+back the previous collection during this visit. It changes saved looks rather
+than your current outfit. Complete game backups include the collection; a fresh
+start clears only the current journey's looks. Other journeys keep theirs.
+
+If saving is unavailable, the tent explains that a change lasts for this visit.
+You can still wear and undo your session's saved looks. Traveler names now keep
+whole emoji and accented characters and remain stable after reloading.

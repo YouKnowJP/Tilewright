@@ -1,3 +1,4 @@
+import { playerName } from './player-text.mjs';
 // Cosmetic choices stay outside adventure rules and replay fingerprints.
 const colors = entries => Object.freeze(entries.map(([id,label,color,light]) => Object.freeze({id,label,color,light:light||color})));
 export const TRAVELER_CHOICES = Object.freeze({
@@ -21,8 +22,7 @@ export const OUTFITS = Object.freeze([
   {id:'mechanist',name:'Midnight mechanist',place:'The garden wakes',coat:'midnight',scarf:'mint',headwear:'hood',lantern:'gold'},
 ].map(Object.freeze));
 export function normalizeTraveler(value) {
-  const raw=typeof value?.travelerName==='string'?value.travelerName:'';
-  const travelerName=[...raw.replace(/[\u0000-\u001f\u007f-\u009f<>]/g,'').replace(/\s+/g,' ').trim()].slice(0,24).join('')||DEFAULT_TRAVELER.travelerName;
+  const travelerName=playerName(value?.travelerName,DEFAULT_TRAVELER.travelerName);
   return {travelerName,...Object.fromEntries(Object.entries(TRAVELER_CHOICES).map(([key,options])=>[key,options.some(option=>option.id===value?.[key])?value[key]:DEFAULT_TRAVELER[key]]))};
 }
 export function travelerDescription(value) {

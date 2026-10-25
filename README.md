@@ -22,6 +22,11 @@ projects, seven keepsakes, and an unlockable original lantern-festival adventure
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
 
+Version 0.28 adds three personal saved looks per journey, with wear, replace,
+and Undo, and strengthens name boundaries and background replay recovery.
+A pinned Chromium suite now plays the built release before the website can
+publish. See the [test setup](scripts/README.md).
+
 Version 0.27 adds **Your traveler**: six outfit presets, custom name, clothing,
 skin tones, hair, headwear, lanterns, and camp scenery. **The Lanternfair Letters**
 adds four peaceful original chapters to play and remix. See the
@@ -581,14 +586,14 @@ screen-reader and real-device validation remains on the roadmap.
 npm --prefix Tilewright run verify
 ```
 
-This checks every JavaScript module, runs 598 focused editor/game/storage/server/build
+This checks every JavaScript module, runs 633 focused editor/game/storage/server/build
 tests with Node's built-in test runner, and builds `Tilewright/dist/`. No package
 installation is required. To run individual checks, use `npm run check`,
 `npm test`, or `npm run build` inside this folder. CI verifies Node 22, 24, and
 26 on Linux, plus Node 24 on macOS and Windows.
 
 An optional browser regression suite lives in `scripts/browser/checks.mjs`.
-With Playwright separately installed in the development environment and Google
+With locked development tools installed using `npm ci` and Google
 Chrome available, keep the local server running and use `npm run test:browser`
 inside this folder. It uses a separate headless browser and disposable contexts;
 it does not modify existing browser maps. It completes all twenty-four story missions,
@@ -609,8 +614,11 @@ detailed-interaction suites in `scripts/browser/expansion-browser-checks.mjs`, p
 `scripts/browser/journal-browser-checks.mjs`, `scripts/browser/horizon-browser-checks.mjs`, `scripts/browser/layout-browser-checks.mjs`,
 `scripts/browser/sluice-browser-checks.mjs`,
 `scripts/browser/atlas-browser-checks.mjs`, and `scripts/browser/guild-browser-checks.mjs`.
-Playwright is not needed to run the app or the default checks. Browser tests
-are not currently run in CI.
+Playwright is not needed to play or run the base Node checks. The extended
+30-family suite remains available locally. CI also runs `npm run test:browser:smoke`: six
+required scenarios against the built site, using a temporary server and bundled
+Chromium. Install its browser with `npx playwright install --with-deps --only-shell chromium`.
+Failure screenshots, console logs, and traces are retained for debugging.
 
 The [tooling guide](scripts/README.md) explains browser checks and route
 generators. The [documentation index](docs/README.md) links every player and

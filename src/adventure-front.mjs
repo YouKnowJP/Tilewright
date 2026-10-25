@@ -11,7 +11,7 @@ export function createFrontMenu({ storage, sound, saveSession, onSaveReload, onM
   const guide = $('#game-guide-dialog'), settings = $('#game-settings-dialog');
   const saveData=createSaveDataUI({session:saveSession,onComplete:onSaveReload});
   settings.addEventListener('close',()=>saveData.close());
-  const traveler=createTravelerUI({getPreferences:()=>preferences,onChange:remember,onFestival:()=>{settings.close();onFestival?.();}});
+  const traveler=createTravelerUI({storage,getPreferences:()=>preferences,onChange:remember,onFestival:()=>{settings.close();onFestival?.();}});
   document.querySelectorAll('[data-mode-art]').forEach(canvas => drawAtlasArt(canvas, CHAPTERS.find(theme => theme.id === canvas.dataset.modeArt), 0));
   function applyPreferences() {
     sound.setVolume(preferences.volume / 100);

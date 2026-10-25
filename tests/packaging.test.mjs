@@ -30,6 +30,17 @@ test('build refuses to delete an unrelated nonempty directory', async () => {
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
+test('release serving uses the built package and never falls back to development source',async()=>{
+  const directory=await mkdtemp(path.join(tmpdir(),'tilewright-release-test-'));
+  let server;
+  try{
+    const release=await build(path.join(directory,'site'));
+    server=createDevServer({root:release.destination});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base=`http://127.0.0.1:${server.address().port}`;
+    assert.equal(await(await fetch(base+'/src/player-text.mjs')).text(),await readFile(path.join(release.destination,'src/player-text.mjs'),'utf8'));
+    await rm(path.join(release.destination,'src/player-text.mjs'));assert.equal((await fetch(base+'/src/player-text.mjs')).status,404);assert.equal((await fetch(base+'/tests/traveler.test.mjs')).status,404);
+  }finally{if(server)await new Promise(resolve=>server.close(resolve));await rm(directory,{recursive:true,force:true});}
+});
+
 test('development server serves modules, supports HEAD, and rejects private paths and writes', async () => {
   const server = createDevServer();
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));

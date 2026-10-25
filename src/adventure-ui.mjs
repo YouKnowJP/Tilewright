@@ -1,3 +1,4 @@
+import { yieldToBrowser } from './browser-yield.mjs';
 import { MAP_KEY, surroundings } from './adventure-accessibility.mjs';
 import { createReviewUI } from './adventure-review-ui.mjs';
 import { rememberTrail } from './trail-memories.mjs';
@@ -318,8 +319,8 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     const loaded=loadTrail(storage);if(!loaded.data){front.notice(loaded.error||'No unfinished trail is available. Choose an adventure to begin.');return;}
     const token=++restoreToken;restoring=true;$('#game-title-screen').inert=true;$('#adventure-workshop').inert=true;
     try{
-      front.notice('Returning to your saved trail…');await new Promise(resolve=>requestAnimationFrame(resolve));
-      const restored=await restoreTrail(loaded.data,()=>new Promise(resolve=>requestAnimationFrame(resolve)));
+      front.notice('Returning to your saved trail…');await yieldToBrowser();
+      const restored=await restoreTrail(loaded.data,()=>yieldToBrowser());
       if(token!==restoreToken||!active)return;
       if(restored.session){rewind=null;expeditions.restore(restored.session);return;}
       const trail=restored.trail;if(trail.run.stage.workshop)workshop.resumeRun(trail.source,trail.run);

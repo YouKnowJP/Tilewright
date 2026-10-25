@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.28.0 — 2026-10-24
+
+- Keep three named personal looks per journey, with wear, replace, and Undo.
+  Include saved looks in complete backups, restoration, and fresh starts.
+- Fix names changing after a length-boundary save. Preserve complete emoji,
+  normalize accents, and keep bounded names stable through repeated reloads.
+- Let checkpoint, training, creator-clear, and review replay continue when a
+  browser suspends animation frames. Release unused timer/frame handles.
+- Add seeded action/Undo/reload invariant tests across campaign and custom
+  chapters on both rule sets, wardrobe fault tests, and built-package serving checks.
+- Require Chromium release checks before publishing. Actually play, restore,
+  create, export, and finish stories from the built website, with diagnostic
+  screenshots, console logs, and traces on failure. Pin browser tools in a lockfile.
+
 ## 0.27.0 — 2026-10-24
 
 - Add the Traveler’s Tent: six outfit presets; custom name, coat, scarf, skin,

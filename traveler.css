@@ -24,3 +24,14 @@ body[data-game-contrast="high"] :is(.traveler-intro,.traveler-invitation,.travel
 body[data-game-text="largest"] .traveler-outfit strong { font-size:18px; }body[data-game-text="largest"] .traveler-outfit small { font-size:15px; }
 @media(max-width:520px){.traveler-intro{grid-template-columns:96px minmax(0,1fr);gap:12px;padding:12px;}.traveler-intro h3{font-size:23px;}.traveler-outfit{flex-direction:column;align-items:flex-start;}.traveler-fields{grid-template-columns:minmax(0,1fr);}.traveler-presets,.traveler-camp{padding:10px;}.traveler-intro .ws-footnote{display:none;}}
 @media(max-width:360px){.traveler-outfits{grid-template-columns:minmax(0,1fr);}.traveler-outfit{flex-direction:row;align-items:center;}.traveler-intro{grid-template-columns:80px minmax(0,1fr);}.traveler-intro h3{font-size:21px;}}
+
+.traveler-favorites { margin:20px 0;padding:14px;border:1px solid #7f956e; }
+.traveler-favorites>summary { min-height:44px;align-content:center;cursor:pointer;font-size:18px; }
+.traveler-favorite { display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px;padding:16px 0;border-top:1px solid #657b63; }
+.traveler-favorite canvas { width:72px;height:72px;image-rendering:pixelated;border:1px solid #899879; }.traveler-favorite canvas.is-empty{opacity:.45;}
+.traveler-favorite label { display:block;font-size:14px; }.traveler-favorite input{display:block;box-sizing:border-box;width:100%;min-width:0;min-height:44px;margin-top:6px;padding:8px;background:#132f2f;color:#f5edce;border:1px solid #9ca883;font:inherit;}
+.traveler-favorite .traveler-actions button { max-width:100%;white-space:normal;min-height:44px; }
+#traveler-favorites-undo { min-height:44px;max-width:100%;white-space:normal; }
+@media(max-width:520px){.traveler-favorite{grid-template-columns:48px minmax(0,1fr);gap:10px;}.traveler-favorite canvas{width:48px;height:48px;}.traveler-favorite .traveler-actions{display:grid;grid-template-columns:minmax(0,1fr);}}
+
+.traveler-favorite .controls-help { overflow-wrap:anywhere; }

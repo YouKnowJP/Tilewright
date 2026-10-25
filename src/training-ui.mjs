@@ -1,3 +1,4 @@
+import { yieldToBrowser } from './browser-yield.mjs';
 import { movementKey, controlHelp } from './adventure-controls.mjs';
 import { createMapInput } from './adventure-input.mjs';
 import { practiceWorld, paintPractice, tellPracticeStory, playLessonSteps, creatorLessonSteps, readTraining, saveTraining, practiceClear, PRACTICE_SPOTS } from './training-model.mjs';
@@ -41,7 +42,7 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
   }
   async function start(kind, reset = false) {
     const token=++loadToken;let recovery='';
-    if(!reset&&!sessions.has(kind)){const saved=readPractice(storage,kind);if(saved)try{const restored=await restorePractice(saved,kind,()=>new Promise(resolve=>requestAnimationFrame(resolve)));if(token!==loadToken||root.hidden)return;sessions.set(kind,restored);recovery='Your saved practice is ready.';}catch{recovery='The earlier practice could not be restored. A fresh lesson is ready; your other adventures are retained.';}}
+    if(!reset&&!sessions.has(kind)){const saved=readPractice(storage,kind);if(saved)try{const restored=await restorePractice(saved,kind,()=>yieldToBrowser());if(token!==loadToken||root.hidden)return;sessions.set(kind,restored);recovery='Your saved practice is ready.';}catch{recovery='The earlier practice could not be restored. A fresh lesson is ready; your other adventures are retained.';}}
     if(token!==loadToken||root.hidden)return;
     if (reset || !sessions.has(kind)) {
       const pack = practiceWorld(kind);

@@ -1,5 +1,18 @@
 # Verification record
 
+## Saved looks and release hardening — v0.28.0
+
+633 Node tests pass, including seeded action/Undo/checkpoint interleavings,
+Unicode name boundaries, timer/frame recovery, wardrobe faults and namespaces,
+and serving the actual release directory. Six live release scenarios now gate
+Pages deployment and produce screenshots, console/error logs, and traces on
+failure. They play phone and desktop adventures, restore with animation frames
+suspended, complete both training lessons and export a proven world, exercise
+wardrobe backups/fresh starts across journeys, recover from quota failures,
+and finish all four Lanternfair chapters. Firefox and WebKit repeat these flows.
+See [development test commands](../scripts/README.md).
+
+
 ## Traveler’s Tent and Lanternfair — v0.27.0
 
 598 Node checks pass. The new browser family covers every appearance and

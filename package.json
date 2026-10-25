@@ -1,22 +1,28 @@
 {
   "name": "tilewright",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "private": true,
   "type": "module",
   "description": "A local-first tile map editor and original turn-based puzzle adventure game.",
   "license": "MIT",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node serve.mjs",
     "check": "node scripts/check.mjs",
     "test": "node --test",
     "test:browser": "node scripts/browser/checks.mjs",
     "build": "node scripts/build.mjs",
-    "verify": "npm run check && npm test && npm run build"
+    "verify": "npm run check && npm test && npm run build",
+    "test:browser:smoke": "node scripts/browser/release-smoke.mjs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YouKnowJP/Personal-Project.git",
     "directory": "Tilewright"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
   }
 }

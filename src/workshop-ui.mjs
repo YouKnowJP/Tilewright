@@ -1,3 +1,4 @@
+import { yieldToBrowser } from './browser-yield.mjs';
 import { trailboardAdventures, loadBookmarks, toggleBookmark, saveBookmarks } from './workshop-trailboard.mjs';
 import { rememberTrail } from './trail-memories.mjs';
 import { blankAdventure, normalizeAdventure, editAdventure, adventureKey, adventureStage, checkAdventure, verifyAdventureProof, MAX_PROOF_ACTIONS, MAX_ADVENTURE_BYTES } from './workshop-model.mjs';
@@ -71,7 +72,7 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   const proofId = pack => `${adventureKey(pack)}:${JSON.stringify(pack.proof)}`;
   async function validateProof(pack) {
     if(!pack.proof)return null; const id=proofId(pack); if(verified.has(id))return verified.get(id);
-    const result=await verifyAdventureProof(pack,()=>new Promise(resolve=>requestAnimationFrame(resolve))); verified.set(id,result); while(verified.size>16)verified.delete(verified.keys().next().value); return result;
+    const result=await verifyAdventureProof(pack,()=>yieldToBrowser()); verified.set(id,result); while(verified.size>16)verified.delete(verified.keys().next().value); return result;
   }
   async function openPreview(input, origin = 'shelf') {
     const n=++token;

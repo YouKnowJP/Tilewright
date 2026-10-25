@@ -17,9 +17,35 @@ npm run verify
 
 ## Optional live checks
 
-Keep the development server running, make Playwright and Chrome available in
-the developer environment, then run `npm run test:browser`. Individual browser
-modules also export functions for focused checks and cross-engine runs.
+Install the locked development tools with `npm ci`. For the release checks:
+
+```sh
+npx playwright install --with-deps --only-shell chromium
+npm run test:browser:smoke
+```
+
+The command builds the static package, starts a temporary loopback server, and
+plays that exact package. It checks phone/desktop looks and recovery while frames
+are suspended, both training lessons and a real creator export, journey-specific
+wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
+It closes the browser and server afterward. No separate server is needed.
+
+This suite gates deployment in CI. Failures retain a screenshot, console/error
+JSON, and Playwright trace in `playwright-report/release-smoke/<engine>/`; successful
+reruns remove the matching stale failure files. CI keeps failure reports for seven
+days. Reports are ignored by Git and excluded from the game. See the official
+[Playwright CI guide](https://playwright.dev/docs/ci).
+
+To repeat one case, for example:
+
+```sh
+npm run test:browser:smoke -- saved-looks-and-continue-390
+```
+
+Unknown case names fail instead of silently passing an empty suite. For all 30
+extended browser families, keep the development server running and Google Chrome
+available, then run `npm run test:browser`. Individual modules also export
+functions for focused checks and Firefox/WebKit runs.
 
 The browser suite lives in `scripts/browser/`; the npm command stays the same.
 `ui-driver.mjs` shares real UI interactions, and `artifacts.mjs` puts optional

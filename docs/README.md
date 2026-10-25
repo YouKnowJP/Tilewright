@@ -32,6 +32,7 @@
 - [QA record](QA.md) and [dated audits](audits/)
 - [Full game recheck, October 24](audits/2026-10-24-full-recheck.md)
 - [Traveler and Lanternfair verification](audits/2026-10-24-traveler-lanternfair.md)
+- [Saved looks and release hardening](audits/2026-10-24-release-hardening.md)
 - [Hosting and sharing](HOSTING.md)
 - [Roadmap](../ROADMAP.md), [changelog](../CHANGELOG.md), and [submission notes](SUBMISSION.md)
 - [Design notes](DESIGN_NOTES.md), [research](RESEARCH.md), and [feature ideas](IDEAS.md)

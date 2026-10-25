@@ -1,7 +1,8 @@
 # Architecture and map format
 
-Tilewright is a static browser application. There is no backend, dependency
-installation, build-time framework, database service, or remote API.
+Tilewright is a static browser application. Playing needs no backend, package
+installation, build-time framework, database service, or remote API. Development
+browser checks use a pinned Playwright package.
 
 | File | Responsibility |
 | --- | --- |
@@ -926,3 +927,29 @@ honors, continuation, export, and remixes. Stable earlier book positions and
 world identities are unchanged; the festival is appended to the library and
 added to the curated Trailboard. `traveler-browser-checks.mjs` exercises all
 choices and actual complete chapters through the shipped UI.
+
+
+## Release hardening and personal looks — v0.28
+
+`player-text.mjs` normalizes printable names, keeps whole graphemes, and applies
+both visible-character and bounded-storage limits before a final trim. The
+normalization is idempotent, including a space at the truncation boundary.
+`traveler-wardrobe.mjs` owns a separate three-slot `tilewright.wardrobe.v1` record.
+Snapshots contain only the seven appearance fields; wearing a look preserves
+identity names and camp/control settings. Inputs validate before storage; readback
+checks detect silent writes. UI replacement Undo retains an independent previous
+collection during the session. Journey adapters and complete archives include
+this logical key without broadening their ownership rules.
+
+`browser-yield.mjs` races an animation frame with a bounded timer and releases
+both handles after the first completion. Checkpoint/training replay, creator
+proofs, and review inspection use it instead of depending on a visible tab.
+Existing stale-result tokens still own application of asynchronous results.
+
+The pinned development-only Playwright package and lockfile support a release
+suite that builds and serves the actual public package. `createDevServer({root})`
+uses the same public allowlist for either source or a built directory and never
+falls back between them. CI uses bundled Chromium, one sequential browser run,
+a stable Linux image, and diagnostic artifacts on failure. Pages depends on
+both the five-platform Node matrix and this browser job. Test outputs are grouped
+by engine and excluded from public assets and repository reference checks.

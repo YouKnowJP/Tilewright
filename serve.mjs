@@ -8,7 +8,7 @@ const ROOT = fileURLToPath(new URL('.', import.meta.url));
 const TYPES = { '.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
 
-export function createDevServer() {
+export function createDevServer({root=ROOT}={}) {
   return http.createServer(async (request, response) => {
     const headers = { 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'no-cache',
       'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" };
@@ -22,7 +22,7 @@ export function createDevServer() {
     } catch { response.writeHead(400, headers); response.end(); return; }
     if (!PUBLIC_FILES.includes(relative)) { response.writeHead(404, headers); response.end('Not found'); return; }
     try {
-      const body = await readFile(path.join(ROOT, relative));
+      const body = await readFile(path.join(root, relative));
       response.writeHead(200, { ...headers, 'Content-Type': TYPES[path.extname(relative)] || 'text/plain; charset=utf-8' });
       response.end(request.method === 'HEAD' ? undefined : body);
     } catch { response.writeHead(404, headers); response.end('Not found'); }
