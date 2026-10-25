@@ -1,3 +1,5 @@
+import { createClueUI } from './adventure-clues-ui.mjs';
+import { wonderPreview } from './adventure-wonders.mjs';
 import { yieldToBrowser } from './browser-yield.mjs';
 import { MAP_KEY, surroundings } from './adventure-accessibility.mjs';
 import { createReviewUI } from './adventure-review-ui.mjs';
@@ -328,11 +330,12 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       if(!run.stage.workshop){memory=run.memory;memorySaveFailed=!saveMemory(storage,memory);}
       if(run.guild)selectedKit=run.guild.kit;
       const index=campaign.findIndex(stage=>stage.id===run.stage.id);if(index>=0)selectedChapter=Math.floor(index/3);
-      paused=false;dashArmed=false;interactionId=null;hintVisible=false;selectNotes('quest');renderer=createAdventureRenderer(canvas,run.stage,{reducedMotion:motion,preferences:()=>front.preferences});renderPicker();renderGuild();checkpoint();showBoard();update();revealBoard();
+      paused=false;dashArmed=false;interactionId=null;clueUI.reset();hintVisible=false;selectNotes('quest');renderer=createAdventureRenderer(canvas,run.stage,{reducedMotion:motion,preferences:()=>front.preferences});renderPicker();renderGuild();checkpoint();showBoard();update();revealBoard();
     }catch(error){const note=`${error.message} Your completed progress and worlds are retained.`;savedTrail.data=null;savedTrail.error=error.message;front.notice(note);if(!$('#adventure-workshop').hidden){workshop.show('books');workshop.notice(note,true);}}
     finally{restoring=false;$('#game-title-screen').inert=false;$('#adventure-workshop').inert=false;}
   }
 
+  const clueUI=createClueUI({preferences:()=>front.preferences,onFocus(point){renderer?.setHintFocus(point);paint();}});
   function update() {
     if (!run) return;
     const stage = run.stage, result = resultFor(run), index = campaign.findIndex(item => item.id === stage.id);
@@ -396,9 +399,9 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#game-target-wrap').hidden = nearby.length < 2;
     $('#game-target').replaceChildren(...nearby.map(item => { const option = document.createElement('option'); option.value = item.id; option.textContent = item.label; return option; }));
     $('#game-target').value = interactionId || ''; $('#game-target').disabled = paused || run.status !== 'playing';
-    $('#game-interaction-note').hidden = !['switch', 'waystone'].includes(interact?.kind);
-    $('#game-interaction-note').textContent = interact?.kind === 'switch' ? mechanismPreview(run, interact) : interact?.kind === 'waystone' ? waystonePreview(run, interact, canEnter, hazardActive) : '';
-    $('#game-interact').textContent = interact ? `${interact.kind === 'npc' ? 'Talk:' : interact.kind === 'relay' ? 'Ring:' : interact.kind === 'relic' ? 'Take:' : interact.kind === 'switch' ? 'Turn:' : interact.kind === 'waystone' ? 'Travel:' : 'Open:'} ${interact.name || 'supplies'} (E)` : 'Interact (E)';
+    $('#game-interaction-note').hidden = !['switch', 'waystone', 'turntable', 'vault'].includes(interact?.kind);
+    $('#game-interaction-note').textContent = ['turntable','vault'].includes(interact?.kind) ? wonderPreview(run,interact) : interact?.kind === 'switch' ? mechanismPreview(run, interact) : interact?.kind === 'waystone' ? waystonePreview(run, interact, canEnter, hazardActive) : '';
+    $('#game-interact').textContent = interact ? `${interact.kind === 'npc' ? 'Talk:' : interact.kind === 'relay' ? 'Ring:' : interact.kind === 'relic' ? 'Take:' : ['switch','turntable'].includes(interact.kind) ? 'Turn:' : interact.kind === 'waystone' ? 'Travel:' : 'Open:'} ${interact.name || 'supplies'} (E)` : 'Interact (E)';
     $('#game-interact').setAttribute('aria-label', interact?.label || 'Interact with a nearby keeper, relay, or supplies');
     $('#game-interact').disabled = !interact || paused || run.status !== 'playing';
     $('#game-decoys').textContent = run.decoys; $('#game-shields').textContent = run.shields;
@@ -427,6 +430,11 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#quest-beacon').textContent = run.status === 'won' ? 'The beacon shines again.' : 'Return to the home beacon (H with map symbols).';
     $('#game-hint').hidden = !hintVisible;
     $('#game-hint-text').textContent = scoutHint(run);
+    renderer?.setHintFocus(clueUI.update(run,hintVisible));
+    document.body.classList.toggle('cooperative-active',!!run.twin);$('#game-decoy').hidden=!!run.twin;$('#game-shield').hidden=!!run.twin;
+    $('#game-twin').hidden=!run.twin;$('#game-twin').disabled=paused||run.status!=='playing'||!!run.dialogue;$('#game-twin').textContent=run.twin?`Switch to ${run.twin.active===0?'Pathfinder':'Lantern keeper'} · T`:'Switch traveler · T';
+    const wonderSummary=run.twin?`${run.twin.active===0?'LANTERN KEEPER · restores lights':'PATHFINDER · turns rooms'} · T hands over controls. Both can hold plates. Bring both home.`:run.stage.vaults?.length?`OPTIONAL VAULTS · ${run.wonders.vaults.length}/${run.stage.vaults.length} · Security ${run.wonders.security}/3 · Treasure +${run.wonders.treasure} · Every vault can be left closed.`:run.stage.turntables?.length?'LIVING MAP · Stand beside a brass dial to turn its dashed room clockwise. Undo restores the entire turn.':'';
+    $('#game-wonder-summary').hidden=!wonderSummary;$('#game-wonder-summary').textContent=wonderSummary;
     $('#game-hint-button').setAttribute('aria-expanded', String(hintVisible));
     const incoming = boss?.mode === 'charging sweep' && Math.abs(boss.x - run.player.x) + Math.abs(boss.y - run.player.y) <= 7;
     const intro = run.turns === 0 && run.message === stage.intro;
@@ -520,7 +528,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     rewind=beginRewind(run,stage.workshop?workshop.runSource(run):ordinarySource(run));checkpoint();
     const chapterIndex = campaign.findIndex(item => item.id === stage.id);
     if (chapterIndex >= 0) selectedChapter = Math.floor(chapterIndex / 3);
-    hintVisible = false; selectNotes('quest');
+    clueUI.reset(); hintVisible = false; selectNotes('quest');
     renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion, preferences:()=>front.preferences }); renderPicker(); renderGuild(); resize(); update();
     revealBoard();
   }
@@ -555,7 +563,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#conversation-wallet').hidden = !(npc.choices || []).some(choice => choice.cost);
     $('#conversation-wallet').textContent = `Unspent coins: ${wallet(run)}. Trades are optional and each keeper offers one parcel. Supplies are capped at three.`;
     $('#conversation-name').textContent = npc.name;
-    const lines = run.rescued.includes(npc.id) && npc.after ? [npc.after] : selected ? [npc.choices.find(choice => choice.id === selected).response] : npc.lines;
+    const lines = run.wonders && Object.hasOwn(run.wonders.dialogue,npc.id) ? [run.wonders.dialogue[npc.id]] : run.rescued.includes(npc.id) && npc.after ? [npc.after] : selected ? [npc.choices.find(choice => choice.id === selected).response] : npc.lines;
     $('#conversation-lines').replaceChildren(...lines.map(text => Object.assign(document.createElement('p'), { textContent: text })));
     $('#conversation-options').replaceChildren(...(selected || run.rescued.includes(npc.id) ? [] : npc.choices || []).map(choice => {
       const button = document.createElement('button'), problem = choiceProblem(run, choice);
@@ -572,6 +580,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   $('#game-cargo').addEventListener('click', () => action('drop-cargo'));
   $('#game-decoy').addEventListener('click', () => action('decoy'));
   $('#game-shield').addEventListener('click', () => action('shield'));
+  $('#game-twin').addEventListener('click',()=>action('switch-traveler'));
   $('#game-power').addEventListener('click', () => action('power'));
   $('#library-guild').addEventListener('click', showGuild);
   $('#guild-kit').addEventListener('change', event => { selectedKit = event.target.value; renderGuild(); });
@@ -658,10 +667,10 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       event.preventDefault();
       if (!event.repeat || front.preferences.keyRepeat==='on' && performance.now() - lastAction > 160) action(direction, event.shiftKey);
     } else if (key === ' ' && !event.target.closest('button')) { event.preventDefault(); if (!event.repeat) action('wait'); }
-    else if (!event.repeat && ['p', 'Escape', 'r', 'h', 'e', 'q', 'c', 'x', 'v', 'b'].includes(key)) {
+    else if (!event.repeat && ['p', 'Escape', 'r', 'h', 'e', 'q', 'c', 'x', 'v', 'b', 't'].includes(key)) {
       event.preventDefault();
       if (key === 'r') restart(); else if (key === 'h') hint(); else if (key === 'e') interact(); else if (key === 'v') inspect();
-      else if (key === 'b') action('power'); else if (key === 'x') action('drop-cargo'); else if (key === 'q') action('decoy'); else if (key === 'c') action('shield'); else pause();
+      else if (key === 't') action('switch-traveler'); else if (key === 'b') action('power'); else if (key === 'x') action('drop-cargo'); else if (key === 'q') action('decoy'); else if (key === 'c') action('shield'); else pause();
     } else if (key === 'Enter' && run.status !== 'playing' && !event.target.closest('button')) { event.preventDefault(); $('#game-primary').click(); }
   });
   mapInput=createMapInput(canvas,{
@@ -672,6 +681,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   });
   function controllerPress(command) {
     if(controlDropdown(command))return;
+    if(clueUI.control(command))return;
     if(command==='undo'){if(!$('#training-camp').hidden)training.control('undo');else rewindAction();return;}
     const dialog=document.activeElement?.closest('dialog[open]')||document.querySelector('dialog[open]'),menu=$('#game-menu');
     if(!dialog&&training?.control(command))return;
@@ -700,7 +710,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if(run.status!=='playing'){if(command==='interact')$('#game-primary').click();return;}
     if(paused){if(command==='interact'||command==='back')pause();return;}
     if(['up','right','down','left'].includes(command))action(command);
-    else if(command==='interact')interact();else if(command==='dash')armDash();else if(command==='back')action('wait');else if(command==='plan')inspect();else action(command==='cargo'?'drop-cargo':command);
+    else if(command==='power'&&run.twin&&!run.guild)action('switch-traveler');else if(command==='interact')interact();else if(command==='dash')armDash();else if(command==='back')action('wait');else if(command==='plan')inspect();else action(command==='cargo'?'drop-cargo':command);
   }
   function applyControls(preferences){
     document.body.dataset.controls=preferences.controls;document.body.dataset.padSide=preferences.padSide;document.body.dataset.controlSize=preferences.controlSize;

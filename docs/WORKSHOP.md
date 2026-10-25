@@ -145,3 +145,21 @@ Keep downloaded backups. Browser storage can be cleared or unavailable. Draft,
 shelf, and bests have separate stores; failed writes retain session data and
 show a warning. Up to 32 saved worlds are kept without silently evicting an old
 world. Export before removing one to make room.
+
+## Living maps and reactive stories — v0.29
+
+The full palette now includes **Rotating room dial**, **Optional security vault**,
+**Two-Lantern partner**, and **Story rune**. Inspect a dial to choose a 3 × 3,
+5 × 5, or 7 × 7 room. The dashed square previews the whole moving area.
+
+**Adventure notes → Story moments & playable clues** opens a separate editor.
+Connect up to six events to outcomes, or add a gentle clue, a focused clue,
+a helpful object, and a miniature practice lesson. These settings share the
+world’s Undo/Redo, draft save, portable files/codes, and creator-clear invalidation.
+Choose **Apply story & clues**, then complete a fresh playtest.
+
+New-rule worlds use adventure version 2. Existing worlds remain version 1;
+current Lantern Trails reads both. Story moments cannot be silently copied into
+a puzzle assembly: remove their cards first, or remix/share the complete world.
+Assemblies containing a dial must include its whole room. See the
+[mechanics, limits, and example workflow](LOST_CARTOGRAPHER.md).

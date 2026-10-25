@@ -5,7 +5,7 @@ import { resumeDefinition } from './adventure-resume.mjs';
 import { serializeJourney, restoreJourney } from './adventure-journey.mjs';
 
 export const TRAIL_SAVE_KEY='tilewright.trail.checkpoint.v1',REWIND_LIMIT=60,MAX_TRAIL_ACTIONS=8192,MAX_TRAIL_BYTES=650000;
-const RULES='0.22.0',actionPattern=/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|close-dialogue|forget|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/;
+const RULES='0.22.0',actionPattern=/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|switch-traveler|close-dialogue|forget|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/;
 export const replayAction=(run,action)=>action==='forget'?{...run,memory:freshMemory(),events:[],message:'The learned movement habits were cleared.'}:stepRun(run,action);
 export function runFingerprint(run){const {stage,walkable,events,message,...state}=run;return hashSeed(JSON.stringify(state)).toString(16);}
 export function beginRewind(run,input){
@@ -15,7 +15,7 @@ export function beginRewind(run,input){
 }
 export function advanceRewind(trail,action){
   const before=trail.run,next=replayAction(before,action);
-  const changed=next.turns!==before.turns||next.facing!==before.facing||next.dialogue!==before.dialogue||next.choices!==before.choices||next.rescued.length!==before.rescued.length||next.talkedTo.length!==before.talkedTo.length||action==='forget';
+  const changed=next.twin!==before.twin||next.turns!==before.turns||next.facing!==before.facing||next.dialogue!==before.dialogue||next.choices!==before.choices||next.rescued.length!==before.rescued.length||next.talkedTo.length!==before.talkedTo.length||action==='forget';
   if(!changed)return {...trail,run:next};
   return {...trail,run:next,actions:[...trail.actions,action],past:[...trail.past,{run:before,length:trail.actions.length,action}].slice(-REWIND_LIMIT)};
 }

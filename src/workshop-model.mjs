@@ -1,3 +1,4 @@
+import { normalizeWonderNotes, WONDER_KINDS } from './adventure-wonders.mjs';
 import { CHANNEL_NUMBERS } from './adventure-accessibility.mjs';
 import { createDocument, validateDocument, paintCells } from './model.mjs';
 import { createRun, stepRun, walkableCells } from './adventure.mjs';
@@ -9,6 +10,7 @@ export const ADVENTURE_FORMAT = 'tilewright-adventure';
 export const MAX_ADVENTURE_BYTES = 400_000, MAX_PROOF_ACTIONS = 2000, MAX_MARKERS = 128;
 export const CHANNELS = Object.freeze(['amber', 'jade', 'violet', 'blue']);
 export const OBJECTS = Object.freeze([
+  ['turntable','Rotating room dial','Puzzles'], ['vault','Optional security vault','Puzzles'], ['partner','Two-Lantern partner','Story'], ['rune','Story rune','Story'],
   ['start', 'Starting point', 'Goals'], ['beacon', 'Exit beacon', 'Goals'], ['lantern', 'Lantern', 'Goals'], ['coin', 'Treasure', 'Goals'],
   ['key', 'Brass key', 'Puzzles'], ['gate', 'Key gate', 'Puzzles'], ['crate', 'Pushable crate', 'Puzzles'], ['plate', 'Pressure plate', 'Puzzles'],
   ['bridge', 'Pressure bridge', 'Puzzles'], ['lever', 'Lever', 'Puzzles'], ['door', 'Lever door', 'Puzzles'], ['bell', 'Sequence bell', 'Puzzles'],
@@ -27,7 +29,7 @@ const integer = (value, min, max, label) => { if (!Number.isInteger(value) || va
 const point = (value, map) => ({ x: integer(value?.x, 0, map.width - 1, 'Column'), y: integer(value?.y, 0, map.height - 1, 'Row') });
 export const nextMarkerId = markers => { let n = 1; while (markers.some(item => item.id === `mark-${n}`)) n++; return `mark-${n}`; };
 export function normalizeAdventure(input) {
-  if (!input || input.format !== ADVENTURE_FORMAT || input.version !== 1) throw Error('Choose a Tilewright adventure file (version 1), rather than a terrain-only map.');
+  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2].includes(input.version)) throw Error('Choose a Tilewright adventure file (version 1 or 2), rather than a terrain-only map.');
   const map = validateDocument(input.map), title = lineText(input.title, 64, 'Adventure title');
   if (!title) throw Error('Give your adventure a title.');
   if (!Array.isArray(input.markers) || input.markers.length > MAX_MARKERS) throw Error(`Adventures support up to ${MAX_MARKERS} objects.`);
@@ -39,6 +41,8 @@ export function normalizeAdventure(input) {
       channel: CHANNELS.includes(value.channel) ? value.channel : 'amber', order: integer(value.order ?? 1, 1, 8, 'Bell order'),
       initial: value.initial === true, required: value.required === true, reward: ['advice', 'supplies', 'route'].includes(value.reward) ? value.reward : 'advice',
       nemesisOnly: value.nemesisOnly === true, vision: integer(value.vision ?? 6, 3, 10, 'Hunter vision'), offset: integer(value.offset ?? 0, 0, 3, 'Ember offset') };
+    if (item.kind === 'turntable') item.span = integer(value.span ?? 5,3,7,'Rotating room size');
+    if (item.kind === 'turntable' && ![3,5,7].includes(item.span)) throw Error('Rotating rooms are 3, 5, or 7 tiles wide.');
     if (value.rival === 'listener' && ['hunter','watcher'].includes(item.kind)) item.rival = 'listener';
     if (['patrol', 'hunter', 'watcher'].includes(item.kind)) {
       if (!Array.isArray(value.route) || value.route.length > 24) throw Error('Threat routes support up to 24 waypoints.');
@@ -52,10 +56,12 @@ export function normalizeAdventure(input) {
     theme: CHAPTERS.some(theme => theme.id === input.theme) ? input.theme : 'woodland',
     kit: GUILD_KITS.some(kit => kit.id === input.kit) ? input.kit : 'none', par: integer(input.par ?? 120, 8, 5000, 'Three-star target'),
     rules: { noDash: input.rules?.noDash === true, noShield: input.rules?.noShield === true, allCoins: input.rules?.allCoins === true }, map, markers };
+  Object.assign(pack, normalizeWonderNotes(input,markers));
+  if(markers.some(m=>WONDER_KINDS.includes(m.kind))||pack.storyCards||pack.hints)pack.version=2;
   if (input.proof !== undefined) {
     const proof = input.proof;
     if (!proof || !['trail', 'nemesis'].includes(proof.difficulty) || !Array.isArray(proof.actions) || !proof.actions.length || proof.actions.length > MAX_PROOF_ACTIONS
-      || proof.actions.some(action => typeof action !== 'string' || !/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|close-dialogue|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/.test(action))) throw Error('The creator clear contains an invalid or oversized action journal.');
+      || proof.actions.some(action => typeof action !== 'string' || !/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|switch-traveler|close-dialogue|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/.test(action))) throw Error('The creator clear contains an invalid or oversized action journal.');
     pack.proof = { difficulty: proof.difficulty, actions: [...proof.actions] };
   }
   return pack;
@@ -69,7 +75,7 @@ export function adventureKey(input) {
 export function editAdventure(input, patch) { const { proof, ...pack } = input; return normalizeAdventure({ ...pack, ...patch }); }
 export function placeObject(input, kind, x, y, extra = {}) {
   if (!kinds.has(kind)) throw Error('Choose a known adventure object.');
-  const markers = input.markers.filter(item => !(item.kind === kind && ['start', 'beacon', 'relic'].includes(kind))
+  const markers = input.markers.filter(item => !(item.kind === kind && ['start', 'beacon', 'relic', 'partner'].includes(kind))
     && !(item.x === x && item.y === y && (overlays.has(kind) ? item.kind === kind : !overlays.has(item.kind))));
   const marker = { id: nextMarkerId(markers), kind, x, y, channel: 'amber', order: kind === 'bell' ? Math.min(8, markers.filter(item => item.kind === 'bell').length + 1) : 1, ...extra };
   if (['patrol', 'hunter', 'watcher'].includes(kind) && !marker.route) {
@@ -132,6 +138,14 @@ export function adventureStage(input) {
     restrictions: { noDash: pack.rules.noDash, noShield: pack.rules.noShield }, requireCoins: pack.rules.allCoins,
     relic: by('relic')[0] ? { ...position(by('relic')[0]), name: by('relic')[0].name || 'Singing relic' } : null,
     delivery: by('relic').length ? position(by('beacon')[0]) : null, workshop: { key: adventureKey(pack), author: pack.author, source: pack.source } };
+  if (by('partner').length > 1) throw Error('Keep only one Two-Lantern partner.');
+  if (by('turntable').length) stage.turntables = by('turntable').map(item=>({...position(item),name:item.name||'Cartographer’s dial',radius:(item.span-1)/2}));
+  if (by('vault').length) stage.vaults = by('vault').map(item=>({...position(item),name:item.name||'Brass vault'}));
+  if (by('rune').length) stage.runes = by('rune').map(item=>({...position(item),name:item.name||'Story rune'}));
+  if (by('partner').length) stage.partner = {...position(by('partner')[0]),name:by('partner')[0].name||'Pathfinder'};
+  if (pack.storyCards) { stage.storyCards = structuredClone(pack.storyCards); stage.storyTargets=pack.markers.map(position); }
+  if (pack.hints) stage.hints = {...pack.hints};
+  if (stage.partner && stage.vaults?.length) throw Error('Two-Lantern worlds are peaceful; use vaults in a single-traveler world.');
   if (pack.kit !== 'none') { stage.guild = { kit: pack.kit, merits: ['clean', 'treasure', 'power'] }; stage.waystones = waystones; }
   else if (waystones.length) throw Error('Choose a specialist kit to use paired waystones.');
   return stage;
@@ -140,7 +154,7 @@ export function checkAdventure(input) {
   const errors = [], warnings = []; let pack, stage;
   try { pack = normalizeAdventure(input); } catch (error) { return { errors: [error.message], warnings, ready: false }; }
   const by = kind => pack.markers.filter(item => item.kind === kind);
-  for (const kind of ['start', 'beacon', 'relic']) if (by(kind).length > 1) errors.push(`Keep only one ${kind}.`);
+  for (const kind of ['start', 'beacon', 'relic', 'partner']) if (by(kind).length > 1) errors.push(`Keep only one ${kind}.`);
   for (const [kind, max] of [['lantern', 12], ['bell', 8], ['waystone', 8], ['patrol', 8], ['hunter', 6], ['watcher', 1], ['guide', 8], ['rescue', 8]]) if (by(kind).length > max) errors.push(`Use at most ${max} ${kind} objects.`);
   for (const channel of CHANNELS) {
     if (by('lever').filter(item => item.channel === channel).length > 1) errors.push(`Use one lever per channel (${channel}).`);
@@ -163,12 +177,13 @@ export function checkAdventure(input) {
   }
   try { stage = adventureStage(pack); if (!errors.length) createRun(stage, { memory: freshMemory() }); } catch (error) { errors.push(error.message); }
   if (stage && !errors.length) {
+    const spinning = by('turntable');
     // An optimistic connectivity check catches isolated goals, not every puzzle deadlock.
     const gates = new Set(stage.gates.map(p => p.y * pack.map.width + p.x)), people = new Set(stage.npcs.map(p => p.y * pack.map.width + p.x));
     const queue = [stage.start], seen = new Set([stage.start.y * pack.map.width + stage.start.x]);
     for (let i = 0; i < queue.length; i++) for (const [dx, dy] of [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
       const x = queue[i].x + dx, y = queue[i].y + dy, at = y * pack.map.width + x;
-      if (x < 0 || y < 0 || x >= pack.map.width || y >= pack.map.height || seen.has(at) || people.has(at) || (!walkable[at] && !gates.has(at))) continue;
+      if (x < 0 || y < 0 || x >= pack.map.width || y >= pack.map.height || seen.has(at) || people.has(at) || (!walkable[at] && !gates.has(at) && !spinning.some(r=>Math.abs(x-r.x)<=(r.span-1)/2&&Math.abs(y-r.y)<=(r.span-1)/2))) continue;
       seen.add(at); queue.push({ x, y });
     }
     const adjacent = p => [[0, -1], [1, 0], [0, 1], [-1, 0]].some(([dx, dy]) => p.x + dx >= 0 && p.x + dx < pack.map.width && p.y + dy >= 0 && p.y + dy < pack.map.height && seen.has((p.y + dy) * pack.map.width + p.x + dx));
@@ -177,6 +192,7 @@ export function checkAdventure(input) {
     }
   }
   if (by('gate').length > by('key').length) warnings.push('There are more key gates than keys. Make sure a required route cannot consume the only key too early.');
+  if (by('turntable').length) warnings.push('Rotating-room checks allow possible future paths. Playtest every orientation, both travelers, and the return route; Undo can recover a poor turn.');
   if (by('crate').length || by('plate').length || by('lever').length || by('waystone').length) warnings.push('Playtest both your outward and return paths. Linked puzzles can trap a route even when the map is connected.');
   if (!pack.proof) warnings.push('No creator clear yet. Finish a playtest to attach a replayable clear before sharing.');
   return { errors: [...new Set(errors)], warnings, ready: !errors.length, stage };

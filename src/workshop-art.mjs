@@ -20,6 +20,10 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'turntable': ring('#465b70',12,12,11); ring('#e8c785',12,12,8); rect('#253f48',10,4,4,15); rect('#253f48',7,7,9,3); rect('#fff1c6',14,13,5,4); break;
+    case 'vault': rect('#503e4d',2,5,20,18); rect('#c99a5f',4,7,16,13); rect('#f4d796',10,6,4,16); ring('#394d57',12,13,4); rect('#fff1c6',11,11,2,4); break;
+    case 'rune': ring('#547a81',12,13,9); rect('#d4eeee',10,5,4,15); rect('#d4eeee',5,10,14,4); ring('#203d48',12,12,3); break;
+    case 'partner': rect('#6e9dbe',6,11,13,12); rect('#efcba6',8,5,9,8); rect('#3a586d',6,3,13,5); rect('#f6df9b',15,12,4,7); rect('#18363f',8,21,3,3); rect('#18363f',14,21,3,3); break;
     case 'start': rect('#926344', 6, 3, 13, 6); rect('#eec997', 8, 8, 9, 6); rect('#e5bc76', 7, 14, 11, 8); rect('#40554a', 8, 21, 3, 3); rect('#40554a', 14, 21, 3, 3); break;
     case 'beacon': ring('#7ed8cc66', 12, 13, 11); rect('#4a9d99', 4, 18, 16, 5); rect('#b0eee0', 9, 3, 6, 16); rect('#e8f8d0', 7, 8, 10, 5); break;
     case 'lantern': ring('#ffe4a13b', 12, 12, 11); rect('#a98043', 6, 3, 12, 18); rect('#ffeba7', 9, 7, 6, 11); break;
@@ -55,6 +59,7 @@ export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = 
   }
   if (grid) { ctx.strokeStyle = '#17393235'; ctx.lineWidth = 1; ctx.beginPath(); for (let x = 0; x <= map.width; x++) { ctx.moveTo(x * size, 0); ctx.lineTo(x * size, height); } for (let y = 0; y <= map.height; y++) { ctx.moveTo(0, y * size); ctx.lineTo(width, y * size); } ctx.stroke(); }
   for (const item of [...pack.markers.filter(m => ['fern', 'ember'].includes(m.kind)), ...pack.markers.filter(m => !['fern', 'ember'].includes(m.kind))]) drawWorkshopObject(ctx, item, size);
+  for(const room of pack.markers.filter(m=>m.kind==='turntable')){const r=(room.span-1)/2;ctx.strokeStyle='#f6d88e';ctx.lineWidth=thumbnail?1:2;ctx.setLineDash([4,3]);ctx.strokeRect((room.x-r)*size+1,(room.y-r)*size+1,room.span*size-2,room.span*size-2);ctx.setLineDash([]);}
   const object = pack.markers.find(m => m.id === selected);
   if (object?.route && !thumbnail) { ctx.strokeStyle = '#f5d893'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]); ctx.beginPath(); object.route.forEach((p, i) => i ? ctx.lineTo((p.x + .5) * size, (p.y + .5) * size) : ctx.moveTo((p.x + .5) * size, (p.y + .5) * size)); ctx.stroke(); ctx.setLineDash([]); }
   if (object) { ctx.strokeStyle = '#fff0b2'; ctx.lineWidth = 2; ctx.strokeRect(object.x * size + 1, object.y * size + 1, size - 2, size - 2); }

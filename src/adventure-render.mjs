@@ -1,3 +1,4 @@
+import { drawWorkshopObject } from './workshop-art.mjs';
 import { drawTraveler } from './traveler-art.mjs';
 import { boardWindow, drawMapCues, drawCueBadge } from './adventure-accessibility.mjs';
 import { renderMap, drawTile, TILE_SIZE } from './render.mjs';
@@ -9,6 +10,7 @@ const same = (a, b) => a.x === b.x && a.y === b.y;
 export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPreference, preferences = () => ({}) } = {}) {
   const background = document.createElement('canvas'); renderMap(background, stage.map); decorateMap(background, stage);
   let columns = Math.min(24, stage.map.width), rows = Math.min(16, stage.map.height);
+  let focus = null;
   let state = null, previous = null, movedAt = 0;
   const near = (a, b) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 <= (state?.effects.sightSquared ?? 30);
   const reducedMotion = motionPreference || matchMedia('(prefers-reduced-motion: reduce)');
@@ -27,8 +29,9 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     return {x:(x-left+.5)/columns,y:(y-top+.5)/rows};
   }
   function setState(next) {
-    previous = state?.player || next.player;
+    previous = next.events.some(e=>['traveler-switch','room-turn'].includes(e.type))?next.player:state?.player||next.player;
     if (!state || !same(state.player, next.player) || (state.turns !== next.turns && next.events.some(event => event.type === 'pulse'))) movedAt = performance.now();
+    if (stage !== next.stage) { stage=next.stage; renderMap(background,stage.map); decorateMap(background,stage); }
     state = next;
   }
 
@@ -54,6 +57,10 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     const circle = (color, x, y, radius) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill(); };
     const visible = point => run.seen[point.y * stage.map.width + point.x];
     const active = activePlates(run);
+    for(const room of stage.turntables||[]) {if(!visible(room))continue;ctx.strokeStyle=preferences().contrast==='high'?'#ffffff':'#f6d88e';ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.strokeRect((room.x-room.radius)*24+2,(room.y-room.radius)*24+2,(room.radius*2+1)*24-4,(room.radius*2+1)*24-4);ctx.setLineDash([]);drawWorkshopObject(ctx,{...room,kind:'turntable'});}
+    for(const item of stage.vaults||[])if(visible(item)&&!run.wonders.vaults.includes(item.id))drawWorkshopObject(ctx,{...item,kind:'vault'});
+    for(const item of stage.runes||[])if(visible(item))drawWorkshopObject(ctx,{...item,kind:'rune'});
+    if(run.twin&&visible(run.twin.other)){drawTraveler(ctx,run.twin.other.x*24,run.twin.other.y*24,run.twin.active===1?preferences():{...preferences(),coat:'tide',scarf:'cream',headwear:'cap'},{facing:run.twin.otherFacing});drawCueBadge(ctx,run.twin.other,run.twin.active===0?'2':'1');}
     for (const stone of stage.waystones || []) {
       if (!visible(stone)) continue;
       const x = stone.x * 24, y = stone.y * 24;
@@ -221,6 +228,7 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
         else if (!near({ x, y }, run.player)) rect(`${stage.theme ? themeFor(stage).dark : '#173932'}66`, x * 24, y * 24, 24, 24);
       }
     }
+    if(focus){ctx.strokeStyle='#fff8d8';ctx.lineWidth=3;ctx.strokeRect(focus.x*24+1,focus.y*24+1,22,22);drawCueBadge(ctx,focus,'?');}
     if(preferences().mapCues==='on')drawMapCues(ctx,run);
     const echo = run.guild?.echo;
     if (echo && echo.until > run.turns) {
@@ -240,8 +248,9 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     circle('#354f3b55', x + 12, y + 21, 8);
     const blink = run.invulnerability > 0 && !reducedMotion.matches && Math.floor(time / 130) % 2;
     ctx.globalAlpha = blink ? .55 : 1;
-    drawTraveler(ctx,x,y,preferences(),{facing:run.facing,carrying:run.carrying});ctx.globalAlpha = 1;
-    if(preferences().contrast==='high'||preferences().mapCues==='on'){ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.strokeRect(x+1,y+1,22,22);drawCueBadge(ctx,{x:player.x,y:player.y},'Y');}
+    drawTraveler(ctx,x,y,run.twin?.active===1?{...preferences(),coat:'tide',scarf:'cream',headwear:'cap'}:preferences(),{facing:run.facing,carrying:run.carrying});ctx.globalAlpha = 1;
+    if(run.twin)drawCueBadge(ctx,run.player,run.twin.active===0?'1':'2');
+    if(preferences().contrast==='high'||preferences().mapCues==='on'){ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.strokeRect(x+1,y+1,22,22);drawCueBadge(ctx,{x:player.x,y:player.y},run.twin?run.twin.active===0?'1':'2':'Y');}
     if (run.events.some(event => ['lantern', 'win'].includes(event.type)) && time - movedAt < 550 && !reducedMotion.matches) {
       const spread = (time - movedAt) / 35;
       for (let i = 0; i < 6; i++) {
@@ -287,5 +296,5 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
   }
 
   function projectPoint(point){return {x:(point.x-Math.max(0,Math.min(stage.map.width-columns,state.player.x-(columns-1)/2)))*24,y:(point.y-Math.max(0,Math.min(stage.map.height-rows,state.player.y-(rows-1)/2)))*24};}
-  return { projectPoint, playerAnchor, resize, setState, draw, drawMinimap };
+  return { setHintFocus(point){focus=point;}, projectPoint, playerAnchor, resize, setState, draw, drawMinimap };
 }

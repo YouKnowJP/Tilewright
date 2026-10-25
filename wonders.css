@@ -1,0 +1,23 @@
+/* Contextual controls, with one contained practice board on narrow screens. */
+.clue-actions{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:12px 0}
+.clue-actions>label{flex:1 1 160px;display:grid;gap:6px}
+.clue-dialog{max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain}
+.clue-dialog h2{margin:10px 0}.clue-dialog p{margin:10px 0}.clue-dialog .clue-footnote{font-size:13px}
+.clue-board{display:flex;justify-content:center;background:#10292e;border:1px solid #8e9a81;padding:8px;min-height:140px}
+.clue-board canvas{image-rendering:pixelated;max-width:100%;outline-offset:3px;touch-action:pan-y pinch-zoom}
+.clue-pad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,44px);gap:6px;justify-content:center;margin:12px auto}
+.clue-pad button{padding:4px;font-size:22px}.clue-pad button:nth-child(1){grid-column:2}.clue-pad button:nth-child(2){grid-column:1;grid-row:2}.clue-pad button:nth-child(3){grid-column:2;grid-row:2}.clue-pad button:nth-child(4){grid-column:3;grid-row:2}
+#game-twin[hidden],#game-wonder-summary[hidden]{display:none}#game-twin{border-color:#b6dbe8;background:#294d58}
+#game-wonder-summary{font-size:var(--adventure-small-size,14px);line-height:1.55;margin:8px 0;color:#f5e5b8}
+.story-card-editor{padding:14px;border:1px solid #8c987e;background:#102f2e;margin:12px 0;min-width:0}.story-card-editor legend{color:#f2d89e;padding:0 8px}
+.wonder-editor label{display:grid;gap:7px;margin:12px 0}.wonder-editor input:not([type="checkbox"]),.wonder-editor textarea{width:100%;box-sizing:border-box;background:#112c2c;border:1px solid #91a48c;color:#f4ecd1;padding:10px;font:inherit}.wonder-editor select{width:100%}
+.wonder-editor details{border-top:1px solid #6a8272;margin-top:16px;padding-top:14px}.wonder-editor summary{cursor:pointer;min-height:44px;color:#f7ddb0}.wonder-editor [role=status]{color:#f5d9ac}
+body[data-game-contrast=high] .clue-board,body[data-game-contrast=high] .story-card-editor{border:2px solid white;background:#101c23}
+@media(max-width:480px){.clue-dialog{padding:14px}.clue-dialog .front-dialog-heading{top:-14px;gap:8px}.clue-dialog .front-dialog-heading button{max-width:150px}.clue-actions>button{flex:1 1 125px}.clue-actions>.game-select-trigger{flex:1}.clue-board{padding:4px}}
+
+.game-controls #game-wonder-summary:not([hidden]){display:block;width:100%;grid-column:1 / -1;margin:0;font-size:var(--adventure-small-size,14px)}
+
+.clue-console{display:grid;grid-template-columns:144px minmax(0,1fr);gap:12px;align-items:center}.clue-console .clue-pad{margin:6px 0}.clue-commands{display:grid;gap:8px;min-width:0}.clue-commands label{display:grid;gap:5px;font-size:13px}.clue-commands .game-select-trigger{min-width:0;width:100%}.clue-utility{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.clue-utility button{flex:1;min-width:85px;padding:8px}.clue-dialog #clue-status{font-size:14px;line-height:1.5}.wonder-editor .ws-checkbox{display:flex;align-items:center;gap:12px}.wonder-editor .ws-checkbox input{width:20px;height:20px;flex-shrink:0;accent-color:#d9bd79}
+@media(max-width:359px){.clue-console{grid-template-columns:126px minmax(0,1fr);gap:8px}.clue-console .clue-pad{grid-template-columns:repeat(3,38px);gap:5px}.clue-commands button{padding:6px;font-size:12px}}
+
+.cooperative-active .game-controls .tactical-actions{grid-template-columns:repeat(2,minmax(0,1fr))}

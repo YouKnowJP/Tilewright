@@ -138,3 +138,12 @@ World studio puzzle assemblies, a curated Trailboard, and reactive village
 scenes. See the [delivered feature guide](KEEPERS-PROMISE.md). Open community
 publishing, general Terrain Mapmaker selection, and optional cloud saves remain
 future work.
+
+## Delivered from the latest research — v0.29
+
+Living-map puzzles, playable hints, creator event/outcome cards, optional treasure
+heists, and shared-device cooperative adventures are delivered in
+[The Lost Cartographer](LOST_CARTOGRAPHER.md). The Quiet Heist proposal now has
+three optional vault tiers with declared security, verified clean escape routes,
+and no additional exit condition. The original moving-storm proposal remains
+future work; the new living-map mechanic is a player-operated rotating room.

@@ -1,3 +1,4 @@
+import { cartographerBook } from './cartographer-worlds.mjs';
 import { lanternfairBook } from './storybook-lanternfair.mjs';
 import { welcomeBook } from './storybook-welcome.mjs';
 import { puzzleLabWorld } from './workshop-lab.mjs';
@@ -44,5 +45,6 @@ export function featuredBooks() {
     promiseBook(),
     welcomeBook(),
     lanternfairBook(),
+    cartographerBook(),
   ];
 }

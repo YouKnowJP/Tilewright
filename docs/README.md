@@ -7,6 +7,7 @@
 
 | Guide | Covers |
 | --- | --- |
+| [The Lost Cartographer](LOST_CARTOGRAPHER.md) | Living maps, vaults, story cards, cooperative chapters, and playable clues. |
 | [Player guide](PLAYER_GUIDE.md) | Basic goals, actions, and play flow. |
 | [Training camp](TRAINING.md) | Hands-on play and world-creation lessons. |
 | [Accessibility](ACCESSIBILITY.md) | Readable text, high contrast, map cues, and peaceful chapters. |
@@ -29,6 +30,7 @@
 
 - [Architecture and formats](ARCHITECTURE.md)
 - [Development tools and browser checks](../scripts/README.md)
+- [Lost Cartographer release verification](audits/2026-10-24-cartographer.md)
 - [QA record](QA.md) and [dated audits](audits/)
 - [Full game recheck, October 24](audits/2026-10-24-full-recheck.md)
 - [Traveler and Lanternfair verification](audits/2026-10-24-traveler-lanternfair.md)

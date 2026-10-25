@@ -9,18 +9,24 @@ explore a world you paint. The **Wayfarers’ Guild** adds eight dispatches,
 three specialist tools, linked waystones, and optional commendations. The new
 **Echoist** leaves a lantern double to hold a plate, lure a hunter, or return to
 after taking a risky shortcut.
-The **Adventure Workshop** adds three authored adventures, twelve playable Puzzle Lab rooms, 24 editable object
+The **Adventure Workshop** adds nine authored adventures, twelve playable Puzzle Lab rooms, 28 editable object
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
-creator for portable two-to-six-world adventures. Five original Storybooks add
-**twenty-three levels**, recurring keepers, alternate solutions, and readable endings.
+creator for portable two-to-six-world adventures. Six original Storybooks add
+**twenty-nine levels**, recurring keepers, alternate solutions, and readable endings.
 **The Keeper’s Promise** adds five worlds across two branching roads: restore a
 ferry or a workshop, then follow that choice to its own reunion and ending.
 The **Trailhouse** adds twelve keeper commissions, a village with six restoration
 projects, seven keepsakes, and an unlockable original lantern-festival adventure.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
+
+Version 0.29 adds **The Lost Cartographer**: six original chapters, rotating
+rooms, optional security vaults, reactive story cards, peaceful shared-device
+Two-Lantern adventures, and four playable hint puzzles. These tools also work in
+the Workshop, portable worlds, Undo, checkpoints, and route reviews. See the
+[Lost Cartographer guide](docs/LOST_CARTOGRAPHER.md).
 
 Version 0.28 adds three personal saved looks per journey, with wear, replace,
 and Undo, and strengthens name boundaries and background replay recovery.

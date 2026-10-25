@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.29.0 — 2026-10-24
+
+- Add The Lost Cartographer: six original chapters and six remixable featured worlds.
+- Turn 3/5/7-tile rooms during play, carrying their terrain, objects, and travelers.
+- Open up to three optional vaults with announced rewards and deterministic security rings.
+- Cooperate as Lantern keeper and Pathfinder on one device, or switch roles solo.
+- Author up to six event/outcome story cards, including changed dialogue and opened routes.
+- Add gentle clues, focused map markers, and four independent playable hint puzzles.
+- Preserve original restart layouts, complete Undo, exact checkpoints, and route reviews.
+- Use version 2 for new adventure rules; keep existing version-1 worlds and saves compatible.
+- Gate publishing on live new-content, creator, accessibility, controller, and recovery scenarios.
+
 ## 0.28.0 — 2026-10-24
 
 - Keep three named personal looks per journey, with wear, replace, and Undo.

@@ -15,6 +15,8 @@ export function captureAssembly(input,bounds,name){
   if(!b||['x','y','width','height'].some(key=>!Number.isInteger(b[key]))||b.x<0||b.y<0||b.width<1||b.height<1||b.width>12||b.height>12||b.x+b.width>pack.map.width||b.y+b.height>pack.map.height)throw Error('Select an area inside the map, up to 12 × 12 cells.');
   const markers=pack.markers.filter(m=>inside(m,b));
   for(const marker of markers){
+    if(marker.kind==='turntable'&& (marker.x-(marker.span-1)/2<b.x||marker.y-(marker.span-1)/2<b.y||marker.x+(marker.span-1)/2>=b.x+b.width||marker.y+(marker.span-1)/2>=b.y+b.height))throw Error('Include the entire rotating room in the assembly.');
+    if((pack.storyCards||[]).some(c=>c.source===marker.id||c.target===marker.id))throw Error('Story moments belong to this world. Remove their cards before capturing these objects as an assembly.');
     if(marker.route?.some(p=>!inside(p,b)))throw Error('Include every patrol waypoint in the selected area.');
     if(linked(marker)&&pack.markers.some(other=>linked(other)&&other.channel===marker.channel&&!inside(other,b)))throw Error(`Include the whole ${marker.channel} puzzle so its links stay together.`);
   }
@@ -37,6 +39,7 @@ export function pasteAssembly(input,source,point,turns=0){
   if(!point||!Number.isInteger(point.x)||!Number.isInteger(point.y)||point.x<0||point.y<0||point.x+b.width>pack.map.width||point.y+b.height>pack.map.height)throw Error('Move the cursor so the entire assembly fits inside the map.');
   if(pack.markers.some(m=>inside(m,b)))throw Error('Place assemblies on an empty object area. Terrain will be replaced; existing puzzle objects stay safe.');
   if(pack.markers.length+assembly.markers.length>MAX_MARKERS)throw Error('This assembly would exceed the 128-object limit.');
+  if(pack.markers.some(m=>m.kind==='partner')&&assembly.markers.some(m=>m.kind==='partner'))throw Error('A world can hold only one Two-Lantern partner.');
   if(pack.markers.some(m=>m.kind==='relic')&&assembly.markers.some(m=>m.kind==='relic'))throw Error('A world can hold only one singing relic.');
   const used=new Set(pack.markers.filter(linked).map(m=>m.channel)),needed=[...new Set(assembly.markers.filter(linked).map(m=>m.channel))],free=CHANNELS.filter(id=>!used.has(id));
   if(needed.length>free.length)throw Error('There are not enough unused puzzle channels. Clear a complete channel before placing this linked assembly.');

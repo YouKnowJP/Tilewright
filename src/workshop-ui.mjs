@@ -1,3 +1,4 @@
+import { cartographerWorld, CARTOGRAPHER_LEVELS } from './cartographer-worlds.mjs';
 import { yieldToBrowser } from './browser-yield.mjs';
 import { trailboardAdventures, loadBookmarks, toggleBookmark, saveBookmarks } from './workshop-trailboard.mjs';
 import { rememberTrail } from './trail-memories.mjs';
@@ -22,7 +23,7 @@ import { MASTERY_REWARDS, MAX_MASTERY_BYTES, loadMastery, saveMastery, masteryCo
 export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onExit, onPlay, onTerrain, onGuide, onResume, canResumeBook, onReplaceBook }) {
   const $ = id => document.getElementById(`ws-${id}`), root = document.getElementById('adventure-workshop');
   const kitLabel=id=>GUILD_KITS.find(kit=>kit.id===id)?.name||'Wayfarer';
-  const restored = loadWorkshop(storage), featured = workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) }));
+  const restored = loadWorkshop(storage), featured = [...workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) })), ...CARTOGRAPHER_LEVELS.map(id=>cartographerWorld(id))];
   const board=trailboardAdventures();let bookmarks=loadBookmarks(storage);
   const restoredDraft=loadWorkshopDraft(storage); let draftTouched=Boolean(restoredDraft);
   let entries = restored.entries, bests = loadWorkshopBests(storage), saved = true, preview = null, share = null, activePlay = null, section = 'shelf';

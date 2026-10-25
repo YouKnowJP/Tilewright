@@ -24,7 +24,7 @@ or game progress. [Read about the two lessons](TRAINING.md).
 | Story chapters | Twenty-four authored missions in eight regions. Begin any chapter; finish its missions in order. |
 | Wayfarers’ Guild | Eight jobs with three specialists: halt hunters, veil your movement, or leave a lantern double. |
 | Expeditions | Seeded journeys, daily trails, camps, upgrades, and route choices. Saved checkpoints let you return later. |
-| Adventure Workshop | Three featured worlds, player-made adventures, and tools to create/remix/share your own. |
+| Adventure Workshop | Nine featured worlds, player-made adventures, and tools to create/remix/share your own. |
 | Terrain Mapmaker | Paint the land first, then explore it or build an authored adventure from it. |
 
 Main menu preserves the current trail while you browse. **Continue** returns to
@@ -116,3 +116,15 @@ files. Imported adventures preview before playing or adding to your shelf.
 The game runs in your browser with portable sharing. It does not require an
 account. Structural checks cannot guarantee every puzzle choice is solvable;
 playtest your outward and return routes before asking a friend to follow them.
+
+## A map that changes with you
+
+Open **Adventure Workshop → Storybooks → The Lost Cartographer** for six new
+chapters. They teach rotating rooms, lasting crate crossings, story runes,
+optional security vaults, and two travelers working together. The same six
+worlds appear on the Workshop shelf, with Remix and verified creator routes.
+
+**Menu → Scout hint** offers a gentle clue, a clearer clue, and a tiny practice
+puzzle when an appropriate lesson is available. Practice has its own Undo and
+restart and changes no adventure turns, progress, or rewards. Return to your
+adventure whenever you like. [Full guide](LOST_CARTOGRAPHER.md).

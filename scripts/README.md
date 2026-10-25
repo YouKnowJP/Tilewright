@@ -58,3 +58,9 @@ Saved route fixtures stay in `tests/fixtures/`. Source, fixtures, browser tools,
 and generators remain separate, and the static build excludes all developer
 tools. See the [documentation index](../docs/README.md) and
 [repository organization guide](../../docs/README.md).
+
+The release suite also runs `cartographer-browser-checks.mjs`: full six-chapter
+phone/desktop books, all four hint lessons, three vault tiers, creator card and
+clue authoring/export/reload, 320-pixel extra-large/high-contrast play with quota
+failure, and simulated standard-controller handoff/Undo isolation. New chapter
+witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.

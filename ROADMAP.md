@@ -312,3 +312,14 @@ paths and existing maps.
 - Verified rollback/recovery, stale-tab protection, and serialized management.
 - Next candidates: useful post-run route reviews and branching Storybook camps.
   See [Saved data](docs/SAVED_DATA.md) and QA for scope and verification.
+
+## Living maps and shared adventures completed — v0.29
+
+- The Lost Cartographer: six authored worlds, a complete Storybook, and six shelf remixes.
+- Live 3/5/7-tile room rotation, deterministic optional vault heists, and bounded story cards.
+- Peaceful Two-Lantern chapters, playable clues, and Workshop authoring for every new rule.
+- Versioned sharing, original-layout restart, Undo, checkpoint recovery, and route reviews.
+- Automated complete routes and built-release live browser coverage.
+
+Network multiplayer, an open upload gallery, and arbitrary executable creator
+scripts are outside this release. Shared-device cooperation needs no accounts.

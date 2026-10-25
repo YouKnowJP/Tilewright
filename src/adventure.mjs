@@ -1,3 +1,4 @@
+import { validateWonders, initializeWonders, wonderInteractions, wonderProblem, rotateRoom, openVault, switchTraveler, applyStoryCards, twinGoal } from './adventure-wonders.mjs';
 import { validateDocument } from './model.mjs';
 import { freshMemory, normalizeMemory, learnMove } from './adventure-brain.mjs';
 import { perkEffects, PERKS } from './adventure-perks.mjs';
@@ -27,20 +28,20 @@ export function walkableCells(document) {
 
 export function activePlates(run) {
   const echo = liveEcho(run);
-  return run.stage.plates.filter(plate => same(plate, run.player) || run.crates.some(crate => same(crate, plate)) || (echo && same(plate, echo))).map(plate => plate.id);
+  return run.stage.plates.filter(plate => same(plate, run.player) || run.crates.some(crate => same(crate, plate)) || (echo && same(plate, echo)) || (run.twin && same(plate, run.twin.other))).map(plate => plate.id);
 }
 
 export function gateIsOpen(run, gate) {
   if (gate.type === 'switch') return switchGateOpen(run, gate);
   if (gate.type === 'key') return run.openGates.includes(gate.id);
   if (gate.type === 'signal') return run.relayProgress === run.stage.sequence.length;
-  if (gate.safeClose && [run.player, ...run.crates, ...run.companions, ...run.hunters, ...run.enemies.map(enemy => enemy.route[enemy.index])].some(point => same(point, gate))) return true;
+  if (gate.safeClose && [run.player, ...(run.twin?[run.twin.other]:[]), ...run.crates, ...run.companions, ...run.hunters, ...run.enemies.map(enemy => enemy.route[enemy.index])].some(point => same(point, gate))) return true;
   const active = activePlates(run);
   return gate.plates.every(id => active.includes(id));
 }
 
 export function canEnter(run, point, unlock = false) {
-  if (!inside(run.stage.map, point)) return false;
+  if (!inside(run.stage.map, point) || (run.twin && same(point, run.twin.other))) return false;
   const gate = run.stage.gates.find(item => same(item, point));
   if (gate) {
     if (['bridge', 'signal', 'switch'].includes(gate.type)) return gateIsOpen(run, gate);
@@ -61,9 +62,10 @@ function reveal(run, point) {
 }
 
 export function createRun(definition, { memory = freshMemory(), difficulty = 'trail', perks = [], loadout = null } = {}) {
+  definition=definition.initialDefinition||definition;
   const map = validateDocument(definition.map);
   const stage = { ...definition, map };
-  for (const name of ['lanterns', 'keys', 'coins', 'hearts', 'crates', 'plates', 'gates', 'enemies', 'npcs', 'relays', 'supplies', 'cover', 'hazards', 'hunters', 'switches']) {
+  for (const name of ['lanterns', 'keys', 'coins', 'hearts', 'crates', 'plates', 'gates', 'enemies', 'npcs', 'relays', 'supplies', 'cover', 'hazards', 'hunters', 'switches', 'turntables', 'vaults', 'runes', 'storyCards']) {
     stage[name] = structuredClone(definition[name] || []);
   }
   const effects = perkEffects(perks);
@@ -77,7 +79,7 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   if (!stage.start || !stage.exit || !stage.lanterns.length) throw new Error('An adventure needs a start, a beacon, and at least one lantern.');
   const points = [stage.start, stage.exit, ...stage.lanterns, ...stage.keys, ...stage.coins, ...stage.hearts,
     ...stage.crates, ...stage.plates, ...stage.gates, ...stage.enemies.flatMap(enemy => enemy.route),
-    ...stage.npcs, ...stage.relays, ...stage.supplies, ...stage.cover, ...stage.hazards, ...stage.switches, ...stage.hunters.flatMap(hunter => hunter.route), ...(stage.waystones || []), ...(stage.relic ? [stage.relic, stage.delivery] : [])];
+    ...stage.npcs, ...stage.relays, ...stage.supplies, ...stage.cover, ...stage.hazards, ...stage.switches, ...stage.hunters.flatMap(hunter => hunter.route), ...stage.turntables, ...stage.vaults, ...stage.runes, ...(stage.partner ? [stage.partner] : []), ...(stage.waystones || []), ...(stage.relic ? [stage.relic, stage.delivery] : [])];
   if (points.some(point => !point || !Number.isInteger(point.x) || !Number.isInteger(point.y) || !inside(map, point))) {
     throw new Error('Adventure markers must be inside the map.');
   }
@@ -87,6 +89,7 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   }
   validateMechanisms(stage);
   validateTools(stage);
+  validateWonders(stage);
   if (stage.enemies.some(enemy => enemy.route.length < 2
     || enemy.route.some((point, index) => index && Math.abs(point.x - enemy.route[index - 1].x) + Math.abs(point.y - enemy.route[index - 1].y) !== 1))) {
     throw new Error('Patrol routes must connect adjacent cells.');
@@ -122,6 +125,9 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
       run.shields = stage.guild.kit === 'mistweaver' ? (hard ? 0 : 1) : (hard ? 1 : 2);
     }
   }
+  initializeWonders(run);
+  if(run.wonders)stage.initialDefinition=definition;
+  if (stage.partner && (!run.walkable[stage.partner.y*map.width+stage.partner.x] || stage.crates.some(c=>same(c,stage.partner)) || stage.npcs.some(c=>same(c,stage.partner)))) throw Error('The partner needs a clear land cell.');
   if (!canEnter(run, run.player) || stage.crates.some(crate => same(crate, run.player))) throw new Error('The starting cell is blocked.');
   if (stage.guild && stage.waystones.some(stone => !canEnter(run, stone))) throw Error('Waystones need walkable landing cells.');
   reveal(run, run.player);
@@ -135,6 +141,7 @@ function collect(run) {
     ['coins', 'collectedCoins', 'coin'], ['hearts', 'collectedHearts', 'heart'],
   ]) {
     const item = run.stage[items].find(candidate => same(candidate, run.player) && !run[collection].includes(candidate.id));
+    if (type === 'lantern' && item && run.twin?.active === 1) { run.events.push({type:'needs-keeper',x:item.x,y:item.y}); continue; }
     if (!item || (type === 'heart' && run.health === MAX_HEARTS)) continue;
     run[collection].push(item.id); run.events.push({ type, x: item.x, y: item.y });
     if (type === 'key') run.keyCount++;
@@ -174,11 +181,11 @@ function blockMessage(run, point) {
 export function hazardActive(run, hazard, turn = run.turns) {
   if (hazard.disabledBy && run.switches[hazard.disabledBy]) return false;
   const phase = (turn + (hazard.offset || 0)) % hazard.period;
-  return hazard.phases.includes(phase) || (run.difficulty === 'nemesis' && phase === (hazard.phases[0] + hazard.period - 1) % hazard.period);
+  return hazard.phases.includes(phase) || (!hazard.vault && run.difficulty === 'nemesis' && phase === (hazard.phases[0] + hazard.period - 1) % hazard.period);
 }
 
 export function nearbyInteractions(run) {
-  return [...run.stage.npcs.map(item => ({ ...item, ...(run.companions.find(companion => companion.id === item.id) || {}), kind: 'npc', label: `Talk to ${item.name}` })),
+  return [...wonderInteractions(run), ...run.stage.npcs.map(item => ({ ...item, ...(run.companions.find(companion => companion.id === item.id) || {}), kind: 'npc', label: `Talk to ${item.name}` })),
     ...run.stage.relays.map(item => ({ ...item, kind: 'relay', label: `Ring ${item.name}` })),
     ...run.stage.switches.filter(item => item.operable !== false).map(item => ({ ...item, kind: 'switch', label: `${run.switches[item.id] ? 'Switch off' : 'Switch on'} ${item.name}` })),
     ...(run.stage.waystones || []).map(item => ({ ...item, kind: 'waystone', label: `Travel from ${item.name}` })),
@@ -190,6 +197,7 @@ export function nearbyInteractions(run) {
 
 export function missionGoals(run) {
   return [
+    ...(run.twin ? [{label:'Bring both travelers to the beacon (one may wait beside it)',done:twinGoal(run)}] : []),
     { label: `Restore ${run.stage.lanterns.length === 1 ? 'the lantern' : `all ${run.stage.lanterns.length} lanterns`}`, done: run.collectedLanterns.length === run.stage.lanterns.length },
     ...(run.stage.sequence.length ? [{ label: `Power the relay sequence (${run.relayProgress}/${run.stage.sequence.length})`, done: run.relayProgress === run.stage.sequence.length }] : []),
     ...(run.stage.requireCoins ? [{ label: `Recover every coin (${run.collectedCoins.length}/${run.stage.coins.length})`, done: run.collectedCoins.length === run.stage.coins.length }] : []),
@@ -221,12 +229,13 @@ function conversation(run, action) {
 
 export function stepRun(run, action) {
   if (run.status !== 'playing' || typeof action !== 'string') return run;
-  if (run.dialogue || action === 'close-dialogue') return conversation(run, action);
+  if (run.dialogue || action === 'close-dialogue') return applyStoryCards(conversation(run, action));
+  if (action === 'switch-traveler') { let next=switchTraveler(run); if(next.twin!==run.twin){next={...next,seen:[...run.seen]};reveal(next,next.player);} return next; }
   const interaction = action.startsWith('interact:') ? nearbyInteractions(run).find(item => item.id === action.slice(9)) : null;
   if (interaction?.kind === 'npc') {
     const rescued = run.stage.requiredRescues.includes(interaction.id) && run.collectedLanterns.length === run.stage.lanterns.length;
-    return { ...run, dialogue: interaction.id, talkedTo: [...new Set([...run.talkedTo, interaction.id])], companions: rescued && !run.rescued.includes(interaction.id) ? [...run.companions, { id: interaction.id, x: interaction.x, y: interaction.y }] : run.companions, rescued: rescued ? [...new Set([...run.rescued, interaction.id])] : run.rescued,
-      message: rescued ? `${interaction.name} is safe. Reach the beacon together.` : `You speak with ${interaction.name}.`, events: rescued ? [{ type: 'rescue' }] : [] };
+    return applyStoryCards({ ...run, dialogue: interaction.id, talkedTo: [...new Set([...run.talkedTo, interaction.id])], companions: rescued && !run.rescued.includes(interaction.id) ? [...run.companions, { id: interaction.id, x: interaction.x, y: interaction.y }] : run.companions, rescued: rescued ? [...new Set([...run.rescued, interaction.id])] : run.rescued,
+      message: rescued ? `${interaction.name} is safe. Reach the beacon together.` : `You speak with ${interaction.name}.`, events: rescued ? [{ type: 'rescue' }] : [] });
   }
   const dash = action.startsWith('dash-'), direction = dash ? action.slice(5) : action;
   const moving = Boolean(DIRECTIONS[direction]), tactical = ['decoy', 'shield', 'power'].includes(action);
@@ -239,9 +248,11 @@ export function stepRun(run, action) {
   if (dash && (!moving || run.energy < 2)) return { ...run, events: [], message: 'Dash needs two energy. Walk or wait to recharge.' };
   if (['decoy', 'shield'].includes(action) && run[action === 'decoy' ? 'decoys' : 'shields'] < 1) return { ...run, events: [], message: `No ${action === 'decoy' ? 'decoys' : 'shields'} left. Find supplies or ask a trail keeper.` };
   if (interaction?.kind === 'relay' && run.relayProgress === run.stage.sequence.length) return { ...run, events: [], message: 'The relay network is already powered.' };
+  const wonderError = wonderProblem(run, interaction);
+  if (wonderError) return {...run,events:[],message:wonderError};
   const change = interaction?.kind === 'switch' ? switchChange(run, { [interaction.id]: !run.switches[interaction.id] }) : null;
   if (change?.error) return { ...run, events: [], message: change.error };
-  const next = { ...run, player: { ...run.player }, crates: run.crates.map(crate => ({ ...crate })),
+  let next = { ...run, player: { ...run.player }, crates: run.crates.map(crate => ({ ...crate })),
     companions: run.companions.map(companion => ({ ...companion })),
     enemies: run.enemies.map(enemy => ({ ...enemy })), hunters: run.hunters.map(hunter => ({ ...hunter })),
     collectedLanterns: [...run.collectedLanterns], collectedKeys: [...run.collectedKeys],
@@ -313,7 +324,9 @@ export function stepRun(run, action) {
   else if (interaction?.kind === 'supply') {
     next.usedSupplies.push(interaction.id); next.decoys = Math.min(3, next.decoys + 1); next.shields = Math.min(3, next.shields + 1);
     next.health = Math.min(MAX_HEARTS, next.health + 1); next.events.push({ type: 'supply' });
-  } else if (interaction?.kind === 'relay') {
+  } else if (interaction?.kind === 'turntable') { next = rotateRoom(next,interaction,walkableCells); collect(next); reveal(next,next.player); }
+  else if (interaction?.kind === 'vault') next = openVault(next,interaction);
+  else if (interaction?.kind === 'relay') {
     if (next.stage.sequence[next.relayProgress] === interaction.id) {
       next.relayProgress++; next.events.push({ type: next.relayProgress === next.stage.sequence.length ? 'relay-complete' : 'relay' });
       if (next.relayProgress === next.stage.sequence.length) { next.stun = 4; next.alarm = 0; }
@@ -348,20 +361,21 @@ export function stepRun(run, action) {
       next.events.push({ type: 'hurt', ...next.player });
     }
   }
+  next = applyStoryCards(next);
   next.hunters = planHunters(next, canEnter);
   const boss = next.hunters.find(hunter => hunter.boss), previousBoss = run.hunters.find(hunter => hunter.boss);
   if (boss && previousBoss && boss.phase > previousBoss.phase) next.events.push({ type: 'phase' });
   if (next.health <= 0) { next.status = 'lost'; next.message = 'The trail caught you. Try cover, a decoy, a shield, or a different route.'; return next; }
-  if (same(next.player, next.stage.exit)) {
+  if (same(next.player, next.stage.exit) || next.twin && same(next.twin.other,next.stage.exit) && Math.abs(next.player.x-next.stage.exit.x)+Math.abs(next.player.y-next.stage.exit.y)<=1) {
     const missing = missionGoals(next).filter(goal => !goal.done);
     if (!missing.length) { next.status = 'won'; next.message = 'Mission complete. The trail is safe again!'; next.events.push({ type: 'win', ...next.player }); return next; }
     const lanterns = next.stage.lanterns.length - next.collectedLanterns.length;
     next.message = lanterns ? `The beacon needs ${lanterns} more ${lanterns === 1 ? 'lantern' : 'lanterns'}.` : `Before leaving: ${missing.map(goal => goal.label.toLowerCase()).join('; ')}.`; return next;
   }
-  const priority = ['hurt', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
+  const priority = ['hurt', 'needs-keeper', 'story-card', 'vault', 'room-turn', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const hunted=next.hunters.length>0,threatened=hunted||next.enemies.length>0;
-  const messages = { hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
+  const messages = { 'needs-keeper':'This light needs Lantern keeper. Use T or Switch traveler to hand over the controls, then bring Lantern keeper here.', 'story-card':event?.text, 'room-turn':`${event?.name} turns a quarter-circle. The room, its objects, and travelers move together.`, vault:`${event?.name} opened! Security ${event?.security}/3. The vault-ring embers are marked; Plan shows their next pulse. The normal exit stays open.`, hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
     pulse: next.effects.powerRecharge ? `Resonance pulse! Nearby hunters halt for ${next.effects.pulseTurns} turns.${next.effects.pulseWard ? ' A two-turn ward protects you too.' : ' Contact and fire still hurt.'}` : 'Resonance pulse! Hunters within four reachable steps halt for this turn and the next. Contact and fire still hurt.',
     veil: 'Mist veil raised. Existing enemy plans still resolve; move away from their last lead. Cargo and alarms reveal you.',
     echo: next.effects.echoTurns ? `Double cast! ${next.effects.echoTurns} more turns to lure hunters or hold a plate. Returning costs ${next.effects.returnEnergy} energy. Check Plan before returning.` : 'Double cast! Six more turns to lure hunters or hold a plate. B returns to it for one energy. Check Plan before returning.',
@@ -394,7 +408,7 @@ export function resultFor(run) {
   const par = turnTarget(run);
   const stars = run.damage === 0 && run.turns <= par ? 3 : run.health >= 2 && run.turns <= par * 1.5 ? 2 : 1;
   return { stars, turns: run.turns,
-    score: 250 + run.collectedLanterns.length * 100 + run.collectedCoins.length * 25 + run.health * 50 + Math.max(0, par - run.turns) * 5 };
+    score: (run.wonders?.treasure || 0) + 250 + run.collectedLanterns.length * 100 + run.collectedCoins.length * 25 + run.health * 50 + Math.max(0, par - run.turns) * 5 };
 }
 
 export function scoutHint(run) {

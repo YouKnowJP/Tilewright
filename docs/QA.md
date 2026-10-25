@@ -1,5 +1,15 @@
 # Verification record
 
+## The Lost Cartographer — v0.29.0
+
+699 Node checks pass, including clean chapter/practice/vault witnesses, immutable
+rotation, cooperative roles, exact Undo/checkpoint/review recovery, real v0.28
+save compatibility, versioned sharing, and invalid creator data. The complete
+13-case built-release suite passes in Chromium, Firefox, and WebKit; additional
+Chromium dropdown (12), controls (19), and accessibility (5) scenarios pass.
+See the [release audit](audits/2026-10-24-cartographer.md) and
+[player/creator guide](LOST_CARTOGRAPHER.md).
+
 ## Saved looks and release hardening — v0.28.0
 
 633 Node tests pass, including seeded action/Undo/checkpoint interleavings,

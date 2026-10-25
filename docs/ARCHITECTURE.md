@@ -953,3 +953,36 @@ falls back between them. CI uses bundled Chromium, one sequential browser run,
 a stable Linux image, and diagnostic artifacts on failure. Pages depends on
 both the five-platform Node matrix and this browser job. Test outputs are grouped
 by engine and excluded from public assets and repository reference checks.
+
+## Optional world rules — v0.29
+
+`adventure-wonders.mjs` owns bounded optional state for rotating rooms, vaults,
+story cards, and a cooperative partner. `cartographer-worlds.mjs` authors six
+chapters and four independent hint lessons; `cartographer-clears.mjs` stores
+actual winning journals. `adventure-clues-ui.mjs` operates a separate ephemeral
+run, and `workshop-wonders-ui.mjs` authors data-only event/outcome cards.
+`wonders.css` supplies contextual controls and the contained practice layout.
+
+New gameplay definitions normalize to adventure version 2. The existing LT1
+code framing continues to carry the versioned JSON payload; old clients reject
+version 2 rather than silently discard new rules. Version-1 definitions retain
+their previous keys and run fingerprints. Storybook, checkpoint, profile, and
+backup formats retain their existing envelopes and validate nested worlds.
+
+Only worlds using new rules acquire `wonders`/`twin` state. Immutable rotations
+copy terrain and positional collections together, update passability and seen
+cells, and invalidate the renderer background through stage identity. An initial
+definition retained on the stage makes Restart independent of its current
+orientation or vault hazards. Threat routes cannot intersect rotating rooms.
+
+Cooperative worlds are peaceful. Both actors block one another and hold plates;
+Lantern keeper restores lights and Pathfinder operates dials. Handoff records an
+undoable, turn-free input; it does not transfer carried cargo. Both travelers
+must reach the beacon neighborhood. Shared-device control has no networking.
+
+Each story card can fire once, with at most six bounded dependency passes.
+Cards open levers, reveal validated marker positions, change keeper dialogue,
+or show a story moment. They never execute imported code. Vaults add deterministic
+four-cell ember rings with one/two/three active phases per four-turn cycle;
+opening provides a one-turn ward, and vault rhythm is equal on both rules.
+Practice state and controller Undo are isolated from the parent adventure.

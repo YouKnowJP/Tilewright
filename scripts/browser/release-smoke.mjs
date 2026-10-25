@@ -1,3 +1,4 @@
+import { cartographerScenarios } from './cartographer-browser-checks.mjs';
 import assert from 'node:assert/strict';
 import { mkdir,readFile,writeFile,rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -65,6 +66,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await scenario('lanternfair-four-chapter-story',390,async page=>{
       await page.locator('#title-traveler').click();await page.locator('#traveler-festival').click();await page.locator('[data-festival-book] .front-primary').click();for(const [index,chapter]of lanternfairBook().chapters.entries()){await page.locator('[data-book-challenge="clean"]').click();await page.locator('#book-continue').click();await playGuild(page,chapter.world.proof.actions,true);await page.locator('#adventure[data-status="won"]').waitFor();assert.equal(await page.locator('#game-health').getAttribute('aria-label'),'Health: 3 of 3');assert.equal(await page.locator('#game-coins').textContent(),'3/3');await page.locator('#game-primary').click();if(index<3){await page.reload();await page.locator('#title-workshop').click();await page.locator('#ws-tab-books').click();}}assert.match(await page.locator('#book-camp-kicker').textContent(),/LAST PAGE/);
     });
+    await cartographerScenarios(scenario);
     const report={browser:browser.version(),baseURL,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
   }finally{await browser.close();}
 }
