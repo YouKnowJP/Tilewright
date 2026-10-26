@@ -25,7 +25,7 @@ export async function checkWorkshop(browserType,{baseURL=BASE,channel='chrome',s
    const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});
    try{
     const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.url());});page.on('dialog',d=>d.accept());
-    await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();assert.equal(await page.locator('.ws-adventure-card').count(),3);
+    await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();assert.equal(await page.locator('.ws-adventure-card').count(),6);assert.match(await page.locator('#ws-shelf-count').textContent(),/27 worlds/);
     const original=await originals(page),packs=workshopShowcases();
     if(screenshots)await page.screenshot({path:artifactPath('workshop-shelf-desktop.png'),fullPage:true});
     for(const [i,pack]of packs.entries())for(const rules of ['trail','nemesis']){

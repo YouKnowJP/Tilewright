@@ -145,3 +145,8 @@ rainseed rescue, **The Night Post** for longer deliveries and optional heists,
 or **The Open Workshop** for peaceful two-traveler inventions. Every chapter
 can also be played or remixed through **Player adventures → New adventures**.
 See [screen view and new adventures](SCREEN_AND_SAGAS.md).
+
+
+After a finish, **Quest & notes** lets you reread your objectives, map, and
+keeper journal before choosing the next adventure. The pause screen offers
+the same action. Reading preserves the result, and Back returns to its opener.

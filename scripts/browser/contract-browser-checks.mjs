@@ -93,7 +93,7 @@ export async function checkContracts(browserType, { baseURL = BASE, channel = 'c
       assert.ok(dialog.x >= 0 && dialog.x + dialog.width <= 320 && dialog.y >= 0 && dialog.y + dialog.height <= 844);
       await clickControl(page, '[data-choice="shield"]', true); await clickControl(page, '#conversation-close', true);
       await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' }));
-      const geometry = await page.locator('.tactical-actions').boundingBox();
+      const geometry = await page.locator('.play-actions').boundingBox();
       assert.ok(geometry.y + geometry.height <= 844, 'Tactical controls must remain in view on a narrow phone.');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), 320);
       await clickControl(page, '#game-decoy', true); await clickControl(page, '#game-shield', true);

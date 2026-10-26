@@ -43,7 +43,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
             width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight, clipped: text.scrollHeight > text.clientHeight };
         });
         assert.ok(feedback.font >= 16 && feedback.contrast >= 7, 'Blocked messages need large, high-contrast text.');
-        assert.equal(feedback.clipped, false); assert.ok(feedback.status.bottom <= feedback.controls.top + 1, 'Feedback belongs between the map and controls.');
+        if(feedback.clipped){await page.locator('#game-message-more').waitFor({state:'visible'});await page.locator('#game-message-more').click();assert.match(await page.locator('#game-message-copy').textContent(),/Mira blocks the trail/);await page.locator('#game-message-close').click();} assert.ok(height<=540&&width>=500?feedback.status.right<=feedback.controls.left+1:feedback.status.bottom<=feedback.controls.top+1,'Feedback stays separate from the controls.');
         assert.equal(feedback.width, width);
         if (height >= 740) { assert.equal(feedback.height, height); assert.ok(feedback.controls.bottom <= height); }
         else assert.ok(feedback.height<=feedback.controls.bottom+24,'Long feedback uses the page without trailing blank overflow.');
@@ -72,7 +72,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         await page.keyboard.press('ArrowRight'); assert.equal(await page.locator('#notes-tab-journal').getAttribute('aria-selected'), 'true');
         await page.keyboard.press('End'); assert.equal(await page.locator('#notes-tab-help').getAttribute('aria-selected'), 'true');
         await page.keyboard.press('Home'); assert.equal(await page.locator('#notes-tab-quest').getAttribute('aria-selected'), 'true');
-        if (width <= 1000) {
+        {
           await page.keyboard.press('ArrowUp'); await page.keyboard.press('b');
           assert.equal(await page.locator('#game-turns').textContent(), '0');
           await page.keyboard.press('Escape'); assert.equal(await page.locator('#game-notes-dialog').isVisible(), false);
@@ -104,16 +104,16 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         assert.equal(await page.locator('#game-turns').textContent(), '0', 'Restart must reset the current run.');
         await page.locator('#game-menu summary').click(); await page.locator('#game-restart').focus(); await page.keyboard.press('Tab');
         assert.equal(await page.locator('#game-menu').getAttribute('open'), null, 'Tabbing past the menu must dismiss it.');
-        // Crossing the responsive boundary moves the same notes, preserving selection.
+        // Resizing keeps the same notes dialog open and preserves the selected tab.
         if (width === 390) {
           await page.locator('#game-notes-button').click(); await clickControl(page,'#notes-tab-map');
           await page.setViewportSize({ width: 1440, height: 900 });
-          await page.waitForFunction(() => document.querySelector('#game-aside').parentElement.id === 'game-layout');
-          assert.equal(await page.locator('#game-notes-dialog').isVisible(), false);
+          await page.waitForFunction(() => document.querySelector('#game-aside').parentElement.id === 'game-notes-dialog');
+          assert.equal(await page.locator('#game-notes-dialog').isVisible(), true);
           assert.equal(await page.locator('#game-minimap').isVisible(), true);
           await page.setViewportSize({ width, height });
           await page.waitForFunction(() => document.querySelector('#game-aside').parentElement.id === 'game-notes-dialog');
-          await page.locator('#game-notes-button').click(); assert.equal(await page.locator('#game-minimap').isVisible(), true);
+          assert.equal(await page.locator('#game-notes-dialog').isVisible(), true);assert.equal(await page.locator('#game-minimap').isVisible(), true);
           await page.locator('#game-notes-close').click();
         }
         if (screenshots && [390,1440].includes(width)) await page.screenshot({ path: artifactPath(`focused-play-${width}.png`) });

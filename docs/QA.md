@@ -1,5 +1,15 @@
 # Verification record
 
+## Complete recheck and interface fixes — v0.30.1
+
+**778 Node tests**, syntax, the **114-file** build, and all **30 extended
+Chromium families / 483 reported cases** pass. Live Chromium, Firefox, and
+WebKit checks cover the corrected landscape popups, enlarged text, fullscreen,
+pause/result keyboard focus, actual wins, and navigation. The audit fixes
+inaccessible pack headers, overlapping enlarged tracks, missing post-run notes,
+and keyboard focus leaving the pause panel. See the [complete record](audits/2026-10-25-v0301-full-recheck.md)
+for scope, reruns, reviewed screenshots, and device limits.
+
 ## Compact play, screen modes, and eighteen new worlds — v0.30.0
 
 **778 Node tests**, syntax checks, and the **114-file** package pass. The

@@ -16,6 +16,7 @@ async function play(page, actions, touch = false) {
     } else if (action.startsWith('choose:')) await clickControl(page, `[data-choice="${action.slice(7)}"]`, touch);
     else if (action === 'close-dialogue') await clickControl(page, '#conversation-close', touch);
     else if (touch && action.startsWith('dash-')) { await page.locator('#dash-button').tap(); await page.locator(`[data-move="${action.slice(5)}"]`).tap(); }
+    else if(touch&&['shield','decoy','drop-cargo'].includes(action))await clickControl(page,action==='shield'?'#game-shield':action==='decoy'?'#game-decoy':'#game-cargo',true);
     else if (touch) await page.locator(['up', 'right', 'down', 'left'].includes(action) ? `[data-move="${action}"]` : { wait: '#game-wait', shield: '#game-shield', decoy: '#game-decoy', 'drop-cargo': '#game-cargo' }[action]).tap();
     else await page.keyboard.press(action.startsWith('dash-') ? `Shift+${keys[action.slice(5)]}` : keys[action]);
   }
@@ -26,7 +27,7 @@ async function start(page, fixture, touch = false) {
   assert.equal(await page.locator('#game-turns').textContent(), '0');
   assert.equal(await page.locator('#adventure-library').isVisible(), false);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), page.viewportSize().width);
-  const controls = await page.locator('.tactical-actions').boundingBox();
+  const controls = await page.locator('.play-actions').boundingBox();
   assert.ok(controls.y + controls.height <= page.viewportSize().height, `${fixture.id}: controls stay on screen.`);
 }
 async function won(page, fixture) {

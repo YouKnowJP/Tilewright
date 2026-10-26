@@ -31,6 +31,7 @@
 
 - [Architecture and formats](ARCHITECTURE.md)
 - [Development tools and browser checks](../scripts/README.md)
+- [Complete v0.30.1 game recheck](audits/2026-10-25-v0301-full-recheck.md)
 - [Screen and new adventures verification](audits/2026-10-25-screen-and-sagas.md)
 - [Lost Cartographer release verification](audits/2026-10-24-cartographer.md)
 - [QA record](QA.md) and [dated audits](audits/)

@@ -125,7 +125,7 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
         const page = await context.newPage(), errors = []; page.on('pageerror', error => errors.push(error.message));
         await page.goto(`${baseURL}/#play`); await clickControl(page, '#begin-sluices', true);
         await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' }));
-        const controls = await page.locator('.tactical-actions').boundingBox(); assert.ok(controls.y + controls.height <= 844, 'New act controls stay visible at entry.');
+        const controls = await page.locator('.play-actions').boundingBox(); assert.ok(controls.y + controls.height <= 844, 'New act controls stay visible at entry.');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
         await clickControl(page, '#game-inspect', true); const modal = await page.locator('#forecast-dialog').boundingBox();
         assert.ok(modal.x >= 0 && modal.x + modal.width <= width && modal.y >= 0 && modal.y + modal.height <= 844);
@@ -139,7 +139,7 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
           await page.locator('#adventure-canvas').focus();
           for (const value of fixture.actions) {
             try {
-              if (value.startsWith('interact:') && await page.locator('#game-target-wrap').isVisible()) {
+              if (value.startsWith('interact:') && await page.locator('#game-target option').count()>1) {
                 await selectControl(page, '#game-target', value.slice(9)); await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e'); selections++;
               } else await action(page, value);
             } catch (error) {

@@ -74,3 +74,10 @@ chapters, camp reloads, and both hard optional courier routes. The game’s CSP
 continues to block runtime network connections; test-only asset inspections
 use the Playwright request client. Node saga tests verify both rules, complete
 portable proofs, checkpoint/Undo/review fidelity, and optional hard routes.
+
+
+The v0.30.1 full audit repeats all 30 extended families (483 result entries).
+The release checks also verify short-landscape pack/menu bounds, enlarged grid
+tracks, pause/result Tab cycling, and no-turn notes after actual wins. Current
+UI helpers open the visible Quest or result-note action, use paged world search,
+and return through Main menu where necessary. See the [audit](../docs/audits/2026-10-25-v0301-full-recheck.md).

@@ -115,7 +115,7 @@ export async function checkStorybooks(browserType,{baseURL='http://127.0.0.1:417
       try {
         const page=await context.newPage();await page.goto(baseURL);await openBooks(page);assert.equal(await page.locator('#book-file').isVisible(),false);await fits(page);await newBook(page,0,'trail');await fits(page);
         await page.locator('[data-book-challenge="swift"]').tap();if(screenshots){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:artifactPath(`storybook-camp-${width}.png`),fullPage:true});}
-        await page.locator('#book-continue').tap();await fits(page);assert.ok(await page.locator('#game-book-banner').isVisible());
+        await page.locator('#book-continue').tap();await fits(page);await page.locator('#game-notes-button').click();assert.ok(await page.locator('#game-book-banner').isVisible());await page.locator('#game-notes-close').click();
         const bounds=await page.evaluate(()=>({height:innerHeight,document:document.documentElement.scrollHeight,controls:document.querySelector('.game-controls').getBoundingClientRect().bottom,canvas:document.querySelector('#adventure-canvas').getBoundingClientRect().toJSON(),view:document.querySelector('#game-viewport').getBoundingClientRect().toJSON()}));
         if(bounds.height>=740){assert.equal(bounds.document,bounds.height);assert.ok(bounds.controls<=bounds.height);}else assert.ok(bounds.document<=704);
         assert.ok(bounds.canvas.width>0&&bounds.canvas.height>0&&bounds.canvas.left>=bounds.view.left&&bounds.canvas.right<=bounds.view.right+1);

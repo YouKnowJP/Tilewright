@@ -16,6 +16,7 @@ async function play(page, values, touch = false) {
     } else if (value.startsWith('choose:')) await clickControl(page, `[data-choice="${value.slice(7)}"]`, touch);
     else if (value === 'close-dialogue') await clickControl(page, '#conversation-close', touch);
     else if (touch && value.startsWith('dash-')) { await clickControl(page, '#dash-button', true); await clickControl(page, `[data-move="${value.slice(5)}"]`, true); }
+    else if(touch&&['shield','decoy'].includes(value))await clickControl(page,value==='shield'?'#game-shield':'#game-decoy',true);
     else if (touch) await page.locator(['up', 'right', 'down', 'left'].includes(value) ? `[data-move="${value}"]` : { wait: '#game-wait', shield: '#game-shield', decoy: '#game-decoy' }[value]).tap();
     else await page.keyboard.press(value.startsWith('dash-') ? `Shift+${keys[value.slice(5)]}` : keys[value]);
   }
@@ -92,7 +93,7 @@ export async function checkAtlas(browserType, { baseURL = BASE, channel = 'chrom
           const fixture = fixtures.find(item => item.id === id && item.difficulty === 'trail' && item.branch === 0);
           await start(page, fixture, true);
           await page.locator('.game-main').evaluate(el => el.scrollIntoView({ block: 'start' }));
-          const controls = await page.locator('.tactical-actions').boundingBox(); assert.ok(controls.y + controls.height <= 844, `${id}/${width} controls remain on screen at entry.`);
+          const controls = await page.locator('.play-actions').boundingBox(); assert.ok(controls.y + controls.height <= 844, `${id}/${width} controls remain on screen at entry.`);
           await clickControl(page, '#game-inspect', true); const modal = await page.locator('#forecast-dialog').boundingBox();
           assert.ok(modal.x >= 0 && modal.x + modal.width <= width && modal.y >= 0 && modal.y + modal.height <= 844); await clickControl(page, '#forecast-close', true);
           await play(page, fixture.actions, true); await won(page, fixture);

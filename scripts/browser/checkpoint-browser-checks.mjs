@@ -84,7 +84,7 @@ export async function checkCheckpoints(browserType,{baseURL='http://127.0.0.1:41
     });
     for(const width of widths)await scenario(async page=>{
       await lab(page,'foundry');await playGuild(page,LAB_CLEARS.foundry.slice(0,12),width<768);await restore(page,await saved(page));await undoRedo(page,width<768);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
-      const boxes=await page.evaluate(()=>[...document.querySelectorAll('.game-input-strip button')].map(node=>({x:node.getBoundingClientRect().x,right:node.getBoundingClientRect().right,w:node.getBoundingClientRect().width,h:node.getBoundingClientRect().height})));for(const box of boxes){assert.ok(box.x>=0&&box.right<=width);assert.ok(box.w>=44&&box.h>=44);}
+      const boxes=await page.evaluate(()=>[...document.querySelectorAll('.play-utilities>button,.play-tools>summary')].map(node=>({x:node.getBoundingClientRect().x,right:node.getBoundingClientRect().right,w:node.getBoundingClientRect().width,h:node.getBoundingClientRect().height})));for(const box of boxes){assert.ok(box.x>=0&&box.right<=width);assert.ok(box.w>=44&&box.h>=44);}
       if(screenshots){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:artifactPath(`checkpoint-play-${width}.png`),fullPage:true});}
       await playGuild(page,LAB_CLEARS.foundry.slice(12),width<768);await won(page);report(`${width}px: visible 44px Undo and Controls targets, exact Continue, actual ${width<768?'touch':'keyboard'} win, and no sideways scrolling.`);
     },{viewport:{width,height:width===320?568:width===844?390:1000},hasTouch:true});

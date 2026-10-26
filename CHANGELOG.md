@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.30.1 — 2026-10-25
+
+- Keep Tools and Menu panels within short landscape windows and safe areas.
+- Size enlarged headers, status text, and HUD rows to their actual content so controls cannot overlap them.
+- Add Quest & notes to results and pause screens, preserving the run and returning focus to its opener.
+- Focus Resume when pausing and keep keyboard Tab navigation on the visible result controls.
+- Preserve the same Quest dialog and selected tab across resizing.
+- Refresh the complete browser suites for current pagination, controls, full storybooks, and visible menu navigation.
+
 ## 0.30.0 — 2026-10-25
 
 - Give gameplay a larger board, compact action dock, and on-demand Quest/Tools.

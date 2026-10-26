@@ -124,3 +124,8 @@ On a phone/tablet, add the website to your Home Screen from the browser’s menu
 or Share sheet, then launch its icon. Support and browser chrome vary. The
 launcher is online-only. App and browser storage can be separate: export a
 backup before switching. See [screen guide](SCREEN_AND_SAGAS.md).
+
+
+Pause moves keyboard focus to Resume. Tab and Shift+Tab cycle through the
+visible pause/results actions. **Quest & notes** is also available from that
+panel; closing it returns focus without spending a turn or advancing a book.

@@ -90,3 +90,8 @@ body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=pl
  body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] .game-toolbar>div:first-child{width:100%}
  body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] .game-hud{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+/* Keep the pack header and Close button inside short landscape windows. */
+.play-tools>section{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(68px,calc(var(--game-safe-bottom) + 64px));max-height:min(65dvh,calc(var(--play-height,100dvh) - 88px - var(--game-safe-top) - var(--game-safe-bottom)))}
+/* Large reading must size each track to its text before the map uses the rest. */
+body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] :is(.game-toolbar,.game-hud,.game-status){min-height:min-content;height:max-content}
+.playing .game-menu>div{position:fixed;right:12px;top:64px}

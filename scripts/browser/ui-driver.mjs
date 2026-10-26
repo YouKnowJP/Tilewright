@@ -11,6 +11,7 @@ export async function enterFirstTrail(page) {
   await page.locator('.atlas-nav button').first().click(); await page.locator('[data-stage="trail-1"]').click();
   await page.locator('#adventure[data-view="play"]').waitFor();
 }
+async function revealNotes(page){if(!await page.locator('#game-notes-dialog').isVisible())await page.locator(await page.locator('#game-overlay').isVisible()?'#game-result-notes':'#game-notes-button').click();}
 async function prepareControl(page, selector) {
   const original=page.locator(selector);
   const select=await original.evaluate(el=>el.matches('select.game-select-source')?el.id:null);
@@ -36,7 +37,8 @@ async function prepareControl(page, selector) {
   }
   if (await page.locator('#game-notes-dialog').isVisible() && !await target.evaluate(el => Boolean(el.closest('#game-notes-dialog')))) await page.locator('#game-notes-close').click();
   if(await target.evaluate(el=>Boolean(el.closest('#game-tools')))){if(await page.locator('#game-tools').getAttribute('open')===null)await page.locator('#game-tools>summary').click();if(await target.isVisible())return;}
-  if(await target.evaluate(el=>Boolean(el.closest('#game-aside')))&&!await page.locator('#game-notes-dialog').isVisible())await page.locator('#game-notes-button').click();
+  if(await target.evaluate(el=>Boolean(el.closest('#game-aside')))&&await page.locator('#game-layout').isVisible())await revealNotes(page);
+  if(selector==='#game-choose'&&await page.locator('#game-overlay').isVisible()){const tab=await page.locator('.adventure-library-tabs [aria-pressed="true"]').getAttribute('id');await page.locator('#game-result-menu').click();await page.locator('#title-play').click();await page.locator(tab==='library-guild'?'#front-guild':tab==='library-expeditions'?'#front-expeditions':'#front-story').click();return;}
   if (await target.isVisible()) return;
   const location = await target.evaluate(el => ({
     library: Boolean(el.closest('#adventure-library')),
@@ -60,7 +62,7 @@ async function prepareControl(page, selector) {
       if (await page.locator('#library-resume').isVisible()) await page.locator('#library-resume').click();
       else await enterFirstTrail(page);
     }
-    if (await page.locator('#game-notes-button').isVisible()&&!await page.locator('#game-notes-dialog').isVisible()) await page.locator('#game-notes-button').click();
+    await revealNotes(page);
     await page.locator(`#notes-tab-${location.notes.slice(6)}`).click();
   } else {
     if (await page.locator('#adventure-library').isVisible()) {
@@ -74,6 +76,7 @@ export async function clickControl(page, selector, touch = false) {
   const browsing = await page.locator('#adventure-library').isVisible();
   const tab = browsing ? await page.locator('.adventure-library-tabs [aria-pressed="true"]').getAttribute('id') : null;
   await prepareControl(page, selector);
+  if(selector==='#game-choose'&&await page.locator('#adventure-library').isVisible())return;
   await page.locator(selector)[touch ? 'tap' : 'click']();
   if (selector === '#mode-play' && await page.locator('#game-title-screen').isVisible() && await page.locator('#title-continue').isVisible()) await page.locator('#title-continue').click();
   if (selector === '#forget-habits') {
