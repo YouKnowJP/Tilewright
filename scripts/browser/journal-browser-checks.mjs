@@ -43,7 +43,7 @@ export async function checkJournal(browserType, { baseURL = 'http://127.0.0.1:41
         assert.equal(await page.locator('#front-home').isVisible(), true); assert.deepEqual(await saves(page), original);
         await enterFirstTrail(page); await page.locator('#adventure-canvas').focus(); await page.keyboard.press('ArrowUp');
         const position = await page.locator('#adventure-canvas').getAttribute('aria-label');
-        await page.locator('#game-shell-options').click(); await page.keyboard.press('r'); await page.keyboard.press('ArrowUp'); await page.locator('#settings-close').click();
+        await clickControl(page,'#game-shell-options'); await page.keyboard.press('r'); await page.keyboard.press('ArrowUp'); await page.locator('#settings-close').click();
         await page.waitForFunction(() => document.activeElement.id === 'game-shell-options');
         await page.locator('#game-home').click(); await page.locator('#title-journal').click(); await page.keyboard.press('r'); await page.keyboard.press('ArrowUp');
         assert.equal(await page.locator('#game-turns').textContent(), '1'); await page.keyboard.press('Escape'); await page.locator('#title-continue').click();

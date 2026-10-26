@@ -9,18 +9,25 @@ explore a world you paint. The **Wayfarers’ Guild** adds eight dispatches,
 three specialist tools, linked waystones, and optional commendations. The new
 **Echoist** leaves a lantern double to hold a plate, lure a hunter, or return to
 after taking a risky shortcut.
-The **Adventure Workshop** adds nine authored adventures, twelve playable Puzzle Lab rooms, 28 editable object
+The **Adventure Workshop** adds twenty-seven featured adventures, twelve playable Puzzle Lab rooms, 28 editable object
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
-creator for portable two-to-six-world adventures. Six original Storybooks add
-**twenty-nine levels**, recurring keepers, alternate solutions, and readable endings.
+creator for portable two-to-six-world adventures. Nine original Storybooks add
+**forty-seven levels**, recurring keepers, alternate solutions, and readable endings.
 **The Keeper’s Promise** adds five worlds across two branching roads: restore a
 ferry or a workshop, then follow that choice to its own reunion and ending.
 The **Trailhouse** adds twelve keeper commissions, a village with six restoration
 projects, seven keepsakes, and an unlockable original lantern-festival adventure.
 It uses JavaScript ES modules, HTML, CSS, and Canvas, with no runtime packages,
 accounts, or backend.
+
+Version 0.30 gives the board more room: a compact action dock, on-demand Tools
+and Quest panels, native full screen where available, and an expanded view
+fallback. Three new six-chapter books add **18 playable, remixable adventures**:
+**The Weatherkeepers’ Almanac**, **The Night Post**, and **The Open Workshop**.
+Search and filter twelve Storybooks or browse paged world shelves. See the
+[screen and new adventures guide](docs/SCREEN_AND_SAGAS.md).
 
 Version 0.29 adds **The Lost Cartographer**: six original chapters, rotating
 rooms, optional security vaults, reactive story cards, peaceful shared-device
@@ -204,7 +211,7 @@ this directory (in PowerShell, set `$env:PORT=4180` first).
 
 Use an HTTP server; opening `index.html` with `file://` does not support the
 module setup. The editor works without an internet connection while the local
-server is running. Installation as an offline web app is future work.
+server is running. The Home Screen launcher requires a network connection; offline caching is future work.
 
 ## A creator’s camp inside the game
 
@@ -621,7 +628,7 @@ detailed-interaction suites in `scripts/browser/expansion-browser-checks.mjs`, p
 `scripts/browser/sluice-browser-checks.mjs`,
 `scripts/browser/atlas-browser-checks.mjs`, and `scripts/browser/guild-browser-checks.mjs`.
 Playwright is not needed to play or run the base Node checks. The extended
-30-family suite remains available locally. CI also runs `npm run test:browser:smoke`: six
+30-family suite remains available locally. CI also runs `npm run test:browser:smoke`: twenty-three
 required scenarios against the built site, using a temporary server and bundled
 Chromium. Install its browser with `npx playwright install --with-deps --only-shell chromium`.
 Failure screenshots, console logs, and traces are retained for debugging.

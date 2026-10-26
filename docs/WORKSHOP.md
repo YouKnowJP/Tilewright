@@ -163,3 +163,14 @@ current Lantern Trails reads both. Story moments cannot be silently copied into
 a puzzle assembly: remove their cards first, or remix/share the complete world.
 Assemblies containing a dial must include its whole room. See the
 [mechanics, limits, and example workflow](LOST_CARTOGRAPHER.md).
+
+
+## A larger, browsable shelf — v0.30
+
+Player adventures now includes 27 featured worlds. **New adventures** shows
+18 chapters from the three new books. Search title, author, and description;
+six worlds appear per page, with Previous/Next navigation. A search or filter
+starts at page one, and paging places keyboard focus on the first new card.
+Your personal shelf still holds up to 32 worlds. Preview, play, remix, checked
+creator clears, and file/code/link sharing use the existing portable format.
+See [the new adventures](SCREEN_AND_SAGAS.md).

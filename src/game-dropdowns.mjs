@@ -34,6 +34,7 @@ function commit(index){
   const changed=widget.source.value!==option.value;close();widget.source.value=option.value;
   if(changed){widget.source.dispatchEvent(new Event('input',{bubbles:true}));widget.source.dispatchEvent(new Event('change',{bubbles:true}));}
   refresh(widget);
+  widget.source.dispatchEvent(new CustomEvent('game-choice',{bubbles:true,detail:{value:widget.source.value}}));
 }
 function renderChoices(){
   if(!active)return;const {widget,list}=active,previous=active.choices?.[active.index]?.value;

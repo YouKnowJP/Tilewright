@@ -6,7 +6,7 @@ import { PUBLIC_FILES } from './scripts/build.mjs';
 
 const ROOT = fileURLToPath(new URL('.', import.meta.url));
 const TYPES = { '.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
-  '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
+  '.webmanifest':'application/manifest+json', '.png':'image/png', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
 
 export function createDevServer({root=ROOT}={}) {
   return http.createServer(async (request, response) => {

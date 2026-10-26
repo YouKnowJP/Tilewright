@@ -986,3 +986,24 @@ or show a story moment. They never execute imported code. Vaults add determinist
 four-cell ember rings with one/two/three active phases per four-turn cycle;
 opening provides a one-turn ward, and vault rhythm is equal on both rules.
 Practice state and controller Undo are isolated from the parent adventure.
+
+
+## Screen presentation and new sagas — v0.30
+
+`play-layout.mjs` rearranges existing controls without replacing their action
+handlers. `play.css` supplies viewport-height play layouts, safe-area spacing,
+a landscape action dock, bounded Tools, and readable modal panels. Quest is a
+dialog at every viewport. `screen-mode.mjs` isolates standard/prefixed native
+fullscreen, external exit events, overlapping requests, and expanded fallback
+from game state. The manifest and original PNG launcher icons support Home
+Screen presentation without adding an offline service worker.
+
+Themed dropdowns emit `game-choice` after an explicit confirmation, including
+an unchanged choice. Tools can close after either confirmation or a changed
+value; cancellation emits neither. Source input/change semantics stay intact.
+
+`saga-worlds.mjs` authors 18 portable v2 maps in three six-chapter books.
+`saga-clears.mjs` supplies ordinary winning input journals, verified on both
+rules. The library includes their maps and books; worlds page by six and
+Storybooks filter/search metadata. No save schema, remote service, or runtime
+dependency is added. Test-only hard alternate routes remain under fixtures.

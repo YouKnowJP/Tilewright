@@ -10,7 +10,7 @@ async function play(page, actions, touch = false) {
   await page.locator('#adventure-canvas').focus();
   for (const action of actions) {
     if (action.startsWith('interact:')) {
-      if (await page.locator('#game-target-wrap').isVisible()) await selectControl(page, '#game-target', action.slice(9));
+      if (await page.locator('#game-target option').count()>1) await selectControl(page, '#game-target', action.slice(9));
       if (touch) await page.locator('#game-interact').tap();
       else { await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e'); }
     } else if (action.startsWith('choose:')) await clickControl(page, `[data-choice="${action.slice(7)}"]`, touch);

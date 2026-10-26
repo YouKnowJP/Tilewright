@@ -24,7 +24,7 @@ or game progress. [Read about the two lessons](TRAINING.md).
 | Story chapters | Twenty-four authored missions in eight regions. Begin any chapter; finish its missions in order. |
 | Wayfarers’ Guild | Eight jobs with three specialists: halt hunters, veil your movement, or leave a lantern double. |
 | Expeditions | Seeded journeys, daily trails, camps, upgrades, and route choices. Saved checkpoints let you return later. |
-| Adventure Workshop | Nine featured worlds, player-made adventures, and tools to create/remix/share your own. |
+| Adventure Workshop | Twenty-seven featured worlds, player-made adventures, and tools to create/remix/share your own. |
 | Terrain Mapmaker | Paint the land first, then explore it or build an authored adventure from it. |
 
 Main menu preserves the current trail while you browse. **Continue** returns to
@@ -128,3 +128,20 @@ worlds appear on the Workshop shelf, with Remix and verified creator routes.
 puzzle when an appropriate lesson is available. Practice has its own Undo and
 restart and changes no adventure turns, progress, or rewards. Return to your
 adventure whenever you like. [Full guide](LOST_CARTOGRAPHER.md).
+
+
+## A clearer board and eighteen more adventures
+
+The header’s house returns to the main menu and its corner icon toggles full
+screen. The dock keeps nearby interaction, Wait, Dash, and your specialist or
+partner action beside the movement pad. **Tools** holds supplies, inventory,
+control choices, and Options. **Quest** holds story, objectives, and the written
+bell order. **Plan** previews the next move without spending a turn. Long trail
+messages offer **Read more** in a separate reading window.
+
+Find three new six-chapter books through **Workshop → Storybooks → New
+adventures**. Play **The Weatherkeepers’ Almanac** for river puzzles and a
+rainseed rescue, **The Night Post** for longer deliveries and optional heists,
+or **The Open Workshop** for peaceful two-traveler inventions. Every chapter
+can also be played or remixed through **Player adventures → New adventures**.
+See [screen view and new adventures](SCREEN_AND_SAGAS.md).

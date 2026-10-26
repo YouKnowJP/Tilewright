@@ -1,0 +1,92 @@
+/* The board owns the screen. Reading, inventory and secondary tools open on demand. */
+body.playing.play-session main{max-width:1500px;padding:4px max(6px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))}
+.playing #adventure[data-view=play] .game-layout{height:calc(var(--play-height,100dvh) - 8px - env(safe-area-inset-bottom));min-height:0!important;grid-template-columns:minmax(0,1fr);gap:0}
+.playing #adventure[data-view=play] .game-main{min-height:0;border-radius:3px;overflow:visible}
+.playing #game-shell-bar{display:none!important}
+.playing #adventure[data-view=play] .game-toolbar{display:flex;flex-wrap:nowrap;align-items:center;padding:6px 8px;gap:8px;min-height:50px}
+.playing .game-toolbar>div:first-child{min-width:0;flex:1;width:auto}
+.playing .game-toolbar h3{font-size:clamp(15px,2.1vw,21px);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.4}
+.playing #game-subtitle{display:none}
+.playing .game-toolbar-actions{display:flex;width:auto;flex-shrink:0;gap:5px}
+.playing .game-toolbar-actions>button,.playing .game-menu summary{min-width:44px;min-height:44px;padding:8px;font-size:12px}
+.playing #game-home{font-size:24px;line-height:1}
+.playing #game-menu #game-choose{display:block}
+.playing .game-menu>div{width:min(235px,calc(100vw - 28px));max-height:calc(var(--play-height,100dvh) - 82px);overflow:auto;z-index:25}
+.playing .game-hud{grid-template-columns:repeat(4,minmax(0,1fr));min-height:38px}
+.playing .game-hud>div{min-height:38px;padding:3px;gap:2px;flex-direction:row;flex-wrap:wrap;column-gap:7px}
+.playing .game-hud>div>span{font-size:9px;letter-spacing:.3px}.playing .game-hud strong{font-size:14px}
+.playing .game-viewport{min-height:100px;padding:6px;flex:1;overflow:hidden}
+.playing .game-status{padding:8px 10px;display:flex;align-items:center;gap:8px;min-height:48px}
+.playing #game-status-text{font-size:var(--adventure-text-size,16px);line-height:1.45;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;flex:1;margin:0}
+#game-message-more{flex-shrink:0;min-height:44px;max-width:80px;padding:5px;font-size:11px}
+.playing #adventure[data-view=play] .game-controls{display:grid;grid-template-columns:138px minmax(0,1fr);align-items:center;gap:6px 10px;padding:7px 10px;position:relative;border-bottom:0;flex-shrink:0}
+.playing .game-controls .direction-pad{grid-column:1;grid-row:1;justify-self:start}
+.playing .game-controls .play-actions{grid-column:2;grid-row:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;min-width:0}
+.playing .play-actions button{min-width:0;min-height:44px;padding:6px;font-size:12px;overflow-wrap:anywhere}
+.playing #game-interact{grid-column:1/-1;line-height:1.35}
+.playing .play-actions #game-power,.playing .play-actions #game-twin{grid-column:1/-1}
+.playing #dash-button,.playing #game-wait{grid-column:auto;grid-row:auto;margin:0}
+.playing .game-controls kbd{display:none}
+.playing .game-controls .play-utilities{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-column:1/-1;gap:5px;min-width:0}
+.play-utilities>button,.play-tools>summary{min-height:44px;padding:7px 4px;font-size:12px;text-align:center}
+.playing #game-notes-button{display:block}
+.play-tools{position:static;min-width:0}.play-tools>summary{list-style:none;cursor:pointer;border:1px solid #919164;background:#254439;color:#fff0bd;box-sizing:border-box;border-radius:2px;line-height:1.7}.play-tools>summary::-webkit-details-marker{display:none}
+.play-tools[open]>summary{background:#51492f;border-color:#e7c47c}
+.play-tools>section{position:absolute;bottom:54px;right:6px;z-index:24;width:min(420px,calc(100vw - 28px));box-sizing:border-box;max-height:min(65dvh,470px);overflow:auto;overscroll-behavior:contain;padding:16px;background:#17362f;border:2px solid #b7a16b;box-shadow:0 12px 50px #04171c88;color:#f5e5bd}
+.play-tools-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.play-tools-heading button{min-height:44px;padding:8px}
+.play-inventory{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.play-inventory>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;background:#102b2b}.play-inventory span{font-size:12px}.play-inventory strong{font-size:18px}
+.play-tool-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.play-tool-actions button{min-height:48px;padding:8px;font-size:13px}
+#game-tool-notes p{font-size:var(--adventure-text-size,16px);line-height:1.5}#game-tool-notes .game-input-state{font-size:12px;margin-top:12px;display:flex;justify-content:space-between;gap:8px}
+.playing .game-controls #game-context:not([hidden]){grid-column:1/-1;grid-row:auto;display:block;min-height:36px;padding:4px 8px;font-size:12px;line-height:1.45;text-align:left;background:#253d3b;color:#f5dfac;border-color:#75846b}
+.playing .game-controls .game-target-wrap:not([hidden]){grid-column:1/-1;grid-row:auto;margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px;font-size:12px}
+.playing .game-target-wrap .game-select-trigger{margin:0;min-height:40px}
+#game-notes-dialog{width:min(680px,calc(100% - 20px));max-width:680px;height:min(850px,calc(var(--play-height,100dvh) - 20px));max-height:calc(var(--play-height,100dvh) - 20px);padding:0}
+#game-notes-dialog .game-aside{display:flex;width:100%;height:100%;box-sizing:border-box;overflow:hidden}
+#game-notes-dialog #game-notes-close{display:block;min-width:44px;min-height:44px}
+#game-notes-dialog :is(#game-region,#game-rule-note,#game-book-banner,#game-expedition-banner,#game-wonder-summary){margin:10px 0;font-size:var(--adventure-text-size,16px);line-height:1.5;padding:0;overflow-wrap:anywhere}
+.playing .reading-view{max-height:150px;overflow:auto;flex-shrink:0}
+body[data-pad-side=right] #adventure[data-view=play] .game-controls{grid-template-columns:minmax(0,1fr) 138px}body[data-pad-side=right] #adventure[data-view=play] .game-controls .direction-pad{grid-column:2;grid-row:1;justify-self:end}body[data-pad-side=right] #adventure[data-view=play] .game-controls .play-actions{grid-column:1}
+body[data-control-size=large] #adventure[data-view=play] .game-controls{grid-template-columns:162px minmax(0,1fr)}body[data-control-size=large][data-pad-side=right] #adventure[data-view=play] .game-controls{grid-template-columns:minmax(0,1fr) 162px}
+body:is([data-controls=swipe],[data-controls=tap],[data-controls=keyboard]) #adventure[data-view=play] .game-controls{grid-template-columns:minmax(0,1fr)}body:is([data-controls=swipe],[data-controls=tap],[data-controls=keyboard]) #adventure[data-view=play] .game-controls .play-actions{grid-column:1}
+body:is([data-controls=swipe],[data-controls=tap],[data-controls=keyboard]) .play-actions{grid-template-columns:repeat(4,minmax(0,1fr))}body:is([data-controls=swipe],[data-controls=tap],[data-controls=keyboard]) .play-actions #game-interact{grid-column:span 2}
+.screen-exit{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:30;min-height:44px;padding:8px 14px;color:#fff0bd;background:#203e36;border:1px solid #d0ad64;font:13px/1.4 ui-monospace,monospace}
+.screen-options{margin-top:24px;border-top:1px solid #70846c;padding-top:16px}.screen-options details{margin-top:16px}.screen-options summary{cursor:pointer;min-height:44px;color:#f7ddb0}.screen-options p{overflow-wrap:anywhere}
+html:fullscreen{background:#102b2b}html:-webkit-full-screen{background:#102b2b}body.screen-expanded{background:#102b2b}
+body[data-game-contrast=high] :is(.play-tools>section,.play-tools>summary,.screen-exit){border-color:#fff;background:#101c23;color:#fff}
+@media(max-width:400px){.playing .game-hud>div>span{font-size:8px}.playing .game-hud strong{font-size:12px}.playing .game-controls{padding:6px;gap:5px}.playing .play-actions button{font-size:11px}.playing .game-toolbar h3{font-size:15px}.playing .game-toolbar-actions{gap:4px}.playing .game-toolbar-actions>button,.playing .game-menu summary{padding:7px 5px}.playing .heart-pip .ui-icon{width:11px;height:11px}}
+@media(max-height:540px) and (min-width:500px){
+ .playing #adventure[data-view=play] .game-main{display:grid;grid-template-columns:minmax(0,1fr) 260px;grid-template-rows:auto auto minmax(96px,1fr) auto}
+ .playing .game-toolbar{grid-column:1/-1;grid-row:1;min-height:44px;padding:2px 6px}.playing .game-toolbar h3{font-size:16px}
+ .playing .game-hud{grid-column:1;grid-row:2}.playing .game-viewport{grid-column:1;grid-row:3;min-height:96px;padding:3px}
+ .playing .game-status{grid-column:1;grid-row:4;min-height:40px;padding:5px 8px}.playing #game-status-text{-webkit-line-clamp:2;font-size:var(--adventure-text-size,14px)}
+ .playing #adventure[data-view=play] .game-controls{grid-column:2;grid-row:2/5;align-content:center;overflow:visible;padding:5px;gap:5px}
+ .playing .game-hud>div{min-height:32px}.playing .game-hud>div>span{font-size:8px}
+ .playing .play-utilities>button,.playing .play-tools>summary{font-size:11px}.play-tools>section{max-height:calc(var(--play-height,100dvh) - 64px)}
+ .playing .reading-view{grid-column:1;grid-row:5;max-height:75px}
+}
+@media(max-height:400px) and (min-width:500px){.playing #game-status-text{-webkit-line-clamp:1}.playing .game-controls #game-context:not([hidden]){font-size:11px;min-height:30px}.playing .play-actions button{min-height:40px}.playing .play-utilities>button,.playing .play-tools>summary{min-height:40px}.playing .game-toolbar-actions>button,.playing .game-menu summary{min-height:40px}}
+.book-shelf{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.book-shelf label{display:grid;gap:8px;min-width:0;color:#f2dfb0;font:13px/1.5 ui-monospace,monospace}.book-shelf :is(input,select,.game-select-trigger){min-width:0;width:100%;box-sizing:border-box;padding:10px;min-height:44px;background:#102c2b;color:#f1e7c8;border:1px solid #839166;font:inherit}.book-shelf p{grid-column:1/-1;margin:0;color:#c9d8bd;font-size:13px}.shelf-pager{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px 0}.shelf-pager button{min-height:44px}.shelf-pager span{color:#d9dab8;font-size:13px}
+@media(max-width:500px){.book-shelf{grid-template-columns:1fr}.book-cover>canvas{height:110px}.book-cover-copy{padding:16px}.book-cover h4{font-size:24px}.book-cover-copy .book-actions{margin-top:14px}}
+
+.book-cover-copy>p:not(.title-kicker){font-size:var(--adventure-text-size,16px)}.book-cover h4{overflow-wrap:anywhere}
+:root{--game-safe-top:env(safe-area-inset-top,0px);--game-safe-bottom:env(safe-area-inset-bottom,0px);--console-width:260px}
+body.playing.play-session main{padding-top:max(4px,var(--game-safe-top));padding-bottom:max(4px,var(--game-safe-bottom))}
+.playing #adventure[data-view=play] .game-layout{height:calc(var(--play-height,100dvh) - max(4px,var(--game-safe-top)) - max(4px,var(--game-safe-bottom)))}
+body[data-screen-mode=native].play-session main,body.screen-expanded.play-session main{max-width:none}
+body[data-control-size=large]{--console-width:300px}body[data-control-size=large] .play-tools>summary{min-height:52px}
+@media(max-height:540px) and (min-width:500px){.playing #adventure[data-view=play] .game-main{grid-template-columns:minmax(0,1fr) var(--console-width)}}
+.playing #game-overlay:not([hidden]){position:fixed;inset:max(12px,var(--game-safe-top)) 12px max(12px,var(--game-safe-bottom));z-index:35;width:min(480px,calc(100vw - 24px));max-width:480px;box-sizing:border-box;max-height:calc(var(--play-height,100dvh) - max(12px,var(--game-safe-top)) - max(12px,var(--game-safe-bottom)));padding:22px;margin:auto;height:max-content;overflow-y:auto}
+.playing .game-overlay button{min-height:44px;font-size:13px}.playing .game-overlay #game-primary{flex:1 0 100%}
+#game-fullscreen{display:grid;place-items:center}#game-fullscreen svg{width:22px;height:22px}#game-fullscreen[data-active=true] svg{transform:rotate(180deg) scale(.8)}
+
+.playing #game-layout:has(#game-overlay:not([hidden])) .game-main{height:100%}
+.playing #adventure[data-view=play] #game-viewport:has(#game-overlay:not([hidden])){flex:1;height:auto;min-height:100px;padding:6px}
+/* Reading preferences enlarge labels without displacing the anchored menu. */
+body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] .game-toolbar-actions{width:auto;flex-wrap:nowrap;justify-self:end}
+body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] .play-actions button{padding:6px 3px;overflow-wrap:normal}
+body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] :is(.play-utilities>button,.play-tools>summary){padding:6px 2px;overflow-wrap:normal}
+@media(max-width:600px){
+ body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] .game-toolbar{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+ body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] .game-toolbar>div:first-child{width:100%}
+ body:is([data-game-text=large],[data-game-text=largest]) #adventure[data-view=play] .game-hud{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

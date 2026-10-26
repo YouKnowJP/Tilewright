@@ -36,3 +36,14 @@ There are no enemies or burning tiles on either rule set, no real-time deadlines
 The implementation follows the principles of configurable text and redundant cues described in [Xbox guideline 101: Text display](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101), [Xbox guideline 103: Additional channels](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103), and [W3C: Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html). Text contrast checks use the [W3C contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
 
 These are practical accessibility improvements, not a claim of WCAG conformance or universal access. The canvas board still needs visual navigation; there is no complete nonvisual play mode or text-to-speech narration. Browser/controller combinations and personal needs vary. Testing with players who use assistive technology remains valuable. Automated emulation checks layouts and input behavior, not a person’s experience of a disability.
+
+
+## Less clutter, more room — v0.30
+
+Quest, secondary tools, and inventory open on demand, leaving a larger board.
+Nearby vault prices remain visible through a Details button. Full messages
+can be opened with Read more, while all story introductions remain in Quest.
+Large text, high contrast, numbered links, text map descriptions, and every
+movement style are retained. Screen mode has a visible exit and never forces
+an orientation. The Open Workshop adds six peaceful cooperative chapters;
+a single player can switch both roles without a time limit.

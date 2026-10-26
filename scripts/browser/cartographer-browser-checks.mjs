@@ -4,7 +4,7 @@ import {cartographerWorld,cartographerBook} from '../../src/cartographer-worlds.
 import {CARTOGRAPHER_CLEARS} from '../../src/cartographer-clears.mjs';
 import {serializeAdventure,parseAdventure} from '../../src/workshop-sharing.mjs';
 import {TRAIL_SAVE_KEY} from '../../src/adventure-rewind.mjs';
-import {chooseOption} from './ui-driver.mjs';
+import {chooseOption,selectControl, clickControl} from './ui-driver.mjs';
 import {artifactPath} from './artifacts.mjs';
 const fixture=async name=>JSON.parse(await readFile(new URL('../../tests/fixtures/'+name,import.meta.url),'utf8'));
 export async function playCartographer(page,actions,{practice=false,touch=false}={}){
@@ -12,7 +12,7 @@ export async function playCartographer(page,actions,{practice=false,touch=false}
  const keys={up:'ArrowUp',right:'ArrowRight',down:'ArrowDown',left:'ArrowLeft',wait:'Space','switch-traveler':'t'};
  for(const action of actions){
   if(action==='close-dialogue')await page.locator('#conversation-close').click();
-  else if(action.startsWith('interact:')){const target=practice?'clue-target':'game-target';if(await page.locator(`[data-game-select="${target}"]`).isVisible())await chooseOption(page,'#'+target,action.slice(9));await page.locator(practice?'#clue-interact':'#game-interact').click();}
+  else if(action.startsWith('interact:')){const target=practice?'clue-target':'game-target';if(await page.locator('#'+target+' option').count()>1){if(!practice)await selectControl(page,'#'+target,action.slice(9));else await chooseOption(page,'#'+target,action.slice(9));}await page.locator(practice?'#clue-interact':'#game-interact').click();}
   else if(touch){await page.locator(action==='switch-traveler'?(practice?'#clue-switch':'#game-twin'):action==='wait'?(practice?'#clue-wait':'#game-wait'):`[data-${practice?'clue-':''}move="${action}"]`).tap();}
   else {await page.locator(practice?'#clue-canvas':'#adventure-canvas').focus();await page.keyboard.press(keys[action]);}
  }
@@ -53,7 +53,7 @@ export async function cartographerScenarios(scenario){
  });
  await scenario('cartographer-controller-practice-isolation',768,async page=>{
   await page.evaluate(()=>{window.__cluePad={connected:true,mapping:'standard',index:0,id:'practice standard controller',axes:[0,0],buttons:Array.from({length:17},()=>({pressed:false,value:0}))};Object.defineProperty(navigator,'getGamepads',{value:()=>[window.__cluePad],configurable:true});});
-  await playWorld(page,cartographerWorld('first-turn'));await playCartographer(page,CARTOGRAPHER_CLEARS['first-turn'].slice(0,3));await page.locator('#game-controls-settings').click();await page.locator('.controller-options>summary').click();await chooseOption(page,'#settings-gamepad','on');await page.waitForFunction(()=>document.querySelector('#settings-gamepad-status').textContent.includes('ready'));await page.locator('#settings-close').click();const before=await page.evaluate(key=>localStorage.getItem(key),TRAIL_SAVE_KEY),turn=await page.locator('#game-turns').textContent();
+  await playWorld(page,cartographerWorld('first-turn'));await playCartographer(page,CARTOGRAPHER_CLEARS['first-turn'].slice(0,3));await clickControl(page,'#game-controls-settings');await page.locator('.controller-options>summary').click();await chooseOption(page,'#settings-gamepad','on');await page.waitForFunction(()=>document.querySelector('#settings-gamepad-status').textContent.includes('ready'));await page.locator('#settings-close').click();const before=await page.evaluate(key=>localStorage.getItem(key),TRAIL_SAVE_KEY),turn=await page.locator('#game-turns').textContent();
   const hold=index=>page.evaluate(index=>window.__cluePad.buttons[index].pressed=true,index),release=async()=>{await page.evaluate(()=>window.__cluePad.buttons.forEach(b=>b.pressed=false));await page.waitForTimeout(50);};
   await page.locator('#game-menu>summary').click();await page.locator('#game-hint-button').click();await page.locator('#clue-practice').click();await page.locator('#clue-canvas').focus();await hold(15);await page.waitForFunction(()=>document.querySelector('#clue-canvas').getAttribute('aria-label').includes('Turn 1.'));await page.waitForTimeout(120);assert.match(await page.locator('#clue-canvas').getAttribute('aria-label'),/Turn 1\./);await release();await hold(11);await page.waitForFunction(()=>document.querySelector('#clue-canvas').getAttribute('aria-label').includes('Turn 0.'));await release();assert.equal(await page.evaluate(key=>localStorage.getItem(key),TRAIL_SAVE_KEY),before);await hold(1);await page.locator('#clue-dialog').waitFor({state:'hidden'});await release();assert.equal(await page.locator('#game-turns').textContent(),turn);await page.locator('#game-notes-close').click();
   await playWorld(page,cartographerWorld('two-lanterns'));await page.locator('#adventure-canvas').focus();await hold(2);await page.waitForFunction(()=>document.querySelector('#game-wonder-summary').textContent.startsWith('PATHFINDER'));await release();assert.equal(await page.locator('#game-turns').textContent(),'0');await hold(11);await page.waitForFunction(()=>document.querySelector('#game-wonder-summary').textContent.startsWith('LANTERN KEEPER'));await release();

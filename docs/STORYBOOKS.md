@@ -1,7 +1,8 @@
 # Storybooks: a road between worlds
 
 Choose **Adventure Workshop → Storybooks** from the main menu. Read a book's
-opening scene before entering its first chapter. Eight featured books are available.
+opening scene before entering its first chapter. Twelve featured books are available. Use the search field or choose New
+adventures, Peaceful books, or More demanding books to narrow the shelves.
 **The Rainmaker’s Letters** and **The Observatory of Borrowed Stars** each add
 four original maps and a complete new story. The three earlier books weave the
 six Puzzle Lab worlds into journeys of three, three, and six chapters.
@@ -89,3 +90,15 @@ cloud saves, or automatic transfer between devices.
 Branching books use format v2 with optional forward chapter links, route choices,
 and route-specific endings. Linear v1 books retain their existing identity and
 save compatibility. See [the branching creator guide](KEEPERS-PROMISE.md#write-branching-adventures).
+
+
+## Three new long roads — v0.30
+
+**The Weatherkeepers’ Almanac**, **The Night Post**, and **The Open Workshop**
+add eighteen original worlds. The first explores crossings, songs, rotating
+glass, and a rainseed return; the second adds longer courier routes and clearly
+optional treasures; the third is peaceful cooperation on one device. Every
+chapter supports Trail/Nemesis, chapter promises, exact Continue, Undo, route
+review, and remixing. The library now includes nine original storybooks with
+47 unique levels, plus three journeys assembled from Puzzle Lab worlds.
+See [the chapter list](SCREEN_AND_SAGAS.md).

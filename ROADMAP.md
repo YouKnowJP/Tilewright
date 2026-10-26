@@ -323,3 +323,14 @@ paths and existing maps.
 
 Network multiplayer, an open upload gallery, and arbitrary executable creator
 scripts are outside this release. Shared-device cooperation needs no accounts.
+
+
+## Screen and content expansion completed — v0.30
+
+- Compact board-first play with on-demand tools and readable Quest panels.
+- Native fullscreen, resilient expanded fallback, and online Home Screen launch.
+- Three original six-chapter books, eighteen worlds, and hard optional routes.
+- Search, theme filters, paged world shelves, and preserved keyboard focus.
+- Real-input route proofs, checkpoint/review checks, and cross-engine live play.
+
+Offline caching and network multiplayer remain future work.

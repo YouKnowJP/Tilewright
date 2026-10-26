@@ -9,7 +9,7 @@ const arrows = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'A
 async function action(page, value) {
   if (value.startsWith('interact:')) {
     const id = value.slice(9);
-    if (await page.locator('#game-target-wrap').isVisible()) await selectControl(page, '#game-target', id);
+    if (await page.locator('#game-target option').count()>1) await selectControl(page, '#game-target', id);
     await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e');
   } else if (value.startsWith('choose:')) await clickControl(page, `[data-choice="${value.slice(7)}"]`);
   else if (value === 'close-dialogue') await clickControl(page, '#conversation-close');
@@ -93,8 +93,8 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
       await start(page, nearbyFixture);
       const relicIndex = nearbyFixture.actions.indexOf('interact:relic');
       await play(page, nearbyFixture.actions.slice(0, relicIndex));
-      assert.equal(await page.locator('#game-target-wrap').isVisible(), true);
-      await selectControl(page, '#game-target', 'relic'); await page.locator('#game-target-control').focus(); await page.keyboard.press('e');
+      assert.ok(await page.locator('#game-target option').count()>1);
+      await selectControl(page, '#game-target', 'relic'); await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e');
       assert.equal(await page.locator('#game-cargo').isDisabled(), false);
       // Restore genuine previous-version saves through the file input, then verify immediate migration.
       await clickControl(page, '#begin-expedition');
@@ -140,7 +140,7 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
           for (const value of fixture.actions) {
             try {
               if (value.startsWith('interact:') && await page.locator('#game-target-wrap').isVisible()) {
-                await selectControl(page, '#game-target', value.slice(9)); await page.locator('#game-target-control').focus(); await page.keyboard.press('e'); selections++;
+                await selectControl(page, '#game-target', value.slice(9)); await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e'); selections++;
               } else await action(page, value);
             } catch (error) {
               const state = await page.evaluate(() => ({ title: document.querySelector('#game-title').textContent, turn: document.querySelector('#game-turns').textContent,

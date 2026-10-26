@@ -1,3 +1,4 @@
+import { sagaBooks } from './saga-worlds.mjs';
 import { cartographerBook } from './cartographer-worlds.mjs';
 import { lanternfairBook } from './storybook-lanternfair.mjs';
 import { welcomeBook } from './storybook-welcome.mjs';
@@ -46,5 +47,6 @@ export function featuredBooks() {
     welcomeBook(),
     lanternfairBook(),
     cartographerBook(),
+    ...sagaBooks(),
   ];
 }

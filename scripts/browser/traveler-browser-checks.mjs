@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { artifactPath } from './artifacts.mjs';
-import { chooseOption,enterFirstTrail } from './ui-driver.mjs';
+import { chooseOption,enterFirstTrail , clickControl} from './ui-driver.mjs';
 import { playGuild } from './guild-browser-checks.mjs';
 import { TRAVELER_CHOICES,DEFAULT_TRAVELER,OUTFITS } from '../../src/traveler-art.mjs';
 import { PREFERENCES_KEY } from '../../src/adventure-preferences.mjs';
@@ -33,7 +33,7 @@ export async function checkTraveler(browserType,{baseURL='http://127.0.0.1:4174'
         const saved=await preferences(page);await page.reload();await page.locator('#title-traveler').click();assert.deepEqual(await preferences(page),saved);assert.match(await page.locator('#traveler-description').textContent(),/灯り Iris 🌙.*Tide coat/);await fit(page);
         if(screenshots&&[390,1440].includes(width)){await page.locator('#game-settings-dialog').evaluate(n=>n.scrollTop=0);await page.screenshot({path:artifactPath(`traveler-tent-${width}.png`)});}
         await page.locator('#settings-close').click();await enterFirstTrail(page);const checkpoint=await progress(page),turn=await page.locator('#game-turns').textContent(),image=await page.locator('#adventure-canvas').evaluate(n=>n.toDataURL());
-        await page.locator('#game-controls-settings').click();await page.locator('#settings-tab-traveler').click();await page.locator('#traveler-tailoring>summary').click();await page.locator('#traveler-name').fill('Aster');await page.locator('#traveler-name').pressSequentially('wasd');await page.locator('[data-outfit="gardener"]').click();await page.locator('#settings-close').click();assert.equal(await page.locator('#game-turns').textContent(),turn);assert.deepEqual(await progress(page),checkpoint,'Changing clothes cannot modify a checkpoint, learning, or game progress.');assert.notEqual(await page.locator('#adventure-canvas').evaluate(n=>n.toDataURL()),image);
+        await clickControl(page,'#game-controls-settings');await page.locator('#settings-tab-traveler').click();await page.locator('#traveler-tailoring>summary').click();await page.locator('#traveler-name').fill('Aster');await page.locator('#traveler-name').pressSequentially('wasd');await page.locator('[data-outfit="gardener"]').click();await page.locator('#settings-close').click();assert.equal(await page.locator('#game-turns').textContent(),turn);assert.deepEqual(await progress(page),checkpoint,'Changing clothes cannot modify a checkpoint, learning, or game progress.');assert.notEqual(await page.locator('#adventure-canvas').evaluate(n=>n.toDataURL()),image);
         await page.locator('#game-home').click();await page.locator('#title-traveler').click();await page.locator('#traveler-festival').click();await page.locator('[data-festival-book]').waitFor({state:'visible'});
         if(fullBooks&&[390,1440].includes(width)) {
           const difficulty=width===1440?'nemesis':'trail';await chooseOption(page,'#book-rules',difficulty);await page.locator('[data-festival-book] .front-primary').click();

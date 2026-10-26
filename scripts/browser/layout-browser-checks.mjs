@@ -1,5 +1,5 @@
 import { artifactPath } from './artifacts.mjs';
-import { enterFirstTrail } from './ui-driver.mjs';
+import { enterFirstTrail , clickControl} from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -66,7 +66,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         assert.equal(await page.locator('#game-menu').getAttribute('open'), null);
         assert.equal(await page.locator('#game-turns').textContent(), '0');
         if (width <= 1000) await page.locator('#game-notes-button').click();
-        await page.locator('#notes-tab-map').click();
+        await clickControl(page,'#notes-tab-map');
         assert.equal(await page.locator('#game-minimap').isVisible(), true);
         assert.equal(await page.locator('.notes-panel:visible').count(), 1);
         await page.keyboard.press('ArrowRight'); assert.equal(await page.locator('#notes-tab-journal').getAttribute('aria-selected'), 'true');
@@ -78,7 +78,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
           await page.keyboard.press('Escape'); assert.equal(await page.locator('#game-notes-dialog').isVisible(), false);
           assert.equal(await page.evaluate(() => document.activeElement.id), 'game-notes-button');
         }
-        await page.locator('#game-choose').click();
+        await clickControl(page,'#game-choose');
         assert.equal(await page.locator('#game-layout').isVisible(), false);
         assert.equal(await page.locator('.atlas-chapter:visible').count(), 1);
         const chapterCount = await page.locator('.atlas-nav button').count();
@@ -106,7 +106,7 @@ export async function checkPlayLayout(browserType, { baseURL = 'http://127.0.0.1
         assert.equal(await page.locator('#game-menu').getAttribute('open'), null, 'Tabbing past the menu must dismiss it.');
         // Crossing the responsive boundary moves the same notes, preserving selection.
         if (width === 390) {
-          await page.locator('#game-notes-button').click(); await page.locator('#notes-tab-map').click();
+          await page.locator('#game-notes-button').click(); await clickControl(page,'#notes-tab-map');
           await page.setViewportSize({ width: 1440, height: 900 });
           await page.waitForFunction(() => document.querySelector('#game-aside').parentElement.id === 'game-layout');
           assert.equal(await page.locator('#game-notes-dialog').isVisible(), false);

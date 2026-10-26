@@ -2,7 +2,7 @@
 
 Open [Lantern Trails](https://youknowjp.github.io/Personal-Project/) on a phone,
 tablet, laptop, or desktop. Choose **Options → Controls** before playing, or
-use **Controls** below the map during an adventure. Training has its own
+use **Tools → Controls** below the map during an adventure. Training has its own
 **Choose controls** button. Changes apply immediately without restarting or
 spending a turn, and stay in this browser. Browser data is separate on each
 device; use the appropriate world, Storybook, expedition, or Trailhouse backup
@@ -27,15 +27,17 @@ reading a dialog, or browsing menus.
 Put the pad on the **left or right** and choose **Comfortable (44 px)** or
 **Large (52 px)** movement/action targets. The layout adjusts to portrait,
 landscape, tablet split views, and browser resizing without restarting the run.
-Small or short screens may use one page scroll to preserve readable text and
-reachable controls. Pinch zoom remains available; use the page outside a
+The main play screen fits the available viewport at ordinary browser zoom.
+Portrait uses a bottom dock; short landscape screens put it beside the map.
+Reading panels and menus scroll within their own frames when needed. Pinch zoom remains available; use the page outside a
 swipe/tap map to scroll. Cancelled gestures and multiple fingers do not move
 the keeper. Touch holds do not repeat turns.
 
 **Dash** arms your next direction for a two-cell move; choose it again to cancel.
 It still needs two energy and obeys mission restrictions. **Wait** takes one
 turn and recharges energy. Nearby actions, shields, decoys, cargo, and
-specialist powers keep visible buttons in every movement style.
+specialist powers remain available in every movement style. Supplies, shields,
+decoys, cargo, and Options open from **Tools**.
 
 ## Keyboard actions
 
@@ -61,6 +63,7 @@ The selected value is preserved when you cancel or leave the screen.
 | B / X | Specialist power / drop cargo |
 | V / H | Plan / scout hint |
 | Z | Undo the last gameplay action, up to 60 recent actions |
+| F | Enter/leave screen view; Escape also leaves expanded view |
 | P or Escape | Pause/resume on the board |
 | R | Restart the current attempt |
 
@@ -106,3 +109,18 @@ The HTTPS play link and localhost preview can use the browser’s Gamepad API.
 Controller availability and standard mappings depend on the browser, operating
 system, and hardware. Controller tests use a simulated standard device; real
 hardware testing remains useful. Browser coverage is recorded in [QA](QA.md).
+
+
+## Full screen and Home Screen play
+
+Choose the corner icon beside Menu, **Options → Display → Enter full screen**,
+or **Full screen** on the main menu. A direct button press requests native
+browser fullscreen. When a browser refuses or lacks that API, expanded view
+uses the available window. Browser Escape/Back or the same button leaves it;
+menus retain a visible **Leave screen view** control. Rotation and resizing do
+not restart the game or change its checkpoint.
+
+On a phone/tablet, add the website to your Home Screen from the browser’s menu
+or Share sheet, then launch its icon. Support and browser chrome vary. The
+launcher is online-only. App and browser storage can be separate: export a
+backup before switching. See [screen guide](SCREEN_AND_SAGAS.md).

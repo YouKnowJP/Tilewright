@@ -8,12 +8,13 @@ const BASE = 'http://127.0.0.1:4174', recordKey = 'tilewright.guild.v1';
 const keys = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'ArrowLeft', wait: 'Space', decoy: 'q', shield: 'c', power: 'b' };
 async function input(page, value, touch = false) {
   if (value.startsWith('interact:')) {
-    if (await page.locator('#game-target-wrap').isVisible()) await selectControl(page, '#game-target', value.slice(9));
+    if (await page.locator('#game-target option').count()>1) await selectControl(page, '#game-target', value.slice(9));
     if (touch) await clickControl(page, '#game-interact', true);
     else { await page.locator('#adventure-canvas').focus(); await page.keyboard.press('e'); }
   } else if (value.startsWith('choose:')) await clickControl(page, `[data-choice="${value.slice(7)}"]`, touch);
   else if (value === 'close-dialogue') await clickControl(page, '#conversation-close', touch);
   else if (touch && value.startsWith('dash-')) { await clickControl(page, '#dash-button', true); await clickControl(page, `[data-move="${value.slice(5)}"]`, true); }
+  else if(touch&&['decoy','shield'].includes(value))await clickControl(page,value==='decoy'?'#game-decoy':'#game-shield',true);
   else if (touch) await page.locator(['up', 'right', 'down', 'left'].includes(value) ? `[data-move="${value}"]` : { wait: '#game-wait', decoy: '#game-decoy', shield: '#game-shield', power: '#game-power' }[value]).tap();
   else await page.keyboard.press(value.startsWith('dash-') ? `Shift+${keys[value.slice(5)]}` : keys[value]);
 }

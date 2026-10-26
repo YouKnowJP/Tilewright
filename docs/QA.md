@@ -1,5 +1,16 @@
 # Verification record
 
+## Compact play, screen modes, and eighteen new worlds — v0.30.0
+
+**778 Node tests**, syntax checks, and the **114-file** package pass. The
+23-scenario release suite passes in Chromium, Firefox, and WebKit, including
+full new books, difficult optional routes, native/fallback fullscreen, safe
+areas, viewport resizing, long-message reading, and library navigation. A
+Firefox phone tap timeout passed on an isolated rerun. Additional Chromium
+checks cover 12 dropdown, 19 control, 5 accessibility, 4 settings, and 11
+interface scenarios. See the [detailed audit](audits/2026-10-25-screen-and-sagas.md)
+and [player guide](SCREEN_AND_SAGAS.md) for coverage and hardware limits.
+
 ## The Lost Cartographer — v0.29.0
 
 699 Node checks pass, including clean chapter/practice/vault witnesses, immutable

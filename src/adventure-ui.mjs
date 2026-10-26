@@ -1,3 +1,4 @@
+import { createPlayLayout } from './play-layout.mjs';
 import { createClueUI } from './adventure-clues-ui.mjs';
 import { wonderPreview } from './adventure-wonders.mjs';
 import { yieldToBrowser } from './browser-yield.mjs';
@@ -41,19 +42,20 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   let expeditions, workshop, training, workshopActions = [], workshopClearNote = '';
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0;
   let mapInput,gamepadInput;
+  const playLayout=createPlayLayout();
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;
   let rewind=null,checkpointFailed=false,checkpointError='',restoring=false,restoreToken=0;
   const savedTrail=loadTrail(storage), reviews=createReviewUI({storage,getPreferences:()=>front?.preferences||{}});
   let selectedChapter = 0, libraryTab = 'story';
-  const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(max-width: 1000px)');
+  const notes = $('#game-aside'), notesDialog = $('#game-notes-dialog'), compactNotes = matchMedia('(min-width: 0px)');
   const libraryOpen = () => !$('#adventure-library').hidden;
   const outsideBoard = () => libraryOpen() || !$('#game-title-screen').hidden || !$('#adventure-workshop').hidden || !$('#training-camp').hidden;
 
   function frontStyle(view) {
-    $('#adventure').dataset.view = view;
-    $('#game-shell-bar').hidden = view !== 'play';
+    $('#adventure').dataset.view = view;document.body.classList.toggle('play-session',view==='play');
+    $('#game-shell-bar').hidden = true;playLayout.closeTools();playLayout.sync();
     document.body.classList.toggle('game-front', view !== 'play');
     document.body.classList.toggle('game-title-open', view === 'title');
     document.body.classList.toggle('game-library-open', view === 'library');
@@ -164,7 +166,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   let optionsReturn = null;
   $('#game-settings-button').addEventListener('click', () => { optionsReturn = $('#game-menu summary'); $('#game-menu').open = false; front.settings('display',optionsReturn); });
   $('#game-shell-options').addEventListener('click', () => { optionsReturn = $('#game-shell-options'); front.settings('display',optionsReturn); });
-  function restoreBoardFocus(dialog,target){const current=document.activeElement;if(active&&!outsideBoard()&&(current===document.body||current===target||dialog.contains(current)))target.focus({preventScroll:true});}
+  function restoreBoardFocus(dialog,target){const current=document.activeElement;if(active&&!outsideBoard()&&(current===document.body||current===target||dialog.contains(current)))(target.getClientRects().length&&(!target.closest('#game-tools')||$('#game-tools').open)?target:$('#game-tools summary')).focus({preventScroll:true});}
   $('#game-settings-dialog').addEventListener('close', () => restoreBoardFocus($('#game-settings-dialog'),optionsReturn || $('#game-menu summary')));
   $('#game-guide-dialog').addEventListener('close', () => restoreBoardFocus($('#game-guide-dialog'),$('#game-menu summary')));
   document.addEventListener('click', event => { if (!event.target.closest('#game-menu')) $('#game-menu').open = false; });
@@ -258,16 +260,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     renderer.draw(); renderer.drawMinimap($('#game-minimap'));
   }
 
-  function fitBoard() {
-    const layout=$('#game-layout');
-    if(!run || layout.hidden || !$('#game-overlay').hidden) { layout.style.minHeight=''; return; }
-    const main=$('.game-main'), style=getComputedStyle(main);
-    const fixed=[...main.children].filter(element=>element!==viewport).reduce((height,element)=>{
-      const css=getComputedStyle(element);return height+(css.display==='none'?0:element.getBoundingClientRect().height+(parseFloat(css.marginTop)||0)+(parseFloat(css.marginBottom)||0));
-    },0);
-    const minimum=Math.max(620,Math.ceil(fixed+(parseFloat(getComputedStyle(viewport).minHeight)||170)+(parseFloat(style.borderTopWidth)||0)+(parseFloat(style.borderBottomWidth)||0)));
-    const value=`${minimum}px`;if(layout.style.minHeight!==value)layout.style.minHeight=value;
-  }
+  function fitBoard() { $('#game-layout').style.minHeight=''; }
 
   function animate(time) {
     frame = null;
@@ -291,7 +284,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
 
   function showStatus(text, tone = 'info') {
     const status = $('#game-status'); status.dataset.tone = tone;
-    $('#game-status-text').textContent = text;
+    $('#game-status-text').textContent = text;playLayout.sync();
   }
 
   function questEntry(goal) {
@@ -312,7 +305,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     const dialog=document.querySelector('dialog[open]');if(dialog&&dialog.id!=='conversation-dialog')return;
     if(expeditions?.session){if(!expeditions.canUndo)return;expeditions.undo();}
     else{if(!canRewind(rewind))return;rewind=undoRewind(rewind);run=rewind.run;workshopActions=[...rewind.actions];if(!run.stage.workshop){memory=run.memory;memorySaveFailed=!saveMemory(storage,memory);}}
-    mapInput?.cancel();dashArmed=false;paused=false;interactionId=null;$('#game-menu').open=false;checkpoint();update();
+    playLayout.closeTools();mapInput?.cancel();dashArmed=false;paused=false;interactionId=null;$('#game-menu').open=false;checkpoint();update();
     showStatus(`Last action undone. Back to turn ${run.turns}.`);if(!run.dialogue)canvas.focus({preventScroll:true});
   }
   async function continueTrail(){
@@ -513,6 +506,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     }
     $('#game-review').hidden=Boolean(run.stage.workshop?.practice)||paused||run.status==='playing'||!reviews.hasRun(run);
     $('#game-nemesis').hidden = Boolean(journey) || paused || run.status !== 'won' || !stage.actFinal || difficulty !== 'trail';
+    playLayout.update(run,interact);
     fitBoard();renderer.setState(run); renderer.drawMinimap($('#game-minimap')); paint();
   }
 
@@ -609,7 +603,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   $('#conversation-dialog').addEventListener('cancel', event => { event.preventDefault(); action('close-dialogue'); });
   $('#conversation-dialog').addEventListener('close', () => { if (active && run?.dialogue && !$('#conversation-dialog').open) action('close-dialogue'); });
 
-  function pause() { if (!run || run.status !== 'playing') return; $('#game-menu').open = false; paused = !paused; update(); }
+  function pause() { playLayout.closeTools(); if (!run || run.status !== 'playing') return; $('#game-menu').open = false; paused = !paused; update(); }
   function hint() { hintVisible = !hintVisible; $('#game-menu').open = false; update(); if (hintVisible) openNotes('help'); }
   $('#game-pause').addEventListener('click', pause);
   for(const id of ['game-undo','game-undo-menu','game-undo-result','conversation-undo'])$('#'+id).addEventListener('click',rewindAction);
@@ -660,6 +654,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       event.preventDefault(); canvas.focus({ preventScroll: true }); interact(); return;
     }
     if (!active || !run || outsideBoard() || front.dialogOpen || notesDialog.open || event.ctrlKey || event.metaKey || event.altKey || event.target.closest('[data-game-select], input, select, textarea, dialog, .game-aside')) return;
+    if ($('#game-tools').open) { if(event.key==='Escape'){event.preventDefault();playLayout.closeTools(true);} return; }
     if ($('#game-menu').open) { if (event.key === 'Escape') { event.preventDefault(); $('#game-menu').open = false; $('#game-menu summary').focus(); } return; }
     const direction=movementKey(event.key,front.preferences.keyboardLayout);
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
@@ -675,7 +670,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   });
   mapInput=createMapInput(canvas,{
     preferences:()=>front.preferences,
-    enabled:()=>active&&!outsideBoard()&&!front.dialogOpen&&!notesDialog.open&&!document.querySelector('dialog[open]')&&!$('#game-menu').open&&!paused&&run?.status==='playing',
+    enabled:()=>active&&!outsideBoard()&&!front.dialogOpen&&!notesDialog.open&&!document.querySelector('dialog[open]')&&!$('#game-menu').open&&!$('#game-tools').open&&!paused&&run?.status==='playing',
     origin:()=>{const rect=canvas.getBoundingClientRect(),point=renderer?.playerAnchor()||{x:.5,y:.5};return {x:rect.left+rect.width*point.x,y:rect.top+rect.height*point.y};},
     onMove:direction=>action(direction),
   });
@@ -683,7 +678,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     if(controlDropdown(command))return;
     if(clueUI.control(command))return;
     if(command==='undo'){if(!$('#training-camp').hidden)training.control('undo');else rewindAction();return;}
-    const dialog=document.activeElement?.closest('dialog[open]')||document.querySelector('dialog[open]'),menu=$('#game-menu');
+    const dialog=document.activeElement?.closest('dialog[open]')||document.querySelector('dialog[open]'),menu=$('#game-tools').open?$('#game-tools'):$('#game-menu');
     if(!dialog&&training?.control(command))return;
     if(command==='pause'&&!dialog&&!outsideBoard()&&run?.status==='playing'){pause();return;}
     const overlay=!outsideBoard()&&!$('#game-overlay').hidden?$('#game-overlay'):null;
@@ -700,7 +695,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       else if(command==='back'){
         if(dialog){const back=dialog.querySelector('[data-controller-back],button[id$="-close"],button[id$="-cancel"]');if(back&&!back.disabled)back.click();}
         else if(overlay)$(paused?'#game-primary':'#game-result-menu').click();
-        else if(menu.open){menu.open=false;$('#game-menu summary').focus({preventScroll:true});}
+        else if(menu.open){menu.open=false;menu.querySelector('summary').focus({preventScroll:true});}
         else{const back=['#journal-back','#front-back','#ws-home','#training-home','#library-title'].map(selector=>$(selector)).find(node=>node.getClientRects().length&&!node.closest('[hidden]'));back?.click();}
       }
       return;
@@ -717,7 +712,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#game-input-label').textContent=CONTROL_STYLES[preferences.controls];$('#game-controls-help').textContent=controlHelp(preferences)+' Z undoes the last action.';canvas.title=$('#game-controls-help').textContent;
     mapInput?.cancel();dashArmed=false;training?.refresh();
     if(preferences.gamepad==='on')gamepadInput?.start();else gamepadInput?.stop();
-    if(run)resize();
+    if(run){playLayout.sync();resize();}
   }
   document.addEventListener('visibilitychange', () => { if (document.hidden && active && run?.status === 'playing' && !run.dialogue && !paused) { paused = true; update(); } });
   let resizeFrame=0;

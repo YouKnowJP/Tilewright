@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.30.0 — 2026-10-25
+
+- Give gameplay a larger board, compact action dock, and on-demand Quest/Tools.
+- Add native fullscreen with prefixed support, external exit handling, and expanded fallback.
+- Add Home Screen launch metadata and original PNG icons; remain online-only.
+- Add eighteen playable/remixable worlds in three six-chapter original Storybooks.
+- Include peaceful cooperation, longer deliveries, evolving river routes, rescues, and optional heists.
+- Search/filter story shelves and page featured worlds by six with keyboard focus preserved.
+- Open long feedback in a reading panel and retain visible optional-vault costs.
+- Fix confirmed default interactions leaving Tools over the action button.
+- Extend deterministic route, checkpoint, replay, responsive, and cross-engine live checks.
+
 ## 0.29.0 — 2026-10-24
 
 - Add The Lost Cartographer: six original chapters and six remixable featured worlds.

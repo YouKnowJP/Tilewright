@@ -1,9 +1,10 @@
+import { presentationScenarios } from './presentation-browser-checks.mjs';
 import { cartographerScenarios } from './cartographer-browser-checks.mjs';
 import assert from 'node:assert/strict';
 import { mkdir,readFile,writeFile,rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { chooseOption,enterFirstTrail } from './ui-driver.mjs';
+import { chooseOption,enterFirstTrail , clickControl} from './ui-driver.mjs';
 import { playGuild } from './guild-browser-checks.mjs';
 import { playTraining,buildTrainingWorld } from './training-browser-checks.mjs';
 import { lanternfairBook } from '../../src/storybook-lanternfair.mjs';
@@ -43,7 +44,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
       // Simulate a browser suspending animation frames while replay is underway.
       await page.evaluate(()=>{const request=requestAnimationFrame.bind(window),cancel=cancelAnimationFrame.bind(window),pending=new Map();let id=-1;window.requestAnimationFrame=callback=>{pending.set(id,callback);return id--;};window.cancelAnimationFrame=key=>key<0?pending.delete(key):cancel(key);window.resumeSmokeFrames=()=>{window.requestAnimationFrame=request;window.cancelAnimationFrame=cancel;for(const callback of pending.values())request(callback);pending.clear();};});
       await page.locator('#title-continue').click();await page.locator('#adventure[data-status="playing"]').waitFor();assert.equal(await page.locator('#game-turns').textContent(),turn);assert.equal(await saved(page,TRAIL_SAVE_KEY),checkpoint);await page.evaluate(()=>window.resumeSmokeFrames());
-      await page.locator('#game-controls-settings').click();await page.locator('#settings-tab-traveler').click();await openFavorites(page);assert.equal(await saved(page,WARDROBE_KEY),first);await page.locator('[data-favorite-wear="0"]').click();assert.equal((await preferences(page)).coat,'plum');assert.equal((await preferences(page)).travelerName,'abcdefghijklmnopqrstuvw');await page.locator('#settings-close').click();assert.equal(await saved(page,TRAIL_SAVE_KEY),checkpoint);
+      await clickControl(page,'#game-controls-settings');await page.locator('#settings-tab-traveler').click();await openFavorites(page);assert.equal(await saved(page,WARDROBE_KEY),first);await page.locator('[data-favorite-wear="0"]').click();assert.equal((await preferences(page)).coat,'plum');assert.equal((await preferences(page)).travelerName,'abcdefghijklmnopqrstuvw');await page.locator('#settings-close').click();assert.equal(await saved(page,TRAIL_SAVE_KEY),checkpoint);
       await playGuild(page,story.slice(half),width<500);await page.locator('#adventure[data-status="won"]').waitFor();await page.locator('#game-home').click();await page.locator('#title-traveler').click();await openFavorites(page);await page.locator('[data-favorite-wear="0"]').click();assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');
     });
     await scenario('learn-build-play-and-export',390,async page=>{
@@ -67,6 +68,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
       await page.locator('#title-traveler').click();await page.locator('#traveler-festival').click();await page.locator('[data-festival-book] .front-primary').click();for(const [index,chapter]of lanternfairBook().chapters.entries()){await page.locator('[data-book-challenge="clean"]').click();await page.locator('#book-continue').click();await playGuild(page,chapter.world.proof.actions,true);await page.locator('#adventure[data-status="won"]').waitFor();assert.equal(await page.locator('#game-health').getAttribute('aria-label'),'Health: 3 of 3');assert.equal(await page.locator('#game-coins').textContent(),'3/3');await page.locator('#game-primary').click();if(index<3){await page.reload();await page.locator('#title-workshop').click();await page.locator('#ws-tab-books').click();}}assert.match(await page.locator('#book-camp-kicker').textContent(),/LAST PAGE/);
     });
     await cartographerScenarios(scenario);
+    await presentationScenarios(scenario);
     const report={browser:browser.version(),baseURL,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
   }finally{await browser.close();}
 }

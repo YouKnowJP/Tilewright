@@ -60,3 +60,15 @@ versioning and new long-run compatibility tests.
   Safari app, and emulated mobile layouts do not replace testing on hardware.
   QA records the actual engine versions, device sizes, and simulated controller
   coverage rather than claiming every browser or device has been tested.
+
+
+## Screen presentation — 2026-10-25
+
+The [MDN Fullscreen API guide](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API/Guide)
+and [WHATWG Fullscreen specification](https://fullscreen.spec.whatwg.org/)
+describe direct user activation, asynchronous requests, rejection, and browser
+exit events. This release feature-detects standard/prefixed methods, tracks
+native exit events, and provides expanded view when a request is unavailable
+or rejected. Home Screen launch is another option, not a promise that every
+mobile browser exposes arbitrary-element fullscreen. The app does not lock
+orientation or disable pinch zoom. The manifest adds no offline cache.
