@@ -73,6 +73,10 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   }
   function showJournal() { showTitle(); front.journal(); }
   function openWorkshop(section = 'shelf') { showTitle(); front.hide(); frontStyle('workshop'); workshop.show(section); }
+  function openFeaturedBook(selector) {
+    openWorkshop('books');$('#book-search').value='';$('#book-shelf-filter').value='all';$('#book-shelf-filter').dispatchEvent(new Event('change'));
+    const card=document.querySelector(selector);if(!card)return;const fold=card.closest('details');if(fold)fold.open=true;card.querySelector('button')?.focus({preventScroll:true});card.scrollIntoView({block:'center'});
+  }
   function openTraining() { showTitle(); front.hide(); frontStyle('training'); training.show(); }
   function journalDestination(target) {
     if (target.mode === 'story') {
@@ -744,8 +748,8 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     onContinue:continueTrail,
     onResumeExpedition() { expeditions.show(); $('#expedition-resume').click(); },
     onMapmaker: backToEditor,
-    onFestival(){openWorkshop('books');const card=document.querySelector('[data-festival-book]');if(card){const fold=card.closest('details');if(fold)fold.open=true;card.querySelector('button')?.focus({preventScroll:true});card.scrollIntoView({block:'center'});}},
-    onPeaceful(){openWorkshop('books');document.querySelector('[data-peaceful-book] button')?.focus({preventScroll:true});document.querySelector('[data-peaceful-book]')?.scrollIntoView({block:'center'});},
+    onFestival(){openFeaturedBook('[data-festival-book]');},
+    onPeaceful(){openFeaturedBook('[data-peaceful-book]');},
     onCustomMap() { try { start(createCustomStage(getMap())); } catch (error) { front.notice(error.message); } },
     onPreferences(preferences) { applyControls(preferences);training?.refreshPreferences();workshop?.refreshPreferences(); if (run) { update(); paint(); } },
     getJournal() { return { ...adventureJournal({ campaign, jobs: journalJobs, records, guildRecords, book: expeditions.logbook, difficulty, kit: selectedKit }), saveUnavailable: saveFailed || guildSaveFailed || expeditions.checkpointFailed || peekJourney(storage).unavailable }; },

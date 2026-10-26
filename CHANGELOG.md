@@ -7,6 +7,7 @@
 - Add Home Screen launch metadata and original PNG icons; remain online-only.
 - Add eighteen playable/remixable worlds in three six-chapter original Storybooks.
 - Include peaceful cooperation, longer deliveries, evolving river routes, rescues, and optional heists.
+- Keep peaceful/festival shortcuts visible after conflicting library searches.
 - Search/filter story shelves and page featured worlds by six with keyboard focus preserved.
 - Open long feedback in a reading panel and retain visible optional-vault costs.
 - Fix confirmed default interactions leaving Tools over the action button.

@@ -53,6 +53,9 @@ all 23 Chromium release scenarios before Pages can deploy.
 
 ## Issues found and corrected
 
+- Peaceful/festival book shortcuts could inherit a conflicting search or filter.
+  They now reveal the requested book and open its shelf fold; the regression
+  repeats both shortcuts after an empty search in all three engines.
 - Confirming the currently selected nearby action did not emit a value change,
   leaving Tools over Interact. Dropdowns now emit a separate confirmation event;
   cancellation and unchanged setting semantics remain intact.
