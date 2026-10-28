@@ -11,9 +11,11 @@ Three built-game migration cases verify exact old-save continuation to a real
 win, keyboard opening of the rights page without changing any saves/settings,
 and a shared custom-world win under the project URL prefix. Options fits
 320/844/1440-pixel viewports; the rights page fits phone and short landscape.
-Additional live Chromium and WebKit checks pass with extra-large text and high
+Additional live Chromium, Firefox and WebKit checks pass with extra-large text and high
 contrast at all three sizes, Tab/Enter link activation, return navigation and
 a real playable turn. An explicit focus target fixes WebKit skipping the link.
+The permissions link follows reading size, and the Options Back button remains
+on one line at the narrowest tested size.
 
 ## Complete recheck and interface fixes — v0.30.1
 
