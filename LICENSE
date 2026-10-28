@@ -1,21 +1,76 @@
-MIT License
+TILEWRIGHT PROPRIETARY LICENSE
+Version 1.0 — 28 October 2026
 
-Copyright (c) 2026 Jackson Pham
+Copyright (c) 2026 Jackson Pham (YouKnowJP). All rights reserved in new owned material.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. Scope and retained legacy rights
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This license governs new copyrightable Tilewright/Lantern Trails code, writing,
+original artwork, interface expression, and other material owned by Jackson
+Pham (the Owner) introduced under this license from the standalone migration
+on 28 October 2026 onward, unless another license is expressly stated.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+The imported game through v0.30.1 was previously distributed under MIT. Its
+source baseline is Personal-Project commit c1c7534e4641e0385293af004d1c5c7346e0a920,
+extracted as a9a90e068940ac778cf02184860888d64f1a1ccd and tagged
+legacy-mit-v0.30.1 in this repository. LEGACY-MIT-LICENSE.txt retains the exact
+MIT text and copyright notice. Existing MIT permissions, including commercial
+use, modification, distribution, sublicensing and sale under its conditions,
+are not revoked or restricted by this license. Unchanged imported MIT material
+retains those rights. This migration does not make the existing game exclusively
+proprietary. Preserve required notices in copies or substantial portions.
+
+No ownership is claimed over facts, ideas, game mechanics as such, material
+outside copyright protection, third-party components, or players' independently
+created original writing and designs. Independent licenses remain effective.
+
+2. Limited permission for new owned material
+
+The Owner permits individuals to play the officially hosted game for personal,
+non-commercial enjoyment, including browser copies necessarily made to do so.
+Individuals may download a copy for private, non-commercial evaluation and
+make private modifications for that evaluation. Retain copyright and license
+notices. This permission does not authorize redistributing those copies or
+modifications, operating another hosted game, or commercial exploitation of
+new material governed by this license.
+
+Players may non-commercially share adventure/map/Storybook data exported by the
+game for others to import and play, including the limited references to game
+content needed by those formats. Players retain rights in their own original
+contributions. This does not grant permission to distribute the game engine,
+asset library, or a monetized game copy. Previously granted MIT rights remain
+unaffected as stated in section 1.
+
+3. Rights reserved
+
+Except for the permissions above, mandatory law, existing MIT rights and other
+independent licenses, no permission is granted to copy, adapt, publish,
+distribute, sublicense, sell, rent, or commercially exploit the new protected
+material governed by this license. In particular, no permission is granted to
+sell game copies or access; monetize a copy/derivative through advertising,
+subscriptions, sponsorship, paid hosting, or in-game payments; reuse new
+protected code, assets or writing in another distributed/commercial product;
+or remove ownership notices or imply the Owner's endorsement.
+
+Obtain separate written permission from the Owner for those uses. Contact the
+YouKnowJP GitHub profile linked in README.md. No trademark license is granted;
+no registered trademark status is asserted.
+
+4. GitHub and third-party rights
+
+GitHub's applicable terms govern platform-required rights, including viewing
+and forking public repositories. Those platform rights are not a separate
+commercial license for new proprietary material. Independent third-party
+licenses remain effective for their respective material. See
+THIRD_PARTY_NOTICES.md and LEGACY-MIT-LICENSE.txt.
+
+5. No warranty; liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE MATERIAL IS PROVIDED "AS IS",
+WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, TITLE, OR NONINFRINGEMENT. THE OWNER IS NOT
+LIABLE FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM THE MATERIAL OR ITS
+USE. NOTHING EXCLUDES LIABILITY OR RIGHTS THAT CANNOT LAWFULLY BE EXCLUDED.
+
+This is a proprietary, source-available license for new owned material, not an
+open-source license. The earlier MIT grant and its conditions remain effective.

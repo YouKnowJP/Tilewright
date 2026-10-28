@@ -1,0 +1,88 @@
+import {blankAdventure,editAdventure,normalizeAdventure} from './workshop-model.mjs';
+import {transformAdventure} from './workshop-lab.mjs';
+import {normalizeBook} from './storybook-model.mjs';
+import {SAGA_CLEARS} from './saga-clears.mjs';
+export const SAGA_BOOKS=Object.freeze([
+ {id:'weather',title:'The Weatherkeepers’ Almanac',synopsis:'Six chapters about a town learning to welcome the rain: river wheels, lasting bridges, written songs, moving glass, and a seed carried home.',ending:'Nessa leaves the almanac open beside the window. It does not predict tomorrow. It reminds the town of all the ways they have already learned to care for one another.'},
+ {id:'courier',title:'The Night Post',synopsis:'Six longer deliveries through a city that keeps its promises after dark. Choose optional vaults and guarded treasures, use specialist routes, and bring the last letter home.',ending:'Mara hangs a new sign above the night post: EVERY ADDRESS IS SOMEONE WAITING. Beneath it, the last letter becomes the first page of a story the whole city can deliver.'},
+ {id:'together',title:'The Open Workshop',synopsis:'Six peaceful cooperative inventions. Coordinate two travelers, share a bridge, turn rooms, use waystones, rescue guests, and build a festival. Play both roles or share a device.',ending:'The workshop opens with no ribbon to cut. Its first invention is simply a long table, with room for anyone who would like to make a road beside someone else.'},
+]);
+const titles={weather:['The First Rain Post','Reed Counterpoint','The Orchard’s Forecast','The Wind-Glass Room','The Sleeping Pier','The Eye of the Rain'],courier:['The Last Stamp','The Whispering Market','The Lantern Express','An Address Below the Stars','The Midnight Exchange','A Letter Called Home'],together:['The Two Chairs','The Moving Classroom','Counterpoint for Two','A Room for a Guest','The Paper Theatre','The Founders’ Festival']};
+const ids={weather:['rain-post','reed-counterpoint','orchard-forecast','wind-glass','sleeping-pier','eye-of-rain'],courier:['last-stamp','whispering-market','lantern-express','address-below','midnight-exchange','letter-home'],together:['two-chairs','moving-classroom','counterpoint-duet','room-for-guest','paper-theatre','founders-festival']};
+const passages={
+ weather:['Nessa finds a letter addressed to the first rainy day. Its stamp is a wheel, its ink a river. Moss asks you to open the two old crossings and let the town remember how a road can carry water as well as people.','The reeds answer the new rain with a song in two parts. One voice is a crate that must stay behind; the other is a key that must keep moving. Ori has written a small note beside the bridge: leave something useful for your return.','An orchard bell rings before a drop reaches the ground. The forecast is written in the ember clock, not in the sky. Ring the garden’s words in order, read the free Plan, then find the far-bank wheel that can quiet the return crossing.','A room made of wind glass has forgotten which shore it belongs to. Its lantern turns with it. Nessa writes: a place can change without losing the things that matter. Take the dial’s measure before you choose another direction.','The tidekeeper has fallen asleep beside a letter that is still singing. Jun offers a shorter road or a little protection for the long way. Neither answer is wrong. Bring the parcel and its keeper home before you decide what the story meant.','Ori brings the last rainseed to the outer garden. Two lights, a bell song, and a patient counterweight stand between it and the town. The almanac ends with an empty page. Carry the seed home and give tomorrow somewhere to begin.'],
+ courier:['Mara sorts the post by the windows still lit after midnight. The last stamp belongs to a house beyond both crossings. A guarded side garden holds an optional keepsake; the ordinary delivery asks only that you find a reliable road.','At the whispering market, people trade routes as carefully as supplies. A wooden weight can keep a promise longer than a fleeting shortcut. Restore the market lamps and deliver the parcel; the brass vault is an invitation you may decline.','The lantern express has no engine. It runs on keys, shared signs, and keepers who remember the order of the road. Mara lends a specialist’s toolkit. Use its waystones if you wish, but leave a walking route that makes sense to the next courier.','A letter arrives with an address written beneath a drawing of a turning room. Its owner has moved the horizon, not the house. Follow the light inside the dial’s square, then find the person waiting beyond the second gate.','The midnight exchange offers three optional vaults. Their prices are written on the lids; no one will charge you for passing by. The real parcel waits beyond a bell song. Decide what you want to carry, and what you would rather leave quiet.','Mara recognizes her own handwriting on the last envelope. It is addressed to the night post, from a keeper who has been missing for years. Vesper listens in a side garden. Complete the rescue, bring the singing letter home, and choose whether the city needs one more daring story.'],
+ together:['Two chairs wait beside a bridge. One traveler can hold the way while the other restores a light. No one needs to be faster. Ask which place each of you would like to keep, then trade the controls when it is time to come home.','The classroom has a door in the wrong wall and a desk made from a brass dial. Bring Lantern keeper into its center before Pathfinder turns the room. The last lamp will unfold another return road for both of you.','The workshop’s first tune needs two steady notes. You can leave two crates on the plates, or let a traveler hold one while you find a different answer. The room has more than one useful arrangement; its best invention may be the one you make together.','A guest has arrived on the far shore with a parcel and no way to return. The workshop lends a pair of waystones and an Echoist’s kit. Leave space at the landing, share your energy, and invite the guest home after the lights are restored.','The paper theatre has two turning stages. Neither actor can perform the whole play alone. Carry Lantern keeper through each room with Pathfinder’s dial, then let the final lamps unfold a different road for your curtain call.','Everyone brings a small invention to the festival: a weight, a bell, a way to make room for a guest. Restore three lights, listen to the written song, and bring both guests and the singing heart home. The table has a place for both travelers.'],
+};
+export const SAGA_LEVELS=Object.freeze(SAGA_BOOKS.flatMap(book=>ids[book.id].map((id,index)=>({id,book:book.id,index,title:titles[book.id][index],passage:passages[book.id][index],orientation:book.id==='together'?(index===2?'mirror-x':index===3?'rotate':null):index%3===1?'rotate':index%3===2?'mirror-x':null}))));
+export function sagaWorld(id,{proof=true}={}) {
+ const spec=SAGA_LEVELS.find(level=>level.id===id);if(!spec)throw Error('Choose a new Storybook chapter.');
+ const {book,index}=spec,coop=book==='together',threeBanks=!coop||index>=4,w=25,h=17,base=blankAdventure(w,h),map=structuredClone(base.map);map.name=spec.title;
+ for(const layer of map.layers)layer.tiles.fill(layer===map.layers[0]?3:0);
+ const tile=(x,y,t=1,layer=0)=>{map.layers[layer].tiles[y*w+x]=t;};
+ const land=(x1,y1,x2,y2)=>{for(let y=y1;y<=y2;y++)for(let x=x1;x<=x2;x++)tile(x,y,(x*3+y+index)%13===0?2:1);};
+ if(threeBanks){land(1,1,7,15);land(9,1,15,15);land(17,1,23,15);}else{land(1,1,11,15);land(13,1,23,15);}
+ const markers=[],add=(kind,id,x,y,extra={})=>{if(markers.some(m=>m.id===id||m.x===x&&m.y===y&&!['ember','fern'].includes(kind)&&!['ember','fern'].includes(m.kind)))throw Error('Overlapping authored object '+id);markers.push({kind,id,x,y,...extra});};
+ add('start','start',2,8);add('beacon','home',2,9);add('guide','guide',3,11,{name:book==='weather'?'Nessa':coop?'Workshop keeper Tavi':'Postkeeper Mara',text:spec.passage});
+ let hints,storyCards=[],kit=coop&&index===3?'echoist':book==='courier'?['bellrunner','mistweaver','echoist'][index%3]:'none';
+ const gates={},room=(name,x,y,r=2)=>{for(let yy=y-r;yy<=y+r;yy++)for(let xx=x-r;xx<=x+r;xx++)tile(xx,yy,3);for(let d=0;d<=r;d++){tile(x-d,y,5);tile(x,y-d,5);}add('turntable',name,x,y,{name:name==='dial-a'?'First turning room':'Second turning room',span:r*2+1});};
+ const lever=(id,x,y,channel,required=false)=>add('lever',id,x,y,{name:id==='wheel-a'?'River wheel':id==='wheel-b'?'Far-bank wheel':'Return-road wheel',channel,required});
+ const song=which=>{add('bell','note-one',6,13,{name:'Road · note 1',order:1});add('bell','note-two',which==='a'?2:12,which==='a'?13:3,{name:'Neighbor · note 2',order:2});add('bell','note-three',which==='a'?7:14,which==='a'?7:11,{name:'Home · note 3',order:3});};
+ function crossing(which,kind){
+  const x=which==='a'?(threeBanks?8:12):16,y=which==='a'?(threeBanks?4:8):12,channel=which==='a'?'amber':'jade';gates[which]={x,y,kind};
+  if(kind==='room'){room('dial-'+which,x,y,threeBanks?2:3);return;}
+  if(kind==='none')return;
+  if(kind==='portal'){add('waystone','near-stone',5,3,{name:'Workshop waystone',channel:'violet'});add('waystone','far-stone',20,12,{name:'Guest-shore waystone',channel:'violet'});add('plate','weight-a',5,6,{channel});add('bridge','crossing-a',x,y,{channel});return;}
+  if(kind==='lever'){lever('wheel-'+which,which==='a'?4:12,which==='a'?6:10,channel,true);add('door','crossing-'+which,x,y,{channel});}
+  if(kind==='key'){add('gate','crossing-'+which,x,y);add('key','key-'+which,which==='a'?6:11,which==='a'?7:6);}
+  if(kind==='song'){song(which);add('signal','crossing-'+which,x,y);}
+  if(kind==='crate'||kind==='dualcrate'){
+   const px=which==='a'?6:13,py=which==='a'?(book==='courier'?6:4):12;add('crate','crate-'+which,px-1,py);add('plate','weight-'+which,px,py,{channel});add('bridge','crossing-'+which,x,y,{channel});
+   if(kind==='dualcrate'){add('crate','crate-extra',5,11);add('plate','weight-extra',6,11,{channel});}
+  }
+  if(kind==='plate'){add('plate','weight-a',5,6,{channel});add('bridge','crossing-a',x,y,{channel});}
+ }
+ const a=coop?['plate','room','dualcrate','portal','room','dualcrate'][index]:book==='weather'?['lever','crate','lever','room','song','crate'][index]:['key','lever','crate','room','song','lever'][index];
+ const b=coop?['none','none','none','none','room','song'][index]:book==='weather'?['lever','key','song','lever','lever','song'][index]:['lever','crate','key','key','lever','song'][index];
+ crossing('a',a);if(threeBanks)crossing('b',b);
+ add('lantern','far-light',22,4);if(index>=2)add('lantern','garden-light',22,13);if(index===5)add('lantern','third-light',19,14);
+ if(!coop&&index===3)add('lantern','turning-light',8,2);
+ add('coin','near-token',7,14);add('coin','far-token',23,14);add('coin','high-token',threeBanks?10:19,2);
+ if(coop){
+  add('partner','partner',3,10,{name:'Pathfinder'});
+  if(index===1||index===4){lever('return-wheel',4,13,'blue');add('door','return-a',threeBanks?8:12,threeBanks?12:14,{channel:'blue'});if(threeBanks)add('door','return-b',16,4,{channel:'blue'});storyCards.push({id:'card-1',when:'lanterns',source:'',effect:'open',target:'return-wheel',text:'The last light unfolds a return road. Both travelers can leave the turning rooms behind.'});}
+  if(index===2){add('bell','duet-first',5,2,{name:'Steady · note 1',order:1});add('bell','duet-second',21,12,{name:'Together · note 2',order:2});}
+  if(index===3){add('rescue','guest',21,7,{name:'Aster',text:'Restore both lamps, then return for me. The waystones have room for every traveler who waits for the landing to clear.'});add('relic','parcel',19,11,{name:'The guest’s singing parcel'});}
+  if(index===5){add('rescue','guest',21,7,{name:'Aster',text:'I brought an empty chair to the festival. Restore all three lights, then invite me home.'});add('rescue','second-guest',22,11,{name:'Iris',text:'I brought a tune with room for another voice. Come back when all the lamps are awake.'});add('relic','parcel',19,12,{name:'The festival’s singing heart'});}
+  hints={nudge:'Choose where each traveler can help. Lantern keeper restores lights; Pathfinder turns rooms. Either can push a crate or hold a plate.',focus:a==='plate'?'Leave Pathfinder on the plate and send Lantern keeper across. Bring the light back, then move both travelers beside the beacon.':a==='room'?'Bring Lantern keeper into the room’s center. Stand Pathfinder just to the west of its dial, then turn clockwise. Wake all lights to unfold the return road.':'You can leave lasting crates on plates, or let a traveler hold one. The written bell order stays in Quest. Both travelers must come home.',practice:'twin',target:a==='room'?'dial-a':'weight-a'};
+ }else{
+  if(index===0||index===4||index===5)add('rescue','guest',21,7,{name:book==='weather'?'Moss':'Ori',text:'Wake every lamp first, then return to invite me home. I will follow the traveler who comes back for me.'});
+  if(book==='courier'||index>=4)add('relic','parcel',20,11,{name:book==='weather'?'The sleeping rainseed':'The night post’s singing letter'});
+  if(index===2&&book==='weather'){
+   lever('return-wheel',20,14,'blue',true);add('ember','forecast-near',15,12,{channel:'blue',offset:1});add('ember','forecast-far',17,12,{channel:'blue',offset:0});
+  }
+  if(index>=4&&book==='weather'){
+   lever('return-wheel',4,13,'blue');add('door','return-a',8,12,{channel:'blue'});add('guide','route-keeper',5,10,{name:'Jun',reward:'route',channel:'blue',text:'I can open the remembered return road, or pack a shield and let you find its wheel. Both choices leave a way home.'});
+   storyCards.push({id:'card-1',when:'rescue',source:'guest',effect:'message',target:'',text:'The keeper joins your road. The parcel’s song sounds less lonely with another set of footsteps beside it.'});
+  }
+  if(book==='courier'){
+   // A completely optional, clearly bounded side garden. Its key is additional
+   // to all keys needed for the ordinary delivery.
+   for(let yy=1;yy<=5;yy++)for(let xx=1;xx<=4;xx++)if(xx===1||xx===4||yy===1||yy===5)tile(xx,yy,8,1);
+   tile(3,5,0,1);add('gate','garden-gate',3,5);add('key','garden-key',7,10);add('coin','garden-token',2,3);add('heart','garden-heart',3,3);add('fern','garden-cover',2,4);
+   add(index===5?'watcher':'hunter','garden-warden',2,2,{name:index===5?'Vesper, the Listener':'The garden listener',rival:index===5?'listener':undefined,nemesisOnly:true,vision:6,route:[{x:2,y:2},{x:3,y:2},{x:3,y:4},{x:2,y:4}]});
+   add('supplies','courier-pack',6,8);
+   if(index>0){const count=index===4?3:index===5?2:1;for(let n=0;n<count;n++)add('vault','vault-'+(n+1),[11,13,10][n],[14,7,5][n],{name:`Market vault ${n+1}`});}
+   if(index===2||index===5){add('waystone','near-stone',6,2,{name:'Post-road waystone',channel:'violet'});add('waystone','far-stone',19,3,{name:'Outer-post waystone',channel:'violet'});}
+  }
+  hints={nudge:a==='room'?'A room can change the road without losing its lantern. Let the dial turn the whole dashed square.':a==='crate'?'A weight left in the right place can keep a crossing open for the return.':a==='song'?'The first road listens for a written song. Its numbered bells are your map.':'Read the crossing’s mechanism, then plan an outward and a return route.',focus:book==='courier'?'The guarded garden and brass vaults are optional. Complete the delivery first in your plan; keep enough keys for the ordinary crossings. Restore every light before asking a keeper to follow.':'Operate the first crossing, then its far-bank partner. Read the bell order in Quest, leave crates on plates, and come back for the keeper after every lamp is lit.',practice:a==='room'?'rotate':a==='crate'?'crate':a==='song'||b==='song'?'bells':'crate',target:a==='room'?'dial-a':a==='crate'?'crate-a':a==='song'?'note-one':a==='key'?'key-a':'wheel-a'};
+ }
+ // Original gardens use distinct silhouettes while keeping main corridors legible.
+ for(let x=2;x<24;x+=3)for(const y of [1,15])if(map.layers[0].tiles[y*w+x]!==3&&!markers.some(m=>m.x===x&&m.y===y))tile(x,y,10,1);
+ for(const m of markers)if(!['bridge','door','signal'].includes(m.kind)){tile(m.x,m.y,1);tile(m.x,m.y,0,1);}
+ const intro=`${spec.passage} ${coop?'Both travelers must return beside the beacon. Switching with T is free.':book==='courier'?'The side garden and every vault are optional. Keep the normal exit in your plan.':'Take your time. Plan and conversations do not spend a turn.'}`;
+ let pack=editAdventure(base,{title:spec.title,author:'Lantern Trails',description:`${SAGA_BOOKS.find(b=>b.id===book).title} · Chapter ${index+1} · ${coop?'Peaceful cooperative invention':book==='courier'?'Delivery, optional risks & specialist routes':'An inventive road through the rain'}`,source:'Storybook original',theme:(book==='weather'?['woodland','marsh','woodland','aurora','coast','marsh']:book==='courier'?['archive','dunes','forge','aurora','archive','clockwork']:['woodland','archive','coast','aurora','clockwork','woodland'])[index],kit,map,markers,intro,hint:hints.focus,hints,storyCards,ending:passages[book][Math.min(index+1,5)]+ ' The road you leave behind is a little more welcoming.',par:Math.max(100,Math.ceil((SAGA_CLEARS[id]?.length||240)*1.25))});
+ if(spec.orientation)pack=transformAdventure(pack,spec.orientation);
+ return normalizeAdventure({...pack,...(proof&&SAGA_CLEARS[id]?{proof:{difficulty:'trail',actions:SAGA_CLEARS[id]}}:{})});
+}
+export function sagaBooks(){return SAGA_BOOKS.map(book=>normalizeBook({title:book.title,author:'Lantern Trails',synopsis:book.synopsis,ending:book.ending,chapters:SAGA_LEVELS.filter(s=>s.book===book.id).map(s=>({world:sagaWorld(s.id),passage:s.passage}))}));}

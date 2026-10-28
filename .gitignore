@@ -1,0 +1,29 @@
+# Operating-system files
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+.nyc_output/
+.cache/
+.tilewright-build-*/
+
+# Local configuration and secrets (commit examples with placeholder values)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs, browser-test output, and editor temporary files
+*.log
+.playwright-mcp/
+test-results/
+playwright-report/
+*.swp
+*.swo
+*~
+release.json

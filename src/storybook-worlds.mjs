@@ -1,0 +1,52 @@
+import { sagaBooks } from './saga-worlds.mjs';
+import { cartographerBook } from './cartographer-worlds.mjs';
+import { lanternfairBook } from './storybook-lanternfair.mjs';
+import { welcomeBook } from './storybook-welcome.mjs';
+import { puzzleLabWorld } from './workshop-lab.mjs';
+import { storyAdventure } from './storybook-adventures.mjs';
+import { normalizeBook } from './storybook-model.mjs';
+import { promiseBook } from './storybook-promise.mjs';
+
+export function featuredBooks() {
+  // These pars leave the recorded clean route attainable on both rule sets.
+  const pars = { counterweight:24, brassloop:31, bellgarden:53, footstep:11, tidekeeper:30, emberclock:43 };
+  const chapter = (id, passage) => ({ world: { ...puzzleLabWorld(id), par:pars[id] }, passage });
+  const original=(id,passage)=>({world:storyAdventure(id),passage});
+  return [
+    normalizeBook({ title: 'The Copperlight Caravan', author: 'Lantern Trails', synopsis: 'Three stops along a forgotten postal road. Repair a crossing, borrow a footstep, and deliver a song to the sea.', ending: 'At last the parcel sings. Along the coast, lamps answer one by one. The road remembers its keepers again.', chapters: [
+      chapter('counterweight', 'Vale’s last letter arrived without a stamp, carried by a moth made of copper. “The coast has gone quiet,” it said. “Bring the road back to life. Start with the old counterweight.”'),
+      chapter('footstep', 'Beyond the creek, two sets of footprints meet the river. One belongs to you. The other is waiting to be imagined. A ferryman’s note reads: “Sometimes help is the shadow you leave behind.”'),
+      chapter('tidekeeper', 'Salt brightens the air. Vale is waiting at the last crossing, a singing parcel under one arm. Across the water, Kelp has kept a lamp burning for a letter that never came.'),
+    ] }),
+    normalizeBook({ title: 'The Midnight Mechanists', author: 'Lantern Trails', synopsis: 'Keys, bells, and wheels: rebuild a clockwork garden before its last brass fruit loses its glow.', ending: 'The orchard hums in time with the bells. Tomorrow, the mechanists will find their garden awake. Tonight, its light belongs to you.', chapters: [
+      chapter('brassloop', 'A tiny key turns up in your breakfast. Attached is an invitation: “The Midnight Mechanists request a keeper with a talent for finding the long way around.” The vault keeps their first secret.'),
+      chapter('bellgarden', 'Inside the vault is a score for three bells: Dew, Dusk, Moon. The garden gates will hear no other song. Take its scattered tokens; each is a tooth from a sleeping clock.'),
+      chapter('emberclock', 'The clock’s heart lies inside a glowing orchard. Its wheels move more than doors. Watch the channels, cool the embers, and bring every brass fruit home.'),
+    ] }),
+    normalizeBook({ title: 'Six Lights Before Dawn', author: 'Lantern Trails', synopsis: 'The long route: all six Puzzle Lab worlds in one story, with a fresh optional challenge at every camp.', ending: 'Six lights meet the sunrise. Every crossing, conversation, and small invention has become a chapter in a road that someone else can follow.', chapters: [
+      chapter('counterweight', 'The atlas has lost six lights. You have one night, a notebook, and a promise: leave every place a little brighter than you found it.'),
+      chapter('brassloop', 'Your notebook gains its first sketch: a crate that became a bridge. The next page holds two keyholes, and a path that doubles back on itself.'),
+      chapter('bellgarden', 'A bell rings somewhere beyond the trees. Two more answer. Write down their order; this garden remembers melodies better than footsteps.'),
+      chapter('footstep', 'Halfway home, the river asks for something you cannot carry: another version of yourself. Or perhaps the answer is already sitting on the bank.'),
+      chapter('tidekeeper', 'A keeper’s story joins yours. Listen before you choose your route. There is room in this notebook for more than one voice.'),
+      chapter('emberclock', 'Only the orchard remains. Its brass fruit glows like the coming sunrise. Follow the channels, turn the wheels, and write the final line.'),
+    ] }),
+    normalizeBook({ title:'The Rainmaker’s Letters', author:'Lantern Trails', synopsis:'A letter addressed to the first rainy day. A town that has forgotten rain. Follow Nessa, Moss, and Ori across four original maps to bring the weather home.', ending:'By morning, the canals have names again. Nessa opens the post office to find a hundred letters waiting, each addressed to something someone missed: the smell of wet stone, a muddy footprint, a garden after thunder. She pins one envelope above the door. It is empty now, except for a map and your name. Outside, Ori plants the first silver seed. This time, nobody has to ask it to grow.', chapters:[
+      original('undelivered','All summer, the town has waited for rain. Nessa has spent every afternoon sorting the same dry post. Today she finds an envelope addressed to “the first rainy day,” written in a hand she almost recognizes. She will not open a letter that belongs to someone else. But she asks if you might carry it somewhere the sky can read it. The old roof lantern, perhaps. If the crossings still remember the way.'),
+      original('sluices','The letter unfolds into a drawing of the town before the canals went quiet. A blue line joins two sluices, then loops back to where it began. Below it, a note: “A river is a promise you make twice: once to go, once to return.” Moss waits on the lower bank with a wheel that cannot be reached from here. He has been watering one reed from a teacup. “Start with the other wheel,” he calls. “I think it still trusts us.”'),
+      original('orchard','Water reaches the orchard, but the clouds do not follow. Ori hangs four bells among the branches. “Rain, Root, River, Home,” she says. “My mother sang it when the weather was lost.” Four brass seeds lie scattered outside the hedge. Each is warm as a sleeping bird. Walk the song through the garden. Let the bells hear each other. Some doors open only when you take the time to listen.'),
+      original('rainhome','The final seed points toward the coast. Nessa and Moss have gone ahead to light the old rain station, but the bridge has dried behind them. Ori waits on the western shore, holding the child’s drawing you found in the orchard. It is hers. “I drew this the last time it rained,” she says. “I thought, if I remembered enough of it, it would find us again.” Across the inlet, two lamps are dark. Bring everyone home before you plant the last seed.'),
+    ] }),
+    normalizeBook({ title:'The Observatory of Borrowed Stars', author:'Lantern Trails', synopsis:'Someone has erased an apprentice from the sky’s ledger. Follow an echo through four original chapters of memory bridges, broken time, hidden constellations, and a shared-star finale.', ending:'The observatory stops counting stars. Instead, Ilex begins a new ledger: a light in Nessa’s window, a glimmer on Moss’s canal, a paper star Ori has tied to a branch. Sable leaves the great telescope pointing at the town. Eid’s final page is no longer a promise to be kept, but a story that has been told. When you look up, the sky seems no brighter than before. It is simply less lonely. There is room in it for every name.', chapters:[
+      original('remembering','The observatory’s door opens for a keeper who has been gone for a hundred years. Inside stands Eid, an echo wearing a coat of remembered light. “I borrowed the stars,” he says, “and promised to give them back.” Beyond him is a bridge that needs someone to stay behind. Perhaps your double can hold it. Perhaps an old crate is a kinder answer. Cross into the archive and find out whose promise this really was.'),
+      original('seconds','The ledger lists every borrowed star. Beside one, a name has been rubbed away. Astronomer Sable recognizes the handwriting: Ilex, her missing apprentice. The clock heart stopped on the night Ilex disappeared, breaking the island road into Yesterday, Tomorrow, and Now. “A machine remembers events,” Sable says. “People remember why they mattered.” Bring the heart home. Give the broken road its present back.'),
+      original('constellation','A note from Ilex leads to a garden the old sentinel still patrols. The apprentice hid the stars here, afraid that returning them would leave the town dark. The sentinel knows every straight path and learns repeated footsteps. It knows very little about waiting, ferns, or choosing the long way around. Sable leaves you a field pack. Find Ilex after both lights are restored. This time, let the missing person choose to come home.'),
+      original('everyone','Ilex brings a paper star to the last crossing. Eid carries the ledger. Neither knows how to finish the promise alone. Sable points to the bells on three banks: Keeper, Neighbor, Stranger. “A sky is not a collection,” she says. “It is something we share.” Leave both counterweights where they can help the return journey. Cool the far bridge, restore the lights, and bring Eid back with the star that has room for everyone.'),
+    ] }),
+    promiseBook(),
+    welcomeBook(),
+    lanternfairBook(),
+    cartographerBook(),
+    ...sagaBooks(),
+  ];
+}

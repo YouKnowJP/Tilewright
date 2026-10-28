@@ -1,0 +1,1212 @@
+[
+  {
+    "id": "rules06-playing",
+    "phase": "playing",
+    "turns": 17,
+    "player": {
+      "x": 13,
+      "y": 10
+    },
+    "checkpoint": {
+      "version": 1,
+      "rules": "0.6.0",
+      "state": {
+        "id": "legacy-playing",
+        "config": {
+          "mode": "journey",
+          "seed": "long-way-home",
+          "length": 9,
+          "difficulty": "trail",
+          "vow": "none"
+        },
+        "leg": 0,
+        "path": "s",
+        "phase": "playing",
+        "perks": [],
+        "legMemory": {
+          "observations": 0,
+          "last": null,
+          "counts": {
+            "up": 0,
+            "right": 0,
+            "down": 0,
+            "left": 0,
+            "wait": 0,
+            "dash-up": 0,
+            "dash-right": 0,
+            "dash-down": 0,
+            "dash-left": 0
+          },
+          "transitions": {
+            "up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "wait": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            }
+          }
+        },
+        "loadout": {
+          "health": 3,
+          "decoys": 2,
+          "shields": 2
+        },
+        "journal": [
+          "interact:guide",
+          "choose:shield",
+          "close-dialogue",
+          "dash-right",
+          "right",
+          "dash-right",
+          "down",
+          "down",
+          "dash-down",
+          "right",
+          "down",
+          "right",
+          "dash-right",
+          "right",
+          "dash-down",
+          "down",
+          "down",
+          "down",
+          "dash-up",
+          "up"
+        ],
+        "receipts": [],
+        "retries": 0
+      },
+      "fingerprint": "31d70c9c"
+    }
+  },
+  {
+    "id": "rules06-dialogue",
+    "phase": "playing",
+    "turns": 0,
+    "player": {
+      "x": 3,
+      "y": 3
+    },
+    "checkpoint": {
+      "version": 1,
+      "rules": "0.6.0",
+      "state": {
+        "id": "legacy-dialogue",
+        "config": {
+          "mode": "journey",
+          "seed": "long-way-home",
+          "length": 9,
+          "difficulty": "trail",
+          "vow": "none"
+        },
+        "leg": 0,
+        "path": "s",
+        "phase": "playing",
+        "perks": [],
+        "legMemory": {
+          "observations": 0,
+          "last": null,
+          "counts": {
+            "up": 0,
+            "right": 0,
+            "down": 0,
+            "left": 0,
+            "wait": 0,
+            "dash-up": 0,
+            "dash-right": 0,
+            "dash-down": 0,
+            "dash-left": 0
+          },
+          "transitions": {
+            "up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "wait": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            }
+          }
+        },
+        "loadout": {
+          "health": 3,
+          "decoys": 2,
+          "shields": 2
+        },
+        "journal": [
+          "interact:guide"
+        ],
+        "receipts": [],
+        "retries": 0
+      },
+      "fingerprint": "122f3dab"
+    }
+  },
+  {
+    "id": "rules06-camp",
+    "phase": "camp",
+    "turns": 80,
+    "player": {
+      "x": 13,
+      "y": 13
+    },
+    "checkpoint": {
+      "version": 1,
+      "rules": "0.6.0",
+      "state": {
+        "id": "legacy-camp",
+        "config": {
+          "mode": "journey",
+          "seed": "long-way-home",
+          "length": 9,
+          "difficulty": "trail",
+          "vow": "none"
+        },
+        "leg": 0,
+        "path": "s",
+        "phase": "camp",
+        "perks": [],
+        "legMemory": {
+          "observations": 0,
+          "last": null,
+          "counts": {
+            "up": 0,
+            "right": 0,
+            "down": 0,
+            "left": 0,
+            "wait": 0,
+            "dash-up": 0,
+            "dash-right": 0,
+            "dash-down": 0,
+            "dash-left": 0
+          },
+          "transitions": {
+            "up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "wait": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            }
+          }
+        },
+        "loadout": {
+          "health": 3,
+          "decoys": 2,
+          "shields": 2
+        },
+        "journal": [
+          "interact:guide",
+          "choose:shield",
+          "close-dialogue",
+          "dash-right",
+          "right",
+          "dash-right",
+          "down",
+          "down",
+          "dash-down",
+          "right",
+          "down",
+          "right",
+          "dash-right",
+          "right",
+          "dash-down",
+          "down",
+          "down",
+          "down",
+          "dash-up",
+          "up",
+          "dash-up",
+          "left",
+          "shield",
+          "left",
+          "dash-left",
+          "left",
+          "left",
+          "left",
+          "dash-left",
+          "left",
+          "right",
+          "interact:supply-0",
+          "shield",
+          "dash-right",
+          "right",
+          "dash-right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "dash-up",
+          "up",
+          "dash-up",
+          "right",
+          "right",
+          "right",
+          "dash-right",
+          "right",
+          "dash-right",
+          "right",
+          "down",
+          "right",
+          "down",
+          "dash-down",
+          "down",
+          "dash-left",
+          "left",
+          "left",
+          "left",
+          "dash-right",
+          "right",
+          "dash-right",
+          "up",
+          "up",
+          "dash-up",
+          "up",
+          "wait",
+          "dash-left",
+          "left",
+          "left",
+          "left",
+          "left",
+          "dash-left",
+          "left",
+          "dash-down",
+          "left",
+          "down",
+          "dash-down",
+          "down",
+          "down",
+          "down",
+          "dash-down",
+          "down"
+        ],
+        "receipts": [
+          {
+            "leg": 0,
+            "family": "lantern",
+            "biome": "dunes",
+            "score": 930,
+            "turns": 80,
+            "stars": 3,
+            "damage": 0,
+            "coins": 0,
+            "totalCoins": 6,
+            "delivered": false,
+            "rescues": 0,
+            "relays": 0
+          }
+        ],
+        "retries": 0
+      },
+      "fingerprint": "85aed396"
+    }
+  },
+  {
+    "id": "rules06-lost",
+    "phase": "lost",
+    "turns": 29,
+    "player": {
+      "x": 4,
+      "y": 8
+    },
+    "checkpoint": {
+      "version": 1,
+      "rules": "0.6.0",
+      "state": {
+        "id": "legacy-lost",
+        "config": {
+          "mode": "journey",
+          "seed": "crown-run",
+          "length": 6,
+          "difficulty": "nemesis",
+          "vow": "unwarded"
+        },
+        "leg": 1,
+        "path": "ss",
+        "phase": "lost",
+        "perks": [
+          "ward"
+        ],
+        "legMemory": {
+          "observations": 72,
+          "last": "right",
+          "counts": {
+            "up": 9,
+            "right": 14,
+            "down": 9,
+            "left": 17,
+            "wait": 1,
+            "dash-up": 4,
+            "dash-right": 8,
+            "dash-down": 4,
+            "dash-left": 6
+          },
+          "transitions": {
+            "up": {
+              "up": 2,
+              "right": 2,
+              "down": 0,
+              "left": 1,
+              "wait": 0,
+              "dash-up": 3,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 1
+            },
+            "right": {
+              "up": 0,
+              "right": 5,
+              "down": 1,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 1,
+              "dash-right": 6,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "down": {
+              "up": 1,
+              "right": 0,
+              "down": 3,
+              "left": 1,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 4,
+              "dash-left": 0
+            },
+            "left": {
+              "up": 3,
+              "right": 2,
+              "down": 0,
+              "left": 6,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 1,
+              "dash-down": 0,
+              "dash-left": 5
+            },
+            "wait": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 1,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-up": {
+              "up": 3,
+              "right": 0,
+              "down": 0,
+              "left": 1,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-right": {
+              "up": 0,
+              "right": 5,
+              "down": 2,
+              "left": 0,
+              "wait": 1,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-down": {
+              "up": 0,
+              "right": 0,
+              "down": 3,
+              "left": 1,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 6,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            }
+          }
+        },
+        "loadout": {
+          "health": 3,
+          "decoys": 2,
+          "shields": 2
+        },
+        "journal": [
+          "interact:guide",
+          "choose:decoy",
+          "close-dialogue",
+          "dash-right",
+          "right",
+          "dash-right",
+          "down",
+          "down",
+          "dash-down",
+          "left",
+          "down",
+          "dash-left",
+          "left",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait",
+          "wait"
+        ],
+        "receipts": [
+          {
+            "leg": 0,
+            "family": "rescue",
+            "biome": "dunes",
+            "score": 1050,
+            "turns": 72,
+            "stars": 3,
+            "damage": 0,
+            "coins": 0,
+            "totalCoins": 6,
+            "delivered": false,
+            "rescues": 1,
+            "relays": 0
+          }
+        ],
+        "retries": 0
+      },
+      "fingerprint": "33645b5c"
+    }
+  },
+  {
+    "id": "rules06-cargo",
+    "phase": "playing",
+    "turns": 45,
+    "player": {
+      "x": 9,
+      "y": 13
+    },
+    "checkpoint": {
+      "version": 1,
+      "rules": "0.6.0",
+      "state": {
+        "id": "legacy-cargo",
+        "config": {
+          "mode": "contract",
+          "seed": "single-trail-unwarded",
+          "length": 1,
+          "difficulty": "trail",
+          "vow": "unwarded"
+        },
+        "leg": 0,
+        "path": "s",
+        "phase": "playing",
+        "perks": [],
+        "legMemory": {
+          "observations": 0,
+          "last": null,
+          "counts": {
+            "up": 0,
+            "right": 0,
+            "down": 0,
+            "left": 0,
+            "wait": 0,
+            "dash-up": 0,
+            "dash-right": 0,
+            "dash-down": 0,
+            "dash-left": 0
+          },
+          "transitions": {
+            "up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "wait": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            }
+          }
+        },
+        "loadout": {
+          "health": 3,
+          "decoys": 2,
+          "shields": 2
+        },
+        "journal": [
+          "interact:guide",
+          "choose:decoy",
+          "close-dialogue",
+          "dash-right",
+          "right",
+          "right",
+          "dash-right",
+          "wait",
+          "right",
+          "dash-right",
+          "right",
+          "dash-right",
+          "right",
+          "right",
+          "down",
+          "right",
+          "dash-down",
+          "down",
+          "down",
+          "dash-up",
+          "up",
+          "dash-up",
+          "left",
+          "left",
+          "left",
+          "dash-left",
+          "down",
+          "down",
+          "dash-down",
+          "down",
+          "left",
+          "dash-left",
+          "left",
+          "left",
+          "dash-left",
+          "left",
+          "left",
+          "left",
+          "down",
+          "dash-down",
+          "down",
+          "right",
+          "down",
+          "dash-right",
+          "right",
+          "right",
+          "right",
+          "interact:relic"
+        ],
+        "receipts": [],
+        "retries": 0
+      },
+      "fingerprint": "4ca871a1"
+    }
+  },
+  {
+    "id": "rules06-finish",
+    "phase": "won",
+    "turns": 58,
+    "player": {
+      "x": 4,
+      "y": 3
+    },
+    "checkpoint": {
+      "version": 1,
+      "rules": "0.6.0",
+      "state": {
+        "id": "legacy-finish",
+        "config": {
+          "mode": "contract",
+          "seed": "single-trail-unwarded",
+          "length": 1,
+          "difficulty": "trail",
+          "vow": "unwarded"
+        },
+        "leg": 0,
+        "path": "s",
+        "phase": "won",
+        "perks": [],
+        "legMemory": {
+          "observations": 0,
+          "last": null,
+          "counts": {
+            "up": 0,
+            "right": 0,
+            "down": 0,
+            "left": 0,
+            "wait": 0,
+            "dash-up": 0,
+            "dash-right": 0,
+            "dash-down": 0,
+            "dash-left": 0
+          },
+          "transitions": {
+            "up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "wait": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-up": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-right": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-down": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            },
+            "dash-left": {
+              "up": 0,
+              "right": 0,
+              "down": 0,
+              "left": 0,
+              "wait": 0,
+              "dash-up": 0,
+              "dash-right": 0,
+              "dash-down": 0,
+              "dash-left": 0
+            }
+          }
+        },
+        "loadout": {
+          "health": 3,
+          "decoys": 2,
+          "shields": 2
+        },
+        "journal": [
+          "interact:guide",
+          "choose:decoy",
+          "close-dialogue",
+          "dash-right",
+          "right",
+          "right",
+          "dash-right",
+          "wait",
+          "right",
+          "dash-right",
+          "right",
+          "dash-right",
+          "right",
+          "right",
+          "down",
+          "right",
+          "dash-down",
+          "down",
+          "down",
+          "dash-up",
+          "up",
+          "dash-up",
+          "left",
+          "left",
+          "left",
+          "dash-left",
+          "down",
+          "down",
+          "dash-down",
+          "down",
+          "left",
+          "dash-left",
+          "left",
+          "left",
+          "dash-left",
+          "left",
+          "left",
+          "left",
+          "down",
+          "dash-down",
+          "down",
+          "right",
+          "down",
+          "dash-right",
+          "right",
+          "right",
+          "right",
+          "interact:relic",
+          "dash-left",
+          "left",
+          "dash-left",
+          "up",
+          "left",
+          "up",
+          "up",
+          "dash-up",
+          "up",
+          "dash-up",
+          "up",
+          "up",
+          "right"
+        ],
+        "receipts": [
+          {
+            "leg": 0,
+            "family": "courier",
+            "biome": "ruins",
+            "score": 1040,
+            "turns": 58,
+            "stars": 3,
+            "damage": 0,
+            "coins": 0,
+            "totalCoins": 6,
+            "delivered": true,
+            "rescues": 0,
+            "relays": 0
+          }
+        ],
+        "retries": 0
+      },
+      "fingerprint": "7f82674f"
+    }
+  }
+]

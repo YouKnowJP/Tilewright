@@ -1,0 +1,74 @@
+/* Preferences enlarge the actual interface, without scaling the whole page. */
+#settings-access[hidden],#game-reading-view[hidden] { display:none; }
+.settings-tabs { display:grid;grid-template-columns:repeat(2,minmax(0,1fr)); }
+.settings-tabs button { white-space:normal; }
+.access-welcome { padding:18px; margin:16px 0; background:#163832;border:1px solid #8ba983;border-radius:8px; }
+.access-welcome h3 { margin:0 0 10px;color:#fff2cc;font-size:20px; }
+.access-welcome p { margin:8px 0 14px; }
+#settings-access>.control-field { margin-top:22px; }
+#settings-access details { margin:20px 0; }
+#settings-access-reset { margin-top:12px; }
+.reading-view { padding:12px 16px;border:1px solid #8ba983;background:#102a29;color:#f4f5e8;border-radius:6px;margin:12px 0; }
+.reading-view summary { cursor:pointer;font-size:16px;font-weight:700;min-height:32px; }
+.reading-view p { font-size:var(--adventure-text-size,16px);line-height:1.65;overflow-wrap:anywhere;margin:10px 0; }
+body[data-game-text="large"] { --reading-ui-size:16px;--reading-heading-size:20px; }
+body[data-game-text="largest"] { --reading-ui-size:20px;--reading-heading-size:24px; }
+body:is([data-game-text="large"],[data-game-text="largest"]) :is(p,button,input,textarea,select,label,summary,li,dt,dd,output,kbd,small,.game-select-option,.game-select-value,.control-field) { font-size:var(--reading-ui-size)!important;line-height:1.55; }
+body:is([data-game-text="large"],[data-game-text="largest"]) :is(h3,h4,h5) { font-size:var(--reading-heading-size)!important;line-height:1.4; }
+body:is([data-game-text="large"],[data-game-text="largest"]) :is(button,summary,label,.game-hud,.game-input-state) :is(span,small,strong) { font-size:inherit!important; }
+body:is([data-game-text="large"],[data-game-text="largest"]) #game-status-text { font-size:var(--adventure-text-size)!important; }
+body:is([data-game-text="large"],[data-game-text="largest"]) :is(#conversation-lines,#forecast-lines,.reading-view) p { font-size:var(--adventure-text-size)!important; }
+body:is([data-game-text="large"],[data-game-text="largest"]) :is(.game-toolbar-actions,.game-input-strip,.game-control-tools,.option-buttons,.book-actions,.ws-actions) { flex-wrap:wrap; }
+body:is([data-game-text="large"],[data-game-text="largest"]) :is(button,summary) { white-space:normal;overflow-wrap:anywhere;min-height:44px; }
+body:is([data-game-text="large"],[data-game-text="largest"]) .game-hud { flex-wrap:wrap; }
+body:is([data-game-text="large"],[data-game-text="largest"]) .game-hud>div { min-width:70px; }
+body:is([data-game-text="large"],[data-game-text="largest"]) .game-toolbar { flex-wrap:wrap; }
+body:is([data-game-text="large"],[data-game-text="largest"]) .game-select-value { white-space:normal; }
+body[data-game-contrast="high"] { background:#071619;color:#ffffff; }
+body[data-game-contrast="high"] :is(.front-dialog,.trail-dialog,.maker-drawer,.game-main,.game-aside,.game-title-screen,.front-home,.front-modes,.front-journal,.book-cover,.book-camp,.ws-shelf-card,.access-welcome,.reading-view,.game-status,.game-select-popup,.game-select-listbox) { background:#071619!important;color:#ffffff; border-color:#dceaf0; }
+body[data-game-contrast="high"] :is(p,label,summary,li,dt,dd,small,h1,h2,h3,h4,h5,.eyebrow,.title-kicker,.game-region,.ws-footnote) { color:#ffffff!important;text-shadow:none!important; }
+body[data-game-contrast="high"] :is(button,input,textarea,select,.game-select-trigger,.game-select-option,.game-menu>div) { background:#102a33!important;color:#fff5bf!important;border-color:#cedee6!important; }
+body[data-game-contrast="high"] :is(button[aria-pressed="true"],[aria-selected="true"],.game-select-option[aria-selected="true"]) { border:2px solid #fff4ac!important;text-decoration:underline;text-underline-offset:4px; }
+body[data-game-contrast="high"] :is(button:disabled,input:disabled) { color:#bac8cf!important;opacity:1;border-style:dashed; }
+body[data-game-contrast="high"] a { color:#fff4ac!important;text-decoration:underline; }
+:focus-visible { outline:3px solid #fff3a4;outline-offset:4px; }
+@media(max-width:600px) {
+  body:is([data-game-text="large"],[data-game-text="largest"]) :is(.controls-pair,.book-library-heading,.book-form,.ws-filter-row) { grid-template-columns:minmax(0,1fr); }
+  body:is([data-game-text="large"],[data-game-text="largest"]) .game-hud { display:grid;grid-template-columns:repeat(3,minmax(0,1fr)); }
+  body:is([data-game-text="large"],[data-game-text="largest"]) .game-toolbar-actions { width:100%; }
+  body:is([data-game-text="large"],[data-game-text="largest"]) .game-input-strip { align-items:flex-start; }
+  .settings-dialog { padding:20px; }
+}
+@media (forced-colors:active) {
+  button,input,textarea,select,[role="combobox"] { border:1px solid ButtonText; }
+  :focus-visible { outline:3px solid Highlight; }
+}
+
+.reading-directions { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;list-style:none;padding:0;margin:12px 0; }
+.reading-directions li { font-size:var(--adventure-text-size,16px);line-height:1.55; }
+@media(max-width:420px){.reading-directions{grid-template-columns:minmax(0,1fr);}}
+
+body:is([data-game-text="large"],[data-game-text="largest"]) .game-hud>div>span { font-size:var(--reading-ui-size)!important;letter-spacing:0;overflow-wrap:anywhere; }
+body:is([data-game-text="large"],[data-game-text="largest"]) .resource-meter svg { width:22px;height:22px; }
+body:is([data-game-text="large"],[data-game-text="largest"]) .game-hud strong { font-size:var(--reading-ui-size)!important; }
+@media(max-width:420px){body[data-game-text="largest"] .game-hud{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
+#title-accessibility { font-size:16px;min-height:48px;letter-spacing:.02em; }
+
+/* Endings and pause controls are full reading panels, rather than a tiny scroller. */
+.playing #game-layout:has(#game-overlay:not([hidden])) { height:auto;min-height:0; }
+.playing #game-layout:has(#game-overlay:not([hidden])) .game-main { height:auto; }
+.playing #game-viewport:has(#game-overlay:not([hidden])) { flex:none;height:auto;min-height:0;padding:20px; }
+#game-viewport:has(#game-overlay:not([hidden]))>canvas { display:none; }
+.playing #game-overlay:not([hidden]) { position:relative;inset:auto;width:100%;max-width:680px;height:auto;max-height:none;overflow:visible;flex-shrink:0;margin:0; }
+body[data-game-contrast="high"] #game-overlay { background:#071619;color:#fff;border-color:#dceaf0;box-shadow:none; }
+@media(max-width:420px){.playing #game-viewport:has(#game-overlay:not([hidden])){padding:12px;}.playing #game-overlay:not([hidden]){padding:20px 14px;}}
+body:is([data-game-text="large"],[data-game-text="largest"]) :is(.ws-heading,.ws-heading-actions,.ws-section-heading,.ws-banner,.ws-shelf-tools,.ws-build-heading,.ws-lab-tools,.ws-lab-collections) { flex-wrap:wrap; }
+body:is([data-game-text="large"],[data-game-text="largest"]) :is(.ws-heading,.ws-section-heading,.ws-banner)>div { min-width:0; }
+body:is([data-game-text="large"],[data-game-text="largest"]) .ws-navigation button { min-width:0; }
+body:is([data-game-text="large"],[data-game-text="largest"]) .adventure-workshop :is(p,h2,h3,h4,label,summary) { overflow-wrap:anywhere; }
+@media(max-width:1000px){
+ body:is([data-game-text="large"],[data-game-text="largest"]) .ws-navigation { display:grid;grid-template-columns:repeat(3,minmax(0,1fr)); }
+ body:is([data-game-text="large"],[data-game-text="largest"]) .ws-heading-actions { width:100%; }
+ body[data-game-text="largest"] .ws-lab-room { grid-template-columns:minmax(0,1fr); }
+}

@@ -1,0 +1,37 @@
+.settings-tabs #settings-tab-data { grid-column:1 / -1; }
+.traveler-intro { display:grid;grid-template-columns:136px minmax(0,1fr);gap:20px;align-items:center;margin:22px 0;padding:18px;border:1px solid #8ca17a;background:#173a36; }
+.traveler-intro h3 { margin:8px 0;font-size:26px;line-height:1.2;overflow-wrap:anywhere; }
+.traveler-intro p { margin:8px 0; }
+.traveler-portrait { min-width:0; }
+.traveler-portrait canvas { display:block;width:128px;max-width:100%;height:auto;image-rendering:pixelated;border:1px solid #c8b97c; }
+.traveler-portrait button { width:100%;margin-top:8px;min-height:44px;padding:8px;font-size:12px; }
+.traveler-presets,.traveler-camp { min-width:0;border:1px solid #7f956e;padding:14px;margin:20px 0; }
+.traveler-presets legend,.traveler-camp legend { padding:0 8px;color:#efdb9c;font-size:16px; }
+.traveler-outfits { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
+.traveler-outfit { display:flex;gap:10px;align-items:center;min-width:0;min-height:86px;padding:8px!important;text-align:left; }
+.traveler-outfit canvas { width:56px;height:56px;flex:0 0 56px;image-rendering:pixelated;border:1px solid #899879; }
+.traveler-outfit span { min-width:0; }.traveler-outfit strong { display:block;font:14px/1.4 var(--game-font,Georgia,serif);overflow-wrap:anywhere; }.traveler-outfit small { display:block;margin-top:5px;font-size:11px;line-height:1.4;color:#cbd3b4; }
+.traveler-outfit[aria-pressed="true"] { border-color:#f5d589!important;background:#385441!important;box-shadow:inset 0 0 0 1px #f5d589; }
+.traveler-fields { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px; }
+.traveler-fields .control-field { min-width:0; }.traveler-fields :is(select,.game-select-trigger) { width:100%; }
+#traveler-tailoring { border:1px solid #7f956e;padding:14px; }#traveler-tailoring>summary { min-height:44px;align-content:center;cursor:pointer;font-size:18px; }
+#traveler-name { box-sizing:border-box;width:100%;min-height:44px;padding:10px;background:#132f2f;color:#f5edce;border:1px solid #9ca883;font:inherit; }
+.traveler-description { border-left:3px solid #e4c884;padding-left:14px;overflow-wrap:anywhere;font-size:14px;line-height:1.6; }
+.traveler-actions { display:flex;flex-wrap:wrap;gap:10px; }.traveler-actions button { min-height:44px; }
+.traveler-invitation { margin-top:24px;padding:18px;border:1px solid #af9266;background:#2c3c32; }.traveler-invitation h3 { margin:8px 0;font-size:24px; }.traveler-invitation button { max-width:100%;white-space:normal;min-height:44px; }
+body[data-game-camp="sunrise"] .traveler-intro { background:#443d3e; }body[data-game-camp="starfall"] .traveler-intro { background:#252e49; }
+body[data-game-contrast="high"] :is(.traveler-intro,.traveler-invitation,.traveler-outfit) { background:#06181b!important;color:#fff;border-color:#c5e0da; }
+body[data-game-text="largest"] .traveler-outfit strong { font-size:18px; }body[data-game-text="largest"] .traveler-outfit small { font-size:15px; }
+@media(max-width:520px){.traveler-intro{grid-template-columns:96px minmax(0,1fr);gap:12px;padding:12px;}.traveler-intro h3{font-size:23px;}.traveler-outfit{flex-direction:column;align-items:flex-start;}.traveler-fields{grid-template-columns:minmax(0,1fr);}.traveler-presets,.traveler-camp{padding:10px;}.traveler-intro .ws-footnote{display:none;}}
+@media(max-width:360px){.traveler-outfits{grid-template-columns:minmax(0,1fr);}.traveler-outfit{flex-direction:row;align-items:center;}.traveler-intro{grid-template-columns:80px minmax(0,1fr);}.traveler-intro h3{font-size:21px;}}
+
+.traveler-favorites { margin:20px 0;padding:14px;border:1px solid #7f956e; }
+.traveler-favorites>summary { min-height:44px;align-content:center;cursor:pointer;font-size:18px; }
+.traveler-favorite { display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px;padding:16px 0;border-top:1px solid #657b63; }
+.traveler-favorite canvas { width:72px;height:72px;image-rendering:pixelated;border:1px solid #899879; }.traveler-favorite canvas.is-empty{opacity:.45;}
+.traveler-favorite label { display:block;font-size:14px; }.traveler-favorite input{display:block;box-sizing:border-box;width:100%;min-width:0;min-height:44px;margin-top:6px;padding:8px;background:#132f2f;color:#f5edce;border:1px solid #9ca883;font:inherit;}
+.traveler-favorite .traveler-actions button { max-width:100%;white-space:normal;min-height:44px; }
+#traveler-favorites-undo { min-height:44px;max-width:100%;white-space:normal; }
+@media(max-width:520px){.traveler-favorite{grid-template-columns:48px minmax(0,1fr);gap:10px;}.traveler-favorite canvas{width:48px;height:48px;}.traveler-favorite .traveler-actions{display:grid;grid-template-columns:minmax(0,1fr);}}
+
+.traveler-favorite .controls-help { overflow-wrap:anywhere; }

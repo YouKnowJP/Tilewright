@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import http from 'node:http';
+import {execFileSync} from 'node:child_process';
+import {mkdtemp,mkdir,rm,writeFile,readFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {build} from '../build.mjs';
+import {createDevServer} from '../../serve.mjs';
+import {enterFirstTrail} from './ui-driver.mjs';
+import {playGuild} from './guild-browser-checks.mjs';
+import {TRAIL_SAVE_KEY} from '../../src/adventure-rewind.mjs';
+import {blankAdventure} from '../../src/workshop-model.mjs';
+import {adventurePlayLink} from '../../src/workshop-sharing.mjs';
+const root=fileURLToPath(new URL('../../',import.meta.url));
+const routes=JSON.parse(await readFile(new URL('../../tests/fixtures/adventure-routes.json',import.meta.url),'utf8'));
+export async function checkMigration(browserType,{onProgress=console.log}={}){
+ const legacyRoot=await mkdtemp(path.join(tmpdir(),'tilewright-mit-baseline-'));
+ const out=path.join(root,'playwright-report/migration',browserType.name());await mkdir(out,{recursive:true});
+ let browser,server;const results=[];
+ try{
+  const archive=execFileSync('git',['archive','--format=tar','legacy-mit-v0.30.1'],{cwd:root,maxBuffer:20_000_000});execFileSync('tar',['-xf','-','-C',legacyRoot],{input:archive});
+  const release=await build(path.join(legacyRoot,'.standalone-site')),old=createDevServer({root:legacyRoot}),current=createDevServer({root:release.destination});
+  server=http.createServer((req,res)=>{const target=new URL(req.url,'http://127.0.0.1'),prefix=target.pathname.startsWith('/Personal-Project/')?'/Personal-Project/':target.pathname.startsWith('/Tilewright/')?'/Tilewright/':null;if(!prefix){res.writeHead(404);res.end();return;}req.url=target.pathname.slice(prefix.length-1)+target.search;(prefix==='/Personal-Project/'?old:current).emit('request',req,res);});await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
+  const origin=`http://127.0.0.1:${server.address().port}`,before=origin+'/Personal-Project/',after=origin+'/Tilewright/';browser=await browserType.launch({headless:true});
+  const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});context.setDefaultTimeout(15000);const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
+  const saves=()=>page.evaluate(()=>Object.entries(localStorage).filter(([key])=>key.startsWith('tilewright.')).sort(([a],[b])=>a.localeCompare(b)));
+  try{
+   await page.goto(before);await page.locator('#loading-note[hidden]').waitFor({state:'attached'});await page.locator('#title-traveler').click();await page.locator('#traveler-tailoring>summary').click();await page.locator('#traveler-name').fill('Migration keeper');await page.locator('#settings-close').click();await enterFirstTrail(page);const actions=routes['trail-1'],split=Math.floor(actions.length/2);await playGuild(page,actions.slice(0,split),true);const turn=await page.locator('#game-turns').textContent(),checkpoint=await page.evaluate(key=>localStorage.getItem(key),TRAIL_SAVE_KEY);await page.locator('#game-home').click();await page.locator('#title-workshop').click();await page.locator('#ws-tab-build').click();await page.locator('[data-ws-panel="adventure"]').click();await page.locator('#ws-title').fill('Migration garden');await page.locator('#ws-props-adventure button[type=submit]').click();await page.locator('#ws-inspector-close').click();await page.locator('#ws-home').click();const original=await saves();
+   await page.goto(after);await page.locator('#loading-note[hidden]').waitFor({state:'attached'});assert.deepEqual(await saves(),original,'Moving between path prefixes preserves all existing save bytes.');await page.locator('#title-continue').click();await page.locator('#adventure[data-status=playing]').waitFor();assert.equal(await page.locator('#game-turns').textContent(),turn);assert.equal(await page.evaluate(key=>localStorage.getItem(key),TRAIL_SAVE_KEY),checkpoint);await playGuild(page,actions.slice(split),true);await page.locator('#adventure[data-status=won]').waitFor();assert.equal(await page.locator('#game-stars').textContent(),'★★★');results.push({name:'actual-v0301-to-standalone-continuation',pass:true});onProgress('PASS actual MIT-baseline to standalone continuation, preference/draft/save bytes, and real win');
+   await page.locator('#game-result-menu').click();const popup=context.waitForEvent('page');await page.locator('#front-home a[href="rights.html"]').click();const rights=await popup;await rights.waitForLoadState();assert.match(await rights.locator('main').textContent(),/Earlier MIT releases remain an exception/);for(const [width,height]of [[320,568],[844,390]]){await rights.setViewportSize({width,height});assert.ok(await rights.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await rights.screenshot({path:path.join(out,`rights-${width}.png`),fullPage:true});}for(const name of ['LICENSE','LEGACY-MIT-LICENSE.txt','THIRD_PARTY_NOTICES.md','PRIVACY.md'])assert.equal((await context.request.get(after+name)).status(),200);const legacy=await(await context.request.get(after+'LEGACY-MIT-LICENSE.txt')).text();assert.match(legacy,/Copyright \(c\) 2025 Thong Pham/);const metadata=await(await context.request.get(after+'release.json')).json();assert.equal(metadata.repository,'https://github.com/YouKnowJP/Tilewright');results.push({name:'rights-notices-relative-links-and-release-metadata',pass:true});onProgress('PASS visible rights/privacy page, retained legacy notice, relative URLs and metadata');await rights.close();
+   const world=blankAdventure(8,8);for(const layer of world.map.layers)layer.tiles.fill(layer===world.map.layers[0]?1:0);world.title='A portable road';world.markers=[{kind:'start',id:'start',x:1,y:1},{kind:'lantern',id:'light',x:2,y:1},{kind:'beacon',id:'home',x:6,y:6}];const publicLink=adventurePlayLink(world,'https://youknowjp.github.io/Tilewright/');assert.ok(publicLink.startsWith('https://youknowjp.github.io/Tilewright/#adventure='));await page.goto(after+new URL(publicLink).hash);await page.locator('#ws-preview-dialog').waitFor();await page.locator('#ws-preview-play').click();await playGuild(page,[...Array(5).fill('right'),...Array(5).fill('down')],true);await page.locator('#adventure[data-status=won]').waitFor();results.push({name:'shared-world-link-under-project-prefix',pass:true});onProgress('PASS portable adventure play link and real win under /Tilewright/');assert.deepEqual(errors,[]);
+  }catch(error){await page.screenshot({path:path.join(out,'failure.png'),fullPage:true}).catch(()=>{});throw error;}finally{await context.close();}
+  await writeFile(path.join(out,'results.json'),JSON.stringify({browser:browser.version(),results},null,2));return results;
+ }finally{if(browser)await browser.close();if(server)await new Promise(resolve=>server.close(resolve));await rm(legacyRoot,{recursive:true,force:true});}
+}
+if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){const {chromium}=await import('playwright');await checkMigration(chromium);}

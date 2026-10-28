@@ -1,0 +1,112 @@
+#settings-controls[hidden],#settings-display[hidden] { display:none; }
+.settings-tabs { display:flex; gap:8px; border-bottom:1px solid #667957; padding-bottom:14px; margin-bottom:12px; }
+.settings-tabs button { flex:1; min-height:44px; }
+.settings-tabs [aria-pressed="true"] { color:#fff0bd; background:#51492f; border-color:#d7b875; }
+.control-field { display:block; color:#ffe7af; font:13px/1.7 ui-monospace,monospace; margin:18px 0; min-width:0; }
+.control-field :is(select,.game-select-trigger) { display:block; width:100%; min-height:48px; margin-top:8px; padding:10px; border:1px solid #8a9569; border-radius:2px; background:#102c2b; color:#f3e9c9; font:13px/1.5 ui-monospace,monospace; }
+.controls-pair { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.controls-pair .control-field { margin:4px 0; }
+.front-dialog .controls-invitation { color:#ead6a6; font:19px/1.6 Georgia,serif; }
+.front-dialog .controls-help { color:#c4d7b6; font-size:13px; line-height:1.8; }
+.controller-options { padding:12px 0; border-block:1px solid #637451; margin:22px 0; }
+.controller-options summary { color:#f2d8a2; cursor:pointer; min-height:44px; padding:12px 0; }
+.controller-options p { font-size:13px; line-height:1.8; }
+#settings-gamepad-status { border-left:2px solid #b9a268; padding:8px 12px; background:#102c2b; }
+.playing .game-controls>.game-input-strip { grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:38px; }
+.game-input-strip span { color:#dacb99; font:11px/1.5 ui-monospace,monospace; }
+.playing .game-input-strip button { min-height:36px; padding:7px 12px; font-size:11px; }
+.playing .direction-pad { grid-template-columns:repeat(3,44px); grid-template-rows:repeat(2,44px); gap:3px; }
+.playing .direction-pad button { min-height:44px; min-width:44px; touch-action:manipulation; }
+.playing .game-controls { grid-template-columns:138px repeat(2,minmax(0,1fr)); }
+body[data-pad-side="right"] .direction-pad { grid-column:3; grid-row:2; justify-self:end; }
+body[data-pad-side="right"] #dash-button { grid-column:1; grid-row:2; }
+body[data-pad-side="right"] #game-wait { grid-column:2; grid-row:2; }
+body[data-pad-side="right"] .game-controls { grid-template-columns:repeat(2,minmax(0,1fr)) 138px; }
+body[data-controls="swipe"] .game-controls>.direction-pad,body[data-controls="tap"] .game-controls>.direction-pad,body[data-controls="keyboard"] .game-controls>.direction-pad { display:none; }
+body:is([data-controls="swipe"],[data-controls="tap"],[data-controls="keyboard"]) .game-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
+body:is([data-controls="swipe"],[data-controls="tap"],[data-controls="keyboard"]) #dash-button { grid-column:1; grid-row:2; }
+body:is([data-controls="swipe"],[data-controls="tap"],[data-controls="keyboard"]) #game-wait { grid-column:2; grid-row:2; }
+body #adventure-canvas,body #training-map { touch-action:pinch-zoom; }
+body:is([data-controls="pad"],[data-controls="keyboard"]) #adventure-canvas,body:is([data-controls="pad"],[data-controls="keyboard"]) #training-map { touch-action:pan-y pinch-zoom; }
+body[data-controls="tap"] #adventure-canvas { cursor:crosshair; }
+.playing .tactical-actions { flex-wrap:wrap; }
+.playing .tactical-actions button { flex:1 1 68px; min-height:44px; }
+body[data-control-size="large"] .game-controls .direction-pad { grid-template-columns:repeat(3,52px); grid-template-rows:repeat(2,52px); }
+body[data-control-size="large"] .game-controls { grid-template-columns:162px repeat(2,minmax(0,1fr)); }
+body[data-control-size="large"][data-pad-side="right"] .game-controls { grid-template-columns:repeat(2,minmax(0,1fr)) 162px; }
+body[data-control-size="large"]:is([data-controls="swipe"],[data-controls="tap"],[data-controls="keyboard"]) .game-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
+body[data-control-size="large"] .game-controls button,body[data-control-size="large"] .training-play-controls button { min-height:52px; }
+body[data-control-size="large"] .direction-pad button { min-width:52px; }
+.training-control-settings { margin:12px 0; min-height:44px; }
+body[data-controls="keyboard"] .training-dpad,body[data-controls="tap"] .training-dpad,body[data-controls="swipe"] .training-dpad { display:none; }
+body[data-pad-side="right"] .training-dpad { order:2; }
+body[data-control-size="large"] .training-dpad { grid-template-columns:repeat(3,52px); grid-template-rows:repeat(2,52px); }
+.playing main { padding-left:max(10px,env(safe-area-inset-left)); padding-right:max(10px,env(safe-area-inset-right)); padding-bottom:max(12px,env(safe-area-inset-bottom)); }
+.playing .game-layout { height:calc(100vh - 72px); height:calc(100svh - 72px); }
+.front-dialog { max-height:calc(100vh - 24px); max-height:calc(100svh - 24px); }
+.playing button,.playing summary { touch-action:manipulation; }
+@media(min-width:761px) { .playing main { padding-left:max(3%,env(safe-area-inset-left)); padding-right:max(3%,env(safe-area-inset-right)); } }
+@media(max-width:600px) { .controls-pair { grid-template-columns:1fr; gap:8px; }.control-field :is(select,.game-select-trigger) { font-size:12px; }.playing .tactical-actions button { flex-basis:74px; } }
+.playing .game-input-strip button { min-height:44px; }
+.game-input-state { min-width:0; flex:1; }
+.game-input-state>span,.game-input-state>small { display:block; }
+.game-input-state>small { color:#b9d5ac; font:10px/1.5 ui-monospace,monospace; }
+.game-input-state>[data-error="true"] { color:#ffcf98; }
+.game-control-tools { display:flex; gap:6px; flex-shrink:0; }
+.playing .game-control-tools button { padding-inline:9px; }
+#game-undo-result[hidden],#conversation-undo[hidden] { display:none!important; }
+@media(any-pointer:coarse) { .playing :is(select,.game-select-trigger),.playing textarea,.playing input:not([type="checkbox"]):not([type="range"]),.front-dialog :is(select,.game-select-trigger) { font-size:16px; } }
+
+/* Small screens retain distinct, readable navigation labels. */
+@media(max-width:360px) {
+  .playing .game-toolbar-actions>button,.playing .game-menu summary { font-size:10px; padding:8px 2px; white-space:normal; line-height:1.3; min-height:44px; }
+}
+
+.save-data-page h3 { color:#f4dca6; font:600 25px/1.4 Georgia,serif; }
+.save-data-card { margin:18px 0; padding:18px; border:1px solid #7e875f; background:#102c2b; }
+.save-data-card h4 { margin:0; color:#f4dda8; font:600 20px/1.4 Georgia,serif; }
+.save-data-actions { display:flex; flex-wrap:wrap; gap:10px; }
+.save-data-actions button { flex:1 1 160px; min-width:0; }
+.save-data-danger { border-color:#bc8d62; }
+.front-dialog .save-danger-button,.front-dialog #save-start { color:#ffe4c1; background:#633c30; border-color:#d3a06c; }
+.front-dialog .save-danger-button:hover,.front-dialog #save-start:hover { background:#79503a; }
+.front-dialog .save-scope-note,.front-dialog #save-status { font-size:13px; }
+#save-error,#save-status[data-error="true"] { color:#ffcfaa; }
+#save-error[hidden],#save-recovery[hidden],#save-reload[hidden],#save-cancel[hidden] { display:none!important; }
+@media(max-width:380px) { .settings-tabs { gap:5px; }.settings-tabs button { font-size:11px; padding-inline:7px; }.save-data-card { padding:14px; } }
+
+/* Each saved journey is a lantern at camp, with the active one lit. */
+.title-home .title-profile { display:block; max-width:100%; min-height:44px; margin-top:14px; padding:8px 12px; border:1px solid #758767; border-radius:3px; color:#f4dca6; background:#15352edb; font:12px/1.6 ui-monospace,monospace; overflow-wrap:anywhere; text-align:left; }
+.title-home .title-profile:hover { background:#21483b; border-color:#d9bc7f; }
+.journey-manager { margin:20px 0; }
+.journey-manager>h4 { color:#f4dda8; font:600 20px/1.4 Georgia,serif; margin-bottom:12px; }
+.journey-list { display:grid; gap:10px; }
+.journey-card { position:relative; min-width:0; padding:14px 14px 14px 58px; border:1px solid #677c68; background:#102c2b; }
+.journey-card.journey-current { border-color:#d8b575; background:linear-gradient(120deg,#293f2f,#102c2b); box-shadow:inset 3px 0 #d8b575; }
+.journey-card h5 { margin:0; color:#f4dda8; font:600 20px/1.4 Georgia,serif; overflow-wrap:anywhere; }
+.front-dialog .journey-state { margin:3px 0 10px; font-size:12px; color:#bbd0b8; }
+.journey-current .journey-state { color:#f1d596; }
+.journey-sigil { position:absolute; top:17px; left:14px; display:grid; place-items:center; width:30px; height:38px; color:#c1ccb3; border:1px solid #839172; border-radius:9px 9px 4px 4px; font:16px Georgia,serif; }
+.journey-current .journey-sigil { color:#ffe7af; border-color:#deb879; box-shadow:0 0 16px #d9b36e32; background:#a3823529; }
+.journey-card details { margin-top:10px; }
+.journey-card summary { min-height:44px; display:list-item; align-content:center; padding:10px 0; color:#c7d3bd; cursor:pointer; font-size:13px; }
+.journey-card details .save-data-actions { margin-top:8px; }
+.journey-name-field { display:block; margin:18px 0; color:#f4dda8; font-size:14px; }
+.journey-name-field input { display:block; width:100%; min-height:48px; margin-top:8px; padding:10px 12px; border:1px solid #a4a47d; border-radius:3px; color:#fff2cf; background:#102c2b; font:16px/1.5 Georgia,serif; }
+.journey-name-field[hidden] { display:none!important; }
+.journey-name-field input:focus-visible { outline:2px solid #f2d28f; outline-offset:3px; }
+.front-dialog .save-data-page h3 { margin:16px 0 8px; font-size:24px; }
+.front-dialog .save-data-page>p:not(.title-kicker) { margin:8px 0 14px; }
+.journey-manager>h4 { margin:12px 0; font-size:18px; }
+.journey-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:0 10px; align-items:start; }
+.journey-card h5 { font-size:18px; }
+.journey-card .journey-state { grid-column:1; margin-bottom:0; }
+.journey-card>.save-data-actions { grid-column:2; grid-row:1 / 3; align-self:center; }
+.journey-card>.save-data-actions button { flex:0 1 auto; padding:10px; font-size:12px; }
+.journey-card details { grid-column:1 / -1; margin-top:0; }
+@media(max-width:360px) {
+  .journey-card { padding-left:48px; gap:0 6px; }
+  .journey-sigil { left:10px; width:27px; }
+  .journey-card h5 { font-size:17px; }
+  .journey-card>.save-data-actions button { max-width:86px; }
+}
