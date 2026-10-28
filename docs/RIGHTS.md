@@ -4,6 +4,33 @@ The owner's goal is free personal play without permission to commercially
 copy, redistribute or rehost new protected game material. This uses the same
 source-available approach as Mallside, with a material legacy exception.
 
+## Free play and community use
+
+- Everyone can play the official website free, without an account or purchase.
+  Families, classrooms, libraries and community groups can use that free game.
+- Link to the official game and share noncommercial exported worlds/Storybooks.
+  Players retain rights in their own original designs and writing.
+- Publish screenshots, reviews, tutorials, gameplay videos and livestreams,
+  including ordinary advertising, sponsorship and platform creator revenue.
+  This permission covers gameplay media, not distributing a playable copy or
+  extracting an asset pack. A link on an ad-supported page is welcome.
+
+## Commercial copies of new protected work
+
+Written permission is required to sell downloads, app-store packages, paid
+bundles or access containing new protected material; to run ad-supported,
+sponsored or subscription copies/rehosts; or to resell protected new assets,
+dialogue or code in another product. Renaming the game or giving credit does
+not supply that permission. Free redistribution/rehosting of new protected
+material also requires permission except for the exports, gameplay media and
+GitHub platform rights expressly allowed by the [license](../LICENSE).
+
+**These restrictions do not override the earlier MIT grant.** The existing
+baseline can still be commercially reused under MIT's conditions. Public
+source cannot be made technically uncopyable by a notice or build setting.
+
+## Which permissions apply?
+
 | Material | Applicable permissions |
 | --- | --- |
 | Tilewright through v0.30.1 and unchanged imported material | MIT; commercial reuse remains permitted under its conditions. |

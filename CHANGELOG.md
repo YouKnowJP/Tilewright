@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.30.3 — 2026-10-28
+
+- Clarify that paid downloads, ad-supported game copies, subscription rehosting and asset resale of new protected material need written permission.
+- Explicitly welcome free official play in community/education settings, shared worlds, links and gameplay videos/streams including creator revenue.
+- Place the permissions summary near the top of the repository and in a folded Options section, with the earlier MIT commercial-use exception beside it.
+- Keep prior MIT grants, player ownership, save data and free gameplay intact.
+
 ## 0.30.2 — 2026-10-28
 
 - Move to the standalone YouKnowJP/Tilewright repository and local sibling folder.

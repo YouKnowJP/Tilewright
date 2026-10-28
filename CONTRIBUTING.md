@@ -23,3 +23,9 @@ actual playable outcomes. Describe the problem, resulting behavior and checks.
 Stage new files, run `node scripts/repository-files.mjs`, and include the
 refreshed docs/FILE_INDEX.md. Record player-facing changes in CHANGELOG.md and
 preserve the current license and all independent notices.
+
+New original contributions intended for the current proprietary release must
+have the owner's agreement on their licensing before acceptance. Preserve the
+MIT notice on imported material and its derivatives; do not relabel unchanged
+legacy files as exclusively proprietary. Public forks and attribution alone
+do not grant commercial rights in separately protected new work.

@@ -19,6 +19,12 @@ body.game-front { background:#102b2b; }
 .title-menu button { text-align:left; font-size:15px; padding:11px 18px; }
 .title-menu button:focus-visible,.game-front button:focus-visible,.front-dialog button:focus-visible { outline:3px solid #f1d68e; outline-offset:4px; }
 .title-footnote { font:12px/1.8 ui-monospace,monospace; color:#b0c7b5; margin:25px 0 0; }
+.settings-permissions { margin-top:24px; padding-top:8px; border-top:1px solid #8e895a; overflow-wrap:anywhere; }
+.settings-permissions summary { min-height:44px; padding:10px 0; box-sizing:border-box; cursor:pointer; color:#f5dfaa; }
+.settings-permissions p { font-size:var(--adventure-text-size,16px); line-height:1.65; }
+.settings-permissions a { display:inline-block; min-height:44px; padding:10px 0; box-sizing:border-box; color:#ffe4a8; text-decoration:underline; text-underline-offset:4px; }
+.settings-permissions :is(summary,a):focus-visible { outline:3px solid #f1d68e; outline-offset:3px; }
+.permissions-link-hint { font-size:.85em; }
 .front-modes { max-width:1120px; margin:auto; width:100%; padding:25px; border:1px solid #9c8c5b; background:#102b2bf2; box-shadow:inset 0 0 0 4px #102b2b,inset 0 0 0 5px #9c8c5b66; }
 .front-back { float:right; }
 .front-modes h2 { font:600 clamp(24px,3vw,36px)/1.3 Georgia,serif; color:#f5dfaa; margin:12px 0; }

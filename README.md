@@ -8,6 +8,14 @@ Make a little world, then go on an adventure. Tilewright combines an original
 turn-based puzzle game with a terrain editor and Adventure Workshop. Players
 need only the website link: no account, installation, GitHub clone, or terminal.
 
+**Free to play. New protected work is not licensed for commercial copies.**
+Paid downloads, ad-supported copies, subscription rehosting and asset resale
+need the owner's written permission. Links to the official game, fan videos
+(including creator revenue), and noncommercial world sharing are welcome.
+**The game through v0.30.1 remains MIT licensed, including commercial reuse;**
+these restrictions apply only to new protected material. Read the
+[permissions guide](docs/RIGHTS.md) and [full license](LICENSE).
+
 ## Play, explore, and create
 
 - 24 campaign missions, eight Guild jobs, daily trails and branching expeditions.
@@ -101,3 +109,5 @@ See [rights and provenance](docs/RIGHTS.md), [asset/dependency notices](THIRD_PA
 and [privacy](PRIVACY.md). New work is not offered under an open-source license.
 Players retain rights in their own original map designs and writing; the
 limited permission to share playable worlds is described in the license.
+Free official play also includes classrooms, libraries and community groups.
+Credit alone does not grant commercial rights to new protected material.

@@ -32,7 +32,7 @@
 <body class="playing game-front game-title-open">
   <div id="startup-status" class="startup-status" role="status"><img src="icon.svg" width="48" height="48" alt=""><strong>Lighting the trail…</strong><p>Your adventure is on its way.</p><button id="startup-retry" hidden>Try again</button></div>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.30.2</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.30.3</span></a>
     <span class="header-note">LANTERN TRAILS / THE CREATOR’S CAMP</span>
     <button id="header-training" class="source-link">Training camp</button>
   </header>
@@ -286,6 +286,7 @@
     <section class="settings-row"><div><label for="settings-volume">Volume</label><p>Lantern chimes and trail signals.</p></div><div class="volume-control"><input id="settings-volume" type="range" min="0" max="100" step="5" value="60"><output id="settings-volume-value" for="settings-volume">60%</output></div></section>
     <section class="settings-row"><div><h3>Motion</h3><p>Reduced motion keeps movement and effects still. System follows your device preference.</p></div><div class="option-buttons" aria-label="Motion"><button data-motion="system" aria-pressed="true">System</button><button data-motion="reduced" aria-pressed="false">Reduced</button></div></section>
     <section class="settings-row"><div><h3>Reading size</h3><p>Larger menus, messages, conversations, and forecasts.</p></div><div class="option-buttons" aria-label="Reading size"><button data-text-size="standard" aria-pressed="true">Standard</button><button data-text-size="large" aria-pressed="false">Large</button><button data-text-size="largest" aria-pressed="false">Extra large</button></div></section>
+    <details id="settings-permissions" class="settings-permissions"><summary>Free play &amp; sharing</summary><p>Everyone can play the official game free, without an account or purchase. Create and share noncommercial worlds, or share gameplay videos and streams, including creator revenue.</p><p>New protected work needs the owner’s written permission for paid downloads, ad-supported copies, subscription rehosting or asset resale. The earlier game through v0.30.1 remains MIT licensed, including commercial reuse.</p><a href="rights.html" target="_blank" rel="noopener">Read permissions &amp; privacy <span class="permissions-link-hint">(opens a new tab)</span></a></details>
     </div><section id="settings-traveler" hidden aria-labelledby="traveler-heading">
       <div class="traveler-intro"><div class="traveler-portrait"><canvas id="traveler-preview" width="160" height="160" role="img" aria-label="Your traveler preview"></canvas><button id="traveler-turn">Turn preview</button></div><div><p class="title-kicker">THE TRAVELER’S TENT</p><h3 id="traveler-heading">Your trail kit</h3><p>Dress for the road ahead. Every look is yours from the beginning.</p><p class="ws-footnote">Outfits follow you into adventures, training, and playtests. Changing your look never spends a turn.</p></div></div>
       <fieldset class="traveler-presets"><legend>A look for every road</legend><div id="traveler-outfits" class="traveler-outfits"></div></fieldset>

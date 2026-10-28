@@ -1,5 +1,5 @@
 TILEWRIGHT PROPRIETARY LICENSE
-Version 1.0 — 28 October 2026
+Version 1.1 — 28 October 2026
 
 Copyright (c) 2026 Jackson Pham (YouKnowJP). All rights reserved in new owned material.
 
@@ -28,6 +28,8 @@ created original writing and designs. Independent licenses remain effective.
 
 The Owner permits individuals to play the officially hosted game for personal,
 non-commercial enjoyment, including browser copies necessarily made to do so.
+Free use of that official game in families, classrooms, libraries and community
+groups is also permitted. Players need no account, purchase or license fee.
 Individuals may download a copy for private, non-commercial evaluation and
 make private modifications for that evaluation. Retain copyright and license
 notices. This permission does not authorize redistributing those copies or
@@ -41,16 +43,38 @@ contributions. This does not grant permission to distribute the game engine,
 asset library, or a monetized game copy. Previously granted MIT rights remain
 unaffected as stated in section 1.
 
+Anyone may link to the official free game. Players may publish screenshots,
+gameplay videos, livestreams, reviews and tutorials, including with ordinary
+advertising, sponsorship or platform creator revenue. This permission covers
+recorded or streamed gameplay and commentary, not a playable game copy,
+downloadable asset pack, or a claim of official ownership or endorsement.
+An ordinary link on an ad-supported page does not itself monetize a game copy.
+
 3. Rights reserved
 
 Except for the permissions above, mandatory law, existing MIT rights and other
 independent licenses, no permission is granted to copy, adapt, publish,
 distribute, sublicense, sell, rent, or commercially exploit the new protected
-material governed by this license. In particular, no permission is granted to
-sell game copies or access; monetize a copy/derivative through advertising,
-subscriptions, sponsorship, paid hosting, or in-game payments; reuse new
-protected code, assets or writing in another distributed/commercial product;
-or remove ownership notices or imply the Owner's endorsement.
+material governed by this license. Without separate written permission, this
+includes:
+
+- Selling downloads, app-store packages, game copies, access or paid bundles
+  containing new protected material, even with credit or a different name.
+- Running an ad-supported, sponsored, subscription-only or otherwise monetized
+  playable copy/derivative containing new protected material, including a
+  rehosted or embedded copy, paid hosting service, or in-game payments.
+- Reselling new protected artwork, dialogue, writing or code as asset packs,
+  templates or components, or using them in another distributed/commercial
+  product. Players' independent original contributions remain their own.
+- Redistributing or publicly rehosting new protected material, including free
+  copies, except for the expressly permitted exports, gameplay media and
+  GitHub platform rights described here.
+- Removing required notices, claiming ownership of the Owner's work, or
+  implying the Owner's endorsement.
+
+These restrictions concern new material within section 1's scope; they do not
+override earlier MIT grants, independent licenses or rights under mandatory
+law. Credit alone is not a commercial license for new protected material.
 
 Obtain separate written permission from the Owner for those uses. Contact the
 YouKnowJP GitHub profile linked in README.md. No trademark license is granted;
