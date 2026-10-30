@@ -1,7 +1,7 @@
 # Storybooks: a road between worlds
 
-Choose **Adventure Workshop → Storybooks** from the main menu. Read a book's
-opening scene before entering its first chapter. Twelve featured books are available. Use the search field or choose New
+Choose **Choose your adventure → Storybooks**, or Adventure Workshop → Storybooks. Read a book's
+opening scene before entering its first chapter. Thirteen featured books are available. Use the search field or choose New
 adventures, Peaceful books, or More demanding books to narrow the shelves.
 **The Rainmaker’s Letters** and **The Observatory of Borrowed Stars** each add
 four original maps and a complete new story. The three earlier books weave the
@@ -42,7 +42,7 @@ lets you open a completed chapter to reread its opening scene and ending.
 
 Select **Bind your own story** or **Make your version** on a featured book.
 Write a title, creator name, invitation, and ending. Add **two to six worlds**
-from your saved shelf, featured adventures, Puzzle Lab, the twenty-three original
+from your saved shelf, featured adventures, Puzzle Lab, the fifty original
 Storybook levels, or current World studio
 draft. Add a short scene before each chapter, move chapters earlier or later,
 and remove any you no longer need. A world must pass structural checks before
@@ -54,8 +54,11 @@ does not change an existing book. To update a chapter, remove it and add the
 updated original. Repeated worlds are allowed: give a return visit a new scene
 and try a different optional challenge.
 
-There is one saved book draft and one active book checkpoint per browser.
-Starting another book replaces the checkpoint only after a confirmation;
+The Clockwork Post adds three peaceful programmable-companion chapters.
+
+There is one saved book draft per journey. Each book version/rule combination
+keeps a chapter and branch bookmark (up to 32, without silent eviction).
+Starting another book preserves the earlier bookmark;
 replacing a populated book draft also asks first. The World studio draft,
 saved world shelf, campaign, training, Guild, and expeditions remain separate.
 
@@ -78,8 +81,9 @@ Use **Main menu → Continue trail** or **Resume chapter** to return. Starting a
 different adventure replaces this latest-trail slot; the book still keeps its
 completed chapters and selected promise, and offers **Restart chapter** if its
 exact run is no longer available. Every new chapter starts with fresh supplies
-and hunter habits; a retry starts that chapter over. Accepting a replacement
-book retires the old book's exact Continue slot. Cancelling retains it.
+and hunter habits; a retry starts that chapter over. Browsing another book's
+camp preserves the latest exact Continue slot until you start a different
+adventure. Returning through Continue trail also reopens the correct book.
 Failed browser saving is reported, and books remain playable for the visit.
 Keep the tab open to retain session-only progress, and download any book you
 want to keep before clearing browser data.
@@ -99,6 +103,8 @@ add eighteen original worlds. The first explores crossings, songs, rotating
 glass, and a rainseed return; the second adds longer courier routes and clearly
 optional treasures; the third is peaceful cooperation on one device. Every
 chapter supports Trail/Nemesis, chapter promises, exact Continue, Undo, route
-review, and remixing. The library now includes nine original storybooks with
+review, and remixing. That release brought the library to nine original storybooks with
 47 unique levels, plus three journeys assembled from Puzzle Lab worlds.
 See [the chapter list](SCREEN_AND_SAGAS.md).
+
+Bookmarks keep completed chapters and choices, not every suspended board. Only the latest Continue slot retains an exact in-chapter position. Use a complete game backup to keep bookmarks; a downloaded Storybook contains its worlds, not your progress. Your story bookmarks lists older custom books too. Removing an inactive bookmark asks for confirmation. If storage is full or blocked, keep the tab open; unsaved bookmark changes last only for the visit.

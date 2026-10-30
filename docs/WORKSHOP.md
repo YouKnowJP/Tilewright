@@ -174,3 +174,20 @@ starts at page one, and paging places keyboard focus on the first new card.
 Your personal shelf still holds up to 32 worlds. Preview, play, remix, checked
 creator clears, and file/code/link sharing use the existing portable format.
 See [the new adventures](SCREEN_AND_SAGAS.md).
+
+## Clockwork companion — v0.31
+
+Paint **Clockwork companion** from the Puzzles palette, inspect it, and choose
+three direction/Wait cards. One companion is supported in a peaceful solo world;
+remove enemies, burning tiles and Two-Lantern partners. It starts paused. It can
+hold pressure plates, shares paths with you, and stops against crates or locked
+doors. Control actions spend one turn without advancing the helper; ordinary
+turns advance one card. Blocked cards still advance. Return to dock recovers a
+stranded helper when its dock is clear. Turning rooms carry its dock too.
+
+Remix any Clockwork Post chapter to begin. Whole-map and assembly rotations
+transform its compass directions. Gameplay room rotations leave its compass
+cards unchanged. Version-3 exports include programs and verified action journals;
+versions 1 and 2 keep their rules. Full playtests, Undo, Continue, sharing and
+route reviews use the same deterministic companion state. Always playtest a
+custom loop and the return crossing; structural checks are not a puzzle solver.

@@ -1,3 +1,4 @@
+import {createClockworkUI} from './clockwork-ui.mjs';
 import { createPlayLayout } from './play-layout.mjs';
 import { createClueUI } from './adventure-clues-ui.mjs';
 import { wonderPreview } from './adventure-wonders.mjs';
@@ -42,7 +43,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   let expeditions, workshop, training, workshopActions = [], workshopClearNote = '';
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0;
   let mapInput,gamepadInput;
-  const playLayout=createPlayLayout();
+  const playLayout=createPlayLayout();const clockworkUI=createClockworkUI({onAction:action});
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;
@@ -74,11 +75,12 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   function showJournal() { showTitle(); front.journal(); }
   function openWorkshop(section = 'shelf') { showTitle(); front.hide(); frontStyle('workshop'); workshop.show(section); }
   function openFeaturedBook(selector) {
-    openWorkshop('books');$('#book-search').value='';$('#book-shelf-filter').value='all';$('#book-shelf-filter').dispatchEvent(new Event('change'));
+    openWorkshop('books');$('#book-search').value=selector.includes('festival')?'Lanternfair':'';$('#book-shelf-filter').value='all';$('#book-shelf-filter').dispatchEvent(new Event('change'));
     const card=document.querySelector(selector);if(!card)return;const fold=card.closest('details');if(fold)fold.open=true;card.querySelector('button')?.focus({preventScroll:true});card.scrollIntoView({block:'center'});
   }
   function openTraining() { showTitle(); front.hide(); frontStyle('training'); training.show(); }
   function journalDestination(target) {
+    if(target.mode==='books'){openWorkshop('books');return;}
     if (target.mode === 'story') {
       selectedChapter = target.chapter ?? selectedChapter; renderPicker(); expeditions.show('story');
       const destination = target.stage ? $(`[data-stage="${target.stage}"]`) : $(`#atlas-${CHAPTERS[selectedChapter].id} [data-chapter-start]`);
@@ -190,7 +192,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       button.addEventListener('click', () => start(stage)); return button;
     }));
     const matches = Object.entries(guildRecords).filter(([id]) => id.endsWith(`-${selectedKit}-${difficulty}`));
-    $('#guild-progress').textContent = `${matches.length}/${jobs.length} jobs finished · ${matches.reduce((sum, [, record]) => sum + record.merits, 0)}/${jobs.length * 3} commendations · ${kit.name} / ${difficulty}. ${guildSaveFailed ? 'Saving unavailable; results remain in this session.' : 'Bests save on completion. An unfinished job restarts from the beginning.'}`;
+    $('#guild-progress').textContent = `${matches.length}/${jobs.length} jobs finished · ${matches.reduce((sum, [, record]) => sum + record.merits, 0)}/${jobs.length * 3} commendations · ${kit.name} / ${difficulty}. ${guildSaveFailed ? 'Saving unavailable; results remain in this session.' : 'Bests save on completion. Main menu → Continue trail restores your latest unfinished job, including its position and Undo history.'}`;
   }
   function showGuild() {
     expeditions.show('guild'); $('#guild-hub').hidden = false; $('#library-guild').setAttribute('aria-pressed', 'true'); renderGuild();
@@ -311,7 +313,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   }
   async function continueTrail(){
     if(restoring)return;
-    if(run){paused=false;showBoard();update();revealBoard();return;}
+    if(run){try{if(run.status!=='won'&&run.stage.workshop?.storybook)workshop.runSource(run);}catch(error){front.notice(error.message);return;}paused=false;showBoard();update();revealBoard();return;}
     const loaded=loadTrail(storage);if(!loaded.data){front.notice(loaded.error||'No unfinished trail is available. Choose an adventure to begin.');return;}
     const token=++restoreToken;restoring=true;$('#game-title-screen').inert=true;$('#adventure-workshop').inert=true;
     try{
@@ -332,6 +334,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   const clueUI=createClueUI({preferences:()=>front.preferences,onFocus(point){renderer?.setHintFocus(point);paint();}});
   function update() {
     if (!run) return;
+    clockworkUI.update(run);
     const stage = run.stage, result = resultFor(run), index = campaign.findIndex(item => item.id === stage.id);
     const theme = themeFor(stage), book = workshop.bookStatus(run), house = workshop.trailhouseStatus(run), lab = workshop.labStatus(run);
     $('#game-map-legend').textContent = run.guild ? 'White diamond: you. H: home beacon. T: travel stones. Outlined squares: wheels and bells. The pale double marks your return point.' : 'White diamond: you. H: home beacon. Outlined squares: discovered wheels and bells.';
@@ -531,6 +534,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   function action(direction, dash = false) {
     const conversationAction = direction === 'close-dialogue' || direction.startsWith('choose:');
     if (!active || outsideBoard() || front.dialogOpen || notesDialog.open || !run || (paused && !conversationAction) || run.status !== 'playing') return;
+    if(run.clockwork&&direction===`interact:${run.clockwork.id}`&&nearbyInteractions(run).some(item=>item.id===run.clockwork.id)){clockworkUI.open();return;}
     const input = `${['up', 'right', 'down', 'left'].includes(direction) && (dash || dashArmed) ? 'dash-' : ''}${direction}`;
     if (expeditions?.session) { dashArmed = false; lastAction = performance.now(); expeditions.act(input); return; }
     const before = run;
@@ -735,7 +739,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   } });
   workshop = createWorkshopUI({ storage, getMap, getPreferences:()=>front?.preferences||{}, onExit: showTitle, onTerrain: backToEditor, onGuide: onCreatorGuide,
     onResume:continueTrail,
-    onReplaceBook(key){const current=run?.stage.workshop?.storybook?.key;if((run?current:savedTrail.data?.source?.meta?.key)!==key)return;if(current===key){run=null;rewind=null;workshopActions=[];}clearTrail(storage);savedTrail.data=null;},
+    onReplaceBook(key,rules){const current=run?.stage.workshop?.storybook?.key;if((run?current:savedTrail.data?.source?.meta?.key)!==key||(run?run.difficulty:savedTrail.data?.header.difficulty)!==rules)return;if(current===key){run=null;rewind=null;workshopActions=[];}clearTrail(storage);savedTrail.data=null;},
     canResumeBook(stage,rules){const meta=run?.stage.workshop?.storybook,source=savedTrail.data?.source;return Boolean(run?run.status!=='won'&&run.difficulty===rules&&JSON.stringify(meta)===JSON.stringify(stage.workshop.storybook):source?.kind==='book'&&savedTrail.data.header.difficulty===rules&&JSON.stringify(source.meta)===JSON.stringify(stage.workshop.storybook));},
     onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
   training = createTrainingUI({ storage, getPreferences:()=>front.preferences, onControls:()=>front.settings('controls',$('#training-controls-settings')), onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },

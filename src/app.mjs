@@ -1,3 +1,4 @@
+import {confirmGame} from './game-confirm.mjs';
 import { TILES, MAX_LAYERS, MAX_FILE_BYTES, History, createDocument, validateDocument,
   parseDocument, serializeDocument, paintCells, floodCells, lineCells, rectangleCells, inBounds } from './model.mjs';
 import { createSample } from './sample.mjs';
@@ -347,10 +348,10 @@ for (const [selector, direction, label] of [['#raise-layer', 1, 'forward'], ['#l
     cancelStroke(); commit(moveLayer(history.document, activeLayer, direction), `Layer moved ${label}.`);
   });
 }
-$('#delete-layer').addEventListener('click', () => {
+$('#delete-layer').addEventListener('click', async () => {
   const layer = history.document.layers.find(item => item.id === activeLayer);
   const count = layer.tiles.filter(tile => tile !== 0).length;
-  if (!window.confirm(`Delete “${layer.name}” and its ${count} occupied cells? Undo can restore the layer.`)) return;
+  if (!await confirmGame(`Delete “${layer.name}” and its ${count} occupied cells? Undo can restore the layer.`,{title:'Remove this layer?',accept:'Delete layer'})) return;
   cancelStroke();
   try { commit(removeLayer(history.document, activeLayer), 'Layer deleted. Undo restores it.'); }
   catch (error) { announce(error.message); }
@@ -426,17 +427,17 @@ function replaceDocument(map) {
   const saved = persist(); refresh(); viewport.scrollTo(0, 0);
   announce(saved ? `${map.name} opened and saved locally.` : `${map.name} opened. Local saving failed; export JSON to keep your work.`);
 }
-function canReplace() { return !hasEdits || window.confirm('Replace the current map? Export JSON first if you want to keep both maps.'); }
+async function canReplace() { return !hasEdits || await confirmGame('Replace the current map? Export JSON first if you want to keep both maps.',{title:'Open another map?',accept:'Replace map'}); }
 $('#new-map').addEventListener('click', () => { cancelStroke(); $('#new-dialog').showModal(); });
 $('#cancel-new').addEventListener('click', () => $('#new-dialog').close());
-$('#new-form').addEventListener('submit', event => {
+$('#new-form').addEventListener('submit', async event => {
   event.preventDefault();
   try {
     const map = createDocument($('#new-name').value, Number($('#new-width').value), Number($('#new-height').value));
-    if (canReplace()) { $('#new-dialog').close(); replaceDocument(map); }
+    if (await canReplace()) { $('#new-dialog').close(); replaceDocument(map); }
   } catch (error) { announce(error.message); }
 });
-$('#load-sample').addEventListener('click', () => { if (canReplace()) replaceDocument(createSample()); });
+$('#load-sample').addEventListener('click', async () => { if (await canReplace()) replaceDocument(createSample()); });
 $('#import-map').addEventListener('click', () => { cancelStroke(); $('#file-input').click(); });
 $('#file-input').addEventListener('change', async event => {
   const file = event.target.files[0]; event.target.value = '';
@@ -444,7 +445,7 @@ $('#file-input').addEventListener('change', async event => {
   try {
     if (file.size > MAX_FILE_BYTES) throw new Error('Map files must be smaller than 1 MB.');
     const map = parseDocument(await file.text());
-    if (canReplace()) replaceDocument(map);
+    if (await canReplace()) replaceDocument(map);
   } catch (error) { announce(`Import failed: ${error.message} Your current map is unchanged.`); }
 });
 $('#help-button').addEventListener('click', () => { cancelStroke(); $('#help-dialog').showModal(); });

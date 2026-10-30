@@ -1,3 +1,5 @@
+import {clockworkWorld,CLOCKWORK_LEVELS} from './clockwork-worlds.mjs';
+import {confirmGame} from './game-confirm.mjs';
 import { sagaWorld, SAGA_LEVELS } from './saga-worlds.mjs';
 import { cartographerWorld, CARTOGRAPHER_LEVELS } from './cartographer-worlds.mjs';
 import { yieldToBrowser } from './browser-yield.mjs';
@@ -28,6 +30,7 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   let shelfPage=0;const pager=document.createElement('div');pager.id='ws-shelf-pager';pager.className='shelf-pager';$('adventures').insertAdjacentElement('afterend',pager);$('filter').add(new Option('New adventures · 18 worlds','new'));
   $('search').addEventListener('input',()=>{shelfPage=0;},true);$('filter').addEventListener('change',()=>{shelfPage=0;},true);
   const restored = loadWorkshop(storage), featured = [...workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) })), ...CARTOGRAPHER_LEVELS.map(id=>cartographerWorld(id)),...newWorlds];
+  featured.push(...CLOCKWORK_LEVELS.map(id=>clockworkWorld(id)));
   const board=trailboardAdventures();let bookmarks=loadBookmarks(storage);
   const restoredDraft=loadWorkshopDraft(storage); let draftTouched=Boolean(restoredDraft);
   let entries = restored.entries, bests = loadWorkshopBests(storage), saved = true, preview = null, share = null, activePlay = null, section = 'shelf';
@@ -37,9 +40,9 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   const notice = (text,error=false) => { $('status').textContent=text; $('status').dataset.error=String(error); };
   const designer = createWorkshopDesigner({ storage, initial:restoredDraft || blankAdventure(), onChange(pack) { draftTouched=true; saved=saveWorkshopDraft(storage,pack); draftState(pack); }, notice });
   const books = createStorybookUI({ storage, onResume, onReplace:onReplaceBook, canResume:canResumeBook, getWorlds: () => [...featured, ...LAB_ROOMS.map(room => puzzleLabWorld(room.id)), ...STORY_LEVELS.map(level => storyAdventure(level.id)), ...board.map(item=>item.world), ...entries], getDraft: () => designer.get(), onPlay(stage,rules) { activePlay={book:true,origin:'books'}; hide(); onPlay(stage,rules); } });
-  const house = createTrailhouseUI({ storage, onPlay(stage,rules) { activePlay={house:true}; hide(); onPlay(stage,rules); }, onRemix(pack) { house.hide(); return replaceDraft(editAdventure(pack,{source:`Remix of ${pack.title} by ${pack.author}`.slice(0,128),author:'A trail keeper'})); } });
+  const house = createTrailhouseUI({ storage, onPlay(stage,rules) { activePlay={house:true}; hide(); onPlay(stage,rules); }, async onRemix(pack) { const opened=await replaceDraft(editAdventure(pack,{source:`Remix of ${pack.title} by ${pack.author}`.slice(0,128),author:'A trail keeper'}));if(opened)house.hide();return opened; } });
   function draftState(pack = designer.get()) { $('draft-state').textContent = `${pack.map.width} × ${pack.map.height} · ${pack.markers.length}/128 objects · ${draftTouched ? saved ? 'Draft saved' : 'Saving unavailable — export a backup' : 'A new canvas'}${pack.proof ? ` · Clear attached (${pack.proof.difficulty})` : ' · Playtest to record a clear'}`; }
-  const guard = fn => { try { return fn(); } catch(error) { notice(error.message,true); return null; } };
+  const guard = fn => { try { const result=fn();if(result?.catch)result.catch(error=>notice(error.message,true));return result; } catch(error) { notice(error.message,true); return null; } };
   function close(id) { if ($(id).open) $(id).close(); }
   function stopReplay() { if (timer) clearTimeout(timer); timer=null; if(replay) replay.playing=false; }
   function hide() { token++; stopReplay(); designer.hide(); house.hide(); for(const id of ['new-dialog','preview-dialog','share-dialog','replay-dialog','remix-dialog','mastery-dialog']) close(id); root.hidden=true; document.body.classList.remove('workshop-designing'); }
@@ -70,7 +73,7 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
       const actions=document.createElement('div'); actions.className='ws-card-actions';
       const remix=document.createElement('button'); remix.textContent='Remix'; remix.onclick=()=>remixWorld(pack); actions.append(remix);
       if(discovery){const mark=document.createElement('button');mark.textContent=bookmarks.includes(key)?'Bookmarked':'Bookmark';mark.setAttribute('aria-pressed',String(bookmarks.includes(key)));mark.onclick=()=>{bookmarks=toggleBookmark(bookmarks,key);const ok=saveBookmarks(storage,bookmarks);renderShelf();notice(ok?'Your trailboard bookmarks are saved.':'Bookmark kept for this visit; saving is unavailable.',!ok);};actions.append(mark);}
-      if(!item.featured) { const remove=document.createElement('button'); remove.textContent='Remove'; remove.onclick=()=>{ if(confirm(`Remove “${pack.title}” from this browser’s shelf? Download a backup first if you need it.`)){ entries=entries.filter(p=>adventureKey(p)!==key); const ok=persist(); notice(ok?'Adventure removed from your shelf.':'Removed for this session. Browser saving is unavailable.',!ok); } }; actions.append(remove); }
+      if(!item.featured) { const remove=document.createElement('button'); remove.textContent='Remove'; remove.onclick=async()=>{ if(await confirmGame(`Remove “${pack.title}” from this browser’s shelf? Download a backup first if you need it.`,{title:'Remove this adventure?',accept:'Remove from shelf'})){ entries=entries.filter(p=>adventureKey(p)!==key); const ok=persist();$('search').focus({preventScroll:true}); notice(ok?'Adventure removed from your shelf.':'Removed for this session. Browser saving is unavailable.',!ok); } }; actions.append(remove); }
       card.append(actions); return card;
     }));
     if(!matches.length) { const p=document.createElement('p'); p.className='ws-footnote'; p.textContent='No worlds match this view. Try another tag, browse the Trailboard, or import an adventure from a friend.'; $('adventures').append(p); }
@@ -97,11 +100,11 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
       $('preview-difficulty').value=origin==='lab'?$('lab-rules').value:'trail'; $('preview-dialog').showModal(); notice('Choose your rules, set out, or remix this world.');
     } catch(error) { if(n===token)notice(error.message,true); }
   }
-  function replaceDraft(pack) {
-    if(draftTouched&&!confirm('Replace the current workshop draft? Save it to your shelf or download it first if you want to keep it.'))return false;
-    close('preview-dialog'); designer.replace(pack); tab('build'); notice('Your new draft is ready. Choose a brush, then shape the next adventure.'); return true;
+  async function replaceDraft(pack) {
+    if(draftTouched&&!await confirmGame('Replace the current workshop draft? Save it to your shelf or download it first if you want to keep it.',{title:'Start a new draft?',accept:'Replace draft'}))return false;
+    close('preview-dialog'); designer.replace(pack); tab('build');$('canvas').focus({preventScroll:true}); notice('Your new draft is ready. Choose a brush, then shape the next adventure.'); return true;
   }
-  function remixWorld(pack) { guard(()=>{ designer.get(); replaceDraft(editAdventure(pack,{source:`Remix of ${pack.title} by ${pack.author}`.slice(0,128),author:'A trail keeper'})); }); }
+  function remixWorld(pack) { guard(()=>{ designer.get(); return replaceDraft(editAdventure(pack,{source:`Remix of ${pack.title} by ${pack.author}`.slice(0,128),author:'A trail keeper'})); }); }
   async function openShare(pack) {
     const n=++token;
     try {
@@ -169,7 +172,7 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   $('new-mode').onchange=()=>{newArt(); const mode=$('new-mode').value; $('new-dimensions').hidden=mode!=='blank';$('new-seeded').hidden=mode!=='seed';$('new-note').textContent=mode==='current'?'Copy terrain into an independent adventure. The original map and its undo history stay saved.':mode==='seed'?'Choose one of 20 region-and-mission recipes. The same seed and recipe produce the same world.':'Place puzzles, keepers, patrols, and goals. Add a story, then playtest it.'; };
   $('new-form').onsubmit=event=>{event.preventDefault();guard(()=>{
     const mode=$('new-mode').value,pack=mode==='seed'?seededAdventure($('new-seed').value,$('new-region').value,$('new-mission').value,$('new-risk').value==='perilous'):mode==='current'?adventureFromMap(getMap()):blankAdventure(Number($('new-width').value),Number($('new-height').value));
-    close('new-dialog');replaceDraft(pack);
+    close('new-dialog');return replaceDraft(pack);
   });};
   drawAtlasArt($('scenery'),CHAPTERS.find(theme=>theme.id==='clockwork'));
   $('guide').onclick=()=>onGuide?.($('guide')); $('terrain').onclick=()=>guard(()=>{designer.get();onTerrain();});

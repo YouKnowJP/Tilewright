@@ -30,7 +30,7 @@ export function rotateAssembly(input,turns=0){
   for(let t=0;t<turns;t++){
     const {width:w,height:h}=assembly.map,rotate=p=>({x:h-1-p.y,y:p.x});
     const map={...assembly.map,width:h,height:w,layers:assembly.map.layers.map(layer=>{const tiles=Array(w*h);layer.tiles.forEach((tile,i)=>{const p=rotate({x:i%w,y:Math.floor(i/w)});tiles[p.y*h+p.x]=tile;});return {...layer,tiles};})};
-    assembly={...assembly,map,markers:assembly.markers.map(m=>({...m,...rotate(m),...(m.route?{route:m.route.map(rotate)}:{})}))};
+    assembly={...assembly,map,markers:assembly.markers.map(m=>({...m,...rotate(m),...(m.program?{program:m.program.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait'}[command]))}:{}),...(m.route?{route:m.route.map(rotate)}:{})}))};
   }
   return assembly;
 }
@@ -39,6 +39,7 @@ export function pasteAssembly(input,source,point,turns=0){
   if(!point||!Number.isInteger(point.x)||!Number.isInteger(point.y)||point.x<0||point.y<0||point.x+b.width>pack.map.width||point.y+b.height>pack.map.height)throw Error('Move the cursor so the entire assembly fits inside the map.');
   if(pack.markers.some(m=>inside(m,b)))throw Error('Place assemblies on an empty object area. Terrain will be replaced; existing puzzle objects stay safe.');
   if(pack.markers.length+assembly.markers.length>MAX_MARKERS)throw Error('This assembly would exceed the 128-object limit.');
+  if(pack.markers.some(m=>m.kind==='clockwork')&&assembly.markers.some(m=>m.kind==='clockwork'))throw Error('A world can hold only one Clockwork companion.');
   if(pack.markers.some(m=>m.kind==='partner')&&assembly.markers.some(m=>m.kind==='partner'))throw Error('A world can hold only one Two-Lantern partner.');
   if(pack.markers.some(m=>m.kind==='relic')&&assembly.markers.some(m=>m.kind==='relic'))throw Error('A world can hold only one singing relic.');
   const used=new Set(pack.markers.filter(linked).map(m=>m.channel)),needed=[...new Set(assembly.markers.filter(linked).map(m=>m.channel))],free=CHANNELS.filter(id=>!used.has(id));

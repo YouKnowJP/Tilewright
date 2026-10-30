@@ -1,5 +1,35 @@
 # Verification record
 
+## The Clockwork Post and saved story shelves — v0.31.0
+
+All **803 Node tests**, syntax checks, the **124-file** static build, public
+artifact validation and the repository's **1,474 local references** pass.
+The **30-scenario Chromium release suite** passes against the built game.
+Firefox and WebKit each pass eight focused expansion/library scenarios.
+The new chapters have executable clean routes on Trail and Nemesis. Additional
+checks cover blocked cards, turn timing, pressure plates, room/map/assembly
+rotation, version-3 sharing, creator proofs, exact Undo/Continue and route-review
+replay. Earlier world formats and retained save fixtures still pass.
+
+Live checks complete all three new chapters at phone/desktop widths, edit and
+export a real creator program, reload and attach its playtest clear, switch books
+while preserving the latest exact trail, restart/remove inactive bookmarks, and
+recover from an interrupted active-book write. Bookmark tests also retain a
+branch choice and honor, enforce capacity without eviction, and verify profile
+and backup isolation. Native browser confirmations are replaced with visible
+game dialogs; cancellation, Escape, Tab/Enter, large text, nested prompts and
+focus return are exercised through actual controls.
+Additional Chromium Workshop (14), creator layout (7), legacy Storybook (8),
+and Expedition (13) checks pass, including every object inspector and 20 seeded
+world recipes.
+
+The three retained-baseline migration scenarios pass, including a real win
+continued from v0.30.1 and a shared-world win under `/Tilewright/`. Reviewed
+phone/desktop screenshots led to corrections for main-menu grid specificity
+and narrow, enlarged companion Back text. Covers use four-item pages with
+expandable descriptions. Browser checks use disposable contexts. They do not
+establish physical-device, screen-reader or long-term player-study coverage.
+
 ## Free play and commercial-use notices — v0.30.3
 
 All **780 Node tests**, syntax checks, the **119-file** build, public-artifact

@@ -1,3 +1,4 @@
+import {withGameConfirmation} from './ui-driver.mjs';
 import { artifactPath } from './artifacts.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -96,9 +97,9 @@ export async function checkTraining(browserType, { baseURL = 'http://127.0.0.1:4
       const page = await context.newPage(); await page.goto(baseURL); await page.locator('#title-training').click();
       const before = await page.evaluate(() => localStorage.getItem('tilewright.workshop.draft.v1'));
       await createWorld(page, routes.create, false);
-      page.once('dialog', dialog => dialog.dismiss()); await page.locator('#training-workshop').click();
+      await withGameConfirmation(page,false,async()=>{await page.locator('#training-workshop').click();});
       assert.equal(await page.locator('#training-camp').isVisible(), true); assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.workshop.draft.v1')), before);
-      page.once('dialog', dialog => dialog.accept()); await page.locator('#training-workshop').click();
+      await withGameConfirmation(page,true,async()=>{await page.locator('#training-workshop').click();});
       await page.locator('#ws-build').waitFor(); assert.equal(await page.locator('#ws-title').inputValue(), 'Moonbeam Island');
       assert.ok(JSON.parse(await page.evaluate(() => localStorage.getItem('tilewright.workshop.draft.v1'))).proof);
       results.push({ checks: 'Workshop transfer respects cancelled replacement, then explicitly imports the actual created world and winning clear.' });

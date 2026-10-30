@@ -1,3 +1,4 @@
+import {clockworkAction,clockworkStep,normalizeProgram} from './clockwork.mjs';
 import { validateWonders, initializeWonders, wonderInteractions, wonderProblem, rotateRoom, openVault, switchTraveler, applyStoryCards, twinGoal } from './adventure-wonders.mjs';
 import { validateDocument } from './model.mjs';
 import { freshMemory, normalizeMemory, learnMove } from './adventure-brain.mjs';
@@ -28,14 +29,14 @@ export function walkableCells(document) {
 
 export function activePlates(run) {
   const echo = liveEcho(run);
-  return run.stage.plates.filter(plate => same(plate, run.player) || run.crates.some(crate => same(crate, plate)) || (echo && same(plate, echo)) || (run.twin && same(plate, run.twin.other))).map(plate => plate.id);
+  return run.stage.plates.filter(plate => same(plate, run.player) || run.crates.some(crate => same(crate, plate)) || (echo && same(plate, echo)) || (run.twin && same(plate, run.twin.other)) || (run.clockwork && same(plate,run.clockwork))).map(plate => plate.id);
 }
 
 export function gateIsOpen(run, gate) {
   if (gate.type === 'switch') return switchGateOpen(run, gate);
   if (gate.type === 'key') return run.openGates.includes(gate.id);
   if (gate.type === 'signal') return run.relayProgress === run.stage.sequence.length;
-  if (gate.safeClose && [run.player, ...(run.twin?[run.twin.other]:[]), ...run.crates, ...run.companions, ...run.hunters, ...run.enemies.map(enemy => enemy.route[enemy.index])].some(point => same(point, gate))) return true;
+  if (gate.safeClose && [run.player, ...(run.twin?[run.twin.other]:[]), ...(run.clockwork?[run.clockwork]:[]), ...run.crates, ...run.companions, ...run.hunters, ...run.enemies.map(enemy => enemy.route[enemy.index])].some(point => same(point, gate))) return true;
   const active = activePlates(run);
   return gate.plates.every(id => active.includes(id));
 }
@@ -126,6 +127,7 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
     }
   }
   initializeWonders(run);
+  if(stage.clockwork){const bot=stage.clockwork;if(!Number.isInteger(bot.x)||!Number.isInteger(bot.y)||!inside(map,bot)||!canEnter(run,bot)||stage.crates.some(p=>same(p,bot))||stage.partner||stage.hazards.length||stage.hunters.length||stage.enemies.length)throw Error('Clockwork companions need clear land in a peaceful single-traveler world.');stage.clockwork={...bot,program:normalizeProgram(bot.program)};run.clockwork={...stage.clockwork,program:[...stage.clockwork.program],index:0,running:false,moves:0,last:'Paused'};}
   if(run.wonders)stage.initialDefinition=definition;
   if (stage.partner && (!run.walkable[stage.partner.y*map.width+stage.partner.x] || stage.crates.some(c=>same(c,stage.partner)) || stage.npcs.some(c=>same(c,stage.partner)))) throw Error('The partner needs a clear land cell.');
   if (!canEnter(run, run.player) || stage.crates.some(crate => same(crate, run.player))) throw new Error('The starting cell is blocked.');
@@ -185,7 +187,7 @@ export function hazardActive(run, hazard, turn = run.turns) {
 }
 
 export function nearbyInteractions(run) {
-  return [...wonderInteractions(run), ...run.stage.npcs.map(item => ({ ...item, ...(run.companions.find(companion => companion.id === item.id) || {}), kind: 'npc', label: `Talk to ${item.name}` })),
+  return [...(run.clockwork?[{...run.clockwork,kind:'clockwork',label:`Program ${run.clockwork.name}`}]:[]),...wonderInteractions(run), ...run.stage.npcs.map(item => ({ ...item, ...(run.companions.find(companion => companion.id === item.id) || {}), kind: 'npc', label: `Talk to ${item.name}` })),
     ...run.stage.relays.map(item => ({ ...item, kind: 'relay', label: `Ring ${item.name}` })),
     ...run.stage.switches.filter(item => item.operable !== false).map(item => ({ ...item, kind: 'switch', label: `${run.switches[item.id] ? 'Switch off' : 'Switch on'} ${item.name}` })),
     ...(run.stage.waystones || []).map(item => ({ ...item, kind: 'waystone', label: `Travel from ${item.name}` })),
@@ -231,7 +233,9 @@ export function stepRun(run, action) {
   if (run.status !== 'playing' || typeof action !== 'string') return run;
   if (run.dialogue || action === 'close-dialogue') return applyStoryCards(conversation(run, action));
   if (action === 'switch-traveler') { let next=switchTraveler(run); if(next.twin!==run.twin){next={...next,seen:[...run.seen]};reveal(next,next.player);} return next; }
+  const clockAction=clockworkAction(action)&&Boolean(run.clockwork);
   const interaction = action.startsWith('interact:') ? nearbyInteractions(run).find(item => item.id === action.slice(9)) : null;
+  if(interaction?.kind==='clockwork')return run;
   if (interaction?.kind === 'npc') {
     const rescued = run.stage.requiredRescues.includes(interaction.id) && run.collectedLanterns.length === run.stage.lanterns.length;
     return applyStoryCards({ ...run, dialogue: interaction.id, talkedTo: [...new Set([...run.talkedTo, interaction.id])], companions: rescued && !run.rescued.includes(interaction.id) ? [...run.companions, { id: interaction.id, x: interaction.x, y: interaction.y }] : run.companions, rescued: rescued ? [...new Set([...run.rescued, interaction.id])] : run.rescued,
@@ -239,7 +243,7 @@ export function stepRun(run, action) {
   }
   const dash = action.startsWith('dash-'), direction = dash ? action.slice(5) : action;
   const moving = Boolean(DIRECTIONS[direction]), tactical = ['decoy', 'shield', 'power'].includes(action);
-  if (!moving && direction !== 'wait' && !interaction && !tactical && action !== 'drop-cargo') return run;
+  if (!clockAction && !moving && direction !== 'wait' && !interaction && !tactical && action !== 'drop-cargo') return run;
   if (dash && run.stage.restrictions.noDash) return { ...run, events: [], message: 'Measured steps oath: use walking, cover, decoys, and shields.' };
   if (action === 'shield' && run.stage.restrictions.noShield) return { ...run, events: [], message: 'Unwarded oath: use cover, timing, and decoys instead of a shield.' };
   if (action === 'drop-cargo' && !run.carrying) return run;
@@ -260,6 +264,7 @@ export function stepRun(run, action) {
     openGates: [...run.openGates], seen: [...run.seen], events: [], invulnerability: Math.max(0, run.invulnerability - 1),
     noise: Math.max(0, run.noise - 1), alarm: Math.max(0, run.alarm - 1), stun: Math.max(0, run.stun - 1), ward: Math.max(0, run.ward - 1) };
   if (run.guild) next.guild = { ...run.guild };
+  if(clockAction){next.clockwork={...run.clockwork};if(action==='clockwork-toggle')next.clockwork.running=!run.clockwork.running;else if(action==='clockwork-reset'){const dock=run.stage.clockwork;if(!canEnter(run,dock)||run.crates.some(p=>same(p,dock)))return {...run,message:'Clear the companion’s dock before returning it.',events:[]};Object.assign(next.clockwork,{x:dock.x,y:dock.y,index:0,running:false,last:'At dock'});}else Object.assign(next.clockwork,{program:normalizeProgram(action.slice('clockwork-program:'.length).split(',')),index:0,running:false,last:'New loop'});next.events.push({type:'clockwork'});}
   let moved = false, touchedEnemy = false, blocked = '';
   const visited = [];
   if (moving) {
@@ -341,6 +346,8 @@ export function stepRun(run, action) {
   if (dash) next.noise = next.effects.dashNoise;
   if (next.carrying) next.noise = Math.max(next.noise, 2);
   if (next.carrying && same(next.player, next.stage.delivery)) { next.carrying = false; next.cargoDelivered = true; next.cargoPoint = null; next.events.push({ type: 'delivery' }); }
+  if(!clockAction)next=clockworkStep(next,canEnter);
+  if(next.clockwork)reveal(next,next.clockwork);
   for (const enemy of next.enemies) {
     const intent = enemyIntent(next, enemy); enemy.index = intent.index; enemy.direction = intent.direction;
   }
@@ -372,7 +379,7 @@ export function stepRun(run, action) {
     const lanterns = next.stage.lanterns.length - next.collectedLanterns.length;
     next.message = lanterns ? `The beacon needs ${lanterns} more ${lanterns === 1 ? 'lantern' : 'lanterns'}.` : `Before leaving: ${missing.map(goal => goal.label.toLowerCase()).join('; ')}.`; return next;
   }
-  const priority = ['hurt', 'needs-keeper', 'story-card', 'vault', 'room-turn', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
+  const priority = ['hurt', 'clockwork', 'needs-keeper', 'story-card', 'vault', 'room-turn', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const hunted=next.hunters.length>0,threatened=hunted||next.enemies.length>0;
   const messages = { 'needs-keeper':'This light needs Lantern keeper. Use T or Switch traveler to hand over the controls, then bring Lantern keeper here.', 'story-card':event?.text, 'room-turn':`${event?.name} turns a quarter-circle. The room, its objects, and travelers move together.`, vault:`${event?.name} opened! Security ${event?.security}/3. The vault-ring embers are marked; Plan shows their next pulse. The normal exit stays open.`, hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
@@ -380,6 +387,7 @@ export function stepRun(run, action) {
     veil: 'Mist veil raised. Existing enemy plans still resolve; move away from their last lead. Cargo and alarms reveal you.',
     echo: next.effects.echoTurns ? `Double cast! ${next.effects.echoTurns} more turns to lure hunters or hold a plate. Returning costs ${next.effects.returnEnergy} energy. Check Plan before returning.` : 'Double cast! Six more turns to lure hunters or hold a plate. B returns to it for one energy. Check Plan before returning.',
     'echo-return': next.effects.returnEnergy ? `Returned to your double. ${next.effects.returnEnergy} energy spent; the double dissolves.${next.effects.returnWard?' A two-turn ward protects this landing.':' Enemies take their turn.'}` : 'Returned to your double. One energy spent; the double dissolves and enemies take their turn.',
+    clockwork: next.clockwork?`${next.clockwork.name}: ${next.clockwork.running?'loop running':'paused'}. Read the next card in Plan; open Tools to change the loop.`:'',
     'echo-fade': 'Your double has faded or a hunter reached it. Check pressure crossings before moving.',
     waystone: `Waystone crossed to ${event?.name}. One energy spent.${threatened?' Enemies moved once.':' Walk or wait to recharge.'}`,
     'blocked-hit': 'Your shield absorbs the hit. Keep moving before it fades.',

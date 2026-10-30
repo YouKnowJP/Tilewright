@@ -1,3 +1,4 @@
+import {confirmGame} from './game-confirm.mjs';
 import { createJourney, advanceJourney, campOffers, leaveCamp, retryLeg, journeyScore, peekJourney, loadJourney, saveJourney, serializeJourney, restoreJourney, journeyUndoFrames } from './adventure-journey.mjs';
 import { dailySeed, expeditionConfig } from './adventure-generator.mjs';
 import { GUILD_KITS } from './adventure-tools.mjs';
@@ -60,9 +61,9 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
     return expeditionConfig({ mode: $('#expedition-mode').value, seed: $('#expedition-seed').value,
       length: Number($('#expedition-length').value), difficulty: $('#expedition-difficulty').value, vow: $('#expedition-vow').value, kit: $('#expedition-kit').value });
   }
-  function replacementAllowed() {
+  async function replacementAllowed() {
     return !(current && current.phase !== 'won') && !(saved.header && saved.header.phase !== 'won') && !(saved.error && !saved.unavailable)
-      || window.confirm('Starting or importing an expedition replaces the suspended expedition. Export it first if you want to keep it. Continue?');
+      || await confirmGame('Starting or importing an expedition replaces the suspended expedition. Export it first if you want to keep it. Continue?',{title:'Begin another expedition?',accept:'Replace expedition'});
   }
   function modeChanged() {
     const mode = $('#expedition-mode').value;
@@ -88,9 +89,9 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
   $('#expedition-surprise').addEventListener('click', () => {
     const values = new Uint32Array(1); window.crypto.getRandomValues(values); customSeed = `trail-${values[0].toString(36)}`; $('#expedition-seed').value = customSeed;
   });
-  $('#expedition-form').addEventListener('submit', event => {
+  $('#expedition-form').addEventListener('submit', async event => {
     event.preventDefault(); if (busy) return; $('#expedition-form-error').hidden = true;
-    try { const session = createJourney(configFromForm()); if (!replacementAllowed()) return; latestEarned = []; commit(session, true); }
+    try { const session = createJourney(configFromForm()); if (!await replacementAllowed()) return; latestEarned = []; commit(session, true); }
     catch (error) { $('#expedition-form-error').textContent = error.message; $('#expedition-form-error').hidden = false; }
   });
   $('#expedition-resume').addEventListener('click', async () => {
@@ -116,7 +117,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
     busy = true; renderHub();
     try {
       if (file.size > 220_000) throw new Error('Choose an expedition backup smaller than 220 KB.');
-      const session = restoreJourney(await file.text()); if (!replacementAllowed()) return;
+      const session = restoreJourney(await file.text()); if (!await replacementAllowed()) return;
       $('#expedition-form-error').hidden = true; latestEarned = []; commit(session, true); onNotice('Expedition backup restored.');
     } catch (error) { $('#expedition-form-error').textContent = error.message; $('#expedition-form-error').hidden = false; }
     finally { busy = false; renderHub(); }
@@ -136,7 +137,7 @@ export function createExpeditionUI({ storage, onRun, onNotice, onShow }) {
     $('#camp-perks').replaceChildren(...choices(offers.perks, 'camp-perk')); $('#camp-routes').replaceChildren(...choices(offers.routes, 'camp-route'));
     $('#camp-error').hidden = true; $('#camp-dialog').showModal(); campScrollNote();
   }
-  $('#camp-form').addEventListener('submit', event => {
+  $('#camp-form').addEventListener('submit', async event => {
     event.preventDefault();
     try {
       const next = leaveCamp(current, $('#camp-form input[name="camp-perk"]:checked')?.value, $('#camp-form input[name="camp-route"]:checked')?.value);

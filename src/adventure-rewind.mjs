@@ -5,7 +5,7 @@ import { resumeDefinition } from './adventure-resume.mjs';
 import { serializeJourney, restoreJourney } from './adventure-journey.mjs';
 
 export const TRAIL_SAVE_KEY='tilewright.trail.checkpoint.v1',REWIND_LIMIT=60,MAX_TRAIL_ACTIONS=8192,MAX_TRAIL_BYTES=650000;
-const RULES='0.22.0',actionPattern=/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|switch-traveler|close-dialogue|forget|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/;
+const RULES='0.22.0',actionPattern=/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|switch-traveler|clockwork-toggle|clockwork-reset|clockwork-program:(?:up|right|down|left|wait),(?:up|right|down|left|wait),(?:up|right|down|left|wait)|close-dialogue|forget|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/;
 export const replayAction=(run,action)=>action==='forget'?{...run,memory:freshMemory(),events:[],message:'The learned movement habits were cleared.'}:stepRun(run,action);
 export function runFingerprint(run){const {stage,walkable,events,message,...state}=run;return hashSeed(JSON.stringify(state)).toString(16);}
 export function beginRewind(run,input){

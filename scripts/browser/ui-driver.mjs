@@ -100,6 +100,7 @@ export async function revealEditorControl(page,target) {
   const panel=location.panel;
   if(panel){const dialog=page.locator(`#maker-${panel}-dialog`);if(await page.locator(`#maker-${panel}-button`).isVisible()&&!await dialog.isVisible()){await closeEditorPanels(page);await page.locator(`#maker-${panel}-button`).click();}}
   else await closeEditorPanels(page);
+  for(const details of await target.locator('xpath=ancestor::details').all())if(await details.getAttribute('open')===null)await details.locator(':scope > summary').click();
 }
 export async function editorButton(page,options) {
   const target=page.locator('#editor, #maker-palette-dialog, #maker-settings-dialog, dialog[open]').getByRole('button',{...options,includeHidden:true});
@@ -114,4 +115,11 @@ export async function chooseOption(page,selector,choice) {
   const id=await page.locator(selector).getAttribute('id');
   await page.locator(`[data-game-select="${id}"]`).click();
   await page.locator(`.game-select-menu [role="option"][data-value=${JSON.stringify(value)}]`).click();
+}
+
+export async function withGameConfirmation(page,accept,action){
+  await action();await page.locator('#game-confirm-dialog').waitFor();await page.locator(accept?'#game-confirm-accept':'#game-confirm-cancel').click();await page.locator('#game-confirm-dialog').waitFor({state:'detached'});
+}
+export async function confirmDraftReplacement(page){
+  if(await page.locator('#game-confirm-dialog').isVisible()){if(!/Replace the current workshop draft/.test(await page.locator('#game-confirm-copy').textContent()))throw Error('Unexpected confirmation instead of a Workshop draft replacement.');await page.locator('#game-confirm-accept').click();await page.locator('#game-confirm-dialog').waitFor({state:'detached'});}
 }

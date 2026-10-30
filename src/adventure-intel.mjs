@@ -1,3 +1,4 @@
+import {clockworkForecast} from './clockwork.mjs';
 import { hazardActive, enemyIntent, canEnter } from './adventure.mjs';
 import { kitFor, powerPreview, waystonePreview } from './adventure-tools.mjs';
 const at = point => `column ${point.x + 1}, row ${point.y + 1}`;
@@ -5,6 +6,7 @@ export function threatForecast(run) {
   const near = point => (point.x - run.player.x) ** 2 + (point.y - run.player.y) ** 2 <= run.effects.sightSquared;
   const lines = [`You: ${at(run.player)}. Health ${run.health}/3; energy ${run.energy}/3.`,
     run.carrying ? 'The carried relic is audible. Set it down with X to create a false trail.' : 'Waiting spends a turn. Reading this forecast does not.'];
+  if(run.clockwork)lines.push(clockworkForecast(run,canEnter));
   for (const hunter of run.hunters.filter(near)) {
     lines.push(`${hunter.name || (hunter.boss ? 'Watcher' : 'Hunter')} at ${at(hunter)}: ${hunter.mode}; next step ${at(hunter.intent)}.`);
     if (hunter.tactic) lines.push(`${hunter.name}: ${hunter.tactic.line} The marked move and sweep are already committed.`);

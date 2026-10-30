@@ -32,7 +32,7 @@
 <body class="playing game-front game-title-open">
   <div id="startup-status" class="startup-status" role="status"><img src="icon.svg" width="48" height="48" alt=""><strong>Lighting the trail…</strong><p>Your adventure is on its way.</p><button id="startup-retry" hidden>Try again</button></div>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.30.3</span></a>
+    <a class="brand" href="./" aria-label="Tilewright home"><img src="icon.svg" width="31" height="31" alt="">Tilewright<span class="version">v0.31.0</span></a>
     <span class="header-note">LANTERN TRAILS / THE CREATOR’S CAMP</span>
     <button id="header-training" class="source-link">Training camp</button>
   </header>
@@ -114,10 +114,11 @@
           <button id="front-back" class="front-back">Main menu</button><p class="title-kicker">CHOOSE A PATH</p>
           <h2 id="front-modes-title" tabindex="-1">What kind of journey?</h2><p>Explore a world, try a new tool, or make a path of your own.</p>
           <div class="front-mode-grid">
+            <button id="front-books"><canvas data-mode-art="archive" aria-hidden="true"></canvas><strong>Storybooks</strong><span>Follow a complete tale, keep your chapter bookmarks, or find a peaceful road. Your stories wait while you try another.</span><small>Peaceful journeys · Puzzles · Branching stories</small><b class="mode-card-action">Find your next story →</b></button>
             <button id="front-story" data-front-mode="story"><canvas data-mode-art="woodland" aria-hidden="true"></canvas><strong>Story chapters</strong><span>Follow the lost lanterns through forests, shores, and clockwork gardens. A gentle first trail teaches the way.</span><small>24 missions · 8 chapters · Start here</small><b class="mode-card-action">Browse chapters →</b></button>
             <button id="front-guild" data-front-mode="guild"><canvas data-mode-art="clockwork" aria-hidden="true"></canvas><strong>Wayfarers’ Guild</strong><span>Choose a specialist. Leave a double, cast a veil, or halt a hunter. Take any job and find your own route.</span><small>8 jobs · 3 specialists · Replay for honors</small><b class="mode-card-action">Choose a specialist →</b></button>
             <button id="front-expeditions" data-front-mode="expeditions"><canvas data-mode-art="aurora" aria-hidden="true"></canvas><strong>Expeditions</strong><span>Build a toolkit between trails. Make camp, choose the next road, and return to a saved journey.</span><small>Short or long journeys · Daily trails</small><b class="mode-card-action">Plan an expedition →</b></button>
-            <article class="front-mapmaker-card"><canvas data-mode-art="coast" aria-hidden="true"></canvas><strong>Mapmaker</strong><span>Paint a little world, then explore it. Build puzzles and stories in the Workshop, share them with friends, or paint terrain in Mapmaker.</span><small>Build a world · Play your own map</small><div><button id="front-workshop" class="ws-mode-entry">Design &amp; share adventures</button><button id="front-mapmaker" data-front-mode="mapmaker">Open Mapmaker</button><button id="front-custom">Explore current map</button></div></article>
+            <article class="front-mapmaker-card front-create-card"><canvas data-mode-art="coast" aria-hidden="true"></canvas><strong>Mapmaker</strong><span>Paint a little world, then explore it. Build puzzles and stories in the Workshop, share them with friends, or paint terrain in Mapmaker.</span><small>Build a world · Play your own map</small><div><button id="front-workshop" class="ws-mode-entry">Design &amp; share adventures</button><button id="front-mapmaker" data-front-mode="mapmaker">Open Mapmaker</button><button id="front-custom">Explore current map</button></div></article>
           </div>
           <p id="front-mode-notice" class="front-mode-notice" role="status" hidden></p>
         </section>

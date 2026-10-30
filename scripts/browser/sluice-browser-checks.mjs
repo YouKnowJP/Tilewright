@@ -1,3 +1,4 @@
+import {withGameConfirmation} from './ui-driver.mjs';
 import { artifactPath } from './artifacts.mjs';
 import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
@@ -102,8 +103,8 @@ export async function checkSluices(browserType, { baseURL = BASE, channel = 'chr
         if (await page.locator('#conversation-dialog').isVisible()) await clickControl(page, '#conversation-close');
         await clickControl(page, '#begin-expedition');
         const previous = await page.evaluate(() => localStorage.getItem('tilewright.expedition.v1'));
-        if (previous && JSON.parse(previous).state.phase !== 'won') page.once('dialog', dialog => dialog.accept());
-        await page.locator('#expedition-file').setInputFiles({ name: `${fixture.id}.json`, mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(fixture.checkpoint)) });
+        if (previous && JSON.parse(previous).state.phase !== 'won') await withGameConfirmation(page,true,async()=>{await page.locator('#expedition-file').setInputFiles({ name: `${fixture.id}.json`, mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(fixture.checkpoint)) });});
+        else await page.locator('#expedition-file').setInputFiles({ name: `${fixture.id}.json`, mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(fixture.checkpoint)) });
         await page.waitForFunction(() => !document.querySelector('#expedition-import').disabled);
         assert.equal(await page.locator('#game-turns').textContent(), String(fixture.turns));
         const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('tilewright.expedition.v1')));

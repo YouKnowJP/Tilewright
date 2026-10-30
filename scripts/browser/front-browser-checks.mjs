@@ -1,3 +1,4 @@
+import {withGameConfirmation} from './ui-driver.mjs';
 import { artifactPath } from './artifacts.mjs';
 import assert from 'node:assert/strict';
 import { chooseOption, clickControl } from './ui-driver.mjs';
@@ -85,8 +86,7 @@ export async function checkFrontMenu(browserType, { baseURL = 'http://127.0.0.1:
         assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), original);
         await clickControl(page, '#game-title-menu'); await page.locator('#title-mapmaker').click();
         await page.locator('#new-map').click(); await page.locator('#new-width').fill('1'); await page.locator('#new-height').fill('1');
-        page.once('dialog', dialog => dialog.accept());
-        await page.locator('#new-form button[type="submit"]').click(); await page.locator('#mode-play').click();
+        await withGameConfirmation(page,true,async()=>{await page.locator('#new-form button[type="submit"]').click();}); await page.locator('#mode-play').click();
         await page.locator('#title-play').click(); await page.locator('#front-custom').click();
         assert.equal(await page.locator('#game-title-screen').isVisible(), true);
         assert.equal(await page.locator('#game-layout').isVisible(), false);

@@ -122,7 +122,7 @@ function validReceipt(receipt) {
   return receipt && Number.isInteger(receipt.chapter) && typeof receipt.earned === 'boolean' && ['wander','clean','swift','treasure','voices','resourceful'].includes(receipt.challenge)
     && Number.isInteger(receipt.stars) && receipt.stars >= 1 && receipt.stars <= 3 && Number.isInteger(receipt.turns) && receipt.turns >= 1 && receipt.turns <= 1_000_000 && Number.isInteger(receipt.score) && receipt.score >= 0 && receipt.score <= 1_000_000_000 && !(receipt.challenge === 'wander' && receipt.earned);
 }
-function restoreSession(input) {
+export function restoreSession(input) {
   const book = decode(input?.book), length = book.chapters.length; serializeBook(book);
   if (!['trail','nemesis'].includes(input.difficulty) || !Number.isInteger(input.chapter) || input.chapter < 0 || input.chapter > length || !['interlude','playing','won','choice'].includes(input.phase) || !Array.isArray(input.receipts) || input.receipts.length > length || !input.receipts.every(validReceipt) || (input.phase === 'won') !== (input.chapter === length)) throw Error('This storybook checkpoint is damaged.');
   const session = { book, difficulty: input.difficulty, chapter: input.chapter, phase: input.phase, receipts: input.receipts.map(receipt => ({ chapter: receipt.chapter, challenge: receipt.challenge, earned: receipt.earned, stars: receipt.stars, score: receipt.score, turns: receipt.turns, ...(receipt.route !== undefined ? {route:receipt.route} : {}) })), challenge: input.challenge };
@@ -138,6 +138,7 @@ function restoreSession(input) {
     const target = route ? route.target : page.next ?? (expected + 1 < length ? expected + 1 : 'end');
     ending = route?.ending || page.ending; expected = target;
   }
+  if(input.bookmarkRevision!==undefined){if(!Number.isSafeInteger(input.bookmarkRevision)||input.bookmarkRevision<0||input.bookmarkRevision>1_000_000_000)throw Error('This story bookmark has invalid revision data.');session.bookmarkRevision=input.bookmarkRevision;}
   const pending = session.phase === 'choice';
   if ((expected === 'end' ? length : expected) !== session.chapter || pending && (!session.receipts.length || session.receipts.at(-1).route !== undefined || !book.chapters[expected]?.routes) || !pending && session.receipts.some(receipt => book.chapters[receipt.chapter].routes && !receipt.route)) throw Error('This checkpoint has an invalid story path.');
   if (session.phase === 'won' && ending) session.ending = ending;

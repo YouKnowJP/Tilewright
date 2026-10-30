@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.31.0 — 2026-10-30
+
+- Add The Clockwork Post: three peaceful companion puzzles, three-card instruction loops, predictable turn timing, pause/reset, Plan forecasts, Undo and exact Continue.
+- Let creators paint a Clockwork companion, edit its three starting cards, remix/rotate its program, share version-3 worlds, and attach verified creator clears.
+- Add direct Storybooks discovery in the Play hub, compact main-menu choices, four-cover pages, search/filter navigation and readable bookmarks.
+- Keep up to 32 per-book-version/rule chapter and branch bookmarks within each journey; preserve the latest exact trail while browsing other books. Bookmarks are included in full backups and fresh starts.
+- Replace remaining browser confirmation boxes with shared game dialogs, retaining cancellation, Escape, focus and nested-dialog behavior.
+- Correct Guild Continue guidance and extend rules, compatibility and live browser regression checks.
+
 ## 0.30.3 — 2026-10-28
 
 - Clarify that paid downloads, ad-supported game copies, subscription rehosting and asset resale of new protected material need written permission.

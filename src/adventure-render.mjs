@@ -57,6 +57,7 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     const circle = (color, x, y, radius) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill(); };
     const visible = point => run.seen[point.y * stage.map.width + point.x];
     const active = activePlates(run);
+    if(run.clockwork&&visible(run.clockwork)){drawWorkshopObject(ctx,{...run.clockwork,kind:'clockwork'});drawCueBadge(ctx,run.clockwork,'A');}
     for(const room of stage.turntables||[]) {if(!visible(room))continue;ctx.strokeStyle=preferences().contrast==='high'?'#ffffff':'#f6d88e';ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.strokeRect((room.x-room.radius)*24+2,(room.y-room.radius)*24+2,(room.radius*2+1)*24-4,(room.radius*2+1)*24-4);ctx.setLineDash([]);drawWorkshopObject(ctx,{...room,kind:'turntable'});}
     for(const item of stage.vaults||[])if(visible(item)&&!run.wonders.vaults.includes(item.id))drawWorkshopObject(ctx,{...item,kind:'vault'});
     for(const item of stage.runes||[])if(visible(item))drawWorkshopObject(ctx,{...item,kind:'rune'});

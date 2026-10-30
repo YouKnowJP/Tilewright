@@ -1,3 +1,4 @@
+import {confirmDraftReplacement} from './ui-driver.mjs';
 import { artifactPath } from './artifacts.mjs';
 import { chooseOption } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
@@ -24,8 +25,8 @@ export async function checkWorkshop(browserType,{baseURL=BASE,channel='chrome',s
   if(desktop){
    const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});
    try{
-    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.url());});page.on('dialog',d=>d.accept());
-    await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();assert.equal(await page.locator('.ws-adventure-card').count(),6);assert.match(await page.locator('#ws-shelf-count').textContent(),/27 worlds/);
+    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
+    await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();assert.equal(await page.locator('.ws-adventure-card').count(),6);assert.match(await page.locator('#ws-shelf-count').textContent(),/30 worlds/);
     const original=await originals(page),packs=workshopShowcases();
     if(screenshots)await page.screenshot({path:artifactPath('workshop-shelf-desktop.png'),fullPage:true});
     for(const [i,pack]of packs.entries())for(const rules of ['trail','nemesis']){
@@ -47,7 +48,7 @@ export async function checkWorkshop(browserType,{baseURL=BASE,channel='chrome',s
     const alternates=JSON.parse(await readFile(new URL('../../tests/fixtures/workshop-alternates.json',import.meta.url),'utf8'));
     for (const [i,proof] of alternates.entries()) { await page.locator('.ws-adventure-card>button').nth(i===0?0:1).click();await page.locator('#ws-preview-dialog').waitFor();await page.locator('#ws-preview-play').click();await playGuild(page,proof.actions);assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');await page.locator('#game-primary').click(); }
     assert.deepEqual(await originals(page),original);assert.equal(await page.evaluate(()=>Object.keys(JSON.parse(localStorage.getItem('tilewright.workshop.bests.v1')).records).length),6);
-    await page.locator('#ws-new').click();await page.locator('#ws-new-width').fill('8');await page.locator('#ws-new-height').fill('8');await page.locator('#ws-new-form button[type="submit"]').click();
+    await page.locator('#ws-new').click();await page.locator('#ws-new-width').fill('8');await page.locator('#ws-new-height').fill('8');await page.locator('#ws-new-form button[type="submit"]').click();await confirmDraftReplacement(page);
     await page.locator('#ws-title').fill('The Little Homecoming');await page.locator('#ws-author').fill('A test keeper');await page.locator('#ws-story-details summary').click();await page.locator('#ws-intro').fill('One lamp beyond the orchard. Bring its light home.');await page.locator('#ws-props-adventure button[type="submit"]').click();
     await chooseBrush(page,'Story','Talking keeper');await cell(page,6,6);await page.locator('#ws-inspect-tool').click();await cell(page,6,6);await page.locator('#ws-object-name').fill('Mira');await page.locator('#ws-object-text').fill('The river remembers every traveller.');await chooseOption(page,'#ws-object-reward','supplies');await page.locator('#ws-props-object button[type="submit"]').click();
     const draft=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('tilewright.workshop.draft.v1')));
@@ -77,7 +78,7 @@ export async function checkWorkshop(browserType,{baseURL=BASE,channel='chrome',s
   if(desktop) { results.push(...await recoveryChecks(browser,baseURL)); results.push(...await designerChecks(browser,baseURL)); }
   for(const width of widths){
    const context=await browser.newContext({viewport:{width,height:900},hasTouch:width<=1000,acceptDownloads:true});
-   try{const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
+   try{const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
     await page.locator('.ws-adventure-card>button').first().click();await page.locator('#ws-preview-dialog').waitFor();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);await page.locator('#ws-preview-close').click();
     await page.locator('#ws-tab-build').click();await notes(page,'adventure');await page.locator('#ws-title').fill('A touch-built world');await page.locator('#ws-props-adventure button[type="submit"]').click();await closeNotes(page);
     await chooseBrush(page,'Goals','Treasure');await cell(page,4,4,{touch:width<=1000});assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('tilewright.workshop.draft.v1')).markers.filter(m=>m.kind==='coin').length),1);
@@ -97,14 +98,14 @@ export async function checkWorkshop(browserType,{baseURL=BASE,channel='chrome',s
 async function recoveryChecks(browser,baseURL) {
  const results=[],context=await browser.newContext({viewport:{width:1440,height:1000}});
  try {
-  const page=await context.newPage();page.on('dialog',d=>d.accept());await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();
+  const page=await context.newPage();await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();
   for (const region of WORLD_REGIONS) for (const mission of WORLD_MISSIONS) {
    await page.locator('#ws-new-draft').isVisible().then(async visible=>{await page.locator(visible?'#ws-new-draft':'#ws-new').click();});
-   await chooseOption(page,'#ws-new-mode','seed');await chooseOption(page,'#ws-new-region',region.id);await chooseOption(page,'#ws-new-mission',mission.id);await page.locator('#ws-new-form button[type="submit"]').click();
+   await chooseOption(page,'#ws-new-mode','seed');await chooseOption(page,'#ws-new-region',region.id);await chooseOption(page,'#ws-new-mission',mission.id);await page.locator('#ws-new-form button[type="submit"]').click();await confirmDraftReplacement(page);
    assert.equal(await page.locator('#ws-build').isVisible(),true);await notes(page,'checks');assert.match(await page.locator('#ws-check-title').textContent(),/Ready/);
   }
   results.push({checks:'All 20 region/mission recipes created through visible controls'});
-  await page.locator('#ws-new-draft').click();await chooseOption(page,'#ws-new-mode','current');await page.locator('#ws-new-form button[type="submit"]').click();assert.match(await page.locator('#ws-description').inputValue(),/painted world/);
+  await page.locator('#ws-new-draft').click();await chooseOption(page,'#ws-new-mode','current');await page.locator('#ws-new-form button[type="submit"]').click();await confirmDraftReplacement(page);assert.match(await page.locator('#ws-description').inputValue(),/painted world/);
   await chooseOption(page,'#ws-zoom','2');await page.locator('#ws-pan-tool').click();await cell(page,2,2,{dragTo:{x:1,y:1}});await chooseOption(page,'#ws-zoom','fit');
   await notes(page,'adventure');await page.locator('#ws-title').fill('Details saved on leaving');await page.locator('#ws-home').click();await page.locator('#title-workshop').click();await page.locator('#ws-tab-build').click();assert.equal(await page.locator('#ws-title').inputValue(),'Details saved on leaving');
   await page.locator('#ws-tab-import').click();await page.locator('#ws-file').setInputFiles({name:'too-big.json',mimeType:'application/json',buffer:Buffer.alloc(400001)});await page.waitForFunction(()=>document.querySelector('#ws-status').textContent.includes('400 KB'));assert.equal(await page.locator('#ws-preview-dialog').isVisible(),false);
@@ -113,11 +114,11 @@ async function recoveryChecks(browser,baseURL) {
  const blocked=await browser.newContext({viewport:{width:1440,height:1000}});
  try {
   await blocked.addInitScript(()=>{Storage.prototype.setItem=()=>{throw new DOMException('blocked','QuotaExceededError');};Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{throw Error('denied');}}});});
-  const page=await blocked.newPage();page.on('dialog',d=>d.accept());await page.goto(baseURL+'/#adventure='+adventureCode(blankAdventure(8,8)));await page.locator('#ws-preview-dialog').waitFor();await page.locator('#ws-preview-remix').click();await page.locator('#ws-test').click();await playGuild(page,['up','up','right','right','down','down','right']);assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');assert.match(await page.locator('#game-result-text').textContent(),/Saving unavailable/);await page.locator('#game-primary').click();assert.match(await page.locator('#ws-draft-state').textContent(),/Saving unavailable/);await page.locator('#ws-share').click();await page.locator('#ws-share-dialog').waitFor();await page.locator('#ws-copy-code').click();assert.equal(await page.locator('#ws-manual-copy').getAttribute('open'),'');assert.match(await page.locator('#ws-share-status').textContent(),/manually/);assert.match(await page.locator('#ws-export-code').inputValue(),/^LT1\./);
+  const page=await blocked.newPage();await page.goto(baseURL+'/#adventure='+adventureCode(blankAdventure(8,8)));await page.locator('#ws-preview-dialog').waitFor();await page.locator('#ws-preview-remix').click();await confirmDraftReplacement(page);await page.locator('#ws-test').click();await playGuild(page,['up','up','right','right','down','down','right']);assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');assert.match(await page.locator('#game-result-text').textContent(),/Saving unavailable/);await page.locator('#game-primary').click();assert.match(await page.locator('#ws-draft-state').textContent(),/Saving unavailable/);await page.locator('#ws-share').click();await page.locator('#ws-share-dialog').waitFor();await page.locator('#ws-copy-code').click();assert.equal(await page.locator('#ws-manual-copy').getAttribute('open'),'');assert.match(await page.locator('#ws-share-status').textContent(),/manually/);assert.match(await page.locator('#ws-export-code').inputValue(),/^LT1\./);
   results.push({checks:'Blocked storage retains actual completion and creator clear in session; denied clipboard exposes manual code'});
  } finally { await blocked.close(); }
  const damaged=await browser.newContext({viewport:{width:1440,height:1000}});
- try { const page=await damaged.newPage();page.on('dialog',d=>d.accept());await damaged.addInitScript(()=>{localStorage.setItem('tilewright.workshop.v1','damaged original shelf');});await page.goto(baseURL+'/#adventure='+adventureCode(blankAdventure(8,8)));await page.locator('#ws-preview-dialog').waitFor();await page.locator('#ws-preview-remix').click();await page.locator('#ws-test').click();await playGuild(page,['up','up','right','right','down','down','right']);assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');assert.equal(await page.evaluate(()=>localStorage.getItem('tilewright.workshop.v1')),'damaged original shelf');results.push({checks:'A creator clear never overwrites an unreadable shelf unless the player explicitly saves an adventure'}); } finally {await damaged.close();}
+ try { const page=await damaged.newPage();await damaged.addInitScript(()=>{localStorage.setItem('tilewright.workshop.v1','damaged original shelf');});await page.goto(baseURL+'/#adventure='+adventureCode(blankAdventure(8,8)));await page.locator('#ws-preview-dialog').waitFor();await page.locator('#ws-preview-remix').click();await confirmDraftReplacement(page);await page.locator('#ws-test').click();await playGuild(page,['up','up','right','right','down','down','right']);assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won');assert.equal(await page.evaluate(()=>localStorage.getItem('tilewright.workshop.v1')),'damaged original shelf');results.push({checks:'A creator clear never overwrites an unreadable shelf unless the player explicitly saves an adventure'}); } finally {await damaged.close();}
  return results;
 }
 
@@ -133,7 +134,7 @@ async function designerChecks(browser,baseURL) {
   else{await page.locator('#ws-canvas').evaluate(node=>node.addEventListener('pointerdown',event=>window.cancelledStroke=event.pointerId,{once:true}));await page.mouse.move(r.x+r.width/2,r.y+r.height/2);await page.mouse.down();await page.locator('#ws-canvas').evaluate(node=>node.dispatchEvent(new PointerEvent('pointercancel',{pointerId:window.cancelledStroke})));await page.mouse.up();}
   assert.equal(await page.evaluate(()=>localStorage.getItem('tilewright.workshop.draft.v1')),before,'Cancelled pointer strokes must not save edits');
   await page.locator('#ws-panel-adventure').click();await page.locator('#ws-title').fill('A Nemesis creator clear');await page.locator('#ws-world-details summary').click();await chooseOption(page,'#ws-test-rules','nemesis');await page.locator('#ws-props-adventure button[type="submit"]').click();assert.deepEqual(errors,[]);
-  return [{checks:'All 24 object inspectors hide irrelevant settings; layer visibility, cancelled pointer stroke, and Nemesis playtest controls'}];
+  return [{checks:'All 29 object inspectors hide irrelevant settings; layer visibility, cancelled pointer stroke, and Nemesis playtest controls'}];
  } finally { await context.close(); }
 }
 

@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**362 files in 15 folders.** Stage new files before refreshing. Run
+**370 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,10 +23,10 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 5 |
-| [scripts/browser/](../scripts/browser/) | 35 |
+| [scripts/browser/](../scripts/browser/) | 36 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 90 |
-| [tests/](../tests/) | 46 |
+| [src/](../src/) | 95 |
+| [tests/](../tests/) | 48 |
 | [tests/fixtures/](../tests/fixtures/) | 21 |
 
 <details>
@@ -254,7 +254,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 35 files</summary>
+<summary>scripts/browser/ — 36 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -276,6 +276,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [journal-browser-checks.mjs](../scripts/browser/journal-browser-checks.mjs)
 - [lab-browser-checks.mjs](../scripts/browser/lab-browser-checks.mjs)
 - [layout-browser-checks.mjs](../scripts/browser/layout-browser-checks.mjs)
+- [library-clockwork-browser-checks.mjs](../scripts/browser/library-clockwork-browser-checks.mjs)
 - [mastery-browser-checks.mjs](../scripts/browser/mastery-browser-checks.mjs)
 - [migration-browser-checks.mjs](../scripts/browser/migration-browser-checks.mjs)
 - [presentation-browser-checks.mjs](../scripts/browser/presentation-browser-checks.mjs)
@@ -307,7 +308,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 90 files</summary>
+<summary>src/ — 95 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -347,7 +348,11 @@ captures, dependencies, and operating-system metadata are excluded.
 - [browser-yield.mjs](../src/browser-yield.mjs)
 - [cartographer-clears.mjs](../src/cartographer-clears.mjs)
 - [cartographer-worlds.mjs](../src/cartographer-worlds.mjs)
+- [clockwork-ui.mjs](../src/clockwork-ui.mjs)
+- [clockwork-worlds.mjs](../src/clockwork-worlds.mjs)
+- [clockwork.mjs](../src/clockwork.mjs)
 - [creator-guide.mjs](../src/creator-guide.mjs)
+- [game-confirm.mjs](../src/game-confirm.mjs)
 - [game-dropdowns.mjs](../src/game-dropdowns.mjs)
 - [icons.mjs](../src/icons.mjs)
 - [mapmaker-shell.mjs](../src/mapmaker-shell.mjs)
@@ -366,6 +371,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [storage.mjs](../src/storage.mjs)
 - [story-adventure-clears.mjs](../src/story-adventure-clears.mjs)
 - [storybook-adventures.mjs](../src/storybook-adventures.mjs)
+- [storybook-bookmarks.mjs](../src/storybook-bookmarks.mjs)
 - [storybook-lanternfair.mjs](../src/storybook-lanternfair.mjs)
 - [storybook-model.mjs](../src/storybook-model.mjs)
 - [storybook-promise.mjs](../src/storybook-promise.mjs)
@@ -403,7 +409,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 46 files</summary>
+<summary>tests/ — 48 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -420,6 +426,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [atlas-runs.test.mjs](../tests/atlas-runs.test.mjs)
 - [browser-yield.test.mjs](../tests/browser-yield.test.mjs)
 - [cartographer.test.mjs](../tests/cartographer.test.mjs)
+- [clockwork.test.mjs](../tests/clockwork.test.mjs)
 - [echo.test.mjs](../tests/echo.test.mjs)
 - [expansion-mechanics.test.mjs](../tests/expansion-mechanics.test.mjs)
 - [expedition-runs.test.mjs](../tests/expedition-runs.test.mjs)
@@ -439,6 +446,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [sluice-runs.test.mjs](../tests/sluice-runs.test.mjs)
 - [storage.test.mjs](../tests/storage.test.mjs)
 - [story-adventures.test.mjs](../tests/story-adventures.test.mjs)
+- [storybook-bookmarks.test.mjs](../tests/storybook-bookmarks.test.mjs)
 - [storybook.test.mjs](../tests/storybook.test.mjs)
 - [trailboard-memories.test.mjs](../tests/trailboard-memories.test.mjs)
 - [trailhouse.test.mjs](../tests/trailhouse.test.mjs)

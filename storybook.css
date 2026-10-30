@@ -85,3 +85,16 @@
   #ws-books[data-phase="choice"] .book-camp h4 { font-size:25px; margin:8px 0 12px; }
   #ws-books[data-phase="choice"] .book-passage { font-size:16px; line-height:1.65; }
 }
+/* New owned presentation; see LICENSE. */
+.book-saved-stories{padding:12px 16px;border:1px solid #8e895a;margin:18px 0;color:#eee5c7;background:#173630}
+.book-saved-stories summary{cursor:pointer;min-height:44px;align-content:center;line-height:1.5}
+.book-saved-stories article{padding:12px 0;border-top:1px solid #667559;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.book-saved-stories p{flex:1 1 100%;margin:0 0 6px;font-size:var(--adventure-text-size,16px);overflow-wrap:anywhere}
+#book-covers .book-cover canvas{height:100px}#book-covers .book-cover-copy{padding:16px}#book-covers .book-cover h4{font-size:23px}
+@media(max-width:600px){#book-covers .book-cover canvas{height:72px}#book-covers .book-cover-copy{padding:14px}#book-covers .book-cover p{line-height:1.5}}
+.clockwork-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:20px 0}.clockwork-cards label{min-width:0;display:grid;gap:8px;color:#f1d799}.clockwork-actions{display:flex;flex-wrap:wrap;gap:8px}.clockwork-actions button{flex:1 1 150px}
+@media(max-width:420px){.clockwork-cards{grid-template-columns:1fr}}
+#clockwork-dialog .front-dialog-heading button{flex-shrink:0;white-space:nowrap;min-height:44px}
+#clockwork-dialog .front-dialog-heading p{min-width:0}
+.book-about{margin:10px 0}.book-about>summary{cursor:pointer;min-height:44px;align-content:center;color:#f2dfac;font-size:var(--adventure-text-size,16px);line-height:1.5}
+.book-about p{overflow-wrap:anywhere;margin:10px 0}

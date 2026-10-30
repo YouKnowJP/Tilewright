@@ -1,5 +1,5 @@
 import { artifactPath } from './artifacts.mjs';
-import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
+import { clickControl, selectControl, chooseOption, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,6 +7,7 @@ import { readFile } from 'node:fs/promises';
 const BASE = 'http://127.0.0.1:4174', recordKey = 'tilewright.guild.v1';
 const keys = { up: 'ArrowUp', right: 'ArrowRight', down: 'ArrowDown', left: 'ArrowLeft', wait: 'Space', decoy: 'q', shield: 'c', power: 'b', 'switch-traveler':'t', 'drop-cargo':'x' };
 async function input(page, value, touch = false) {
+  if(value.startsWith('clockwork-')){await clickControl(page,'#game-clockwork',touch);if(value.startsWith('clockwork-program:')){for(const [i,command]of value.slice('clockwork-program:'.length).split(',').entries())await chooseOption(page,`#clockwork-card-${i}`,command);await page.locator('#clockwork-apply').click();}else await page.locator(value==='clockwork-toggle'?'#clockwork-toggle':'#clockwork-reset').click();return;}
   if (value.startsWith('interact:')) {
     if (await page.locator('#game-target option').count()>1) await selectControl(page, '#game-target', value.slice(9));
     if (touch) await clickControl(page, '#game-interact', true);

@@ -1,3 +1,4 @@
+import {confirmDraftReplacement} from './ui-driver.mjs';
 import { artifactPath } from './artifacts.mjs';
 import assert from 'node:assert/strict';
 import { editorButton, revealEditorControl, closeEditorPanels } from './ui-driver.mjs';
@@ -9,7 +10,7 @@ export async function checkCreators(browserType,{baseURL='http://127.0.0.1:4174'
  for(const [width,height]of [[320,740],[390,900],[768,900],[1024,768],[1440,900],[320,568],[844,390]]){
   const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce',acceptDownloads:true});
   try{
-   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+':'+r.url());});page.on('dialog',d=>d.accept());
+   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+':'+r.url());});
    await page.goto(`${baseURL}/#mapmaker`);await page.locator('#loading-note').waitFor({state:'hidden'});await page.locator('#editor').waitFor({state:'visible'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
    assert.equal(await page.locator('#editor').isVisible(),true);assert.equal(await page.locator('.inspector').isVisible(),width>1100);
    await guide(page,width<=1100?'#maker-guide':'#maker-guide-wide');
@@ -20,7 +21,7 @@ export async function checkCreators(browserType,{baseURL='http://127.0.0.1:4174'
    await cell(page,'#map',2,2,28,20);assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('tilewright.document.v1')).layers[0].tiles[58]),4);
    const terrain=await page.evaluate(()=>localStorage.getItem('tilewright.document.v1'));
    await page.locator('#maker-use-terrain').click();await page.locator('#ws-new-dialog').waitFor();assert.equal(await page.locator('#ws-new-mode').inputValue(),'current');assert.equal(await page.locator('#ws-new-art').evaluate(c=>c.width>0&&c.height>0),true);
-   await page.locator('#ws-new-form button[type="submit"]').click();await page.locator('#ws-build').waitFor();assert.equal(await page.locator('#ws-heading').textContent(),'World studio');
+   await page.locator('#ws-new-form button[type="submit"]').click();await confirmDraftReplacement(page);await page.locator('#ws-build').waitFor();assert.equal(await page.locator('#ws-heading').textContent(),'World studio');
    assert.equal(await page.evaluate(()=>localStorage.getItem('tilewright.document.v1')),terrain);
    assert.equal(await page.locator('[data-ws-quick]').count(),8);assert.ok(await page.locator('#ws-quest-strip button').count()>=3);
    await guide(page,'#ws-guide');

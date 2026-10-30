@@ -1,3 +1,4 @@
+import {withGameConfirmation} from './ui-driver.mjs';
 import { revealEditorControl } from './ui-driver.mjs';
 import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
@@ -95,7 +96,7 @@ export async function checkAdventures(browserType, { baseURL = BASE, channel = '
         await clickControl(page, '#mode-play'); await playRoute(page, ['right']); await clickControl(page, '#mode-create');
         await clickControl(page, '#undo'); assert.equal(await page.locator('#map-name').inputValue(), 'Adventure test map');
         await clickControl(page, '#new-map'); await page.locator('#new-width').fill('1'); await page.locator('#new-height').fill('1');
-        page.once('dialog', dialog => dialog.accept()); await page.getByRole('button', { name: 'Create map', exact: true }).click();
+        await withGameConfirmation(page,true,async()=>{await page.getByRole('button', { name: 'Create map', exact: true }).click();});
         await clickControl(page, '#mode-play'); const title = await page.locator('#game-title').textContent();
         await clickControl(page, '#play-custom');
         assert.match(await page.locator('#game-status').textContent(), /six connected/);

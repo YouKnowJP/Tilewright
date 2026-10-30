@@ -1,3 +1,4 @@
+import {withGameConfirmation} from './ui-driver.mjs';
 import { artifactPath } from './artifacts.mjs';
 import { clickControl, selectControl, enterFirstTrail } from './ui-driver.mjs';
 import assert from 'node:assert/strict';
@@ -18,8 +19,8 @@ async function begin(page, config) {
     await selectControl(page, '#expedition-vow', config.vow || 'none');
   }
   const suspended = await snapshot(page);
-  if (suspended && JSON.parse(suspended).state.phase !== 'won') page.once('dialog', dialog => dialog.accept());
-  await clickControl(page, '#expedition-start');
+  if (suspended && JSON.parse(suspended).state.phase !== 'won') await withGameConfirmation(page,true,async()=>{await clickControl(page, '#expedition-start');});
+  else await clickControl(page, '#expedition-start');
   await page.locator('#adventure[data-view=play][data-status=playing]').waitFor();assert.match(await page.locator('#game-expedition-banner').textContent(),/Leg 1\//);
 }
 async function input(page, action) {
@@ -77,7 +78,7 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
       await page.locator('#expedition-seed').fill('bad<script>'); await clickControl(page, '#expedition-start');
       assert.equal(await page.locator('#expedition-seed').evaluate(el => el.validity.patternMismatch), true);
       const saved = await snapshot(page); await page.locator('#expedition-seed').fill('cancel-replacement');
-      page.once('dialog', dialog => dialog.dismiss()); await clickControl(page, '#expedition-start'); compareCheckpoint(saved, await snapshot(page));
+      await withGameConfirmation(page,false,async()=>{await clickControl(page, '#expedition-start');}); compareCheckpoint(saved, await snapshot(page));
       assert.deepEqual(errors, []); assert.deepEqual(failures, []);
       results.push({ checks: `${count + 1} form configurations, daily UTC/fixed rules/custom-settings return, surprise seed, invalid seed, replacement cancellation, no runtime/asset/console errors.` });
       // Long runs use only keyboard, real conversation choices, and camp forms.
@@ -132,8 +133,7 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
         await page.waitForFunction(() => !document.querySelector('#expedition-import').disabled);
         await page.locator('#expedition-form-error').waitFor(); compareCheckpoint(portable, await snapshot(page));
       }
-      page.once('dialog', dialog => dialog.dismiss());
-      await page.locator('#expedition-file').setInputFiles({ name: 'backup.json', mimeType: 'application/json', buffer: Buffer.from(backup) });
+      await withGameConfirmation(page,false,async()=>{await page.locator('#expedition-file').setInputFiles({ name: 'backup.json', mimeType: 'application/json', buffer: Buffer.from(backup) });});
       await page.waitForFunction(() => !document.querySelector('#expedition-import').disabled); compareCheckpoint(portable, await snapshot(page));
       await clickControl(page, '#mode-create'); await clickControl(page, '#mode-play'); await hub(page);
       await clickControl(page, '#library-story'); await clickControl(page, '#begin-contracts'); await resume(page); compareCheckpoint(portable, await snapshot(page));
@@ -185,8 +185,7 @@ export async function checkExpeditions(browserType, { baseURL = BASE, channel = 
             assert.equal(await page.locator('#game-cargo').isDisabled(), true); await clickControl(page, '#game-interact', true);
             assert.equal(await page.locator('#game-cargo').isDisabled(), false);
             // Return to the held checkpoint to keep the golden route's enemy timing; import is verified in the UI.
-            await hub(page); page.once('dialog', dialog => dialog.accept());
-            await page.locator('#expedition-file').setInputFiles({ name: 'held.json', mimeType: 'application/json', buffer: Buffer.from(held) });
+            await hub(page); await withGameConfirmation(page,true,async()=>{await page.locator('#expedition-file').setInputFiles({ name: 'held.json', mimeType: 'application/json', buffer: Buffer.from(held) });});
             await page.waitForFunction(() => !document.querySelector('#expedition-import').disabled);
             await page.locator('#adventure-canvas').focus(); dropped = true;
           }

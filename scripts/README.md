@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **23 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **30 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -74,6 +74,15 @@ chapters, camp reloads, and both hard optional courier routes. The game’s CSP
 continues to block runtime network connections; test-only asset inspections
 use the Playwright request client. Node saga tests verify both rules, complete
 portable proofs, checkpoint/Undo/review fidelity, and optional hard routes.
+
+`library-clockwork-browser-checks.mjs` adds seven required scenarios: all three
+Clockwork Post chapters at phone/desktop widths, helper programming/Undo/reload,
+separate book bookmarks with exact latest-trail continuation, paged discovery,
+keyboard and enlarged-text confirmations, protected map/draft replacement,
+real creator card editing/export/reload and an attached playtest clear,
+and recovery when an interrupted write leaves the active book older than its
+bookmark. Node checks also cover creator transforms, shared version-3 worlds,
+both rule sets, and bookmark backup/profile/storage boundaries.
 
 
 The v0.30.1 full audit repeats all 30 extended families (483 result entries).

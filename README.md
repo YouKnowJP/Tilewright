@@ -19,11 +19,13 @@ these restrictions apply only to new protected material. Read the
 ## Play, explore, and create
 
 - 24 campaign missions, eight Guild jobs, daily trails and branching expeditions.
-- Twelve featured Storybooks, including 47 unique original book levels, plus Puzzle Lab journeys.
-- 27 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
+- Thirteen featured Storybooks, including 50 unique original book levels, plus Puzzle Lab journeys.
+- 30 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
 - Create puzzles, write dialogue, rotate rooms, coordinate two travelers, and share adventure files, codes, links, or Storybooks.
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
+
+Choose **Choose your adventure → Storybooks** for complete journeys, including the new three-chapter **Clockwork Post**. Arrange Pip’s three instruction cards, coordinate bridges, and remix the same helper in World studio. Each book keeps its chapter and branch bookmark; the latest active trail also keeps exact in-chapter Continue.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),
 [complete game guide](docs/GAME_GUIDE.md), and [controls](docs/CONTROLS.md).

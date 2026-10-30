@@ -1,3 +1,4 @@
+import {confirmGame} from './game-confirm.mjs';
 import { createWonderEditor } from './workshop-wonders-ui.mjs';
 import { captureAssembly, pasteAssembly, loadAssemblies, saveAssemblies, MAX_ASSEMBLIES } from './workshop-assemblies.mjs';
 import { History, TILES, paintCells, floodCells, rectangleCells, lineCells } from './model.mjs';
@@ -37,6 +38,7 @@ export function createWorkshopDesigner({ storage, initial, onChange, notice }) {
   $('inspector-close').onclick = () => $('inspector-dialog').close();
   $('inspector-dialog').addEventListener('close', () => { if (!$('build').hidden) canvas.focus({ preventScroll: true }); });
   $('theme').replaceChildren(...CHAPTERS.map(t => new Option(t.name, t.id)));
+  const clockFields=document.createElement('fieldset');clockFields.dataset.wsFor='clockwork';const legend=document.createElement('legend');legend.textContent='Three companion cards · starts paused';clockFields.append(legend);for(let i=0;i<3;i++){const label=document.createElement('label');label.textContent=`Card ${i+1}`;const select=document.createElement('select');select.id=`ws-clockwork-card-${i}`;for(const command of ['up','right','down','left','wait'])select.add(new Option(command,command));label.append(select);clockFields.append(label);}$('object-fields').append(clockFields);
   const details = ['title', 'author', 'description', 'theme', 'kit', 'par', 'intro', 'ending', 'hint'];
   function populate() {
     for (const id of details) $(id).value = pack()[id];
@@ -48,7 +50,7 @@ export function createWorkshopDesigner({ storage, initial, onChange, notice }) {
     const item = pack().markers.find(m => m.id === selected); selected = item?.id || null;
     $('object-empty').hidden = Boolean(item); $('object-fields').hidden = !item; objectDirty = false;
     if (!item) return;
-    $('object-span').value=item.span||5;
+    $('object-span').value=item.span||5;for(let i=0;i<3;i++)document.getElementById(`ws-clockwork-card-${i}`).value=item.program?.[i]||['right','right','wait'][i];
     $('object-rival').value = item.rival || 'none';
     $('object-kind').textContent = OBJECTS.find(o => o.id === item.kind).name + ` · ${item.x + 1}, ${item.y + 1}`;
     for (const id of ['name', 'text', 'channel', 'order', 'reward', 'vision', 'offset']) $('object-' + id).value = item[id];
@@ -110,7 +112,7 @@ export function createWorkshopDesigner({ storage, initial, onChange, notice }) {
   }
   function readObject() {
     if (!$('props-object').reportValidity()) throw Error('Complete the selected object’s details.');
-    return { span:Number($('object-span').value), rival: $('object-rival').value, name: $('object-name').value, text: $('object-text').value, channel: $('object-channel').value, reward: $('object-reward').value,
+    return { ...(pack().markers.find(m=>m.id===selected)?.kind==='clockwork'?{program:[0,1,2].map(i=>document.getElementById(`ws-clockwork-card-${i}`).value)}:{}),span:Number($('object-span').value), rival: $('object-rival').value, name: $('object-name').value, text: $('object-text').value, channel: $('object-channel').value, reward: $('object-reward').value,
       order: Number($('object-order').value), vision: Number($('object-vision').value), offset: Number($('object-offset').value),
       initial: $('object-initial').checked, required: $('object-required').checked, nemesisOnly: $('object-nemesis').checked };
   }
@@ -206,7 +208,7 @@ export function createWorkshopDesigner({ storage, initial, onChange, notice }) {
       title.textContent=assembly.name;detail.textContent=`${assembly.map.width} × ${assembly.map.height} · ${assembly.markers.length} objects`;
       const ctx=art.getContext('2d');art.width=assembly.map.width*12;art.height=assembly.map.height*12;ctx.scale(.5,.5);for(const layer of assembly.map.layers)if(layer.visible)layer.tiles.forEach((tile,i)=>drawTile(ctx,tile,i%assembly.map.width*24,Math.floor(i/assembly.map.width)*24));for(const item of assembly.markers)drawWorkshopObject(ctx,item);art.setAttribute('aria-hidden','true');
       place.textContent='Place at cursor';place.onclick=()=>assemblyGuard(()=>{commit(pasteAssembly(pack(),assembly,cursor,Number($('assembly-rotation').value)));$('assemblies-dialog').close();setBrush({type:'inspect',name:'Inspect'});notice('Assembly placed with fresh object IDs and independent puzzle channels. Undo restores the whole placement.');canvas.focus({preventScroll:true});});
-      remove.textContent='Remove';remove.onclick=()=>{if(!confirm(`Remove the saved assembly “${assembly.name}”? Placed copies stay in their worlds.`))return;assemblies=assemblies.filter((_,i)=>i!==index);const ok=saveAssemblies(storage,assemblies);openAssemblies();assemblyNote(ok?'Assembly removed.':'Removed for this visit; saving is unavailable.',!ok);};card.append(art,title,detail,place,remove);return card;
+      remove.textContent='Remove';remove.onclick=async()=>{if(!await confirmGame(`Remove the saved assembly “${assembly.name}”? Placed copies stay in their worlds.`,{title:'Remove saved puzzle?',accept:'Remove assembly'}))return;assemblies=assemblies.filter((_,i)=>i!==index);const ok=saveAssemblies(storage,assemblies);openAssemblies();assemblyNote(ok?'Assembly removed.':'Removed for this visit; saving is unavailable.',!ok);};card.append(art,title,detail,place,remove);return card;
     }));
     if(!assemblies.length)$('assembly-items').textContent='Your reusable puzzles will appear here. Capture a small area to begin.';
     assemblyNote(loadedAssemblies.failed?'Saved assemblies could not be read. Your world draft is safe.':`${assemblies.length}/${MAX_ASSEMBLIES} personal assemblies · included in journey backups`,loadedAssemblies.failed);

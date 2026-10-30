@@ -3,6 +3,22 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## New roads in v0.31
+
+**Choose your adventure → Storybooks** opens complete tales directly from Play.
+Search the shelves, use four-cover pages, or open Your story bookmarks. Every
+book version and rule set keeps its completed chapters and branching choices.
+The latest Continue trail keeps the exact board and Undo history. Older books
+return to their bookmarked chapter; they may require restarting that chapter.
+
+**The Clockwork Post** teaches a new companion in three peaceful chapters.
+Pip follows three direction/Wait cards. Use Tools → Clockwork companion, or
+Interact beside Pip. Applying a loop, starting/pausing, and returning to dock
+each spend one turn and hold Pip still that turn. While running, Pip executes
+one card after each of your turns; a blocked card still advances. Pip holds
+plates, but cannot collect lights, push crates, or unlock doors. Plan describes
+its next step; Undo restores both travelers. No real-time reactions are needed.
+
 ## Choose your road
 
 **[Open the game](https://youknowjp.github.io/Tilewright/#play)** in your

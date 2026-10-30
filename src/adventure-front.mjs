@@ -125,6 +125,7 @@ export function createFrontMenu({ storage, sound, saveSession, onSaveReload, onM
   $('#title-expedition').addEventListener('click', onResumeExpedition);
   $('#title-mapmaker').addEventListener('click', onMapmaker);
   $('#front-custom').addEventListener('click', onCustomMap);
+  $('#front-books').addEventListener('click',()=>onDestination({mode:'books'}));
   document.querySelectorAll('[data-front-mode]').forEach(button => button.addEventListener('click', () => button.dataset.frontMode === 'mapmaker' ? onMapmaker() : onMode(button.dataset.frontMode)));
   $('#title-guide').addEventListener('click',()=>openGuide($('#title-guide')));
   $('#title-journal').addEventListener('click', journal); $('#journal-back').addEventListener('click', home);

@@ -20,6 +20,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'clockwork': rect('#805c3e',3,6,18,15);rect('#e7c886',5,7,14,11);rect('#203d48',7,10,3,4);rect('#203d48',14,10,3,4);rect('#ecf5c7',10,2,4,5);rect('#566b68',5,21,5,3);rect('#566b68',15,21,5,3);break;
     case 'turntable': ring('#465b70',12,12,11); ring('#e8c785',12,12,8); rect('#253f48',10,4,4,15); rect('#253f48',7,7,9,3); rect('#fff1c6',14,13,5,4); break;
     case 'vault': rect('#503e4d',2,5,20,18); rect('#c99a5f',4,7,16,13); rect('#f4d796',10,6,4,16); ring('#394d57',12,13,4); rect('#fff1c6',11,11,2,4); break;
     case 'rune': ring('#547a81',12,13,9); rect('#d4eeee',10,5,4,15); rect('#d4eeee',5,10,14,4); ring('#203d48',12,12,3); break;

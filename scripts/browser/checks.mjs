@@ -1,3 +1,4 @@
+import {withGameConfirmation} from './ui-driver.mjs';
 import { checkTraveler } from './traveler-browser-checks.mjs';
 import { checkReviews } from './review-browser-checks.mjs';
 import { checkAccessibility } from './accessibility-browser-checks.mjs';
@@ -165,11 +166,9 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         await editorButton(page, { name: 'Move selected layer forward', exact: true });
         assert.equal((await saved()).layers[2].id, copyId);
         const beforeDelete = await saved();
-        page.once('dialog', dialog => dialog.dismiss());
-        await editorButton(page, { name: 'Delete selected layer', exact: true });
+        await withGameConfirmation(page,false,async()=>{await editorButton(page, { name: 'Delete selected layer', exact: true });});
         assert.deepEqual(await saved(), beforeDelete, 'Canceling deletion must retain the layer.');
-        page.once('dialog', dialog => dialog.accept());
-        await editorButton(page, { name: 'Delete selected layer', exact: true });
+        await withGameConfirmation(page,true,async()=>{await editorButton(page, { name: 'Delete selected layer', exact: true });});
         assert.equal((await saved()).layers.length, 2);
         await editorButton(page, { name: 'Undo', exact: true });
         assert.deepEqual(await saved(), beforeDelete, 'Undo must restore layer content and order.');
@@ -182,12 +181,10 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
         assert.equal(await page.locator('#add-layer').isDisabled(), true);
         assert.ok(Math.abs((await metrics(page)).view.height - initialViewHeight) < 1, 'Layer settings must not stretch the canvas.');
         while ((await saved()).layers.length > 1) {
-          page.once('dialog', dialog => dialog.accept());
-          await editorButton(page, { name: 'Delete selected layer', exact: true });
+          await withGameConfirmation(page,true,async()=>{await editorButton(page, { name: 'Delete selected layer', exact: true });});
         }
         assert.equal(await page.locator('#delete-layer').isDisabled(), true, 'The final layer cannot be deleted.');
-        page.once('dialog', dialog => dialog.accept());
-        await editorButton(page, { name: /Open the sample map/ });
+        await withGameConfirmation(page,true,async()=>{await editorButton(page, { name: /Open the sample map/ });});
         const original = await saved();
 
         step = 'resize preview and cancel';
@@ -280,8 +277,7 @@ export async function checkBrowser(browserType, { baseURL = BASE, channel = 'chr
       for (const size of [64, 1]) {
         await editorButton(page, { name: '+ New map', exact: true });
         await page.locator('#new-width').fill(String(size)); await page.locator('#new-height').fill(String(size));
-        page.once('dialog', dialog => dialog.accept());
-        await editorButton(page, { name: 'Create map', exact: true });
+        await withGameConfirmation(page,true,async()=>{await editorButton(page, { name: 'Create map', exact: true });});
         assertFits(await metrics(page));
         if (size === 1) assert.equal((await metrics(page)).map.width, 24, 'Tiny maps must retain their natural pixel size.');
       }

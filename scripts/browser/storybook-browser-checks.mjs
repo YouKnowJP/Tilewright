@@ -1,3 +1,4 @@
+import {withGameConfirmation} from './ui-driver.mjs';
 import { artifactPath } from './artifacts.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -12,11 +13,12 @@ import { playGuild } from './guild-browser-checks.mjs';
 import { chooseOption, clickControl } from './ui-driver.mjs';
 
 const saved = page => page.evaluate(key => JSON.parse(localStorage.getItem(key)),BOOK_KEY);
-const otherSaves = page => page.evaluate(key => JSON.stringify(Object.entries(localStorage).filter(([name])=>name!==key&&!['tilewright.route.reviews.v1','tilewright.village.memories.v1'].includes(name)).sort()),BOOK_KEY);
+const otherSaves = page => page.evaluate(key => JSON.stringify(Object.entries(localStorage).filter(([name])=>name!==key&&!['tilewright.route.reviews.v1','tilewright.village.memories.v1','tilewright.bookmarks.v1'].includes(name)).sort()),BOOK_KEY);
 async function openBooks(page) { await page.locator('#title-workshop').click(); await page.locator('#ws-tab-books').click(); }
 async function newBook(page,index,difficulty) {
   if (await page.locator('#book-more-books').getAttribute('open') === null) await page.locator('#book-more-books>summary').click();
-  await chooseOption(page,'#book-rules',difficulty); await page.locator(`[data-book-cover="${index}"] button`).first().click();
+  await page.locator('#book-search').fill(featuredBooks()[index].title);await chooseOption(page,'#book-rules',difficulty); await page.locator(`[data-book-cover="${index}"] button`).first().click();
+  if(await page.locator('#game-confirm-dialog').isVisible()){assert.match(await page.locator('#game-confirm-copy').textContent(),/Start this book again/);await page.locator('#game-confirm-accept').click();await page.locator('#game-confirm-dialog').waitFor({state:'detached'});}
 }
 async function finish(page,actions,touch=false,ending='') { await playGuild(page,actions,touch); assert.equal(await page.locator('#adventure').getAttribute('data-status'),'won'); assert.equal(await page.locator('#game-primary').textContent(),'Turn the page →');if(ending)assert.ok((await page.locator('#game-result-text').textContent()).includes(ending));await page.locator('#game-primary').click(); }
 async function fits(page) { assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'The storybook must not create sideways document scrolling.'); }
@@ -67,15 +69,15 @@ export async function checkStorybooks(browserType,{baseURL='http://127.0.0.1:417
       await page.locator('[data-book-chapter="0"] button').last().click();
       for(let index=0;index<4;index++){await chooseOption(page,'#book-world',{label:'Counterweight Creek'});await page.locator('#book-add').click();}
       assert.equal(await page.locator('#book-add').isDisabled(),true);assert.equal((await saved(page)).draft.chapters.length,6);
-      const beforeCancel=JSON.stringify((await saved(page)).draft);page.once('dialog',dialog=>dialog.dismiss());await page.locator('#book-clear').click();assert.equal(JSON.stringify((await saved(page)).draft),beforeCancel);
+      const beforeCancel=JSON.stringify((await saved(page)).draft);await withGameConfirmation(page,false,async()=>{await page.locator('#book-clear').click();});assert.equal(JSON.stringify((await saved(page)).draft),beforeCancel);
       await page.reload();await openBooks(page);await page.locator('#book-compose').click();assert.equal(await page.locator('#book-title').inputValue(),'The keeper’s own road');assert.equal(await page.locator('[data-book-chapter]').count(),6);
       if(screenshots)await page.screenshot({path:artifactPath('storybook-builder-desktop.png'),fullPage:true});
       const builderDownload=page.waitForEvent('download');await page.locator('#book-draft-download').click();assert.equal(parseBook(await readFile(await(await builderDownload).path(),'utf8')).chapters.length,6);
-      page.once('dialog',dialog=>dialog.dismiss());await page.locator('#book-file').setInputFiles({name:'friend.storybook.json',mimeType:'application/json',buffer:Buffer.from(exported)});assert.equal((await saved(page)).draft.title,'The keeper’s own road');
+      await withGameConfirmation(page,false,async()=>{await page.locator('#book-file').setInputFiles({name:'friend.storybook.json',mimeType:'application/json',buffer:Buffer.from(exported)});});assert.equal((await saved(page)).draft.title,'The keeper’s own road');
       await page.locator('#book-file').setInputFiles({name:'bad.storybook.json',mimeType:'application/json',buffer:Buffer.from('{broken')});await page.waitForFunction(()=>document.querySelector('#book-notice').textContent.includes('JSON'));assert.equal((await saved(page)).draft.title,'The keeper’s own road');
       const activeBefore=(await saved(page)).session;await page.locator('#book-title').fill('');await page.locator('#book-draft-play').click();assert.match(await page.locator('#book-notice').textContent(),/title/);assert.deepEqual((await saved(page)).session,activeBefore);
-      await page.locator('#book-title').fill('The keeper’s own road');page.once('dialog',dialog=>dialog.dismiss());await page.locator('#book-draft-play').click();assert.deepEqual((await saved(page)).session,activeBefore);
-      await chooseOption(page,'#book-draft-rules','nemesis');page.once('dialog',dialog=>dialog.accept());await page.locator('#book-draft-play').click();assert.match(await page.locator('#book-camp-heading').textContent(),/keeper’s own road/);await page.locator('#book-continue').click();await finish(page,LAB_CLEARS.counterweight);assert.equal((await saved(page)).session.chapter,1);
+      await page.locator('#book-title').fill('The keeper’s own road');await page.locator('#book-draft-play').click();assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('tilewright.bookmarks.v1')).entries.some(item=>item.book.title!=='The keeper’s own road')),true);await page.locator('#book-compose').click();
+      await chooseOption(page,'#book-draft-rules','nemesis');await page.locator('#book-draft-play').click();assert.match(await page.locator('#book-camp-heading').textContent(),/keeper’s own road/);await page.locator('#book-continue').click();await finish(page,LAB_CLEARS.counterweight);assert.equal((await saved(page)).session.chapter,1);
       assert.equal(await otherSaves(page),originals);assert.deepEqual(errors,[]);report({checks:'Six-slot authoring, independent chapter snapshots, written interludes, reorder/remove, persistence, draft download, cancelled and malformed import.'});
     } finally {await context.close();}
     // Friend receives a self-contained book, without the original browser or its shelf.
@@ -99,7 +101,7 @@ export async function checkStorybooks(browserType,{baseURL='http://127.0.0.1:417
     if(fullBooks)for(const index of [3,4]){
       const width=index===3?390:320,height=index===3?844:568,context=await contextFor({viewport:{width,height},hasTouch:true,isMobile:true}),book=featuredBooks()[index];
       try{
-        const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(baseURL);await openBooks(page);assert.equal(await page.locator('#book-covers>article').first().getAttribute('data-book-cover'),'6');await newBook(page,index,index===3?'trail':'nemesis');
+        const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.goto(baseURL);await openBooks(page);assert.ok(await page.locator('#book-covers>article').count()<=4);await newBook(page,index,index===3?'trail':'nemesis');
         for(const [chapterIndex,chapter]of book.chapters.entries()){
           await fits(page);if(screenshots&&chapterIndex===0){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:artifactPath(`new-story-${index}-camp-${width}.png`),fullPage:true});}
           await page.locator('[data-book-challenge="clean"]').tap();await page.locator('#book-continue').tap();await fits(page);await page.waitForFunction(()=>{const board=document.querySelector('.game-main'),controls=document.querySelector('.game-controls');return board.scrollHeight<=board.clientHeight+1&&controls.getBoundingClientRect().bottom<=board.getBoundingClientRect().bottom+1;});

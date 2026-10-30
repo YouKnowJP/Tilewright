@@ -24,7 +24,7 @@ async function fit(page){assert.ok(await page.evaluate(()=>document.documentElem
 async function shot(page,name){await mkdir(artifactPath(''),{recursive:true});await page.screenshot({path:artifactPath(page.context().browser().browserType().name()+'-'+name),fullPage:true});}
 export async function cartographerScenarios(scenario){
  for(const width of [390,1440])await scenario(`cartographer-six-chapters-${width}`,width,async page=>{
-  await page.locator('#title-workshop').click();await page.locator('#ws-tab-books').click();await page.locator('[data-book-cover]').filter({has:page.getByRole('heading',{name:'The Lost Cartographer',exact:true})}).getByRole('button',{name:'Read this book',exact:true}).click();
+  await page.locator('#title-workshop').click();await page.locator('#ws-tab-books').click();await page.locator('#book-search').fill('The Lost Cartographer');await page.locator('[data-book-cover]').filter({has:page.getByRole('heading',{name:'The Lost Cartographer',exact:true})}).getByRole('button',{name:'Read this book',exact:true}).click();
   for(const [i,chapter]of cartographerBook().chapters.entries()){
    await page.locator('[data-book-challenge="clean"]').click();await page.locator('#book-continue').click();
    const actions=chapter.world.proof.actions;if(i===0){await playCartographer(page,actions.slice(0,6),{touch:width<500});await shot(page,`cartographer-room-${width}.png`);await page.locator('#game-home').click();await page.reload();await page.locator('#title-continue').click();await playCartographer(page,actions.slice(6),{touch:width<500});}
