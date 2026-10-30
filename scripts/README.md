@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **30 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **35 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -96,3 +96,10 @@ and return through Main menu where necessary. See the [audit](../docs/audits/202
 current build under two paths on one origin. It verifies real saved-game
 continuation, preferences/drafts, the rights page, and shared-world links.
 The tag must be present; this check uses Git and tar, and runs in Linux CI.
+
+
+`pip-orchestra-browser-checks.mjs` adds five required cases: all six new chapters
+on phone/desktop, no-turn recipes/rehearsal with keyboard and enlarged layouts,
+version-4 creator editing/export/reload/proofs, and exact continuation from a
+captured v0.31 Pip checkpoint. Node tests cover both rule sets, occupied-floor
+safety, bell recovery, rehearsal immutability, action histories and transforms.

@@ -30,7 +30,7 @@ const integer = (value, min, max, label) => { if (!Number.isInteger(value) || va
 const point = (value, map) => ({ x: integer(value?.x, 0, map.width - 1, 'Column'), y: integer(value?.y, 0, map.height - 1, 'Row') });
 export const nextMarkerId = markers => { let n = 1; while (markers.some(item => item.id === `mark-${n}`)) n++; return `mark-${n}`; };
 export function normalizeAdventure(input) {
-  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3].includes(input.version)) throw Error('Choose a Tilewright adventure file (version 1, 2 or 3), rather than a terrain-only map.');
+  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4].includes(input.version)) throw Error('Choose a Tilewright adventure file (version 1, 2, 3 or 4), rather than a terrain-only map.');
   const map = validateDocument(input.map), title = lineText(input.title, 64, 'Adventure title');
   if (!title) throw Error('Give your adventure a title.');
   if (!Array.isArray(input.markers) || input.markers.length > MAX_MARKERS) throw Error(`Adventures support up to ${MAX_MARKERS} objects.`);
@@ -59,11 +59,11 @@ export function normalizeAdventure(input) {
     kit: GUILD_KITS.some(kit => kit.id === input.kit) ? input.kit : 'none', par: integer(input.par ?? 120, 8, 5000, 'Three-star target'),
     rules: { noDash: input.rules?.noDash === true, noShield: input.rules?.noShield === true, allCoins: input.rules?.allCoins === true }, map, markers };
   Object.assign(pack, normalizeWonderNotes(input,markers));
-  if(markers.some(m=>WONDER_KINDS.includes(m.kind))||pack.storyCards||pack.hints)pack.version=2;if(markers.some(m=>m.kind==='clockwork'))pack.version=3;
+  if(markers.some(m=>WONDER_KINDS.includes(m.kind))||pack.storyCards||pack.hints)pack.version=2;if(markers.some(m=>m.kind==='clockwork'))pack.version=3;if(markers.some(m=>m.program?.includes('use'))||Array.isArray(input.proof?.actions)&&input.proof.actions.some(action=>action==='clockwork-step'||typeof action==='string'&&action.startsWith('clockwork-program:')&&action.split(':')[1].split(',').includes('use')))pack.version=4;
   if (input.proof !== undefined) {
     const proof = input.proof;
     if (!proof || !['trail', 'nemesis'].includes(proof.difficulty) || !Array.isArray(proof.actions) || !proof.actions.length || proof.actions.length > MAX_PROOF_ACTIONS
-      || proof.actions.some(action => typeof action !== 'string' || !/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|switch-traveler|clockwork-toggle|clockwork-reset|clockwork-program:(?:up|right|down|left|wait),(?:up|right|down|left|wait),(?:up|right|down|left|wait)|close-dialogue|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/.test(action))) throw Error('The creator clear contains an invalid or oversized action journal.');
+      || proof.actions.some(action => typeof action !== 'string' || !/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|switch-traveler|clockwork-toggle|clockwork-reset|clockwork-step|clockwork-program:(?:up|right|down|left|wait|use),(?:up|right|down|left|wait|use),(?:up|right|down|left|wait|use)|close-dialogue|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/.test(action))) throw Error('The creator clear contains an invalid or oversized action journal.');
     pack.proof = { difficulty: proof.difficulty, actions: [...proof.actions] };
   }
   return pack;
@@ -141,6 +141,7 @@ export function adventureStage(input) {
     relic: by('relic')[0] ? { ...position(by('relic')[0]), name: by('relic')[0].name || 'Singing relic' } : null,
     delivery: by('relic').length ? position(by('beacon')[0]) : null, workshop: { key: adventureKey(pack), author: pack.author, source: pack.source } };
   if(by('clockwork').length>1)throw Error('Keep one Clockwork companion per world.');if(by('clockwork').length)stage.clockwork={...position(by('clockwork')[0]),name:by('clockwork')[0].name||'Pip',program:normalizeProgram(by('clockwork')[0].program)};
+  if(stage.clockwork&&pack.version>=4)stage.clockworkSharedSight=true;
   if (by('partner').length > 1) throw Error('Keep only one Two-Lantern partner.');
   if (by('turntable').length) stage.turntables = by('turntable').map(item=>({...position(item),name:item.name||'Cartographer’s dial',radius:(item.span-1)/2}));
   if (by('vault').length) stage.vaults = by('vault').map(item=>({...position(item),name:item.name||'Brass vault'}));

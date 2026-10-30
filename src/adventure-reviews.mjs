@@ -4,7 +4,7 @@ import { replayAction, runFingerprint, MAX_TRAIL_ACTIONS } from './adventure-rew
 import { serializeJourney, restoreJourney, journeyStartRun } from './adventure-journey.mjs';
 export const REVIEWS_KEY='tilewright.route.reviews.v1',MAX_REVIEWS_BYTES=2000000;
 const bytes=text=>new TextEncoder().encode(text).length;
-const actions=/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|switch-traveler|clockwork-toggle|clockwork-reset|clockwork-program:(?:up|right|down|left|wait),(?:up|right|down|left|wait),(?:up|right|down|left|wait)|close-dialogue|forget|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/;
+const actions=/^(?:(?:dash-)?(?:up|right|down|left)|wait|decoy|shield|power|drop-cargo|switch-traveler|clockwork-toggle|clockwork-reset|clockwork-step|clockwork-program:(?:up|right|down|left|wait|use),(?:up|right|down|left|wait|use),(?:up|right|down|left|wait|use)|close-dialogue|forget|(?:interact|choose):[a-z][a-z0-9-]{0,39})$/;
 function entry(run,payload){
   if(!['won','lost'].includes(run.status)||run.stage.workshop?.practice)throw Error('Finish an adventure before reviewing its route.');
   return {key:`${run.stage.id}-${run.difficulty}-${run.guild?.kit||'wayfarer'}`,name:run.stage.name,difficulty:run.difficulty,status:run.status,turns:run.turns,fingerprint:runFingerprint(run),payload};
@@ -35,7 +35,7 @@ export async function inspectReview(review,yieldFrame=()=>Promise.resolve()){
     if(run.status!=='playing')throw Error('This review continues past its ending.');const before=run;run=replayAction(run,action);
     const major=run.events.filter(event=>['hurt','win'].includes(event.type));
     if(major.length)for(const event of major){const moment={index:index+1,turn:run.turns,label:event.type==='hurt'?'Damage taken':'Beacon restored'},first=event.type==='hurt'&&!firstHurt;if(first)firstHurt=moment;remember(moment,first||event.type==='win');}
-    else if(action.startsWith('choose:')||run.events.some(event=>['lantern','delivery','relay-complete','power','pulse','veil','echo','echo-return','room-turn','vault','story-card','traveler-switch','clockwork'].includes(event.type)))remember({index:index+1,turn:run.turns,label:action.startsWith('choose:')?'Keeper choice':run.message});
+    else if(action.startsWith('choose:')||run.events.some(event=>['lantern','delivery','relay-complete','power','pulse','veil','echo','echo-return','room-turn','vault','story-card','traveler-switch','clockwork','clockwork-use'].includes(event.type)))remember({index:index+1,turn:run.turns,label:action.startsWith('choose:')?'Keeper choice':run.message});
     if(run===before)throw Error('This review contains an action that cannot be replayed.');
     if(index%32===31)await yieldFrame();
   }

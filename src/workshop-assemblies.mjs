@@ -30,7 +30,7 @@ export function rotateAssembly(input,turns=0){
   for(let t=0;t<turns;t++){
     const {width:w,height:h}=assembly.map,rotate=p=>({x:h-1-p.y,y:p.x});
     const map={...assembly.map,width:h,height:w,layers:assembly.map.layers.map(layer=>{const tiles=Array(w*h);layer.tiles.forEach((tile,i)=>{const p=rotate({x:i%w,y:Math.floor(i/w)});tiles[p.y*h+p.x]=tile;});return {...layer,tiles};})};
-    assembly={...assembly,map,markers:assembly.markers.map(m=>({...m,...rotate(m),...(m.program?{program:m.program.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait'}[command]))}:{}),...(m.route?{route:m.route.map(rotate)}:{})}))};
+    assembly={...assembly,map,markers:assembly.markers.map(m=>({...m,...rotate(m),...(m.program?{program:m.program.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]))}:{}),...(m.route?{route:m.route.map(rotate)}:{})}))};
   }
   return assembly;
 }

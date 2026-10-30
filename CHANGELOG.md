@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.32.0 — 2026-10-30
+
+- Add Pip and the Pocket Orchestra: six original peaceful chapters, optional treasure detours, remote switches, ordered bell duets, shared crossings and a lantern-fair finale.
+- Add a Use instruction for levers and bells on Pip’s tile, plus paused single-card stepping. Occupied crossings cannot be closed by a remote lever.
+- Add four program recipes and a free six-card rehearsal from the current position. Editing and previewing do not advance turns or change saves.
+- Rework the companion workbench with compact controls, a personalized heading, expandable help and readable rehearsal cards. Reopening returns to the controls.
+- Open a newly selected Storybook at the top so its opening scene is visible after browsing the shelf.
+- Show Pip’s starting surroundings in new-format worlds and draw it above instruments so remote programming remains visible.
+- Support version-4 creator worlds, proofs, transforms, portable sharing, exact Continue, Undo and route reviews; retain earlier worlds and a real v0.31 checkpoint fixture.
+
 ## 0.31.0 — 2026-10-30
 
 - Add The Clockwork Post: three peaceful companion puzzles, three-card instruction loops, predictable turn timing, pause/reset, Plan forecasts, Undo and exact Continue.

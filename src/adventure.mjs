@@ -133,6 +133,7 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   if (!canEnter(run, run.player) || stage.crates.some(crate => same(crate, run.player))) throw new Error('The starting cell is blocked.');
   if (stage.guild && stage.waystones.some(stone => !canEnter(run, stone))) throw Error('Waystones need walkable landing cells.');
   reveal(run, run.player);
+  if(stage.clockworkSharedSight&&run.clockwork)reveal(run,run.clockwork);
   run.hunters = planHunters(run, canEnter);
   return run;
 }
@@ -234,6 +235,7 @@ export function stepRun(run, action) {
   if (run.dialogue || action === 'close-dialogue') return applyStoryCards(conversation(run, action));
   if (action === 'switch-traveler') { let next=switchTraveler(run); if(next.twin!==run.twin){next={...next,seen:[...run.seen]};reveal(next,next.player);} return next; }
   const clockAction=clockworkAction(action)&&Boolean(run.clockwork);
+  if(action==='clockwork-step'&&run.clockwork?.running)return {...run,events:[],message:'Pause the companion before advancing a single card.'};
   const interaction = action.startsWith('interact:') ? nearbyInteractions(run).find(item => item.id === action.slice(9)) : null;
   if(interaction?.kind==='clockwork')return run;
   if (interaction?.kind === 'npc') {
@@ -264,7 +266,7 @@ export function stepRun(run, action) {
     openGates: [...run.openGates], seen: [...run.seen], events: [], invulnerability: Math.max(0, run.invulnerability - 1),
     noise: Math.max(0, run.noise - 1), alarm: Math.max(0, run.alarm - 1), stun: Math.max(0, run.stun - 1), ward: Math.max(0, run.ward - 1) };
   if (run.guild) next.guild = { ...run.guild };
-  if(clockAction){next.clockwork={...run.clockwork};if(action==='clockwork-toggle')next.clockwork.running=!run.clockwork.running;else if(action==='clockwork-reset'){const dock=run.stage.clockwork;if(!canEnter(run,dock)||run.crates.some(p=>same(p,dock)))return {...run,message:'Clear the companion’s dock before returning it.',events:[]};Object.assign(next.clockwork,{x:dock.x,y:dock.y,index:0,running:false,last:'At dock'});}else Object.assign(next.clockwork,{program:normalizeProgram(action.slice('clockwork-program:'.length).split(',')),index:0,running:false,last:'New loop'});next.events.push({type:'clockwork'});}
+  if(clockAction){next.clockwork={...run.clockwork};if(action==='clockwork-toggle')next.clockwork.running=!run.clockwork.running;else if(action==='clockwork-reset'){const dock=run.stage.clockwork;if(!canEnter(run,dock)||run.crates.some(p=>same(p,dock)))return {...run,message:'Clear the companion’s dock before returning it.',events:[]};Object.assign(next.clockwork,{x:dock.x,y:dock.y,index:0,running:false,last:'At dock'});}else if(action==='clockwork-step'){next=clockworkStep({...next,clockwork:{...next.clockwork,running:true}},canEnter);next.clockwork={...next.clockwork,running:false};}else Object.assign(next.clockwork,{program:normalizeProgram(action.slice('clockwork-program:'.length).split(',')),index:0,running:false,last:'New loop'});next.events.push({type:'clockwork'});}
   let moved = false, touchedEnemy = false, blocked = '';
   const visited = [];
   if (moving) {
@@ -379,7 +381,7 @@ export function stepRun(run, action) {
     const lanterns = next.stage.lanterns.length - next.collectedLanterns.length;
     next.message = lanterns ? `The beacon needs ${lanterns} more ${lanterns === 1 ? 'lantern' : 'lanterns'}.` : `Before leaving: ${missing.map(goal => goal.label.toLowerCase()).join('; ')}.`; return next;
   }
-  const priority = ['hurt', 'clockwork', 'needs-keeper', 'story-card', 'vault', 'room-turn', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
+  const priority = ['hurt', 'clockwork-use', 'clockwork', 'needs-keeper', 'story-card', 'vault', 'room-turn', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const hunted=next.hunters.length>0,threatened=hunted||next.enemies.length>0;
   const messages = { 'needs-keeper':'This light needs Lantern keeper. Use T or Switch traveler to hand over the controls, then bring Lantern keeper here.', 'story-card':event?.text, 'room-turn':`${event?.name} turns a quarter-circle. The room, its objects, and travelers move together.`, vault:`${event?.name} opened! Security ${event?.security}/3. The vault-ring embers are marked; Plan shows their next pulse. The normal exit stays open.`, hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
@@ -387,6 +389,7 @@ export function stepRun(run, action) {
     veil: 'Mist veil raised. Existing enemy plans still resolve; move away from their last lead. Cargo and alarms reveal you.',
     echo: next.effects.echoTurns ? `Double cast! ${next.effects.echoTurns} more turns to lure hunters or hold a plate. Returning costs ${next.effects.returnEnergy} energy. Check Plan before returning.` : 'Double cast! Six more turns to lure hunters or hold a plate. B returns to it for one energy. Check Plan before returning.',
     'echo-return': next.effects.returnEnergy ? `Returned to your double. ${next.effects.returnEnergy} energy spent; the double dissolves.${next.effects.returnWard?' A two-turn ward protects this landing.':' Enemies take their turn.'}` : 'Returned to your double. One energy spent; the double dissolves and enemies take their turn.',
+    'clockwork-use':event?.text,
     clockwork: next.clockwork?`${next.clockwork.name}: ${next.clockwork.running?'loop running':'paused'}. Read the next card in Plan; open Tools to change the loop.`:'',
     'echo-fade': 'Your double has faded or a hunter reached it. Check pressure crossings before moving.',
     waystone: `Waystone crossed to ${event?.name}. One energy spent.${threatened?' Enemies moved once.':' Walk or wait to recharge.'}`,

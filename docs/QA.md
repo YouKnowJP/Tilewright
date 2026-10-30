@@ -1,5 +1,34 @@
 # Verification record
 
+## Pip and the Pocket Orchestra — v0.32.0
+
+**829 Node tests**, syntax checks and the **125-file** static build pass. The
+repository index checks **1,505 local references**. The
+new six-chapter book has clean three-star witnesses on Trail and Nemesis,
+version-4 file/code/book portability, creator proof verification, exact
+Continue/Undo and route-review replay. Tests exercise all **216** three-card
+programs for bounded, immutable rehearsal. A captured v0.31 Pip checkpoint
+continues to its original winning fingerprint; earlier formats remain readable.
+
+The **35-scenario Chromium release suite** covers new and existing adventures.
+Focused Firefox/WebKit playthroughs repeat both new-book viewport widths,
+recipes/rehearsal, creator editing/export/reload/clears, the original Clockwork
+Post and its older checkpoint. The final interface checks also exercise
+320×568, 844×390, 768×900 and 1440×1000 layouts with enlarged text and high
+contrast, keyboard isolation, Escape/focus return, unchanged checkpoints while
+reading, workbench scroll reset and correct Storybook arrival position.
+
+Reviewed phone/desktop screenshots led to initially revealing Pip in new-format
+worlds, drawing it above instruments, and correcting reopening/navigation scroll.
+Use handles empty tiles, wrong/already-complete melodies and occupied crossings.
+Rehearsal holds the player still; it does not promise that later player movement
+will leave the same bridges open. The three retained-baseline migration checks
+also pass. Browser tests use disposable contexts; no physical-device,
+screen-reader or long-term enjoyment study is claimed.
+One additional Firefox menu click timed out while suites ran concurrently;
+the final cases were repeated in isolation without forcing clicks or changing
+their timeouts. The isolated Firefox rerun passed.
+
 ## The Clockwork Post and saved story shelves — v0.31.0
 
 All **803 Node tests**, syntax checks, the **124-file** static build, public

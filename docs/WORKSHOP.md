@@ -181,8 +181,8 @@ Paint **Clockwork companion** from the Puzzles palette, inspect it, and choose
 three direction/Wait cards. One companion is supported in a peaceful solo world;
 remove enemies, burning tiles and Two-Lantern partners. It starts paused. It can
 hold pressure plates, shares paths with you, and stops against crates or locked
-doors. Control actions spend one turn without advancing the helper; ordinary
-turns advance one card. Blocked cards still advance. Return to dock recovers a
+doors. Apply, Start/Pause and Return to dock spend one turn while holding Pip
+still; ordinary turns advance one card. Blocked cards still advance. Return to dock recovers a
 stranded helper when its dock is clear. Turning rooms carry its dock too.
 
 Remix any Clockwork Post chapter to begin. Whole-map and assembly rotations
@@ -191,3 +191,26 @@ cards unchanged. Version-3 exports include programs and verified action journals
 versions 1 and 2 keep their rules. Full playtests, Undo, Continue, sharing and
 route reviews use the same deterministic companion state. Always playtest a
 custom loop and the return crossing; structural checks are not a puzzle solver.
+
+
+## Pip’s instruments and rehearsal — v0.32
+
+The companion inspector offers **Use** along with directions and Wait. Place
+an ordinary lever or sequence bell along Pip’s path. Use acts only on Pip’s
+current tile. Start Pip beside the instrument and program its approach: one
+non-overlay object fits per tile. Bell order and switch channels use the
+existing controls. Use cannot operate keepers, runes, room dials or key gates.
+Remote switches preserve occupied crossings for travelers and Pip.
+
+Remix any of the six Pocket Orchestra worlds. Try East/Use/East for a spaced
+bell line, East/East/Use for a latch, or a shuttle that returns to a plate.
+Combine your own movement with paused **Advance one card**, or leave a loop
+running. Every control action costs one turn; recipes and rehearsals are free.
+Rehearsal holds the player still and starts at card 1. Later player movement
+can change which bridges remain open, so playtest the whole return journey.
+World/assembly transforms rotate directions while preserving Use and Wait.
+
+Worlds with Use cards or single-step creator proofs export as version 4.
+Earlier version-1/2/3 maps retain their identities. Use/stepping are recorded in
+Continue, Undo and route reviews. Share a proved adventure file, code, link or
+Storybook for friends to play in the public game. No code editing is required.

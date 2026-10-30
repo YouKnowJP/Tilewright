@@ -57,7 +57,6 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     const circle = (color, x, y, radius) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill(); };
     const visible = point => run.seen[point.y * stage.map.width + point.x];
     const active = activePlates(run);
-    if(run.clockwork&&visible(run.clockwork)){drawWorkshopObject(ctx,{...run.clockwork,kind:'clockwork'});drawCueBadge(ctx,run.clockwork,'A');}
     for(const room of stage.turntables||[]) {if(!visible(room))continue;ctx.strokeStyle=preferences().contrast==='high'?'#ffffff':'#f6d88e';ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.strokeRect((room.x-room.radius)*24+2,(room.y-room.radius)*24+2,(room.radius*2+1)*24-4,(room.radius*2+1)*24-4);ctx.setLineDash([]);drawWorkshopObject(ctx,{...room,kind:'turntable'});}
     for(const item of stage.vaults||[])if(visible(item)&&!run.wonders.vaults.includes(item.id))drawWorkshopObject(ctx,{...item,kind:'vault'});
     for(const item of stage.runes||[])if(visible(item))drawWorkshopObject(ctx,{...item,kind:'rune'});
@@ -223,6 +222,7 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
         for (let i = 0; i < hunter.phase; i++) rect('#fff0bc', x + 6 + i * 5, y - 2, 3, 5);
       }
     }
+    if(run.clockwork&&visible(run.clockwork)){drawWorkshopObject(ctx,{...run.clockwork,kind:'clockwork'});drawCueBadge(ctx,run.clockwork,'A');}
     for (let y = Math.floor(cameraY); y < Math.min(stage.map.height, Math.ceil(cameraY + rows)); y++) {
       for (let x = Math.floor(cameraX); x < Math.min(stage.map.width, Math.ceil(cameraX + columns)); x++) {
         if (!run.seen[y * stage.map.width + x]) rect(stage.theme ? themeFor(stage).dark : '#142d2c', x * 24, y * 24, 24, 24);

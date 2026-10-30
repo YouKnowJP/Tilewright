@@ -98,3 +98,11 @@
 #clockwork-dialog .front-dialog-heading p{min-width:0}
 .book-about{margin:10px 0}.book-about>summary{cursor:pointer;min-height:44px;align-content:center;color:#f2dfac;font-size:var(--adventure-text-size,16px);line-height:1.5}
 .book-about p{overflow-wrap:anywhere;margin:10px 0}
+.clockwork-controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.clockwork-controls button{flex:1 1 150px;min-height:44px}
+#clockwork-dialog h2,#clockwork-state{overflow-wrap:anywhere}.clockwork-apply{width:100%;min-height:44px;border-color:#c7ae69;background:#42482b}
+.clockwork-disclosure{border-top:1px solid #73866a;margin-top:16px;padding-top:8px}.clockwork-disclosure>summary{cursor:pointer;min-height:44px;align-content:center;line-height:1.5;font-size:var(--adventure-text-size,16px);color:#f2dfa7}
+#clockwork-preview{list-style:none;margin:14px 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#clockwork-preview li{border:1px solid #7f956e;border-left:4px solid #d9b866;background:#102e29;padding:12px;min-width:0;display:grid;gap:6px;overflow-wrap:anywhere}
+#clockwork-preview strong{color:#ffe5a0;font-size:var(--adventure-text-size,16px)}#clockwork-preview span{font-size:var(--adventure-text-size,16px);line-height:1.55}
+#clockwork-recipe-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}#clockwork-recipe-list button{min-height:52px;text-align:left;line-height:1.6;overflow-wrap:anywhere}
+@media(max-width:600px){#clockwork-preview,#clockwork-recipe-list{grid-template-columns:1fr}}

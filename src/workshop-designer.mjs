@@ -38,7 +38,7 @@ export function createWorkshopDesigner({ storage, initial, onChange, notice }) {
   $('inspector-close').onclick = () => $('inspector-dialog').close();
   $('inspector-dialog').addEventListener('close', () => { if (!$('build').hidden) canvas.focus({ preventScroll: true }); });
   $('theme').replaceChildren(...CHAPTERS.map(t => new Option(t.name, t.id)));
-  const clockFields=document.createElement('fieldset');clockFields.dataset.wsFor='clockwork';const legend=document.createElement('legend');legend.textContent='Three companion cards · starts paused';clockFields.append(legend);for(let i=0;i<3;i++){const label=document.createElement('label');label.textContent=`Card ${i+1}`;const select=document.createElement('select');select.id=`ws-clockwork-card-${i}`;for(const command of ['up','right','down','left','wait'])select.add(new Option(command,command));label.append(select);clockFields.append(label);}$('object-fields').append(clockFields);
+  const clockFields=document.createElement('fieldset');clockFields.dataset.wsFor='clockwork';const legend=document.createElement('legend');legend.textContent='Three companion cards · starts paused';clockFields.append(legend);for(let i=0;i<3;i++){const label=document.createElement('label');label.textContent=`Card ${i+1}`;const select=document.createElement('select');select.id=`ws-clockwork-card-${i}`;for(const command of ['up','right','down','left','wait','use'])select.add(new Option(command==='use'?'Use lever / bell':command,command));label.append(select);clockFields.append(label);}$('object-fields').append(clockFields);
   const details = ['title', 'author', 'description', 'theme', 'kit', 'par', 'intro', 'ending', 'hint'];
   function populate() {
     for (const id of details) $(id).value = pack()[id];

@@ -9,9 +9,9 @@ export function choiceProblem(run, choice) {
   return switchChange(run, effect.switches || {}).error || null;
 }
 export function choiceAvailable(run, choice) { return !choiceProblem(run, choice); }
-export function switchChange(run, patch) {
+export function switchChange(run, patch, {includeClockwork=false}={}) {
   const switches = { ...run.switches, ...patch }, next = { ...run, switches };
-  const occupied = [run.player, ...run.crates, ...run.companions, ...run.hunters,
+  const occupied = [run.player, ...((includeClockwork||run.stage.clockworkSharedSight)&&run.clockwork?[run.clockwork]:[]), ...run.crates, ...run.companions, ...run.hunters,
     ...run.enemies.map(enemy => enemy.route[enemy.index])];
   const blocked = run.stage.gates.find(gate => gate.type === 'switch' && switchGateOpen(run, gate) && !switchGateOpen(next, gate)
     && occupied.some(point => point.x === gate.x && point.y === gate.y));

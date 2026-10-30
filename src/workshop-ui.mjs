@@ -1,3 +1,4 @@
+import {orchestraWorld,ORCHESTRA_LEVELS} from './pip-orchestra-worlds.mjs';
 import {clockworkWorld,CLOCKWORK_LEVELS} from './clockwork-worlds.mjs';
 import {confirmGame} from './game-confirm.mjs';
 import { sagaWorld, SAGA_LEVELS } from './saga-worlds.mjs';
@@ -30,7 +31,7 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   let shelfPage=0;const pager=document.createElement('div');pager.id='ws-shelf-pager';pager.className='shelf-pager';$('adventures').insertAdjacentElement('afterend',pager);$('filter').add(new Option('New adventures · 18 worlds','new'));
   $('search').addEventListener('input',()=>{shelfPage=0;},true);$('filter').addEventListener('change',()=>{shelfPage=0;},true);
   const restored = loadWorkshop(storage), featured = [...workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) })), ...CARTOGRAPHER_LEVELS.map(id=>cartographerWorld(id)),...newWorlds];
-  featured.push(...CLOCKWORK_LEVELS.map(id=>clockworkWorld(id)));
+  featured.push(...CLOCKWORK_LEVELS.map(id=>clockworkWorld(id)),...ORCHESTRA_LEVELS.map(id=>orchestraWorld(id)));
   const board=trailboardAdventures();let bookmarks=loadBookmarks(storage);
   const restoredDraft=loadWorkshopDraft(storage); let draftTouched=Boolean(restoredDraft);
   let entries = restored.entries, bests = loadWorkshopBests(storage), saved = true, preview = null, share = null, activePlay = null, section = 'shelf';

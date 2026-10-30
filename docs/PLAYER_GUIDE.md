@@ -3,6 +3,26 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## Pip’s Pocket Orchestra — v0.32
+
+Open **Choose your adventure → Storybooks → Pip and the Pocket Orchestra**.
+Six peaceful chapters teach remote switches, repeating bell songs, a player/Pip
+duet, and crossings that need both of you. Optional treasure detours and chapter
+promises offer more routes. The earlier Clockwork Post keeps its original levels.
+
+A **Use** card operates the lever or bell on Pip’s exact tile, without reaching
+adjacent tiles. Repeating Use can switch a lever off again. Pause or step through
+the program to keep a crossing open. Wrong bell notes restart the melody; Quest
+lists the order. A completed melody stays complete. Pip cannot collect lights,
+push crates or open key gates.
+
+**Advance one card** works while paused, spends one turn and leaves Pip paused.
+Blocked or empty cards still advance. **Borrow a program recipe** fills your
+cards for free. Apply edited cards before starting or stepping; Apply costs one
+turn. **Rehearse six cards** changes no saves: it starts at card 1 from Pip’s
+current position and holds you still. Moving yourself onto/off a plate later
+can change the real route. Undo restores Pip, switches and melody together.
+
 ## New roads in v0.31
 
 **Choose your adventure → Storybooks** opens complete tales directly from Play.
@@ -16,7 +36,7 @@ Pip follows three direction/Wait cards. Use Tools → Clockwork companion, or
 Interact beside Pip. Applying a loop, starting/pausing, and returning to dock
 each spend one turn and hold Pip still that turn. While running, Pip executes
 one card after each of your turns; a blocked card still advances. Pip holds
-plates, but cannot collect lights, push crates, or unlock doors. Plan describes
+plates, but cannot collect lights, push crates, or unlock key gates. Plan describes
 its next step; Undo restores both travelers. No real-time reactions are needed.
 
 ## Choose your road
