@@ -1,7 +1,7 @@
 # Storybooks: a road between worlds
 
 Choose **Choose your adventure → Storybooks**, or Adventure Workshop → Storybooks. Read a book's
-opening scene before entering its first chapter. Fifteen featured books are available. Use the search field or choose New
+opening scene before entering its first chapter. Sixteen featured books are available. Use the search field or choose New
 adventures, Peaceful books, or More demanding books to narrow the shelves.
 **The Rainmaker’s Letters** and **The Observatory of Borrowed Stars** each add
 four original maps and a complete new story. The three earlier books weave the
@@ -117,3 +117,12 @@ review, and remixing. That release brought the library to nine original storyboo
 See [the chapter list](SCREEN_AND_SAGAS.md).
 
 Bookmarks keep completed chapters and choices, not every suspended board. Only the latest Continue slot retains an exact in-chapter position. Use a complete game backup to keep bookmarks; a downloaded Storybook contains its worlds, not your progress. Your story bookmarks lists older custom books too. Removing an inactive bookmark asks for confirmation. If storage is full or blocked, keep the tab open; unsaved bookmark changes last only for the visit.
+
+
+**Pip and the Midnight Parcelworks** adds five original chapters: Across the Air,
+Three Rooftops, The Midnight Reply, The Freight Lock and The Night Mail. Courier
+tubes connect separate rooms, then return melodies, keeper-held crossings and
+scarce rewrites combine into harder routes. The finale has seven ordered stops
+and three tube pairs. Every chapter has a replayable creator clear and can be
+remixed as a standalone adventure. The featured shelf now holds 16 books with
+77 chapter entries (65 unique original book levels plus earlier reused rooms).

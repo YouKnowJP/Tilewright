@@ -9,12 +9,14 @@ explore a world you paint. The **Wayfarers’ Guild** adds eight dispatches,
 three specialist tools, linked waystones, and optional commendations. The new
 **Echoist** leaves a lantern double to hold a plate, lure a hunter, or return to
 after taking a risky shortcut.
-The **Adventure Workshop** adds twenty-seven featured adventures, twelve playable Puzzle Lab rooms, 28 editable object
+The **Adventure Workshop** has forty-five featured adventures, twelve playable Puzzle Lab rooms, 31 editable object
 types, 20 seeded world recipes, dialogue and linked-puzzle design, creator
 playtests, and file/code sharing with other players. **Storybooks** connects
 worlds into longer journeys with optional honors, saved chapter camps, and a
-creator for portable two-to-six-world adventures. Nine original Storybooks add
-**forty-seven levels**, recurring keepers, alternate solutions, and readable endings.
+creator for portable two-to-six-world adventures. Sixteen featured Storybooks
+collect 77 chapter entries, including 65 unique original book levels, recurring
+keepers, alternate solutions, and readable endings. Program Pip to use remote
+instruments and courier tubes, deliver ordered flags, and share your own routes.
 **The Keeper’s Promise** adds five worlds across two branching roads: restore a
 ferry or a workshop, then follow that choice to its own reunion and ending.
 The **Trailhouse** adds twelve keeper commissions, a village with six restoration

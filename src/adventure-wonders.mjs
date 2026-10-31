@@ -68,7 +68,7 @@ export function rotateRoom(run,room,walkableCells) {
   const point=p=>p&&insideRoom(p,room)?{...p,x:room.x-(p.y-room.y),y:room.y+(p.x-room.x)}:p;
   const map={...run.stage.map,layers:run.stage.map.layers.map(layer=>{const tiles=[...layer.tiles];for(let y=room.y-room.radius;y<=room.y+room.radius;y++)for(let x=room.x-room.radius;x<=room.x+room.radius;x++){const p=point({x,y});tiles[p.y*run.stage.map.width+p.x]=layer.tiles[y*run.stage.map.width+x];}return {...layer,tiles};})};
   const stage={...run.stage,map};
-  for(const key of ['lanterns','keys','coins','hearts','crates','plates','gates','npcs','relays','supplies','cover','hazards','switches','waystones','vaults','runes','storyTargets','clockworkStops'])if(stage[key])stage[key]=stage[key].map(point);
+  for(const key of ['lanterns','keys','coins','hearts','crates','plates','gates','npcs','relays','supplies','cover','hazards','switches','waystones','vaults','runes','storyTargets','clockworkStops','clockworkTubes'])if(stage[key])stage[key]=stage[key].map(point);
   for(const key of ['start','exit','relic','delivery','partner','clockwork'])if(stage[key])stage[key]=point(stage[key]);
   const next={...run,stage,walkable:walkableCells(map),player:point(run.player),crates:run.crates.map(point),companions:run.companions.map(point),cargoPoint:point(run.cargoPoint),lure:point(run.lure),seen:[...run.seen],wonders:{...run.wonders,rotations:{...run.wonders.rotations,[room.id]:((Object.hasOwn(run.wonders.rotations,room.id)?run.wonders.rotations[room.id]:0)+1)%4}}};
   if(run.clockwork)next.clockwork=point(run.clockwork);

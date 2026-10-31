@@ -54,7 +54,7 @@ test('v0.31 Pip saves resume with the same original winning fingerprint',async()
  const fixture=JSON.parse(await readFile(new URL('fixtures/clockwork-v031-trail.json',import.meta.url),'utf8'));let trail=(await restoreTrail(fixture.checkpoint)).trail;for(const action of fixture.remaining)trail=advanceRewind(trail,action);assert.equal(trail.run.status,'won');assert.equal(runFingerprint(trail.run),fixture.finalFingerprint);
 });
 test('Use and single-step creator proofs use version 4 while old companion maps retain version 3',async()=>{
- const {clockworkWorld}=await import('../src/clockwork-worlds.mjs');assert.equal(clockworkWorld('first-loop').version,3);const world=orchestraWorld('little-switch');assert.equal(world.version,4);assert.throws(()=>normalizeAdventure({...world,version:6}),/version/);const old=clockworkWorld('first-loop',{proof:false});assert.equal(editAdventure(old,{proof:{difficulty:'trail',actions:['clockwork-step']}}).version,4);
+ const {clockworkWorld}=await import('../src/clockwork-worlds.mjs');assert.equal(clockworkWorld('first-loop').version,3);const world=orchestraWorld('little-switch');assert.equal(world.version,4);assert.throws(()=>normalizeAdventure({...world,version:999}),/version/);const old=clockworkWorld('first-loop',{proof:false});assert.equal(editAdventure(old,{proof:{difficulty:'trail',actions:['clockwork-step']}}).version,4);
 });
 test('Use survives world/assembly transforms, and the complete six-chapter book is portable',()=>{
  const world=orchestraWorld('little-switch',{proof:false});let next=world;for(let i=0;i<4;i++)next=transformAdventure(next,'rotate');assert.deepEqual(next,world);assert.deepEqual(transformAdventure(transformAdventure(world,'mirror-y'),'mirror-y'),world);

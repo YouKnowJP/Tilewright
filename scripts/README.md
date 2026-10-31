@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **41 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **47 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -111,3 +111,12 @@ flag/rule authoring and proved export, enlarged layouts and quota faults, and
 original v0.32 save continuation. Node tests check ordering, parking, rewrite
 limits, dock behavior, assembly numbering, room rotation, profile isolation and
 bounded data-only program files.
+
+
+`pip-parcelworks-browser-checks.mjs` adds six required scenarios: all five chapters
+with phone touch and desktop keyboard play, free program transforms/rehearsal
+and satchel export, actual creator tube painting and proved export followed by
+shared-link play, 320-pixel largest-text/high-contrast directory/dropdown/focus
+checks across four layouts, and captured v0.33 continuation. Node tests verify
+blocked exits, tube-only connectivity, assembly pairing, map/room transforms,
+immutable forecasts, rewind/reviews and version-6 portability.

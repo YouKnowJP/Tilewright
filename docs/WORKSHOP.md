@@ -72,7 +72,7 @@ coexisting objects. Give keepers dialogue, change puzzle channels, set bell orde
 or draw a threat route. Patrol waypoints must touch edge to edge and retrace at
 the ends; hunters path between their waypoints. Routes have 2–24 waypoints.
 
-**World notes → Adventure** sets the title, creator, opening, ending, hint, eight world
+**World notes → World** sets the title, creator, opening, ending, hint, eight world
 palettes, three-star target, specialist kit, and optional walking-only,
 no-shield, or all-treasure rules. Changes apply on **Apply**, Save, Playtest,
 Share, switching sections, or Main menu. Invalid fields explain what to fix.
@@ -241,3 +241,31 @@ The workbench’s eight-slot **program satchel** stores card arrangements for
 reuse. It has its own Undo, import/export and journey-backed save key. Loading
 or saving a pocket never applies a program or consumes a rewrite. Programs
 are data, with no scripts or external assets.
+
+
+## Courier tubes and program remixing — v0.34
+
+Paint **Pip courier tube** from Puzzles. The first two endpoints use amber, the
+next two jade, then violet and blue. Inspect an endpoint for its partner’s
+coordinates; repainting preserves its channel/name. Set both endpoints to the
+same channel if pairing by hand. Each used tube channel needs exactly two
+endpoints, clear walkable land and a Clockwork companion. Tubes need no
+specialist kit. Their pairing is independent of plates/levers on that channel.
+
+Pip executes **Use** on a tube to travel. Movement/Wait do not trigger it. One
+card makes one journey; it never chains or bounces on arrival. Crates or blocked
+landings refuse travel while consuming the card. The keeper walks over tubes
+without travelling. Tube exits can carry delivery-flag overlays. Numeric U1–U4
+labels, the workbench directory and Surroundings explain the pair without color.
+
+Tube endpoints follow whole-map and rotating-room transforms. Assembly capture
+must include the entire linked pair; pasting safely remaps tube channels independently of plate/lever channels. Structural
+connectivity checks trace tube travel for Pip only. They do not prove timing or
+that the keeper can collect a remote lantern; finish a real playtest to attach
+an exportable clear. Version-6 files, codes, links and Storybooks preserve the
+network and proof. Older world formats, identities and saved routes remain valid.
+
+**Remix the cards · free** rotates direction cards clockwise, mirrors East/West,
+or reverses card order. Use/Wait retain their meaning. These tools only change
+the draft; the usual Apply action spends the world’s rewrite allowance. Save
+useful variations in the program satchel and download it to share them.

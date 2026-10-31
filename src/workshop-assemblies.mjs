@@ -8,6 +8,7 @@ export function normalizeAssembly(input){
   if(!input||typeof input.name!=='string'||!input.name.trim()||input.name.length>48||!input.map||input.map.width<1||input.map.height<1||input.map.width>12||input.map.height>12)throw Error('Name a puzzle assembly of at most 12 × 12 cells.');
   const map=validateDocument(input.map),pack=normalizeAdventure({format:'tilewright-adventure',version:1,title:input.name,map,markers:input.markers,kit:'none'});
   if(pack.markers.some(m=>['start','beacon'].includes(m.kind)))throw Error('Keep the starting point and beacon outside an assembly.');
+  for(const channel of CHANNELS){const count=pack.markers.filter(m=>m.kind==='pip-tube'&&m.channel===channel).length;if(count&&count!==2)throw Error(`Include both ${channel} courier tube endpoints in the assembly.`);}
   return {name:input.name.trim(),map,markers:pack.markers,...(pack.markers.some(m=>m.kind==='waystone')?{kit:GUILD_KITS.some(kit=>kit.id===input.kit)?input.kit:'none'}:{})};
 }
 export function captureAssembly(input,bounds,name){
@@ -18,6 +19,7 @@ export function captureAssembly(input,bounds,name){
     if(marker.kind==='turntable'&& (marker.x-(marker.span-1)/2<b.x||marker.y-(marker.span-1)/2<b.y||marker.x+(marker.span-1)/2>=b.x+b.width||marker.y+(marker.span-1)/2>=b.y+b.height))throw Error('Include the entire rotating room in the assembly.');
     if((pack.storyCards||[]).some(c=>c.source===marker.id||c.target===marker.id))throw Error('Story moments belong to this world. Remove their cards before capturing these objects as an assembly.');
     if(marker.route?.some(p=>!inside(p,b)))throw Error('Include every patrol waypoint in the selected area.');
+    if(marker.kind==='pip-tube'&&pack.markers.some(other=>other.kind==='pip-tube'&&other.channel===marker.channel&&!inside(other,b)))throw Error(`Include the whole ${marker.channel} courier tube pair so its links stay together.`);
     if(linked(marker)&&pack.markers.some(other=>linked(other)&&other.channel===marker.channel&&!inside(other,b)))throw Error(`Include the whole ${marker.channel} puzzle so its links stay together.`);
   }
   const map={...pack.map,width:b.width,height:b.height,layers:pack.map.layers.map(layer=>({...layer,tiles:Array.from({length:b.width*b.height},(_,i)=>layer.tiles[(b.y+Math.floor(i/b.width))*pack.map.width+b.x+i%b.width])}))};
@@ -44,10 +46,11 @@ export function pasteAssembly(input,source,point,turns=0){
   if(pack.markers.some(m=>m.kind==='relic')&&assembly.markers.some(m=>m.kind==='relic'))throw Error('A world can hold only one singing relic.');
   const used=new Set(pack.markers.filter(linked).map(m=>m.channel)),needed=[...new Set(assembly.markers.filter(linked).map(m=>m.channel))],free=CHANNELS.filter(id=>!used.has(id));
   if(needed.length>free.length)throw Error('There are not enough unused puzzle channels. Clear a complete channel before placing this linked assembly.');
+  const tubeUsed=new Set(pack.markers.filter(m=>m.kind==='pip-tube').map(m=>m.channel)),tubeNeeded=[...new Set(assembly.markers.filter(m=>m.kind==='pip-tube').map(m=>m.channel))],tubeFree=CHANNELS.filter(id=>!tubeUsed.has(id));if(tubeNeeded.length>tubeFree.length)throw Error('There are not enough unused courier tube channels. Keep at most four complete pairs.');const tubeChannels=Object.fromEntries(tubeNeeded.map((id,i)=>[id,tubeFree[i]]));
   const channels=Object.fromEntries(needed.map((id,i)=>[id,free[i]])),markers=[...pack.markers],bells=assembly.markers.filter(m=>m.kind==='bell').sort((a,b)=>a.order-b.order),bellOffset=pack.markers.filter(m=>m.kind==='bell').length;
   const stops=assembly.markers.filter(m=>m.kind==='pip-stop').sort((a,b)=>a.order-b.order),stopOffset=pack.markers.filter(m=>m.kind==='pip-stop').length;if(stops.length+stopOffset>8)throw Error('A world can hold at most eight Pip delivery stops.');if(stops.length&&pack.markers.some(m=>m.kind==='pip-stop'&&m.required))throw Error('Clear the earlier final parking requirement before extending its delivery route.');
   if(bells.length+bellOffset>8)throw Error('A world can hold at most eight sequence bells.');
-  for(const m of assembly.markers){const shift=p=>({x:p.x+point.x,y:p.y+point.y});markers.push({...m,id:nextMarkerId(markers),...shift(m),...(linked(m)?{channel:channels[m.channel]}:{}),...(m.kind==='bell'?{order:bellOffset+bells.indexOf(m)+1}:{}),...(m.kind==='pip-stop'?{order:stopOffset+stops.indexOf(m)+1}:{}),...(m.route?{route:m.route.map(shift)}:{})});}
+  for(const m of assembly.markers){const shift=p=>({x:p.x+point.x,y:p.y+point.y});markers.push({...m,id:nextMarkerId(markers),...shift(m),...(m.kind==='pip-tube'?{channel:tubeChannels[m.channel]}:linked(m)?{channel:channels[m.channel]}:{}),...(m.kind==='bell'?{order:bellOffset+bells.indexOf(m)+1}:{}),...(m.kind==='pip-stop'?{order:stopOffset+stops.indexOf(m)+1}:{}),...(m.route?{route:m.route.map(shift)}:{})});}
   const layers=pack.map.layers.map(layer=>({...layer,tiles:[...layer.tiles]}));
   for(const [i,layer] of assembly.map.layers.entries()){
     if(!layers[i]){let serial=i,id=`assembly-layer-${serial}`;while(layers.some(item=>item.id===id))id=`assembly-layer-${++serial}`;layers.push({...layer,id,tiles:Array(pack.map.width*pack.map.height).fill(0)});}

@@ -19,13 +19,13 @@ these restrictions apply only to new protected material. Read the
 ## Play, explore, and create
 
 - 24 campaign missions, eight Guild jobs, daily trails and branching expeditions.
-- Fifteen featured Storybooks, including 60 unique original book levels, plus Puzzle Lab journeys.
-- 40 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
+- Sixteen featured Storybooks, including 65 unique original book levels, plus Puzzle Lab journeys.
+- 45 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
 - Create puzzles, write dialogue, rotate rooms, coordinate two travelers, and share adventure files, codes, links, or Storybooks.
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
 
-Choose **Choose your adventure → Storybooks → Pip and the Brassbound Atlas** for four harder delivery trials. Plan ordered stops, work within a program rewrite budget, and coordinate crossings with Pip. Creators can build these routes themselves, while an eight-slot program satchel saves and shares favorite card arrangements. The earlier Pip books remain available. Every book keeps chapter/branch bookmarks; the latest active trail also keeps exact in-chapter Continue.
+Choose **Choose your adventure → Storybooks → Pip and the Midnight Parcelworks** for five new courier-tube adventures. Connect separated rooms, plan a return melody and deliver a seven-stop night-mail route with scarce rewrites. Creators can paint paired tubes and flags, remix the levels, rotate/mirror/reverse draft programs, and share playable files, codes, links or Storybooks. The earlier Pip books and eight-slot program satchel remain available. Every book keeps chapter/branch bookmarks; the latest active trail also keeps exact in-chapter Continue.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),
 [complete game guide](docs/GAME_GUIDE.md), and [controls](docs/CONTROLS.md).

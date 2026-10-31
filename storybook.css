@@ -109,3 +109,7 @@
 .clockwork-rules{padding:12px;border:1px solid #d3b36b;background:#293f30;color:#ffe5a0;font-size:var(--adventure-text-size,16px);line-height:1.6;overflow-wrap:anywhere}
 #clockwork-deliveries{list-style:none;padding-left:0;line-height:1.65;font-size:var(--adventure-text-size,16px)}#clockwork-deliveries li{padding:10px 12px;border-left:3px solid #d3b36b;background:#18352f;margin:8px 0;overflow-wrap:anywhere}
 #pip-satchel label{display:grid;gap:8px;margin:14px 0;font-size:var(--adventure-text-size,16px)}#pip-satchel input,#pip-satchel select{width:100%;min-height:44px;min-width:0}#pip-satchel .clockwork-controls{margin:12px 0}
+
+#clockwork-tube-list{padding-left:24px;font-size:var(--adventure-text-size,16px);line-height:1.65}#clockwork-tube-list li{margin:10px 0;overflow-wrap:anywhere}
+
+#book-covers .book-cover-parcelworks>canvas{height:144px;padding:0;object-fit:cover;background:#112f3c}@media(max-width:600px){#book-covers .book-cover-parcelworks>canvas{height:112px}}

@@ -64,9 +64,9 @@ routes on both rules; optional side trips offer additional difficulty.
 
 ## Explore and create
 
-The Storybook shelf has twelve books. Search titles, summaries, and chapter
+The Storybook shelf has sixteen books. Search titles, summaries, and chapter
 scenes, or filter new, peaceful, and more demanding journeys. Player adventures
-has twenty-seven featured worlds and six cards per page. Search/filter resets
+has forty-five featured worlds and six cards per page. Search/filter resets
 to page one; Previous/Next moves keyboard focus to the first new card. Your
 personal shelf continues to hold 32 worlds.
 

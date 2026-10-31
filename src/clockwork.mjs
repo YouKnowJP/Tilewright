@@ -15,22 +15,28 @@ function visitStop(run){
  return {...run,clockwork:{...bot,delivered:[...(bot.delivered||[]),next.id],last:text},events:[...run.events,{type:'clockwork-stop',text}]};
 }
 const delta={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0],wait:[0,0]};
-function useCard(run){
- const bot=run.clockwork,lever=run.stage.switches.find(item=>same(item,bot)&&item.operable!==false),bell=run.stage.relays.find(item=>same(item,bot)),events=[];let next=run,text='No lever or bell on this tile.';
- if(lever){const change=switchChange(run,{[lever.id]:!run.switches[lever.id]},{includeClockwork:true});if(change.error)text=change.error;else{next={...run,switches:change.switches};text=`${lever.name} switched ${next.switches[lever.id]?'on':'off'}.`;events.push({type:'switch',name:lever.name,active:next.switches[lever.id]});}}
+function useCard(run,canEnter){
+ const bot=run.clockwork,tube=run.stage.clockworkTubes?.find(item=>same(item,bot)),lever=run.stage.switches.find(item=>same(item,bot)&&item.operable!==false),bell=run.stage.relays.find(item=>same(item,bot)),events=[];let next=run,text='No lever or bell on this tile.';
+ if(tube){const destination=run.stage.clockworkTubes.find(item=>item.id===tube.partner);if(!destination||!canEnter(run,destination)||run.crates.some(item=>same(item,destination)))text='Tube exit blocked. Clear its landing tile, then try Use again.';else{next={...run,clockwork:{...bot,x:destination.x,y:destination.y,moves:bot.moves+1}};text=`Tube ${tube.number} carried ${bot.name} to ${destination.name}, column ${destination.x+1}, row ${destination.y+1}.`;}}
+ else if(lever){const change=switchChange(run,{[lever.id]:!run.switches[lever.id]},{includeClockwork:true});if(change.error)text=change.error;else{next={...run,switches:change.switches};text=`${lever.name} switched ${next.switches[lever.id]?'on':'off'}.`;events.push({type:'switch',name:lever.name,active:next.switches[lever.id]});}}
  else if(bell){if(run.relayProgress===run.stage.sequence.length)text='The melody is already complete.';else if(run.stage.sequence[run.relayProgress]===bell.id){const relayProgress=run.relayProgress+1;next={...run,relayProgress,...(relayProgress===run.stage.sequence.length?{stun:4,alarm:0}:{})};text=relayProgress===run.stage.sequence.length?'Melody complete; signal gates open.':`${bell.name}: note ${relayProgress} of ${run.stage.sequence.length}.`;events.push({type:relayProgress===run.stage.sequence.length?'relay-complete':'relay'});}else{next={...run,relayProgress:run.stage.sequence[0]===bell.id?1:0,alarm:6};text='Wrong bell; the melody starts again. Read the order in Quest.';events.push({type:'alarm'});}}
- return {...next,clockwork:{...bot,last:text},events:[...run.events,...events,{type:'clockwork-use',text:`${bot.name}: ${text}`} ]};
+ return {...next,clockwork:{...next.clockwork,last:text},events:[...run.events,...events,{type:'clockwork-use',text:`${bot.name}: ${text}`} ]};
 }
 export function clockworkStep(run,canEnter){
  const bot=run.clockwork;if(!bot||!bot.running)return run;
- const command=bot.program[bot.index];if(command==='use'){const next=useCard(run);return visitStop({...next,clockwork:{...next.clockwork,index:(bot.index+1)%3}});}
+ const command=bot.program[bot.index];if(command==='use'){const next=useCard(run,canEnter);return visitStop({...next,clockwork:{...next.clockwork,index:(bot.index+1)%3}});}
  const [dx,dy]=delta[command],point={x:bot.x+dx,y:bot.y+dy};
  const blocked=command!=='wait'&&(!canEnter(run,point)||run.crates.some(crate=>same(crate,point)));
  return visitStop({...run,clockwork:{...bot,...(!blocked?point:{}),index:(bot.index+1)%3,last:blocked?'Blocked':command,moves:bot.moves+(command!=='wait'&&!blocked?1:0)}});
 }
 export function clockworkForecast(run,canEnter){
  const bot=run.clockwork;if(!bot)return '';const command=bot.program[bot.index],[dx,dy]=delta[command]||[0,0],point={x:bot.x+dx,y:bot.y+dy},blocked=!canEnter(run,point)||run.crates.some(crate=>same(crate,point));
- return `${bot.name} at column ${bot.x+1}, row ${bot.y+1}. ${bot.running?`Next: card ${bot.index+1}, ${command}${blocked&&!['wait','use'].includes(command)?' (blocked; the card still advances)':''}.`:'Paused; holds its current plate.'} Loop: ${bot.program.join(' → ')}. Movement happens after your step. Use operates a lever or bell on the helper’s tile. Advance one card works while paused and costs one turn. Program, Start/Pause and Return to dock each spend one turn and hold the helper still for that turn.`;
+ return `${bot.name} at column ${bot.x+1}, row ${bot.y+1}. ${bot.running?`Next: card ${bot.index+1}, ${command}${blocked&&!['wait','use'].includes(command)?' (blocked; the card still advances)':''}.`:'Paused; holds its current plate.'} Loop: ${bot.program.join(' → ')}. Movement happens after your step. Use operates a lever, bell or courier tube on the helper’s tile. Advance one card works while paused and costs one turn. Program, Start/Pause and Return to dock each spend one turn and hold the helper still for that turn.`;
 }
-export function clockworkRehearsal(run,canEnter,program){normalizeProgram(program);let next={...run,events:[],clockwork:{...run.clockwork,program:[...program],index:0,running:true}};return Array.from({length:6},(_,index)=>{const card=program[next.clockwork.index];next=clockworkStep(next,canEnter);return {step:index+1,card,x:next.clockwork.x,y:next.clockwork.y,result:next.clockwork.last};});}
+export function clockworkRehearsal(run,canEnter,program){normalizeProgram(program);let next={...run,events:[],clockwork:{...run.clockwork,program:[...program],index:0,running:true}};return Array.from({length:6},(_,index)=>{const card=program[next.clockwork.index],from=next.clockwork,tube=next.stage.clockworkTubes?.find(t=>same(t,from));next=clockworkStep(next,canEnter);return {step:index+1,card,x:next.clockwork.x,y:next.clockwork.y,result:next.clockwork.last,...(card==='use'&&tube&&!same(from,next.clockwork)?{travel:`Tube ${tube.number} → column ${next.clockwork.x+1}, row ${next.clockwork.y+1}`}:{})};});}
 export function clockworkActionLabel(action){if(action.startsWith('clockwork-program:'))return 'Set companion cards: '+action.slice('clockwork-program:'.length).split(',').map(command=>({up:'North',right:'East',down:'South',left:'West',wait:'Wait',use:'Use'}[command]||command)).join(' → ');if(action==='clockwork-toggle')return 'Start or pause companion';if(action==='clockwork-reset')return 'Return companion to dock';if(action==='clockwork-step')return 'Advance one companion card';return null;}
+
+export function transformProgram(program,operation){
+ const cards=normalizeProgram(program);if(operation==='reverse')return cards.reverse();
+ const changes={rotate:{up:'right',right:'down',down:'left',left:'up'},mirror:{left:'right',right:'left'}};if(!changes[operation])throw Error('Choose Rotate, Mirror or Reverse cards.');return cards.map(card=>changes[operation][card]||card);
+}

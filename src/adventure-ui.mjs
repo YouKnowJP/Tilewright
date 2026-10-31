@@ -76,7 +76,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   function openWorkshop(section = 'shelf') { showTitle(); front.hide(); frontStyle('workshop'); workshop.show(section); }
   function openFeaturedBook(selector) {
     openWorkshop('books');$('#book-search').value=selector.includes('festival')?'Lanternfair':'';$('#book-shelf-filter').value='all';$('#book-shelf-filter').dispatchEvent(new Event('change'));
-    const card=document.querySelector(selector);if(!card)return;const fold=card.closest('details');if(fold)fold.open=true;card.querySelector('button')?.focus({preventScroll:true});card.scrollIntoView({block:'center'});
+    let card=document.querySelector(selector);const next=$('#book-page-next');while(!card&&next&&!next.disabled){next.click();card=document.querySelector(selector);}if(!card)return;const fold=card.closest('details');if(fold)fold.open=true;card.querySelector('button')?.focus({preventScroll:true});card.scrollIntoView({block:'center'});
   }
   function openTraining() { showTitle(); front.hide(); frontStyle('training'); training.show(); }
   function journalDestination(target) {

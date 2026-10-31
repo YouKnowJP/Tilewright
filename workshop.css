@@ -114,8 +114,8 @@
 .ws-inspector-scroll { overflow:auto; padding:18px 16px; min-height:0; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#738262 #193630; }
 .ws-props>label,.ws-props>fieldset,.ws-props>div>label { margin-bottom:18px; }
 .ws-props h4 { color:#f4dca8; margin:0 0 20px; font:22px/1.4 Georgia,serif; }
-.ws-props fieldset { padding:14px 0; border:0; border-top:1px solid #627a52; border-bottom:1px solid #627a52; }
-.ws-props legend { color:#ecdba9; font:12px ui-monospace,monospace; padding-right:10px; }
+.ws-props fieldset { min-width:0; padding:14px 0; border:0; border-top:1px solid #627a52; border-bottom:1px solid #627a52; }
+.ws-props legend { color:#ecdba9; font:var(--adventure-text-size,16px)/1.4 ui-monospace,monospace; max-width:100%; overflow-wrap:anywhere; padding-right:10px; }
 .ws-inspector .ws-checkbox { display:flex; gap:10px; align-items:start; font-size:11px; margin:10px 0; }
 .ws-checkbox input { flex-shrink:0; width:17px; height:17px; accent-color:#d9bd79; margin:2px 0 0; }
 .ws-object-actions { display:flex; gap:8px; margin-top:20px; }

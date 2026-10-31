@@ -1,5 +1,34 @@
 # Verification record
 
+## Pip and the Midnight Parcelworks — v0.34.0
+
+**887 Node tests**, syntax checks and the **129-file** static build pass.
+The five chapters have clean three-star clears on Trail and Nemesis, including
+all-treasure variations. Tests cover tube-only travel, blocked landings, ordered
+exit deliveries, isolated-room connectivity, paired assemblies with independent
+channel space, room/map transforms, immutable rehearsal and draft transforms,
+version-6 files/links/books, exact Continue/Undo and route-review replay. A captured
+v0.33 checkpoint keeps its original winning fingerprint alongside the earlier
+v0.31/v0.32 fixtures.
+
+All six expansion scenarios pass sequentially in **Firefox and WebKit**: complete
+phone/desktop books, free program remix/rehearsal and satchel export, creator tube
+painting/capture/paste plus proved export and shared-link play, enlarged text and
+48-character tube names, and old-save continuation. Layouts include 320×568,
+844×390, 768×900 and 1440×1000. Screenshots review the board, numeric tube/flag
+labels, compact pair directory, custom card menus, creator inspector and original
+Parcelworks cover. Enlarged creator tests reserve at least 180 pixels of map
+height, check readable section headings, and navigate tube inspection by keyboard. Tests use fresh disposable storage.
+
+Chromium regression testing exposed and repaired two navigation issues: the
+peaceful-story shortcut now finds its target across shelf pages; companion
+controls restore board focus immediately so a fast first movement is accepted.
+A final delivery made while the keeper waits at home also retains victory-button
+focus. The required release suite contains **47 scenarios**, including the new
+six; CI gates deployment on that full suite, legacy-browser migration and the
+five Node/OS jobs. Browser engine and viewport checks do not replace physical
+device or assistive-technology sessions.
+
 ## Pip and the Brassbound Atlas — v0.33.0
 
 **853 Node tests**, syntax checks, the **128-file** build and public packaging

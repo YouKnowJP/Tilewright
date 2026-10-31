@@ -223,6 +223,7 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
         for (let i = 0; i < hunter.phase; i++) rect('#fff0bc', x + 6 + i * 5, y - 2, 3, 5);
       }
     }
+    for(const tube of stage.clockworkTubes||[])if(visible(tube)){drawWorkshopObject(ctx,{...tube,kind:'pip-tube'});drawCueBadge(ctx,tube,'U',tube.number);}
     if(run.clockwork&&visible(run.clockwork)){drawWorkshopObject(ctx,{...run.clockwork,kind:'clockwork'});drawCueBadge(ctx,run.clockwork,'A');}
     if(preferences().mapCues!=='on')for(const [i,stop]of (stage.clockworkStops||[]).entries())if(visible(stop))drawCueBadge(ctx,{...stop,y:stop.y+.5},'F',String(i+1));
     for (let y = Math.floor(cameraY); y < Math.min(stage.map.height, Math.ceil(cameraY + rows)); y++) {

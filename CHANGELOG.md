@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.34.0 — 2026-10-30
+
+- Add Pip and the Midnight Parcelworks: five story chapters with airborne deliveries, connected rooftops, a return melody, a freight lock and a seven-stop night-mail finale.
+- Add paired courier tubes: Pip uses its current tube to reach the matching endpoint. Blocked exits refuse travel, walking/Wait stay in place, and exit deliveries count on arrival.
+- Add creator-painted tube pairs with automatic channel pairing, numeric map cues, partner coordinates, linked assembly capture and version-6 adventure sharing with verified clears. All five worlds are available to remix.
+- Add an original pixel-art Parcelworks cover and a compact, named tube-pair directory.
+- Add free Rotate, Mirror and Reverse card-draft tools, a Parcel recipe and a tube directory. Applying still follows each world’s rewrite budget. Fix the creator’s delivery-flag toolbar label make the peaceful-story shortcut find its book across shelf pages, and restore keyboard focus immediately after companion controls.
+- Keep creator tabs readable at large text sizes, put object actions after Pip fields, and scale section headings with the reading preference, and reserve usable map space beneath enlarged toolbars.
+- Extend deterministic, migration and live browser coverage for tubes, creator export/shared play, program transforms, small/large layouts, keyboard/touch, Continue, Undo and old Pip saves.
+
 ## 0.33.0 — 2026-10-30
 
 - Add Pip and the Brassbound Atlas: four harder courier trials with ordered deliveries, rewrite budgets, sealed docks, shared crossings and a return journey.

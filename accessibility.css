@@ -72,3 +72,15 @@ body:is([data-game-text="large"],[data-game-text="largest"]) .adventure-workshop
  body:is([data-game-text="large"],[data-game-text="largest"]) .ws-heading-actions { width:100%; }
  body[data-game-text="largest"] .ws-lab-room { grid-template-columns:minmax(0,1fr); }
 }
+
+/* Enlarged creator controls keep a real map area instead of squeezing it away. */
+@media(max-width:1000px){
+ body:is([data-game-text="large"],[data-game-text="largest"]) .ws-studio{height:auto;grid-template-rows:auto}
+ body:is([data-game-text="large"],[data-game-text="largest"]) .ws-viewport{flex:0 0 auto;height:clamp(260px,50svh,520px);min-height:260px}
+ body:is([data-game-text="large"],[data-game-text="largest"]) .ws-quick-brushes{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:600px){
+ body[data-game-text="large"] .ws-quick-brushes{grid-template-columns:repeat(3,minmax(0,1fr))}
+ body[data-game-text="largest"] :is(.ws-navigation,.ws-quick-brushes,.ws-build-heading>div:last-child){grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-game-text="largest"] :is(.ws-journey-bar,.ws-panel-shortcuts){grid-template-columns:minmax(0,1fr)}
+}

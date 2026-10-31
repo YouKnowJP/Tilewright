@@ -3,6 +3,24 @@ import { CHANNEL_NUMBERS, drawCueBadge } from './adventure-accessibility.mjs';
 import { drawTile } from './render.mjs';
 import { CHAPTERS } from './adventure-art.mjs';
 export const CHANNEL_COLORS = Object.freeze({ amber: '#efc47a', jade: '#8ed8ae', violet: '#c3a2e4', blue: '#8acddd' });
+// New owned Parcelworks cover illustration; earlier art retains its permissions.
+export function drawParcelworksCover(canvas){
+  canvas.width=400;canvas.height=160;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
+  const pixel=(ink,x,y,w,h)=>{ctx.fillStyle=ink;ctx.fillRect(x,y,w,h);};
+  pixel('#112f3c',0,0,400,160);pixel('#1b4347',0,82,400,78);
+  for(const [x,y]of [[20,20],[54,40],[97,17],[143,32],[181,13],[224,35],[287,21],[381,56]]){pixel('#e6d59c',x,y,3,3);pixel('#9fbead',x-3,y+1,9,1);}
+  pixel('#ebd6a0',333,18,27,27);pixel('#112f3c',328,14,20,24);
+  for(const [x,y,w]of [[0,94,57],[61,80,48],[118,102,44],[294,85,53],[353,96,47]]){pixel('#254b4b',x,y,w,160-y);pixel('#41635a',x-3,y,w+6,5);for(let wx=x+9;wx<x+w-7;wx+=17){pixel('#f5cd7e',wx,y+13,7,10);pixel('#34534d',wx+3,y+13,1,10);}}
+  pixel('#173d3c',0,142,400,18);pixel('#789374',0,142,400,3);
+  // Two brass dispatch mouths and their roof-level pipework.
+  pixel('#725643',38,64,18,77);pixel('#deb678',41,64,12,74);pixel('#8e6b48',38,60,67,18);pixel('#edc68a',41,63,61,12);
+  pixel('#edc68a',93,59,20,33);pixel('#fff0c1',96,62,14,27);pixel('#153b42',99,66,11,19);
+  pixel('#725643',322,69,19,72);pixel('#deb678',325,69,13,69);pixel('#edc68a',300,64,43,18);pixel('#fff0c1',293,60,19,32);pixel('#153b42',296,65,11,21);
+  for(const [x,y]of [[125,63],[147,53],[170,49],[193,52],[275,55]])pixel('#e0ba75',x,y,5,3);
+  for(const [x,y]of [[155,76],[278,90]]){pixel('#e7dfb7',x,y,17,12);pixel('#b89864',x+2,y+2,13,2);pixel('#b89864',x+5,y+5,7,2);}
+  ctx.save();ctx.translate(201,65);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0},77);ctx.restore();
+  pixel('#e9bf76',265,123,16,16);pixel('#fff0bd',271,123,4,16);pixel('#537165',184,144,106,3);
+}
 export function drawLabDiscovery(canvas,index,unlocked){
   canvas.width=96;canvas.height=72;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
   const colors=unlocked?['#efbf72','#a5e1d2','#c0a7eb','#ffe5a0']:['#687d6a','#6f8175','#6c7a76','#7b8067'];
@@ -20,6 +38,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-tube': rect('#273e47',2,3,20,20);rect('#d0a766',4,4,16,18);rect(color,6,6,12,14);rect('#102d33',8,8,8,10);rect('#f9e5b2',9,17,6,3);break;
     case 'pip-stop': rect('#efe0a4',2,3,20,18);rect('#4e7069',4,5,16,14);rect('#e6c46b',6,6,3,12);rect('#fbefcc',9,6,9,6);ctx.fillStyle='#1a3536';ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.fillText(String(item.order||1),13,13);break;
     case 'clockwork': rect('#805c3e',3,6,18,15);rect('#e7c886',5,7,14,11);rect('#203d48',7,10,3,4);rect('#203d48',14,10,3,4);rect('#ecf5c7',10,2,4,5);rect('#566b68',5,21,5,3);rect('#566b68',15,21,5,3);break;
     case 'turntable': ring('#465b70',12,12,11); ring('#e8c785',12,12,8); rect('#253f48',10,4,4,15); rect('#253f48',7,7,9,3); rect('#fff1c6',14,13,5,4); break;
@@ -62,6 +81,7 @@ export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = 
   if (grid) { ctx.strokeStyle = '#17393235'; ctx.lineWidth = 1; ctx.beginPath(); for (let x = 0; x <= map.width; x++) { ctx.moveTo(x * size, 0); ctx.lineTo(x * size, height); } for (let y = 0; y <= map.height; y++) { ctx.moveTo(0, y * size); ctx.lineTo(width, y * size); } ctx.stroke(); }
   for (const item of [...pack.markers.filter(m => ['fern', 'ember', 'pip-stop'].includes(m.kind)), ...pack.markers.filter(m => !['fern', 'ember', 'pip-stop'].includes(m.kind))]) drawWorkshopObject(ctx, item, size);
   for(const room of pack.markers.filter(m=>m.kind==='turntable')){const r=(room.span-1)/2;ctx.strokeStyle='#f6d88e';ctx.lineWidth=thumbnail?1:2;ctx.setLineDash([4,3]);ctx.strokeRect((room.x-r)*size+1,(room.y-r)*size+1,room.span*size-2,room.span*size-2);ctx.setLineDash([]);}
+  for(const tube of pack.markers.filter(m=>m.kind==='pip-tube'))drawCueBadge(ctx,tube,'U',CHANNEL_NUMBERS[tube.channel],size);
   for(const stop of pack.markers.filter(m=>m.kind==='pip-stop'))drawCueBadge(ctx,{x:stop.x,y:stop.y+.5},'F',String(stop.order),size);
   const object = pack.markers.find(m => m.id === selected);
   if (object?.route && !thumbnail) { ctx.strokeStyle = '#f5d893'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]); ctx.beginPath(); object.route.forEach((p, i) => i ? ctx.lineTo((p.x + .5) * size, (p.y + .5) * size) : ctx.moveTo((p.x + .5) * size, (p.y + .5) * size)); ctx.stroke(); ctx.setLineDash([]); }

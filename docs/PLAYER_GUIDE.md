@@ -3,6 +3,28 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## The Midnight Parcelworks — v0.34
+
+Open **Choose your adventure → Storybooks → Pip and the Midnight Parcelworks**.
+Five chapters introduce courier tubes, then combine them with limited rewrites,
+ordered deliveries, bells and crossings that need both you and Pip.
+
+A **U1** tube connects to the other **U1**, U2 to U2, and so on. Pip must stand
+on a tube and execute **Use** to travel. Walking and Wait keep it in place.
+A blocked landing refuses travel but advances the card; clear the landing and
+try again. Only Pip uses these tubes. A delivery flag at the exit counts as
+soon as Pip arrives. Pip’s **Courier tube directory** lists both coordinates.
+
+**Remix the cards · free** edits your draft: Rotate turns directions clockwise,
+Mirror swaps East/West, and Reverse reads the cards backward. Wait and Use keep
+their meaning. Rehearsal, satchel loading and draft tools do not spend turns
+or rewrites. **Apply** still does, and **Restore current cards** discards a draft.
+
+Want to invent a route? Remix a Parcelworks world in Adventure Workshop, or
+paint **Pip courier tube** from Puzzles. The brush pairs endpoints automatically;
+inspect them to rename or change channels. Add flags, playtest the entire round
+trip, then share a proved adventure file, code, play link or Storybook.
+
 ## The Brassbound Atlas — v0.33
 
 Open **Choose your adventure → Storybooks → Pip and the Brassbound Atlas**.
