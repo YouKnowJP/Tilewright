@@ -214,3 +214,30 @@ Worlds with Use cards or single-step creator proofs export as version 4.
 Earlier version-1/2/3 maps retain their identities. Use/stepping are recorded in
 Continue, Undo and route reviews. Share a proved adventure file, code, link or
 Storybook for friends to play in the public game. No code editing is required.
+
+
+## Courier routes and program pockets — v0.33
+
+Paint **Pip delivery stop** from Puzzles and number up to eight flags once each
+from 1. Flags can share tiles with bells, levers, plates or Pip’s starting dock.
+A flag is credited when Pip executes a card on it after all earlier flags; a
+later flag passed early needs another visit. Inspect the last flag to require
+Pip to finish paused there. Earlier flags cannot require final parking.
+
+Inspect Pip to choose **Program rewrites** (0 means unlimited; otherwise 1–8)
+and **Seal Return to dock**. Every Apply spends a rewrite. Undo restores the
+counter, while an allowed dock return clears deliveries without refilling it.
+These constraints are optional: older worlds keep unlimited rewrites and dock
+returns. Remix any Brassbound Atlas trial to begin a harder adventure.
+
+Flags and their labels follow map/room rotations. Puzzle assemblies append
+flag numbers in order. Clear an earlier final parking requirement before
+extending its route; no route can exceed eight stops. Structural checks allow
+possible gate openings and remote instruments reached by Pip, so a full
+playtest remains necessary. Version-5 files/codes/links and Storybooks carry
+these rules, proofs, exact Continue, Undo and route-review histories.
+
+The workbench’s eight-slot **program satchel** stores card arrangements for
+reuse. It has its own Undo, import/export and journey-backed save key. Loading
+or saving a pocket never applies a program or consumes a rewrite. Programs
+are data, with no scripts or external assets.

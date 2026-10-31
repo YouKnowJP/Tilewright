@@ -1,7 +1,7 @@
 # Storybooks: a road between worlds
 
 Choose **Choose your adventure → Storybooks**, or Adventure Workshop → Storybooks. Read a book's
-opening scene before entering its first chapter. Fourteen featured books are available. Use the search field or choose New
+opening scene before entering its first chapter. Fifteen featured books are available. Use the search field or choose New
 adventures, Peaceful books, or More demanding books to narrow the shelves.
 **The Rainmaker’s Letters** and **The Observatory of Borrowed Stars** each add
 four original maps and a complete new story. The three earlier books weave the
@@ -42,7 +42,7 @@ lets you open a completed chapter to reread its opening scene and ending.
 
 Select **Bind your own story** or **Make your version** on a featured book.
 Write a title, creator name, invitation, and ending. Add **two to six worlds**
-from your saved shelf, featured adventures, Puzzle Lab, the fifty-six original
+from your saved shelf, featured adventures, Puzzle Lab, the sixty original
 Storybook levels, or current World studio
 draft. Add a short scene before each chapter, move chapters earlier or later,
 and remove any you no longer need. A world must pass structural checks before
@@ -53,6 +53,11 @@ Each chapter is an independent snapshot. Editing its original world later
 does not change an existing book. To update a chapter, remove it and add the
 updated original. Repeated worlds are allowed: give a return visit a new scene
 and try a different optional challenge.
+
+**Pip and the Brassbound Atlas** adds four advanced courier trials: The Staircase
+Courier, The Folded River, The Return Address and The Brassbound Exchange.
+Their ordered deliveries, rewrite budgets and parking goals reward careful
+planning; optional treasure and chapter promises add replay routes.
 
 The Clockwork Post adds three peaceful programmable-companion chapters.
 **Pip and the Pocket Orchestra** adds six more: One Little Switch, A Bell for

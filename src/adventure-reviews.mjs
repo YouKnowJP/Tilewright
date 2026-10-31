@@ -35,7 +35,7 @@ export async function inspectReview(review,yieldFrame=()=>Promise.resolve()){
     if(run.status!=='playing')throw Error('This review continues past its ending.');const before=run;run=replayAction(run,action);
     const major=run.events.filter(event=>['hurt','win'].includes(event.type));
     if(major.length)for(const event of major){const moment={index:index+1,turn:run.turns,label:event.type==='hurt'?'Damage taken':'Beacon restored'},first=event.type==='hurt'&&!firstHurt;if(first)firstHurt=moment;remember(moment,first||event.type==='win');}
-    else if(action.startsWith('choose:')||run.events.some(event=>['lantern','delivery','relay-complete','power','pulse','veil','echo','echo-return','room-turn','vault','story-card','traveler-switch','clockwork','clockwork-use'].includes(event.type)))remember({index:index+1,turn:run.turns,label:action.startsWith('choose:')?'Keeper choice':run.message});
+    else if(action.startsWith('choose:')||run.events.some(event=>['lantern','delivery','relay-complete','power','pulse','veil','echo','echo-return','room-turn','vault','story-card','traveler-switch','clockwork','clockwork-use','clockwork-stop'].includes(event.type)))remember({index:index+1,turn:run.turns,label:action.startsWith('choose:')?'Keeper choice':run.message});
     if(run===before)throw Error('This review contains an action that cannot be replayed.');
     if(index%32===31)await yieldFrame();
   }

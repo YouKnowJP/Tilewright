@@ -43,7 +43,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   let expeditions, workshop, training, workshopActions = [], workshopClearNote = '';
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0;
   let mapInput,gamepadInput;
-  const playLayout=createPlayLayout();const clockworkUI=createClockworkUI({onAction:action});
+  const playLayout=createPlayLayout();const clockworkUI=createClockworkUI({onAction:action,storage});
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;

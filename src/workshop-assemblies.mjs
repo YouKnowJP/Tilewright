@@ -45,8 +45,9 @@ export function pasteAssembly(input,source,point,turns=0){
   const used=new Set(pack.markers.filter(linked).map(m=>m.channel)),needed=[...new Set(assembly.markers.filter(linked).map(m=>m.channel))],free=CHANNELS.filter(id=>!used.has(id));
   if(needed.length>free.length)throw Error('There are not enough unused puzzle channels. Clear a complete channel before placing this linked assembly.');
   const channels=Object.fromEntries(needed.map((id,i)=>[id,free[i]])),markers=[...pack.markers],bells=assembly.markers.filter(m=>m.kind==='bell').sort((a,b)=>a.order-b.order),bellOffset=pack.markers.filter(m=>m.kind==='bell').length;
+  const stops=assembly.markers.filter(m=>m.kind==='pip-stop').sort((a,b)=>a.order-b.order),stopOffset=pack.markers.filter(m=>m.kind==='pip-stop').length;if(stops.length+stopOffset>8)throw Error('A world can hold at most eight Pip delivery stops.');if(stops.length&&pack.markers.some(m=>m.kind==='pip-stop'&&m.required))throw Error('Clear the earlier final parking requirement before extending its delivery route.');
   if(bells.length+bellOffset>8)throw Error('A world can hold at most eight sequence bells.');
-  for(const m of assembly.markers){const shift=p=>({x:p.x+point.x,y:p.y+point.y});markers.push({...m,id:nextMarkerId(markers),...shift(m),...(linked(m)?{channel:channels[m.channel]}:{}),...(m.kind==='bell'?{order:bellOffset+bells.indexOf(m)+1}:{}),...(m.route?{route:m.route.map(shift)}:{})});}
+  for(const m of assembly.markers){const shift=p=>({x:p.x+point.x,y:p.y+point.y});markers.push({...m,id:nextMarkerId(markers),...shift(m),...(linked(m)?{channel:channels[m.channel]}:{}),...(m.kind==='bell'?{order:bellOffset+bells.indexOf(m)+1}:{}),...(m.kind==='pip-stop'?{order:stopOffset+stops.indexOf(m)+1}:{}),...(m.route?{route:m.route.map(shift)}:{})});}
   const layers=pack.map.layers.map(layer=>({...layer,tiles:[...layer.tiles]}));
   for(const [i,layer] of assembly.map.layers.entries()){
     if(!layers[i]){let serial=i,id=`assembly-layer-${serial}`;while(layers.some(item=>item.id===id))id=`assembly-layer-${++serial}`;layers.push({...layer,id,tiles:Array(pack.map.width*pack.map.height).fill(0)});}

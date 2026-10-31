@@ -25,7 +25,7 @@ export function serializeAdventure(input) {
 export function parseAdventure(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > MAX_ADVENTURE_BYTES) throw Error('Choose an adventure file smaller than 400 KB.');
   let input; try { input = JSON.parse(text); } catch { throw Error('The adventure file is not valid JSON.'); }
-  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4].includes(input.version)) throw Error('Choose a Tilewright adventure file, rather than a terrain-only map.');
+  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5].includes(input.version)) throw Error('Choose a Tilewright adventure file, rather than a terrain-only map.');
   if (input.encoding !== undefined) {
     if (input.encoding !== 'rle-v1' || !Number.isInteger(input.map?.width) || !Number.isInteger(input.map?.height) || input.map.width < 1 || input.map.height < 1 || input.map.width > 64 || input.map.height > 64
       || !Array.isArray(input.map.layers) || input.map.layers.length < 1 || input.map.layers.length > 6) throw Error('This adventure uses unsupported terrain encoding or dimensions.');

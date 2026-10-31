@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.33.0 — 2026-10-30
+
+- Add Pip and the Brassbound Atlas: four harder courier trials with ordered deliveries, rewrite budgets, sealed docks, shared crossings and a return journey.
+- Add creator-painted Pip delivery stops, final parking goals, optional one-to-eight rewrite allowances and dock locks. Version-5 sharing preserves these rules and verified clears.
+- Add a per-journey eight-slot program satchel with naming, free loading, Undo, portable import/export and full-save backup support.
+- Show a delivery manifest and remaining rewrites in Pip’s workbench; restore current cards without spending a turn or rewrite.
+- Preserve old world identities and captured v0.31/v0.32 checkpoints. Extend rotation, assemblies, map cues, proofs and route reviews to courier routes.
+
 ## 0.32.0 — 2026-10-30
 
 - Add Pip and the Pocket Orchestra: six original peaceful chapters, optional treasure detours, remote switches, ordered bell duets, shared crossings and a lantern-fair finale.

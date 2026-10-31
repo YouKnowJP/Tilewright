@@ -26,7 +26,7 @@ export async function checkWorkshop(browserType,{baseURL=BASE,channel='chrome',s
    const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});
    try{
     const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
-    await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();assert.equal(await page.locator('.ws-adventure-card').count(),6);assert.match(await page.locator('#ws-shelf-count').textContent(),/36 worlds/);
+    await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();assert.equal(await page.locator('.ws-adventure-card').count(),6);assert.match(await page.locator('#ws-shelf-count').textContent(),/40 worlds/);
     const original=await originals(page),packs=workshopShowcases();
     if(screenshots)await page.screenshot({path:artifactPath('workshop-shelf-desktop.png'),fullPage:true});
     for(const [i,pack]of packs.entries())for(const rules of ['trail','nemesis']){
@@ -126,7 +126,7 @@ async function designerChecks(browser,baseURL) {
  const context=await browser.newContext({viewport:{width:1440,height:1000},hasTouch:true});
  try {
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(baseURL+'/#play');await page.locator('#title-workshop').click();await page.locator('#ws-tab-build').click();
-  for(const item of OBJECTS){await chooseBrush(page,item.group,item.name);await cell(page,6,6);await page.locator('#ws-inspect-tool').click();await cell(page,6,6);for(let n=0;n<2&&!(await page.locator('#ws-object-kind').textContent()).includes(item.name);n++)await cell(page,6,6);assert.match(await page.locator('#ws-object-kind').textContent(),new RegExp(item.name));const checks=item.id==='lever'?2:['hunter','watcher'].includes(item.id)?1:0;assert.equal(await page.locator('#ws-object-fields .ws-checkbox:visible').count(),checks,item.id+' should show only its own settings');}
+  for(const item of OBJECTS){await chooseBrush(page,item.group,item.name);await cell(page,6,6);await page.locator('#ws-inspect-tool').click();await cell(page,6,6);for(let n=0;n<2&&!(await page.locator('#ws-object-kind').textContent()).includes(item.name);n++)await cell(page,6,6);assert.match(await page.locator('#ws-object-kind').textContent(),new RegExp(item.name));const checks=item.id==='lever'?2:['clockwork','pip-stop'].includes(item.id)?1:['hunter','watcher'].includes(item.id)?1:0;assert.equal(await page.locator('#ws-object-fields .ws-checkbox:visible').count(),checks,item.id+' should show only its own settings');}
   await chooseBrush(page,'Terrain','Stone');await page.locator('#ws-brush').click();await page.locator('#ws-layer-visible').uncheck();await page.locator('#ws-palette-close').click();assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('tilewright.workshop.draft.v1')).map.layers[0].visible),false);await page.locator('#ws-undo').click();
   await page.locator('[data-ws-quick="terrain:7"]').click();await page.locator('#ws-brush').click();await page.locator('#ws-layer-visible').uncheck();await page.locator('#ws-palette-close').click();await page.locator('[data-ws-quick="terrain:1"]').click();await page.locator('#ws-brush').click();assert.equal(await page.locator('#ws-layer-visible').isChecked(),true,'Quick terrain brushes must show the selected layer’s real visibility');await page.locator('#ws-palette-close').click();await page.locator('#ws-undo').click();
   const before=await page.evaluate(()=>localStorage.getItem('tilewright.workshop.draft.v1'));const r=await page.locator('#ws-canvas').boundingBox();
@@ -134,7 +134,7 @@ async function designerChecks(browser,baseURL) {
   else{await page.locator('#ws-canvas').evaluate(node=>node.addEventListener('pointerdown',event=>window.cancelledStroke=event.pointerId,{once:true}));await page.mouse.move(r.x+r.width/2,r.y+r.height/2);await page.mouse.down();await page.locator('#ws-canvas').evaluate(node=>node.dispatchEvent(new PointerEvent('pointercancel',{pointerId:window.cancelledStroke})));await page.mouse.up();}
   assert.equal(await page.evaluate(()=>localStorage.getItem('tilewright.workshop.draft.v1')),before,'Cancelled pointer strokes must not save edits');
   await page.locator('#ws-panel-adventure').click();await page.locator('#ws-title').fill('A Nemesis creator clear');await page.locator('#ws-world-details summary').click();await chooseOption(page,'#ws-test-rules','nemesis');await page.locator('#ws-props-adventure button[type="submit"]').click();assert.deepEqual(errors,[]);
-  return [{checks:'All 29 object inspectors hide irrelevant settings; layer visibility, cancelled pointer stroke, and Nemesis playtest controls'}];
+  return [{checks:'All 30 object inspectors hide irrelevant settings; layer visibility, cancelled pointer stroke, and Nemesis playtest controls'}];
  } finally { await context.close(); }
 }
 

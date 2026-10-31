@@ -19,13 +19,13 @@ these restrictions apply only to new protected material. Read the
 ## Play, explore, and create
 
 - 24 campaign missions, eight Guild jobs, daily trails and branching expeditions.
-- Fourteen featured Storybooks, including 56 unique original book levels, plus Puzzle Lab journeys.
-- 36 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
+- Fifteen featured Storybooks, including 60 unique original book levels, plus Puzzle Lab journeys.
+- 40 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
 - Create puzzles, write dialogue, rotate rooms, coordinate two travelers, and share adventure files, codes, links, or Storybooks.
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
 
-Choose **Choose your adventure → Storybooks → Pip and the Pocket Orchestra** for six new chapters of remote switches, bell duets, and shared crossings. Arrange Pip’s three cards, borrow program recipes, rehearse for free, or advance one card at a time. Remix the same helper in World studio and share your own puzzles. The earlier three-chapter **Clockwork Post** remains available. Each book keeps its chapter and branch bookmark; the latest active trail also keeps exact in-chapter Continue.
+Choose **Choose your adventure → Storybooks → Pip and the Brassbound Atlas** for four harder delivery trials. Plan ordered stops, work within a program rewrite budget, and coordinate crossings with Pip. Creators can build these routes themselves, while an eight-slot program satchel saves and shares favorite card arrangements. The earlier Pip books remain available. Every book keeps chapter/branch bookmarks; the latest active trail also keeps exact in-chapter Continue.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),
 [complete game guide](docs/GAME_GUIDE.md), and [controls](docs/CONTROLS.md).

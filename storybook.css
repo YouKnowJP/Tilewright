@@ -106,3 +106,6 @@
 #clockwork-preview strong{color:#ffe5a0;font-size:var(--adventure-text-size,16px)}#clockwork-preview span{font-size:var(--adventure-text-size,16px);line-height:1.55}
 #clockwork-recipe-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}#clockwork-recipe-list button{min-height:52px;text-align:left;line-height:1.6;overflow-wrap:anywhere}
 @media(max-width:600px){#clockwork-preview,#clockwork-recipe-list{grid-template-columns:1fr}}
+.clockwork-rules{padding:12px;border:1px solid #d3b36b;background:#293f30;color:#ffe5a0;font-size:var(--adventure-text-size,16px);line-height:1.6;overflow-wrap:anywhere}
+#clockwork-deliveries{list-style:none;padding-left:0;line-height:1.65;font-size:var(--adventure-text-size,16px)}#clockwork-deliveries li{padding:10px 12px;border-left:3px solid #d3b36b;background:#18352f;margin:8px 0;overflow-wrap:anywhere}
+#pip-satchel label{display:grid;gap:8px;margin:14px 0;font-size:var(--adventure-text-size,16px)}#pip-satchel input,#pip-satchel select{width:100%;min-height:44px;min-width:0}#pip-satchel .clockwork-controls{margin:12px 0}

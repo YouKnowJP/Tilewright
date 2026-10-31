@@ -1,3 +1,4 @@
+import {atlasBook} from './pip-atlas-worlds.mjs';
 import {orchestraBook} from './pip-orchestra-worlds.mjs';
 import {clockworkBook} from './clockwork-worlds.mjs';
 import { sagaBooks } from './saga-worlds.mjs';
@@ -52,5 +53,6 @@ export function featuredBooks() {
     ...sagaBooks(),
     clockworkBook(),
     orchestraBook(),
+    atlasBook(),
   ];
 }

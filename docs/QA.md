@@ -1,5 +1,35 @@
 # Verification record
 
+## Pip and the Brassbound Atlas — v0.33.0
+
+**853 Node tests**, syntax checks, the **128-file** build and public packaging
+checks pass. The four harder trials have clean three-star routes on Trail and
+Nemesis. Tests cover ordered/early deliveries, final parking, exhausted rewrites,
+sealed docks, Undo, allowed-return resets, disconnected flags, overlay repainting,
+assembly numbering, rotating rooms, exact Continue and route reviews. Captured
+v0.31/v0.32 journals retain their original outcomes and fingerprints.
+
+The **41-scenario Chromium release suite passes**. Six focused expansion cases
+also pass in Firefox and WebKit: both complete trial-book widths, eight-slot
+satchel save/import/export/Undo/reload, actual creator flag/rule editing and
+proved export, enlarged layouts/storage faults, and v0.32 continuation. Layout
+checks include 320×568, 844×390, 768×900 and 1440×1000 with largest reading size,
+high contrast and a maximum-length program name. The free card-discard action
+keeps the current loop usable after the rewrite allowance has been spent.
+
+Reviewed screenshots led to keeping delivery numbers visible on shared tiles,
+showing flag coordinates in the manifest, and removing duplicate list numbering.
+Satchel tests reject invalid/oversized data, retain in-memory edits after quota
+or silent-write failures, and verify journey/backup isolation. Sharing remains
+bounded data with no scripts or external assets.
+
+An initial concurrent browser run hit click/startup timeouts and a Continue
+assertion that read the counter before restoration finished. The affected checks
+passed separately; the Continue check now waits for the expected restored turn.
+Final browser suites run sequentially without forced clicks or longer action
+timeouts. Tests use disposable profiles, not existing player saves. Physical
+devices, screen readers and extended difficulty/enjoyment studies are not claimed.
+
 ## Pip and the Pocket Orchestra — v0.32.0
 
 **829 Node tests**, syntax checks and the **125-file** static build pass. The

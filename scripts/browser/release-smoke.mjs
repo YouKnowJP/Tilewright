@@ -1,5 +1,6 @@
 import {libraryClockworkScenarios} from './library-clockwork-browser-checks.mjs';
 import {pipOrchestraScenarios} from './pip-orchestra-browser-checks.mjs';
+import {pipAtlasScenarios} from './pip-atlas-browser-checks.mjs';
 import { presentationScenarios } from './presentation-browser-checks.mjs';
 import { cartographerScenarios } from './cartographer-browser-checks.mjs';
 import assert from 'node:assert/strict';
@@ -72,6 +73,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await cartographerScenarios(scenario);
     await libraryClockworkScenarios(scenario);
     await pipOrchestraScenarios(scenario);
+    await pipAtlasScenarios(scenario);
     await presentationScenarios(scenario);
     const report={browser:browser.version(),baseURL,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
   }finally{await browser.close();}

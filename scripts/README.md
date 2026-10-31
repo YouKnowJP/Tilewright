@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **35 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **41 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -103,3 +103,11 @@ on phone/desktop, no-turn recipes/rehearsal with keyboard and enlarged layouts,
 version-4 creator editing/export/reload/proofs, and exact continuation from a
 captured v0.31 Pip checkpoint. Node tests cover both rule sets, occupied-floor
 safety, bell recovery, rehearsal immutability, action histories and transforms.
+
+
+`pip-atlas-browser-checks.mjs` adds six release scenarios: all four courier trials
+on phone/desktop, eight-slot satchel save/share/import/Undo/reload, real creator
+flag/rule authoring and proved export, enlarged layouts and quota faults, and
+original v0.32 save continuation. Node tests check ordering, parking, rewrite
+limits, dock behavior, assembly numbering, room rotation, profile isolation and
+bounded data-only program files.

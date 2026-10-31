@@ -11,7 +11,7 @@ export const ADVENTURE_FORMAT = 'tilewright-adventure';
 export const MAX_ADVENTURE_BYTES = 400_000, MAX_PROOF_ACTIONS = 2000, MAX_MARKERS = 128;
 export const CHANNELS = Object.freeze(['amber', 'jade', 'violet', 'blue']);
 export const OBJECTS = Object.freeze([
-  ['clockwork','Clockwork companion','Puzzles'], ['turntable','Rotating room dial','Puzzles'], ['vault','Optional security vault','Puzzles'], ['partner','Two-Lantern partner','Story'], ['rune','Story rune','Story'],
+  ['pip-stop','Pip delivery stop','Puzzles'], ['clockwork','Clockwork companion','Puzzles'], ['turntable','Rotating room dial','Puzzles'], ['vault','Optional security vault','Puzzles'], ['partner','Two-Lantern partner','Story'], ['rune','Story rune','Story'],
   ['start', 'Starting point', 'Goals'], ['beacon', 'Exit beacon', 'Goals'], ['lantern', 'Lantern', 'Goals'], ['coin', 'Treasure', 'Goals'],
   ['key', 'Brass key', 'Puzzles'], ['gate', 'Key gate', 'Puzzles'], ['crate', 'Pushable crate', 'Puzzles'], ['plate', 'Pressure plate', 'Puzzles'],
   ['bridge', 'Pressure bridge', 'Puzzles'], ['lever', 'Lever', 'Puzzles'], ['door', 'Lever door', 'Puzzles'], ['bell', 'Sequence bell', 'Puzzles'],
@@ -19,7 +19,7 @@ export const OBJECTS = Object.freeze([
   ['relic', 'Singing relic', 'Story'], ['supplies', 'Supply cache', 'Story'], ['heart', 'Healing heart', 'Story'], ['fern', 'Fern cover', 'Threats'],
   ['ember', 'Cycling embers', 'Threats'], ['patrol', 'Patrol warden', 'Threats'], ['hunter', 'Adaptive hunter', 'Threats'], ['watcher', 'Watcher boss', 'Threats'],
 ].map(([id, name, group]) => ({ id, name, group })));
-const kinds = new Set(OBJECTS.map(item => item.id)), overlays = new Set(['fern', 'ember']);
+const kinds = new Set(OBJECTS.map(item => item.id)), overlays = new Set(['fern', 'ember', 'pip-stop']);
 const text = (value, max, label, fallback = '') => {
   const result = value ?? fallback;
   if (typeof result !== 'string' || result.length > max || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(result)) throw Error(`${label} must be printable text, up to ${max} characters.`);
@@ -30,7 +30,7 @@ const integer = (value, min, max, label) => { if (!Number.isInteger(value) || va
 const point = (value, map) => ({ x: integer(value?.x, 0, map.width - 1, 'Column'), y: integer(value?.y, 0, map.height - 1, 'Row') });
 export const nextMarkerId = markers => { let n = 1; while (markers.some(item => item.id === `mark-${n}`)) n++; return `mark-${n}`; };
 export function normalizeAdventure(input) {
-  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4].includes(input.version)) throw Error('Choose a Tilewright adventure file (version 1, 2, 3 or 4), rather than a terrain-only map.');
+  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5].includes(input.version)) throw Error('Choose a Tilewright adventure file (version 1, 2, 3, 4 or 5), rather than a terrain-only map.');
   const map = validateDocument(input.map), title = lineText(input.title, 64, 'Adventure title');
   if (!title) throw Error('Give your adventure a title.');
   if (!Array.isArray(input.markers) || input.markers.length > MAX_MARKERS) throw Error(`Adventures support up to ${MAX_MARKERS} objects.`);
@@ -42,7 +42,7 @@ export function normalizeAdventure(input) {
       channel: CHANNELS.includes(value.channel) ? value.channel : 'amber', order: integer(value.order ?? 1, 1, 8, 'Bell order'),
       initial: value.initial === true, required: value.required === true, reward: ['advice', 'supplies', 'route'].includes(value.reward) ? value.reward : 'advice',
       nemesisOnly: value.nemesisOnly === true, vision: integer(value.vision ?? 6, 3, 10, 'Hunter vision'), offset: integer(value.offset ?? 0, 0, 3, 'Ember offset') };
-    if(item.kind==='clockwork')item.program=normalizeProgram(value.program);
+    if(item.kind==='clockwork'){item.program=normalizeProgram(value.program);if(value.rewrites!==undefined&&value.rewrites!==0)item.rewrites=integer(value.rewrites,1,8,'Program rewrite limit');if(value.dockLocked===true)item.dockLocked=true;}
     if (item.kind === 'turntable') item.span = integer(value.span ?? 5,3,7,'Rotating room size');
     if (item.kind === 'turntable' && ![3,5,7].includes(item.span)) throw Error('Rotating rooms are 3, 5, or 7 tiles wide.');
     if (value.rival === 'listener' && ['hunter','watcher'].includes(item.kind)) item.rival = 'listener';
@@ -60,6 +60,7 @@ export function normalizeAdventure(input) {
     rules: { noDash: input.rules?.noDash === true, noShield: input.rules?.noShield === true, allCoins: input.rules?.allCoins === true }, map, markers };
   Object.assign(pack, normalizeWonderNotes(input,markers));
   if(markers.some(m=>WONDER_KINDS.includes(m.kind))||pack.storyCards||pack.hints)pack.version=2;if(markers.some(m=>m.kind==='clockwork'))pack.version=3;if(markers.some(m=>m.program?.includes('use'))||Array.isArray(input.proof?.actions)&&input.proof.actions.some(action=>action==='clockwork-step'||typeof action==='string'&&action.startsWith('clockwork-program:')&&action.split(':')[1].split(',').includes('use')))pack.version=4;
+  if(markers.some(m=>m.kind==='pip-stop'||m.kind==='clockwork'&&(m.rewrites||m.dockLocked)))pack.version=5;
   if (input.proof !== undefined) {
     const proof = input.proof;
     if (!proof || !['trail', 'nemesis'].includes(proof.difficulty) || !Array.isArray(proof.actions) || !proof.actions.length || proof.actions.length > MAX_PROOF_ACTIONS
@@ -77,9 +78,10 @@ export function adventureKey(input) {
 export function editAdventure(input, patch) { const { proof, ...pack } = input; return normalizeAdventure({ ...pack, ...patch }); }
 export function placeObject(input, kind, x, y, extra = {}) {
   if (!kinds.has(kind)) throw Error('Choose a known adventure object.');
+  if(kind==='pip-stop'){const existing=input.markers.find(m=>m.kind===kind&&m.x===x&&m.y===y);if(existing)extra={order:existing.order,name:existing.name,required:existing.required,...extra};}
   const markers = input.markers.filter(item => !(item.kind === kind && ['start', 'beacon', 'relic', 'partner', 'clockwork'].includes(kind))
     && !(item.x === x && item.y === y && (overlays.has(kind) ? item.kind === kind : !overlays.has(item.kind))));
-  const marker = { id: nextMarkerId(markers), kind, x, y, channel: 'amber', order: kind === 'bell' ? Math.min(8, markers.filter(item => item.kind === 'bell').length + 1) : 1, ...extra };
+  const marker = { id: nextMarkerId(markers), kind, x, y, channel: 'amber', order: ['bell','pip-stop'].includes(kind) ? Math.min(8, markers.filter(item => item.kind === kind).length + 1) : 1, ...extra };
   if (['patrol', 'hunter', 'watcher'].includes(kind) && !marker.route) {
     const walkable = walkableCells(input.map), end = [[1, 0], [0, 1], [-1, 0], [0, -1]].map(([dx, dy]) => ({ x: x + dx, y: y + dy }))
       .find(p => p.x >= 0 && p.y >= 0 && p.x < input.map.width && p.y < input.map.height && walkable[p.y * input.map.width + p.x]);
@@ -140,7 +142,8 @@ export function adventureStage(input) {
     restrictions: { noDash: pack.rules.noDash, noShield: pack.rules.noShield }, requireCoins: pack.rules.allCoins,
     relic: by('relic')[0] ? { ...position(by('relic')[0]), name: by('relic')[0].name || 'Singing relic' } : null,
     delivery: by('relic').length ? position(by('beacon')[0]) : null, workshop: { key: adventureKey(pack), author: pack.author, source: pack.source } };
-  if(by('clockwork').length>1)throw Error('Keep one Clockwork companion per world.');if(by('clockwork').length)stage.clockwork={...position(by('clockwork')[0]),name:by('clockwork')[0].name||'Pip',program:normalizeProgram(by('clockwork')[0].program)};
+  if(by('clockwork').length>1)throw Error('Keep one Clockwork companion per world.');if(by('clockwork').length)stage.clockwork={...position(by('clockwork')[0]),name:by('clockwork')[0].name||'Pip',program:normalizeProgram(by('clockwork')[0].program),...(by('clockwork')[0].rewrites?{rewrites:by('clockwork')[0].rewrites}:{}),...(by('clockwork')[0].dockLocked?{dockLocked:true}:{})};
+  const stops=by('pip-stop').sort((a,b)=>a.order-b.order);if(stops.length){if(!stage.clockwork)throw Error('Pip delivery stops need a Clockwork companion.');if(stops.length>8||stops.some((s,i)=>s.order!==i+1))throw Error('Number up to eight Pip stops once each, in order from 1.');if(new Set(stops.map(s=>s.x+','+s.y)).size!==stops.length)throw Error('Give each Pip stop its own tile.');if(stops.slice(0,-1).some(s=>s.required))throw Error('Only the final Pip stop can require parking.');stage.clockworkStops=stops.map(s=>({...position(s),name:s.name||`Delivery ${s.order}`,required:s.required}));}
   if(stage.clockwork&&pack.version>=4)stage.clockworkSharedSight=true;
   if (by('partner').length > 1) throw Error('Keep only one Two-Lantern partner.');
   if (by('turntable').length) stage.turntables = by('turntable').map(item=>({...position(item),name:item.name||'Cartographer’s dial',radius:(item.span-1)/2}));
@@ -173,7 +176,7 @@ export function checkAdventure(input) {
   for (const marker of pack.markers) {
     const key = `${marker.x},${marker.y}`;
     if (!overlays.has(marker.kind)) { if (occupied.has(key)) errors.push(`Two objects overlap at column ${marker.x + 1}, row ${marker.y + 1}.`); occupied.add(key); }
-    if (!['bridge', 'door', 'signal'].includes(marker.kind) && !walkable[marker.y * pack.map.width + marker.x]) errors.push(`${OBJECTS.find(item => item.id === marker.kind).name} at ${marker.x + 1},${marker.y + 1} needs walkable land.`);
+    if (!(marker.kind==='pip-stop'&&pack.markers.some(m=>['bridge','door','signal'].includes(m.kind)&&m.x===marker.x&&m.y===marker.y))&&!['bridge', 'door', 'signal'].includes(marker.kind) && !walkable[marker.y * pack.map.width + marker.x]) errors.push(`${OBJECTS.find(item => item.id === marker.kind).name} at ${marker.x + 1},${marker.y + 1} needs walkable land.`);
     if (marker.route) {
       if (marker.route.length < 2 || marker.route[0].x !== marker.x || marker.route[0].y !== marker.y) errors.push('Threat routes must begin at their object and have at least two waypoints.');
       if (marker.route.some((p, i) => !walkable[p.y * pack.map.width + p.x] || (marker.kind === 'patrol' && i && Math.abs(p.x - marker.route[i - 1].x) + Math.abs(p.y - marker.route[i - 1].y) !== 1))) errors.push('Patrols need adjacent land cells; hunter waypoints need walkable land.');
@@ -190,9 +193,10 @@ export function checkAdventure(input) {
       if (x < 0 || y < 0 || x >= pack.map.width || y >= pack.map.height || seen.has(at) || people.has(at) || (!walkable[at] && !gates.has(at) && !spinning.some(r=>Math.abs(x-r.x)<=(r.span-1)/2&&Math.abs(y-r.y)<=(r.span-1)/2))) continue;
       seen.add(at); queue.push({ x, y });
     }
+    const pipSeen=new Set();if(pack.version>=5&&stage.clockwork){const pending=[stage.clockwork];pipSeen.add(stage.clockwork.y*pack.map.width+stage.clockwork.x);for(let i=0;i<pending.length;i++)for(const [dx,dy]of [[0,-1],[1,0],[0,1],[-1,0]]){const x=pending[i].x+dx,y=pending[i].y+dy,at=y*pack.map.width+x;if(x<0||y<0||x>=pack.map.width||y>=pack.map.height||pipSeen.has(at)||people.has(at)||(!walkable[at]&&!gates.has(at)&&!spinning.some(r=>Math.abs(x-r.x)<=(r.span-1)/2&&Math.abs(y-r.y)<=(r.span-1)/2)))continue;pipSeen.add(at);pending.push({x,y});}for(const stop of stage.clockworkStops||[])if(!pipSeen.has(stop.y*pack.map.width+stop.x))errors.push(`${stop.name} is disconnected from Pip’s starting area.`);}
     const adjacent = p => [[0, -1], [1, 0], [0, 1], [-1, 0]].some(([dx, dy]) => p.x + dx >= 0 && p.x + dx < pack.map.width && p.y + dy >= 0 && p.y + dy < pack.map.height && seen.has((p.y + dy) * pack.map.width + p.x + dx));
     for (const marker of pack.markers.filter(p => ['beacon', 'lantern', 'key', 'coin', 'guide', 'rescue', 'relic', 'bell', 'lever'].includes(p.kind))) {
-      if ((['guide', 'rescue', 'relic', 'bell', 'lever'].includes(marker.kind) ? !adjacent(marker) : !seen.has(marker.y * pack.map.width + marker.x)) && !by('waystone').length) errors.push(`${marker.name || marker.kind} is disconnected from the starting area.`);
+      if ((['guide', 'rescue', 'relic', 'bell', 'lever'].includes(marker.kind) ? !adjacent(marker) : !seen.has(marker.y * pack.map.width + marker.x)) && !(['bell','lever'].includes(marker.kind)&&pipSeen.has(marker.y*pack.map.width+marker.x)) && !by('waystone').length) errors.push(`${marker.name || marker.kind} is disconnected from the starting area.`);
     }
   }
   if (by('gate').length > by('key').length) warnings.push('There are more key gates than keys. Make sure a required route cannot consume the only key too early.');

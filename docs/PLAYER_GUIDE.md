@@ -3,6 +3,29 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## The Brassbound Atlas — v0.33
+
+Open **Choose your adventure → Storybooks → Pip and the Brassbound Atlas**.
+Four harder trials ask Pip to deliver flags in order while you arrange crossings
+and restore your own light. Quest and Pip’s **Delivery manifest** list the route.
+A later flag does not count before its turn. A final parking goal also needs Pip
+to remain paused on that flag until you finish at the beacon.
+
+Some trials limit **program rewrites**: every Apply uses one, including applying
+unchanged cards. Start/Pause and single-card stepping use no rewrites. Undo can
+recover a rewrite; Restart begins a fresh attempt. A sealed dock disables Return
+to dock. In custom worlds where returning is allowed, it clears deliveries but
+does not refill rewrites. Free rehearsal and **Restore current cards** let you
+experiment without changing the trail.
+
+**Your program satchel**, inside Pip’s workbench, holds eight named arrangements
+per save journey. Select a pocket, name your chosen cards, and Save in slot.
+Loading fills the card editor for free; Apply still follows the world’s rules.
+Saving replaces that pocket; Undo satchel edit recovers the previous edit for
+this visit. Download/import the satchel to share programs across browsers, or
+use a complete game backup to retain it with your journey. It contains cards,
+not a map or a suspended game.
+
 ## Pip’s Pocket Orchestra — v0.32
 
 Open **Choose your adventure → Storybooks → Pip and the Pocket Orchestra**.
