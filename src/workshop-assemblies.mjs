@@ -41,6 +41,7 @@ export function pasteAssembly(input,source,point,turns=0){
   if(!point||!Number.isInteger(point.x)||!Number.isInteger(point.y)||point.x<0||point.y<0||point.x+b.width>pack.map.width||point.y+b.height>pack.map.height)throw Error('Move the cursor so the entire assembly fits inside the map.');
   if(pack.markers.some(m=>inside(m,b)))throw Error('Place assemblies on an empty object area. Terrain will be replaced; existing puzzle objects stay safe.');
   if(pack.markers.length+assembly.markers.length>MAX_MARKERS)throw Error('This assembly would exceed the 128-object limit.');
+  if(pack.markers.filter(m=>m.kind==='pip-stamp').length+assembly.markers.filter(m=>m.kind==='pip-stamp').length>8)throw Error('A world can hold at most eight program stamps.');
   if(pack.markers.some(m=>m.kind==='clockwork')&&assembly.markers.some(m=>m.kind==='clockwork'))throw Error('A world can hold only one Clockwork companion.');
   if(pack.markers.some(m=>m.kind==='partner')&&assembly.markers.some(m=>m.kind==='partner'))throw Error('A world can hold only one Two-Lantern partner.');
   if(pack.markers.some(m=>m.kind==='relic')&&assembly.markers.some(m=>m.kind==='relic'))throw Error('A world can hold only one singing relic.');

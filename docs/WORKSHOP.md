@@ -269,3 +269,34 @@ network and proof. Older world formats, identities and saved routes remain valid
 or reverses card order. Use/Wait retain their meaning. These tools only change
 the draft; the usual Apply action spends the world’s rewrite allowance. Save
 useful variations in the program satchel and download it to share them.
+
+
+## Program stamps and engraved routes — v0.35
+
+Paint **Pip program stamp** in Puzzles. Up to eight stamps can hold three direction,
+Wait or Use cards each. They require Pip and clear land; flag overlays are allowed.
+Inspect a stamp to name it, engrave its cards, or require loading it before a win.
+Use starts the engraving at card 1 on the next turn. It spends a normal Pip turn
+and holds position; keeper rewrite allowances do not change. Merely passing over
+one does not load it. Repeated loading is allowed and records a station only once.
+
+**Borrow from your program satchel** copies saved cards into the object draft;
+**Rotate engraved directions** turns compass cards clockwise. Neither operation
+changes the trail or the saved satchel. Apply object saves the engraving. If the
+satchel is unavailable or damaged, manual engraving still works and the old data
+is retained. Keep the first card useful for leaving a press; an engraving starting
+with Use can repeatedly reload itself. Free rehearsal, Undo and Restart help test
+these routes without trapping a player permanently.
+
+Whole-map/assembly rotations also turn engraved directions; a rotating room during
+play moves its press while compass cards retain their directions. Capturing and
+pasting stamps preserves programs and required goals, gives copies fresh IDs and
+refuses more than eight stamps. Include flag overlays deliberately: extending a
+route requires clearing an earlier final-parking requirement.
+
+Version-7 files/codes/links omit only canonical object defaults, reducing link size
+without changing world identities, proofs or imported data. Earlier versions keep
+their original serialization. Large or dialogue-heavy worlds can still exceed the
+play-link limit; share their adventure file or code instead. The six Loom maps are
+available to remix, and the final chapter combines four presses with three tube
+pairs, eight deliveries, wheels, plates and a two-note melody.

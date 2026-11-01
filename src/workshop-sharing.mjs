@@ -18,14 +18,17 @@ export function decodeRuns(runs, count) {
 }
 export function serializeAdventure(input) {
   const pack = normalizeAdventure(input);
-  const json = JSON.stringify({ ...pack, encoding: 'rle-v1', map: { ...pack.map, layers: pack.map.layers.map(({ tiles, ...layer }) => ({ ...layer, runs: encodeRuns(tiles) })) } }) + '\n';
+  // New v7 exports omit only canonical defaults; normalization restores identical worlds.
+  const defaults={name:'',text:'',channel:'amber',order:1,initial:false,required:false,reward:'advice',nemesisOnly:false,vision:6,offset:0};
+  const markers=pack.version>=7?pack.markers.map(marker=>Object.fromEntries(Object.entries(marker).filter(([key,value])=>!(Object.hasOwn(defaults,key)&&defaults[key]===value)))):pack.markers;
+  const json = JSON.stringify({ ...pack,markers, encoding: 'rle-v1', map: { ...pack.map, layers: pack.map.layers.map(({ tiles, ...layer }) => ({ ...layer, runs: encodeRuns(tiles) })) } }) + '\n';
   if (new TextEncoder().encode(json).length > MAX_ADVENTURE_BYTES) throw Error('This adventure exceeds the 400 KB file limit. Shorten dialogue, simplify terrain, or record a shorter creator clear.');
   return json;
 }
 export function parseAdventure(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > MAX_ADVENTURE_BYTES) throw Error('Choose an adventure file smaller than 400 KB.');
   let input; try { input = JSON.parse(text); } catch { throw Error('The adventure file is not valid JSON.'); }
-  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5,6].includes(input.version)) throw Error('Choose a Tilewright adventure file, rather than a terrain-only map.');
+  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5,6,7].includes(input.version)) throw Error('Choose a Tilewright adventure file, rather than a terrain-only map.');
   if (input.encoding !== undefined) {
     if (input.encoding !== 'rle-v1' || !Number.isInteger(input.map?.width) || !Number.isInteger(input.map?.height) || input.map.width < 1 || input.map.height < 1 || input.map.width > 64 || input.map.height > 64
       || !Array.isArray(input.map.layers) || input.map.layers.length < 1 || input.map.layers.length > 6) throw Error('This adventure uses unsupported terrain encoding or dimensions.');

@@ -1,3 +1,4 @@
+import {loomBook} from './pip-loom-worlds.mjs';
 import {parcelworksBook} from './pip-parcelworks-worlds.mjs';
 import {atlasBook} from './pip-atlas-worlds.mjs';
 import {orchestraBook} from './pip-orchestra-worlds.mjs';
@@ -56,5 +57,6 @@ export function featuredBooks() {
     orchestraBook(),
     atlasBook(),
     parcelworksBook(),
+    loomBook(),
   ];
 }

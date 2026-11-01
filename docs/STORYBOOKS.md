@@ -1,7 +1,7 @@
 # Storybooks: a road between worlds
 
 Choose **Choose your adventure → Storybooks**, or Adventure Workshop → Storybooks. Read a book's
-opening scene before entering its first chapter. Sixteen featured books are available. Use the search field or choose New
+opening scene before entering its first chapter. Seventeen featured books are available. Use the search field or choose New
 adventures, Peaceful books, or More demanding books to narrow the shelves.
 **The Rainmaker’s Letters** and **The Observatory of Borrowed Stars** each add
 four original maps and a complete new story. The three earlier books weave the
@@ -124,5 +124,12 @@ Three Rooftops, The Midnight Reply, The Freight Lock and The Night Mail. Courier
 tubes connect separate rooms, then return melodies, keeper-held crossings and
 scarce rewrites combine into harder routes. The finale has seven ordered stops
 and three tube pairs. Every chapter has a replayable creator clear and can be
-remixed as a standalone adventure. The featured shelf now holds 16 books with
-77 chapter entries (65 unique original book levels plus earlier reused rooms).
+remixed as a standalone adventure. That expansion joined the earlier stories and reused Lab journeys.
+
+
+**Pip and the Lantern Loom** adds six original chapters: The First Imprint,
+The Folded Corners, The Borrowed Chorus, The Paper Causeway, The Unwritten Return
+and The Keeper’s Loom. Program stamps let one opening loop become a succession
+of routes. All chapters support verified clears, standard/treasure challenges
+and standalone remixes. The shelf now has 17 books, 83 chapter entries and 71
+unique original book levels plus earlier reused Lab rooms.

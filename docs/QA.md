@@ -1,5 +1,34 @@
 # Verification record
 
+## Pip and the Lantern Loom — v0.35.0
+
+**936 Node tests**, syntax checks and the **130-file** static build pass.
+All six new chapters have three-star clears on Trail and Nemesis, including
+all-treasure and automatic-loop routes. Tests cover stamp loading, next-card reset, unchanged keeper
+rewrite counts, required/optional stations, repeated-use bounds, dock behavior,
+all 216 rehearsal drafts, engraving repaint/rotation/assemblies, room transforms,
+Continue/Undo and completed reviews. A captured v0.34 save keeps its original
+winning fingerprint and exact prior export bytes. New compact v7 links preserve
+canonical worlds, programs, goals and proofs, including the larger finale.
+
+All six Loom scenarios pass in Firefox and WebKit; automatic handoff and long-name
+layouts also pass a final Chromium check. The **53-scenario release suite**
+includes six Loom cases: complete phone/touch
+and desktop/keyboard books; free changing-program rehearsal and victory focus;
+actual brush repainting, satchel borrowing, engraving rotation, assembly reuse,
+proved export and shared-link play; enlarged/corrupt-satchel recovery; and v0.34
+continuation. Sizes include 320×568, 844×390, 768×900 and 1440×1000 with largest
+text and high contrast. The creator retains usable map height, failed satchel
+reads keep the original data, and manual engraving remains available.
+
+Reviewed phone/desktop captures cover the original pixel-art book cover, board,
+loaded program, combined hardware directory, engraved card fields and themed
+satchel menu. Pip controls retain the earlier small-screen layout; optional
+engraving tools and hardware details remain in disclosures. Release CI runs the
+full browser gate, preserved-baseline migration and five Node/OS jobs before
+publishing. Tests use disposable profiles; physical-device and assistive-tech
+sessions remain outside this browser-engine/viewport coverage.
+
 ## Pip and the Midnight Parcelworks — v0.34.0
 
 **887 Node tests**, syntax checks and the **129-file** static build pass.

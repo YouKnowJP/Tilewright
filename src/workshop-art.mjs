@@ -21,6 +21,16 @@ export function drawParcelworksCover(canvas){
   ctx.save();ctx.translate(201,65);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0},77);ctx.restore();
   pixel('#e9bf76',265,123,16,16);pixel('#fff0bd',271,123,4,16);pixel('#537165',184,144,106,3);
 }
+// New owned illustration for the Lantern Loom.
+export function drawLoomCover(canvas){
+ canvas.width=400;canvas.height=160;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;const pixel=(ink,x,y,w,h)=>{ctx.fillStyle=ink;ctx.fillRect(x,y,w,h);};
+ pixel('#192f3e',0,0,400,160);pixel('#304853',0,92,400,68);for(const [x,y,w]of [[0,71,40],[146,84,49],[318,68,82]]){pixel('#25404a',x,y,w,160-y);pixel('#577367',x-3,y,w+6,5);for(let k=x+11;k<x+w-8;k+=18)pixel('#d6be82',k,y+17,7,12);}
+ for(const [x,y]of [[23,22],[155,29],[206,13],[293,24],[377,41]]){pixel('#e8d9ac',x,y,3,3);pixel('#b5c9ae',x-2,y+1,7,1);}
+ pixel('#d9b779',41,45,100,12);pixel('#759288',44,56,13,88);pixel('#759288',125,56,13,88);pixel('#e6c98e',57,57,68,13);pixel('#ebd5a2',82,69,18,14);pixel('#b8c9ba',61,84,60,44);pixel('#102e37',65,88,52,33);
+ for(let n=0;n<3;n++){pixel('#f0dc9e',70+n*15,93,11,22);pixel('#466961',73+n*15,99,6,4);}pixel('#d5b379',58,132,68,12);pixel('#81977f',35,144,116,4);
+ for(const [x,y]of [[162,76],[185,82],[307,80]]){pixel('#e8d8a6',x,y,16,22);pixel('#607d72',x+4,y+5,8,3);pixel('#607d72',x+4,y+12,8,3);}
+ ctx.save();ctx.translate(225,65);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0},77);ctx.restore();pixel('#e8d09a',319,34,3,25);pixel('#f5df9f',314,54,13,21);pixel('#fff2bf',318,58,5,12);pixel('#789274',0,148,400,3);
+}
 export function drawLabDiscovery(canvas,index,unlocked){
   canvas.width=96;canvas.height=72;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
   const colors=unlocked?['#efbf72','#a5e1d2','#c0a7eb','#ffe5a0']:['#687d6a','#6f8175','#6c7a76','#7b8067'];
@@ -38,6 +48,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-stamp': rect('#30475e',2,3,20,20);rect('#b0c8cf',4,4,16,15);rect('#102f38',6,6,12,10);for(let n=0;n<3;n++){rect('#ffe3a3',7+n*3,8,2,5);}rect('#d5b379',5,20,14,3);break;
     case 'pip-tube': rect('#273e47',2,3,20,20);rect('#d0a766',4,4,16,18);rect(color,6,6,12,14);rect('#102d33',8,8,8,10);rect('#f9e5b2',9,17,6,3);break;
     case 'pip-stop': rect('#efe0a4',2,3,20,18);rect('#4e7069',4,5,16,14);rect('#e6c46b',6,6,3,12);rect('#fbefcc',9,6,9,6);ctx.fillStyle='#1a3536';ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.fillText(String(item.order||1),13,13);break;
     case 'clockwork': rect('#805c3e',3,6,18,15);rect('#e7c886',5,7,14,11);rect('#203d48',7,10,3,4);rect('#203d48',14,10,3,4);rect('#ecf5c7',10,2,4,5);rect('#566b68',5,21,5,3);rect('#566b68',15,21,5,3);break;
@@ -81,6 +92,7 @@ export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = 
   if (grid) { ctx.strokeStyle = '#17393235'; ctx.lineWidth = 1; ctx.beginPath(); for (let x = 0; x <= map.width; x++) { ctx.moveTo(x * size, 0); ctx.lineTo(x * size, height); } for (let y = 0; y <= map.height; y++) { ctx.moveTo(0, y * size); ctx.lineTo(width, y * size); } ctx.stroke(); }
   for (const item of [...pack.markers.filter(m => ['fern', 'ember', 'pip-stop'].includes(m.kind)), ...pack.markers.filter(m => !['fern', 'ember', 'pip-stop'].includes(m.kind))]) drawWorkshopObject(ctx, item, size);
   for(const room of pack.markers.filter(m=>m.kind==='turntable')){const r=(room.span-1)/2;ctx.strokeStyle='#f6d88e';ctx.lineWidth=thumbnail?1:2;ctx.setLineDash([4,3]);ctx.strokeRect((room.x-r)*size+1,(room.y-r)*size+1,room.span*size-2,room.span*size-2);ctx.setLineDash([]);}
+  for(const [i,stamp]of pack.markers.filter(m=>m.kind==='pip-stamp').entries())drawCueBadge(ctx,stamp,'M',String(i+1),size);
   for(const tube of pack.markers.filter(m=>m.kind==='pip-tube'))drawCueBadge(ctx,tube,'U',CHANNEL_NUMBERS[tube.channel],size);
   for(const stop of pack.markers.filter(m=>m.kind==='pip-stop'))drawCueBadge(ctx,{x:stop.x,y:stop.y+.5},'F',String(stop.order),size);
   const object = pack.markers.find(m => m.id === selected);

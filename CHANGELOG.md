@@ -1,12 +1,20 @@
 # Changelog
 
+## 0.35.0 — 2026-10-31
+
+- Add Pip and the Lantern Loom: six original chapters with changing programs, a borrowed chorus, a coordinated causeway, a return journey and an eight-stop finale.
+- Add Pip program stamps: Use loads three engraved cards and starts card 1 next turn without spending or refilling keeper rewrites. Optional required-station goals record which presses were used; dock returns clear those records.
+- Add creator engraving, free direction rotation, saved-satchel borrowing, assembly reuse, numeric M markers, text descriptions and a combined route-hardware directory. Less-used controls stay in disclosures.
+- Add an original pixel-art book cover and compact version-7 adventure exports. Canonical defaults are restored on import; earlier file bytes, world identities and saved routes stay compatible.
+- Extend live browser and deterministic coverage for all six chapters, both difficulties and treasure runs, program changes, Undo/Continue/review, creator proofs/shared play, large text and old saves.
+
 ## 0.34.0 — 2026-10-30
 
 - Add Pip and the Midnight Parcelworks: five story chapters with airborne deliveries, connected rooftops, a return melody, a freight lock and a seven-stop night-mail finale.
 - Add paired courier tubes: Pip uses its current tube to reach the matching endpoint. Blocked exits refuse travel, walking/Wait stay in place, and exit deliveries count on arrival.
 - Add creator-painted tube pairs with automatic channel pairing, numeric map cues, partner coordinates, linked assembly capture and version-6 adventure sharing with verified clears. All five worlds are available to remix.
 - Add an original pixel-art Parcelworks cover and a compact, named tube-pair directory.
-- Add free Rotate, Mirror and Reverse card-draft tools, a Parcel recipe and a tube directory. Applying still follows each world’s rewrite budget. Fix the creator’s delivery-flag toolbar label make the peaceful-story shortcut find its book across shelf pages, and restore keyboard focus immediately after companion controls.
+- Add free Rotate, Mirror and Reverse card-draft tools, a Parcel recipe and a tube directory. Applying still follows each world’s rewrite budget. Fix the creator’s delivery-flag toolbar label, make the peaceful-story shortcut find its book across shelf pages, and restore keyboard focus immediately after companion controls.
 - Keep creator tabs readable at large text sizes, put object actions after Pip fields, and scale section headings with the reading preference, and reserve usable map space beneath enlarged toolbars.
 - Extend deterministic, migration and live browser coverage for tubes, creator export/shared play, program transforms, small/large layouts, keyboard/touch, Continue, Undo and old Pip saves.
 

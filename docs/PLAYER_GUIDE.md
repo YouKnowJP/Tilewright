@@ -3,6 +3,26 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## The Lantern Loom — v0.35
+
+Open **Choose your adventure → Storybooks → Pip and the Lantern Loom**.
+Six chapters teach Pip to load programs from **M** stamps. Stand Pip on the
+stamp, then execute **Use**. Its three cards replace the current loop; the next
+turn starts at card 1. Loading holds Pip still and does not spend or refill
+keeper rewrites. Walking over a stamp or using it with the keeper does not load it.
+
+Required stamps appear in Quest. Read their engravings and loaded status under
+Pip’s **Route hardware** disclosure. Rehearsal follows program changes without
+changing your trail. Undo restores the old program and stamp records. Returning
+to an allowed dock clears records and deliveries, keeps the current cards, and
+does not refill the rewrite allowance. The Loom trials seal the dock.
+
+To create a route, paint **Pip program stamp** in Puzzles and inspect it. Choose
+three cards, give it a name, and decide whether it must be loaded to finish.
+Rotate directions or borrow a saved satchel program for free, then **Apply object**.
+Capture engravings as puzzle assemblies to reuse them. Test the whole return
+trip before exporting a verified adventure file, code, play link or Storybook.
+
 ## The Midnight Parcelworks — v0.34
 
 Open **Choose your adventure → Storybooks → Pip and the Midnight Parcelworks**.
