@@ -19,7 +19,10 @@ actual brush repainting, satchel borrowing, engraving rotation, assembly reuse,
 proved export and shared-link play; enlarged/corrupt-satchel recovery; and v0.34
 continuation. Sizes include 320×568, 844×390, 768×900 and 1440×1000 with largest
 text and high contrast. The creator retains usable map height, failed satchel
-reads keep the original data, and manual engraving remains available.
+reads keep the original data, and manual engraving remains available. A full
+Chromium run exposed an older test reading the hidden initial turn counter before
+async save restoration completed. It now waits for the exact saved turn before
+asserting and continuing; no legacy state or golden outcome was changed.
 
 Reviewed phone/desktop captures cover the original pixel-art book cover, board,
 loaded program, combined hardware directory, engraved card fields and themed
