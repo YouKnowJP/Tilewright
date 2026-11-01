@@ -28,7 +28,9 @@ All seven Prism scenarios pass across Chromium, Firefox and WebKit, including
 final retests of damaged-store removal/capture and the long-name drawer. The
 resized keyboard check explicitly resets from any map position with the pointer
 away from the board; it no longer assumes the hover cursor stayed at the last
-keyboard cell during a viewport change. No action timeout was increased.
+keyboard cell during a viewport change. No action timeout was increased. The Orchard browser helper now chooses its
+exact cover title after searching: the new Observatory synopsis legitimately
+adds a related second match for “Signal Orchard.”
 
 Reviewed phone/desktop captures cover the original observatory illustration,
 board, prism messages/hardware, compact creator inspector, themed operation
