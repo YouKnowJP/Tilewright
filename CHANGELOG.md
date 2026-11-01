@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.36.0 — 2026-11-01
+
+- Add Pip and the Signal Orchard: six original chapters with return routes, signal changes, crate coordination, bell duets and an eight-stop finale.
+- Add signal stamps with Quiet and Powered programs. Pip samples linked plates/levers on Use; optional both-route goals require revisiting under both signals.
+- Add creator engraving for both routes, per-bank satchel borrowing and rotation, linked assembly reuse, live numeric signal descriptions and an original pixel-art book cover. Optional details stay inside existing disclosures.
+- Add portable version-8 adventures and preserve earlier worlds, export bytes, saves and proofs.
+- Extend deterministic and live browser coverage for chapter wins, automatic loops, all-treasure routes, sharing, old saves, phone/desktop and enlarged text.
+
 ## 0.35.0 — 2026-10-31
 
 - Add Pip and the Lantern Loom: six original chapters with changing programs, a borrowed chorus, a coordinated causeway, a return journey and an eight-stop finale.

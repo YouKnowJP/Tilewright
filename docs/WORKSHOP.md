@@ -300,3 +300,29 @@ their original serialization. Large or dialogue-heavy worlds can still exceed th
 play-link limit; share their adventure file or code instead. The six Loom maps are
 available to remix, and the final chapter combines four presses with three tube
 pairs, eight deliveries, wheels, plates and a two-note melody.
+
+## Signal stamps and two-route adventures — v0.36
+
+Paint **Pip signal stamp** in Puzzles. It shares the eight-stamp limit and M
+numbering with ordinary program stamps. Link at least one plate or lever using
+its channel; Checks rejects missing sources. Engrave a Quiet program and a
+Powered program. Power means any linked lever is on, or every linked plate is
+held. Pip samples it only when executing Use on the stamp, after the keeper’s
+move. The selected cards stay loaded even if power changes later.
+
+Choose which program receives Rotate or a saved-satchel copy. Apply object
+saves both engravings. Repainting preserves both routes and the channel. A
+required stamp needs a Use; **Must load both Quiet and Powered routes** instead
+requires both distinct samples before a win. Both-route goals imply required.
+
+Capture every mechanism on the same channel with its signal stamp. Pasting
+remaps the channel and keeps both programs and goals. Whole-map and assembly
+rotation/mirroring transforms both engravings; in-play rotating rooms carry the
+hardware while both programs keep compass directions. Undo, Continue, rehearsal
+and completed route reviews retain the chosen program and visited modes.
+
+Version-8 adventures preserve the two programs, sources and verified clear in
+files, codes and play links. Versions 1–7 keep their previous format and world
+identity. Storybooks can combine new and older chapters. Large worlds may need
+file/code sharing instead of a link. The six Signal Orchard maps are available
+to remix individually; no account or public map-hosting service is required.

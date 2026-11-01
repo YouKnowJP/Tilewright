@@ -1,3 +1,4 @@
+import {liveEcho} from './adventure-tools.mjs';
 // Reversible world controls. A closed bridge never removes an occupied floor.
 export const switchGateOpen = (run, gate) => gate.controls.every(control => Boolean(run.switches[control.id]) === control.on);
 export const wallet = run => run.collectedCoins.length - run.spentCoins;
@@ -42,3 +43,6 @@ export function validateMechanisms(stage) {
     throw new Error('Mission switches, crossings, trades, and hazard controls must be valid.');
   }
 }
+
+// Shared occupancy keeps bridges and Pip signal stamps in agreement.
+export function activePlateIds(run){const echo=liveEcho(run),same=(a,b)=>a.x===b.x&&a.y===b.y;return run.stage.plates.filter(plate=>same(plate,run.player)||run.crates.some(crate=>same(crate,plate))||(echo&&same(plate,echo))||(run.twin&&same(plate,run.twin.other))||(run.clockwork&&same(plate,run.clockwork))).map(plate=>plate.id);}

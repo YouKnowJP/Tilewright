@@ -2,7 +2,7 @@ import { normalizeAdventure, editAdventure, nextMarkerId, CHANNELS, MAX_MARKERS 
 import { validateDocument } from './model.mjs';
 import { GUILD_KITS } from './adventure-tools.mjs';
 export const ASSEMBLIES_KEY='tilewright.workshop.assemblies.v1', MAX_ASSEMBLIES=12;
-const linked=m=>['plate','bridge','lever','door','ember','waystone'].includes(m.kind)||m.kind==='guide'&&m.reward==='route';
+const linked=m=>['plate','bridge','lever','door','ember','waystone','pip-router'].includes(m.kind)||m.kind==='guide'&&m.reward==='route';
 const inside=(p,b)=>p.x>=b.x&&p.y>=b.y&&p.x<b.x+b.width&&p.y<b.y+b.height;
 export function normalizeAssembly(input){
   if(!input||typeof input.name!=='string'||!input.name.trim()||input.name.length>48||!input.map||input.map.width<1||input.map.height<1||input.map.width>12||input.map.height>12)throw Error('Name a puzzle assembly of at most 12 × 12 cells.');
@@ -32,7 +32,7 @@ export function rotateAssembly(input,turns=0){
   for(let t=0;t<turns;t++){
     const {width:w,height:h}=assembly.map,rotate=p=>({x:h-1-p.y,y:p.x});
     const map={...assembly.map,width:h,height:w,layers:assembly.map.layers.map(layer=>{const tiles=Array(w*h);layer.tiles.forEach((tile,i)=>{const p=rotate({x:i%w,y:Math.floor(i/w)});tiles[p.y*h+p.x]=tile;});return {...layer,tiles};})};
-    assembly={...assembly,map,markers:assembly.markers.map(m=>({...m,...rotate(m),...(m.program?{program:m.program.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]))}:{}),...(m.route?{route:m.route.map(rotate)}:{})}))};
+    assembly={...assembly,map,markers:assembly.markers.map(m=>({...m,...rotate(m),...(m.program?{program:m.program.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]))}:{}),...(m.alternate?{alternate:m.alternate.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]))}:{}),...(m.route?{route:m.route.map(rotate)}:{})}))};
   }
   return assembly;
 }
@@ -41,7 +41,7 @@ export function pasteAssembly(input,source,point,turns=0){
   if(!point||!Number.isInteger(point.x)||!Number.isInteger(point.y)||point.x<0||point.y<0||point.x+b.width>pack.map.width||point.y+b.height>pack.map.height)throw Error('Move the cursor so the entire assembly fits inside the map.');
   if(pack.markers.some(m=>inside(m,b)))throw Error('Place assemblies on an empty object area. Terrain will be replaced; existing puzzle objects stay safe.');
   if(pack.markers.length+assembly.markers.length>MAX_MARKERS)throw Error('This assembly would exceed the 128-object limit.');
-  if(pack.markers.filter(m=>m.kind==='pip-stamp').length+assembly.markers.filter(m=>m.kind==='pip-stamp').length>8)throw Error('A world can hold at most eight program stamps.');
+  if(pack.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind)).length+assembly.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind)).length>8)throw Error('A world can hold at most eight program stamps.');
   if(pack.markers.some(m=>m.kind==='clockwork')&&assembly.markers.some(m=>m.kind==='clockwork'))throw Error('A world can hold only one Clockwork companion.');
   if(pack.markers.some(m=>m.kind==='partner')&&assembly.markers.some(m=>m.kind==='partner'))throw Error('A world can hold only one Two-Lantern partner.');
   if(pack.markers.some(m=>m.kind==='relic')&&assembly.markers.some(m=>m.kind==='relic'))throw Error('A world can hold only one singing relic.');

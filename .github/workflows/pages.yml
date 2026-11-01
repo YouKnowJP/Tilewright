@@ -55,7 +55,8 @@ jobs:
   browser:
     name: Built game / Chromium
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # Full-book playthroughs grow with content; per-action browser timeouts stay unchanged.
+    timeout-minutes: 25
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

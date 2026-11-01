@@ -19,13 +19,13 @@ these restrictions apply only to new protected material. Read the
 ## Play, explore, and create
 
 - 24 campaign missions, eight Guild jobs, daily trails and branching expeditions.
-- Seventeen featured Storybooks, including 71 unique original book levels, plus Puzzle Lab journeys.
-- 51 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
+- Eighteen featured Storybooks, including 77 unique original book levels, plus Puzzle Lab journeys.
+- 57 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
 - Create puzzles, write dialogue, rotate rooms, coordinate two travelers, and share adventure files, codes, links, or Storybooks.
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
 
-Choose **Choose your adventure → Storybooks → Pip and the Lantern Loom** for six new program-stamp adventures. One opening loop can become a whole route as Pip loads engraved programs, plays a borrowed melody, crosses between rooms and returns a letter home. Creators can paint stamps, borrow saved satchel programs, rotate engravings and reuse them as puzzle assemblies. Compact version-7 exports keep even the finale shareable by play link. Earlier Pip books, tubes, delivery routes and saved programs remain available. Every book keeps chapter/branch bookmarks; the latest active trail also keeps exact in-chapter Continue.
+Choose **Choose your adventure → Storybooks → Pip and the Signal Orchard** for six new adventures. Signal stamps let Pip choose Quiet or Powered programs from linked plates and levers. Return journeys, bell duets, crate-held signals and an eight-stop finale test how well you coordinate both routes. Creators can engrave both programs, require both to be used, borrow saved cards and reuse linked assemblies. Share a verified adventure file, code, play link or Storybook. Earlier books and saved routes remain available; books keep chapter bookmarks and the active trail keeps exact Continue.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),
 [complete game guide](docs/GAME_GUIDE.md), and [controls](docs/CONTROLS.md).

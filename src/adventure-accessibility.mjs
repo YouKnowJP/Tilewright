@@ -1,7 +1,8 @@
+import {clockworkSignal,clockworkRoutes} from './clockwork.mjs';
 import { activePlates, canEnter, gateIsOpen, hazardActive, enemyIntent } from './adventure.mjs';
 
 export const CHANNEL_NUMBERS = Object.freeze({ amber:'1', jade:'2', violet:'3', blue:'4' });
-export const MAP_KEY = 'M = Pip program stamp (Use loads its three cards); U = Pip courier tube (Use on its tile; matching numbers pair exits); F = ordered Pip delivery flag; A = Clockwork companion; Y = your keeper; H = home beacon; L = lantern; K = key; C = crate; P = pressure plate; W = wheel; B = bell; G = closed gate; O = open crossing; T = travel stone; R = relic; D = rotating dial; V = optional vault; S = story rune; 1/2 = cooperative traveler; ? = keeper; ! = danger. Matching small numbers link mechanisms. Plates and wheels have solid white outlines when held or on, dashed outlines when empty or off. Outlined arrows show an enemy’s next step; crossed cells mark a sweep.';
+export const MAP_KEY = 'M = Pip program or signal stamp (Use loads three cards; signal stamps sample their linked plates or levers); U = Pip courier tube (Use on its tile; matching numbers pair exits); F = ordered Pip delivery flag; A = Clockwork companion; Y = your keeper; H = home beacon; L = lantern; K = key; C = crate; P = pressure plate; W = wheel; B = bell; G = closed gate; O = open crossing; T = travel stone; R = relic; D = rotating dial; V = optional vault; S = story rune; 1/2 = cooperative traveler; ? = keeper; ! = danger. Matching small numbers link mechanisms. Plates and wheels have solid white outlines when held or on, dashed outlines when empty or off. Outlined arrows show an enemy’s next step; crossed cells mark a sweep.';
 export function boardWindow(map, width, height, zoom = 'standard') {
   const cell = {standard:28,large:42,largest:56}[zoom] || 28;
   return {columns:Math.min(map.width, Math.max(4, Math.min(24, Math.floor(width/cell)))), rows:Math.min(map.height, Math.max(4, Math.min(16, Math.floor(height/cell))))};
@@ -60,7 +61,7 @@ export function surroundings(run) {
     return `${name}: ${status}.`;
   });
   add([stage.exit],'Home beacon');add(stage.lanterns,'Unlit lantern',p=>!run.collectedLanterns.includes(p.id));add(stage.keys,'Key',p=>!run.collectedKeys.includes(p.id));
-  add(stage.clockworkStamps,p=>`Program stamp M${p.number}: ${p.name}; ${p.program.join(' → ')}; ${run.clockwork?.stamped?.includes(p.id)?'loaded':'not loaded'}${p.required?'; required to finish':''}`);
+  add(stage.clockworkStamps,p=>`Program stamp M${p.number}: ${p.name}; ${p.alternate?`Signal ${p.link} ${clockworkSignal(run,p)?'powered':'quiet'}; Quiet ${p.program.join(' → ')}; Powered ${p.alternate.join(' → ')}; loaded ${clockworkRoutes(run,p).join(' and ')||'neither'}${p.both?'; both routes required':p.required?'; required to finish':''}`:`${p.program.join(' → ')}; ${run.clockwork?.stamped?.includes(p.id)?'loaded':'not loaded'}${p.required?'; required to finish':''}`}`);
   add(stage.clockworkTubes,p=>{const end=stage.clockworkTubes.find(t=>t.id===p.partner);return `Courier tube U${p.number}: ${p.name}; Pip uses its own tile to travel to ${end.name} at ${at(end)}`;});
   add(stage.clockworkStops,p=>`Pip delivery ${stage.clockworkStops.indexOf(p)+1}: ${p.name}; ${run.clockwork?.delivered?.includes(p.id)?'delivered':'waiting'}${p.required?'; Pip must finish paused here':''}`);
   add(stage.switches,p=>`${p.name||'Wheel'}: ${run.switches[p.id]?'on':'off'}`);add(stage.plates,p=>`Pressure plate: ${activePlates(run).includes(p.id)?'held':'empty'}`);

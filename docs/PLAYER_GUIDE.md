@@ -3,6 +3,31 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## The Signal Orchard — v0.36
+
+Open **Choose your adventure → Storybooks → Pip and the Signal Orchard**.
+Six chapters introduce signal stamps, then build toward two changing routes,
+three courier pairs, eight deliveries and a three-bell duet.
+
+A signal stamp has two engravings: **Quiet** and **Powered**. When Pip executes
+Use on it, any linked lever on, or every linked plate held, selects Powered.
+Otherwise it loads Quiet. The loaded loop stays unchanged when the signal
+changes later. The next card starts at 1 on the following turn; loading costs
+no keeper rewrite. Plan your return visit before changing the signal.
+
+**Route hardware** lists both programs, the signal number, current power and
+which routes you have loaded. A **both routes** quest needs a separate Use
+under each signal. The keeper, crates and Pip can hold plates. Undo restores
+programs and route records; allowed dock returns clear those records without
+refilling rewrites. Use free rehearsal to preview the signal you currently hold.
+
+In the creator, paint **Pip signal stamp** and at least one plate or lever on
+its channel. Inspect to engrave both routes. Choose Quiet or Powered before
+rotating directions or borrowing saved cards. Optional both-route goals invite
+round trips. Capture the whole linked puzzle as an assembly, then playtest both
+visits before sharing. The game does not upload your maps to a public server;
+share the downloaded file, code, link or Storybook with your players.
+
 ## The Lantern Loom — v0.35
 
 Open **Choose your adventure → Storybooks → Pip and the Lantern Loom**.

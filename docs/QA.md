@@ -1,5 +1,41 @@
 # Verification record
 
+## Pip and the Signal Orchard — v0.36.0
+
+**987 Node tests**, syntax checks and the **131-file** production build pass.
+All six chapters have clean three-star Trail/Nemesis clears, including
+all-treasure detours and automatic loops. Tests cover signal sampling after
+the keeper move, all-plate occupancy, lever overrides, latched programs, both-route
+goals, dock rules, repeated records, prototype-named IDs, all 216 rehearsal
+drafts, linked assemblies, both-program transforms, Continue/Undo and route
+review. A captured v0.35 checkpoint keeps its original winning fingerprint;
+the full prior v7 export keeps its SHA-256. All new worlds, links and the book
+round-trip with proofs. The largest official play link is 7,865 characters.
+
+The **59-scenario release suite** includes six Orchard cases: full phone/touch
+and desktop/keyboard books; free Quiet/Powered rehearsal, automatic running
+and victory focus; actual brush repaint, per-bank satchel borrowing/rotation,
+linked capture/paste, proved export and shared-link play; enlarged text and
+damaged-satchel recovery; and previous-release continuation. The creator case
+checks that an isolated copy is rejected before sharing, then exports a
+connected copy. Largest-text/high-contrast checks exercise both program banks,
+the bank menu and both-route goals at 320×568, 844×390, 768×900 and 1440×1000.
+
+All six Orchard scenarios pass in Chromium, Firefox and WebKit. Final enlarged
+checks exercise both program banks and their themed menus across all three
+engines. The illustrated cover uses the full Pip-book art frame. Release CI
+gates publishing on the full browser suite, baseline migration and five Node/OS
+jobs; its total browser budget is 25 minutes as full-book coverage grows, with
+individual action timeouts unchanged.
+
+Reviewed captures cover the phone/desktop board, original Orchard cover,
+loaded signal, hardware text, 320-pixel enlarged mode, creator map and themed
+Powered-card/bank menus. Optional details remain inside existing disclosures.
+
+Browser contexts use disposable local saves. The production package contains
+no runtime dependencies or external uploads. Browser engines and emulated
+viewports do not replace physical-device or assistive-technology sessions.
+
 ## Pip and the Lantern Loom — v0.35.0
 
 **936 Node tests**, syntax checks and the **130-file** static build pass.

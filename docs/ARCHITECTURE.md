@@ -1007,3 +1007,26 @@ value; cancellation emits neither. Source input/change semantics stay intact.
 rules. The library includes their maps and books; worlds page by six and
 Storybooks filter/search metadata. No save schema, remote service, or runtime
 dependency is added. Test-only hard alternate routes remain under fixtures.
+
+## Conditional Pip programs — v0.36
+
+`pip-router` compiles into the existing stamp list with a second three-card
+program and explicit linked plate/lever IDs. `activePlateIds` is shared by
+crossings and `clockworkSignal`, so keeper, crate and companion occupancy has
+one definition. Use samples after the keeper turn, loads a copied program,
+resets index to zero and appends a distinct Quiet/Powered record. Later signal
+changes do not modify a loaded program. Rehearsal uses the same transition.
+
+Only worlds with signal stamps receive `clockwork.routed`; ordinary worlds keep
+their previous state shape. Both-route goals inspect own ID records, including
+valid prototype-named IDs. Dock returns clear these records without refilling
+rewrites. No command or legacy journal rules token changes. New objects emit
+world format 8; formats 1–7 keep canonical identity and serialized bytes. The
+captured v0.35 save replays to its original winning fingerprint and the original
+v7 export retains its SHA-256. Existing MIT provenance remains unchanged.
+
+`pip-orchard-worlds.mjs` provides six original proved chapters and their book.
+The existing creator inspector holds both card banks, with explicit bank choice
+for rotation/satchel copying. Assemblies include signal sources and remap their
+channels separately from tube pairs. Both card banks transform in authoring;
+runtime room turns move hardware without changing compass programs.
