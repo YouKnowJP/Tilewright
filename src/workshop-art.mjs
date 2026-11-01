@@ -39,6 +39,14 @@ export function drawOrchardCover(canvas){
  pixel('#b59e70',32,129,137,9);pixel('#d6c08b',40,117,116,5);for(const [x,y]of [[77,72],[113,84],[160,58],[185,88]]){pixel('#e9deba',x,y,15,20);pixel('#577e6c',x+4,y+5,7,3);pixel('#577e6c',x+4,y+11,7,3);}
  ctx.save();ctx.translate(203,65);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0},77);ctx.restore();ctx.save();ctx.translate(45,74);drawWorkshopObject(ctx,{kind:'pip-router',channel:'jade',x:0,y:0},49);ctx.restore();pixel('#efdda6',299,123,18,16);pixel('#72977c',285,142,45,3);
 }
+// New owned illustration for the Prism Observatory.
+export function drawPrismCover(canvas){
+ canvas.width=400;canvas.height=160;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;const p=(c,x,y,w,h)=>{ctx.fillStyle=c;ctx.fillRect(x,y,w,h);};
+ p('#172d43',0,0,400,160);p('#304655',0,114,400,46);for(const [x,y]of [[23,17],[57,52],[126,20],[179,40],[275,16],[349,49],[381,22]]){p('#efdda6',x,y,3,3);p('#a4c6c9',x-2,y+1,7,1);}p('#dcd6ac',325,13,22,22);p('#172d43',320,9,15,21);
+ p('#55777b',35,76,122,70);p('#7e9b91',28,76,136,6);p('#72968f',46,58,100,18);p('#a3b4a0',61,43,70,15);p('#d1cda5',81,34,30,9);p('#b0ccc0',92,42,7,34);p('#1b3949',69,89,54,54);p('#b0ccc0',94,90,4,53);
+ p('#839e95',147,73,58,9);p('#c4d5b0',194,58,14,32);p('#203e51',196,62,7,24);for(const [x,y]of [[216,66],[234,57],[250,46]])p('#e5d28c',x,y,5,3);
+ ctx.save();ctx.translate(276,67);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0},75);ctx.restore();ctx.save();ctx.translate(211,105);drawWorkshopObject(ctx,{kind:'pip-prism',x:0,y:0},38);ctx.restore();p('#839d88',0,147,400,4);
+}
 export function drawLabDiscovery(canvas,index,unlocked){
   canvas.width=96;canvas.height=72;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
   const colors=unlocked?['#efbf72','#a5e1d2','#c0a7eb','#ffe5a0']:['#687d6a','#6f8175','#6c7a76','#7b8067'];
@@ -56,6 +64,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-prism': rect('#324e62',2,3,20,20);rect('#b4d8d3',4,5,16,15);rect('#173e49',6,7,12,11);rect('#ffe4a5',11,7,3,10);rect('#ffe4a5',8,10,9,3);rect('#8fbaae',5,20,14,3);break;
     case 'pip-router': rect('#30475e',2,3,20,20);rect(color,4,4,16,17);rect('#102f38',6,6,12,12);for(let n=0;n<3;n++){rect('#e8d8ae',7+n*3,7,2,4);rect('#a7e3cf',7+n*3,13,2,4);}rect('#d5b379',5,20,14,3);break;
     case 'pip-stamp': rect('#30475e',2,3,20,20);rect('#b0c8cf',4,4,16,15);rect('#102f38',6,6,12,10);for(let n=0;n<3;n++){rect('#ffe3a3',7+n*3,8,2,5);}rect('#d5b379',5,20,14,3);break;
     case 'pip-tube': rect('#273e47',2,3,20,20);rect('#d0a766',4,4,16,18);rect(color,6,6,12,14);rect('#102d33',8,8,8,10);rect('#f9e5b2',9,17,6,3);break;
@@ -101,6 +110,7 @@ export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = 
   if (grid) { ctx.strokeStyle = '#17393235'; ctx.lineWidth = 1; ctx.beginPath(); for (let x = 0; x <= map.width; x++) { ctx.moveTo(x * size, 0); ctx.lineTo(x * size, height); } for (let y = 0; y <= map.height; y++) { ctx.moveTo(0, y * size); ctx.lineTo(width, y * size); } ctx.stroke(); }
   for (const item of [...pack.markers.filter(m => ['fern', 'ember', 'pip-stop'].includes(m.kind)), ...pack.markers.filter(m => !['fern', 'ember', 'pip-stop'].includes(m.kind))]) drawWorkshopObject(ctx, item, size);
   for(const room of pack.markers.filter(m=>m.kind==='turntable')){const r=(room.span-1)/2;ctx.strokeStyle='#f6d88e';ctx.lineWidth=thumbnail?1:2;ctx.setLineDash([4,3]);ctx.strokeRect((room.x-r)*size+1,(room.y-r)*size+1,room.span*size-2,room.span*size-2);ctx.setLineDash([]);}
+  for(const [i,prism]of pack.markers.filter(m=>m.kind==='pip-prism').entries())drawCueBadge(ctx,prism,'X',String(i+1),size);
   for(const [i,stamp]of pack.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind)).entries())drawCueBadge(ctx,stamp,'M',String(i+1),size);
   for(const tube of pack.markers.filter(m=>m.kind==='pip-tube'))drawCueBadge(ctx,tube,'U',CHANNEL_NUMBERS[tube.channel],size);
   for(const stop of pack.markers.filter(m=>m.kind==='pip-stop'))drawCueBadge(ctx,{x:stop.x,y:stop.y+.5},'F',String(stop.order),size);

@@ -1,3 +1,4 @@
+import {prismWorld,PRISM_LEVELS} from './pip-prism-worlds.mjs';
 import {orchardWorld,ORCHARD_LEVELS} from './pip-orchard-worlds.mjs';
 import {loomWorld,LOOM_LEVELS} from './pip-loom-worlds.mjs';
 import {parcelworksWorld,PARCELWORKS_LEVELS} from './pip-parcelworks-worlds.mjs';
@@ -35,7 +36,7 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   let shelfPage=0;const pager=document.createElement('div');pager.id='ws-shelf-pager';pager.className='shelf-pager';$('adventures').insertAdjacentElement('afterend',pager);$('filter').add(new Option('New adventures · 18 worlds','new'));
   $('search').addEventListener('input',()=>{shelfPage=0;},true);$('filter').addEventListener('change',()=>{shelfPage=0;},true);
   const restored = loadWorkshop(storage), featured = [...workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) })), ...CARTOGRAPHER_LEVELS.map(id=>cartographerWorld(id)),...newWorlds];
-  featured.push(...CLOCKWORK_LEVELS.map(id=>clockworkWorld(id)),...ORCHESTRA_LEVELS.map(id=>orchestraWorld(id)),...ATLAS_LEVELS.map(id=>atlasWorld(id)),...PARCELWORKS_LEVELS.map(id=>parcelworksWorld(id)),...LOOM_LEVELS.map(id=>loomWorld(id)),...ORCHARD_LEVELS.map(id=>orchardWorld(id)));
+  featured.push(...CLOCKWORK_LEVELS.map(id=>clockworkWorld(id)),...ORCHESTRA_LEVELS.map(id=>orchestraWorld(id)),...ATLAS_LEVELS.map(id=>atlasWorld(id)),...PARCELWORKS_LEVELS.map(id=>parcelworksWorld(id)),...LOOM_LEVELS.map(id=>loomWorld(id)),...ORCHARD_LEVELS.map(id=>orchardWorld(id)),...PRISM_LEVELS.map(id=>prismWorld(id)));
   const board=trailboardAdventures();let bookmarks=loadBookmarks(storage);
   const restoredDraft=loadWorkshopDraft(storage); let draftTouched=Boolean(restoredDraft);
   let entries = restored.entries, bests = loadWorkshopBests(storage), saved = true, preview = null, share = null, activePlay = null, section = 'shelf';

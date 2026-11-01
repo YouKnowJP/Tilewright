@@ -326,3 +326,37 @@ files, codes and play links. Versions 1–7 keep their previous format and world
 identity. Storybooks can combine new and older chapters. Large worlds may need
 file/code sharing instead of a link. The six Signal Orchard maps are available
 to remix individually; no account or public map-hosting service is required.
+
+## Compass prisms and portable puzzle pieces — v0.37
+
+Paint **Pip compass prism** in Puzzles and inspect it. Choose Turn right, Turn
+left, Mirror East / West, Mirror North / South, or Reverse card order. Up to
+eight prisms can coexist with stamps and tubes. They need Pip and clear land;
+flag overlays are allowed. Set one-to-four credited activations, optionally
+required before a win. Use transforms the current loop and starts card 1 next
+turn. Merely crossing a prism does nothing. Repainting preserves its settings.
+
+The operation repeats on every Use even after its credit target is reached.
+Reverse moves Use along with the other cards, which can cause an immediate
+second activation. Leave an escape route and test both departures. Free
+rehearsal follows transformations; Undo, Continue and route reviews preserve
+the resulting cards and credits. An allowed dock return clears the credits.
+
+Whole-map/assembly quarter turns swap mirror axes. Map reflections swap left
+and right turn operations. Reverse is unchanged. A rotating room during play
+moves a prism without changing its compass rule. New adventures emit format 9;
+older world identities, exports and checkpoints retain their earlier behavior.
+
+In **Puzzle assemblies**, every saved piece has **Download puzzle**. The portable
+`tilewright-assembly` version-1 file contains its name, terrain, objects and kit.
+**Import puzzle** validates it before appending a slot, up to twelve pieces;
+matching names do not overwrite old pieces. Malformed/future files, oversized
+files over 150 KB, incomplete signal sources and partial rotating rooms are
+refused. Existing storage failures keep old bytes; imports remain usable for
+this visit. A damaged saved shelf is retained while imported pieces work in
+memory. Journey backups continue to include saved assemblies.
+
+Place and test imported pieces as part of a whole adventure. Assemblies need
+no starting point or beacon; they are building parts, not complete playable
+missions. Use normal verified world export/code/link or a Storybook to share
+an adventure players can immediately play. No upload service is involved.

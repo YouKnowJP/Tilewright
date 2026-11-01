@@ -1,5 +1,45 @@
 # Verification record
 
+## Pip and the Prism Observatory — v0.37.0
+
+**1,044 Node tests**, syntax checks and the **132-file** production build pass.
+All six chapters have clean three-star Trail/Nemesis clears, including
+all-treasure detours and automatic loops. Coverage includes all five prism
+operations, next-card restart, bounded activation goals, dock/rewrite behavior,
+immutable rehearsal for all 216 programs, transform algebra across all programs
+and map symmetries, room turns, assemblies, own-ID records, Continue/Undo and
+completed route reviews. A captured v0.36 save retains its original winning
+fingerprint and the original v8 export hash. Every new map and the book round-trip;
+the largest official play link is 9,162 characters.
+
+The **66-scenario release suite** includes seven Prism scenarios: full phone/touch
+and desktop/keyboard books; free rehearsal, automatic running and victory focus;
+actual prism repaint/settings, puzzle download/remove/import/place, proved
+world export and shared-link play; malformed/oversized/future puzzle files,
+quota failures, twelve-slot capacity and damaged storage; large-text themed
+menus and long names; and previous-release continuation. Sizes include
+320×568, 844×390, 768×900 and 1440×1000 with largest text and high contrast.
+Live checks exposed and repaired long-name wrapping in the prism directory and
+puzzle drawer, and simplified the drawer’s small-screen heading. A test route
+was also corrected to hold the bridge before walking across; game rules were
+not weakened.
+
+All seven Prism scenarios pass across Chromium, Firefox and WebKit, including
+final retests of damaged-store removal/capture and the long-name drawer. The
+resized keyboard check explicitly resets from any map position with the pointer
+away from the board; it no longer assumes the hover cursor stayed at the last
+keyboard cell during a viewport change. No action timeout was increased.
+
+Reviewed phone/desktop captures cover the original observatory illustration,
+board, prism messages/hardware, compact creator inspector, themed operation
+menu, puzzle-file controls and 320-pixel enlarged long-name cards.
+
+Portable puzzle tests preserve original storage on failed writes and reject
+unsafe/incomplete files before appending. Duplicate names use new slots and
+a full drawer never evicts a piece. Browser tests use disposable profiles.
+Physical-device and assistive-technology sessions remain outside this
+browser-engine/viewport coverage.
+
 ## Pip and the Signal Orchard — v0.36.0
 
 **987 Node tests**, syntax checks and the **131-file** production build pass.

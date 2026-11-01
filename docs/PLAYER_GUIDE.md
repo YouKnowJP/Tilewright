@@ -3,6 +3,36 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## The Prism Observatory — v0.37
+
+Open **Choose your adventure → Storybooks → Pip and the Prism Observatory**.
+Six chapters teach compass prisms, marked **X**, then build toward a four-wind
+circuit, a four-bell tube relay and an eight-prism finale.
+
+Pip executes **Use** on a prism to transform its current cards. A quarter turn
+changes every compass direction; a mirror changes only its named axis. Wait
+and Use keep their meaning. **Reverse** reverses the order of all three cards.
+The new loop starts at card 1 on the next turn, holding Pip still for this turn.
+No keeper rewrite is spent or refilled. Repeated visits transform the new loop
+again. A reverse can put Use first, causing a second activation before Pip leaves.
+
+**Route hardware** shows each operation and its credited activation target.
+Required targets appear in Quest; credits stop at the target while the prism
+continues to work. Undo restores both cards and credits. Allowed dock returns
+clear credits and keep the current program without refilling rewrites. Rehearse
+for free before applying; deliberate blocked steps can position Use correctly.
+
+In **Build an adventure → Puzzles → Pip compass prism**, choose an operation,
+name and one-to-four activation target. Map rotations also turn mirror axes;
+map reflections reverse clockwise/counterclockwise operations. During play,
+a rotating room carries the prism while its compass rule stays fixed.
+
+**Puzzle assemblies → Download puzzle** shares a reusable piece as a puzzle file.
+Another player chooses **Import puzzle** in their assembly drawer. Imports append
+a new slot; existing pieces and world drafts stay safe. Rotate/place the piece,
+then playtest the whole adventure before sharing its playable file, code, link
+or Storybook. Puzzle files contain terrain and objects, not a runnable mission.
+
 ## The Signal Orchard — v0.36
 
 Open **Choose your adventure → Storybooks → Pip and the Signal Orchard**.

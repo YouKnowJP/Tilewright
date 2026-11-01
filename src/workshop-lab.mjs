@@ -1,3 +1,4 @@
+import {transformPrismOperation} from './clockwork.mjs';
 import { blankAdventure, editAdventure, normalizeAdventure, adventureStage } from './workshop-model.mjs';
 import { createRun, canEnter } from './adventure.mjs';
 import { LAB_CLEARS } from './workshop-lab-clears.mjs';
@@ -75,7 +76,7 @@ export function transformAdventure(input, operation) {
     for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) { const p = point({ x, y }); tiles[p.y * nextWidth + p.x] = layer.tiles[y * width + x]; }
     return { ...layer, tiles };
   }) };
-  return editAdventure(pack, { map, markers: pack.markers.map(marker => ({ ...marker, ...point(marker), ...(marker.program?{program:marker.program.map(command=>operation==='rotate'?({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]):operation==='mirror-x'?({left:'right',right:'left'}[command]||command):({up:'down',down:'up'}[command]||command))}:{}), ...(marker.alternate?{alternate:marker.alternate.map(command=>operation==='rotate'?({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]):operation==='mirror-x'?({left:'right',right:'left'}[command]||command):({up:'down',down:'up'}[command]||command))}:{}), ...(marker.route ? { route: marker.route.map(point) } : {}) })) });
+  return editAdventure(pack, { map, markers: pack.markers.map(marker => ({ ...marker, ...point(marker), ...(marker.program?{program:marker.program.map(command=>operation==='rotate'?({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]):operation==='mirror-x'?({left:'right',right:'left'}[command]||command):({up:'down',down:'up'}[command]||command))}:{}), ...(marker.kind==='pip-prism'?{operation:transformPrismOperation(marker.operation,operation)}:{}),...(marker.alternate?{alternate:marker.alternate.map(command=>operation==='rotate'?({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]):operation==='mirror-x'?({left:'right',right:'left'}[command]||command):({up:'down',down:'up'}[command]||command))}:{}), ...(marker.route ? { route: marker.route.map(point) } : {}) })) });
 }
 
 export function cursorPractice(input, point) {

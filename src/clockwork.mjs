@@ -2,6 +2,10 @@
 import {switchChange,activePlateIds} from './adventure-mechanisms.mjs';
 export const CLOCKWORK_COMMANDS=Object.freeze(['up','right','down','left','wait','use']);
 export const CLOCKWORK_LABELS=Object.freeze({up:'North ↑',right:'East →',down:'South ↓',left:'West ←',wait:'Wait ·',use:'Use'});
+export const PRISM_OPERATIONS=Object.freeze({rotate:'Turn right ↻','rotate-left':'Turn left ↺',mirror:'Mirror East / West','mirror-y':'Mirror North / South',reverse:'Reverse card order'});
+export function normalizePrismOperation(value='rotate'){if(!Object.hasOwn(PRISM_OPERATIONS,value))throw Error('Choose a known compass prism operation.');return value;}
+export function transformPrismOperation(value,operation){normalizePrismOperation(value);if(operation==='rotate')return ({mirror:'mirror-y','mirror-y':'mirror'})[value]||value;if(['mirror-x','mirror-y'].includes(operation))return ({rotate:'rotate-left','rotate-left':'rotate'})[value]||value;throw Error('Choose a prism map transformation.');}
+export function prismVisits(run,prism){return Object.hasOwn(run.clockwork?.prisms||{},prism.id)?run.clockwork.prisms[prism.id]:0;}
 export function normalizeProgram(value=['right','right','wait']){if(!Array.isArray(value)||value.length!==3||value.some(item=>!CLOCKWORK_COMMANDS.includes(item)))throw Error('A Clockwork companion needs exactly three direction, Wait or Use cards.');return [...value];}
 export function clockworkAction(action){return ['clockwork-toggle','clockwork-reset','clockwork-step'].includes(action)||/^clockwork-program:(?:up|right|down|left|wait|use),(?:up|right|down|left|wait|use),(?:up|right|down|left|wait|use)$/.test(action);}
 const same=(a,b)=>a.x===b.x&&a.y===b.y;
@@ -9,7 +13,7 @@ export function clockworkRoutes(run,stamp){const records=run.clockwork?.routed;r
 export function clockworkSignal(run,stamp){const signal=stamp.signals;if(!signal)return false;const held=activePlateIds(run);return signal.switches.some(id=>run.switches[id])||Boolean(signal.plates.length&&signal.plates.every(id=>held.includes(id)));}
 export function clockworkGoals(run){
  const stops=run.stage.clockworkStops||[],done=run.clockwork?.delivered||[],last=stops.at(-1);
- return [...(run.stage.clockworkStamps||[]).filter(stamp=>stamp.required).map(stamp=>({label:stamp.both?`Load both routes at ${stamp.name}`:`Load the program at ${stamp.name}`,done:stamp.both?['quiet','powered'].every(mode=>clockworkRoutes(run,stamp).includes(mode)):run.clockwork?.stamped?.includes(stamp.id)||false})),...stops.map((stop,i)=>({label:`Pip delivery ${i+1}: ${stop.name}`,done:done.includes(stop.id)})),...(last?.required?[{label:`Leave Pip paused at ${last.name}`,done:done.length===stops.length&&same(run.clockwork,last)&&!run.clockwork.running}]:[])];
+ return [...(run.stage.clockworkPrisms||[]).filter(p=>p.required).map(p=>({label:`Use ${p.name}: ${prismVisits(run,p)}/${p.visits}`,done:prismVisits(run,p)>=p.visits})),...(run.stage.clockworkStamps||[]).filter(stamp=>stamp.required).map(stamp=>({label:stamp.both?`Load both routes at ${stamp.name}`:`Load the program at ${stamp.name}`,done:stamp.both?['quiet','powered'].every(mode=>clockworkRoutes(run,stamp).includes(mode)):run.clockwork?.stamped?.includes(stamp.id)||false})),...stops.map((stop,i)=>({label:`Pip delivery ${i+1}: ${stop.name}`,done:done.includes(stop.id)})),...(last?.required?[{label:`Leave Pip paused at ${last.name}`,done:done.length===stops.length&&same(run.clockwork,last)&&!run.clockwork.running}]:[])];
 }
 function visitStop(run){
  const stops=run.stage.clockworkStops,bot=run.clockwork,next=stops?.[bot.delivered?.length||0];if(!next||!same(bot,next))return run;
@@ -18,7 +22,8 @@ function visitStop(run){
 }
 const delta={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0],wait:[0,0]};
 function useCard(run,canEnter){
- const bot=run.clockwork,stamp=run.stage.clockworkStamps?.find(item=>same(item,bot)),tube=run.stage.clockworkTubes?.find(item=>same(item,bot)),lever=run.stage.switches.find(item=>same(item,bot)&&item.operable!==false),bell=run.stage.relays.find(item=>same(item,bot)),events=[];let next=run,text=run.stage.clockworkStamps?'No program stamp, lever, bell or tube on this tile.':'No lever or bell on this tile.';
+ const bot=run.clockwork,prism=run.stage.clockworkPrisms?.find(item=>same(item,bot)),stamp=run.stage.clockworkStamps?.find(item=>same(item,bot)),tube=run.stage.clockworkTubes?.find(item=>same(item,bot)),lever=run.stage.switches.find(item=>same(item,bot)&&item.operable!==false),bell=run.stage.relays.find(item=>same(item,bot)),events=[];let next=run,text=run.stage.clockworkStamps?'No program stamp, lever, bell or tube on this tile.':'No lever or bell on this tile.';
+ if(prism){const program=transformProgram(bot.program,prism.operation),text=`${bot.name} used ${prism.name}: ${PRISM_OPERATIONS[prism.operation]}. Next: card 1, ${program[0]}. No keeper rewrite spent.`;return {...run,clockwork:{...bot,program,index:0,prisms:{...bot.prisms,[prism.id]:Math.min(prism.visits,prismVisits(run,prism)+1)},last:text},events:[...run.events,{type:'clockwork-prism',text}]};}
  if(stamp){const mode=stamp.alternate?(clockworkSignal(run,stamp)?'powered':'quiet'):null,program=mode==='powered'?stamp.alternate:stamp.program,text=`${bot.name} loaded ${stamp.name}${mode?' · '+mode+' route':''}. Next: card 1, ${program[0]}. No keeper rewrite spent.`;return {...run,clockwork:{...bot,program:[...program],index:0,stamped:[...new Set([...(bot.stamped||[]),stamp.id])],...(mode?{routed:{...bot.routed,[stamp.id]:[...new Set([...clockworkRoutes(run,stamp),mode])]}}:{}),last:text},events:[...run.events,{type:'clockwork-stamp',text}]};}
  if(tube){const destination=run.stage.clockworkTubes.find(item=>item.id===tube.partner);if(!destination||!canEnter(run,destination)||run.crates.some(item=>same(item,destination)))text='Tube exit blocked. Clear its landing tile, then try Use again.';else{next={...run,clockwork:{...bot,x:destination.x,y:destination.y,moves:bot.moves+1}};text=`Tube ${tube.number} carried ${bot.name} to ${destination.name}, column ${destination.x+1}, row ${destination.y+1}.`;}}
  else if(lever){const change=switchChange(run,{[lever.id]:!run.switches[lever.id]},{includeClockwork:true});if(change.error)text=change.error;else{next={...run,switches:change.switches};text=`${lever.name} switched ${next.switches[lever.id]?'on':'off'}.`;events.push({type:'switch',name:lever.name,active:next.switches[lever.id]});}}
@@ -27,7 +32,7 @@ function useCard(run,canEnter){
 }
 export function clockworkStep(run,canEnter){
  const bot=run.clockwork;if(!bot||!bot.running)return run;
- const command=bot.program[bot.index];if(command==='use'){const next=useCard(run,canEnter);return visitStop({...next,clockwork:{...next.clockwork,index:next.events.at(-1)?.type==='clockwork-stamp'?0:(bot.index+1)%3}});}
+ const command=bot.program[bot.index];if(command==='use'){const next=useCard(run,canEnter);return visitStop({...next,clockwork:{...next.clockwork,index:['clockwork-stamp','clockwork-prism'].includes(next.events.at(-1)?.type)?0:(bot.index+1)%3}});}
  const [dx,dy]=delta[command],point={x:bot.x+dx,y:bot.y+dy};
  const blocked=command!=='wait'&&(!canEnter(run,point)||run.crates.some(crate=>same(crate,point)));
  return visitStop({...run,clockwork:{...bot,...(!blocked?point:{}),index:(bot.index+1)%3,last:blocked?'Blocked':command,moves:bot.moves+(command!=='wait'&&!blocked?1:0)}});
@@ -41,5 +46,5 @@ export function clockworkActionLabel(action){if(action.startsWith('clockwork-pro
 
 export function transformProgram(program,operation){
  const cards=normalizeProgram(program);if(operation==='reverse')return cards.reverse();
- const changes={rotate:{up:'right',right:'down',down:'left',left:'up'},mirror:{left:'right',right:'left'}};if(!changes[operation])throw Error('Choose Rotate, Mirror or Reverse cards.');return cards.map(card=>changes[operation][card]||card);
+ const changes={rotate:{up:'right',right:'down',down:'left',left:'up'},'rotate-left':{up:'left',left:'down',down:'right',right:'up'},mirror:{left:'right',right:'left'},'mirror-y':{up:'down',down:'up'}};if(!changes[operation])throw Error('Choose Rotate, Mirror or Reverse cards.');return cards.map(card=>changes[operation][card]||card);
 }

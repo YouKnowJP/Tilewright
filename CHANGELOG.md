@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.37.0 — 2026-11-01
+
+- Add Pip and the Prism Observatory: six original chapters with axis mirrors, a double reverse, a four-wind circuit, a four-bell tube relay and an eight-prism finale.
+- Add compass prisms that turn, mirror or reverse Pip’s current loop without spending rewrites. Required activation targets support repeated-visit puzzles.
+- Add creator prism settings, geometric transforms, numeric X markers, readable hardware descriptions and an original pixel-art book cover.
+- Add portable puzzle-assembly downloads/imports, append-only slots, bounded file validation and session recovery when storage fails. Whole adventures still share through proved files, codes, links and Storybooks.
+- Add world format 9 and preserve previous exports, checkpoints, commands and license notices.
+- Extend deterministic and live-browser checks for new chapters, transformation algebra, puzzle sharing, old saves, enlarged text and phone/desktop layouts.
+
 ## 0.36.0 — 2026-11-01
 
 - Add Pip and the Signal Orchard: six original chapters with return routes, signal changes, crate coordination, bell duets and an eight-stop finale.

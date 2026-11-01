@@ -1,3 +1,4 @@
+import {transformPrismOperation} from './clockwork.mjs';
 import { normalizeAdventure, editAdventure, nextMarkerId, CHANNELS, MAX_MARKERS } from './workshop-model.mjs';
 import { validateDocument } from './model.mjs';
 import { GUILD_KITS } from './adventure-tools.mjs';
@@ -32,7 +33,7 @@ export function rotateAssembly(input,turns=0){
   for(let t=0;t<turns;t++){
     const {width:w,height:h}=assembly.map,rotate=p=>({x:h-1-p.y,y:p.x});
     const map={...assembly.map,width:h,height:w,layers:assembly.map.layers.map(layer=>{const tiles=Array(w*h);layer.tiles.forEach((tile,i)=>{const p=rotate({x:i%w,y:Math.floor(i/w)});tiles[p.y*h+p.x]=tile;});return {...layer,tiles};})};
-    assembly={...assembly,map,markers:assembly.markers.map(m=>({...m,...rotate(m),...(m.program?{program:m.program.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]))}:{}),...(m.alternate?{alternate:m.alternate.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]))}:{}),...(m.route?{route:m.route.map(rotate)}:{})}))};
+    assembly={...assembly,map,markers:assembly.markers.map(m=>({...m,...rotate(m),...(m.program?{program:m.program.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]))}:{}),...(m.kind==='pip-prism'?{operation:transformPrismOperation(m.operation,'rotate')}:{}),...(m.alternate?{alternate:m.alternate.map(command=>({up:'right',right:'down',down:'left',left:'up',wait:'wait',use:'use'}[command]))}:{}),...(m.route?{route:m.route.map(rotate)}:{})}))};
   }
   return assembly;
 }
@@ -42,6 +43,7 @@ export function pasteAssembly(input,source,point,turns=0){
   if(pack.markers.some(m=>inside(m,b)))throw Error('Place assemblies on an empty object area. Terrain will be replaced; existing puzzle objects stay safe.');
   if(pack.markers.length+assembly.markers.length>MAX_MARKERS)throw Error('This assembly would exceed the 128-object limit.');
   if(pack.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind)).length+assembly.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind)).length>8)throw Error('A world can hold at most eight program stamps.');
+  if(pack.markers.filter(m=>m.kind==='pip-prism').length+assembly.markers.filter(m=>m.kind==='pip-prism').length>8)throw Error('A world can hold at most eight compass prisms.');
   if(pack.markers.some(m=>m.kind==='clockwork')&&assembly.markers.some(m=>m.kind==='clockwork'))throw Error('A world can hold only one Clockwork companion.');
   if(pack.markers.some(m=>m.kind==='partner')&&assembly.markers.some(m=>m.kind==='partner'))throw Error('A world can hold only one Two-Lantern partner.');
   if(pack.markers.some(m=>m.kind==='relic')&&assembly.markers.some(m=>m.kind==='relic'))throw Error('A world can hold only one singing relic.');
@@ -62,3 +64,10 @@ export function pasteAssembly(input,source,point,turns=0){
 }
 export function loadAssemblies(storage){try{const raw=storage.getItem(ASSEMBLIES_KEY);if(!raw)return {items:[],failed:false};if(raw.length>600000)throw Error('Oversized assemblies');const data=JSON.parse(raw);if(data.version!==1||!Array.isArray(data.items)||data.items.length>MAX_ASSEMBLIES)throw Error('Invalid assemblies');return {items:data.items.map(normalizeAssembly),failed:false};}catch{return {items:[],failed:true};}}
 export function saveAssemblies(storage,items){try{if(items.length>MAX_ASSEMBLIES)return false;const raw=JSON.stringify({version:1,items:items.map(normalizeAssembly)});if(raw.length>600000)return false;storage.setItem(ASSEMBLIES_KEY,raw);return true;}catch{return false;}}
+
+// New owned portable puzzle format. Existing assembly storage stays version 1.
+export const MAX_ASSEMBLY_BYTES=150000;
+function portableAssembly(input){const a=normalizeAssembly(input);for(const kind of ['clockwork','partner','relic'])if(a.markers.filter(m=>m.kind===kind).length>1)throw Error('Keep at most one companion, partner and relic in a puzzle assembly.');if(a.markers.filter(m=>m.kind==='pip-prism').length>8||a.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind)).length>8)throw Error('Keep at most eight prisms and eight program stamps in a puzzle assembly.');for(const m of a.markers){if(m.kind==='pip-router'&&!a.markers.some(p=>['plate','lever'].includes(p.kind)&&p.channel===m.channel))throw Error('Include a signal stamp’s linked plates or lever in its puzzle file.');if(m.kind==='turntable'){const r=(m.span-1)/2;if(m.x-r<0||m.y-r<0||m.x+r>=a.map.width||m.y+r>=a.map.height)throw Error('Include the entire rotating room in its puzzle file.');}}return a;}
+export function serializeAssembly(input){const raw=JSON.stringify({format:'tilewright-assembly',version:1,assembly:portableAssembly(input)});if(new TextEncoder().encode(raw).length>MAX_ASSEMBLY_BYTES)throw Error('This puzzle is too large to share as an assembly. Share the whole adventure instead.');return raw;}
+export function parseAssembly(raw){if(typeof raw!=='string'||new TextEncoder().encode(raw).length>MAX_ASSEMBLY_BYTES)throw Error('Choose a puzzle assembly file of at most 150 KB.');let data;try{data=JSON.parse(raw);}catch{throw Error('This puzzle assembly is not valid JSON.');}if(data?.format!=='tilewright-assembly'||data.version!==1)throw Error('Choose a Tilewright puzzle assembly file, version 1.');return portableAssembly(data.assembly);}
+export function importAssembly(items,raw){if(!Array.isArray(items)||items.length>=MAX_ASSEMBLIES)throw Error('All twelve assembly slots are in use. Remove an assembly to make room.');const assembly=parseAssembly(raw);return [...items.map(normalizeAssembly),assembly];}

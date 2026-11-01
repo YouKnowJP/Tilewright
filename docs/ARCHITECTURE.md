@@ -1030,3 +1030,27 @@ The existing creator inspector holds both card banks, with explicit bank choice
 for rotation/satchel copying. Assemblies include signal sources and remap their
 channels separately from tube pairs. Both card banks transform in authoring;
 runtime room turns move hardware without changing compass programs.
+
+## Compass optics and puzzle-file exchange — v0.37
+
+`pip-prism` compiles into `clockworkPrisms`. Use applies one of five pure program
+transformations, resets card index to zero and records a bounded activation
+credit in `clockwork.prisms`, present only in prism worlds. Credits are capped
+at the configured 1–4 target; operations still run after that. Record access
+uses own IDs, including valid prototype-named marker IDs. Required targets join
+the existing mission goals; dock returns clear credits without refilling rewrites.
+Rehearsal, route review and journal replay use the same transition. Commands and
+the legacy journal rules token remain unchanged.
+
+World format 9 carries operation, target and required state. Authored rotations
+conjugate mirror axes; reflections conjugate turn direction. Runtime room turns
+carry prism positions with compass operations unchanged. Tests compare all 216
+programs through all operation/map-transform combinations. A captured v0.36
+checkpoint retains its winning fingerprint and the original full v8 export hash.
+
+Portable assemblies use a separate `tilewright-assembly` version-1 envelope,
+validated before appending to the existing twelve-slot shelf. Import reads are
+serialized; invalid files and failed writes never overwrite prior bytes. Source
+puzzles retain their own local storage version and all existing remap/placement
+rules. File import is bounded to 150 KB of UTF-8 and accepts data only. The creator
+keeps optics and puzzle-sharing controls inside the existing inspector/drawer.
