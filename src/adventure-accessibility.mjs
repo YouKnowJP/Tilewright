@@ -1,8 +1,9 @@
+import {freightSummary,receivedParcels,receiverPowered} from './pip-freight.mjs';
 import {clockworkSignal,clockworkRoutes,PRISM_OPERATIONS,prismVisits} from './clockwork.mjs';
 import { activePlates, canEnter, gateIsOpen, hazardActive, enemyIntent } from './adventure.mjs';
 
 export const CHANNEL_NUMBERS = Object.freeze({ amber:'1', jade:'2', violet:'3', blue:'4' });
-export const MAP_KEY = 'X = Pip compass prism (Use transforms its current program); M = Pip program or signal stamp (Use loads three cards; signal stamps sample their linked plates or levers); U = Pip courier tube (Use on its tile; matching numbers pair exits); F = ordered Pip delivery flag; A = Clockwork companion; Y = your keeper; H = home beacon; L = lantern; K = key; C = crate; P = pressure plate; W = wheel; B = bell; G = closed gate; O = open crossing; T = travel stone; R = relic; D = rotating dial; V = optional vault; S = story rune; 1/2 = cooperative traveler; ? = keeper; ! = danger. Matching small numbers link mechanisms. Plates and wheels have solid white outlines when held or on, dashed outlines when empty or off. Outlined arrows show an enemy’s next step; crossed cells mark a sweep.';
+export const MAP_KEY = 'Q = Pip parcel source (Use collects one); N = Pip parcel receiver (Use a matching parcel); X = Pip compass prism (Use transforms its current program); M = Pip program or signal stamp (Use loads three cards; signal stamps sample their linked plates or levers); U = Pip courier tube (Use on its tile; matching numbers pair exits); F = ordered Pip delivery flag; A = Clockwork companion; Y = your keeper; H = home beacon; L = lantern; K = key; C = crate; P = pressure plate; W = wheel; B = bell; G = closed gate; O = open crossing; T = travel stone; R = relic; D = rotating dial; V = optional vault; S = story rune; 1/2 = cooperative traveler; ? = keeper; ! = danger. Matching small numbers link mechanisms. Plates and wheels have solid white outlines when held or on, dashed outlines when empty or off. Outlined arrows show an enemy’s next step; crossed cells mark a sweep.';
 export function boardWindow(map, width, height, zoom = 'standard') {
   const cell = {standard:28,large:42,largest:56}[zoom] || 28;
   return {columns:Math.min(map.width, Math.max(4, Math.min(24, Math.floor(width/cell)))), rows:Math.min(map.height, Math.max(4, Math.min(16, Math.floor(height/cell))))};
@@ -18,9 +19,9 @@ export function mechanismNumbers(stage) {
 }
 export function mapMarkers(run) {
   const stage=run.stage,numbers=mechanismNumbers(stage),items=[];
-  const add=(points,label,filter=()=>true)=>{for(const point of points||[])if(filter(point))items.push({...point,label,number:numbers[point.id]||(['M','X'].includes(label)?String(point.number):label==='B'?String(stage.sequence.indexOf(point.id)+1):label==='F'?String(stage.clockworkStops.indexOf(point)+1):'')});};
+  const add=(points,label,filter=()=>true)=>{for(const point of points||[])if(filter(point))items.push({...point,label,number:numbers[point.id]||(['M','X','Q','N'].includes(label)?String(point.number):label==='B'?String(stage.sequence.indexOf(point.id)+1):label==='F'?String(stage.clockworkStops.indexOf(point)+1):'')});};
   add([stage.exit],'H');add(stage.lanterns,'L',p=>!run.collectedLanterns.includes(p.id));add(stage.keys,'K',p=>!run.collectedKeys.includes(p.id));
-  add(stage.clockworkPrisms,'X');add(stage.clockworkStamps,'M');add(stage.clockworkTubes,'U');add(stage.clockworkStops,'F');add(run.crates,'C');add(stage.plates,'P');add(stage.switches,'W');for(const gate of stage.gates)add([gate],gateIsOpen(run,gate)?'O':'G');add(stage.relays,'B');add(stage.waystones,'T');
+  add(stage.clockworkParcels,'Q');add(stage.clockworkReceivers,'N');add(stage.clockworkPrisms,'X');add(stage.clockworkStamps,'M');add(stage.clockworkTubes,'U');add(stage.clockworkStops,'F');add(run.crates,'C');add(stage.plates,'P');add(stage.switches,'W');for(const gate of stage.gates)add([gate],gateIsOpen(run,gate)?'O':'G');add(stage.relays,'B');add(stage.waystones,'T');
   add(stage.turntables,'D');add(stage.vaults,'V',p=>!run.wonders.vaults.includes(p.id));add(stage.runes,'S');if(run.clockwork)add([run.clockwork],'A');if(run.twin)add([run.twin.other],run.twin.active===0?'2':'1');
   add(stage.npcs,'?',p=>!run.rescued.includes(p.id));add(stage.supplies,'+',p=>!run.usedSupplies.includes(p.id));add(stage.hearts,'+',p=>!run.collectedHearts.includes(p.id));
   if(run.cargoPoint&&!run.carrying&&!run.cargoDelivered)add([run.cargoPoint],'R');
@@ -61,6 +62,8 @@ export function surroundings(run) {
     return `${name}: ${status}.`;
   });
   add([stage.exit],'Home beacon');add(stage.lanterns,'Unlit lantern',p=>!run.collectedLanterns.includes(p.id));add(stage.keys,'Key',p=>!run.collectedKeys.includes(p.id));
+  add(stage.clockworkParcels,p=>`Parcel source Q${p.number}: ${p.name}; ${p.channel}; Use collects one parcel`);
+  add(stage.clockworkReceivers,p=>`Parcel receiver N${p.number}: ${p.name}; ${receivedParcels(run,p)}/${p.parcels}; ${receiverPowered(run,p)?'powered':'waiting'}${p.required?'; required to finish':''}`);
   add(stage.clockworkPrisms,p=>`Compass prism X${p.number}: ${p.name}; ${PRISM_OPERATIONS[p.operation]}; ${prismVisits(run,p)}/${p.visits} activations credited${p.required?'; required to finish':''}`);
   add(stage.clockworkStamps,p=>`Program stamp M${p.number}: ${p.name}; ${p.alternate?`Signal ${p.link} ${clockworkSignal(run,p)?'powered':'quiet'}; Quiet ${p.program.join(' → ')}; Powered ${p.alternate.join(' → ')}; loaded ${clockworkRoutes(run,p).join(' and ')||'neither'}${p.both?'; both routes required':p.required?'; required to finish':''}`:`${p.program.join(' → ')}; ${run.clockwork?.stamped?.includes(p.id)?'loaded':'not loaded'}${p.required?'; required to finish':''}`}`);
   add(stage.clockworkTubes,p=>{const end=stage.clockworkTubes.find(t=>t.id===p.partner);return `Courier tube U${p.number}: ${p.name}; Pip uses its own tile to travel to ${end.name} at ${at(end)}`;});
@@ -68,7 +71,7 @@ export function surroundings(run) {
   add(stage.switches,p=>`${p.name||'Wheel'}: ${run.switches[p.id]?'on':'off'}`);add(stage.plates,p=>`Pressure plate: ${activePlates(run).includes(p.id)?'held':'empty'}`);
   add(stage.gates,p=>`Gate: ${gateIsOpen(run,p)?'open':'closed'}`);add(stage.relays,p=>`${p.name||'Bell'}: note ${stage.sequence.indexOf(p.id)+1}`);add(stage.waystones,p=>p.name||'Travel stone');
   add(stage.npcs,p=>p.name||'Keeper',p=>!run.rescued.includes(p.id));if(run.cargoPoint&&!run.carrying&&!run.cargoDelivered)add([run.cargoPoint],stage.relic?.name||'Relic');
-  add(stage.turntables,p=>`${p.name}: rotates a ${p.radius*2+1} by ${p.radius*2+1} room clockwise`);add(stage.vaults,p=>`${p.name}: optional treasure, next security ${(run.wonders?.security||0)+1} of 3`,p=>!run.wonders.vaults.includes(p.id));add(stage.runes,p=>p.name||'Story rune');if(run.clockwork)add([run.clockwork],`${run.clockwork.name}, Clockwork companion; ${run.clockwork.running?'running':'paused'}`);if(run.twin)add([run.twin.other],run.twin.active===0?'Pathfinder, traveler 2':'Lantern keeper, traveler 1');
+  add(stage.turntables,p=>`${p.name}: rotates a ${p.radius*2+1} by ${p.radius*2+1} room clockwise`);add(stage.vaults,p=>`${p.name}: optional treasure, next security ${(run.wonders?.security||0)+1} of 3`,p=>!run.wonders.vaults.includes(p.id));add(stage.runes,p=>p.name||'Story rune');if(run.clockwork)add([run.clockwork],`${run.clockwork.name}, Clockwork companion; ${run.clockwork.running?'running':'paused'}${freightSummary(run)?'; '+freightSummary(run):''}`);if(run.twin)add([run.twin.other],run.twin.active===0?'Pathfinder, traveler 2':'Lantern keeper, traveler 1');
   const landmarks=descriptions.sort((a,b)=>distance(a.point)-distance(b.point)).slice(0,10).map(item=>item.text);
   return {position:`${run.twin?`${run.twin.active===0?'Lantern keeper':'Pathfinder'} is active. `:''}You are at ${at(run.player)}. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns lit.`,directions,landmarks};
 }

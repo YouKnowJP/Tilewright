@@ -112,6 +112,6 @@
 
 #clockwork-tube-list{padding-left:24px;font-size:var(--adventure-text-size,16px);line-height:1.65}#clockwork-tube-list li{margin:10px 0;overflow-wrap:anywhere}
 
-#book-covers :is(.book-cover-parcelworks,.book-cover-loom,.book-cover-orchard,.book-cover-prism)>canvas{height:144px;padding:0;object-fit:cover;background:#112f3c}@media(max-width:600px){#book-covers :is(.book-cover-parcelworks,.book-cover-loom,.book-cover-orchard,.book-cover-prism)>canvas{height:112px}}
+#book-covers :is(.book-cover-parcelworks,.book-cover-loom,.book-cover-orchard,.book-cover-prism,.book-cover-foundry)>canvas{height:144px;padding:0;object-fit:cover;background:#112f3c}@media(max-width:600px){#book-covers :is(.book-cover-parcelworks,.book-cover-loom,.book-cover-orchard,.book-cover-prism,.book-cover-foundry)>canvas{height:112px}}
 
-:is(#clockwork-stamp-list,#clockwork-prism-list){padding-left:24px;font-size:var(--adventure-text-size,16px);line-height:1.65}:is(#clockwork-stamp-list,#clockwork-prism-list) li{margin:12px 0;overflow-wrap:anywhere}
+:is(#clockwork-stamp-list,#clockwork-prism-list,#clockwork-freight-list){padding-left:24px;font-size:var(--adventure-text-size,16px);line-height:1.65}:is(#clockwork-stamp-list,#clockwork-prism-list,#clockwork-freight-list) li{margin:12px 0;overflow-wrap:anywhere}

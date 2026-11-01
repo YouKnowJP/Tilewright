@@ -1,3 +1,4 @@
+import {receiverPowered} from './pip-freight.mjs';
 import { drawWorkshopObject } from './workshop-art.mjs';
 import { drawTraveler } from './traveler-art.mjs';
 import { boardWindow, drawMapCues, drawCueBadge } from './adventure-accessibility.mjs';
@@ -223,6 +224,8 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
         for (let i = 0; i < hunter.phase; i++) rect('#fff0bc', x + 6 + i * 5, y - 2, 3, 5);
       }
     }
+    for(const parcel of stage.clockworkParcels||[])if(visible(parcel)){drawWorkshopObject(ctx,{...parcel,kind:'pip-parcel'});drawCueBadge(ctx,parcel,'Q',parcel.number);}
+    for(const receiver of stage.clockworkReceivers||[])if(visible(receiver)){drawWorkshopObject(ctx,{...receiver,kind:'pip-socket',powered:receiverPowered(run,receiver)});drawCueBadge(ctx,receiver,'N',receiver.number);}
     for(const prism of stage.clockworkPrisms||[])if(visible(prism)){drawWorkshopObject(ctx,{...prism,kind:'pip-prism'});drawCueBadge(ctx,prism,'X',prism.number);}
     for(const stamp of stage.clockworkStamps||[])if(visible(stamp)){drawWorkshopObject(ctx,{...stamp,kind:stamp.alternate?'pip-router':'pip-stamp'});drawCueBadge(ctx,stamp,'M',stamp.number);}
     for(const tube of stage.clockworkTubes||[])if(visible(tube)){drawWorkshopObject(ctx,{...tube,kind:'pip-tube'});drawCueBadge(ctx,tube,'U',tube.number);}

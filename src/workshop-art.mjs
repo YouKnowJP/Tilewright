@@ -47,6 +47,13 @@ export function drawPrismCover(canvas){
  p('#839e95',147,73,58,9);p('#c4d5b0',194,58,14,32);p('#203e51',196,62,7,24);for(const [x,y]of [[216,66],[234,57],[250,46]])p('#e5d28c',x,y,5,3);
  ctx.save();ctx.translate(276,67);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0},75);ctx.restore();ctx.save();ctx.translate(211,105);drawWorkshopObject(ctx,{kind:'pip-prism',x:0,y:0},38);ctx.restore();p('#839d88',0,147,400,4);
 }
+// New owned illustration for the Lantern Foundry.
+export function drawFoundryCover(canvas){
+ canvas.width=400;canvas.height=160;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;const p=(c,x,y,w,h)=>{ctx.fillStyle=c;ctx.fillRect(x,y,w,h);};
+ p('#213a46',0,0,400,160);p('#3b544f',0,110,400,50);for(const [x,y]of [[24,26],[75,14],[228,20],[303,38],[376,17]])p('#e9d9a4',x,y,3,3);p('#6e8173',39,37,17,93);p('#81978a',35,31,25,8);p('#4d6e68',23,73,153,72);p('#99ad90',19,69,161,6);p('#35534e',42,91,111,53);
+ for(const [x,c]of [[52,'#efc47a'],[88,'#8ed8ae'],[124,'#c3a2e4']]){p('#d3d5ad',x,91,22,38);p(c,x+4,96,14,28);p('#f9edbf',x+9,99,4,17);}p('#9c9270',34,141,132,7);for(const [x,y]of [[181,81],[199,74],[217,68]])p('#e5c58b',x,y,5,3);
+ ctx.save();ctx.translate(256,65);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0,parcel:'amber'},77);ctx.restore();ctx.save();ctx.translate(193,111);drawWorkshopObject(ctx,{kind:'pip-parcel',x:0,y:0,channel:'amber'},37);ctx.restore();p('#8a9d7e',0,149,400,3);
+}
 export function drawLabDiscovery(canvas,index,unlocked){
   canvas.width=96;canvas.height=72;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
   const colors=unlocked?['#efbf72','#a5e1d2','#c0a7eb','#ffe5a0']:['#687d6a','#6f8175','#6c7a76','#7b8067'];
@@ -64,12 +71,15 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-parcel': rect('#465a61',2,5,20,18);rect(color,4,7,16,13);rect('#102e36',6,9,12,9);rect('#f5d694',9,11,7,7);rect('#fff1c7',11,11,2,7);break;
+    case 'pip-socket': rect('#466570',3,5,18,18);rect(color,5,7,14,13);rect(item.powered?'#eaf8b7':'#183b46',7,9,10,8);rect('#fff1c7',10,10,4,6);break;
+    case 'pip-lock': drawTile(ctx,12,0,0);rect(color,2,2,4,20);rect(color,18,2,4,20);rect('#f3e8b6',9,9,6,6);break;
     case 'pip-prism': rect('#324e62',2,3,20,20);rect('#b4d8d3',4,5,16,15);rect('#173e49',6,7,12,11);rect('#ffe4a5',11,7,3,10);rect('#ffe4a5',8,10,9,3);rect('#8fbaae',5,20,14,3);break;
     case 'pip-router': rect('#30475e',2,3,20,20);rect(color,4,4,16,17);rect('#102f38',6,6,12,12);for(let n=0;n<3;n++){rect('#e8d8ae',7+n*3,7,2,4);rect('#a7e3cf',7+n*3,13,2,4);}rect('#d5b379',5,20,14,3);break;
     case 'pip-stamp': rect('#30475e',2,3,20,20);rect('#b0c8cf',4,4,16,15);rect('#102f38',6,6,12,10);for(let n=0;n<3;n++){rect('#ffe3a3',7+n*3,8,2,5);}rect('#d5b379',5,20,14,3);break;
     case 'pip-tube': rect('#273e47',2,3,20,20);rect('#d0a766',4,4,16,18);rect(color,6,6,12,14);rect('#102d33',8,8,8,10);rect('#f9e5b2',9,17,6,3);break;
     case 'pip-stop': rect('#efe0a4',2,3,20,18);rect('#4e7069',4,5,16,14);rect('#e6c46b',6,6,3,12);rect('#fbefcc',9,6,9,6);ctx.fillStyle='#1a3536';ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.fillText(String(item.order||1),13,13);break;
-    case 'clockwork': rect('#805c3e',3,6,18,15);rect('#e7c886',5,7,14,11);rect('#203d48',7,10,3,4);rect('#203d48',14,10,3,4);rect('#ecf5c7',10,2,4,5);rect('#566b68',5,21,5,3);rect('#566b68',15,21,5,3);break;
+    case 'clockwork': rect('#805c3e',3,6,18,15);rect('#e7c886',5,7,14,11);rect('#203d48',7,10,3,4);rect('#203d48',14,10,3,4);rect('#ecf5c7',10,2,4,5);rect('#566b68',5,21,5,3);rect('#566b68',15,21,5,3);if(item.parcel){rect('#213a43',13,15,11,9);rect(CHANNEL_COLORS[item.parcel]||'#efc47a',15,16,8,7);rect('#fff1c7',18,16,2,7);}break;
     case 'turntable': ring('#465b70',12,12,11); ring('#e8c785',12,12,8); rect('#253f48',10,4,4,15); rect('#253f48',7,7,9,3); rect('#fff1c6',14,13,5,4); break;
     case 'vault': rect('#503e4d',2,5,20,18); rect('#c99a5f',4,7,16,13); rect('#f4d796',10,6,4,16); ring('#394d57',12,13,4); rect('#fff1c6',11,11,2,4); break;
     case 'rune': ring('#547a81',12,13,9); rect('#d4eeee',10,5,4,15); rect('#d4eeee',5,10,14,4); ring('#203d48',12,12,3); break;
@@ -96,7 +106,8 @@ export function drawWorkshopObject(ctx, item, size = 24) {
     case 'patrol': case 'hunter': case 'watcher': rect(item.kind === 'watcher' ? '#786a8b' : '#a76c61', 4, 6, 16, 16); rect('#473f4c', 6, 9, 12, 6); rect('#ffe2a0', 7, 10, 3, 3); rect('#ffe2a0', 14, 10, 3, 3); if (item.kind === 'watcher') { rect('#d3b2db', 3, 1, 4, 7); rect('#d3b2db', 17, 1, 4, 7); } break;
   }
   ctx.restore();
-  if(['plate','bridge','lever','door','waystone','ember'].includes(item.kind))drawCueBadge(ctx,item,CHANNEL_NUMBERS[item.channel]||'1','',size);
+  if(['pip-parcel','pip-socket'].includes(item.kind))drawCueBadge(ctx,item,item.kind==='pip-parcel'?'Q':'N',CHANNEL_NUMBERS[item.channel]||'1',size);
+  if(['plate','bridge','lever','door','waystone','ember','pip-lock'].includes(item.kind))drawCueBadge(ctx,item,CHANNEL_NUMBERS[item.channel]||'1','',size);
 }
 export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = null, cursor = null, grid = false } = {}) {
   const map = pack.map, size = thumbnail ? Math.min(24, 360 / map.width, 240 / map.height) : 24, width = Math.ceil(map.width * size), height = Math.ceil(map.height * size);

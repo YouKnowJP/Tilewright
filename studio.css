@@ -302,3 +302,5 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 @media(max-width:520px){.assembly-bounds {grid-template-columns:repeat(2,minmax(0,1fr));}.assembly-tools,.assembly-items {grid-template-columns:minmax(0,1fr);}}
 
 .assembly-items canvas { width:100%; height:96px; object-fit:contain; background:#0d2929; border:1px solid #78916b55; }
+
+.assembly-tools .assembly-position{grid-column:1/-1}

@@ -1,3 +1,4 @@
+import {foundryBook} from './pip-foundry-worlds.mjs';
 import {prismBook} from './pip-prism-worlds.mjs';
 import {orchardBook} from './pip-orchard-worlds.mjs';
 import {loomBook} from './pip-loom-worlds.mjs';
@@ -62,5 +63,6 @@ export function featuredBooks() {
     loomBook(),
     orchardBook(),
     prismBook(),
+    foundryBook(),
   ];
 }

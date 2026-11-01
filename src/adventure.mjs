@@ -1,3 +1,4 @@
+import {parcelGateOpen,validateFreight,freightResetProblem} from './pip-freight.mjs';
 import {clockworkAction,clockworkStep,normalizeProgram,normalizePrismOperation,clockworkGoals} from './clockwork.mjs';
 import { validateWonders, initializeWonders, wonderInteractions, wonderProblem, rotateRoom, openVault, switchTraveler, applyStoryCards, twinGoal } from './adventure-wonders.mjs';
 import { validateDocument } from './model.mjs';
@@ -33,6 +34,7 @@ export function activePlates(run) {
 
 export function gateIsOpen(run, gate) {
   if (gate.type === 'switch') return switchGateOpen(run, gate);
+  if (gate.type === 'parcel') return parcelGateOpen(run,gate);
   if (gate.type === 'key') return run.openGates.includes(gate.id);
   if (gate.type === 'signal') return run.relayProgress === run.stage.sequence.length;
   if (gate.safeClose && [run.player, ...(run.twin?[run.twin.other]:[]), ...(run.clockwork?[run.clockwork]:[]), ...run.crates, ...run.companions, ...run.hunters, ...run.enemies.map(enemy => enemy.route[enemy.index])].some(point => same(point, gate))) return true;
@@ -44,7 +46,7 @@ export function canEnter(run, point, unlock = false) {
   if (!inside(run.stage.map, point) || (run.twin && same(point, run.twin.other))) return false;
   const gate = run.stage.gates.find(item => same(item, point));
   if (gate) {
-    if (['bridge', 'signal', 'switch'].includes(gate.type)) return gateIsOpen(run, gate);
+    if (['bridge', 'signal', 'switch', 'parcel'].includes(gate.type)) return gateIsOpen(run, gate);
     if (!gateIsOpen(run, gate) && !(unlock && run.keyCount > 0)) return false;
   }
   if (run.stage.npcs.some(npc => !run.rescued.includes(npc.id) && same(npc, point))) return false;
@@ -83,9 +85,10 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   if (points.some(point => !point || !Number.isInteger(point.x) || !Number.isInteger(point.y) || !inside(map, point))) {
     throw new Error('Adventure markers must be inside the map.');
   }
-  if (stage.gates.some(gate => !['key', 'bridge', 'signal', 'switch'].includes(gate.type)
+  if (stage.gates.some(gate => !['key', 'bridge', 'signal', 'switch', 'parcel'].includes(gate.type)
+    || (gate.type === 'parcel' && (!Array.isArray(stage.clockworkReceivers)||!Array.isArray(gate.receivers)||!gate.receivers.length||gate.receivers.some(id=>!stage.clockworkReceivers?.some(r=>r.id===id))))
     || (gate.type === 'bridge' && (!gate.plates?.length || gate.plates.some(id => !stage.plates.some(plate => plate.id === id)))))) {
-    throw new Error('Adventure gates need valid keys or pressure plates.');
+    throw new Error('Adventure gates need valid keys, pressure plates, signals or parcel receivers.');
   }
   validateMechanisms(stage);
   validateTools(stage);
@@ -128,7 +131,8 @@ export function createRun(definition, { memory = freshMemory(), difficulty = 'tr
   initializeWonders(run);
   if(stage.clockwork){const bot=stage.clockwork;if(!Number.isInteger(bot.x)||!Number.isInteger(bot.y)||!inside(map,bot)||!canEnter(run,bot)||stage.crates.some(p=>same(p,bot))||stage.partner||stage.hazards.length||stage.hunters.length||stage.enemies.length)throw Error('Clockwork companions need clear land in a peaceful single-traveler world.');stage.clockwork={...bot,program:normalizeProgram(bot.program)};run.clockwork={...stage.clockwork,program:[...stage.clockwork.program],index:0,running:false,moves:0,last:'Paused'};}
   if(stage.clockworkTubes){const tubes=stage.clockworkTubes;if(!run.clockwork||!Array.isArray(tubes)||tubes.length>8||tubes.some(t=>!Number.isInteger(t.x)||!Number.isInteger(t.y)||!inside(map,t)||!canEnter(run,t)||!tubes.some(other=>other.id===t.partner&&other.partner===t.id&&other.id!==t.id)))throw Error('Courier tubes need a companion and paired walkable landing tiles.');}
-  if(stage.clockworkStamps){const stamps=stage.clockworkStamps;if(!run.clockwork||!Array.isArray(stamps)||stamps.length>8||new Set(stamps.map(s=>s.id)).size!==stamps.length||stamps.some(s=>!Number.isInteger(s.x)||!Number.isInteger(s.y)||!inside(map,s)||!canEnter(run,s)))throw Error('Program stamps need a companion and up to eight distinct walkable stations.');for(const stamp of stamps){normalizeProgram(stamp.program);if(stamp.alternate){normalizeProgram(stamp.alternate);const signal=stamp.signals;if(!signal||!Array.isArray(signal.plates)||!Array.isArray(signal.switches)||!signal.plates.length&&!signal.switches.length||signal.plates.some(id=>!stage.plates.some(p=>p.id===id))||signal.switches.some(id=>!stage.switches.some(p=>p.id===id)))throw Error('Signal stamps need linked plates or a lever.');}else if(stamp.both)throw Error('Both-route goals need a signal stamp.');}run.clockwork.stamped=[];if(stamps.some(s=>s.alternate))run.clockwork.routed={};}
+  validateFreight(run,canEnter);
+  if(stage.clockworkStamps){const stamps=stage.clockworkStamps;if(!run.clockwork||!Array.isArray(stamps)||stamps.length>8||new Set(stamps.map(s=>s.id)).size!==stamps.length||stamps.some(s=>!Number.isInteger(s.x)||!Number.isInteger(s.y)||!inside(map,s)||!canEnter(run,s)))throw Error('Program stamps need a companion and up to eight distinct walkable stations.');for(const stamp of stamps){normalizeProgram(stamp.program);if(stamp.alternate){normalizeProgram(stamp.alternate);const signal=stamp.signals;if(!signal||!Array.isArray(signal.plates)||!Array.isArray(signal.switches)||!signal.plates.length&&!signal.switches.length&&!signal.receivers?.length||signal.plates.some(id=>!stage.plates.some(p=>p.id===id))||signal.switches.some(id=>!stage.switches.some(p=>p.id===id))||signal.receivers&&(!Array.isArray(signal.receivers)||signal.receivers.some(id=>!stage.clockworkReceivers?.some(r=>r.id===id))))throw Error('Signal stamps need linked plates, a lever or parcel receivers.');}else if(stamp.both)throw Error('Both-route goals need a signal stamp.');}run.clockwork.stamped=[];if(stamps.some(s=>s.alternate))run.clockwork.routed={};}
   if(stage.clockworkPrisms){const prisms=stage.clockworkPrisms;if(!run.clockwork||!Array.isArray(prisms)||prisms.length>8||new Set(prisms.map(p=>p.id)).size!==prisms.length||prisms.some(p=>!Number.isInteger(p.x)||!Number.isInteger(p.y)||!inside(map,p)||!canEnter(run,p)||!Number.isInteger(p.visits)||p.visits<1||p.visits>4))throw Error('Compass prisms need a companion and up to eight walkable stations with one to four activations.');for(const prism of prisms)normalizePrismOperation(prism.operation);run.clockwork.prisms={};}
   if(stage.clockworkStops){if(!run.clockwork||!Array.isArray(stage.clockworkStops)||stage.clockworkStops.length>8||stage.clockworkStops.some(p=>!inside(map,p)))throw Error('Pip stops need a companion and valid map positions.');run.clockwork.delivered=[];}if(stage.clockwork?.rewrites){if(!Number.isInteger(stage.clockwork.rewrites)||stage.clockwork.rewrites<1||stage.clockwork.rewrites>8)throw Error('Use one to eight program rewrites.');run.clockwork.rewritesUsed=0;}
   if(run.wonders)stage.initialDefinition=definition;
@@ -177,6 +181,7 @@ function blockMessage(run, point) {
   const gate = run.stage.gates.find(item => same(item, point));
   if (gate?.type === 'key' && !gateIsOpen(run, gate)) return 'A locked gate. Find a key first.';
   if (gate?.type === 'signal') return 'A signal gate. Ring the relays in the correct order to open it.';
+  if(gate?.type==='parcel')return 'This parcel crossing needs every linked receiver powered. Let Pip deliver the matching parcels.';
   if (gate?.type === 'bridge') return run.guild?.kit === 'echoist' ? 'The crossing is closed. Hold each linked pressure plate with a crate or a lantern double.' : 'The crossing is closed. Leave crates on every linked pressure plate.';
   if (gate?.type === 'switch') return 'This crossing follows the valve settings. Inspect nearby controls and read the scout hint.';
   const keeper = run.stage.npcs.find(npc => !run.rescued.includes(npc.id) && same(npc, point));
@@ -272,7 +277,7 @@ export function stepRun(run, action) {
     openGates: [...run.openGates], seen: [...run.seen], events: [], invulnerability: Math.max(0, run.invulnerability - 1),
     noise: Math.max(0, run.noise - 1), alarm: Math.max(0, run.alarm - 1), stun: Math.max(0, run.stun - 1), ward: Math.max(0, run.ward - 1) };
   if (run.guild) next.guild = { ...run.guild };
-  if(clockAction){next.clockwork={...run.clockwork};if(action==='clockwork-toggle')next.clockwork.running=!run.clockwork.running;else if(action==='clockwork-reset'){const dock=run.stage.clockwork;if(!canEnter(run,dock)||run.crates.some(p=>same(p,dock)))return {...run,message:'Clear the companion’s dock before returning it.',events:[]};Object.assign(next.clockwork,{x:dock.x,y:dock.y,index:0,running:false,last:'At dock',...(run.stage.clockworkStops?{delivered:[]}:{} ),...(run.stage.clockworkStamps?{stamped:[]}:{} ),...(run.clockwork.routed?{routed:{}}:{}),...(run.clockwork.prisms?{prisms:{}}:{})});}else if(action==='clockwork-step'){next=clockworkStep({...next,clockwork:{...next.clockwork,running:true}},canEnter);next.clockwork={...next.clockwork,running:false};}else {if(run.stage.clockwork.rewrites)next.clockwork.rewritesUsed=(run.clockwork.rewritesUsed||0)+1;Object.assign(next.clockwork,{program:normalizeProgram(action.slice('clockwork-program:'.length).split(',')),index:0,running:false,last:'New loop'});}next.events.push({type:'clockwork'});}
+  if(clockAction){next.clockwork={...run.clockwork};if(action==='clockwork-toggle')next.clockwork.running=!run.clockwork.running;else if(action==='clockwork-reset'){const dock=run.stage.clockwork,parcelProblem=freightResetProblem(run);if(parcelProblem)return {...run,message:parcelProblem,events:[]};if(!canEnter(run,dock)||run.crates.some(p=>same(p,dock)))return {...run,message:'Clear the companion’s dock before returning it.',events:[]};Object.assign(next.clockwork,{x:dock.x,y:dock.y,index:0,running:false,last:'At dock',...(run.stage.clockworkStops?{delivered:[]}:{} ),...(run.stage.clockworkStamps?{stamped:[]}:{} ),...(run.clockwork.routed?{routed:{}}:{}),...(run.clockwork.prisms?{prisms:{}}:{}),...(run.clockwork.received?{received:{},parcel:null}:{})});}else if(action==='clockwork-step'){next=clockworkStep({...next,clockwork:{...next.clockwork,running:true}},canEnter);next.clockwork={...next.clockwork,running:false};}else {if(run.stage.clockwork.rewrites)next.clockwork.rewritesUsed=(run.clockwork.rewritesUsed||0)+1;Object.assign(next.clockwork,{program:normalizeProgram(action.slice('clockwork-program:'.length).split(',')),index:0,running:false,last:'New loop'});}next.events.push({type:'clockwork'});}
   let moved = false, touchedEnemy = false, blocked = '';
   const visited = [];
   if (moving) {
@@ -387,7 +392,7 @@ export function stepRun(run, action) {
     const lanterns = next.stage.lanterns.length - next.collectedLanterns.length;
     next.message = lanterns ? `The beacon needs ${lanterns} more ${lanterns === 1 ? 'lantern' : 'lanterns'}.` : `Before leaving: ${missing.map(goal => goal.label.toLowerCase()).join('; ')}.`; return next;
   }
-  const priority = ['hurt', 'clockwork-stop', 'clockwork-stamp', 'clockwork-use', 'clockwork', 'needs-keeper', 'story-card', 'vault', 'room-turn', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
+  const priority = ['hurt', 'clockwork-stop', 'clockwork-stamp', 'clockwork-prism', 'clockwork-parcel', 'clockwork-use', 'clockwork', 'needs-keeper', 'story-card', 'vault', 'room-turn', 'blocked-hit', 'delivery', 'cargo', 'cargo-drop', 'echo-return', 'echo-fade', 'echo', 'pulse', 'veil', 'waystone', 'switch', 'relay-complete', 'alarm', 'relay', 'supply', 'decoy', 'shield', 'phase', 'lantern', 'unlock', 'key', 'push', 'heart', 'coin'];
   const event = priority.map(type => next.events.find(item => item.type === type)).find(Boolean);
   const hunted=next.hunters.length>0,threatened=hunted||next.enemies.length>0;
   const messages = { 'needs-keeper':'This light needs Lantern keeper. Use T or Switch traveler to hand over the controls, then bring Lantern keeper here.', 'story-card':event?.text, 'room-turn':`${event?.name} turns a quarter-circle. The room, its objects, and travelers move together.`, vault:`${event?.name} opened! Security ${event?.security}/3. The vault-ring embers are marked; Plan shows their next pulse. The normal exit stays open.`, hurt: 'Ouch! Watch the next-step markers and ember cycles. You have protected turns to get clear.',
@@ -398,6 +403,8 @@ export function stepRun(run, action) {
     'clockwork-stop':event?.text,
     'clockwork-use':event?.text,
     'clockwork-stamp':event?.text,
+    'clockwork-prism':event?.text,
+    'clockwork-parcel':event?.text,
     clockwork: next.clockwork?`${next.clockwork.name}: ${next.clockwork.running?'loop running':'paused'}. Read the next card in Plan; open Tools to change the loop.`:'',
     'echo-fade': 'Your double has faded or a hunter reached it. Check pressure crossings before moving.',
     waystone: `Waystone crossed to ${event?.name}. One energy spent.${threatened?' Enemies moved once.':' Walk or wait to recharge.'}`,

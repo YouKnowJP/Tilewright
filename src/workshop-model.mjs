@@ -11,7 +11,7 @@ export const ADVENTURE_FORMAT = 'tilewright-adventure';
 export const MAX_ADVENTURE_BYTES = 400_000, MAX_PROOF_ACTIONS = 2000, MAX_MARKERS = 128;
 export const CHANNELS = Object.freeze(['amber', 'jade', 'violet', 'blue']);
 export const OBJECTS = Object.freeze([
-  ['pip-prism','Pip compass prism','Puzzles'], ['pip-router','Pip signal stamp','Puzzles'], ['pip-stamp','Pip program stamp','Puzzles'], ['pip-tube','Pip courier tube','Puzzles'], ['pip-stop','Pip delivery stop','Puzzles'], ['clockwork','Clockwork companion','Puzzles'], ['turntable','Rotating room dial','Puzzles'], ['vault','Optional security vault','Puzzles'], ['partner','Two-Lantern partner','Story'], ['rune','Story rune','Story'],
+  ['pip-parcel','Pip parcel source','Puzzles'], ['pip-socket','Pip parcel receiver','Puzzles'], ['pip-lock','Parcel crossing','Puzzles'], ['pip-prism','Pip compass prism','Puzzles'], ['pip-router','Pip signal stamp','Puzzles'], ['pip-stamp','Pip program stamp','Puzzles'], ['pip-tube','Pip courier tube','Puzzles'], ['pip-stop','Pip delivery stop','Puzzles'], ['clockwork','Clockwork companion','Puzzles'], ['turntable','Rotating room dial','Puzzles'], ['vault','Optional security vault','Puzzles'], ['partner','Two-Lantern partner','Story'], ['rune','Story rune','Story'],
   ['start', 'Starting point', 'Goals'], ['beacon', 'Exit beacon', 'Goals'], ['lantern', 'Lantern', 'Goals'], ['coin', 'Treasure', 'Goals'],
   ['key', 'Brass key', 'Puzzles'], ['gate', 'Key gate', 'Puzzles'], ['crate', 'Pushable crate', 'Puzzles'], ['plate', 'Pressure plate', 'Puzzles'],
   ['bridge', 'Pressure bridge', 'Puzzles'], ['lever', 'Lever', 'Puzzles'], ['door', 'Lever door', 'Puzzles'], ['bell', 'Sequence bell', 'Puzzles'],
@@ -30,7 +30,7 @@ const integer = (value, min, max, label) => { if (!Number.isInteger(value) || va
 const point = (value, map) => ({ x: integer(value?.x, 0, map.width - 1, 'Column'), y: integer(value?.y, 0, map.height - 1, 'Row') });
 export const nextMarkerId = markers => { let n = 1; while (markers.some(item => item.id === `mark-${n}`)) n++; return `mark-${n}`; };
 export function normalizeAdventure(input) {
-  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5,6,7,8,9].includes(input.version)) throw Error('Choose a Tilewright adventure file (version 1, 2, 3, 4, 5, 6, 7, 8 or 9), rather than a terrain-only map.');
+  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5,6,7,8,9,10].includes(input.version)) throw Error('Choose a Tilewright adventure file (version 1, 2, 3, 4, 5, 6, 7, 8, 9 or 10), rather than a terrain-only map.');
   const map = validateDocument(input.map), title = lineText(input.title, 64, 'Adventure title');
   if (!title) throw Error('Give your adventure a title.');
   if (!Array.isArray(input.markers) || input.markers.length > MAX_MARKERS) throw Error(`Adventures support up to ${MAX_MARKERS} objects.`);
@@ -42,6 +42,7 @@ export function normalizeAdventure(input) {
       channel: CHANNELS.includes(value.channel) ? value.channel : 'amber', order: integer(value.order ?? 1, 1, 8, 'Bell order'),
       initial: value.initial === true, required: value.required === true, reward: ['advice', 'supplies', 'route'].includes(value.reward) ? value.reward : 'advice',
       nemesisOnly: value.nemesisOnly === true, vision: integer(value.vision ?? 6, 3, 10, 'Hunter vision'), offset: integer(value.offset ?? 0, 0, 3, 'Ember offset') };
+    if(item.kind==='pip-socket')item.parcels=integer(value.parcels??1,1,3,'Parcels needed');
     if(item.kind==='pip-prism'){item.operation=normalizePrismOperation(value.operation);item.visits=integer(value.visits??1,1,4,'Prism activations');}
     if(item.kind==='pip-router'){item.program=normalizeProgram(value.program??['right','right','use']);item.alternate=normalizeProgram(value.alternate??['down','down','use']);if(value.both===true){item.both=true;item.required=true;}}
     if(item.kind==='pip-stamp')item.program=normalizeProgram(value.program);
@@ -68,6 +69,7 @@ export function normalizeAdventure(input) {
   if(markers.some(m=>m.kind==='pip-stamp'))pack.version=7;
   if(markers.some(m=>m.kind==='pip-router'))pack.version=8;
   if(markers.some(m=>m.kind==='pip-prism'))pack.version=9;
+  if(markers.some(m=>['pip-parcel','pip-socket','pip-lock'].includes(m.kind)))pack.version=10;
   if (input.proof !== undefined) {
     const proof = input.proof;
     if (!proof || !['trail', 'nemesis'].includes(proof.difficulty) || !Array.isArray(proof.actions) || !proof.actions.length || proof.actions.length > MAX_PROOF_ACTIONS
@@ -85,6 +87,7 @@ export function adventureKey(input) {
 export function editAdventure(input, patch) { const { proof, ...pack } = input; return normalizeAdventure({ ...pack, ...patch }); }
 export function placeObject(input, kind, x, y, extra = {}) {
   if (!kinds.has(kind)) throw Error('Choose a known adventure object.');
+  if(['pip-parcel','pip-socket','pip-lock'].includes(kind)){const existing=input.markers.find(m=>m.kind===kind&&m.x===x&&m.y===y);if(existing)extra={name:existing.name,channel:existing.channel,required:existing.required,...(kind==='pip-socket'?{parcels:existing.parcels}:{}),...extra};}
   if(kind==='pip-prism'){const existing=input.markers.find(m=>m.kind===kind&&m.x===x&&m.y===y);if(existing)extra={name:existing.name,operation:existing.operation,visits:existing.visits,required:existing.required,...extra};}
   if(['pip-stamp','pip-router'].includes(kind)){const existing=input.markers.find(m=>m.kind===kind&&m.x===x&&m.y===y);if(existing)extra={name:existing.name,program:existing.program,required:existing.required,...(kind==='pip-router'?{channel:existing.channel}:{}),...(existing.alternate?{alternate:existing.alternate}:{}),...(existing.both?{both:true}:{}),...extra};}
   if(kind==='pip-tube'){const existing=input.markers.find(m=>m.kind===kind&&m.x===x&&m.y===y),counts=Object.fromEntries(CHANNELS.map(channel=>[channel,input.markers.filter(m=>m.kind===kind&&m.channel===channel).length]));extra={channel:existing?.channel||CHANNELS.find(channel=>counts[channel]===1)||CHANNELS.find(channel=>counts[channel]===0)||'amber',...(existing?{name:existing.name}:{}),...extra};}
@@ -129,8 +132,9 @@ export function adventureStage(input) {
     }
     return npc;
   });
-  const gates = pack.markers.filter(item => ['gate', 'bridge', 'door', 'signal'].includes(item.kind)).map(item => {
-    const gate = { ...position(item), type: { gate: 'key', bridge: 'bridge', door: 'switch', signal: 'signal' }[item.kind], safeClose: true };
+  const gates = pack.markers.filter(item => ['gate', 'bridge', 'door', 'signal','pip-lock'].includes(item.kind)).map(item => {
+    const gate = { ...position(item), type: { gate: 'key', bridge: 'bridge', door: 'switch', signal: 'signal','pip-lock':'parcel' }[item.kind], safeClose: true };
+    if(item.kind==='pip-lock'){gate.receivers=by('pip-socket').filter(r=>r.channel===item.channel).map(r=>r.id);if(!gate.receivers.length)throw Error(`The ${item.channel} parcel crossing needs a receiver.`);}
     if (item.kind === 'bridge') gate.plates = by('plate').filter(p => p.channel === item.channel).map(p => p.id);
     if (item.kind === 'door') {
       const lever = leverFor(item.channel); if (!lever) throw Error(`The ${item.channel} door needs a lever on its channel.`);
@@ -140,7 +144,7 @@ export function adventureStage(input) {
   });
   const hazards = by('ember').map(item => ({ ...position(item), period: 4, phases: [2, 3], offset: item.offset, ...(leverFor(item.channel) ? { disabledBy: leverFor(item.channel).id } : {}) }));
   const waystones = by('waystone').map(item => ({ ...position(item), name: item.name || `${item.channel} waystone`, partner: by('waystone').find(other => other.id !== item.id && other.channel === item.channel)?.id }));
-  const cueChannels=Object.fromEntries(pack.markers.filter(item=>['plate','bridge','lever','door','waystone','pip-tube','ember'].includes(item.kind)).map(item=>[item.id,CHANNEL_NUMBERS[item.channel]||'1']));
+  const cueChannels=Object.fromEntries(pack.markers.filter(item=>['plate','bridge','lever','door','waystone','pip-tube','ember','pip-parcel','pip-socket','pip-lock'].includes(item.kind)).map(item=>[item.id,CHANNEL_NUMBERS[item.channel]||'1']));
   const stage = { cueChannels, id: adventureKey(pack), name: pack.title, subtitle: pack.description || `A player adventure by ${pack.author}`, theme: pack.theme, map: pack.map,
     start: position(by('start')[0]), exit: position(by('beacon')[0]), par: pack.par, intro: pack.intro || 'Restore every lantern, complete your quest, and reach the beacon.',
     hint: pack.hint || 'Read Quest for your goals. Plan reveals committed threats. Ask nearby keepers for advice.', ending: pack.ending,
@@ -153,9 +157,10 @@ export function adventureStage(input) {
     relic: by('relic')[0] ? { ...position(by('relic')[0]), name: by('relic')[0].name || 'Singing relic' } : null,
     delivery: by('relic').length ? position(by('beacon')[0]) : null, workshop: { key: adventureKey(pack), author: pack.author, source: pack.source } };
   if(by('clockwork').length>1)throw Error('Keep one Clockwork companion per world.');if(by('clockwork').length)stage.clockwork={...position(by('clockwork')[0]),name:by('clockwork')[0].name||'Pip',program:normalizeProgram(by('clockwork')[0].program),...(by('clockwork')[0].rewrites?{rewrites:by('clockwork')[0].rewrites}:{}),...(by('clockwork')[0].dockLocked?{dockLocked:true}:{})};
+  const parcelSources=by('pip-parcel'),parcelReceivers=by('pip-socket');if(parcelSources.length||parcelReceivers.length){if(!stage.clockwork)throw Error('Parcel stations need a Clockwork companion.');stage.clockworkParcels=parcelSources.map(m=>({...position(m),name:m.name||'Parcel source',channel:m.channel,number:CHANNEL_NUMBERS[m.channel]}));stage.clockworkReceivers=parcelReceivers.map(m=>({...position(m),name:m.name||'Parcel receiver',channel:m.channel,number:CHANNEL_NUMBERS[m.channel],parcels:m.parcels,required:m.required}));}
   const stops=by('pip-stop').sort((a,b)=>a.order-b.order);if(stops.length){if(!stage.clockwork)throw Error('Pip delivery stops need a Clockwork companion.');if(stops.length>8||stops.some((s,i)=>s.order!==i+1))throw Error('Number up to eight Pip stops once each, in order from 1.');if(new Set(stops.map(s=>s.x+','+s.y)).size!==stops.length)throw Error('Give each Pip stop its own tile.');if(stops.slice(0,-1).some(s=>s.required))throw Error('Only the final Pip stop can require parking.');stage.clockworkStops=stops.map(s=>({...position(s),name:s.name||`Delivery ${s.order}`,required:s.required}));}
   const tubes=by('pip-tube');if(tubes.length){if(!stage.clockwork)throw Error('Courier tubes need a Clockwork companion.');for(const channel of CHANNELS){const pair=tubes.filter(t=>t.channel===channel);if(pair.length&&pair.length!==2)throw Error(`The ${channel} courier tubes need exactly two endpoints.`);if(pair.length===2&&pair[0].x===pair[1].x&&pair[0].y===pair[1].y)throw Error('Give each courier tube its own landing tile.');}stage.clockworkTubes=tubes.map(t=>({...position(t),name:t.name||`${t.channel} tube`,channel:t.channel,number:CHANNEL_NUMBERS[t.channel],partner:tubes.find(other=>other.channel===t.channel&&other.id!==t.id).id}));}
-  const stamps=pack.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind));if(stamps.length){if(!stage.clockwork)throw Error('Program stamps need a Clockwork companion.');if(stamps.length>8)throw Error('Use at most eight program stamps.');stage.clockworkStamps=stamps.map((m,i)=>{const signals={plates:by('plate').filter(p=>p.channel===m.channel).map(p=>p.id),switches:by('lever').filter(p=>p.channel===m.channel).map(p=>p.id)};if(m.kind==='pip-router'&&!signals.plates.length&&!signals.switches.length)throw Error(`The ${m.channel} signal stamp needs a pressure plate or lever on its channel.`);return {...position(m),name:m.name||`Program stamp ${i+1}`,number:String(i+1),program:normalizeProgram(m.program),required:m.required,...(m.kind==='pip-router'?{alternate:normalizeProgram(m.alternate),signals,channel:m.channel,link:CHANNEL_NUMBERS[m.channel],...(m.both?{both:true}:{})}:{})};});}
+  const stamps=pack.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind));if(stamps.length){if(!stage.clockwork)throw Error('Program stamps need a Clockwork companion.');if(stamps.length>8)throw Error('Use at most eight program stamps.');stage.clockworkStamps=stamps.map((m,i)=>{const signals={plates:by('plate').filter(p=>p.channel===m.channel).map(p=>p.id),switches:by('lever').filter(p=>p.channel===m.channel).map(p=>p.id),...(parcelReceivers.some(r=>r.channel===m.channel)?{receivers:parcelReceivers.filter(r=>r.channel===m.channel).map(r=>r.id)}:{})};if(m.kind==='pip-router'&&!signals.plates.length&&!signals.switches.length&&!signals.receivers?.length)throw Error(`The ${m.channel} signal stamp needs a pressure plate, lever or parcel receiver on its channel.`);return {...position(m),name:m.name||`Program stamp ${i+1}`,number:String(i+1),program:normalizeProgram(m.program),required:m.required,...(m.kind==='pip-router'?{alternate:normalizeProgram(m.alternate),signals,channel:m.channel,link:CHANNEL_NUMBERS[m.channel],...(m.both?{both:true}:{})}:{})};});}
   const prisms=by('pip-prism');if(prisms.length){if(!stage.clockwork)throw Error('Compass prisms need a Clockwork companion.');if(prisms.length>8)throw Error('Use at most eight compass prisms.');stage.clockworkPrisms=prisms.map((m,i)=>({...position(m),number:String(i+1),name:m.name||`Compass prism ${i+1}`,operation:m.operation,visits:m.visits,required:m.required}));}
   if(stage.clockwork&&pack.version>=4)stage.clockworkSharedSight=true;
   if (by('partner').length > 1) throw Error('Keep only one Two-Lantern partner.');
@@ -189,7 +194,7 @@ export function checkAdventure(input) {
   for (const marker of pack.markers) {
     const key = `${marker.x},${marker.y}`;
     if (!overlays.has(marker.kind)) { if (occupied.has(key)) errors.push(`Two objects overlap at column ${marker.x + 1}, row ${marker.y + 1}.`); occupied.add(key); }
-    if (!(marker.kind==='pip-stop'&&pack.markers.some(m=>['bridge','door','signal'].includes(m.kind)&&m.x===marker.x&&m.y===marker.y))&&!['bridge', 'door', 'signal'].includes(marker.kind) && !walkable[marker.y * pack.map.width + marker.x]) errors.push(`${OBJECTS.find(item => item.id === marker.kind).name} at ${marker.x + 1},${marker.y + 1} needs walkable land.`);
+    if (!(marker.kind==='pip-stop'&&pack.markers.some(m=>['bridge','door','signal','pip-lock'].includes(m.kind)&&m.x===marker.x&&m.y===marker.y))&&!['bridge', 'door', 'signal','pip-lock'].includes(marker.kind) && !walkable[marker.y * pack.map.width + marker.x]) errors.push(`${OBJECTS.find(item => item.id === marker.kind).name} at ${marker.x + 1},${marker.y + 1} needs walkable land.`);
     if (marker.route) {
       if (marker.route.length < 2 || marker.route[0].x !== marker.x || marker.route[0].y !== marker.y) errors.push('Threat routes must begin at their object and have at least two waypoints.');
       if (marker.route.some((p, i) => !walkable[p.y * pack.map.width + p.x] || (marker.kind === 'patrol' && i && Math.abs(p.x - marker.route[i - 1].x) + Math.abs(p.y - marker.route[i - 1].y) !== 1))) errors.push('Patrols need adjacent land cells; hunter waypoints need walkable land.');
@@ -206,7 +211,7 @@ export function checkAdventure(input) {
       if (x < 0 || y < 0 || x >= pack.map.width || y >= pack.map.height || seen.has(at) || people.has(at) || (!walkable[at] && !gates.has(at) && !spinning.some(r=>Math.abs(x-r.x)<=(r.span-1)/2&&Math.abs(y-r.y)<=(r.span-1)/2))) continue;
       seen.add(at); queue.push({ x, y });
     }
-    const pipSeen=new Set();if(pack.version>=5&&stage.clockwork){const pending=[stage.clockwork];pipSeen.add(stage.clockwork.y*pack.map.width+stage.clockwork.x);for(let i=0;i<pending.length;i++)for(const point of [...[[0,-1],[1,0],[0,1],[-1,0]].map(([dx,dy])=>({x:pending[i].x+dx,y:pending[i].y+dy})),...(stage.clockworkTubes||[]).filter(t=>t.x===pending[i].x&&t.y===pending[i].y).map(t=>stage.clockworkTubes.find(other=>other.id===t.partner))]){const {x,y}=point,at=y*pack.map.width+x;if(x<0||y<0||x>=pack.map.width||y>=pack.map.height||pipSeen.has(at)||people.has(at)||(!walkable[at]&&!gates.has(at)&&!spinning.some(r=>Math.abs(x-r.x)<=(r.span-1)/2&&Math.abs(y-r.y)<=(r.span-1)/2)))continue;pipSeen.add(at);pending.push({x,y});}for(const stop of [...(stage.clockworkStops||[]),...(stage.clockworkStamps||[]),...(stage.clockworkPrisms||[])])if(!pipSeen.has(stop.y*pack.map.width+stop.x))errors.push(`${stop.name} is disconnected from Pip’s starting area.`);}
+    const pipSeen=new Set();if(pack.version>=5&&stage.clockwork){const pending=[stage.clockwork];pipSeen.add(stage.clockwork.y*pack.map.width+stage.clockwork.x);for(let i=0;i<pending.length;i++)for(const point of [...[[0,-1],[1,0],[0,1],[-1,0]].map(([dx,dy])=>({x:pending[i].x+dx,y:pending[i].y+dy})),...(stage.clockworkTubes||[]).filter(t=>t.x===pending[i].x&&t.y===pending[i].y).map(t=>stage.clockworkTubes.find(other=>other.id===t.partner))]){const {x,y}=point,at=y*pack.map.width+x;if(x<0||y<0||x>=pack.map.width||y>=pack.map.height||pipSeen.has(at)||people.has(at)||(!walkable[at]&&!gates.has(at)&&!spinning.some(r=>Math.abs(x-r.x)<=(r.span-1)/2&&Math.abs(y-r.y)<=(r.span-1)/2)))continue;pipSeen.add(at);pending.push({x,y});}for(const stop of [...(stage.clockworkStops||[]),...(stage.clockworkStamps||[]),...(stage.clockworkPrisms||[]),...(stage.clockworkParcels||[]),...(stage.clockworkReceivers||[])])if(!pipSeen.has(stop.y*pack.map.width+stop.x))errors.push(`${stop.name} is disconnected from Pip’s starting area.`);}
     const adjacent = p => [[0, -1], [1, 0], [0, 1], [-1, 0]].some(([dx, dy]) => p.x + dx >= 0 && p.x + dx < pack.map.width && p.y + dy >= 0 && p.y + dy < pack.map.height && seen.has((p.y + dy) * pack.map.width + p.x + dx));
     for (const marker of pack.markers.filter(p => ['beacon', 'lantern', 'key', 'coin', 'guide', 'rescue', 'relic', 'bell', 'lever'].includes(p.kind))) {
       if ((['guide', 'rescue', 'relic', 'bell', 'lever'].includes(marker.kind) ? !adjacent(marker) : !seen.has(marker.y * pack.map.width + marker.x)) && !(['bell','lever'].includes(marker.kind)&&pipSeen.has(marker.y*pack.map.width+marker.x)) && !by('waystone').length) errors.push(`${marker.name || marker.kind} is disconnected from the starting area.`);

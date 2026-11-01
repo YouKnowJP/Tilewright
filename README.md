@@ -19,13 +19,13 @@ these restrictions apply only to new protected material. Read the
 ## Play, explore, and create
 
 - 24 campaign missions, eight Guild jobs, daily trails and branching expeditions.
-- Nineteen featured Storybooks, including 83 unique original book levels, plus Puzzle Lab journeys.
-- 63 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
+- Twenty featured Storybooks, including 89 unique original book levels, plus Puzzle Lab journeys.
+- 69 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
 - Create puzzles, write dialogue, rotate rooms, coordinate two travelers, and share adventure files, codes, links, or Storybooks.
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
 
-Choose **Choose your adventure → Storybooks → Pip and the Prism Observatory** for six new adventures. Compass prisms rotate, mirror or reverse Pip’s current program. Complete a four-wind circuit, carry a four-bell rhythm through tubes, and solve an eight-prism finale with two signal stamps. Creators can set prism rules and activation targets, reuse transformed assemblies, and download/import puzzle files to share building pieces. Verified world files, codes, play links and Storybooks remain available. Earlier books and saved routes stay compatible.
+Choose **Choose your adventure → Storybooks → Pip and the Lantern Foundry** for six new adventures. Pip carries power parcels between reusable sources and receiver windows. Deliveries open crossings and change signal-stamp routes; later puzzles need refills, coordinated bridges and four colours of freight. Creators can set parcel targets and preview mirrored/rotated assemblies before placing or downloading them. Share a reusable puzzle file or a verified adventure file, code, play link or Storybook. Earlier books and saved routes remain compatible.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),
 [complete game guide](docs/GAME_GUIDE.md), and [controls](docs/CONTROLS.md).

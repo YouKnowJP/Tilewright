@@ -3,6 +3,35 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## The Lantern Foundry — v0.38
+
+Open **Choose your adventure → Storybooks → Pip and the Lantern Foundry**.
+Six chapters introduce power parcels, then build through returning sources,
+coordinated crossings and a four-colour freight route.
+
+Pip uses **Q** to collect a parcel and matching **N** to deliver it. It carries
+one parcel at a time. Sources can refill its hands after a delivery; trying to
+collect another while carrying one keeps the original parcel. A full receiver
+consumes nothing. Some receivers need two or three deliveries. Every receiver
+on a channel must reach its target before its parcel crossings open or its
+signal stamps read Powered. Existing levers and pressure plates can also power
+signal stamps. Tubes and prisms carry the parcel safely.
+
+The companion workbench shows Pip’s current parcel. **Route hardware** lists
+source links and receiver counts; Quest lists required receivers. Deliveries
+stay powered while Pip walks elsewhere. Undo restores the parcel and counts.
+An allowed dock return clears them without refilling rewrites, and refuses if
+it would close a parcel crossing beneath a traveler or crate. The Foundry
+trials seal the dock. Rehearse for free before applying your program.
+
+Creators can paint **Pip parcel source**, **Pip parcel receiver**, and **Parcel
+crossing** in Puzzles. Choose matching linked channels, set receiver targets,
+and test the full return trip. In **Puzzle assemblies**, choose a reflection
+and rotation to see a live preview. Placement and **Download puzzle** use that
+preview; the saved original stays unchanged. Imported preview files already
+contain their displayed orientation, so choose No reflection / Original if you
+want to place them as downloaded.
+
 ## The Prism Observatory — v0.37
 
 Open **Choose your adventure → Storybooks → Pip and the Prism Observatory**.

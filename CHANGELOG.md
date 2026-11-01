@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.38.0 — 2026-11-01
+
+- Add Pip and the Lantern Foundry: six original parcel adventures with refills, powered routing, cooperative bridges, four-colour dispatches and a two-circuit finale.
+- Add reusable parcel sources, receivers with one-to-three parcel targets, and parcel crossings. Pip carries one parcel; full receiver networks power linked crossings and signal stamps.
+- Add readable inventory/status text, numeric Q/N cues, parcel sprites and an original Foundry cover. Parcel and prism actions now announce the actual result.
+- Add east/west and north/south assembly reflections with live previews. Placement and puzzle downloads use the preview while saved originals stay unchanged.
+- Preserve old worlds/saves and introduce adventure format 10. Occupied parcel crossings block dock resets; Undo and Continue retain cargo and delivery counts.
+- Extend gameplay, creator-sharing, geometry, migration and live-browser coverage; make older book tests choose exact cover titles when searches return related stories.
+
 ## 0.37.0 — 2026-11-01
 
 - Add Pip and the Prism Observatory: six original chapters with axis mirrors, a double reverse, a four-wind circuit, a four-bell tube relay and an eight-prism finale.

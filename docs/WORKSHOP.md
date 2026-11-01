@@ -360,3 +360,35 @@ Place and test imported pieces as part of a whole adventure. Assemblies need
 no starting point or beacon; they are building parts, not complete playable
 missions. Use normal verified world export/code/link or a Storybook to share
 an adventure players can immediately play. No upload service is involved.
+
+## Power parcels and mirrored assembly previews — v0.38
+
+Paint Q sources, N receivers and parcel crossings in Puzzles. Set matching
+linked channels. A world supports up to eight sources and eight receivers;
+each channel needs at least one source and receiver. Receivers need 1–3 parcels
+and may be required for the mission. Pip carries one parcel. Use collects or
+delivers; movement alone does neither. Sources are reusable. Wrong receivers
+and already-full hands leave the parcel untouched, and a powered receiver
+consumes nothing.
+
+All receivers on a channel must reach their full targets before parcel
+crossings open or linked signal stamps read Powered. Such crossings remain
+open when Pip leaves the receiver. Return to dock clears parcel state and
+receiver counts, keeps the current cards and never refills rewrites. Occupied
+parcel crossings refuse a return until clear. Undo, Continue and completed
+route reviews preserve inventory and counts. Free rehearsal simulates them.
+Numeric Q/N/link cues and written descriptions support colour-independent play.
+
+Capture the whole linked parcel network for an assembly. Placement gives it
+fresh IDs and an independent channel. Portable puzzle files refuse missing
+source/receiver partners and oversized networks. New adventure format 10
+preserves parcel settings and creator clears; older world files and saves keep
+their original identities and behavior.
+
+The assembly drawer now shows the current reflection and quarter turn in every
+card preview. Mirrors transform terrain, paths, both program banks and compass
+prism handedness. Reflection happens before rotation. **Place at cursor** and
+**Download puzzle** use that displayed orientation without changing the saved
+piece or current world. An imported preview is already transformed; choose
+No reflection and Original to place it unchanged. Long titles and the new
+controls retain enlarged-text wrapping and phone layouts.

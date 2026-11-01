@@ -1054,3 +1054,26 @@ serialized; invalid files and failed writes never overwrite prior bytes. Source
 puzzles retain their own local storage version and all existing remap/placement
 rules. File import is bounded to 150 KB of UTF-8 and accepts data only. The creator
 keeps optics and puzzle-sharing controls inside the existing inspector/drawer.
+
+## Power-parcel routing — v0.38
+
+`pip-freight.mjs` owns parcel transitions, receiver targets, gate state and reset
+safety. New worlds compile `pip-parcel`, `pip-socket` and `pip-lock` into source,
+receiver and parcel-gate arrays. Only those worlds allocate `clockwork.parcel`
+and `clockwork.received`; older state shapes remain unchanged. A receiver stores
+an own-ID count capped at its 1–3 target. Use keeps the normal card advance and
+never spends or refills rewrites. Tubes/prisms retain inventory. Both crossings
+and signal stamps use complete receiver targets, not partial deliveries.
+
+A dock return checks occupied parcel gates before clearing inventory and counts.
+Rehearsal and replay use the same immutable transitions. Source validation bounds
+station counts and checks matching channels. Format 10 adds only the new objects;
+commands and legacy journal rules stay unchanged. A captured v0.37 checkpoint
+retains its winning fingerprint and exact full v9 export SHA-256. Parcel and
+prism events now receive their action-specific announcement priority.
+
+`mirrorAssembly` reflects terrain, routes and both program banks and conjugates
+prism operations. `assemblyPreview` reflects before rotating. The drawer repaints
+its previews on either select change; placing/downloading uses the same transform
+without mutating saved pieces. Existing assembly storage and file envelopes stay
+version 1. Parcel networks join linked-channel capture/remap validation.

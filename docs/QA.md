@@ -1,5 +1,42 @@
 # Verification record
 
+## Pip and the Lantern Foundry — v0.38.0
+
+**1,101 Node tests**, syntax checks and the **134-file** production build pass.
+All six new chapters have clean three-star Trail/Nemesis clears, all-treasure
+routes and automatic-loop solutions. Tests cover reusable sources, one-parcel
+inventory, wrong/full receivers, one-to-three delivery targets, all-receiver
+power, powered routing, tubes/prisms, rewrite limits, reset occupancy and
+immutable rehearsal across all 216 programs. Continue, Undo and completed route
+reviews retain parcel state. A captured v0.37 checkpoint keeps its original
+winning fingerprint and full v9 export SHA-256. New worlds, files, links and the
+book round-trip with proofs; the largest official link is 10,299 characters.
+
+Assembly tests cover both reflections, rotations, terrain, patrol routes, both
+program banks, prism handedness and independent pasted channels. Preview and
+download transformations leave the saved puzzle and current draft unchanged.
+Incomplete parcel networks are rejected before capture or sharing.
+
+The **74-scenario release suite** adds eight Foundry cases: complete phone/touch
+and desktop/keyboard books; free rehearsal, carrying, automatic delivery and
+victory focus; an occupied-crossing dock refusal with Undo; actual station
+repaint/settings, mirrored puzzle capture/download/import/place and proved
+shared-adventure play; both reflected program banks; long names, enlarged text
+and themed controls; and original v0.37 checkpoint continuation.
+
+All eight Foundry cases pass in Chromium. Phone/desktop screenshot review covers
+the original cover, camp, game board, pickup message, hardware directory,
+receiver inspector, themed channel/reflection menus and transformed puzzle
+previews. Enlarged checks use 320×568, 844×390, 768×900 and 1440×1000 with
+extra-large text and high contrast. New browser checks use the actual status
+message element and channel numbers; the blue bridge chapter correctly uses
+Q4/N4. Existing search helpers select exact book titles when related synopses
+produce extra results.
+
+Browser runs use disposable profiles. Viewport/emulated-touch tests and browser
+engines do not replace physical-device, assistive-technology or extended player
+difficulty/enjoyment studies.
+
 ## Pip and the Prism Observatory — v0.37.0
 
 **1,044 Node tests**, syntax checks and the **132-file** production build pass.
