@@ -24,14 +24,19 @@ repaint/settings, mirrored puzzle capture/download/import/place and proved
 shared-adventure play; both reflected program banks; long names, enlarged text
 and themed controls; and original v0.37 checkpoint continuation.
 
-All eight Foundry cases pass in Chromium. Phone/desktop screenshot review covers
+All eight Foundry cases pass in Chromium, Firefox and WebKit. A direct rotating-
+room check also preserves receiver power, Pip and all station positions after
+four turns. Phone/desktop screenshot review covers
 the original cover, camp, game board, pickup message, hardware directory,
 receiver inspector, themed channel/reflection menus and transformed puzzle
 previews. Enlarged checks use 320×568, 844×390, 768×900 and 1440×1000 with
 extra-large text and high contrast. New browser checks use the actual status
 message element and channel numbers; the blue bridge chapter correctly uses
 Q4/N4. Existing search helpers select exact book titles when related synopses
-produce extra results.
+produce extra results. The full release run exposed an older Orchestra test
+reading hidden turn-zero text before Continue finished. Older Pip checkpoint
+checks now wait for their exact saved turn, then still assert unchanged save
+bytes, Undo and the original win; no action timeout or game rule was changed.
 
 Browser runs use disposable profiles. Viewport/emulated-touch tests and browser
 engines do not replace physical-device, assistive-technology or extended player

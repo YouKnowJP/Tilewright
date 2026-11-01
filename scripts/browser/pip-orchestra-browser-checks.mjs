@@ -15,7 +15,7 @@ export async function pipOrchestraScenarios(scenario){
   await openBook(page);
   for(const [index,id]of ORCHESTRA_LEVELS.entries()){
    await page.locator('[data-book-challenge=clean]').click();await page.locator('#book-continue').click();const actions=ORCHESTRA_CLEARS[id];
-   if(index===2){await playGuild(page,actions.slice(0,6),true);const saved=await checkpoint(page),turns=await page.locator('#game-turns').textContent();await page.locator('#game-home').click();await page.reload();await page.locator('#title-continue').click();assert.equal(await checkpoint(page),saved);assert.equal(await page.locator('#game-turns').textContent(),turns);await clickControl(page,'#game-undo',true);await playGuild(page,[actions[5],...actions.slice(6)],true);}
+   if(index===2){await playGuild(page,actions.slice(0,6),true);const saved=await checkpoint(page),turns=await page.locator('#game-turns').textContent();await page.locator('#game-home').click();await page.reload();await page.locator('#title-continue').click();await page.waitForFunction(expected=>document.querySelector('#game-turns').textContent===expected,turns);assert.equal(await checkpoint(page),saved);assert.equal(await page.locator('#game-turns').textContent(),turns);await clickControl(page,'#game-undo',true);await playGuild(page,[actions[5],...actions.slice(6)],true);}
    else await playGuild(page,actions,true);
    await page.locator('#adventure[data-status=won]').waitFor();assert.equal(await page.locator('#game-stars').textContent(),'★★★');assert.equal(await page.locator('#game-health').getAttribute('aria-label'),'Health: 3 of 3');await page.locator('#game-primary').click();
   }
