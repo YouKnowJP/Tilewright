@@ -2,7 +2,7 @@
 
 ## Pip and the Lantern Foundry — v0.38.0
 
-**1,101 Node tests**, syntax checks and the **134-file** production build pass.
+**1,105 Node tests**, syntax checks and the **134-file** production build pass.
 All six new chapters have clean three-star Trail/Nemesis clears, all-treasure
 routes and automatic-loop solutions. Tests cover reusable sources, one-parcel
 inventory, wrong/full receivers, one-to-three delivery targets, all-receiver
@@ -37,6 +37,13 @@ produce extra results. The full release run exposed an older Orchestra test
 reading hidden turn-zero text before Continue finished. Older Pip checkpoint
 checks now wait for their exact saved turn, then still assert unchanged save
 bytes, Undo and the original win; no action timeout or game rule was changed.
+
+The full local 74-scenario run passes. CI reached 72 passing cases before its
+25-minute job limit cancelled it, with no failed case reported. CI now partitions
+the same ordered catalogue into two balanced groups; both gate deployment.
+Selection tests prove exhaustive, disjoint membership and stable focused retries.
+Each job allows 35 minutes; individual action timeouts remain unchanged. The
+preserved-baseline migration also remains required.
 
 Browser runs use disposable profiles. Viewport/emulated-touch tests and browser
 engines do not replace physical-device, assistive-technology or extended player

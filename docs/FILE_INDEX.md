@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**403 files in 15 folders.** Stage new files before refreshing. Run
+**405 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,10 +23,10 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 5 |
-| [scripts/browser/](../scripts/browser/) | 43 |
+| [scripts/browser/](../scripts/browser/) | 44 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
 | [src/](../src/) | 105 |
-| [tests/](../tests/) | 57 |
+| [tests/](../tests/) | 58 |
 | [tests/fixtures/](../tests/fixtures/) | 28 |
 
 <details>
@@ -254,7 +254,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 43 files</summary>
+<summary>scripts/browser/ — 44 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -287,6 +287,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-parcelworks-browser-checks.mjs](../scripts/browser/pip-parcelworks-browser-checks.mjs)
 - [pip-prism-browser-checks.mjs](../scripts/browser/pip-prism-browser-checks.mjs)
 - [presentation-browser-checks.mjs](../scripts/browser/presentation-browser-checks.mjs)
+- [release-selection.mjs](../scripts/browser/release-selection.mjs)
 - [release-smoke.mjs](../scripts/browser/release-smoke.mjs)
 - [review-browser-checks.mjs](../scripts/browser/review-browser-checks.mjs)
 - [save-data-browser-checks.mjs](../scripts/browser/save-data-browser-checks.mjs)
@@ -426,7 +427,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 57 files</summary>
+<summary>tests/ — 58 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -464,6 +465,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-prisms.test.mjs](../tests/pip-prisms.test.mjs)
 - [pip-programs.test.mjs](../tests/pip-programs.test.mjs)
 - [promise.test.mjs](../tests/promise.test.mjs)
+- [release-selection.test.mjs](../tests/release-selection.test.mjs)
 - [replay-invariants.test.mjs](../tests/replay-invariants.test.mjs)
 - [sagas.test.mjs](../tests/sagas.test.mjs)
 - [save-data.test.mjs](../tests/save-data.test.mjs)

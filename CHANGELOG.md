@@ -8,6 +8,7 @@
 - Add east/west and north/south assembly reflections with live previews. Placement and puzzle downloads use the preview while saved originals stay unchanged.
 - Preserve old worlds/saves and introduce adventure format 10. Occupied parcel crossings block dock resets; Undo and Continue retain cargo and delivery counts.
 - Extend gameplay, creator-sharing, geometry, migration and live-browser coverage; make older book tests choose exact cover titles when searches return related stories.
+- Partition the full browser release suite into two exhaustive CI groups, retain migration gating and allow 35 minutes per job as content grows.
 
 ## 0.37.0 — 2026-11-01
 

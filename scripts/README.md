@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **53 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **74 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -129,3 +129,24 @@ satchel borrowing/rotation/assembly reuse with proved export and shared play,
 continuation. Node tests cover both difficulties and treasure clears, all 216
 rehearsal drafts, compact v7 portability, prior export bytes, required stamps,
 rewrite accounting, transforms, immutable state, Continue/Undo and reviews.
+
+
+`pip-foundry-browser-checks.mjs` adds eight required cases for the Lantern Foundry:
+full phone/desktop books, parcel inventory and powered routes, guarded dock resets,
+mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
+and original v0.37 save continuation.
+
+CI runs the complete release catalogue in two parallel groups. Each group has
+37 of the current 74 cases; both must pass before deployment. No scenario is
+removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
+
+```sh
+npm run test:browser:smoke -- --shard=1/2
+npm run test:browser:smoke -- --shard=2/2
+```
+
+The partition is stable when case names are supplied for a focused retry. Reports
+record their group. Invalid/duplicated shard options fail before starting a
+browser, and an empty selection still fails. CI allows 35 minutes per group;
+per-action timeouts remain 15 seconds. Preserved-baseline migration runs in the
+first group and remains part of the deployment gate.

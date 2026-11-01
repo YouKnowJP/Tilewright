@@ -1,3 +1,4 @@
+import {parseReleaseArgs,createReleaseSelector} from './release-selection.mjs';
 import {pipFoundryScenarios} from './pip-foundry-browser-checks.mjs';
 import {pipPrismScenarios} from './pip-prism-browser-checks.mjs';
 import {pipOrchardScenarios} from './pip-orchard-browser-checks.mjs';
@@ -30,10 +31,11 @@ const preferences=async page=>JSON.parse(await saved(page,PREFERENCES_KEY)).pref
 async function openFavorites(page){if(await page.locator('#traveler-favorites').getAttribute('open')===null)await page.locator('#traveler-favorites>summary').click();}
 async function fit(page){assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'No horizontal page overflow.');for(const dialog of await page.locator('dialog[open]').all()){assert.ok(await dialog.evaluate(n=>n.scrollWidth<=n.clientWidth+1),'Dialog content stays within its frame.');}}
 
-export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1440],only=[],onProgress=console.log}={}) {
+export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1440],only=[],shard=null,onProgress=console.log}={}) {
+  const selected=createReleaseSelector({only,shard});
   const output=path.join(outputRoot,browserType.name?.()||'browser');await mkdir(output,{recursive:true});const browser=await browserType.launch({headless:true,...(channel?{channel}:{})}),results=[];
   async function scenario(name,width,exercise){
-    if(only.length&&!only.includes(name))return;
+    if(!selected(name))return;
     const context=await browser.newContext({viewport:{width,height:width<500?844:1000},hasTouch:true,reducedMotion:'reduce',acceptDownloads:true});context.setDefaultTimeout(15000);
     const page=await context.newPage(),errors=[],logs=[];await context.tracing.start({screenshots:true,snapshots:true,sources:true});
     page.on('pageerror',error=>errors.push(error.message));page.on('console',message=>{if(message.type()==='error')errors.push(message.text());logs.push({type:message.type(),text:message.text()});});page.on('response',r=>{if(r.status()>=400&&r.url().startsWith(baseURL))errors.push(`${r.status()} ${r.url()}`);});
@@ -85,11 +87,12 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await pipPrismScenarios(scenario);
     await pipFoundryScenarios(scenario);
     await presentationScenarios(scenario);
-    const report={browser:browser.version(),baseURL,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
+    const report={browser:browser.version(),baseURL,shard,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
   }finally{await browser.close();}
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+  const selection=parseReleaseArgs(process.argv.slice(2));
   const {chromium}=await import('playwright'),release=await build(),server=createDevServer({root:release.destination});await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
-  try{await runReleaseSmoke(chromium,{baseURL:`http://127.0.0.1:${server.address().port}`,only:process.argv.slice(2)});}finally{await new Promise(resolve=>server.close(resolve));}
+  try{await runReleaseSmoke(chromium,{baseURL:`http://127.0.0.1:${server.address().port}`,...selection});}finally{await new Promise(resolve=>server.close(resolve));}
 }
