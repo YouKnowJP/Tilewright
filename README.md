@@ -19,13 +19,13 @@ these restrictions apply only to new protected material. Read the
 ## Play, explore, and create
 
 - 24 campaign missions, eight Guild jobs, daily trails and branching expeditions.
-- Twenty-one featured Storybooks, including 95 unique original book levels, plus Puzzle Lab journeys.
-- 75 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
+- Twenty-two featured Storybooks, including 101 unique original book levels, plus Puzzle Lab journeys.
+- 81 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
 - Create puzzles, write dialogue, rotate rooms, coordinate two travelers, and share adventure files, codes, links, or Storybooks.
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
 
-Choose **Choose your adventure → Storybooks → Pip and the Switchback Station** for six new adventures. Parcel junctions read Pip’s cargo and choose a Matching or Otherwise program without consuming it. Build refill loops, route the wrong colour, coordinate two bridges, and solve a four-colour counting station. Creators can engrave and swap both programs, mirror puzzle pieces, and include builder notes in shared puzzle files. Verified adventure files, codes, links and Storybooks remain available. Earlier worlds and saves keep their identities.
+Choose **Choose your adventure → Storybooks → Pip and the Glassworks** for six new adventures. Turn amber into new parcels, revisit recipes, coordinate a ferry and run a four-window factory from one well. Creators can build parcel presses with conversion targets, combine them with cargo junctions and counting stamps, and swap complete recipe networks as mirrored puzzle files. Saved pieces now have editable names and builder notes. Verified adventure files, codes, links and Storybooks remain available; new recipe adventures keep long creator clears compact. Earlier worlds and saves keep their identities.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),
 [complete game guide](docs/GAME_GUIDE.md), and [controls](docs/CONTROLS.md).

@@ -1,5 +1,43 @@
 # Verification record
 
+## Pip and the Glassworks — v0.40.0
+
+**1,210 Node tests**, syntax checks and the **136-file** production build pass.
+All six chapters have three-star Trail/Nemesis clears, all-treasure routes and
+paused/manual alternatives. Tests cover matching/empty/wrong inputs, ordinary
+card advance, no rewrite/parcel duplication, capped success targets, continued
+conversion, cargo questions and delivery, tubes/prisms, directed recipes and
+supplied cycles. All 216 rehearsal drafts leave state unchanged. Dock reset,
+Undo, Continue and completed reviews preserve the expected cargo/counts.
+The book and proved worlds round-trip; the largest official play link is 9,022
+characters with its complete creator clear.
+
+Repaint, world/room transforms, complete recipe capture and independent input/
+output remapping are checked. Piece metadata edits preserve original geometry
+and preview transforms, validate before replacement and omit blank notes.
+Compact creator clears are bounded at 2,000 expanded actions; malformed,
+unknown, mixed and oversized encodings are refused. Plain arrays remain valid.
+The captured v0.39 checkpoint retains its original winning fingerprint and
+exact full v11 export SHA-256.
+
+The **90-case release catalogue** adds eight Glassworks cases: full clean books
+on phone and desktop, free rehearsal and wrong-input return recipes, dock reset
+and Undo, real creator repaint/settings and transformed puzzle exchange, edited
+piece metadata with Cancel and failed validation, verified shared play, quota/
+damaged-shelf recovery, enlarged high-contrast forms and themed menus at
+320×568, 844×390, 768×900 and 1440×1000, and original v0.39 continuation.
+CI runs all cases in two exhaustive groups of 45; baseline migration also gates
+publishing. Test profiles are disposable.
+
+All eight new cases pass in Chromium. Phone/desktop screenshot review covers
+the original cover, camp, map, conversion message, recipe hardware, creator
+inspector and custom output menu, compact pieces and metadata editor. Review
+caught an unthemed note textarea; it now uses the game colours, readable text
+and focus ring. An open piece editor spans the desktop drawer's columns.
+The final enlarged-text captures keep the edit controls inside a 320×568 view.
+Browser/viewport checks do not replace physical-device or assistive-technology
+sessions.
+
 ## Pip and the Switchback Station — v0.39.0
 
 **1,156 Node tests**, syntax checks and the **135-file** production build pass.

@@ -1,4 +1,4 @@
-import { ADVENTURE_FORMAT, MAX_ADVENTURE_BYTES, normalizeAdventure } from './workshop-model.mjs';
+import { ADVENTURE_FORMAT, MAX_ADVENTURE_BYTES, MAX_PROOF_ACTIONS, normalizeAdventure } from './workshop-model.mjs';
 export const MAX_SHARE_CODE = 300_000, MAX_PLAY_LINK = 12_000;
 export function encodeRuns(tiles) {
   const result = [];
@@ -16,19 +16,27 @@ export function decodeRuns(runs, count) {
   if (tiles.length !== count) throw Error('The shared terrain data is incomplete.');
   return tiles;
 }
+function proofRuns(actions){const runs=[];for(let i=0;i<actions.length;){let end=i+1;while(end<actions.length&&actions[end]===actions[i])end++;runs.push(actions[i],end-i);i=end;}return runs;}
+function expandProof(runs){
+ if(!Array.isArray(runs)||!runs.length||runs.length%2||runs.length>MAX_PROOF_ACTIONS*2)throw Error('The shared creator clear has invalid action runs.');
+ const actions=[];for(let i=0;i<runs.length;i+=2){const action=runs[i],count=runs[i+1];if(typeof action!=='string'||action.length>100||!Number.isInteger(count)||count<1||count>MAX_PROOF_ACTIONS-actions.length)throw Error('The shared creator clear exceeds its action bounds.');for(let n=0;n<count;n++)actions.push(action);}return actions;
+}
 export function serializeAdventure(input) {
   const pack = normalizeAdventure(input);
   // New v7 exports omit only canonical defaults; normalization restores identical worlds.
   const defaults={name:'',text:'',channel:'amber',order:1,initial:false,required:false,reward:'advice',nemesisOnly:false,vision:6,offset:0};
   const markers=pack.version>=7?pack.markers.map(marker=>Object.fromEntries(Object.entries(marker).filter(([key,value])=>!(Object.hasOwn(defaults,key)&&defaults[key]===value)))):pack.markers;
-  const json = JSON.stringify({ ...pack,markers, encoding: 'rle-v1', map: { ...pack.map, layers: pack.map.layers.map(({ tiles, ...layer }) => ({ ...layer, runs: encodeRuns(tiles) })) } }) + '\n';
+  const encoded={...pack,markers,encoding:'rle-v1',map:{...pack.map,layers:pack.map.layers.map(({tiles,...layer})=>({...layer,runs:encodeRuns(tiles)}))}};
+  if(pack.version>=12&&pack.proof){const compact={difficulty:pack.proof.difficulty,encoding:'actions-rle-v1',runs:proofRuns(pack.proof.actions)};if(JSON.stringify(compact).length<JSON.stringify(pack.proof).length)encoded.proof=compact;}
+  const json=JSON.stringify(encoded)+'\n';
   if (new TextEncoder().encode(json).length > MAX_ADVENTURE_BYTES) throw Error('This adventure exceeds the 400 KB file limit. Shorten dialogue, simplify terrain, or record a shorter creator clear.');
   return json;
 }
 export function parseAdventure(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > MAX_ADVENTURE_BYTES) throw Error('Choose an adventure file smaller than 400 KB.');
   let input; try { input = JSON.parse(text); } catch { throw Error('The adventure file is not valid JSON.'); }
-  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5,6,7,8,9,10,11].includes(input.version)) throw Error('Choose a Tilewright adventure file, rather than a terrain-only map.');
+  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5,6,7,8,9,10,11,12].includes(input.version)) throw Error('Choose a Tilewright adventure file, rather than a terrain-only map.');
+  if(input.proof?.encoding!==undefined){if(input.version<12||input.proof.encoding!=='actions-rle-v1'||input.proof.actions!==undefined)throw Error('This adventure uses an unsupported creator-clear encoding.');input.proof={difficulty:input.proof.difficulty,actions:expandProof(input.proof.runs)};}else if(input.proof?.runs!==undefined)throw Error('The creator clear needs a supported action encoding.');
   if (input.encoding !== undefined) {
     if (input.encoding !== 'rle-v1' || !Number.isInteger(input.map?.width) || !Number.isInteger(input.map?.height) || input.map.width < 1 || input.map.height < 1 || input.map.width > 64 || input.map.height > 64
       || !Array.isArray(input.map.layers) || input.map.layers.length < 1 || input.map.layers.length > 6) throw Error('This adventure uses unsupported terrain encoding or dimensions.');

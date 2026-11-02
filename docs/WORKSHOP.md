@@ -420,3 +420,39 @@ Use normal world story/dialogue tools for in-game instructions. Empty notes
 add no property to legacy puzzle data. Invalid notes or incomplete junction
 files are refused without replacing saved pieces. Twelve slots and damaged-
 storage protections remain unchanged.
+
+
+## Parcel recipes and saved-piece editing — v0.40
+
+Paint **Pip parcel press** in Puzzles. Set Input parcel, a different Output
+parcel, one to four successful presses and the optional required goal. Use
+converts exactly one matching parcel; empty hands and wrong parcels are kept.
+It advances the normal three-card order without a rewrite. Recipe targets count
+successes and stop at their target while conversion remains available.
+
+A world supports at most eight presses, eight sources and eight receivers.
+Receivers and junctions can use parcels made through a directed chain of recipes;
+they no longer need a source of that exact colour. Every press input must be
+reachable from a source, and every source and recipe output must have a path
+to a receiver. A recipe cycle with no supply is refused. These checks protect
+links; a complete playtest still proves that Pip can traverse the actual roads.
+Parcel crossings still need matching receivers, and signal stamps still read
+receiver power rather than press counts.
+
+Capture every connected input/output link in a recipe assembly. Placement remaps
+both sides independently onto unused mechanism channels; tube channels remain
+separate. Partial recipe networks and unreachable recipe inputs/outputs are
+refused in puzzle files. Mirrors, rotations, room turns, Undo, Continue,
+rehearsal and route reviews preserve recipe settings and progress.
+
+Each saved puzzle card has **Edit details** for its name and builder note.
+Save details validates and updates the saved original without baking in the
+current preview transform or changing the world draft. Cancel edit writes
+nothing. Names allow 48 characters and printable notes allow 240. Blank notes
+are omitted. Notes stay folded until opened. If storage is unavailable, edits
+remain downloadable for this visit and the earlier stored bytes stay intact;
+a damaged shelf is never silently overwritten.
+
+Recipe worlds use adventure format 12. Their long creator clears use compact
+repeated-action storage when smaller, keeping full replay and verification.
+Versions 1–11 retain their existing serialization and identities.

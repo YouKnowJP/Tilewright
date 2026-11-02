@@ -1101,3 +1101,37 @@ bounded to 240 characters and omitted when blank, preserving legacy bytes.
 The creator uses textContent and pre-wrapped, bounded-width card text. Preview
 transforms leave notes and saved pieces unchanged. Notes never become scripts
 or silently add story events to a placed world.
+
+
+## Directed parcel recipes — v0.40
+
+`pip-press` compiles into `clockworkPresses` with input `channel`, distinct
+`output`, a 1–4 `visits` target and a required flag. Only press worlds allocate
+`clockwork.presses`. Own-ID success counts are capped, while conversions remain
+available after completion. A successful Use replaces one held parcel, keeps
+normal card advance and spends no rewrite; wrong/empty input leaves cargo and
+credits unchanged. Dock return resets credits and parcel/receiver state after
+the existing occupied-gate guard. Rehearsal, Undo, Continue and reviews use the
+same immutable transition. Press events receive action-specific announcement
+priority and E-numbered cues pair colours with written names/numbers.
+
+`reachableParcels` computes a directed closure across at most eight recipes.
+`freightNetworkProblem` requires source-reachable press inputs/receivers and a
+receiver reachable from each source/output. Supplied cycles are valid; isolated
+cycles cannot create cargo. Junctions accept any reachable tested parcel.
+Physical route validation and proved clears remain separate checks. Assembly
+capture includes both channel dependencies and paste remaps both through unused
+mechanism channels; tube links keep their independent namespace.
+
+Format 12 optionally stores creator actions as bounded `actions-rle-v1` pairs.
+Parsing caps expanded actions at 2,000, checks positive integer run lengths,
+rejects mixed/unknown encodings and then applies normal action validation.
+Normalization exposes full actions. Plain action arrays remain accepted. Earlier
+formats keep exact bytes; a captured v0.39 checkpoint, winning fingerprint and
+full v11 SHA-256 guard compatibility.
+
+`editAssemblyDetails` normalizes metadata without changing geometry or map drafts.
+The drawer validates Save before replacing a slot, uses textContent for notes,
+and leaves preview transforms outside the saved original. Cancel writes nothing.
+Failed writes preserve old bytes and allow session downloads; damaged shelves
+retain their raw storage. The assembly storage/file envelope stays version 1.

@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **82 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **90 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -137,7 +137,7 @@ mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
 CI runs the complete release catalogue in two parallel groups. Each group has
-41 of the current 82 cases; both must pass before deployment. No scenario is
+45 of the current 90 cases; both must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -157,4 +157,11 @@ Switchback Station books, cargo questions and free rehearsal, dock reset/Undo,
 real junction repaint and bank swaps, builder-note puzzle export/import and
 shared play, malformed notes and storage failures, enlarged custom menus and
 long notes, and original v0.38 checkpoint continuation. The complete release
-catalogue now has 82 cases, partitioned into 41 per CI group.
+catalogue now has 90 cases, partitioned into 45 per CI group.
+
+
+`pip-glassworks-browser-checks.mjs` adds eight required cases: complete phone
+and desktop Glassworks books, wrong-input/rehearsal and real return recipes,
+reset/Undo, creator recipes and edited/transformed portable pieces, verified
+shared play, quota/damaged-shelf metadata edits, large-text custom menus and
+piece forms across four viewport shapes, and original v0.39 continuation.

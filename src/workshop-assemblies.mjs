@@ -1,9 +1,11 @@
+import {freightNetworkProblem,reachableParcels} from './pip-freight.mjs';
 import {transformPrismOperation,transformProgram} from './clockwork.mjs';
 import { normalizeAdventure, editAdventure, nextMarkerId, CHANNELS, MAX_MARKERS } from './workshop-model.mjs';
 import { validateDocument } from './model.mjs';
 import { GUILD_KITS } from './adventure-tools.mjs';
 export const ASSEMBLIES_KEY='tilewright.workshop.assemblies.v1', MAX_ASSEMBLIES=12;
-const linked=m=>['plate','bridge','lever','door','ember','waystone','pip-router','pip-sorter','pip-parcel','pip-socket','pip-lock'].includes(m.kind)||m.kind==='guide'&&m.reward==='route';
+const linked=m=>['plate','bridge','lever','door','ember','waystone','pip-router','pip-sorter','pip-press','pip-parcel','pip-socket','pip-lock'].includes(m.kind)||m.kind==='guide'&&m.reward==='route';
+const links=m=>linked(m)?[m.channel,...(m.kind==='pip-press'?[m.output]:[])]:[];
 const inside=(p,b)=>p.x>=b.x&&p.y>=b.y&&p.x<b.x+b.width&&p.y<b.y+b.height;
 export function normalizeAssembly(input){
   if(!input||typeof input.name!=='string'||!input.name.trim()||input.name.length>48||!input.map||input.map.width<1||input.map.height<1||input.map.width>12||input.map.height>12)throw Error('Name a puzzle assembly of at most 12 × 12 cells.');
@@ -22,7 +24,7 @@ export function captureAssembly(input,bounds,name,note=''){
     if((pack.storyCards||[]).some(c=>c.source===marker.id||c.target===marker.id))throw Error('Story moments belong to this world. Remove their cards before capturing these objects as an assembly.');
     if(marker.route?.some(p=>!inside(p,b)))throw Error('Include every patrol waypoint in the selected area.');
     if(marker.kind==='pip-tube'&&pack.markers.some(other=>other.kind==='pip-tube'&&other.channel===marker.channel&&!inside(other,b)))throw Error(`Include the whole ${marker.channel} courier tube pair so its links stay together.`);
-    if(linked(marker)&&pack.markers.some(other=>linked(other)&&other.channel===marker.channel&&!inside(other,b)))throw Error(`Include the whole ${marker.channel} puzzle so its links stay together.`);
+    for(const channel of links(marker))if(pack.markers.some(other=>links(other).includes(channel)&&!inside(other,b)))throw Error(`Include the whole ${channel} puzzle so its links stay together.`);
   }
   const map={...pack.map,width:b.width,height:b.height,layers:pack.map.layers.map(layer=>({...layer,tiles:Array.from({length:b.width*b.height},(_,i)=>layer.tiles[(b.y+Math.floor(i/b.width))*pack.map.width+b.x+i%b.width])}))};
   const move=p=>({x:p.x-b.x,y:p.y-b.y});
@@ -51,18 +53,19 @@ export function pasteAssembly(input,source,point,turns=0,reflection='none'){
   if(pack.markers.some(m=>inside(m,b)))throw Error('Place assemblies on an empty object area. Terrain will be replaced; existing puzzle objects stay safe.');
   if(pack.markers.length+assembly.markers.length>MAX_MARKERS)throw Error('This assembly would exceed the 128-object limit.');
   if(pack.markers.filter(m=>['pip-stamp','pip-router','pip-sorter'].includes(m.kind)).length+assembly.markers.filter(m=>['pip-stamp','pip-router','pip-sorter'].includes(m.kind)).length>8)throw Error('A world can hold at most eight program stamps.');
+  if(pack.markers.filter(m=>m.kind==='pip-press').length+assembly.markers.filter(m=>m.kind==='pip-press').length>8)throw Error('A world can hold at most eight parcel presses.');
   if(['pip-parcel','pip-socket'].some(kind=>pack.markers.filter(m=>m.kind===kind).length+assembly.markers.filter(m=>m.kind===kind).length>8))throw Error('Keep at most eight parcel sources and eight receivers.');
   if(pack.markers.filter(m=>m.kind==='pip-prism').length+assembly.markers.filter(m=>m.kind==='pip-prism').length>8)throw Error('A world can hold at most eight compass prisms.');
   if(pack.markers.some(m=>m.kind==='clockwork')&&assembly.markers.some(m=>m.kind==='clockwork'))throw Error('A world can hold only one Clockwork companion.');
   if(pack.markers.some(m=>m.kind==='partner')&&assembly.markers.some(m=>m.kind==='partner'))throw Error('A world can hold only one Two-Lantern partner.');
   if(pack.markers.some(m=>m.kind==='relic')&&assembly.markers.some(m=>m.kind==='relic'))throw Error('A world can hold only one singing relic.');
-  const used=new Set(pack.markers.filter(linked).map(m=>m.channel)),needed=[...new Set(assembly.markers.filter(linked).map(m=>m.channel))],free=CHANNELS.filter(id=>!used.has(id));
+  const used=new Set(pack.markers.flatMap(links)),needed=[...new Set(assembly.markers.flatMap(links))],free=CHANNELS.filter(id=>!used.has(id));
   if(needed.length>free.length)throw Error('There are not enough unused puzzle channels. Clear a complete channel before placing this linked assembly.');
   const tubeUsed=new Set(pack.markers.filter(m=>m.kind==='pip-tube').map(m=>m.channel)),tubeNeeded=[...new Set(assembly.markers.filter(m=>m.kind==='pip-tube').map(m=>m.channel))],tubeFree=CHANNELS.filter(id=>!tubeUsed.has(id));if(tubeNeeded.length>tubeFree.length)throw Error('There are not enough unused courier tube channels. Keep at most four complete pairs.');const tubeChannels=Object.fromEntries(tubeNeeded.map((id,i)=>[id,tubeFree[i]]));
   const channels=Object.fromEntries(needed.map((id,i)=>[id,free[i]])),markers=[...pack.markers],bells=assembly.markers.filter(m=>m.kind==='bell').sort((a,b)=>a.order-b.order),bellOffset=pack.markers.filter(m=>m.kind==='bell').length;
   const stops=assembly.markers.filter(m=>m.kind==='pip-stop').sort((a,b)=>a.order-b.order),stopOffset=pack.markers.filter(m=>m.kind==='pip-stop').length;if(stops.length+stopOffset>8)throw Error('A world can hold at most eight Pip delivery stops.');if(stops.length&&pack.markers.some(m=>m.kind==='pip-stop'&&m.required))throw Error('Clear the earlier final parking requirement before extending its delivery route.');
   if(bells.length+bellOffset>8)throw Error('A world can hold at most eight sequence bells.');
-  for(const m of assembly.markers){const shift=p=>({x:p.x+point.x,y:p.y+point.y});markers.push({...m,id:nextMarkerId(markers),...shift(m),...(m.kind==='pip-tube'?{channel:tubeChannels[m.channel]}:linked(m)?{channel:channels[m.channel]}:{}),...(m.kind==='bell'?{order:bellOffset+bells.indexOf(m)+1}:{}),...(m.kind==='pip-stop'?{order:stopOffset+stops.indexOf(m)+1}:{}),...(m.route?{route:m.route.map(shift)}:{})});}
+  for(const m of assembly.markers){const shift=p=>({x:p.x+point.x,y:p.y+point.y});markers.push({...m,id:nextMarkerId(markers),...shift(m),...(m.kind==='pip-tube'?{channel:tubeChannels[m.channel]}:linked(m)?{channel:channels[m.channel]}:{}),...(m.kind==='pip-press'?{output:channels[m.output]}:{}),...(m.kind==='bell'?{order:bellOffset+bells.indexOf(m)+1}:{}),...(m.kind==='pip-stop'?{order:stopOffset+stops.indexOf(m)+1}:{}),...(m.route?{route:m.route.map(shift)}:{})});}
   const layers=pack.map.layers.map(layer=>({...layer,tiles:[...layer.tiles]}));
   for(const [i,layer] of assembly.map.layers.entries()){
     if(!layers[i]){let serial=i,id=`assembly-layer-${serial}`;while(layers.some(item=>item.id===id))id=`assembly-layer-${++serial}`;layers.push({...layer,id,tiles:Array(pack.map.width*pack.map.height).fill(0)});}
@@ -76,7 +79,25 @@ export function saveAssemblies(storage,items){try{if(items.length>MAX_ASSEMBLIES
 
 // New owned portable puzzle format. Existing assembly storage stays version 1.
 export const MAX_ASSEMBLY_BYTES=150000;
-function portableAssembly(input){const a=normalizeAssembly(input);for(const kind of ['clockwork','partner','relic'])if(a.markers.filter(m=>m.kind===kind).length>1)throw Error('Keep at most one companion, partner and relic in a puzzle assembly.');if(a.markers.filter(m=>m.kind==='pip-prism').length>8||a.markers.filter(m=>['pip-stamp','pip-router','pip-sorter'].includes(m.kind)).length>8)throw Error('Keep at most eight prisms and eight program stamps in a puzzle assembly.');for(const m of a.markers){if(['pip-parcel','pip-socket','pip-lock'].includes(m.kind)){if(a.markers.filter(p=>p.kind==='pip-parcel').length>8||a.markers.filter(p=>p.kind==='pip-socket').length>8)throw Error('Keep at most eight parcel sources and receivers.');if(!a.markers.some(p=>p.kind==='pip-parcel'&&p.channel===m.channel)||!a.markers.some(p=>p.kind==='pip-socket'&&p.channel===m.channel))throw Error('Include matching parcel sources and receivers in the puzzle file.');}if(m.kind==='pip-sorter'&&!a.markers.some(p=>p.kind==='pip-parcel'&&p.channel===m.channel))throw Error('Include a parcel junction’s matching source in its puzzle file.');if(m.kind==='pip-router'&&!a.markers.some(p=>['plate','lever','pip-socket'].includes(p.kind)&&p.channel===m.channel))throw Error('Include a signal stamp’s linked plates, lever or parcel receivers in its puzzle file.');if(m.kind==='turntable'){const r=(m.span-1)/2;if(m.x-r<0||m.y-r<0||m.x+r>=a.map.width||m.y+r>=a.map.height)throw Error('Include the entire rotating room in its puzzle file.');}}return a;}
+function portableAssembly(input){
+ const a=normalizeAssembly(input),sources=a.markers.filter(m=>m.kind==='pip-parcel'),receivers=a.markers.filter(m=>m.kind==='pip-socket'),presses=a.markers.filter(m=>m.kind==='pip-press');
+ for(const kind of ['clockwork','partner','relic'])if(a.markers.filter(m=>m.kind===kind).length>1)throw Error('Keep at most one companion, partner and relic in a puzzle assembly.');
+ if(a.markers.filter(m=>m.kind==='pip-prism').length>8||a.markers.filter(m=>['pip-stamp','pip-router','pip-sorter'].includes(m.kind)).length>8)throw Error('Keep at most eight prisms and eight program stamps in a puzzle assembly.');
+ if(sources.length>8||receivers.length>8||presses.length>8)throw Error('Keep at most eight parcel sources, receivers and presses.');
+ if(presses.length){if(!sources.length||!receivers.length)throw Error('Include parcel sources and receivers with press recipes.');const problem=freightNetworkProblem(sources,receivers,presses);if(problem)throw Error(problem);}
+ else for(const m of [...sources,...receivers,...a.markers.filter(m=>m.kind==='pip-lock')])if(!sources.some(p=>p.channel===m.channel)||!receivers.some(p=>p.channel===m.channel))throw Error('Include matching parcel sources and receivers in the puzzle file.');
+ for(const m of a.markers){
+  if(m.kind==='pip-sorter'&&!reachableParcels(sources.map(p=>p.channel),presses).has(m.channel))throw Error('Include a parcel junction’s matching source or reachable recipe in its puzzle file.');
+  if(m.kind==='pip-lock'&&!receivers.some(p=>p.channel===m.channel))throw Error('Include a parcel crossing’s matching receiver in its puzzle file.');
+  if(m.kind==='pip-router'&&!a.markers.some(p=>['plate','lever','pip-socket'].includes(p.kind)&&p.channel===m.channel))throw Error('Include a signal stamp’s linked plates, lever or parcel receivers in its puzzle file.');
+  if(m.kind==='turntable'){const r=(m.span-1)/2;if(m.x-r<0||m.y-r<0||m.x+r>=a.map.width||m.y+r>=a.map.height)throw Error('Include the entire rotating room in its puzzle file.');}
+ }
+ return a;
+}
+export function editAssemblyDetails(items,index,name,note=''){
+ if(!Array.isArray(items)||!Number.isInteger(index)||index<0||index>=items.length)throw Error('Choose a saved puzzle piece.');
+ const updated=normalizeAssembly({...items[index],name,note});return items.map((item,i)=>i===index?updated:normalizeAssembly(item));
+}
 export function serializeAssembly(input){const raw=JSON.stringify({format:'tilewright-assembly',version:1,assembly:portableAssembly(input)});if(new TextEncoder().encode(raw).length>MAX_ASSEMBLY_BYTES)throw Error('This puzzle is too large to share as an assembly. Share the whole adventure instead.');return raw;}
 export function parseAssembly(raw){if(typeof raw!=='string'||new TextEncoder().encode(raw).length>MAX_ASSEMBLY_BYTES)throw Error('Choose a puzzle assembly file of at most 150 KB.');let data;try{data=JSON.parse(raw);}catch{throw Error('This puzzle assembly is not valid JSON.');}if(data?.format!=='tilewright-assembly'||data.version!==1)throw Error('Choose a Tilewright puzzle assembly file, version 1.');return portableAssembly(data.assembly);}
 export function importAssembly(items,raw){if(!Array.isArray(items)||items.length>=MAX_ASSEMBLIES)throw Error('All twelve assembly slots are in use. Remove an assembly to make room.');const assembly=parseAssembly(raw);return [...items.map(normalizeAssembly),assembly];}

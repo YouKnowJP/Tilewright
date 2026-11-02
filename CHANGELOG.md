@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.40.0 — 2026-11-02
+
+- Add Pip and the Glassworks: six original recipe adventures, including return kilns, a shared ferry, repeated deliveries and a four-window factory from one well.
+- Add parcel presses with directed input/output recipes and optional one-to-four successful-use goals. Recipes combine with tubes, prisms, cargo junctions and counting stamps without spending rewrites.
+- Add editable saved-piece names and builder notes, preserving original geometry, preview transforms and existing stored bytes when saving fails. Complete recipe networks can be mirrored, rotated, exported and independently placed.
+- Add numbered E cues, written recipe progress and original Glassworks cover art inside existing panels.
+- Add bounded compact creator clears for format 12, preserving older exports, checkpoints and identities. Extend deterministic, responsive, cross-browser and live-sharing checks.
+
 ## 0.39.0 — 2026-11-02
 
 - Add Pip and the Switchback Station: six original chapters with cargo questions, wrong-colour branches, returning refill loops, coordinated bridges and a four-colour counting finale.

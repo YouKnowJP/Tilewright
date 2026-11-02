@@ -3,6 +3,33 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## The Glassworks — v0.40
+
+Open **Choose your adventure → Storybooks → Pip and the Glassworks**. Six
+chapters grow from one recipe into return trips, a two-crossing ferry and a
+four-window factory supplied by one amber well. Scout gives a complete route;
+Start/Pause and Advance one card both work.
+
+**E** is a parcel press. Pip uses it to turn one matching input parcel into its
+output. Empty hands or a different parcel stay unchanged. A press keeps the
+normal card order and spends no rewrite. Some recipes need several successful
+conversions; failed attempts do not count. Completed presses keep working.
+**Route hardware** shows both parcel numbers/names and the successful-use count.
+Quest includes required recipes. Undo and Continue retain the parcel and counts;
+an allowed dock return clears them along with receiver power.
+
+Build recipes in **Workshop → Puzzles → Pip parcel press**. Set different input
+and output parcels, a one-to-four successful-use target and whether the recipe
+is required. Include a source and a path of recipes to a receiver. Recipes can
+feed junctions and other presses, including useful return cycles.
+
+In **Puzzle assemblies**, **Edit details** changes a saved piece's name and
+builder note. Save details keeps the edit; Cancel edit leaves the original.
+The current mirror/turn preview stays selected. Download puzzle shares that
+preview, while its saved original keeps its geometry. Capture the complete
+recipe network so its input and output links stay together. Share a verified
+adventure link or Storybook when your friend wants to play immediately.
+
 ## Switchback Station — v0.39
 
 Open **Choose your adventure → Storybooks → Pip and the Switchback Station**.
