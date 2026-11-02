@@ -29,12 +29,16 @@ damaged-shelf recovery, enlarged high-contrast forms and themed menus at
 CI runs all cases in two exhaustive groups of 45; baseline migration also gates
 publishing. Test profiles are disposable.
 
-All eight new cases pass in Chromium. Phone/desktop screenshot review covers
+All eight new cases pass in Chromium, Firefox and WebKit. Phone/desktop screenshot review covers
 the original cover, camp, map, conversion message, recipe hardware, creator
 inspector and custom output menu, compact pieces and metadata editor. Review
 caught an unthemed note textarea; it now uses the game colours, readable text
 and focus ring. An open piece editor spans the desktop drawer's columns.
 The final enlarged-text captures keep the edit controls inside a 320×568 view.
+WebKit exposed a recovery-test race: a second reload interrupted dynamic imports
+67 ms after the first. The test now waits for actual startup completion before
+injecting damaged storage and reloading again. The focused recovery retest passes;
+console errors still fail scenarios and runtime startup behavior is unchanged.
 Browser/viewport checks do not replace physical-device or assistive-technology
 sessions.
 
