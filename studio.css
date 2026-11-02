@@ -312,3 +312,5 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 .assembly-dialog textarea{box-sizing:border-box;width:100%;min-width:0;min-height:100px;padding:10px;border:1px solid #839166;border-radius:2px;background:#102c2b;color:#f1e7c8;font:16px/1.55 ui-monospace,monospace;resize:vertical}
 .assembly-edit label{font-size:14px;color:#eedda9}
 .assembly-dialog textarea:focus-visible{outline:2px solid #f1d68e;outline-offset:3px}
+.ws-inspector-heading h3{min-width:0;overflow-wrap:anywhere}
+.ws-inspector-heading #ws-inspector-close{flex-shrink:0;white-space:nowrap}

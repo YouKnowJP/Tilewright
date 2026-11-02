@@ -33,7 +33,8 @@ All eight new cases pass in Chromium, Firefox and WebKit. Phone/desktop screensh
 the original cover, camp, map, conversion message, recipe hardware, creator
 inspector and custom output menu, compact pieces and metadata editor. Review
 caught an unthemed note textarea; it now uses the game colours, readable text
-and focus ring. An open piece editor spans the desktop drawer's columns.
+and focus ring. An open piece editor spans the desktop drawer's columns. The enlarged inspector
+header reserves its Close button width so its label stays on one line.
 The final enlarged-text captures keep the edit controls inside a 320×568 view.
 WebKit exposed a recovery-test race: a second reload interrupted dynamic imports
 67 ms after the first. The test now waits for actual startup completion before
