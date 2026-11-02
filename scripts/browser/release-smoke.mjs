@@ -1,3 +1,4 @@
+import {pipSwitchbackScenarios} from './pip-switchback-browser-checks.mjs';
 import {parseReleaseArgs,createReleaseSelector} from './release-selection.mjs';
 import {pipFoundryScenarios} from './pip-foundry-browser-checks.mjs';
 import {pipPrismScenarios} from './pip-prism-browser-checks.mjs';
@@ -86,6 +87,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await pipOrchardScenarios(scenario);
     await pipPrismScenarios(scenario);
     await pipFoundryScenarios(scenario);
+    await pipSwitchbackScenarios(scenario);
     await presentationScenarios(scenario);
     const report={browser:browser.version(),baseURL,shard,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
   }finally{await browser.close();}

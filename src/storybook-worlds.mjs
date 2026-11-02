@@ -1,3 +1,4 @@
+import {switchbackBook} from './pip-switchback-worlds.mjs';
 import {foundryBook} from './pip-foundry-worlds.mjs';
 import {prismBook} from './pip-prism-worlds.mjs';
 import {orchardBook} from './pip-orchard-worlds.mjs';
@@ -64,5 +65,6 @@ export function featuredBooks() {
     orchardBook(),
     prismBook(),
     foundryBook(),
+    switchbackBook(),
   ];
 }

@@ -19,13 +19,13 @@ these restrictions apply only to new protected material. Read the
 ## Play, explore, and create
 
 - 24 campaign missions, eight Guild jobs, daily trails and branching expeditions.
-- Twenty featured Storybooks, including 89 unique original book levels, plus Puzzle Lab journeys.
-- 69 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
+- Twenty-one featured Storybooks, including 95 unique original book levels, plus Puzzle Lab journeys.
+- 75 featured worlds, twelve Lab rooms, village commissions, and optional challenges.
 - Create puzzles, write dialogue, rotate rooms, coordinate two travelers, and share adventure files, codes, links, or Storybooks.
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
 
-Choose **Choose your adventure → Storybooks → Pip and the Lantern Foundry** for six new adventures. Pip carries power parcels between reusable sources and receiver windows. Deliveries open crossings and change signal-stamp routes; later puzzles need refills, coordinated bridges and four colours of freight. Creators can set parcel targets and preview mirrored/rotated assemblies before placing or downloading them. Share a reusable puzzle file or a verified adventure file, code, play link or Storybook. Earlier books and saved routes remain compatible.
+Choose **Choose your adventure → Storybooks → Pip and the Switchback Station** for six new adventures. Parcel junctions read Pip’s cargo and choose a Matching or Otherwise program without consuming it. Build refill loops, route the wrong colour, coordinate two bridges, and solve a four-colour counting station. Creators can engrave and swap both programs, mirror puzzle pieces, and include builder notes in shared puzzle files. Verified adventure files, codes, links and Storybooks remain available. Earlier worlds and saves keep their identities.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),
 [complete game guide](docs/GAME_GUIDE.md), and [controls](docs/CONTROLS.md).

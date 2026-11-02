@@ -11,7 +11,7 @@ const storageFor = () => { const values = new Map([['tilewright.document.v1', 'o
 test('adventure normalization bounds objects, routes, text and dimensions and removes unknown metadata', () => {
   const pack = blankAdventure(), copy = structuredClone(pack), clean = normalizeAdventure({ ...pack, script: 'discard', markers: pack.markers.map(marker => ({ ...marker, execute: 'discard' })) });
   assert.equal(clean.script, undefined); assert.equal(clean.markers[0].execute, undefined); assert.deepEqual(pack, copy);
-  for (const patch of [{ version: 11 }, { title: '' }, { title: 'two\nlines' }, { author: 'two\tcolumns' }, { intro: 'x'.repeat(801) }, { map: { ...pack.map, width: 65 } }, { markers: Array(129).fill(pack.markers[0]) }, { markers: [{ ...pack.markers[0], x: -1 }] }, { markers: [pack.markers[0], pack.markers[0]] }]) assert.throws(() => normalizeAdventure({ ...pack, ...patch }));
+  for (const patch of [{ version: 12 }, { title: '' }, { title: 'two\nlines' }, { author: 'two\tcolumns' }, { intro: 'x'.repeat(801) }, { map: { ...pack.map, width: 65 } }, { markers: Array(129).fill(pack.markers[0]) }, { markers: [{ ...pack.markers[0], x: -1 }] }, { markers: [pack.markers[0], pack.markers[0]] }]) assert.throws(() => normalizeAdventure({ ...pack, ...patch }));
   assert.equal(checkAdventure(pack).ready, true);
 });
 test('content identities separate edited worlds and rule sets without including clear journals', () => {

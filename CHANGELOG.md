@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.39.0 — 2026-11-02
+
+- Add Pip and the Switchback Station: six original chapters with cargo questions, wrong-colour branches, returning refill loops, coordinated bridges and a four-colour counting finale.
+- Add parcel junctions with Otherwise/Matching programs and optional both-results goals. They read cargo without consuming it or spending rewrites.
+- Add creator bank swapping and portable builder notes for puzzle pieces. Notes stay with mirrors, rotations, imports and downloads; legacy empty pieces keep their bytes.
+- Add numbered J cues, readable branch/status descriptions and an original station cover, keeping controls inside existing panels.
+- Add adventure format 11 and preserve old world identities, v0.38 saves and v10 exports. Extend deterministic, cross-browser, responsive and live-sharing checks.
+
 ## 0.38.0 — 2026-11-01
 
 - Add Pip and the Lantern Foundry: six original parcel adventures with refills, powered routing, cooperative bridges, four-colour dispatches and a two-circuit finale.

@@ -54,6 +54,10 @@ export function drawFoundryCover(canvas){
  for(const [x,c]of [[52,'#efc47a'],[88,'#8ed8ae'],[124,'#c3a2e4']]){p('#d3d5ad',x,91,22,38);p(c,x+4,96,14,28);p('#f9edbf',x+9,99,4,17);}p('#9c9270',34,141,132,7);for(const [x,y]of [[181,81],[199,74],[217,68]])p('#e5c58b',x,y,5,3);
  ctx.save();ctx.translate(256,65);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0,parcel:'amber'},77);ctx.restore();ctx.save();ctx.translate(193,111);drawWorkshopObject(ctx,{kind:'pip-parcel',x:0,y:0,channel:'amber'},37);ctx.restore();p('#8a9d7e',0,149,400,3);
 }
+// New owned Switchback Station illustration.
+export function drawSwitchbackCover(canvas){
+ canvas.width=400;canvas.height=160;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;const p=(c,x,y,w,h)=>{ctx.fillStyle=c;ctx.fillRect(x,y,w,h);};p('#193a49',0,0,400,160);p('#45655d',0,116,400,44);p('#819078',0,133,400,4);p('#bda46d',25,117,350,4);for(let x=24;x<380;x+=22)p('#657c6d',x,113,8,18);for(let n=0;n<8;n++){p('#cbb784',160+n*13,116-n*8,14,3);p('#cbb784',160+n*13,123-n*8,14,3);}p('#365b62',27,46,112,68);p('#95b2a1',20,40,127,8);for(const [x,c]of [[38,'#efc47a'],[72,'#8ed8ae'],[106,'#8acddd']]){p('#d7d3a1',x,62,20,28);p(c,x+3,66,14,20);}p('#d9c98d',74,16,5,24);p('#ecdda6',63,16,27,4);p('#91b7ad',0,145,400,3);ctx.save();ctx.translate(166,77);drawWorkshopObject(ctx,{kind:'pip-sorter',channel:'jade',x:0,y:0},47);ctx.restore();ctx.save();ctx.translate(289,63);drawWorkshopObject(ctx,{kind:'clockwork',x:0,y:0,parcel:'amber'},78);ctx.restore();
+}
 export function drawLabDiscovery(canvas,index,unlocked){
   canvas.width=96;canvas.height=72;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
   const colors=unlocked?['#efbf72','#a5e1d2','#c0a7eb','#ffe5a0']:['#687d6a','#6f8175','#6c7a76','#7b8067'];
@@ -71,6 +75,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-sorter': rect('#344b61',2,3,20,20);rect(color,4,5,16,16);rect('#173d45',6,7,12,12);rect('#fff0b9',11,12,3,7);rect('#fff0b9',7,8,3,6);rect('#fff0b9',15,8,3,6);rect('#fff0b9',8,13,9,3);break;
     case 'pip-parcel': rect('#465a61',2,5,20,18);rect(color,4,7,16,13);rect('#102e36',6,9,12,9);rect('#f5d694',9,11,7,7);rect('#fff1c7',11,11,2,7);break;
     case 'pip-socket': rect('#466570',3,5,18,18);rect(color,5,7,14,13);rect(item.powered?'#eaf8b7':'#183b46',7,9,10,8);rect('#fff1c7',10,10,4,6);break;
     case 'pip-lock': drawTile(ctx,12,0,0);rect(color,2,2,4,20);rect(color,18,2,4,20);rect('#f3e8b6',9,9,6,6);break;
@@ -106,6 +111,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
     case 'patrol': case 'hunter': case 'watcher': rect(item.kind === 'watcher' ? '#786a8b' : '#a76c61', 4, 6, 16, 16); rect('#473f4c', 6, 9, 12, 6); rect('#ffe2a0', 7, 10, 3, 3); rect('#ffe2a0', 14, 10, 3, 3); if (item.kind === 'watcher') { rect('#d3b2db', 3, 1, 4, 7); rect('#d3b2db', 17, 1, 4, 7); } break;
   }
   ctx.restore();
+  if(item.kind==='pip-sorter')drawCueBadge(ctx,item,'J',item.number||'',size);
   if(['pip-parcel','pip-socket'].includes(item.kind))drawCueBadge(ctx,item,item.kind==='pip-parcel'?'Q':'N',CHANNEL_NUMBERS[item.channel]||'1',size);
   if(['plate','bridge','lever','door','waystone','ember','pip-lock'].includes(item.kind))drawCueBadge(ctx,item,CHANNEL_NUMBERS[item.channel]||'1','',size);
 }
@@ -122,6 +128,7 @@ export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = 
   for (const item of [...pack.markers.filter(m => ['fern', 'ember', 'pip-stop'].includes(m.kind)), ...pack.markers.filter(m => !['fern', 'ember', 'pip-stop'].includes(m.kind))]) drawWorkshopObject(ctx, item, size);
   for(const room of pack.markers.filter(m=>m.kind==='turntable')){const r=(room.span-1)/2;ctx.strokeStyle='#f6d88e';ctx.lineWidth=thumbnail?1:2;ctx.setLineDash([4,3]);ctx.strokeRect((room.x-r)*size+1,(room.y-r)*size+1,room.span*size-2,room.span*size-2);ctx.setLineDash([]);}
   for(const [i,prism]of pack.markers.filter(m=>m.kind==='pip-prism').entries())drawCueBadge(ctx,prism,'X',String(i+1),size);
+  for(const [i,junction]of pack.markers.filter(m=>m.kind==='pip-sorter').entries())drawCueBadge(ctx,junction,'J',String(i+1),size);
   for(const [i,stamp]of pack.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind)).entries())drawCueBadge(ctx,stamp,'M',String(i+1),size);
   for(const tube of pack.markers.filter(m=>m.kind==='pip-tube'))drawCueBadge(ctx,tube,'U',CHANNEL_NUMBERS[tube.channel],size);
   for(const stop of pack.markers.filter(m=>m.kind==='pip-stop'))drawCueBadge(ctx,{x:stop.x,y:stop.y+.5},'F',String(stop.order),size);

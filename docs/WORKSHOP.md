@@ -392,3 +392,31 @@ prism handedness. Reflection happens before rotation. **Place at cursor** and
 piece or current world. An imported preview is already transformed; choose
 No reflection and Original to place it unchanged. Long titles and the new
 controls retain enlarged-text wrapping and phone layouts.
+
+
+## Cargo questions and builder notes — v0.39
+
+A **Pip parcel junction** reads the parcel in Pip’s hands. Its linked channel
+is the parcel to test. Use selects Matching for that parcel and Otherwise for
+empty hands or a different colour. It never consumes the parcel or spends a
+keeper rewrite. Both three-card programs can be borrowed/rotated separately;
+Swap the two programs exchanges the draft banks. Apply object keeps changes.
+The optional both-results goal requires at least one reading of each answer.
+
+A world needs a source for every junction’s tested parcel, matching receivers,
+and Pip. Program stamps, signal stamps and parcel junctions share an eight-
+station limit. J and M have separate numbered cues. Cargo decisions do not
+read pressure-plate power; signal stamps retain their existing power rules.
+Combine them to build refill loops and delivery counters. Include the whole
+linked network when capturing a junction assembly. Pasted copies use fresh
+IDs and independent channels. New junction worlds use adventure format 11;
+older worlds retain their existing format and export identity.
+
+A captured puzzle can include a printable **Builder note** of up to 240
+characters. Open Builder note to read it as plain text, including line breaks.
+Notes start folded to keep the drawer compact. They survive puzzle files, local storage, mirrors and turns. A note belongs
+to the building piece; placing it adds terrain and objects to the adventure.
+Use normal world story/dialogue tools for in-game instructions. Empty notes
+add no property to legacy puzzle data. Invalid notes or incomplete junction
+files are refused without replacing saved pieces. Twelve slots and damaged-
+storage protections remain unchanged.

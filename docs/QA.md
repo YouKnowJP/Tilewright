@@ -1,5 +1,40 @@
 # Verification record
 
+## Pip and the Switchback Station — v0.39.0
+
+**1,156 Node tests**, syntax checks and the **135-file** production build pass.
+All six new chapters have three-star Trail/Nemesis clears, all-treasure routes
+and paused/manual alternatives to automatic loops. Junction tests cover exact
+cargo sampling, empty/wrong-colour branches, retained cargo, latched programs,
+both-result goals, source validation and the shared station cap. Rehearsal
+checks all 216 drafts without mutations. The finale requires releasing jade
+so its counting stamp can read Quiet. The full book, worlds, proofs and links
+round-trip; the largest official play link is 11,187 characters.
+
+Geometry, repaint and assembly checks preserve both banks and parcel links.
+Builder notes survive mirrors, turns, files and local storage. Invalid notes,
+missing junction sources and partial networks are refused. Empty notes retain
+legacy piece bytes. Continue, Undo and completed reviews preserve decisions;
+a captured v0.38 checkpoint keeps its original win fingerprint and exact v10
+export SHA-256.
+
+The **82-scenario release suite** adds eight Switchback cases: phone/desktop
+six-chapter books; free rehearsal and actual branch messages; reset/Undo;
+creator repaint, bank swap/rotation, note capture/download/import/place and
+proved shared play; malformed notes and quota failure; long names, large text,
+themed menus and 240-character notes at 320×568, 844×390, 768×900 and 1440×1000;
+and original v0.38 checkpoint continuation. CI retains both exhaustive groups
+and preserved-baseline migration as publishing gates.
+
+All eight Switchback cases pass in Chromium. Final retests also cover the folded
+builder-note disclosure and affected older Loom/Orchard engraving tools. Reviewed
+phone/desktop captures show the new station cover, map, Otherwise/Matching
+messages, hardware, bank menus, compact puzzle cards and expanded large notes.
+Notes start folded, and station help shows only the types present in the world.
+
+Browser checks use disposable profiles. Browser-engine and emulated-viewport
+coverage does not replace physical-device or assistive-technology sessions.
+
 ## Pip and the Lantern Foundry — v0.38.0
 
 **1,105 Node tests**, syntax checks and the **134-file** production build pass.

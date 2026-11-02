@@ -1077,3 +1077,27 @@ prism operations. `assemblyPreview` reflects before rotating. The drawer repaint
 its previews on either select change; placing/downloading uses the same transform
 without mutating saved pieces. Existing assembly storage and file envelopes stay
 version 1. Parcel networks join linked-channel capture/remap validation.
+
+
+## Cargo-reading junctions — v0.39
+
+`pip-sorter` compiles into a program station with `cargo`, two card banks and
+an optional both-results goal. `clockworkSignal` samples its held parcel;
+legacy signal stations still use plates/levers/receivers. Internal quiet and
+powered record keys remain compatible, while `clockworkBankLabel` renders
+Otherwise/Matching for junctions. Reading retains cargo, resets card index to
+zero and never spends/refills rewrites. Dock returns clear route records;
+Undo, Continue, reviews and rehearsal use the same immutable transitions.
+
+Junctions share the eight-station bound. Source validation rejects impossible
+cargo channels, and linked assembly capture/remapping keeps complete networks.
+Map/room transforms retain cargo IDs and both programs. Format 11 adds the new
+kind; a captured v0.38 checkpoint and full v10 export hash protect prior data.
+`pip-switchback-worlds.mjs` provides six original chapters with automatic and
+manual clears, including the plate-release finale.
+
+Assemblies keep their version-1 envelope. Optional printable `note` text is
+bounded to 240 characters and omitted when blank, preserving legacy bytes.
+The creator uses textContent and pre-wrapped, bounded-width card text. Preview
+transforms leave notes and saved pieces unchanged. Notes never become scripts
+or silently add story events to a placed world.

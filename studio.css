@@ -304,3 +304,5 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 .assembly-items canvas { width:100%; height:96px; object-fit:contain; background:#0d2929; border:1px solid #78916b55; }
 
 .assembly-tools .assembly-position{grid-column:1/-1}
+
+.assembly-items .assembly-note-copy{white-space:pre-wrap;overflow-wrap:anywhere;border-left:3px solid #d5bc7a;padding-left:10px}

@@ -3,6 +3,31 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## Switchback Station — v0.39
+
+Open **Choose your adventure → Storybooks → Pip and the Switchback Station**.
+Six chapters teach parcel questions, returning refill roads, wrong-colour
+branches, cooperative crossings and a four-colour station.
+
+**J** is a parcel junction. Pip’s Use reads the parcel it carries. A matching
+parcel loads **Matching**; empty hands or another colour load **Otherwise**.
+Reading keeps the parcel, starts the selected program at card 1 next turn,
+and spends no keeper rewrite. The chosen program stays loaded until changed.
+Junctions read cargo; M signal stamps still read plates, levers and charged
+receivers. Route hardware shows the current answer, both programs and which
+answers you have used. Some worlds require reading both answers.
+
+Start/Pause and Advance one card both work. Pause safely at a junction before
+changing a bridge plate. In the finale, release jade after the amber platform
+is finished so the jade counting stamp can read Quiet. Scout gives a complete
+route when you want help. Undo and Restart remain available.
+
+Creators can paint **Pip parcel junction** under Puzzles, choose its parcel
+channel and engrave both programs. **Swap the two programs** edits the draft;
+Apply object keeps it. In Puzzle assemblies, optional builder notes travel
+with downloaded pieces, imports, mirrors and rotations. Notes explain a piece
+to another builder; add a keeper or story moment for instructions during play.
+
 ## The Lantern Foundry — v0.38
 
 Open **Choose your adventure → Storybooks → Pip and the Lantern Foundry**.
