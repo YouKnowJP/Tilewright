@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**428 files in 15 folders.** Stage new files before refreshing. Run
+**429 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -26,7 +26,7 @@ captures, dependencies, and operating-system metadata are excluded.
 | [scripts/browser/](../scripts/browser/) | 48 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
 | [src/](../src/) | 113 |
-| [tests/](../tests/) | 62 |
+| [tests/](../tests/) | 63 |
 | [tests/fixtures/](../tests/fixtures/) | 32 |
 
 <details>
@@ -442,7 +442,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 62 files</summary>
+<summary>tests/ — 63 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -482,6 +482,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-prisms.test.mjs](../tests/pip-prisms.test.mjs)
 - [pip-programs.test.mjs](../tests/pip-programs.test.mjs)
 - [pip-switchback.test.mjs](../tests/pip-switchback.test.mjs)
+- [pip-tinker-parity.test.mjs](../tests/pip-tinker-parity.test.mjs)
 - [pip-tinker.test.mjs](../tests/pip-tinker.test.mjs)
 - [promise.test.mjs](../tests/promise.test.mjs)
 - [release-selection.test.mjs](../tests/release-selection.test.mjs)

@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **109 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **112 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -183,3 +183,13 @@ appearance/display persistence, enlarged themed menus across four viewport
 shapes, damaged/quota storage recovery, interrupted event advancement, honest
 community filtering and the original v0.41 checkpoint continuation. The release
 catalogue contains 109 cases split exhaustively into groups of 55 and 54.
+
+
+The v0.42.1 release adds three required regressions for canonical invention
+names and Undo with retained clears; editing/removing placed prisms, recipes
+and A/B memories with real test wins and exports; and enlarged, high-contrast
+part controls across phone, landscape, tablet and desktop shapes. Themed
+comboboxes honor inherited disabled fieldsets. The current 112-case catalogue
+is split into two exhaustive groups of 56. The eight pure parity tests in
+`tests/pip-tinker-parity.test.mjs` compare every three-card program with the
+main adventure rules, including both initial banks for the memory lesson.

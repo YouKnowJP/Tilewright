@@ -1,5 +1,48 @@
 # Verification record
 
+## Pip workshop editing and regression audit — v0.42.1
+
+**1,307 Node tests**, syntax checks, the **143-file** production build, public
+packaging checks and the **429-file** repository index pass. Eight new parity
+tests compare all three-card programs across eight single-companion challenge
+layouts, including both initial banks in the route-memory lesson: 1,944
+program/layout combinations, checked against the real adventure rules for up
+to 24 ticks each. Position, next card, transformed program, cargo and receiver
+counts agree. Adventure and project formats and core turn rules are unchanged.
+
+A live regression reproduced the old name-field mismatch: Undo restored the
+original title but left the edited title in its input. Both name fields now
+render the canonical saved values, and renaming at the bench keeps a verified
+clear. The test exercises blur, Undo, normalized creator names, export, reload
+and locked editing during a test. Firefox explicitly leaves the creator field
+before asserting the committed value, rather than assuming browser Tab timing.
+
+Two more required cases exercise editing and removing placed prisms, recipes
+and route memories; both loaded card banks and first-route selection; budget
+preservation; export with an invalidated mechanical clear; Undo and actual
+finished tests; fixed-station protection; and enlarged high-contrast menus at
+320×568, 844×390, 768×1024 and 1440×1000. All three new cases pass in Chromium,
+Firefox and WebKit. Reviewed phone/desktop captures include the part editor,
+board controls and 320-pixel enlarged first-bank dropdown.
+
+The broader dropdown family opens all 40 existing game/editor choices in each
+of those three engines. It covers real settings, creator and replay screens,
+controller selection with a finished mission, keyboard/touch behavior, a missing
+Popover fallback, grouped lists, rotation and viewport bounds. This audit found
+that Community filters had a hidden attribute overridden by their flex layout:
+visible buttons could not open. The stylesheet now hides them outside the
+Community shelf, and the required community test checks both directions.
+Themed choices also reflect a disabled parent fieldset, including accessible
+state, and reject opening or committing while disabled. The audit now names a
+failed control directly.
+
+The required release catalogue contains **112 cases**, split into two groups
+of 56, with the existing migration and five-platform publication gates. Reports
+and captures remain ignored. Before this patch, the preceding v0.42 release
+was independently confirmed: all 109 release cases and migration passed for
+8cf93bb, all 142 served files matched that commit, and eight targeted scenarios
+passed against the published website.
+
 ## Pip’s invention workshop — v0.42.0
 
 **1,299 Node tests**, syntax checks and the **143-file** production build pass.

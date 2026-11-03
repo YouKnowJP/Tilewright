@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.42.1 — 2026-11-02
+
+- Add direct editing and removal of placed Pip workshop parts. Load a prism, recipe or route memory into the tray, adjust it, then apply the settings to the selected tile without spending extra parts.
+- Expose the first A/B route for workshop memories, preserving both stored programs when editing imported inventions.
+- Fix invention name/creator fields after Undo and normalization. Renaming at the bench retains a verified clear; test mode keeps editing controls locked.
+- Synchronize themed dropdowns with disabled parent fieldsets, including accessible state and menu cancellation. Hide Community filters outside their shelf so unrelated views do not show inactive controls.
+- Add exhaustive studio/main-game comparison for every three-card program in eight single-companion layouts, including both initial route banks, plus live edit/share/Undo/readability regressions.
+
 ## 0.42.0 — 2026-11-02
 
 - Add Pip’s workshop: four interactive lessons, four limited-parts invention challenges, and two optional Pip-and-Sprout relay prototypes with parcel handoffs and shared plate timing.

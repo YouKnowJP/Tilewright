@@ -20,7 +20,7 @@ export async function checkDropdowns(browserType,{baseURL='http://127.0.0.1:4174
   async function audit(page){
     const dialogs=page.locator('dialog[open]'),scope=await dialogs.count()?dialogs.last():page;
     const ids=await scope.locator('.game-select-trigger:visible:not(:disabled)').evaluateAll(nodes=>nodes.map(node=>node.dataset.gameSelect));
-    for(const id of ids){const button=page.locator(trigger(id)),value=await page.locator('#'+id).inputValue();await button.click();assert.equal(await button.getAttribute('aria-expanded'),'true');assert.equal(await page.locator('.game-select-menu').count(),1);assert.equal(await page.locator('.game-select-menu').isVisible(),true);await fits(page);
+    for(const id of ids){const button=page.locator(trigger(id)),value=await page.locator('#'+id).inputValue();await button.click();assert.equal(await button.getAttribute('aria-expanded'),'true',`${id} opens its themed choices`);assert.equal(await page.locator('.game-select-menu').count(),1);assert.equal(await page.locator('.game-select-menu').isVisible(),true);await fits(page);
       const actual=await page.locator('.game-select-menu [role="option"]').allTextContents(),expected=await page.locator('#'+id).evaluate(select=>[...select.options].filter(option=>!option.hidden&&!option.closest('optgroup[hidden]')).map(option=>option.label));assert.deepEqual(actual,expected);assert.ok((await button.boundingBox()).height>=44);assert.match(await button.getAttribute('aria-label'),/\S/);await page.keyboard.press('Escape');assert.equal(await button.getAttribute('aria-expanded'),'false');assert.equal(await page.locator('#'+id).inputValue(),value);seen.add(id);
     }
   }

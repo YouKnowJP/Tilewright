@@ -24,6 +24,14 @@ Set three cards for each companion. Pick a part, configure it, then tap a free
 garden tile. Choose **Inspect tile** to read a station without changing it.
 Arrow keys move the yellow cursor; Space places or inspects. A text garden list
 includes every station’s coordinates. Parcel numbers identify colours too.
+To revise a placed part, select its tile with **Inspect tile** or the arrow keys,
+then choose **Edit this part**. Its actual prism operation, recipe or two route
+programs load into the tray. Change the settings and choose **Apply settings to
+this part**. The edit replaces that tile’s part within the same budget. The
+first-visit choice lets a route memory start with A or B. **Remove this part**
+and **Undo edit** make it easy to try a different idea. Fixed stations remain
+part of the challenge and cannot be edited.
+
 Parts cannot replace fixed stations, starting positions or water. Tubes need
 both ends. Each tray limits both total parts and the available kind of part.
 
@@ -62,7 +70,9 @@ playable. Download project files to keep work when saving is unavailable.
 Download a `.json` Pip project, copy its **PT1** code, or copy a `#pip=` play link
 from a hosted copy. A file or code works from a local development copy too.
 The import verifies a solution by replaying it before describing it as working.
-Changes remove a stale solution. Drafts can be shared honestly as unfinished.
+Changes to parts or cards remove a stale solution. Renaming an invention or its
+creator at the bench keeps a working clear, and Undo restores the visible
+name fields along with the saved project. Drafts can be shared honestly as unfinished.
 
 A finished single-companion invention can also download as an ordinary
 Tilewright adventure. Its creator clear is checked again under the main game
