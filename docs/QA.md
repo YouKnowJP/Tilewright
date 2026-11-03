@@ -29,7 +29,8 @@ Reviewed phone/desktop captures show the board, relay layout, appearance page,
 sharing page and enlarged high-contrast view. The review moved the invention
 picker and garden instructions into optional drawers to bring the board higher
 on phones. Largest-text navigation uses full-width choices to avoid broken
-words. New controls remain inside the optional workshop or existing Pip panel.
+words. Workshop entry buttons explicitly retain their return-focus target,
+including browsers where clicking a button does not focus it. New controls remain inside the optional workshop or existing Pip panel.
 
 The required release catalogue now has **109 cases**, partitioned exhaustively
 into 55 and 54; both Chromium groups, baseline migration and five platform jobs
