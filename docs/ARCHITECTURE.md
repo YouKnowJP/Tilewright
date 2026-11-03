@@ -6,6 +6,9 @@ browser checks use a pinned Playwright package.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-dawn-workshop.mjs` | Four mastery repair variations built from the night-post network, with bounded inventories and deterministic clears. |
+| `src/pip-garden-tools.mjs` / `src/pip-garden-tools-ui.mjs` | Atomic garden geometry, protected resizing and area edits, with folded creator controls. |
+| `src/pip-rehearsal.mjs` / `src/pip-rehearsal-ui.mjs` | Bounded immutable trace generation, repeat detection, advice, paged event views and real-test frame inspection. |
 | `src/pip-night-mail.mjs` | Six authored version-3 night-post missions, repair inventories, dialogue and verified example programs. |
 | `src/pip-duo.mjs` | Version-2/3 duo story catalogue, bounded creator schema, terrain/start edits and readiness validation; version-1 rules remain separate. |
 | `src/pip-duo-blueprints.mjs` | Configurable pieces, rotation/reflection/palette transformations and repeated arrangements, atomic placement and portable captures. |

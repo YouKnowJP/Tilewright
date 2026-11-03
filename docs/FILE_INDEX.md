@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**439 files in 15 folders.** Stage new files before refreshing. Run
+**446 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,10 +23,10 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 5 |
-| [scripts/browser/](../scripts/browser/) | 50 |
+| [scripts/browser/](../scripts/browser/) | 51 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 118 |
-| [tests/](../tests/) | 65 |
+| [src/](../src/) | 123 |
+| [tests/](../tests/) | 66 |
 | [tests/fixtures/](../tests/fixtures/) | 33 |
 
 <details>
@@ -257,7 +257,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 50 files</summary>
+<summary>scripts/browser/ — 51 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -295,6 +295,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-prism-browser-checks.mjs](../scripts/browser/pip-prism-browser-checks.mjs)
 - [pip-switchback-browser-checks.mjs](../scripts/browser/pip-switchback-browser-checks.mjs)
 - [pip-tinker-browser-checks.mjs](../scripts/browser/pip-tinker-browser-checks.mjs)
+- [pip-workshop-tools-browser-checks.mjs](../scripts/browser/pip-workshop-tools-browser-checks.mjs)
 - [presentation-browser-checks.mjs](../scripts/browser/presentation-browser-checks.mjs)
 - [release-selection.mjs](../scripts/browser/release-selection.mjs)
 - [release-smoke.mjs](../scripts/browser/release-smoke.mjs)
@@ -325,7 +326,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 118 files</summary>
+<summary>src/ — 123 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -377,12 +378,15 @@ captures, dependencies, and operating-system metadata are excluded.
 - [operations.mjs](../src/operations.mjs)
 - [pip-atlas-worlds.mjs](../src/pip-atlas-worlds.mjs)
 - [pip-coach.mjs](../src/pip-coach.mjs)
+- [pip-dawn-workshop.mjs](../src/pip-dawn-workshop.mjs)
 - [pip-duo-blueprints.mjs](../src/pip-duo-blueprints.mjs)
 - [pip-duo-storage.mjs](../src/pip-duo-storage.mjs)
 - [pip-duo-ui.mjs](../src/pip-duo-ui.mjs)
 - [pip-duo.mjs](../src/pip-duo.mjs)
 - [pip-foundry-worlds.mjs](../src/pip-foundry-worlds.mjs)
 - [pip-freight.mjs](../src/pip-freight.mjs)
+- [pip-garden-tools-ui.mjs](../src/pip-garden-tools-ui.mjs)
+- [pip-garden-tools.mjs](../src/pip-garden-tools.mjs)
 - [pip-gardens-worlds.mjs](../src/pip-gardens-worlds.mjs)
 - [pip-glassworks-worlds.mjs](../src/pip-glassworks-worlds.mjs)
 - [pip-look.mjs](../src/pip-look.mjs)
@@ -394,6 +398,8 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-prism-worlds.mjs](../src/pip-prism-worlds.mjs)
 - [pip-programs-ui.mjs](../src/pip-programs-ui.mjs)
 - [pip-programs.mjs](../src/pip-programs.mjs)
+- [pip-rehearsal-ui.mjs](../src/pip-rehearsal-ui.mjs)
+- [pip-rehearsal.mjs](../src/pip-rehearsal.mjs)
 - [pip-studio-ui.mjs](../src/pip-studio-ui.mjs)
 - [pip-switchback-worlds.mjs](../src/pip-switchback-worlds.mjs)
 - [pip-tinker.mjs](../src/pip-tinker.mjs)
@@ -449,7 +455,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 65 files</summary>
+<summary>tests/ — 66 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -493,6 +499,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-switchback.test.mjs](../tests/pip-switchback.test.mjs)
 - [pip-tinker-parity.test.mjs](../tests/pip-tinker-parity.test.mjs)
 - [pip-tinker.test.mjs](../tests/pip-tinker.test.mjs)
+- [pip-workshop-tools.test.mjs](../tests/pip-workshop-tools.test.mjs)
 - [promise.test.mjs](../tests/promise.test.mjs)
 - [release-selection.test.mjs](../tests/release-selection.test.mjs)
 - [replay-invariants.test.mjs](../tests/replay-invariants.test.mjs)

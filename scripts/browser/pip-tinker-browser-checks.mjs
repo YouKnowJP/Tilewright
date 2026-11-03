@@ -6,10 +6,10 @@ import {gardenWorld} from '../../src/pip-gardens-worlds.mjs';
 import {serializeAdventure,adventureCode,parseAdventure} from '../../src/workshop-sharing.mjs';
 import {verifyAdventureProof} from '../../src/workshop-model.mjs';
 import {TRAIL_SAVE_KEY} from '../../src/adventure-rewind.mjs';
-import {chooseOption as chooseGameOption,clickControl} from './ui-driver.mjs';
+import {chooseOption as chooseGameOption,clickControl,waitForGameReady} from './ui-driver.mjs';
 import {playGuild} from './guild-browser-checks.mjs';
 async function chooseOption(p,selector,value){if(['#ps-collection','#ps-trial'].includes(selector)&&await p.locator('#ps-chooser').getAttribute('open')===null)await p.locator('#ps-chooser>summary').click();await chooseGameOption(p,selector,value);}
-async function open(p){await p.locator('#title-workshop').click();await p.locator('#ws-tab-lab').click();await p.locator('#ws-pip-studio').click();}
+async function open(p){await waitForGameReady(p);await p.locator('#title-workshop').click();await p.locator('#ws-tab-lab').click();await p.locator('#ws-pip-studio').click();}
 async function collection(p,value,id){await chooseOption(p,'#ps-collection',value);if(id)await chooseOption(p,'#ps-trial',id);}
 async function worked(p){if(await p.locator('#ps-help').getAttribute('open')===null)await p.locator('#ps-help>summary').click();for(let i=0;i<3;i++)await p.locator('#ps-nudge').click();await p.locator('#ps-example').click();await p.locator('#game-confirm-accept').click();}
 async function win(p){await p.locator('#ps-test').click();await p.locator('#ps-run').click();await p.locator('#ps-status').filter({hasText:'Invention complete'}).waitFor();}

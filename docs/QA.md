@@ -1,5 +1,19 @@
 # Verification record
 
+## Dawn Workshop, rehearsals and garden tools — v0.45.0
+
+**1,408 Node tests** pass, including 43 new workshop-tool tests, syntax checks and the **153-file** production package. The four Dawn commissions have verified clears at 45, 61, 84 and 98 ticks, with two-to-four-part inventories, protected fixed hardware and portable creator proofs. They are explicit repair variations of the night-post network, with mirrored banks, changed recipes and increased deliveries. Existing project formats, ordinary adventure rules and save namespaces remain unchanged.
+
+Rehearsal tests compare complete traces against real engine wins in all **26** classic/duo workshop layouts. They verify immutable inputs/frames, exact clear timing, event records, bounded horizons, repeating routes and actionable missing-Use/structural advice. Live checks cover paged events, delivery filtering, Earlier/Later, playback interruption, opening tick 94 as a real test, Undo/advance, verified completion at 98, invalidation after editing and a six-tick original single-Pip clear/export. Previewing alone does not record a personal best.
+
+Geometry tests prove mirror and palette timing invariance across six complex gardens, quarter-turn reversibility, directional cargo banks and prism handedness, companion/card/home-flag swaps, centred resizing, station/start protection, complete-area validation and no-op proof preservation. Live tests complete a turned and resized map, paint and clear regions, undo station removal and verify coordinate/capture controls after changed dimensions. New shared remixes preserve the original challenge drafts and clear correctly after reopening.
+
+Six required scenarios cover both full Dawn runs at phone/desktop widths, rehearsal inspection, bulk garden edits, palette/partner sharing and enlarged controls. These and existing Night Post, blueprint and part-editor regressions pass in Chromium, Firefox and WebKit. Reviewed captures include 390/1440-pixel rehearsal panels, the pinned garden, shaped-map controls and 320-pixel largest-text/high-contrast menus. Controls remain folded until needed; phone Earlier/Later controls sit above a full-width Inspect button.
+
+A reload regression reached the visible menu while the startup overlay was still present. Workshop browser helpers now await both ready markers after navigation/reload; startup failure and action timeouts remain enforced. The affected save/reload case passed on rerun. Final focused checks cover pausing playback through rehearsal controls and original single-Pip export compatibility. Browser viewport/input emulation remains distinct from physical-device and player usability testing.
+
+The required release catalogue now contains **132 distinct cases**, split into two exhaustive groups of **66**, with all existing platform, migration and publication gates. Generated builds, captures, traces and private saves remain ignored. The repository index includes the focused story, model, UI and browser modules.
+
 ## The Night Post and creative blueprint tools — v0.44.0
 
 **1,365 Node tests** pass, with syntax checks and a **148-file** production build. Thirty-one new night-post tests and four additional template cases cover the new mechanics, repair inventories, persistence and blueprint operations. Seven projects captured from v0.43 retain exact serialized exports, share codes, final-state fingerprints and verified clears; four original blueprint exports also remain exact. New station rules use project format 3 and blueprint format 2, while original version-1/2 projects and ordinary adventure formats retain their behavior.

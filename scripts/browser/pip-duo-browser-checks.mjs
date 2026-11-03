@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
-import {chooseOption} from './ui-driver.mjs';
+import {chooseOption,waitForGameReady} from './ui-driver.mjs';
 import {DUO_MISSIONS,DUO_KEY,newDuoProject} from '../../src/pip-duo.mjs';
 import {TINKER_KEY,solvedTinkerProject,tinkerCode,parseTinkerCode,parseTinkerProject} from '../../src/pip-tinker.mjs';
 import {parseDuoBlueprint} from '../../src/pip-duo-blueprints.mjs';
-async function open(p){await p.locator('#title-workshop').click();await p.locator('#ws-tab-lab').click();await p.locator('#ws-duo-adventures').click();}
+async function open(p){await waitForGameReady(p);await p.locator('#title-workshop').click();await p.locator('#ws-tab-lab').click();await p.locator('#ws-duo-adventures').click();}
 async function collection(p,value,id){if(!await p.locator('#ps-chooser').evaluate(n=>n.open))await p.locator('#ps-chooser>summary').click();await chooseOption(p,'#ps-collection',value);if(id)await chooseOption(p,'#ps-trial',id);}
 async function details(p,id){if(!await p.locator(id).evaluate(n=>n.open))await p.locator(id+'>summary').click();}
 async function example(p){await details(p,'#ps-help');for(let i=0;i<3;i++)await p.locator('#ps-nudge').click();await p.locator('#ps-example').click();await p.locator('#game-confirm-accept').click();}

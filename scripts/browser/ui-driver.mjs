@@ -1,5 +1,9 @@
 // Navigate the public UI before operating controls that live in a library,
 // notes tab, or menu. Browser checks still use normal visible clicks/taps.
+export async function waitForGameReady(page){
+  await page.locator('#loading-note[hidden]').waitFor({state:'attached'});
+  await page.locator('#startup-status[hidden]').waitFor({state:'attached'});
+}
 export async function enterFirstTrail(page) {
   await page.locator('#adventure[data-view]').waitFor();
   if (await page.locator('#game-layout').isVisible()) return;

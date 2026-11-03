@@ -80,7 +80,7 @@ Duo adventures use project format 2 inside the existing PT1 file/code/link conta
 
 ## The Night Post: six harder chapters
 
-Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All twelve duo chapters are available without grinding.
+Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All sixteen duo chapters are available without grinding.
 
 | Chapter | Story | Challenge | Worked clear |
 | --- | --- | --- | --- |
@@ -104,6 +104,31 @@ Four more templates provide linked lockers, a cargo compass, a midnight dyehouse
 Arrange one to three copies across or down, with a gap of zero to two tiles. Optional palette shifting gives each copy a different set of linked colours. Copies without shifting retain their original links and still obey the garden’s tube/locker limits. The whole arrangement must fit inside 13×9, remain within 32 parts and avoid existing parts. The board outline and text preview report whether the current cursor position fits; a blocked placement stays disabled. Placing or undoing the whole arrangement is one edit. Saved arrangements reopen as a single piece, without applying their transformations a second time.
 
 **Name & revise this blueprint** edits the piece name, maker and builder note. Keep makes a new saved copy. Update saved blueprint confirms before replacing the selected saved piece; placed parts and other saved copies keep their own contents. Capture includes the new cargo banks and locker roles. New parts use blueprint format 2; original blueprint files remain format 1. Both open in the same drawer, stay inside the current journey and export as bounded JSON files.
+
+## Dawn Workshop: mastery commissions
+
+Choose **Dawn Workshop · 4 mastery repairs** in the Collection menu, or continue from Night Post chapter 12. These are authored repair variations of the night-post network, with mirrored banks, changed recipes and increased deliveries:
+
+| Chapter | Commission | Repair | Worked clear |
+| --- | --- | --- | --- |
+| 13 | The Reversed Route Library | Cargo compass and returning mirror | 45 ticks |
+| 14 | The Quiet Relay | Two blue locker ends with the correct roles | 61 ticks |
+| 15 | Three Invitations at Daybreak | Two recipes and three locker relays | 84 ticks |
+| 16 | The Last Lantern Express | Two presses, a cargo compass and a tube end; three deliveries and both couriers home | 98 ticks |
+
+All sixteen chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
+
+### Plan and replay a route
+
+The folded **Plan & replay a route** drawer rehearses current cards from the start for 12, 24, 60, 120 or 240 ticks. It stops at a complete route, exact repeating state, preview horizon or tick limit. It gives structural or route advice and keeps the bench unchanged until you choose **Inspect this frame**.
+
+Opening or using rehearsal controls pauses playback. Choose a moment, use Earlier/Later, or open the paged event trail. Filters show deliveries, locker exchanges, handoffs, blocked moves or program changes; at most eight event buttons appear per page. Selecting an event previews that frame’s companion positions, cargo and last actions. Inspect enters the real test at that point with the preceding Undo history. A completed inspected route is replayed and verified before a clear or personal best is attached. Changing the garden, cards or dialogue invalidates the rehearsal; repeat it before inspecting the new route. Reset test and Back to the bench keep their usual behavior.
+
+### Shape your own garden
+
+Remix a story or create a personal adventure, then open **Shape your garden**. Turn or mirror the complete map: roads, companions, their starting cards, station banks and prism handedness transform together. Quarter turns must fit the existing 7–13 column and 5–9 row limits. Colour shifting preserves internal parcel/link relationships and leaves Any parcel conditions intact; revise story colour names if needed. Trading companion routes also trades their starting cards and home flags, while Pip still acts first, so check the new timing.
+
+Resize from the top-left corner or centre the layout. Empty roads outside the new edge are trimmed; any companion or station outside it blocks the whole operation. Paint road or water rectangles from the yellow cursor, or remove placed stations in that rectangle. Water refuses to cover any starting companion or station. The garden text view offers exact column/row controls for phone placement. Every operation is atomic and supports one Undo edit. No-op brushes and unchanged sizes retain an existing clear; actual mechanical edits require a fresh test. Coordinate, area and capture selectors update with the board dimensions.
 
 ## Keep something worth returning to
 

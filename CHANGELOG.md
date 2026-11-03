@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.45.0 — 2026-11-03
+
+- Add Dawn Workshop: four mastery commissions that remix the night-post network into mirrored sorting repairs, restored locker links, three-delivery recipes and a four-part express repair. All sixteen duo chapters offer optional hints and verified examples.
+- Add route rehearsal for 12, 24, 60, 120 or 240 ticks, with repeat detection, actionable advice, paged event filters and inspectable frames. Planning controls pause playback. Previewing leaves the bench unchanged; inspecting a frame enters the real test with Undo history and verified completion handling.
+- Add whole-garden rotation, reflection, colour shifting and companion-route trades. Direction cards, conditional banks, prism handedness and home flags move with the layout. Every actual mechanical edit invalidates an old clear and supports one-step Undo.
+- Add protected resizing and rectangle road/water/station brushes. Resizing cannot remove a companion or station; bulk edits validate the complete area before applying. Coordinate and capture controls follow changed dimensions.
+- Keep advanced tools folded, add readable narrow-phone rehearsal controls and preserve existing project formats, saves and ordinary adventure rules.
+- Extend live mission, creator, large-text, event paging, geometry, storage-isolation and legacy regressions.
+
 ## 0.44.0 — 2026-11-03
 
 - Add The Night Post: six harder Pip-and-Sprout stories, including asynchronous letters, cargo-dependent routes, two-way depot exchanges and two limited-parts repair challenges. All twelve duo chapters remain available with optional hints and verified examples.
