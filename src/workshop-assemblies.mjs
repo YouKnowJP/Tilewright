@@ -52,7 +52,7 @@ export function pasteAssembly(input,source,point,turns=0,reflection='none'){
   if(!point||!Number.isInteger(point.x)||!Number.isInteger(point.y)||point.x<0||point.y<0||point.x+b.width>pack.map.width||point.y+b.height>pack.map.height)throw Error('Move the cursor so the entire assembly fits inside the map.');
   if(pack.markers.some(m=>inside(m,b)))throw Error('Place assemblies on an empty object area. Terrain will be replaced; existing puzzle objects stay safe.');
   if(pack.markers.length+assembly.markers.length>MAX_MARKERS)throw Error('This assembly would exceed the 128-object limit.');
-  if(pack.markers.filter(m=>['pip-stamp','pip-router','pip-sorter'].includes(m.kind)).length+assembly.markers.filter(m=>['pip-stamp','pip-router','pip-sorter'].includes(m.kind)).length>8)throw Error('A world can hold at most eight program stamps.');
+  if(pack.markers.filter(m=>['pip-stamp','pip-router','pip-sorter','pip-flip'].includes(m.kind)).length+assembly.markers.filter(m=>['pip-stamp','pip-router','pip-sorter','pip-flip'].includes(m.kind)).length>8)throw Error('A world can hold at most eight program stamps.');
   if(pack.markers.filter(m=>m.kind==='pip-press').length+assembly.markers.filter(m=>m.kind==='pip-press').length>8)throw Error('A world can hold at most eight parcel presses.');
   if(['pip-parcel','pip-socket'].some(kind=>pack.markers.filter(m=>m.kind===kind).length+assembly.markers.filter(m=>m.kind===kind).length>8))throw Error('Keep at most eight parcel sources and eight receivers.');
   if(pack.markers.filter(m=>m.kind==='pip-prism').length+assembly.markers.filter(m=>m.kind==='pip-prism').length>8)throw Error('A world can hold at most eight compass prisms.');
@@ -82,7 +82,7 @@ export const MAX_ASSEMBLY_BYTES=150000;
 function portableAssembly(input){
  const a=normalizeAssembly(input),sources=a.markers.filter(m=>m.kind==='pip-parcel'),receivers=a.markers.filter(m=>m.kind==='pip-socket'),presses=a.markers.filter(m=>m.kind==='pip-press');
  for(const kind of ['clockwork','partner','relic'])if(a.markers.filter(m=>m.kind===kind).length>1)throw Error('Keep at most one companion, partner and relic in a puzzle assembly.');
- if(a.markers.filter(m=>m.kind==='pip-prism').length>8||a.markers.filter(m=>['pip-stamp','pip-router','pip-sorter'].includes(m.kind)).length>8)throw Error('Keep at most eight prisms and eight program stamps in a puzzle assembly.');
+ if(a.markers.filter(m=>m.kind==='pip-prism').length>8||a.markers.filter(m=>['pip-stamp','pip-router','pip-sorter','pip-flip'].includes(m.kind)).length>8)throw Error('Keep at most eight prisms and eight program stamps in a puzzle assembly.');
  if(sources.length>8||receivers.length>8||presses.length>8)throw Error('Keep at most eight parcel sources, receivers and presses.');
  if(presses.length){if(!sources.length||!receivers.length)throw Error('Include parcel sources and receivers with press recipes.');const problem=freightNetworkProblem(sources,receivers,presses);if(problem)throw Error(problem);}
  else for(const m of [...sources,...receivers,...a.markers.filter(m=>m.kind==='pip-lock')])if(!sources.some(p=>p.channel===m.channel)||!receivers.some(p=>p.channel===m.channel))throw Error('Include matching parcel sources and receivers in the puzzle file.');

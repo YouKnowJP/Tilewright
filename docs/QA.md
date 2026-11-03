@@ -1,5 +1,46 @@
 # Verification record
 
+## Pip and the Clockwork Gardens — v0.41.0
+
+**1,261 Node tests**, syntax checks and the **138-file** production build pass.
+All six chapters have three-star Trail/Nemesis clears, all-treasure routes and
+paused-card alternatives. The finale has a separate manual route while the
+normal clear coordinates keeper movement with Pip's running loop. Tests cover
+A/B starting banks, next-card restart, latched cards, retained cargo, independent
+signs, bounded own-ID bits/route records, shared station limits and no external
+signal requirement. All 216 rehearsal drafts remain immutable.
+
+Blueprint checks cover all four complete portable networks, independent copied
+snapshots, full-shelf/unknown-ID refusal, geometry transforms, fresh pasted IDs,
+parcel/tube links and storage round-trips. Repaint, whole-map/room turns, dock
+reset, Undo, Continue and route reviews preserve their expected state. A captured
+v0.40 checkpoint and exact full v12 export hash retain the original outcome.
+New proved worlds/book round-trip; the largest official link is 6,399 characters.
+
+The release catalogue has **98 cases**, in two exhaustive groups of 49. Eight
+new cases cover full phone/desktop books and honors; rehearsal/reset/Undo;
+creator repaint, both banks, starting route, swaps and rotations; copied,
+mirrored, exported/imported/placed blueprints and verified shared play; quota
+and damaged-shelf recovery; next-bank descriptions, themed menus and enlarged
+high-contrast layouts at 320×568, 844×390, 768×900 and 1440×1000; independent
+route memories; and original v0.40 continuation. Baseline migration and the
+platform matrix remain publishing gates. Profiles are disposable.
+
+All eight new scenarios pass in Chromium, Firefox and WebKit. The creator check
+selects the sign beneath its overlapping delivery flag, then places an imported
+piece on a connected road; the normal validator still refuses disconnected
+missions. The blueprint browser check also fills all twelve slots before
+exercising quota failure and damaged-shelf recovery. No console errors are
+filtered and no action timeout is increased.
+
+Reviewed phone/desktop captures cover the original cover, all six maps, route
+message, next-bank directory, creator programs and themed bank menu, folded
+assembly drawer, blueprint previews and copied cards. Blueprint metadata gives
+dimensions/object count, its text is compact, and copying has immediate visible
+feedback beside the button. Enlarged high-contrast menus keep the existing
+unwrapped Back/Close navigation. Physical-device and assistive-technology
+sessions remain outside these emulated viewport/engine checks.
+
 ## Pip and the Glassworks — v0.40.0
 
 **1,210 Node tests**, syntax checks and the **136-file** production build pass.

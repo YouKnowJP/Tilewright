@@ -35,7 +35,7 @@ export function serializeAdventure(input) {
 export function parseAdventure(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > MAX_ADVENTURE_BYTES) throw Error('Choose an adventure file smaller than 400 KB.');
   let input; try { input = JSON.parse(text); } catch { throw Error('The adventure file is not valid JSON.'); }
-  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5,6,7,8,9,10,11,12].includes(input.version)) throw Error('Choose a Tilewright adventure file, rather than a terrain-only map.');
+  if (!input || input.format !== ADVENTURE_FORMAT || ![1,2,3,4,5,6,7,8,9,10,11,12,13].includes(input.version)) throw Error('Choose a Tilewright adventure file, rather than a terrain-only map.');
   if(input.proof?.encoding!==undefined){if(input.version<12||input.proof.encoding!=='actions-rle-v1'||input.proof.actions!==undefined)throw Error('This adventure uses an unsupported creator-clear encoding.');input.proof={difficulty:input.proof.difficulty,actions:expandProof(input.proof.runs)};}else if(input.proof?.runs!==undefined)throw Error('The creator clear needs a supported action encoding.');
   if (input.encoding !== undefined) {
     if (input.encoding !== 'rle-v1' || !Number.isInteger(input.map?.width) || !Number.isInteger(input.map?.height) || input.map.width < 1 || input.map.height < 1 || input.map.width > 64 || input.map.height > 64

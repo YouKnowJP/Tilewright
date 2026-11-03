@@ -1135,3 +1135,31 @@ The drawer validates Save before replacing a slot, uses textContent for notes,
 and leaves preview transforms outside the saved original. Cancel writes nothing.
 Failed writes preserve old bytes and allow session downloads; damaged shelves
 retain their raw storage. The assembly storage/file envelope stays version 1.
+
+
+## Independent flip-stamp memories — v0.41
+
+`pip-flip` compiles into `clockworkStamps` with `flip: true`, two normalized
+programs and a boolean starting route. Flip worlds alone allocate
+`clockwork.flips`, an own-ID boolean record. `clockworkSignal` reads the
+remembered next bank or the starting default without mutations. Use loads it,
+flips that stamp's bit, records the existing bounded quiet/powered route keys,
+restarts card 1 and retains cargo. `clockworkBankLabel` renders Route A/B.
+Shared program-station and both-route goals need no new journal commands.
+
+The shared eight-station cap bounds memory; repeated visits do not append an
+unbounded history. Dock returns clear bits/route records and thereby restore
+starting defaults. Immutable rehearsal, replay, Undo and completed reviews use
+the same transition. Map/assembly transforms preserve bank order and initial
+state while rotating card directions. Runtime room turns retain per-ID memory.
+Z-numbered cues and written next-route descriptions avoid relying on colour.
+Format 13 adds the kind; the existing bounded compact-proof codec is reused.
+A captured v0.40 checkpoint and full v12 SHA-256 protect legacy identities.
+
+`workshop-blueprints.mjs` constructs four original complete assemblies from
+public authored worlds. `copyBlueprint` uses the same portable validation and
+append-only import path as player files. Blueprint originals, saved previews
+and world drafts remain separate snapshots. The folded drawer preview uses
+existing local tile/object drawing. Full shelves disable copying; failed writes
+and damaged storage preserve raw bytes and allow session downloads. Assembly
+storage and portable files remain version 1.

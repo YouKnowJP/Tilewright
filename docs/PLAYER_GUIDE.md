@@ -3,6 +3,36 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## The Clockwork Gardens — v0.41
+
+Open **Choose your adventure → Storybooks → Pip and the Clockwork Gardens**.
+Six chapters teach returning signs, a different starting route, repeated parcel
+trips, shared bridge timing and a four-road courier braid. The final garden
+combines three remembered routes, two recipes, two jade deliveries, a crate
+bridge and a bell duet. Scout offers a complete route when you want help.
+
+**Z** is a flip stamp. Pip's Use loads **Route A**, then **Route B** on its next
+visit, alternating thereafter. Some signs start on B. Each sign remembers its
+own next route, keeps Pip's parcel and spends no keeper rewrite. Its selected
+program stays loaded until changed; the next turn begins with card 1.
+Walking or waiting beside a sign does not flip it. Route hardware lists both
+programs, the next route and which routes have been used. Quest may require
+both. Undo and Continue keep the memories; an allowed dock return restores
+each sign's starting route and clears its route goals.
+
+Build one under **Workshop → Puzzles → Pip flip stamp**. Engrave both programs,
+optionally start on B and require both routes. No pressure signal or parcel
+source is needed for the sign itself. In the final garden, the signs remember
+their turns while the parcel waits for the right recipe; a wrong recipe keeps it.
+
+Open **Puzzle assemblies → Workshop blueprints** for four original building
+pieces. Choose one to see its original map and builder note, then **Keep a copy**
+to add a new personal slot. Copies can be renamed, mirrored, rotated, downloaded
+and placed like your own pieces. The current world changes only when you place
+a piece; Undo restores that placement. Copying never replaces an existing slot.
+Read the new link numbers after placement, and playtest your full adventure
+before sharing its verified file, code, link or Storybook.
+
 ## The Glassworks — v0.40
 
 Open **Choose your adventure → Storybooks → Pip and the Glassworks**. Six

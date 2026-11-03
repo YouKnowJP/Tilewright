@@ -80,6 +80,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
     case 'pip-press': rect('#324a58',2,4,20,19);rect(color,4,7,7,12);rect(CHANNEL_COLORS[item.output]||'#8ed8ae',13,7,7,12);rect('#f5df9d',8,3,8,4);rect('#183d43',10,7,4,9);rect('#fff1c7',9,13,7,3);rect('#8eac99',5,20,14,3);break;
+    case 'pip-flip': rect('#354e5c',2,3,20,20);rect('#f0c785',4,5,7,14);rect('#9cd4bb',13,5,7,14);rect('#193c42',6,8,3,8);rect('#193c42',15,8,3,8);rect('#f7edbd',10,10,4,4);rect('#bbad7b',5,20,14,3);break;
     case 'pip-sorter': rect('#344b61',2,3,20,20);rect(color,4,5,16,16);rect('#173d45',6,7,12,12);rect('#fff0b9',11,12,3,7);rect('#fff0b9',7,8,3,6);rect('#fff0b9',15,8,3,6);rect('#fff0b9',8,13,9,3);break;
     case 'pip-parcel': rect('#465a61',2,5,20,18);rect(color,4,7,16,13);rect('#102e36',6,9,12,9);rect('#f5d694',9,11,7,7);rect('#fff1c7',11,11,2,7);break;
     case 'pip-socket': rect('#466570',3,5,18,18);rect(color,5,7,14,13);rect(item.powered?'#eaf8b7':'#183b46',7,9,10,8);rect('#fff1c7',10,10,4,6);break;
@@ -117,6 +118,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   }
   ctx.restore();
   if(item.kind==='pip-press')drawCueBadge(ctx,item,'E',item.number||'',size);
+  if(item.kind==='pip-flip')drawCueBadge(ctx,item,'Z',item.number||'',size);
   if(item.kind==='pip-sorter')drawCueBadge(ctx,item,'J',item.number||'',size);
   if(['pip-parcel','pip-socket'].includes(item.kind))drawCueBadge(ctx,item,item.kind==='pip-parcel'?'Q':'N',CHANNEL_NUMBERS[item.channel]||'1',size);
   if(['plate','bridge','lever','door','waystone','ember','pip-lock'].includes(item.kind))drawCueBadge(ctx,item,CHANNEL_NUMBERS[item.channel]||'1','',size);
@@ -135,6 +137,7 @@ export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = 
   for(const room of pack.markers.filter(m=>m.kind==='turntable')){const r=(room.span-1)/2;ctx.strokeStyle='#f6d88e';ctx.lineWidth=thumbnail?1:2;ctx.setLineDash([4,3]);ctx.strokeRect((room.x-r)*size+1,(room.y-r)*size+1,room.span*size-2,room.span*size-2);ctx.setLineDash([]);}
   for(const [i,press]of pack.markers.filter(m=>m.kind==='pip-press').entries())drawCueBadge(ctx,press,'E',String(i+1),size);
   for(const [i,prism]of pack.markers.filter(m=>m.kind==='pip-prism').entries())drawCueBadge(ctx,prism,'X',String(i+1),size);
+  for(const [i,flip]of pack.markers.filter(m=>m.kind==='pip-flip').entries())drawCueBadge(ctx,flip,'Z',String(i+1),size);
   for(const [i,junction]of pack.markers.filter(m=>m.kind==='pip-sorter').entries())drawCueBadge(ctx,junction,'J',String(i+1),size);
   for(const [i,stamp]of pack.markers.filter(m=>['pip-stamp','pip-router'].includes(m.kind)).entries())drawCueBadge(ctx,stamp,'M',String(i+1),size);
   for(const tube of pack.markers.filter(m=>m.kind==='pip-tube'))drawCueBadge(ctx,tube,'U',CHANNEL_NUMBERS[tube.channel],size);
@@ -143,4 +146,15 @@ export function drawWorkshopWorld(canvas, pack, { thumbnail = false, selected = 
   if (object?.route && !thumbnail) { ctx.strokeStyle = '#f5d893'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]); ctx.beginPath(); object.route.forEach((p, i) => i ? ctx.lineTo((p.x + .5) * size, (p.y + .5) * size) : ctx.moveTo((p.x + .5) * size, (p.y + .5) * size)); ctx.stroke(); ctx.setLineDash([]); }
   if (object) { ctx.strokeStyle = '#fff0b2'; ctx.lineWidth = 2; ctx.strokeRect(object.x * size + 1, object.y * size + 1, size - 2, size - 2); }
   if (cursor && !thumbnail) { ctx.strokeStyle = '#fff4d2'; ctx.lineWidth = 1; ctx.strokeRect(cursor.x * size + 2, cursor.y * size + 2, size - 4, size - 4); }
+}
+
+export function drawGardensCover(canvas){
+ canvas.width=400;canvas.height=160;const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;
+ const p=(colour,x,y,w,h)=>{c.fillStyle=colour;c.fillRect(x,y,w,h);};
+ p('#183c40',0,0,400,160);p('#416152',0,108,400,52);p('#bdaa78',12,124,376,8);p('#a4bb8b',0,149,400,4);
+ for(const [x,y]of [[30,58],[76,75],[141,42],[228,67],[365,52]]){p('#8eae7a',x,y,5,62);p('#a9c68e',x-12,y+10,16,8);p('#739f7c',x+3,y+23,16,8);p('#efca86',x-5,y-3,16,12);}
+ p('#dbc797',95,91,130,5);p('#dbc797',95,91,5,34);p('#dbc797',221,91,5,34);
+ c.save();c.translate(116,58);drawWorkshopObject(c,{kind:'pip-flip',x:0,y:0},56);c.restore();
+ c.save();c.translate(268,54);drawWorkshopObject(c,{kind:'clockwork',x:0,y:0},77);c.restore();
+ for(const [x,y]of [[20,19],[89,30],[197,21],[259,33],[377,17]])p('#f4e5ba',x,y,3,3);
 }

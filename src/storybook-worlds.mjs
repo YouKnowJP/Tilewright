@@ -1,3 +1,4 @@
+import {gardensBook} from './pip-gardens-worlds.mjs';
 import {glassworksBook} from './pip-glassworks-worlds.mjs';
 import {switchbackBook} from './pip-switchback-worlds.mjs';
 import {foundryBook} from './pip-foundry-worlds.mjs';
@@ -68,5 +69,6 @@ export function featuredBooks() {
     foundryBook(),
     switchbackBook(),
     glassworksBook(),
+    gardensBook(),
   ];
 }

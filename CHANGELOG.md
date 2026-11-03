@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.41.0 — 2026-11-02
+
+- Add Pip and the Clockwork Gardens: six original adventures with returning signs, shared ferry timing, a four-road braid and a two-recipe garden finale.
+- Add flip stamps with independent Route A/B memories, a selectable starting bank and both-route goals. They keep cargo and need no external signal or keeper rewrite.
+- Add four original workshop blueprints with previews and builder notes. Copy into a new personal slot, edit, mirror, turn, place and share through existing puzzle/adventure tools.
+- Add Z cues, readable next-route hardware and original garden cover art, keeping new controls inside existing panels and a folded blueprint drawer.
+- Add adventure format 13 while preserving v0.40 checkpoints and v12 exports. Extend rules, creator, responsive, storage-recovery and live-browser coverage.
+
 ## 0.40.0 — 2026-11-02
 
 - Add Pip and the Glassworks: six original recipe adventures, including return kilns, a shared ferry, repeated deliveries and a four-window factory from one well.

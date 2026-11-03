@@ -456,3 +456,33 @@ a damaged shelf is never silently overwritten.
 Recipe worlds use adventure format 12. Their long creator clears use compact
 repeated-action storage when smaller, keeping full replay and verification.
 Versions 1–11 retain their existing serialization and identities.
+
+
+## Remembered routes and workshop blueprints — v0.41
+
+A **Pip flip stamp** has Route A and Route B, a starting-route option and the
+optional requirement to load both. Use loads the remembered bank and flips the
+next bank for a future visit. It restarts card 1 next turn, retains cargo and
+spends no rewrite. Unlike a signal stamp or cargo junction, it needs no linked
+channel or external source. Flip stamps share the eight-program-station limit.
+Each has an independent memory. Repainting, rotating and mirroring retain both
+banks and the selected starting route; geometric transforms rotate the cards.
+Dock returns restore starting banks and clear used-route goals. Rehearsal,
+Undo, Continue, rotating rooms and completed reviews preserve these rules.
+
+The **Workshop blueprints** disclosure in Puzzle assemblies starts folded.
+Four original pieces include a two-road sign, a parcel pendulum, a four-road
+braid and a simple amber-to-jade recipe. Its preview and notes describe the
+original. **Keep a copy** appends an independent personal assembly, up to twelve
+slots, without changing the world draft. Current preview turns and reflections
+apply to saved-card placement/download, not to the original blueprint copy.
+Names do not overwrite matching saved names. Edit details works on a copy.
+
+Copied pieces use the existing portable puzzle format, complete-network
+validation, fresh pasted IDs and independent mechanism/tube channels. If the
+shelf is full, Keep a copy is disabled. If storage fails or the saved shelf is
+damaged, a copy stays usable/downloadable for this visit while earlier bytes
+remain untouched. Blueprints are included locally with the game; no upload or
+account is required. Complete-adventure playtests still prove actual routes.
+New flip-stamp adventures use format 13. Earlier world identities, format-12
+exports and saved journeys retain their original behavior.

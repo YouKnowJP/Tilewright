@@ -314,3 +314,5 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 .assembly-dialog textarea:focus-visible{outline:2px solid #f1d68e;outline-offset:3px}
 .ws-inspector-heading h3{min-width:0;overflow-wrap:anywhere}
 .ws-inspector-heading #ws-inspector-close{flex-shrink:0;white-space:nowrap}
+
+#ws-blueprints{margin:14px 0}#ws-blueprint-preview{display:block;box-sizing:border-box;width:100%;height:132px;object-fit:contain;image-rendering:pixelated;background:#0d2929;border:1px solid #78916b55;margin:14px 0}#ws-blueprints :is(h3,p){overflow-wrap:anywhere;min-width:0}#ws-blueprint-copy{min-height:44px;max-width:100%;white-space:normal}

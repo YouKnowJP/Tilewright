@@ -228,7 +228,7 @@ export function createAdventureRenderer(canvas, stage, { reducedMotion: motionPr
     for(const receiver of stage.clockworkReceivers||[])if(visible(receiver)){drawWorkshopObject(ctx,{...receiver,kind:'pip-socket',powered:receiverPowered(run,receiver)});drawCueBadge(ctx,receiver,'N',receiver.number);}
     for(const prism of stage.clockworkPrisms||[])if(visible(prism)){drawWorkshopObject(ctx,{...prism,kind:'pip-prism'});drawCueBadge(ctx,prism,'X',prism.number);}
     for(const press of stage.clockworkPresses||[])if(visible(press)){drawWorkshopObject(ctx,{...press,kind:'pip-press'});drawCueBadge(ctx,press,'E',press.number);}
-    for(const stamp of stage.clockworkStamps||[])if(visible(stamp)){drawWorkshopObject(ctx,{...stamp,kind:stamp.cargo?'pip-sorter':stamp.alternate?'pip-router':'pip-stamp'});drawCueBadge(ctx,stamp,stamp.cargo?'J':'M',stamp.number);}
+    for(const stamp of stage.clockworkStamps||[])if(visible(stamp)){drawWorkshopObject(ctx,{...stamp,kind:stamp.flip?'pip-flip':stamp.cargo?'pip-sorter':stamp.alternate?'pip-router':'pip-stamp'});drawCueBadge(ctx,stamp,stamp.flip?'Z':stamp.cargo?'J':'M',stamp.number);}
     for(const tube of stage.clockworkTubes||[])if(visible(tube)){drawWorkshopObject(ctx,{...tube,kind:'pip-tube'});drawCueBadge(ctx,tube,'U',tube.number);}
     if(run.clockwork&&visible(run.clockwork)){drawWorkshopObject(ctx,{...run.clockwork,kind:'clockwork'});drawCueBadge(ctx,run.clockwork,'A');}
     if(preferences().mapCues!=='on')for(const [i,stop]of (stage.clockworkStops||[]).entries())if(visible(stop))drawCueBadge(ctx,{...stop,y:stop.y+.5},'F',String(i+1));
