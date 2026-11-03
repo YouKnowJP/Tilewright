@@ -78,6 +78,33 @@ Select Inspect, put the garden cursor at the desired top-left corner, then **Pla
 
 Duo adventures use project format 2 inside the existing PT1 file/code/link container. Working clears are replayed before being labelled verified. Duo projects play here; ordinary single-Pip adventure exports retain their current format. No server, account or automatic upload is involved.
 
+## The Night Post: six harder chapters
+
+Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All twelve duo chapters are available without grinding.
+
+| Chapter | Story | Challenge | Worked clear |
+| --- | --- | --- | --- |
+| 7 | The Midnight Post | Asynchronous delivery through linked lockers | 72 ticks |
+| 8 | The Compass That Listens | Route from the parcel held, rather than a fixed bank | 45 ticks |
+| 9 | Rook’s Blue Promise | Locker links, cargo matching and two recipes | 54 ticks |
+| 10 | Two Roads for One Greenhouse | Four cross-companion relays, empty lockers and two home flags | 61 ticks |
+| 11 | The Brass Road Repair | Fit one cargo compass and one missing tube into a working mail road | 73 ticks |
+| 12 | The Last Collection Before Dawn | Configure two missing recipes, trade four parcels and return both couriers | 73 ticks |
+
+**K parcel lockers** with the same numbered connection share one parcel slot. Their connection colour is independent of the parcel colour. A carrying companion can store if the slot is empty; an empty-handed companion can collect if it is full. A full slot never replaces either parcel. Send-only lockers never collect; collect-only lockers keep any cargo already held. Each connection supports at most two locker ends. A relay is credited only when the other companion collects the stored parcel. Pip still acts before Sprout, so a same-tick send/collection is possible. A companion taking its own parcel earns no relay.
+
+**C cargo compasses** read the parcel held when Use happens. Any parcel or a selected numbered colour chooses Matching; empty hands or a nonmatching parcel choose Otherwise. Both banks keep cargo and restart at card 1. They share the existing eight-part limit with route memories and signals. Inspect the station or use the garden text view to read its condition and both programs.
+
+Adding a locker or cargo compass upgrades a personal adventure to project format 3. Its folded story drawer exposes zero-to-four locker relays and an optional empty-locker finish. Old version-2 maps retain their original exports until new mechanics are added. Ordinary single-Pip adventures retain their existing format. The two repair stories permit only their listed parts and budget; fixed stations stay protected. A worked example includes the correctly configured repair parts, and mechanical edits remove its old proof.
+
+### Reflect, arrange and revise blueprints
+
+Four more templates provide linked lockers, a cargo compass, a midnight dyehouse and a collector loop. **Reflect & arrange copies** stays folded until needed. Reflect left/right or top/bottom, then rotate: geometry, bank directions and prism handedness change together. Companion cards stay as set, so turn their directions to match the placed piece.
+
+Arrange one to three copies across or down, with a gap of zero to two tiles. Optional palette shifting gives each copy a different set of linked colours. Copies without shifting retain their original links and still obey the garden’s tube/locker limits. The whole arrangement must fit inside 13×9, remain within 32 parts and avoid existing parts. The board outline and text preview report whether the current cursor position fits; a blocked placement stays disabled. Placing or undoing the whole arrangement is one edit. Saved arrangements reopen as a single piece, without applying their transformations a second time.
+
+**Name & revise this blueprint** edits the piece name, maker and builder note. Keep makes a new saved copy. Update saved blueprint confirms before replacing the selected saved piece; placed parts and other saved copies keep their own contents. Capture includes the new cargo banks and locker roles. New parts use blueprint format 2; original blueprint files remain format 1. Both open in the same drawer, stay inside the current journey and export as bounded JSON files.
+
 ## Keep something worth returning to
 
 Completion records your fastest, smallest and latest distinct answers, up to

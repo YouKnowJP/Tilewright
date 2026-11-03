@@ -1,0 +1,569 @@
+{
+  "source": "d8720e1bfcf3eadc5a330bbd3524fc95bbfe566e",
+  "records": [
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 2,
+        "trialId": "duo-first-letter",
+        "name": "A Letter for Two",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "right",
+            "right",
+            "use"
+          ],
+          [
+            "wait",
+            "wait",
+            "use"
+          ]
+        ],
+        "parts": [],
+        "proof": {
+          "ticks": 9
+        }
+      },
+      "serializedSha": "3f2cef86a04073bbad453620bb4a91f076202df327bbdb5fddf06be6f51e0c7a",
+      "code": "PT1.245ad38f.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjoyLCJ0cmlhbElkIjoiZHVvLWZpcnN0LWxldHRlciIsIm5hbWUiOiJBIExldHRlciBmb3IgVHdvIiwiYXV0aG9yIjoiTGFudGVybiBUcmFpbHMiLCJwcm9ncmFtcyI6W1sicmlnaHQiLCJyaWdodCIsInVzZSJdLFsid2FpdCIsIndhaXQiLCJ1c2UiXV0sInBhcnRzIjpbXSwicHJvb2YiOnsidGlja3MiOjl9fQo",
+      "stateSha": "c04150562894024d1cbce0dbe5b95bc401a0ff4d40fddecc048caf787a7a22f9"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 2,
+        "trialId": "duo-dyehouse",
+        "name": "The Dyehouse Promise",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "use",
+            "right",
+            "right"
+          ],
+          [
+            "wait",
+            "wait",
+            "use"
+          ]
+        ],
+        "parts": [],
+        "proof": {
+          "ticks": 11
+        }
+      },
+      "serializedSha": "3a82b2fd1c783f34825196509148c1342671682436a28e95233b78b491743e6f",
+      "code": "PT1.02435465.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjoyLCJ0cmlhbElkIjoiZHVvLWR5ZWhvdXNlIiwibmFtZSI6IlRoZSBEeWVob3VzZSBQcm9taXNlIiwiYXV0aG9yIjoiTGFudGVybiBUcmFpbHMiLCJwcm9ncmFtcyI6W1sidXNlIiwicmlnaHQiLCJyaWdodCJdLFsid2FpdCIsIndhaXQiLCJ1c2UiXV0sInBhcnRzIjpbXSwicHJvb2YiOnsidGlja3MiOjExfX0K",
+      "stateSha": "5a7b7688644a51d0117393fd2e66519c8adc99d47e3272d9f2ea6f30853bf1cd"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 2,
+        "trialId": "duo-rain-bridges",
+        "name": "A Bridge for the Rain",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "use",
+            "right",
+            "right"
+          ],
+          [
+            "left",
+            "left",
+            "use"
+          ]
+        ],
+        "parts": [],
+        "proof": {
+          "ticks": 13
+        }
+      },
+      "serializedSha": "32b275d453d4534e8b4999d0822c7da213f801181a4950f1128cdc3fe2f0cddc",
+      "code": "PT1.17d40e58.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjoyLCJ0cmlhbElkIjoiZHVvLXJhaW4tYnJpZGdlcyIsIm5hbWUiOiJBIEJyaWRnZSBmb3IgdGhlIFJhaW4iLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJ1c2UiLCJyaWdodCIsInJpZ2h0Il0sWyJsZWZ0IiwibGVmdCIsInVzZSJdXSwicGFydHMiOltdLCJwcm9vZiI6eyJ0aWNrcyI6MTN9fQo",
+      "stateSha": "fd027d1bba752375b99492673b0c231f77c8391a76ea01705a18ffe7567c6059"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 2,
+        "trialId": "duo-long-road",
+        "name": "The Long Way Round",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "right",
+            "right",
+            "use"
+          ],
+          [
+            "wait",
+            "wait",
+            "use"
+          ]
+        ],
+        "parts": [],
+        "proof": {
+          "ticks": 19
+        }
+      },
+      "serializedSha": "953cac571b30e22cecf5a341bf70f27857758fbadee5f381023cf4e91ca8f765",
+      "code": "PT1.d513827a.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjoyLCJ0cmlhbElkIjoiZHVvLWxvbmctcm9hZCIsIm5hbWUiOiJUaGUgTG9uZyBXYXkgUm91bmQiLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJ3YWl0Iiwid2FpdCIsInVzZSJdXSwicGFydHMiOltdLCJwcm9vZiI6eyJ0aWNrcyI6MTl9fQo",
+      "stateSha": "3d8ae76951712a1c82d92986ff1f96f10773e12391125c7da2b54a2f411ee7e9"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 2,
+        "trialId": "duo-signmaker",
+        "name": "The Signmaker’s Errand",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "right",
+            "right",
+            "use"
+          ],
+          [
+            "up",
+            "wait",
+            "use"
+          ]
+        ],
+        "parts": [],
+        "proof": {
+          "ticks": 27
+        }
+      },
+      "serializedSha": "b7ca9dd658007b0db3bebcd917523cf61ef867a6e78622a0403b5e87be58b5f3",
+      "code": "PT1.f123d98b.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjoyLCJ0cmlhbElkIjoiZHVvLXNpZ25tYWtlciIsIm5hbWUiOiJUaGUgU2lnbm1ha2Vy4oCZcyBFcnJhbmQiLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJ1cCIsIndhaXQiLCJ1c2UiXV0sInBhcnRzIjpbXSwicHJvb2YiOnsidGlja3MiOjI3fX0K",
+      "stateSha": "87680d972eeadb2367a1d736165c5bd9d4ad535f21dbc9f7548223da7451b82d"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 2,
+        "trialId": "duo-lantern-festival",
+        "name": "The Festival of Two Lights",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "right",
+            "right",
+            "use"
+          ],
+          [
+            "up",
+            "wait",
+            "use"
+          ]
+        ],
+        "parts": [],
+        "proof": {
+          "ticks": 55
+        }
+      },
+      "serializedSha": "54add5c63512fb47ad848a1fa90f9ab61cbd7ba10f6fa4494cf0a1e4488c7654",
+      "code": "PT1.b55c8587.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjoyLCJ0cmlhbElkIjoiZHVvLWxhbnRlcm4tZmVzdGl2YWwiLCJuYW1lIjoiVGhlIEZlc3RpdmFsIG9mIFR3byBMaWdodHMiLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJ1cCIsIndhaXQiLCJ1c2UiXV0sInBhcnRzIjpbXSwicHJvb2YiOnsidGlja3MiOjU1fX0K",
+      "stateSha": "05fac90fd0fa83697b2bba9ed8ff945ed375e5b75ab0bf780306b80459aa2eab"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 2,
+        "trialId": "duo-creator",
+        "name": "The Festival of Two Lights",
+        "author": "A trail keeper",
+        "programs": [
+          [
+            "right",
+            "right",
+            "use"
+          ],
+          [
+            "up",
+            "wait",
+            "use"
+          ]
+        ],
+        "parts": [
+          {
+            "kind": "signal",
+            "x": 1,
+            "y": 4,
+            "channel": "jade",
+            "program": [
+              "right",
+              "right",
+              "use"
+            ],
+            "alternate": [
+              "down",
+              "wait",
+              "use"
+            ]
+          },
+          {
+            "kind": "source",
+            "x": 3,
+            "y": 4,
+            "channel": "jade"
+          },
+          {
+            "kind": "handoff",
+            "x": 5,
+            "y": 4
+          },
+          {
+            "kind": "prism",
+            "x": 7,
+            "y": 4,
+            "operation": "mirror"
+          },
+          {
+            "kind": "flip",
+            "x": 5,
+            "y": 3,
+            "program": [
+              "up",
+              "wait",
+              "use"
+            ],
+            "alternate": [
+              "right",
+              "right",
+              "use"
+            ],
+            "initial": true
+          },
+          {
+            "kind": "prism",
+            "x": 5,
+            "y": 2,
+            "operation": "mirror-y"
+          },
+          {
+            "kind": "receiver",
+            "x": 7,
+            "y": 3,
+            "channel": "jade",
+            "parcels": 1
+          },
+          {
+            "kind": "receiver",
+            "x": 9,
+            "y": 3,
+            "channel": "jade",
+            "parcels": 1
+          },
+          {
+            "kind": "signal",
+            "x": 11,
+            "y": 3,
+            "channel": "jade",
+            "program": [
+              "left",
+              "left",
+              "use"
+            ],
+            "alternate": [
+              "up",
+              "up",
+              "use"
+            ]
+          },
+          {
+            "kind": "pip-dock",
+            "x": 1,
+            "y": 5
+          },
+          {
+            "kind": "sprout-dock",
+            "x": 11,
+            "y": 1
+          }
+        ],
+        "board": {
+          "width": 13,
+          "height": 7,
+          "road": [
+            {
+              "x": 1,
+              "y": 4
+            },
+            {
+              "x": 2,
+              "y": 4
+            },
+            {
+              "x": 3,
+              "y": 4
+            },
+            {
+              "x": 4,
+              "y": 4
+            },
+            {
+              "x": 5,
+              "y": 4
+            },
+            {
+              "x": 6,
+              "y": 4
+            },
+            {
+              "x": 7,
+              "y": 4
+            },
+            {
+              "x": 5,
+              "y": 3
+            },
+            {
+              "x": 6,
+              "y": 3
+            },
+            {
+              "x": 7,
+              "y": 3
+            },
+            {
+              "x": 8,
+              "y": 3
+            },
+            {
+              "x": 9,
+              "y": 3
+            },
+            {
+              "x": 10,
+              "y": 3
+            },
+            {
+              "x": 11,
+              "y": 3
+            },
+            {
+              "x": 5,
+              "y": 2
+            },
+            {
+              "x": 11,
+              "y": 2
+            },
+            {
+              "x": 11,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 5
+            }
+          ]
+        },
+        "starts": [
+          {
+            "x": 1,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 3
+          }
+        ],
+        "intro": "Eid: “Light both windows, then bring both partners home.” Quiet signal stamps keep the post running; once every jade window is full, Powered sends the partners to their P and S flags. Signals read the world when Use happens. Pip acts before Sprout.",
+        "ending": "Both windows shine. Both paper hats are home. The keepers leave a clear space beside the post office: a place for the next adventure you will build.",
+        "source": "Remix of The Festival of Two Lights by Lantern Trails",
+        "handoffs": 2,
+        "proof": {
+          "ticks": 55
+        }
+      },
+      "serializedSha": "c35a510f1a9f0c5be9cf2f8924716ca755b0b46b5606c58f427e8b2c87644d88",
+      "code": "PT1.45e5e5f5.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjoyLCJ0cmlhbElkIjoiZHVvLWNyZWF0b3IiLCJuYW1lIjoiVGhlIEZlc3RpdmFsIG9mIFR3byBMaWdodHMiLCJhdXRob3IiOiJBIHRyYWlsIGtlZXBlciIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJ1cCIsIndhaXQiLCJ1c2UiXV0sInBhcnRzIjpbeyJraW5kIjoic2lnbmFsIiwieCI6MSwieSI6NCwiY2hhbm5lbCI6ImphZGUiLCJwcm9ncmFtIjpbInJpZ2h0IiwicmlnaHQiLCJ1c2UiXSwiYWx0ZXJuYXRlIjpbImRvd24iLCJ3YWl0IiwidXNlIl19LHsia2luZCI6InNvdXJjZSIsIngiOjMsInkiOjQsImNoYW5uZWwiOiJqYWRlIn0seyJraW5kIjoiaGFuZG9mZiIsIngiOjUsInkiOjR9LHsia2luZCI6InByaXNtIiwieCI6NywieSI6NCwib3BlcmF0aW9uIjoibWlycm9yIn0seyJraW5kIjoiZmxpcCIsIngiOjUsInkiOjMsInByb2dyYW0iOlsidXAiLCJ3YWl0IiwidXNlIl0sImFsdGVybmF0ZSI6WyJyaWdodCIsInJpZ2h0IiwidXNlIl0sImluaXRpYWwiOnRydWV9LHsia2luZCI6InByaXNtIiwieCI6NSwieSI6Miwib3BlcmF0aW9uIjoibWlycm9yLXkifSx7ImtpbmQiOiJyZWNlaXZlciIsIngiOjcsInkiOjMsImNoYW5uZWwiOiJqYWRlIiwicGFyY2VscyI6MX0seyJraW5kIjoicmVjZWl2ZXIiLCJ4Ijo5LCJ5IjozLCJjaGFubmVsIjoiamFkZSIsInBhcmNlbHMiOjF9LHsia2luZCI6InNpZ25hbCIsIngiOjExLCJ5IjozLCJjaGFubmVsIjoiamFkZSIsInByb2dyYW0iOlsibGVmdCIsImxlZnQiLCJ1c2UiXSwiYWx0ZXJuYXRlIjpbInVwIiwidXAiLCJ1c2UiXX0seyJraW5kIjoicGlwLWRvY2siLCJ4IjoxLCJ5Ijo1fSx7ImtpbmQiOiJzcHJvdXQtZG9jayIsIngiOjExLCJ5IjoxfV0sImJvYXJkIjp7IndpZHRoIjoxMywiaGVpZ2h0Ijo3LCJyb2FkIjpbeyJ4IjoxLCJ5Ijo0fSx7IngiOjIsInkiOjR9LHsieCI6MywieSI6NH0seyJ4Ijo0LCJ5Ijo0fSx7IngiOjUsInkiOjR9LHsieCI6NiwieSI6NH0seyJ4Ijo3LCJ5Ijo0fSx7IngiOjUsInkiOjN9LHsieCI6NiwieSI6M30seyJ4Ijo3LCJ5IjozfSx7IngiOjgsInkiOjN9LHsieCI6OSwieSI6M30seyJ4IjoxMCwieSI6M30seyJ4IjoxMSwieSI6M30seyJ4Ijo1LCJ5IjoyfSx7IngiOjExLCJ5IjoyfSx7IngiOjExLCJ5IjoxfSx7IngiOjEsInkiOjV9XX0sInN0YXJ0cyI6W3sieCI6MSwieSI6NH0seyJ4Ijo1LCJ5IjozfV0sImludHJvIjoiRWlkOiDigJxMaWdodCBib3RoIHdpbmRvd3MsIHRoZW4gYnJpbmcgYm90aCBwYXJ0bmVycyBob21lLuKAnSBRdWlldCBzaWduYWwgc3RhbXBzIGtlZXAgdGhlIHBvc3QgcnVubmluZzsgb25jZSBldmVyeSBqYWRlIHdpbmRvdyBpcyBmdWxsLCBQb3dlcmVkIHNlbmRzIHRoZSBwYXJ0bmVycyB0byB0aGVpciBQIGFuZCBTIGZsYWdzLiBTaWduYWxzIHJlYWQgdGhlIHdvcmxkIHdoZW4gVXNlIGhhcHBlbnMuIFBpcCBhY3RzIGJlZm9yZSBTcHJvdXQuIiwiZW5kaW5nIjoiQm90aCB3aW5kb3dzIHNoaW5lLiBCb3RoIHBhcGVyIGhhdHMgYXJlIGhvbWUuIFRoZSBrZWVwZXJzIGxlYXZlIGEgY2xlYXIgc3BhY2UgYmVzaWRlIHRoZSBwb3N0IG9mZmljZTogYSBwbGFjZSBmb3IgdGhlIG5leHQgYWR2ZW50dXJlIHlvdSB3aWxsIGJ1aWxkLiIsInNvdXJjZSI6IlJlbWl4IG9mIFRoZSBGZXN0aXZhbCBvZiBUd28gTGlnaHRzIGJ5IExhbnRlcm4gVHJhaWxzIiwiaGFuZG9mZnMiOjIsInByb29mIjp7InRpY2tzIjo1NX19Cg",
+      "stateSha": "c253e8af244d0be9e6e81a1affd4d8487fe0e0eccb0ae60b919242c6aedeae93"
+    }
+  ],
+  "blueprints": [
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "Parcel atelier",
+      "author": "Lantern Trails",
+      "note": "Put a courier two tiles before Q. East / East / Use collects, converts and delivers. Choose different input and output parcels.",
+      "width": 5,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 3,
+          "y": 0
+        },
+        {
+          "x": 4,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "source",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "press",
+          "x": 2,
+          "y": 0,
+          "channel": "amber",
+          "output": "jade"
+        },
+        {
+          "kind": "receiver",
+          "x": 4,
+          "y": 0,
+          "channel": "jade",
+          "parcels": 1
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "A sign with two roads",
+      "author": "Lantern Trails",
+      "note": "Use on Z chooses its next route. The northern glass returns the courier; the other bank opens the road to the right. Add your own wells and windows.",
+      "width": 2,
+      "height": 3,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "parts": [
+        {
+          "kind": "prism",
+          "x": 0,
+          "y": 0,
+          "operation": "mirror-y"
+        },
+        {
+          "kind": "flip",
+          "x": 0,
+          "y": 2,
+          "program": [
+            "up",
+            "wait",
+            "use"
+          ],
+          "alternate": [
+            "right",
+            "wait",
+            "use"
+          ],
+          "initial": false
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "A little brass shortcut",
+      "author": "Lantern Trails",
+      "note": "Use on either U travels to the other end of its colour. Keep one complete pair per tube colour.",
+      "width": 3,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "tube",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "tube",
+          "x": 2,
+          "y": 0,
+          "channel": "amber"
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "A bridge for a friend",
+      "author": "Lantern Trails",
+      "note": "One partner holds P while the other crosses B. The plate and bridge share a numbered colour.",
+      "width": 3,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "plate",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "bridge",
+          "x": 2,
+          "y": 0,
+          "channel": "amber"
+        }
+      ]
+    }
+  ]
+}

@@ -82,6 +82,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   switch (item.kind) {
     case 'pip-press': rect('#324a58',2,4,20,19);rect(color,4,7,7,12);rect(CHANNEL_COLORS[item.output]||'#8ed8ae',13,7,7,12);rect('#f5df9d',8,3,8,4);rect('#183d43',10,7,4,9);rect('#fff1c7',9,13,7,3);rect('#8eac99',5,20,14,3);break;
     case 'pip-flip': rect('#354e5c',2,3,20,20);rect('#f0c785',4,5,7,14);rect('#9cd4bb',13,5,7,14);rect('#193c42',6,8,3,8);rect('#193c42',15,8,3,8);rect('#f7edbd',10,10,4,4);rect('#bbad7b',5,20,14,3);break;
+    case 'pip-locker': rect('#354e5c',2,3,20,20);rect(color,3,4,18,3);rect('#ceb47e',4,8,16,13);rect('#173b43',6,10,12,8);if(item.stored){rect(CHANNEL_COLORS[item.stored]||'#f4dfa5',8,11,8,6);rect('#fff1c7',11,11,2,6);}else rect('#a8c0b3',14,12,2,4);rect('#d9cc99',5,21,14,2);break;
     case 'pip-sorter': rect('#344b61',2,3,20,20);rect(color,4,5,16,16);rect('#173d45',6,7,12,12);rect('#fff0b9',11,12,3,7);rect('#fff0b9',7,8,3,6);rect('#fff0b9',15,8,3,6);rect('#fff0b9',8,13,9,3);break;
     case 'pip-parcel': rect('#465a61',2,5,20,18);rect(color,4,7,16,13);rect('#102e36',6,9,12,9);rect('#f5d694',9,11,7,7);rect('#fff1c7',11,11,2,7);break;
     case 'pip-socket': rect('#466570',3,5,18,18);rect(color,5,7,14,13);rect(item.powered?'#eaf8b7':'#183b46',7,9,10,8);rect('#fff1c7',10,10,4,6);break;

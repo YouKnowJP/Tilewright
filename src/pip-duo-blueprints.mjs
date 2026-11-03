@@ -1,20 +1,25 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
-import {DUO_CHANNELS,normalizeDuoPart,normalizeDuoProject,duoEditable,duoText} from './pip-duo.mjs';
+import {DUO_CHANNELS,DUO_ADVANCED_KINDS,normalizeDuoPart,normalizeDuoProject,duoEditable,duoText} from './pip-duo.mjs';
 import {transformProgram,transformPrismOperation} from './clockwork.mjs';
 const p=(x,y)=>({x,y}),part=(kind,x,y,extra={})=>({kind,x,y,...extra});
 export const DUO_BLUEPRINTS=Object.freeze([
  {id:'recipe',name:'Parcel atelier',note:'Put a courier two tiles before Q. East / East / Use collects, converts and delivers. Choose different input and output parcels.'},
  {id:'return-sign',name:'A sign with two roads',note:'Use on Z chooses its next route. The northern glass returns the courier; the other bank opens the road to the right. Add your own wells and windows.'},
  {id:'tube-pair',name:'A little brass shortcut',note:'Use on either U travels to the other end of its colour. Keep one complete pair per tube colour.'},
- {id:'crossing',name:'A bridge for a friend',note:'One partner holds P while the other crosses B. The plate and bridge share a numbered colour.'}
+ {id:'crossing',name:'A bridge for a friend',note:'One partner holds P while the other crosses B. The plate and bridge share a numbered colour.'},
+ {id:'locker-pair',name:'Letters across the water',note:'K sends at one end and collects at the other. Its numbered colour names the connection; any parcel can travel. One parcel fits in each channel.'},
+ {id:'cargo-switch',name:'A compass for your pockets',note:'Use C with a matching parcel to go east. Otherwise return west. The northern and western mirrors make a little road for experiments.'},
+ {id:'night-atelier',name:'The midnight dyehouse',note:'Use two tiles before Q. Collect, convert and send through K. Place a matching collect locker on your partner’s road.'},
+ {id:'locker-loop',name:'The patient collector',note:'A collect locker and cargo compass wait for a parcel. Mirrors return empty hands. Add a window two tiles east of C.'}
 ]);
 export function normalizeDuoBlueprint(raw){
- if(!raw||raw.format!=='pip-duo-blueprint'||raw.version!==1||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||!raw.parts.length||raw.parts.length>32)throw Error('Choose a duo blueprint with parts inside a garden-sized area.');
+ if(!raw||raw.format!=='pip-duo-blueprint'||![1,2].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||!raw.parts.length||raw.parts.length>32)throw Error('Choose a duo blueprint with parts inside a garden-sized area.');
  const valid=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=0&&p.y>=0&&p.x<raw.width&&p.y<raw.height,road=[],parts=[];
  for(const cell of raw.road){if(!valid(cell)||road.some(p=>p.x===cell.x&&p.y===cell.y))throw Error('Blueprint roads must be unique and inside the piece.');road.push(p(cell.x,cell.y));}
- for(const rawPart of raw.parts){const item=normalizeDuoPart(rawPart);if(!valid(item)||!road.some(p=>p.x===item.x&&p.y===item.y)||parts.some(p=>p.x===item.x&&p.y===item.y))throw Error('Each blueprint part needs its own garden tile.');parts.push(item);}
+ for(const rawPart of raw.parts){const item=normalizeDuoPart(rawPart,{version:raw.version===2?3:2});if(!valid(item)||!road.some(p=>p.x===item.x&&p.y===item.y)||parts.some(p=>p.x===item.x&&p.y===item.y))throw Error('Each blueprint part needs its own garden tile.');parts.push(item);}
  for(const c of DUO_CHANNELS){const count=parts.filter(p=>p.kind==='tube'&&p.channel===c).length;if(count!==0&&count!==2)throw Error('Capture or share both ends of each tube colour.');}
- return {format:'pip-duo-blueprint',version:1,name:duoText(raw.name,'A little invention'),author:duoText(raw.author,'A trail keeper'),note:duoText(raw.note,'A piece for your next adventure.',180),width:raw.width,height:raw.height,road,parts};
+ if(raw.version===2){for(const c of DUO_CHANNELS)if(parts.filter(p=>p.kind==='locker'&&p.channel===c).length>2)throw Error('Each locker channel has at most two ends. Shift colours for separate copies.');if(parts.filter(p=>['flip','signal','cargo'].includes(p.kind)).length>8)throw Error('A blueprint can contain at most eight route memories, signals and cargo compasses.');for(const kind of ['pip-dock','sprout-dock'])if(parts.filter(p=>p.kind===kind).length>1)throw Error('A blueprint can contain only one home flag for each companion.');}
+ return {format:'pip-duo-blueprint',version:raw.version,name:duoText(raw.name,'A little invention'),author:duoText(raw.author,'A trail keeper'),note:duoText(raw.note,'A piece for your next adventure.',180),width:raw.width,height:raw.height,road,parts};
 }
 export function duoBlueprint(id,{input='amber',output='jade',channel='amber',initial=false,turns=0,parcels=1}={}){
  const spec=DUO_BLUEPRINTS.find(b=>b.id===id);if(!spec)throw Error('Choose a duo blueprint.');if(![input,output,channel].every(c=>DUO_CHANNELS.includes(c))||typeof initial!=='boolean'||!Number.isInteger(parcels)||parcels<1||parcels>3)throw Error('Choose known blueprint colours, routes and delivery targets.');
@@ -23,11 +28,16 @@ export function duoBlueprint(id,{input='amber',output='jade',channel='amber',ini
  if(id==='return-sign'){width=2;height=3;road=[p(0,0),p(0,1),p(0,2),p(1,2)];parts=[part('prism',0,0,{operation:'mirror-y'}),part('flip',0,2,{program:['up','wait','use'],alternate:['right','wait','use'],initial})];}
  if(id==='tube-pair'){width=3;height=1;road=[p(0,0),p(1,0),p(2,0)];parts=[part('tube',0,0,{channel}),part('tube',2,0,{channel})];}
  if(id==='crossing'){width=3;height=1;road=[p(0,0),p(1,0),p(2,0)];parts=[part('plate',0,0,{channel}),part('bridge',2,0,{channel})];}
- return configureDuoBlueprint({format:'pip-duo-blueprint',version:1,name:spec.name,author:'Lantern Trails',note:spec.note,width,height,road,parts},{turns});
+ if(id==='locker-pair'){width=3;height=1;road=[p(0,0),p(1,0),p(2,0)];parts=[part('locker',0,0,{channel,mode:'send'}),part('locker',2,0,{channel,mode:'take'})];}
+ if(id==='cargo-switch'){width=5;height=3;road=[p(0,2),p(1,2),p(2,2),p(3,2),p(4,2),p(2,1),p(2,0)];parts=[part('prism',0,2,{operation:'mirror'}),part('cargo',2,2,{channel:'any',program:['left','left','use'],alternate:['right','right','use']}),part('prism',2,0,{operation:'mirror-y'})];}
+ if(id==='night-atelier'){if(input===output)throw Error('The dyehouse needs different parcel colours.');width=5;height=1;road=Array.from({length:5},(_,x)=>p(x,0));parts=[part('source',0,0,{channel:input}),part('press',2,0,{channel:input,output}),part('locker',4,0,{channel,mode:'send'})];}
+ if(id==='locker-loop'){width=5;height=1;road=Array.from({length:5},(_,x)=>p(x,0));parts=[part('prism',0,0,{operation:'mirror'}),part('locker',2,0,{channel,mode:'take'}),part('cargo',4,0,{channel:'any',program:['left','left','use'],alternate:['right','right','use']})];}
+ return configureDuoBlueprint({format:'pip-duo-blueprint',version:parts.some(p=>DUO_ADVANCED_KINDS.includes(p.kind))?2:1,name:spec.name,author:'Lantern Trails',note:spec.note,width,height,road,parts},{turns});
 }
-export function configureDuoBlueprint(input,{turns=0,palette=0,first='keep'}={}){
- let piece=normalizeDuoBlueprint(input);if(!Number.isInteger(turns)||turns<0||turns>3||!Number.isInteger(palette)||palette<0||palette>3||!['keep','a','b'].includes(first))throw Error('Choose a blueprint direction, palette and first route.');
- const colour=c=>DUO_CHANNELS[(DUO_CHANNELS.indexOf(c)+palette)%4];piece={...piece,parts:piece.parts.map(p=>({...p,...(p.channel?{channel:colour(p.channel)}:{}),...(p.output?{output:colour(p.output)}:{}),...(p.kind==='flip'&&first!=='keep'?{initial:first==='b'}:{})}))};
+export function configureDuoBlueprint(input,{turns=0,palette=0,first='keep',reflection='none'}={}){
+ let piece=normalizeDuoBlueprint(input);if(!Number.isInteger(turns)||turns<0||turns>3||!Number.isInteger(palette)||palette<0||palette>3||!['keep','a','b'].includes(first)||!['none','horizontal','vertical'].includes(reflection))throw Error('Choose a blueprint direction, reflection, palette and first route.');
+ const colour=c=>c==='any'?c:DUO_CHANNELS[(DUO_CHANNELS.indexOf(c)+palette)%4];piece={...piece,parts:piece.parts.map(p=>({...p,...(p.channel?{channel:colour(p.channel)}:{}),...(p.output?{output:colour(p.output)}:{}),...(p.kind==='flip'&&first!=='keep'?{initial:first==='b'}:{})}))};
+ if(reflection!=='none'){const horizontal=reflection==='horizontal',point=p=>({x:horizontal?piece.width-1-p.x:p.x,y:horizontal?p.y:piece.height-1-p.y}),programOperation=horizontal?'mirror':'mirror-y',prismOperation=horizontal?'mirror-x':'mirror-y';piece={...piece,road:piece.road.map(point),parts:piece.parts.map(p=>({...p,...point(p),...(p.program?{program:transformProgram(p.program,programOperation)}:{}),...(p.alternate?{alternate:transformProgram(p.alternate,programOperation)}:{}),...(p.operation?{operation:transformPrismOperation(p.operation,prismOperation)}:{})}))};}
  for(let i=0;i<turns;i++){
   const rotate=p=>({x:piece.height-1-p.y,y:p.x});
   piece={...piece,width:piece.height,height:piece.width,road:piece.road.map(rotate),parts:piece.parts.map(p=>({...p,...rotate(p),...(p.program?{program:transformProgram(p.program,'rotate')}:{}),...(p.alternate?{alternate:transformProgram(p.alternate,'rotate')}:{}),...(p.operation?{operation:transformPrismOperation(p.operation,'rotate')}:{})}))};
@@ -38,12 +48,19 @@ export function placeDuoBlueprint(input,piece,x,y){
  if(!duoEditable(input))throw Error('Remix a story before placing blueprints.');const a=normalizeDuoBlueprint(piece);if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||y<0||x+a.width>input.board.width||y+a.height>input.board.height)throw Error('Move the cursor so the whole blueprint fits.');
  const shifted=a.parts.map(p=>({...p,x:p.x+x,y:p.y+y}));if(shifted.some(p=>input.parts.some(q=>p.x===q.x&&p.y===q.y)))throw Error('Place blueprint parts on free tiles. Existing parts stay safe.');
  const road=[...input.board.road];for(const p of a.road){const cell={x:p.x+x,y:p.y+y};if(!road.some(p=>p.x===cell.x&&p.y===cell.y))road.push(cell);}
- const {proof,...base}=input;return normalizeDuoProject({...base,parts:[...base.parts,...shifted],board:{...base.board,road}});
+ const {proof,...base}=input;return normalizeDuoProject({...base,version:a.version===2?3:base.version,parts:[...base.parts,...shifted],board:{...base.board,road}});
 }
 export function captureDuoBlueprint(input,{x,y,width,height},name='My little invention'){
  if(!duoEditable(input)||![x,y,width,height].every(Number.isInteger)||x<0||y<0||width<1||height<1||x+width>input.board.width||y+height>input.board.height)throw Error('Capture an area inside your duo garden.');
  const inside=p=>p.x>=x&&p.y>=y&&p.x<x+width&&p.y<y+height,shift=p=>({...p,x:p.x-x,y:p.y-y});
- return normalizeDuoBlueprint({format:'pip-duo-blueprint',version:1,name,author:input.author,note:'Captured from '+input.name,width,height,road:input.board.road.filter(inside).map(shift),parts:input.parts.filter(inside).map(shift)});
+ const parts=input.parts.filter(inside).map(shift);return normalizeDuoBlueprint({format:'pip-duo-blueprint',version:parts.some(p=>DUO_ADVANCED_KINDS.includes(p.kind))?2:1,name,author:input.author,note:'Captured from '+input.name,width,height,road:input.board.road.filter(inside).map(shift),parts});
 }
+export function repeatDuoBlueprint(input,{count=1,axis='right',gap=1,shiftColours=false}={}){
+ const piece=normalizeDuoBlueprint(input);if(!Number.isInteger(count)||count<1||count>3||!['right','down'].includes(axis)||!Number.isInteger(gap)||gap<0||gap>2||typeof shiftColours!=='boolean')throw Error('Arrange one to three copies with a gap of zero to two tiles.');
+ const width=piece.width+(axis==='right'?(count-1)*(piece.width+gap):0),height=piece.height+(axis==='down'?(count-1)*(piece.height+gap):0);if(width>13||height>9)throw Error('This arrangement is larger than a duo garden.');const road=[],parts=[];
+ for(let i=0;i<count;i++){const copy=configureDuoBlueprint(piece,{palette:shiftColours?i:0}),dx=axis==='right'?i*(piece.width+gap):0,dy=axis==='down'?i*(piece.height+gap):0;road.push(...copy.road.map(p=>({...p,x:p.x+dx,y:p.y+dy})));parts.push(...copy.parts.map(p=>({...p,x:p.x+dx,y:p.y+dy})));}
+ return normalizeDuoBlueprint({...piece,width,height,road,parts});
+}
+export function duoBlueprintFit(project,piece,x,y){try{placeDuoBlueprint(project,piece,x,y);return {valid:true,message:`${piece.width} × ${piece.height} fits at column ${x+1}, row ${y+1}.`};}catch(error){return {valid:false,message:error.message};}}
 export function serializeDuoBlueprint(piece){return JSON.stringify(normalizeDuoBlueprint(piece))+'\n';}
 export function parseDuoBlueprint(raw){if(typeof raw!=='string'||new TextEncoder().encode(raw).length>40_000)throw Error('Choose a duo blueprint smaller than 40 KB.');let p;try{p=JSON.parse(raw);}catch{throw Error('This blueprint is not valid JSON.');}return normalizeDuoBlueprint(p);}

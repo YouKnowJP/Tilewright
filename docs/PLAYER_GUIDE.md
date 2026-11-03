@@ -9,7 +9,7 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. Start wit
 **Learn with Pip**, then try four **Tinkerer’s Trials** or two optional
 **Pip & Sprout** prototypes. Build, test one tick at a time, Undo, and try a
 different answer. Dress Pip, keep an invention display, and share working
-projects from the same compact workshop. See the [complete workshop guide](PIP_WORKSHOP.md).
+projects from the same compact workshop. **Pip & Sprout · story & creator** adds six story chapters and an open garden editor; **The Night Post** adds six harder chapters with lockers, cargo compasses and repair challenges. Use the folded Blueprint drawer to mirror, arrange, capture and revise reusable pieces. See the [complete workshop guide](PIP_WORKSHOP.md).
 
 ## The Clockwork Gardens — v0.41
 

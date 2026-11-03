@@ -1,3 +1,4 @@
+import {pipNightMailScenarios} from './pip-night-mail-browser-checks.mjs';
 import {pipDuoScenarios} from './pip-duo-browser-checks.mjs';
 import {pipTinkerScenarios} from './pip-tinker-browser-checks.mjs';
 import {pipGardensScenarios} from './pip-gardens-browser-checks.mjs';
@@ -94,6 +95,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await pipSwitchbackScenarios(scenario);
     await pipGlassworksScenarios(scenario);
     await pipGardensScenarios(scenario);
+    await pipNightMailScenarios(scenario);
     await pipDuoScenarios(scenario);
     await pipTinkerScenarios(scenario);
     await presentationScenarios(scenario);

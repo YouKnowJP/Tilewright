@@ -6,8 +6,9 @@ browser checks use a pinned Playwright package.
 
 | File | Responsibility |
 | --- | --- |
-| `src/pip-duo.mjs` | Version-2 duo story catalogue, bounded creator schema, terrain/start edits and readiness validation; version-1 rules remain separate. |
-| `src/pip-duo-blueprints.mjs` | Configurable pieces, rotation/palette transformations, atomic placement and portable captures. |
+| `src/pip-night-mail.mjs` | Six authored version-3 night-post missions, repair inventories, dialogue and verified example programs. |
+| `src/pip-duo.mjs` | Version-2/3 duo story catalogue, bounded creator schema, terrain/start edits and readiness validation; version-1 rules remain separate. |
+| `src/pip-duo-blueprints.mjs` | Configurable pieces, rotation/reflection/palette transformations and repeated arrangements, atomic placement and portable captures. |
 | `src/pip-duo-storage.mjs` | Bounded twelve-entry adventure/blueprint shelves and isolated duo journal; legacy bytes are not rewritten by duo saves. |
 | `src/pip-duo-ui.mjs` | Folded creator drawers, blueprint previews and shelf actions inside the existing Pip studio. |
 | `src/model.mjs` | Versioned document validation, immutable painting, iterative flood fill, line/rectangle geometry, bounded snapshot history. No DOM or storage access. |

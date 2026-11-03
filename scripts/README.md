@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **120 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **126 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -195,4 +195,7 @@ is split into two exhaustive groups of 56. The eight pure parity tests in
 main adventure rules, including both initial banks for the memory lesson.
 
 
-`pip-duo-browser-checks.mjs` adds eight required v0.43 cases: all six missions at phone and desktop widths; real creator wins, saved shelves and project sharing; configured/captured/imported blueprints with atomic Undo; shared finale replay and proof validation; enlarged high-contrast menus across four viewport shapes; damaged/quota recovery with legacy save preservation; and terrain, starts, dialogue and part editing. The current **120-case** catalogue splits exhaustively into two groups of 60. New duo cases also run locally in Chromium, Firefox and WebKit.
+`pip-duo-browser-checks.mjs` adds eight required v0.43 cases: all six missions at phone and desktop widths; real creator wins, saved shelves and project sharing; configured/captured/imported blueprints with atomic Undo; shared finale replay and proof validation; enlarged high-contrast menus across four viewport shapes; damaged/quota recovery with legacy save preservation; and terrain, starts, dialogue and part editing. The v0.43 **120-case** catalogue splits exhaustively into two groups of 60. New duo cases also run locally in Chromium, Firefox and WebKit.
+
+
+`pip-night-mail-browser-checks.mjs` adds six required cases for all six harder stories at phone/desktop widths, repair clears and displays, editable locker/cargo rules and goals, reflected/repeated blueprints with confirmed revisions, version-3 sharing with old-project continuation, and enlarged themed controls/placement previews across four viewport shapes. The current **126-case** catalogue splits into two groups of **63**. Pure compatibility fixtures capture exact v0.43 codes, exports and final states; new tests exercise bounded lockers, conditional programs, atomic arrangements and revision isolation.

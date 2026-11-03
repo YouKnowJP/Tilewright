@@ -1,5 +1,19 @@
 # Verification record
 
+## The Night Post and creative blueprint tools — v0.44.0
+
+**1,365 Node tests** pass, with syntax checks and a **148-file** production build. Thirty-one new night-post tests and four additional template cases cover the new mechanics, repair inventories, persistence and blueprint operations. Seven projects captured from v0.43 retain exact serialized exports, share codes, final-state fingerprints and verified clears; four original blueprint exports also remain exact. New station rules use project format 3 and blueprint format 2, while original version-1/2 projects and ordinary adventure formats retain their behavior.
+
+All six new stories have deterministic clears at 72, 45, 54, 61, 73 and 73 ticks. Frame-by-frame checks prove immutable turns and collision safety. Tests cover shared locker capacity, independent channels, send/collect roles, same-tick Pip-first exchanges, self-retrieval without relay credit, empty-locker goals, correct home flags and every cargo match against every carried parcel. The two repairs enforce their inventory, fixed tiles and two-part budget; changed hardware invalidates an old clear, and false attached proofs are rejected.
+
+Blueprint checks cover all eight templates, reflected geometry/cards/prism handedness, arbitrary-cargo preservation during palette shifts, bounded multi-copy layouts, independent copied links, atomic placement/Undo and collision preflight. Arrangements exceeding locker, memory or home-flag limits fail before becoming saved pieces. Revision checks prove that an explicit saved-piece update leaves placed hardware and other saved copies unchanged. New/old drafts, repaired proofs, showcases and both libraries round-trip together through the existing journey namespace; unreadable data stays protected.
+
+Six new required browser cases exercise every night-post mission on phone and desktop, real repair wins, new part/goal editing, reflected/repeated blueprints with confirmed update/cancel flows, version-3 file/code sharing and version-2 continuation. Controls are checked at 320×568, 844×390, 768×1024 and 1440×1000 with largest text, high contrast and themed menus. These cases, existing blueprint flows and part-editor regressions pass in Chromium, Firefox and WebKit. Reviewed captures include the pinned desktop garden, phone blueprint drawer, enlarged narrow dropdowns and placement feedback.
+
+Several initial local checks were interrupted by host suspension; a recorded browser trace contained a roughly seventeen-minute gap during a click. The affected cases passed on rerun without increasing action timeouts, with idle sleep prevented during test processes. Physical-device and human usability testing remain separate from browser viewport/input emulation.
+
+The required release catalogue contains **126 distinct scenarios**, split into two exhaustive groups of **63**, with the five-platform, preserved-migration and publication gates. The repository index includes the new story catalogue, focused browser/rules checks and captured compatibility fixture. Generated builds, private saves and test reports remain ignored.
+
 ## Pip-and-Sprout adventure creator — v0.43.0
 
 **1,330 Node tests** pass, including 23 new duo tests, syntax checks and a **147-file** production package. The repository index covers **435 files** and checks 1,909 local references. New rules are confined to duo project format 2; the ten classic inventions, original adventure exports and captured v0.41 checkpoint retain their behavior. Duo saves use a separate journey-scoped key, so saving a duo never rewrites legacy workshop bytes.

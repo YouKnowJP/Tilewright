@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.44.0 — 2026-11-03
+
+- Add The Night Post: six harder Pip-and-Sprout stories, including asynchronous letters, cargo-dependent routes, two-way depot exchanges and two limited-parts repair challenges. All twelve duo chapters remain available with optional hints and verified examples.
+- Add linked one-parcel lockers with send/collect/both roles, cross-companion relay goals and optional empty-locker finishes. Cargo compasses choose Otherwise or Matching cards from the parcel held when Use happens.
+- Add four night-post blueprint templates, horizontal/vertical reflection, one-to-three-copy arrangements, selectable gaps and optional per-copy colour shifts. Preview placement bounds and collisions before making one atomic, undoable edit.
+- Name and revise saved blueprints with maker credits and builder notes. Updating a saved piece confirms first and leaves existing placements and other copies intact.
+- Add project format 3 and blueprint format 2 for new mechanics. Captured v0.43 projects retain exact export bytes, share codes, clears and final-state fingerprints; old saves and ordinary adventure formats remain compatible.
+- Extend rules, storage, repair, sharing and live-browser coverage, keeping advanced tools folded and controls readable on phone, tablet and desktop.
+
 ## 0.43.0 — 2026-11-03
 
 - Add six Pip-and-Sprout story missions: shared letters, two-stage recipes, linked crossings, courier tubes, repeated deliveries and a signal-driven festival finale with both companions returning home. Each has optional hints and a verified worked example.
