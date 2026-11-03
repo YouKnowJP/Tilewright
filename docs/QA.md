@@ -32,6 +32,12 @@ piece on a connected road; the normal validator still refuses disconnected
 missions. The blueprint browser check also fills all twelve slots before
 exercising quota failure and damaged-shelf recovery. No console errors are
 filtered and no action timeout is increased.
+The first full CI run exposed one remaining older Prism capacity/recovery test
+that checked a generic details element. Both new drawers matched it, so the
+selector is now the explicit capture ID; the optional expansion check uses the
+same target. The focused Prism check passes in Chromium, Firefox and WebKit,
+and native drag, keyboard corners and Escape capture checks also pass.
+The release gate held publication until the correction passed.
 
 Reviewed phone/desktop captures cover the original cover, all six maps, route
 message, next-bank directory, creator programs and themed bank menu, folded
