@@ -1,5 +1,17 @@
 # Verification record
 
+## Pip-and-Sprout adventure creator — v0.43.0
+
+**1,330 Node tests** pass, including 23 new duo tests, syntax checks and a **147-file** production package. The repository index covers **435 files** and checks 1,909 local references. New rules are confined to duo project format 2; the ten classic inventions, original adventure exports and captured v0.41 checkpoint retain their behavior. Duo saves use a separate journey-scoped key, so saving a duo never rewrites legacy workshop bytes.
+
+The six authored stories replay deterministically in 9, 11, 13, 19, 27 and 55 ticks. Tests verify every immutable frame, both companions’ occupancy, handoffs, parcel conversion/counts, colour-specific tubes and bridge timing, signal samples, both home flags, all six portable projects and exact creator clears. False proofs, malformed programs, oversized files, unknown versions, altered official layouts and unsafe coordinates are rejected. Remixes retain credit and leave originals intact.
+
+Creator tests cover terrain/start edits, station limits, readiness messages, atomic placement and Undo, blueprint rotations and directional programs, linked colour shifts, first A/B routes, configurable delivery targets and rectangular capture. Partial tube captures, collisions and over-budget pieces fail without mutation. Twelve-adventure and twelve-blueprint shelves refuse overflow without eviction; explicit replacements leave other entries intact. Quota/corrupt storage, backup/reset/restore and journey isolation are checked.
+
+Eight required live cases exercise all six story wins at 390- and 1440-pixel widths; real player-built clears; shelf save/reload/update/cancel; project files/codes/postcards; configured, captured and imported pieces; shared finale replay and forged-proof rejection; terrain, starts, dialogue and part settings; and recovery downloads without overwriting unreadable saves. These cases and the three existing part-editor regressions pass in Chromium, Firefox and WebKit. Layout checks include 320×568, 844×390, 768×1024 and 1440×1000 with largest text, high contrast and themed dropdowns. Precise Column/Row controls complement direct touch placement on larger gardens.
+
+The required release catalogue now contains **120 distinct cases**, split into two exhaustive groups of 60, with the existing five-platform and legacy-migration publication gates. Local reports, screenshots, traces, private save data and generated builds remain ignored. Browser viewport/input emulation does not replace testing on physical devices or a player usability study.
+
 ## Pip workshop editing and regression audit — v0.42.1
 
 **1,307 Node tests**, syntax checks, the **143-file** production build, public

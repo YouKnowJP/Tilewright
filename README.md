@@ -27,6 +27,8 @@ these restrictions apply only to new protected material. Read the
 
 Visit **Adventure Workshop → Puzzle Lab → Pip’s workshop** for ten new short inventions: four lessons, four limited-parts challenges and two optional Pip-and-Sprout prototypes. Build a route, edit placed parts and their starting A/B route, inspect it one tick at a time, and keep your own fastest or smallest answers. Dress Pip, display three favorite inventions in your Trailhouse, and share a verified project or a playable single-companion adventure. The Community shelf includes four official builder picks and your locally imported worlds. In ordinary Pip adventures, try **Advance to next event** and the numbered 6/12/24-card rehearsal. [Workshop guide](docs/PIP_WORKSHOP.md).
 
+**Pip & Sprout · story & creator** adds six duo story missions and an open garden editor. Paint roads, move both companions, write dialogue and combine recipes, tubes, bridges, memories and signal stamps. Configure or capture reusable blueprints, keep twelve adventures and twelve pieces per journey, and send friends a playable project link. All six chapters include optional worked examples; try the two-home festival finale when you want a longer challenge.
+
 The Clockwork Gardens Storybook still offers six longer adventures with remembered routes, returning parcels, a shared ferry and independent flip stamps. Existing worlds and saves keep their identities.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),

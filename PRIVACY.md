@@ -8,6 +8,7 @@ there is no remote AI inference or upload of thought processes.
 
 Pip workshop drafts, verified solutions, personal bests, invention displays and
 Pip appearance choices also stay in local storage, separately for each journey.
+Duo story drafts, player-created adventures, reusable blueprints and duo displays use a separate journey-scoped local save. Shared duo projects include dialogue, author credit, programs, board layout and an optional verified solution; blueprint files include their author, notes and parts.
 Workshop feedback is a voluntary local download, with the challenge ID, solution
 metrics, selected difficulty feedback and the comment you type. It includes no
 journey backup or account identifier and is never sent automatically. Public

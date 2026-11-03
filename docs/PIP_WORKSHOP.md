@@ -22,7 +22,7 @@ that edit and continue inventing your own solution.
 
 Set three cards for each companion. Pick a part, configure it, then tap a free
 garden tile. Choose **Inspect tile** to read a station without changing it.
-Arrow keys move the yellow cursor; Space places or inspects. A text garden list
+Arrow keys move the yellow cursor; Space places or inspects. The folded garden text view also offers Column/Row selectors, Go to tile and Place selected part for precise phone input. A text garden list
 includes every station’s coordinates. Parcel numbers identify colours too.
 To revise a placed part, select its tile with **Inspect tile** or the arrow keys,
 then choose **Edit this part**. Its actual prism operation, recipe or two route
@@ -32,7 +32,7 @@ first-visit choice lets a route memory start with A or B. **Remove this part**
 and **Undo edit** make it easy to try a different idea. Fixed stations remain
 part of the challenge and cannot be edited.
 
-Parts cannot replace fixed stations, starting positions or water. Tubes need
+In the ten classic inventions, parts cannot replace fixed stations, starting positions or water. Tubes need
 both ends. Each tray limits both total parts and the available kind of part.
 
 **Test invention** starts a fresh simulation. **One tick** advances every
@@ -48,6 +48,35 @@ is beside it. The receiver may accept the parcel later in that same tick. A
 held or occupied bridge stays safe for the whole tick. A blocked move still
 advances its program card. Relay prototypes stay in this workshop; ordinary
 adventures continue to use a single Pip.
+
+## Pip & Sprout: six story missions and your own adventures
+
+Choose **Pip & Sprout · story & creator** in Puzzle Lab, or the **Pip & Sprout · 6 story missions** collection at the bench. All six chapters are available from the start:
+
+| Chapter | Story | New idea | Worked clear |
+| --- | --- | --- | --- |
+| 1 | A Letter for Two | Timed handoff and remembered departure | 9 ticks |
+| 2 | The Dyehouse Promise | Two recipes, one parcel | 11 ticks |
+| 3 | A Bridge for the Rain | Colour-linked crossings and tick-start power | 13 ticks |
+| 4 | The Long Way Round | Paired courier tubes and Sprout’s home flag | 19 ticks |
+| 5 | The Signmaker’s Errand | Two deliveries, return loops and a first B route | 27 ticks |
+| 6 | The Festival of Two Lights | Signal stamps, two windows and both partners home | 55 ticks |
+
+Use **Pip’s cards / Sprout’s cards** to focus on one program. Story gardens are fixed; **Remix this garden** copies all stations, dialogue, cards and credit into an editable adventure. The original remains available. **Next chapter** appears after a story clear. Playback pace offers Steady, Quick or One moment at a time; manual ticks remain available.
+
+In **Create a duo adventure**, choose road/water brushes or move either starting companion. Parts may occupy starting tiles in duo adventures. Remove a station and move any companion before painting its tile as water. Gardens range from 7–13 columns and 5–9 rows; blank presets include 9×7, 11×9 and 13×9. Keep at most 32 parts, eight memories/signals, one home flag per companion and two tube ends per colour.
+
+Every window needs one to three matching parcels. Optional handoff requirements (zero to four) and P/S home flags add goals. Matching bridge colours operate independently. Power is sampled at the start of the tick; a matching occupied bridge keeps that crossing safe for the tick. **Use on M** samples matching held plates or completed windows: all matching plates held **or** all matching windows full selects Powered; otherwise Quiet. Either bank restarts at card 1 and keeps cargo. Signals with no matching hardware stay Quiet. Pip acts first, so a Sprout delivery later in the tick affects Pip’s next sample.
+
+The folded **Your story & goals** drawer edits opening/completion dialogue. **Your adventure shelf** keeps twelve named maps; Save updates a loaded entry after confirmation, Save a new copy uses an empty slot, and a full shelf never evicts anything. Opening another custom map confirms before replacing a different bench draft. Export files or full journey backups for safekeeping. Shelf and blueprint storage are local to the current journey.
+
+### Customizable duo blueprints
+
+The folded **Blueprints** drawer contains a recipe atelier, a two-route sign, a tube pair and a linked crossing. Configure input/output parcels, required deliveries, link colour, first route and facing. Rotation turns geometry, direction cards and mirror orientation together. Saved/imported pieces can shift all four colours together, preserving their internal links. Previews include a text description.
+
+Select Inspect, put the garden cursor at the desired top-left corner, then **Place at cursor**. The whole piece must fit and its parts must avoid existing parts. Roads merge safely; companions stay in place. A placement is one Undo edit and clears an old mechanical proof. **Capture & keep blueprint** takes a chosen rectangle from the cursor, excluding companions; a tube pair must be captured together. Keep up to twelve pieces, download JSON to share a reusable piece or open a friend’s file for preview. A full shelf refuses additions without removing anything.
+
+Duo adventures use project format 2 inside the existing PT1 file/code/link container. Working clears are replayed before being labelled verified. Duo projects play here; ordinary single-Pip adventure exports retain their current format. No server, account or automatic upload is involved.
 
 ## Keep something worth returning to
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.43.0 — 2026-11-03
+
+- Add six Pip-and-Sprout story missions: shared letters, two-stage recipes, linked crossings, courier tubes, repeated deliveries and a signal-driven festival finale with both companions returning home. Each has optional hints and a verified worked example.
+- Add a duo adventure creator with painted roads/water, movable companions, twelve station types, configurable parcel targets, story dialogue, handoff goals and home flags. Keep up to twelve adventures and three verified duo displays per journey.
+- Add customizable recipe, route-memory, tube and bridge blueprints. Configure colours, targets, facing and first routes; capture, save and exchange up to twelve reusable pieces. Placements are atomic and undoable.
+- Share version-2 duo projects through bounded files, codes, verified play links and postcards. Existing version-1 projects, ordinary adventures and saved checkpoints retain their rules and bytes.
+- Keep companion card controls separate, advanced creator tools folded and menus themed. Add quick/steady/careful playback and live phone, tablet, desktop, large-text and storage-recovery coverage.
+
 ## 0.42.1 — 2026-11-02
 
 - Add direct editing and removal of placed Pip workshop parts. Load a prism, recipe or route memory into the tray, adjust it, then apply the settings to the selected tile without spending extra parts.
