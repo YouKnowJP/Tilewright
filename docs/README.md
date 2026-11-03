@@ -9,6 +9,7 @@
 | --- | --- |
 | [Screen view and eighteen new adventures](SCREEN_AND_SAGAS.md) | Compact play, fullscreen, and three new storybooks. |
 | [The Lost Cartographer](LOST_CARTOGRAPHER.md) | Living maps, vaults, story cards, cooperative chapters, and playable clues. |
+| [Pip’s invention workshop](PIP_WORKSHOP.md) | Short lessons, limited parts, relay prototypes, customization, displays, verified sharing and community picks. |
 | [Player guide](PLAYER_GUIDE.md) | Basic goals, actions, and play flow. |
 | [Training camp](TRAINING.md) | Hands-on play and world-creation lessons. |
 | [Accessibility](ACCESSIBILITY.md) | Readable text, high contrast, map cues, and peaceful chapters. |

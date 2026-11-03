@@ -3,6 +3,14 @@
 The woods have lost their light. You can follow a story, set off on a longer
 journey, or make a world for someone else to discover.
 
+## Pip’s invention workshop
+
+Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. Start with
+**Learn with Pip**, then try four **Tinkerer’s Trials** or two optional
+**Pip & Sprout** prototypes. Build, test one tick at a time, Undo, and try a
+different answer. Dress Pip, keep an invention display, and share working
+projects from the same compact workshop. See the [complete workshop guide](PIP_WORKSHOP.md).
+
 ## The Clockwork Gardens — v0.41
 
 Open **Choose your adventure → Storybooks → Pip and the Clockwork Gardens**.

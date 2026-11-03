@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.42.0 — 2026-11-02
+
+- Add Pip’s workshop: four interactive lessons, four limited-parts invention challenges, and two optional Pip-and-Sprout relay prototypes with parcel handoffs and shared plate timing.
+- Add safe event advancement to ordinary Pip adventures, contextual station advice, and immutable 6/12/24-card route rehearsals. Every advanced turn retains normal hazards, checkpoints and Undo.
+- Add always-available Pip paints, antennae, ribbons and expressive faces; keep personal fastest/smallest answers and three Trailhouse invention displays.
+- Share bounded Pip project files/codes/links with verified clears and original postcards. Working single-companion inventions export as normal adventures with independently verified creator clears.
+- Add an honest Community shelf with four official builder picks, local player worlds, invention/challenge filters and manual owner-review suggestions. Include a local-only playtest feedback export.
+- Preserve all existing adventure formats and saves, including a captured v0.41 checkpoint and exact v13 export bytes. Extend rules, phone/desktop, keyboard, storage-recovery and live-browser coverage.
+
 ## 0.41.0 — 2026-11-02
 
 - Add Pip and the Clockwork Gardens: six original adventures with returning signs, shared ferry timing, a four-road braid and a two-recipe garden finale.

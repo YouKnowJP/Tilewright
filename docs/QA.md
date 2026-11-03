@@ -1,5 +1,42 @@
 # Verification record
 
+## Pip’s invention workshop — v0.42.0
+
+**1,299 Node tests**, syntax checks and the **143-file** production build pass.
+The 38 new tests prove all ten inventions, both rule sets for compiled ordinary
+adventures, alternate prism/tube solutions, portable verified projects, budgets,
+terrain/occupancy constraints, parcel retention, handoff uniqueness, no collisions
+or swaps, plate timing, independent flip memory, bounded playback, storage failures,
+journey isolation/full backups/fresh starts, and immutable longer rehearsals.
+A deterministic sweep of 432 relay programs checks 10,368 simulated ticks for
+legal positions, card indices, unique cargo and bounded receiver counters.
+The v0.41 checkpoint still wins with the original fingerprint and exact v13 world
+export hash. Existing core adventure rules and formats are unchanged.
+
+Eleven new required live scenarios cover all ten inventions on phone/desktop,
+keyboard and touch building, budget refusal, Undo, verified project/adventure
+exports and actual shared wins, postcard/feedback downloads, relay import,
+wardrobe/display persistence, storage recovery, themed menus and enlarged
+high-contrast views at 320×568, 844×390, 768×1024 and 1440×1000. They also check
+Stop, keyboard interruption and focus restoration for event advancement, honest
+community filtering, and actual v0.41 continuation. All eleven pass in Chromium.
+The first draft of the harness toggled an already-open hint drawer and used
+Escape as if it had no existing pause action. Both checks now exercise the
+intended visible controls, preserving the normal pause behavior and timeouts.
+
+Reviewed phone/desktop captures show the board, relay layout, appearance page,
+sharing page and enlarged high-contrast view. The review moved the invention
+picker and garden instructions into optional drawers to bring the board higher
+on phones. Largest-text navigation uses full-width choices to avoid broken
+words. New controls remain inside the optional workshop or existing Pip panel.
+
+The required release catalogue now has **109 cases**, partitioned exhaustively
+into 55 and 54; both Chromium groups, baseline migration and five platform jobs
+gate publication. Local browser reports remain ignored. This is automated and
+visual QA, not a volunteer usability study. A local-only feedback download is
+available for the owner’s future player sessions; no real player feedback or
+public community uploads have been invented.
+
 ## Pip and the Clockwork Gardens — v0.41.0
 
 **1,261 Node tests**, syntax checks and the **138-file** production build pass.

@@ -1,3 +1,4 @@
+import {builderPicks} from './pip-tinker.mjs';
 import {gardenWorld,GARDEN_LEVELS} from './pip-gardens-worlds.mjs';
 import {glassworksWorld,GLASSWORKS_LEVELS} from './pip-glassworks-worlds.mjs';
 import {switchbackWorld,SWITCHBACK_LEVELS} from './pip-switchback-worlds.mjs';
@@ -41,7 +42,7 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   $('search').addEventListener('input',()=>{shelfPage=0;},true);$('filter').addEventListener('change',()=>{shelfPage=0;},true);
   const restored = loadWorkshop(storage), featured = [...workshopShowcases().map((pack,i) => normalizeAdventure({ ...pack, ...(WORKSHOP_CLEARS[i] ? { proof:WORKSHOP_CLEARS[i] } : {}) })), ...CARTOGRAPHER_LEVELS.map(id=>cartographerWorld(id)),...newWorlds];
   featured.push(...CLOCKWORK_LEVELS.map(id=>clockworkWorld(id)),...ORCHESTRA_LEVELS.map(id=>orchestraWorld(id)),...ATLAS_LEVELS.map(id=>atlasWorld(id)),...PARCELWORKS_LEVELS.map(id=>parcelworksWorld(id)),...LOOM_LEVELS.map(id=>loomWorld(id)),...ORCHARD_LEVELS.map(id=>orchardWorld(id)),...PRISM_LEVELS.map(id=>prismWorld(id)),...FOUNDRY_LEVELS.map(id=>foundryWorld(id)),...SWITCHBACK_LEVELS.map(id=>switchbackWorld(id)),...GLASSWORKS_LEVELS.map(id=>glassworksWorld(id)),...GARDEN_LEVELS.map(id=>gardenWorld(id)));
-  const board=trailboardAdventures();let bookmarks=loadBookmarks(storage);
+  const picks=builderPicks();const board=trailboardAdventures();let bookmarks=loadBookmarks(storage);
   const restoredDraft=loadWorkshopDraft(storage); let draftTouched=Boolean(restoredDraft);
   let entries = restored.entries, bests = loadWorkshopBests(storage), saved = true, preview = null, share = null, activePlay = null, section = 'shelf';
   let token = 0, replay = null, timer = null, shelfFailed = restored.unavailable, labRoom = LAB_ROOMS[0].id, previewOrigin = 'shelf';
@@ -66,10 +67,11 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   function persist() { shelfFailed=!storeWorkshop(storage,entries); renderShelf(); return !shelfFailed; }
   function add(pack) { entries=addWorkshopAdventure(entries,pack); const ok=persist(); notice(ok ? 'Adventure added to your shelf.' : 'Adventure kept in this session. Browser saving is unavailable; download a file to keep it.',!ok); }
   function renderShelf() {
-    const query=$('search').value.trim().toLowerCase(), filter=$('filter').value, keys=new Set(featured.map(adventureKey)), discovery=['discover','bookmarked'].includes(filter);
-    $('discovery-tools').hidden=!discovery; $('shelf-note').textContent=discovery?'Trailboard is a curated catalogue included with the game. Bookmark a world, play its checked route, or remix it. Friends can still share their own worlds through Import & play.':'Your shelf stays in this browser. Share files or codes with friends; import theirs here. Up to 32 saved worlds, plus the featured adventures.';
+    const query=$('search').value.trim().toLowerCase(), filter=$('filter').value, keys=new Set(featured.map(adventureKey)), community=filter==='community', discovery=['discover','bookmarked','community'].includes(filter);
+    $('community-tools').hidden=!community;$('discovery-tools').hidden=!discovery||community; $('shelf-note').textContent=discovery?'Trailboard is a curated catalogue included with the game. Bookmark a world, play its checked route, or remix it. Friends can still share their own worlds through Import & play.':'Your shelf stays in this browser. Share files or codes with friends; import theirs here. Up to 32 saved worlds, plus the featured adventures.';
     let all=[...(filter==='mine'?[]:featured.map(pack=>({pack,featured:true}))),...(filter==='featured'?[]:entries.filter(p=>filter==='mine'||!keys.has(adventureKey(p))).map(pack=>({pack,featured:false})))];
     if(discovery){const catalog=[...featured.map(pack=>({pack,featured:true,tags:['story'],note:'Featured adventure'})),...board.map(item=>({pack:item.world,featured:true,...item})),...entries.map(pack=>({pack,featured:false,tags:['story','puzzle'],note:'From your shelf'}))],unique=new Set();all=catalog.filter(item=>{const key=adventureKey(item.pack);if(unique.has(key))return false;unique.add(key);return (filter!=='bookmarked'||bookmarks.includes(key))&&($('discovery-tag').value==='all'||item.tags.includes($('discovery-tag').value));});}
+    if(community){all=[...picks.map(({world,trial})=>({pack:world,featured:true,tags:['puzzle',trial.difficulty.toLowerCase()],note:'Official builder pick · '+trial.minutes+' estimate',mechanic:trial.id==='jade-express'?'recipes':trial.id==='corner-post'?'tubes':'prisms',difficulty:trial.difficulty.toLowerCase()})),...entries.map(pack=>({pack,featured:false,tags:['local','player-made'],note:'On this device · imported or saved',mechanic:pack.markers.some(m=>m.kind==='pip-press')?'recipes':pack.markers.some(m=>m.kind==='pip-tube')?'tubes':pack.markers.some(m=>m.kind==='pip-prism')?'prisms':'other',difficulty:'unrated'}))].filter(item=>($('community-mechanic').value==='all'||item.mechanic===$('community-mechanic').value)&&($('community-difficulty').value==='all'||item.difficulty===$('community-difficulty').value));$('shelf-note').textContent='Official builder picks are included by Lantern Trails. Player worlds shown here are saved on this device, not uploaded to a public server. Import a friend’s file or code to add their adventure.';}
     if(filter==='new')all=all.filter(item=>newKeys.has(adventureKey(item.pack)));
     const matches=all.filter(({pack})=>`${pack.title} ${pack.author} ${pack.description}`.toLowerCase().includes(query));
     $('shelf-count').textContent=`${matches.length} worlds · ${entries.length}/32 on your shelf`;
@@ -136,7 +138,7 @@ export function createWorkshopUI({ storage, getMap, getPreferences=()=>({}), onE
   $('preview-play').onclick=()=>guard(()=>{ activePlay={pack:preview,test:false,origin:previewOrigin}; const selected=$('preview-difficulty').value,stage=adventureStage(preview);if(previewOrigin==='lab'){stage.workshop.lab=labRoom;$('lab-rules').value=selected;} hide(); onPlay(stage,selected); });
   $('preview-add').onclick=()=>guard(()=>{add(preview);$('preview-add').disabled=true;});
   $('preview-remix').onclick=()=>remixWorld(preview); $('preview-share').onclick=()=>openShare(preview);
-  $('discovery-tag').onchange=renderShelf;
+  $('discovery-tag').onchange=()=>{shelfPage=0;renderShelf();};for(const id of ['community-mechanic','community-difficulty'])$(id).onchange=()=>{shelfPage=0;renderShelf();};
   $('save').onclick=()=>guard(()=>add(designer.get()));
   $('share').onclick=()=>guard(()=>openShare(designer.get()));
   $('test').onclick=()=>guard(()=>{

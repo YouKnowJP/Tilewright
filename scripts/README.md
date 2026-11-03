@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **98 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **109 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -137,7 +137,7 @@ mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
 CI runs the complete release catalogue in two parallel groups. Each group has
-49 of the current 98 cases; both must pass before deployment. No scenario is
+54 or 55 of the current 109 cases; both must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -157,7 +157,7 @@ Switchback Station books, cargo questions and free rehearsal, dock reset/Undo,
 real junction repaint and bank swaps, builder-note puzzle export/import and
 shared play, malformed notes and storage failures, enlarged custom menus and
 long notes, and original v0.38 checkpoint continuation. The complete release
-catalogue now has 98 cases, partitioned into 49 per CI group.
+v0.41 catalogue had 98 cases, partitioned into 49 per CI group.
 
 
 `pip-glassworks-browser-checks.mjs` adds eight required cases: complete phone
@@ -174,3 +174,12 @@ enlarged themed bank/blueprint menus across four viewport shapes, independent
 route memories and the original v0.40 continuation. Capture controls use the
 explicit `ws-assembly-capture` disclosure so a second optional drawer cannot
 make older capture checks ambiguous.
+
+
+`pip-tinker-browser-checks.mjs` adds eleven required cases: all ten inventions
+on phone/desktop, keyboard building/budgets/Undo, verified project/adventure
+exchange and actual wins, postcard/feedback downloads, shared relay previews,
+appearance/display persistence, enlarged themed menus across four viewport
+shapes, damaged/quota storage recovery, interrupted event advancement, honest
+community filtering and the original v0.41 checkpoint continuation. The release
+catalogue contains 109 cases split exhaustively into groups of 55 and 54.

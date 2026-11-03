@@ -496,6 +496,7 @@ function readGameHash() {
   const shared = location.hash.startsWith('#adventure=');
   setMode(location.hash !== '#mapmaker', false);
   if (shared) adventures.openShared(location.hash.slice(11));
+  if(location.hash.startsWith('#pip='))adventures.openPipProject(location.hash.slice(5));
 }
 window.addEventListener('hashchange', readGameHash);
 readGameHash();

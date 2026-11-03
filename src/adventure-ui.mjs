@@ -1,3 +1,4 @@
+import {createPipStudio} from './pip-studio-ui.mjs';
 import {createClockworkUI} from './clockwork-ui.mjs';
 import { createPlayLayout } from './play-layout.mjs';
 import { createClueUI } from './adventure-clues-ui.mjs';
@@ -43,7 +44,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   let expeditions, workshop, training, workshopActions = [], workshopClearNote = '';
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0;
   let mapInput,gamepadInput;
-  const playLayout=createPlayLayout();const clockworkUI=createClockworkUI({onAction:action,storage});
+  const playLayout=createPlayLayout();const pipStudio=createPipStudio({storage,getPreferences:()=>front?.preferences||{},onLook(){paint();}});const gamePreferences=()=>({...front?.preferences,pipLook:pipStudio.look});const clockworkUI=createClockworkUI({onAction:action,storage,onStudio:id=>pipStudio.open(id),canAdvance:()=>active&&!outsideBoard()&&!paused&&!front.dialogOpen&&!notesDialog.open&&!document.querySelector('dialog[open]')&&!$('#game-menu').open&&!$('#game-tools').open});
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;
@@ -62,6 +63,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     document.body.classList.toggle('game-library-open', view === 'library');
   }
   function showTitle() {
+    clockworkUI.stop();pipStudio.stop();
     training?.hide();
     workshop?.hide();
     for (const selector of ['#conversation-dialog', '#camp-dialog', '#forecast-dialog', '#game-notes-dialog']) if ($(selector).open) $(selector).close();
@@ -304,6 +306,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     }catch(error){checkpointFailed=true;checkpointError=error.message;}
   }
   function rewindAction(){
+    clockworkUI.stop();
     if(!active||outsideBoard()||front.dialogOpen||notesDialog.open||!run||run.status==='won')return;
     const dialog=document.querySelector('dialog[open]');if(dialog&&dialog.id!=='conversation-dialog')return;
     if(expeditions?.session){if(!expeditions.canUndo)return;expeditions.undo();}
@@ -326,12 +329,12 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       if(!run.stage.workshop){memory=run.memory;memorySaveFailed=!saveMemory(storage,memory);}
       if(run.guild)selectedKit=run.guild.kit;
       const index=campaign.findIndex(stage=>stage.id===run.stage.id);if(index>=0)selectedChapter=Math.floor(index/3);
-      paused=false;dashArmed=false;interactionId=null;clueUI.reset();hintVisible=false;selectNotes('quest');renderer=createAdventureRenderer(canvas,run.stage,{reducedMotion:motion,preferences:()=>front.preferences});renderPicker();renderGuild();checkpoint();showBoard();update();revealBoard();
+      paused=false;dashArmed=false;interactionId=null;clueUI.reset();hintVisible=false;selectNotes('quest');renderer=createAdventureRenderer(canvas,run.stage,{reducedMotion:motion,preferences:gamePreferences});renderPicker();renderGuild();checkpoint();showBoard();update();revealBoard();
     }catch(error){const note=`${error.message} Your completed progress and worlds are retained.`;savedTrail.data=null;savedTrail.error=error.message;front.notice(note);if(!$('#adventure-workshop').hidden){workshop.show('books');workshop.notice(note,true);}}
     finally{restoring=false;$('#game-title-screen').inert=false;$('#adventure-workshop').inert=false;}
   }
 
-  const clueUI=createClueUI({preferences:()=>front.preferences,onFocus(point){renderer?.setHintFocus(point);paint();}});
+  const clueUI=createClueUI({preferences:gamePreferences,onFocus(point){renderer?.setHintFocus(point);paint();}});
   function update() {
     if (!run) return;
     clockworkUI.update(run);
@@ -527,11 +530,12 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     const chapterIndex = campaign.findIndex(item => item.id === stage.id);
     if (chapterIndex >= 0) selectedChapter = Math.floor(chapterIndex / 3);
     clueUI.reset(); hintVisible = false; selectNotes('quest');
-    renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion, preferences:()=>front.preferences }); renderPicker(); renderGuild(); resize(); update();
+    renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion, preferences:gamePreferences }); renderPicker(); renderGuild(); resize(); update();
     revealBoard();
   }
 
   function action(direction, dash = false) {
+    clockworkUI.stopForInput();
     const conversationAction = direction === 'close-dialogue' || direction.startsWith('choose:');
     if (!active || outsideBoard() || front.dialogOpen || notesDialog.open || !run || (paused && !conversationAction) || run.status !== 'playing') return;
     if(run.clockwork&&direction===`interact:${run.clockwork.id}`&&nearbyInteractions(run).some(item=>item.id===run.clockwork.id)){clockworkUI.open();return;}
@@ -608,7 +612,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   $('#conversation-dialog').addEventListener('cancel', event => { event.preventDefault(); action('close-dialogue'); });
   $('#conversation-dialog').addEventListener('close', () => { if (active && run?.dialogue && !$('#conversation-dialog').open) action('close-dialogue'); });
 
-  function pause() { playLayout.closeTools(); if (!run || run.status !== 'playing') return; $('#game-menu').open = false; paused = !paused; update();$(paused?'#game-primary':'#adventure-canvas').focus({preventScroll:true}); }
+  function pause() { clockworkUI.stop(); playLayout.closeTools(); if (!run || run.status !== 'playing') return; $('#game-menu').open = false; paused = !paused; update();$(paused?'#game-primary':'#adventure-canvas').focus({preventScroll:true}); }
   function hint() { hintVisible = !hintVisible; $('#game-menu').open = false; update(); if (hintVisible) openNotes('help'); }
   $('#game-pause').addEventListener('click', pause);
   for(const id of ['game-undo','game-undo-menu','game-undo-result','conversation-undo'])$('#'+id).addEventListener('click',rewindAction);
@@ -674,12 +678,14 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     } else if (key === 'Enter' && run.status !== 'playing' && !event.target.closest('button')) { event.preventDefault(); $('#game-primary').click(); }
   });
   mapInput=createMapInput(canvas,{
-    preferences:()=>front.preferences,
+    preferences:gamePreferences,
     enabled:()=>active&&!outsideBoard()&&!front.dialogOpen&&!notesDialog.open&&!document.querySelector('dialog[open]')&&!$('#game-menu').open&&!$('#game-tools').open&&!paused&&run?.status==='playing',
     origin:()=>{const rect=canvas.getBoundingClientRect(),point=renderer?.playerAnchor()||{x:.5,y:.5};return {x:rect.left+rect.width*point.x,y:rect.top+rect.height*point.y};},
     onMove:direction=>action(direction),
   });
   function controllerPress(command) {
+    clockworkUI.stopForInput();
+    if(pipStudio.control(command))return;
     if(controlDropdown(command))return;
     if(clueUI.control(command))return;
     if(command==='undo'){if(!$('#training-camp').hidden)training.control('undo');else rewindAction();return;}
@@ -732,7 +738,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     rewind=null;
     run = session.run; difficulty = session.config.difficulty; $('#game-difficulty').value = difficulty;
     if (newStage || !renderer || run.stage.id !== $('#adventure').dataset.stage) {
-      renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion, preferences:()=>front.preferences }); paused = false; dashArmed = false; interactionId = null; renderPicker(); resize(); revealBoard();
+      renderer = createAdventureRenderer(canvas, run.stage, { reducedMotion: motion, preferences:gamePreferences }); paused = false; dashArmed = false; interactionId = null; renderPicker(); resize(); revealBoard();
     }
     $('#adventure').dataset.stage = run.stage.id; lastAction = performance.now();checkpoint(); if (!newStage) sound.play(run.events); update();
     if (run.status !== 'playing') $('#game-primary').focus({ preventScroll: true });
@@ -766,7 +772,9 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     openTraining,
     useTerrain() { openWorkshop('build'); workshop.fromTerrain(); },
     openShared(code) { openWorkshop('import'); workshop.openShared(code); },
+    openPipProject(code) { openWorkshop('lab');pipStudio.openCode(code); },
     leave() {
+      clockworkUI.stop();pipStudio.stop();if(pipStudio.openNow)pipStudio.close();
       restoreToken++;
       training.hide();
       workshop.hide();

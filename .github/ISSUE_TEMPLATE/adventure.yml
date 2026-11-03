@@ -1,0 +1,33 @@
+name: Suggest a community adventure
+description: Share your own original adventure for the owner to review.
+title: 'Community adventure: '
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: 'This is a public suggestion, not an automatic upload into the game. Share only your own work and leave out personal information. The owner chooses which adventures to include. Friends can play a shared file or code without a GitHub account.'
+  - type: input
+    id: title
+    attributes:
+      label: Adventure title and creator credit
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: LT1 adventure code or PT1 Pip project code
+      description: Finish a playtest and include its verified creator clear. You may attach the exported JSON file instead.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What makes this adventure interesting?
+      description: Describe the main idea, intended challenge and any accessibility considerations.
+  - type: checkboxes
+    id: permissions
+    attributes:
+      label: Your work
+      options:
+        - label: I made this adventure and permit Tilewright to include it in the freely playable game with the creator credit above. I keep ownership of my original contribution.
+          required: true

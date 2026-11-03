@@ -6,7 +6,15 @@ preferences, learned movement counts, creator drafts, and worlds remain in
 this browser's local storage. The game's adaptive opponents use local counters;
 there is no remote AI inference or upload of thought processes.
 
-Exported backup/world/Storybook files stay where you save them. Sharing a play
+Pip workshop drafts, verified solutions, personal bests, invention displays and
+Pip appearance choices also stay in local storage, separately for each journey.
+Workshop feedback is a voluntary local download, with the challenge ID, solution
+metrics, selected difficulty feedback and the comment you type. It includes no
+journey backup or account identifier and is never sent automatically. Public
+community suggestions are submitted manually through GitHub Issues; nothing is
+uploaded just by building or sharing a project.
+
+Exported backup/world/Storybook/Pip project files stay where you save them. Sharing a play
 link, code, or file intentionally discloses its included world data to the
 recipient. Do not put personal or sensitive information into shared worlds.
 

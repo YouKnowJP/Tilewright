@@ -1,3 +1,4 @@
+import {normalizePipLook,PIP_PAINTS} from './pip-look.mjs';
 import { walkableCells } from './adventure.mjs';
 import { CHANNEL_NUMBERS, drawCueBadge } from './adventure-accessibility.mjs';
 import { drawTile } from './render.mjs';
@@ -90,7 +91,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
     case 'pip-stamp': rect('#30475e',2,3,20,20);rect('#b0c8cf',4,4,16,15);rect('#102f38',6,6,12,10);for(let n=0;n<3;n++){rect('#ffe3a3',7+n*3,8,2,5);}rect('#d5b379',5,20,14,3);break;
     case 'pip-tube': rect('#273e47',2,3,20,20);rect('#d0a766',4,4,16,18);rect(color,6,6,12,14);rect('#102d33',8,8,8,10);rect('#f9e5b2',9,17,6,3);break;
     case 'pip-stop': rect('#efe0a4',2,3,20,18);rect('#4e7069',4,5,16,14);rect('#e6c46b',6,6,3,12);rect('#fbefcc',9,6,9,6);ctx.fillStyle='#1a3536';ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.fillText(String(item.order||1),13,13);break;
-    case 'clockwork': rect('#805c3e',3,6,18,15);rect('#e7c886',5,7,14,11);rect('#203d48',7,10,3,4);rect('#203d48',14,10,3,4);rect('#ecf5c7',10,2,4,5);rect('#566b68',5,21,5,3);rect('#566b68',15,21,5,3);if(item.parcel){rect('#213a43',13,15,11,9);rect(CHANNEL_COLORS[item.parcel]||'#efc47a',15,16,8,7);rect('#fff1c7',18,16,2,7);}break;
+    case 'clockwork': {const look=normalizePipLook(item.look);rect('#805c3e',3,6,18,15);rect(PIP_PAINTS[look.paint].body,5,7,14,11);rect('#203d48',7,10,3,item.mood==='pleased'?2:4);rect('#203d48',14,10,3,item.mood==='pleased'?2:4);if(item.mood==='puzzled')rect('#203d48',13,8,5,1);rect('#ecf5c7',10,2,4,5);if(look.antenna==='leaf'){rect('#8dce9e',13,1,5,3);rect('#58866b',14,0,3,2);}if(look.antenna==='star'){rect('#fff1bc',8,3,8,2);rect('#fff1bc',11,0,2,8);}if(look.scarf!=='none'){const ink=look.scarf==='coral'?'#efa58b':'#fff0c4';rect(ink,5,17,14,3);rect(ink,5,19,4,3);}rect('#566b68',5,21,5,3);rect('#566b68',15,21,5,3);if(item.parcel){rect('#213a43',13,15,11,9);rect(CHANNEL_COLORS[item.parcel]||'#efc47a',15,16,8,7);rect('#fff1c7',18,16,2,7);}break;}
     case 'turntable': ring('#465b70',12,12,11); ring('#e8c785',12,12,8); rect('#253f48',10,4,4,15); rect('#253f48',7,7,9,3); rect('#fff1c6',14,13,5,4); break;
     case 'vault': rect('#503e4d',2,5,20,18); rect('#c99a5f',4,7,16,13); rect('#f4d796',10,6,4,16); ring('#394d57',12,13,4); rect('#fff1c6',11,11,2,4); break;
     case 'rune': ring('#547a81',12,13,9); rect('#d4eeee',10,5,4,15); rect('#d4eeee',5,10,14,4); ring('#203d48',12,12,3); break;
@@ -117,6 +118,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
     case 'patrol': case 'hunter': case 'watcher': rect(item.kind === 'watcher' ? '#786a8b' : '#a76c61', 4, 6, 16, 16); rect('#473f4c', 6, 9, 12, 6); rect('#ffe2a0', 7, 10, 3, 3); rect('#ffe2a0', 14, 10, 3, 3); if (item.kind === 'watcher') { rect('#d3b2db', 3, 1, 4, 7); rect('#d3b2db', 17, 1, 4, 7); } break;
   }
   ctx.restore();
+  if(item.hideCue)return;
   if(item.kind==='pip-press')drawCueBadge(ctx,item,'E',item.number||'',size);
   if(item.kind==='pip-flip')drawCueBadge(ctx,item,'Z',item.number||'',size);
   if(item.kind==='pip-sorter')drawCueBadge(ctx,item,'J',item.number||'',size);

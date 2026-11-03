@@ -25,7 +25,9 @@ these restrictions apply only to new protected material. Read the
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
 
-Choose **Choose your adventure → Storybooks → Pip and the Clockwork Gardens** for six new adventures. Flip stamps remember which of two routes comes next. Solve returning signs, coordinate a ferry, weave four courier roads and deliver parcels through a garden with independent route memories. Creators can engrave both banks, choose the starting route and borrow four complete puzzle blueprints. Keep a blueprint as a new saved piece, edit it, turn or mirror its preview, and share a puzzle file or verified adventure link. Earlier worlds and saves keep their identities.
+Visit **Adventure Workshop → Puzzle Lab → Pip’s workshop** for ten new short inventions: four lessons, four limited-parts challenges and two optional Pip-and-Sprout prototypes. Build a route, inspect it one tick at a time, and keep your own fastest or smallest answers. Dress Pip, display three favorite inventions in your Trailhouse, and share a verified project or a playable single-companion adventure. The Community shelf includes four official builder picks and your locally imported worlds. In ordinary Pip adventures, try **Advance to next event** and the numbered 6/12/24-card rehearsal. [Workshop guide](docs/PIP_WORKSHOP.md).
+
+The Clockwork Gardens Storybook still offers six longer adventures with remembered routes, returning parcels, a shared ferry and independent flip stamps. Existing worlds and saves keep their identities.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),
 [complete game guide](docs/GAME_GUIDE.md), and [controls](docs/CONTROLS.md).

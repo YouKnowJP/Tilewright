@@ -19,6 +19,10 @@ browser checks use a pinned Playwright package.
 | `src/viewport.mjs` | Fit-to-workspace geometry and zoom-aware pointer hit testing. |
 | `src/icons.mjs` | Original SVG toolbar and layer icons, independent of installed fonts. |
 | `src/operations.mjs` | Immutable layer naming/duplication/ordering/removal and anchored map resize/crop counting. |
+| `src/pip-tinker.mjs` | Bounded immutable invention trials, two-companion prototype rules, verified project exchange and ordinary-adventure compilation. |
+| `src/pip-studio-ui.mjs` | Optional workshop modal, build/test history, playback, wardrobe, displays and local downloads. |
+| `src/pip-coach.mjs` | Contextual explanations, route-state signatures and bounded event-advancement stop rules. |
+| `src/pip-look.mjs` | Separate journey-local Pip appearance schema and expression selection. |
 | `src/adventure.mjs` | Pure turn rules, collision, pickups, puzzles, patrol intent, scoring, exploration, and connected custom expeditions. |
 | `src/adventure-levels.mjs` | Campaign assembly, twenty-four stable record identities, and the first six authored maps. |
 | `src/adventure-horizon-levels.mjs` | Six authored coast/garden missions, including token circuits, changing doors, cart routes, and rescue finales. |
