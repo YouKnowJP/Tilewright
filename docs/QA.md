@@ -16,7 +16,8 @@ export hash. Existing core adventure rules and formats are unchanged.
 Eleven new required live scenarios cover all ten inventions on phone/desktop,
 keyboard and touch building, budget refusal, Undo, verified project/adventure
 exports and actual shared wins, postcard/feedback downloads, relay import,
-wardrobe/display persistence, storage recovery, themed menus and enlarged
+wardrobe/display persistence, confirmation before a display replaces a newer draft,
+storage recovery, themed menus and enlarged
 high-contrast views at 320×568, 844×390, 768×1024 and 1440×1000. They also check
 Stop, keyboard interruption and focus restoration for event advancement, honest
 community filtering, and actual v0.41 continuation. All eleven pass in Chromium.
