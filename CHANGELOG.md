@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.46.0 — 2026-11-04
+
+- Add The Canopy Fair: four original two-companion repair stories across a bellflower lift, a waiting handoff bell, a guarded rain bridge and a two-tower homecoming. All twenty duo chapters remain available with optional hints and verified examples.
+- Add independent tube and locker blueprint wiring. Remap complete connections, swap multiple numbers atomically, restore piece wiring or suggest unused garden connections while preserving parcel recipes, signals, cards and geometry.
+- Add Find room for this piece. Cycle through valid top-left positions without placing parts or changing a verified clear; placement still uses the existing atomic edit and Undo.
+- Add a waiting-bell blueprint and a turning recipe atelier, including configurable parcel targets and real playable examples. Keep connection tools folded and use the shared themed menus on phone, tablet and desktop.
+- Preserve project, blueprint and save formats; expand repair, timing, wiring, placement, sharing, reload and accessibility coverage.
+
 ## 0.45.0 — 2026-11-03
 
 - Add Dawn Workshop: four mastery commissions that remix the night-post network into mirrored sorting repairs, restored locker links, three-delivery recipes and a four-part express repair. All sixteen duo chapters offer optional hints and verified examples.

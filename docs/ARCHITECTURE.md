@@ -6,6 +6,8 @@ browser checks use a pinned Playwright package.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-canopy-fair.mjs` | Four original version-3 tower/bridge/handoff repair stories, with bounded inventories and verified example programs. |
+| `src/pip-blueprint-links.mjs` / `src/pip-blueprint-links-ui.mjs` | Independent tube/locker remapping, unused-connection suggestions and immutable valid-space search, exposed through folded themed controls. |
 | `src/pip-dawn-workshop.mjs` | Four mastery repair variations built from the night-post network, with bounded inventories and deterministic clears. |
 | `src/pip-garden-tools.mjs` / `src/pip-garden-tools-ui.mjs` | Atomic garden geometry, protected resizing and area edits, with folded creator controls. |
 | `src/pip-rehearsal.mjs` / `src/pip-rehearsal-ui.mjs` | Bounded immutable trace generation, repeat detection, advice, paged event views and real-test frame inspection. |

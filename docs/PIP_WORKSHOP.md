@@ -76,11 +76,11 @@ The folded **Blueprints** drawer contains a recipe atelier, a two-route sign, a 
 
 Select Inspect, put the garden cursor at the desired top-left corner, then **Place at cursor**. The whole piece must fit and its parts must avoid existing parts. Roads merge safely; companions stay in place. A placement is one Undo edit and clears an old mechanical proof. **Capture & keep blueprint** takes a chosen rectangle from the cursor, excluding companions; a tube pair must be captured together. Keep up to twelve pieces, download JSON to share a reusable piece or open a friend’s file for preview. A full shelf refuses additions without removing anything.
 
-Duo adventures use project format 2 inside the existing PT1 file/code/link container. Working clears are replayed before being labelled verified. Duo projects play here; ordinary single-Pip adventure exports retain their current format. No server, account or automatic upload is involved.
+Duo adventures use project format 2 or 3 inside the existing PT1 file/code/link container; locker and cargo-compass mechanics need version 3. Working clears are replayed before being labelled verified. Duo projects play here; ordinary single-Pip adventure exports retain their current format. No server, account or automatic upload is involved.
 
 ## The Night Post: six harder chapters
 
-Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All sixteen duo chapters are available without grinding.
+Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All twenty duo chapters are available without grinding.
 
 | Chapter | Story | Challenge | Worked clear |
 | --- | --- | --- | --- |
@@ -116,7 +116,7 @@ Choose **Dawn Workshop · 4 mastery repairs** in the Collection menu, or continu
 | 15 | Three Invitations at Daybreak | Two recipes and three locker relays | 84 ticks |
 | 16 | The Last Lantern Express | Two presses, a cargo compass and a tube end; three deliveries and both couriers home | 98 ticks |
 
-All sixteen chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
+All twenty chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
 
 ### Plan and replay a route
 
@@ -129,6 +129,38 @@ Opening or using rehearsal controls pauses playback. Choose a moment, use Earlie
 Remix a story or create a personal adventure, then open **Shape your garden**. Turn or mirror the complete map: roads, companions, their starting cards, station banks and prism handedness transform together. Quarter turns must fit the existing 7–13 column and 5–9 row limits. Colour shifting preserves internal parcel/link relationships and leaves Any parcel conditions intact; revise story colour names if needed. Trading companion routes also trades their starting cards and home flags, while Pip still acts first, so check the new timing.
 
 Resize from the top-left corner or centre the layout. Empty roads outside the new edge are trimmed; any companion or station outside it blocks the whole operation. Paint road or water rectangles from the yellow cursor, or remove placed stations in that rectangle. Water refuses to cover any starting companion or station. The garden text view offers exact column/row controls for phone placement. Every operation is atomic and supports one Undo edit. No-op brushes and unchanged sizes retain an existing clear; actual mechanical edits require a fresh test. Coordinate, area and capture selectors update with the board dimensions.
+
+## The Canopy Fair: four tower adventures
+
+Choose **The Canopy Fair · 4 tower adventures**, or continue after Dawn chapter 16. These are original layouts using the existing rules, with two-to-four-part repair trays:
+
+| Chapter | Story | Challenge | Worked clear |
+| --- | --- | --- | --- |
+| 17 | The Bellflower Lift | Repair a recipe and balcony compass; wait for two real locker parcels before climbing | 66 ticks |
+| 18 | The Bell That Waits | A cargo-aware waiting route wakes on the same tick as Pip’s handoff | 36 ticks |
+| 19 | The Rain-Bridge Orchestra | Hold a blue bridge while repairing a jade tube pair and returning mirror | 42 ticks |
+| 20 | When Every Lantern Comes Home | Repair four pieces, exchange four parcels through independent networks, then return both companions | 61 ticks |
+
+In the finale the windows finish before the couriers are home. Signals must sample the completed opposite tower before taking their return roads. Every chapter offers optional hints and a worked example; none is locked behind earlier completions. Remix any finished or unfinished chapter to build on its roads and keepers’ dialogue.
+
+### Reconnect a blueprint
+
+Open **Blueprints → Reconnect tubes & lockers** when the selected piece has those parts. Each row maps one original numbered connection to a destination number. Both tube ends or locker ends move together. Tube and locker numbers are independent, so changing a locker never changes a tube, parcel well, recipe, window, signal or cargo condition.
+
+Separate networks inside a piece need separate destinations. When swapping two numbers, the preview may report a duplicate until both destinations are selected; placement stays disabled until the complete map is valid. **Restore piece connections** returns the numbers to the current piece’s design.
+
+**Use unused connections** reserves numbers not used by that kind of station anywhere in the garden. It keeps already-free numbers when possible. If there are too few numbers, it reports the shortage and makes no partial change. Manual choices can intentionally connect a one-ended locker blueprint to a locker already in the garden. The resulting placement still obeys the two-end limit per connection.
+
+Rewiring changes the preview until a piece is placed, kept, updated or downloaded. Saved and shared files contain the resulting ordinary station numbers; no new file format is required. Choosing another piece resets its connection controls. These tools remain folded and are locked during a test.
+
+### Find room and build a new kind of route
+
+**Find room for this piece** cycles through valid top-left positions in row order, continuing after the current cursor and wrapping to the first space. It checks the whole piece, station collisions, connection counts and garden limits. It moves only the cursor. **Place at cursor** commits the actual edit, adds its roads and supports one-step Undo. If there is no valid position, the garden and cursor stay unchanged; try unused connections, a smaller arrangement or a larger garden.
+
+Two more templates bring the library to ten:
+
+- **A bell that waits**: put a companion on C with Wait / Wait / Use and a handoff beside it. Empty hands wait. A parcel chooses North / North / Use, reaches the configured window and returns by the mirror. Choose its window colour and parcel target.
+- **The corner atelier**: start two tiles west of its well with East / East / Use. Collect, convert, turn clockwise and deliver below the corner. Choose input/output colours and the delivery target; add a return route for repeated deliveries.
 
 ## Keep something worth returning to
 

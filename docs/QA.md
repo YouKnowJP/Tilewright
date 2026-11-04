@@ -1,5 +1,16 @@
 # Verification record
 
+## The Canopy Fair and blueprint connections — v0.46.0
+
+**1,437 Node tests** pass, including 21 focused Canopy/wiring tests plus additional template and rehearsal catalogue cases. Syntax and the **156-file** production package are checked with the normal release commands. Four original 13×9 stories have verified clears at 66, 36, 42 and 61 ticks. Frame checks prove immutable turns, non-overlapping companions, complete handoff/relay/home goals and portable clears. Omitting any supplied repair from the example route prevents its completion. Mirrors and palette shifts retain exact clear timing.
+
+Timing checks cover a waiting compass sampling Pip’s same-tick handoff, a guarded bridge throughout outward/returning crossings, and the finale’s windows finishing at 57 before both flags at 61. Both new templates create real playable routes: a two-handoff waiting bell clears at 36 and a configured corner atelier at 12. New story drafts, custom remixes and rewired pieces round-trip through the existing bounded journal. Project/blueprint versions, ordinary world rules, save keys and captured v0.43 compatibility bytes remain unchanged.
+
+Wiring checks prove that tube and locker numbers change independently of parcels, recipes, signals, cargo conditions, programs and geometry. Atomic swaps work; merged destinations, absent source numbers and malformed maps are rejected. Unused-link allocation reserves already-free source numbers before remapping conflicts, treats the two network families separately and refuses shortages without partial changes. Manual one-ended lockers can intentionally complete an existing connection. Valid-space searches enforce board bounds, occupied stations and global connection limits while preserving the input and its proof.
+
+Eight required browser cases cover all new story wins on phone/desktop, independent wiring and download/placement/Undo/save/reload, invalid-map recovery and number swaps, valid-space cycling and an actual recipe clear, a waiting-handoff creator clear, enlarged themed menus with test-mode locks, and exhausted-link recovery with an intentional locker join. The new cases and existing Dawn, blueprint revision, creator shelf, large-text and original name/Undo regressions pass in Chromium. Reviewed captures include 390/1440-pixel mission/connection views, tablet placement and the 320-pixel largest-text/high-contrast connection menu. The complete required catalogue has **140 distinct cases**, split into two exhaustive groups of **70**; existing platform, migration and publication gates remain required. Phone/tablet/desktop viewport and touch/keyboard emulation do not replace physical-device or human usability testing.
+
+
 ## Dawn Workshop, rehearsals and garden tools — v0.45.0
 
 **1,408 Node tests** pass, including 43 new workshop-tool tests, syntax checks and the **153-file** production package. The four Dawn commissions have verified clears at 45, 61, 84 and 98 ticks, with two-to-four-part inventories, protected fixed hardware and portable creator proofs. They are explicit repair variations of the night-post network, with mirrored banks, changed recipes and increased deliveries. Existing project formats, ordinary adventure rules and save namespaces remain unchanged.

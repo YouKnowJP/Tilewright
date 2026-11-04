@@ -10,7 +10,9 @@ export const DUO_BLUEPRINTS=Object.freeze([
  {id:'locker-pair',name:'Letters across the water',note:'K sends at one end and collects at the other. Its numbered colour names the connection; any parcel can travel. One parcel fits in each channel.'},
  {id:'cargo-switch',name:'A compass for your pockets',note:'Use C with a matching parcel to go east. Otherwise return west. The northern and western mirrors make a little road for experiments.'},
  {id:'night-atelier',name:'The midnight dyehouse',note:'Use two tiles before Q. Collect, convert and send through K. Place a matching collect locker on your partner’s road.'},
- {id:'locker-loop',name:'The patient collector',note:'A collect locker and cargo compass wait for a parcel. Mirrors return empty hands. Add a window two tiles east of C.'}
+ {id:'locker-loop',name:'The patient collector',note:'A collect locker and cargo compass wait for a parcel. Mirrors return empty hands. Add a window two tiles east of C.'},
+ {id:'waiting-bell',name:'A bell that waits',note:'Put Sprout on C with Wait / Wait / Use, and a handoff beside it. Empty hands keep waiting; a parcel chooses North / North / Use, delivers at N and returns by the northern mirror.'},
+ {id:'turning-atelier',name:'The corner atelier',note:'A well, recipe and clockwise corner lead to a window below. Begin two tiles west of Q with East / East / Use. Change the colours and delivery target to fit your tower.'}
 ]);
 export function normalizeDuoBlueprint(raw){
  if(!raw||raw.format!=='pip-duo-blueprint'||![1,2].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||!raw.parts.length||raw.parts.length>32)throw Error('Choose a duo blueprint with parts inside a garden-sized area.');
@@ -32,6 +34,8 @@ export function duoBlueprint(id,{input='amber',output='jade',channel='amber',ini
  if(id==='cargo-switch'){width=5;height=3;road=[p(0,2),p(1,2),p(2,2),p(3,2),p(4,2),p(2,1),p(2,0)];parts=[part('prism',0,2,{operation:'mirror'}),part('cargo',2,2,{channel:'any',program:['left','left','use'],alternate:['right','right','use']}),part('prism',2,0,{operation:'mirror-y'})];}
  if(id==='night-atelier'){if(input===output)throw Error('The dyehouse needs different parcel colours.');width=5;height=1;road=Array.from({length:5},(_,x)=>p(x,0));parts=[part('source',0,0,{channel:input}),part('press',2,0,{channel:input,output}),part('locker',4,0,{channel,mode:'send'})];}
  if(id==='locker-loop'){width=5;height=1;road=Array.from({length:5},(_,x)=>p(x,0));parts=[part('prism',0,0,{operation:'mirror'}),part('locker',2,0,{channel,mode:'take'}),part('cargo',4,0,{channel:'any',program:['left','left','use'],alternate:['right','right','use']})];}
+ if(id==='waiting-bell'){width=1;height=5;road=Array.from({length:5},(_,y)=>p(0,y));parts=[part('prism',0,0,{operation:'mirror-y'}),part('receiver',0,2,{channel,parcels}),part('cargo',0,4,{channel:'any',program:['wait','wait','use'],alternate:['up','up','use']})];}
+ if(id==='turning-atelier'){if(input===output)throw Error('The corner atelier needs different parcel colours.');width=5;height=3;road=[...Array.from({length:5},(_,x)=>p(x,0)),p(4,1),p(4,2)];parts=[part('source',0,0,{channel:input}),part('press',2,0,{channel:input,output}),part('prism',4,0,{operation:'rotate'}),part('receiver',4,2,{channel:output,parcels})];}
  return configureDuoBlueprint({format:'pip-duo-blueprint',version:parts.some(p=>DUO_ADVANCED_KINDS.includes(p.kind))?2:1,name:spec.name,author:'Lantern Trails',note:spec.note,width,height,road,parts},{turns});
 }
 export function configureDuoBlueprint(input,{turns=0,palette=0,first='keep',reflection='none'}={}){
