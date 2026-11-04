@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**451 files in 15 folders.** Stage new files before refreshing. Run
+**456 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,10 +23,10 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 5 |
-| [scripts/browser/](../scripts/browser/) | 52 |
+| [scripts/browser/](../scripts/browser/) | 53 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 126 |
-| [tests/](../tests/) | 67 |
+| [src/](../src/) | 129 |
+| [tests/](../tests/) | 68 |
 | [tests/fixtures/](../tests/fixtures/) | 33 |
 
 <details>
@@ -257,7 +257,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 52 files</summary>
+<summary>scripts/browser/ — 53 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -284,6 +284,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [migration-browser-checks.mjs](../scripts/browser/migration-browser-checks.mjs)
 - [pip-atlas-browser-checks.mjs](../scripts/browser/pip-atlas-browser-checks.mjs)
 - [pip-canopy-browser-checks.mjs](../scripts/browser/pip-canopy-browser-checks.mjs)
+- [pip-collections-browser-checks.mjs](../scripts/browser/pip-collections-browser-checks.mjs)
 - [pip-duo-browser-checks.mjs](../scripts/browser/pip-duo-browser-checks.mjs)
 - [pip-foundry-browser-checks.mjs](../scripts/browser/pip-foundry-browser-checks.mjs)
 - [pip-gardens-browser-checks.mjs](../scripts/browser/pip-gardens-browser-checks.mjs)
@@ -327,7 +328,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 126 files</summary>
+<summary>src/ — 129 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -377,11 +378,14 @@ captures, dependencies, and operating-system metadata are excluded.
 - [mapmaker-shell.mjs](../src/mapmaker-shell.mjs)
 - [model.mjs](../src/model.mjs)
 - [operations.mjs](../src/operations.mjs)
+- [pip-after-hours.mjs](../src/pip-after-hours.mjs)
 - [pip-atlas-worlds.mjs](../src/pip-atlas-worlds.mjs)
 - [pip-blueprint-links-ui.mjs](../src/pip-blueprint-links-ui.mjs)
 - [pip-blueprint-links.mjs](../src/pip-blueprint-links.mjs)
 - [pip-canopy-fair.mjs](../src/pip-canopy-fair.mjs)
 - [pip-coach.mjs](../src/pip-coach.mjs)
+- [pip-collections-ui.mjs](../src/pip-collections-ui.mjs)
+- [pip-collections.mjs](../src/pip-collections.mjs)
 - [pip-dawn-workshop.mjs](../src/pip-dawn-workshop.mjs)
 - [pip-duo-blueprints.mjs](../src/pip-duo-blueprints.mjs)
 - [pip-duo-storage.mjs](../src/pip-duo-storage.mjs)
@@ -459,7 +463,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 67 files</summary>
+<summary>tests/ — 68 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -490,6 +494,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [packaging.test.mjs](../tests/packaging.test.mjs)
 - [pip-atlas.test.mjs](../tests/pip-atlas.test.mjs)
 - [pip-canopy-fair.test.mjs](../tests/pip-canopy-fair.test.mjs)
+- [pip-collections.test.mjs](../tests/pip-collections.test.mjs)
 - [pip-duo.test.mjs](../tests/pip-duo.test.mjs)
 - [pip-freight.test.mjs](../tests/pip-freight.test.mjs)
 - [pip-gardens.test.mjs](../tests/pip-gardens.test.mjs)

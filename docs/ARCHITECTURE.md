@@ -6,6 +6,9 @@ browser checks use a pinned Playwright package.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-after-hours.mjs` | Four explicit mastery variations of the Canopy layouts, with bounded repairs, transformed banks and three-delivery goals. |
+| `src/pip-collections.mjs` | Bounded six-chapter collection schema, verified individual proofs, PC1/file/link exchange, fresh-route construction and mechanical chapter identity. |
+| `src/pip-collections-ui.mjs` | Folded visit-only assembly, safe collection imports, chapter overview/replay/navigation and original-map completion tracking. |
 | `src/pip-canopy-fair.mjs` | Four original version-3 tower/bridge/handoff repair stories, with bounded inventories and verified example programs. |
 | `src/pip-blueprint-links.mjs` / `src/pip-blueprint-links-ui.mjs` | Independent tube/locker remapping, unused-connection suggestions and immutable valid-space search, exposed through folded themed controls. |
 | `src/pip-dawn-workshop.mjs` | Four mastery repair variations built from the night-post network, with bounded inventories and deterministic clears. |

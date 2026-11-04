@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.47.0 — 2026-11-04
+
+- Add Canopy After Hours: four mastery variations with mirrored routes, fresh palettes, three-delivery targets and three-to-six-part repairs. All twenty-four duo chapters offer optional hints and verified examples.
+- Add an adventure collection builder for up to six story or player-made chapters. Copy current/saved adventures, reorder chapters, edit titles and notes, and share a single bounded file, PC1 code or hosted play link.
+- Add a chapter menu with fresh-route challenges, optional verified creator replays, next-chapter navigation and visit-only completion tracking. Custom map edits are labelled remixes and do not award the original chapter.
+- Add a ready-to-play After Hours collection, confirmed collection remixing, clipboard fallback and protected malformed-file imports. Keep assembly tools folded and chapter cards readable on phone and desktop.
+- Preserve individual project/blueprint formats, existing save namespaces and ordinary adventure behavior; extend codec, repair, navigation, sharing, accessibility and live regression coverage.
+
 ## 0.46.0 — 2026-11-04
 
 - Add The Canopy Fair: four original two-companion repair stories across a bellflower lift, a waiting handoff bell, a guarded rain bridge and a two-tower homecoming. All twenty duo chapters remain available with optional hints and verified examples.

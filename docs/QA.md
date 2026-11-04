@@ -1,5 +1,16 @@
 # Verification record
 
+## After Hours and adventure collections — v0.47.0
+
+**1,459 Node tests** pass, including 18 focused repair/collection cases and four additional full-engine rehearsal comparisons. The production package contains **159 files**. Four explicit Canopy mastery variations have verified clears at 96, 60, 72 and 91 ticks, with three-to-six-part trays and three deliveries per window. Each supplied reference-route repair is necessary; immutable turns, non-overlapping companions, handoffs, relays, empty lockers, home flags, mirrored remixes, exact clear timing and portable proofs are checked.
+
+Collection tests cover one-to-six old/new/custom chapters, immutable snapshots, title/note and text bounds, exact file/code round trips, UTF-8 byte limits, transit checks, private/credentialed/oversized-link refusal and validation of every included creator clear. Fresh-route tests strip official solution parts/cards/proofs while preserving authored custom gardens. Mechanical chapter identity ignores cards and presentation metadata, canonicalizes road/part ordering and detects changed terrain, stations, starts or goals. Chapter reorder/removal stays immutable and rejects invalid indices/actions.
+
+Eight required browser scenarios cover all four new repairs on phone/desktop; snapshot assembly with saved chapters, reordered titles/notes and capacity; fresh/replay/next/completion navigation; remix clears without false original-chapter credit; damaged/oversized/forged imports without losing the active collection; confirmed collection replacement/remixing, starter chapters and clipboard fallback; and enlarged themed menus with focus return. New cases and existing Canopy, rehearsal, creator shelf, blueprint and original editor regressions pass in Chromium. Collection progress requires a real test win, rather than merely opening an attached proof.
+
+The complete required release catalogue has **148 distinct cases**, split into two exhaustive groups of **74**. Existing platform, migration and deployment gates remain required. Individual project/blueprint formats, save keys and exact captured compatibility fixtures are retained. Collection assembly and collection-menu progress are explicitly visit-only; existing project drafts/bests still use normal journey storage. Generated builds, screenshots, traces and verification reports remain ignored. Browser viewport/touch/keyboard emulation remains separate from physical-device and human usability testing.
+
+
 ## The Canopy Fair and blueprint connections — v0.46.0
 
 **1,437 Node tests** pass, including 21 focused Canopy/wiring tests plus additional template and rehearsal catalogue cases. Syntax and the **156-file** production package are checked with the normal release commands. Four original 13×9 stories have verified clears at 66, 36, 42 and 61 ticks. Frame checks prove immutable turns, non-overlapping companions, complete handoff/relay/home goals and portable clears. Omitting any supplied repair from the example route prevents its completion. Mirrors and palette shifts retain exact clear timing.

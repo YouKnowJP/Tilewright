@@ -80,7 +80,7 @@ Duo adventures use project format 2 or 3 inside the existing PT1 file/code/link 
 
 ## The Night Post: six harder chapters
 
-Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All twenty duo chapters are available without grinding.
+Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All twenty-four duo chapters are available without grinding.
 
 | Chapter | Story | Challenge | Worked clear |
 | --- | --- | --- | --- |
@@ -116,7 +116,7 @@ Choose **Dawn Workshop · 4 mastery repairs** in the Collection menu, or continu
 | 15 | Three Invitations at Daybreak | Two recipes and three locker relays | 84 ticks |
 | 16 | The Last Lantern Express | Two presses, a cargo compass and a tube end; three deliveries and both couriers home | 98 ticks |
 
-All twenty chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
+All twenty-four chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
 
 ### Plan and replay a route
 
@@ -161,6 +161,37 @@ Two more templates bring the library to ten:
 
 - **A bell that waits**: put a companion on C with Wait / Wait / Use and a handoff beside it. Empty hands wait. A parcel chooses North / North / Use, reaches the configured window and returns by the mirror. Choose its window colour and parcel target.
 - **The corner atelier**: start two tiles west of its well with East / East / Use. Collect, convert, turn clockwise and deliver below the corner. Choose input/output colours and the delivery target; add a return route for repeated deliveries.
+
+## Canopy After Hours: four mastery variations
+
+Choose **Canopy After Hours · 4 mastery repairs**, or continue after Canopy chapter 20. These are explicit variations of the Canopy layouts: reflected roads, changed parcel/link colours, three deliveries per window and more missing hardware.
+
+| Chapter | Repair | Parts | Worked clear |
+| --- | --- | --- | --- |
+| 21 | The Lift Beneath the Stars | Recipe, balcony cargo compass and return mirror | 96 ticks |
+| 22 | Three Rings for the Moon | Recipe and two return mirrors; three handoffs | 60 ticks |
+| 23 | The Last Rain Rehearsal | Pressure plate, mirror and both tube ends | 72 ticks |
+| 24 | Six Letters Before Sunrise | Four recipes and two collecting lockers; both windows three times, empty lockers and both home flags | 91 ticks |
+
+## Build and play adventure collections
+
+Open **Share & feedback → Adventure collections**. Add the current two-companion adventure or choose one from your saved adventure shelf. Each addition takes its own snapshot: later bench edits do not rewrite that chapter. Keep up to six chapters, move them earlier/later, remove a chapter, or open **Chapter title & note** to personalize its presentation. Single-Pip inventions stay in their existing sharing flow.
+
+**Preview collection** opens a chapter menu before play. **Try a fresh route** clears the creator’s starting cards; official repair chapters also start with their missing parts unplaced. Custom gardens keep their authored roads, stations and goals. **Replay creator route** appears only when that chapter has a verified attached solution. Loading a different custom draft still asks before replacement.
+
+Every chapter is selectable. Finish a real test on the original chapter to mark it cleared and reveal **Next collection chapter**. Changing a custom garden’s hardware, terrain, starts or goals makes a remix; it remains playable but does not mark the original chapter cleared. Changing cards or presentation text is allowed. **Collection chapters** returns from the bench; **Open current collection** returns from the share drawer. Escape/Back returns to the control that opened the menu.
+
+**Try the After Hours collection** assembles the four new repairs with optional creator replays. It asks before replacing an existing assembly. A friend’s collection can be copied into your builder through **Use in collection builder**, also with confirmation before replacing a different assembly. Chapter and maker credits stay attached to their copied projects.
+
+Assembly and collection-menu progress last for the current visit. Download a collection to keep it. Ordinary project drafts, personal bests and saved adventures continue to use the existing journey saves; no new browser save namespace is introduced.
+
+### Share one collection
+
+Download a `pip-adventure-collection.json` file, copy a **PC1** collection code, or copy a hosted play link. A link opens the chapter menu first. The file contains one to six normalized duo projects, chapter titles/notes, collection name/maker/opening note and any verified creator routes. Draft chapters remain clearly labelled unverified.
+
+Collection files are limited to 96 KB and codes to 140,000 characters. Hosted links must fit within 12,000 characters; larger collections use a file or code. Localhost/private-network copies offer files and codes. If clipboard access is unavailable, the drawer selects the text for manual copying. Nothing is uploaded automatically and no account is needed.
+
+Open a friend’s file or paste their PC1 code/link in **Open or copy a collection**. Every chapter is validated before the active collection changes. Damaged codes, unsupported versions, oversized files and false creator clears are rejected as a whole. Existing **PT1** single-project codes and ordinary adventure sharing retain their formats and controls.
 
 ## Keep something worth returning to
 

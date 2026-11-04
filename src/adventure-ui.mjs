@@ -773,6 +773,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     useTerrain() { openWorkshop('build'); workshop.fromTerrain(); },
     openShared(code) { openWorkshop('import'); workshop.openShared(code); },
     openPipProject(code) { openWorkshop('lab');pipStudio.openCode(code); },
+    openPipCollection(code) { openWorkshop('lab');pipStudio.openCollectionCode(code); },
     leave() {
       clockworkUI.stop();pipStudio.stop();if(pipStudio.openNow)pipStudio.close();
       restoreToken++;

@@ -11,6 +11,8 @@ Pip appearance choices also stay in local storage, separately for each journey.
 Duo story drafts, player-created adventures, reusable blueprints and duo displays (including night-post locker/cargo rules and blueprint maker notes) use a separate journey-scoped local save. Shared duo projects include dialogue, author credit, programs, board layout and an optional verified solution; blueprint files include their author, notes and parts.
 
 Blueprint connection previews and space searches run entirely in the browser. Searching moves the local cursor; connection choices enter a saved or shared piece only when you keep, update, download or place it. There is no automatic upload or player-tracking service.
+
+Adventure collection assembly and collection-menu progress are held in memory for the current visit. Collection files/codes contain the chapters you choose, their project data and optional creator routes, maker credits and story notes. Copying a code/link or downloading a file is explicit; nothing is uploaded automatically. Opening a chapter uses the existing journey-scoped project draft and best records. Collections introduce no new persistent save key.
 Route rehearsals and their event frames are computed on this device and are not uploaded. Inspecting a completed route can record a verified clear and personal best in the selected journey; the rehearsal timeline itself stays in memory.
 Workshop feedback is a voluntary local download, with the challenge ID, solution
 metrics, selected difficulty feedback and the comment you type. It includes no
