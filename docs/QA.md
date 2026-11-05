@@ -24,6 +24,10 @@ text-field input; and tap/rotate/complete practice and a real story. The capture
 v0.51 journal retains its timed-bell state and history. Existing full-backup and
 classic keyboard construction regressions remain required.
 
+The interruption case also changes playback pace and focuses rehearsal controls
+through their real DOM callbacks. Those callbacks pass Event objects; the pause
+handler accepts only string reasons so the status cannot display an object label.
+
 A separate required recovery runner aborts an actual startup module request,
 retries without changing existing save bytes, delays loading beyond the real
 15-second notice and resumes it, then tests loaded-game controls while offline
