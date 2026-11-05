@@ -425,3 +425,9 @@ See [screen view and new adventures](SCREEN_AND_SAGAS.md).
 After a finish, **Quest & notes** lets you reread your objectives, map, and
 keeper journal before choosing the next adventure. The pause screen offers
 the same action. Reading preserves the result, and Back returns to its opener.
+
+### Borrowed beats and chosen roads
+
+In Pip & Sprout, choose **The Bellkeeper** for four timed adventures. Use a numbered **Timed bell A** to power matching bridges and signals starting on the next tick. Use **One tick** or pause the run to inspect at your own pace. Its countdown shows how many powered ticks remain; an occupied bridge stays safe until its courier leaves. Some stories require both home flags and complete silence before ending.
+
+Creators can set one to six powered ticks on a bell, capture it in a blueprint, and add a silent-bell finish goal. In the collection builder’s **Curator tray**, choose chapters from the assembly or a saved collection. Add independent copies together, undo that batch, or share only the selected chapters as a file, link or poster. Original maker credits travel with the maps; your saved attempts and clears stay private in this journey.

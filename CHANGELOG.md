@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.51.0 — 2026-11-05
+
+- Add timed bells: one to six following ticks of numbered power, refreshed by matching bells without shortening an existing ring. Signals sample power at tick start; occupied crossings and held plates retain their safety rules.
+- Add four Bellkeeper adventures, bringing the duo story to forty chapters. Coordinate a one-beat crossing, rebuild a delayed three-letter post, and solve a three-channel timed finale with every bell silent. Authored repair limits preserve the one-beat challenges; creator gardens allow one to six ticks.
+- Add a silent-bell finish goal, visible countdowns, dedicated bell art, readable inspection and rehearsal advice. Bell settings appear only for that part; creator tools remain folded. Reserve scroll space below sticky workshop headers when returning to a board.
+- Add two configurable bell blueprints with duration, colour, transformations, capture and sharing. Fix missing lantern symbols in blueprint previews. New gardens/pieces use project format 5 and blueprint format 4; captured v0.50 exports, codes, state fingerprints and PC1 bytes remain exact.
+- Add a curator tray for choosing chapters from the assembly or a saved collection, copying them as one undoable batch, and sharing a selected collection, hosted link or illustrated poster. Preserve original maker credits and saved source progress; shared selections contain no personal setups or clears.
+
 ## 0.50.0 — 2026-11-04
 
 - Add remembered lantern switches. Use L toggles a numbered power channel; matching bridges and signal stamps read its new state next tick. Lights remain on after a courier leaves. Occupied bridges and pressure plates retain their safety rules.

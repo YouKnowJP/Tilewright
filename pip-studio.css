@@ -18,3 +18,7 @@
 
 .pip-studio .ps-rehearsal-list{display:grid;gap:8px}.pip-studio .ps-rehearsal-list button{text-align:left;width:100%}.pip-studio #ps-rehearsal-frame{padding:10px;background:#173d44;border-left:3px solid #e4c481;overflow-wrap:anywhere}.pip-studio #ps-rehearsal-list:empty{display:none}
 @media(max-width:480px){.pip-studio #ps-rehearsal .ps-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.pip-studio #ps-rehearsal-inspect{grid-column:1/-1}.pip-studio #ps-rehearsal .ps-actions button{overflow-wrap:normal}}
+
+.ps-curator-list{display:grid;gap:8px;margin:12px 0}.pip-studio .ps-curator-list .ps-check{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:start;gap:10px;min-height:44px;margin:0;padding:10px;border:1px solid #779c8a;background:#173d44;border-radius:5px}.pip-studio .ps-curator-list input{width:24px;height:24px;margin:0}.ps-curator-list span{overflow-wrap:anywhere;line-height:1.55}
+
+.pip-studio,.pip-collection{scroll-padding-top:84px}body:is([data-game-text=large],[data-game-text=largest]) :is(.pip-studio,.pip-collection){scroll-padding-top:110px}

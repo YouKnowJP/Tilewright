@@ -37,3 +37,5 @@ a move to another origin/browser/device requires an exported backup. Clearing
 site data can erase local progress. Use Options → Saved data for backups,
 restoration, separate journeys, and a fresh start. No player data is uploaded
 by the repository migration.
+
+Timed bell countdowns are reconstructed from the saved test position inside the existing local collection journal. Curator exports include chosen authored chapters and maker credits, with no personal setups, clears or countdown saves. No new storage key or network service is added.

@@ -1,0 +1,1694 @@
+{
+  "version": "0.50.0",
+  "records": [
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 4,
+        "trialId": "duo-lantern-first",
+        "name": "A Light Left Behind",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "use",
+            "right",
+            "right"
+          ],
+          [
+            "use",
+            "right",
+            "right"
+          ]
+        ],
+        "parts": [
+          {
+            "kind": "press",
+            "x": 3,
+            "y": 5,
+            "channel": "amber",
+            "output": "jade"
+          }
+        ],
+        "proof": {
+          "ticks": 10
+        }
+      },
+      "serializedSha": "b47d80877ad7899320934522403bccd13e758f75c7abb0916558cde6f9fbab2e",
+      "code": "PT1.54d9f62c.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo0LCJ0cmlhbElkIjoiZHVvLWxhbnRlcm4tZmlyc3QiLCJuYW1lIjoiQSBMaWdodCBMZWZ0IEJlaGluZCIsImF1dGhvciI6IkxhbnRlcm4gVHJhaWxzIiwicHJvZ3JhbXMiOltbInVzZSIsInJpZ2h0IiwicmlnaHQiXSxbInVzZSIsInJpZ2h0IiwicmlnaHQiXV0sInBhcnRzIjpbeyJraW5kIjoicHJlc3MiLCJ4IjozLCJ5Ijo1LCJjaGFubmVsIjoiYW1iZXIiLCJvdXRwdXQiOiJqYWRlIn1dLCJwcm9vZiI6eyJ0aWNrcyI6MTB9fQo",
+      "stateSha": "386d4f72142d61e568bea1a069415c5e90f40ea3d70dece04f0dce128ba1ca21"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 4,
+        "trialId": "duo-lantern-borrowed",
+        "name": "Borrowed Light, Returned",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "right",
+            "right",
+            "use"
+          ],
+          [
+            "right",
+            "right",
+            "use"
+          ]
+        ],
+        "parts": [
+          {
+            "kind": "latch",
+            "x": 3,
+            "y": 2,
+            "channel": "amber"
+          },
+          {
+            "kind": "prism",
+            "x": 5,
+            "y": 2,
+            "operation": "mirror"
+          },
+          {
+            "kind": "press",
+            "x": 5,
+            "y": 5,
+            "channel": "amber",
+            "output": "jade"
+          }
+        ],
+        "proof": {
+          "ticks": 11
+        }
+      },
+      "serializedSha": "3770a5eee078b325e468fdb2e702b1bce3e5cfff399550808681abf18f9df420",
+      "code": "PT1.c3893735.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo0LCJ0cmlhbElkIjoiZHVvLWxhbnRlcm4tYm9ycm93ZWQiLCJuYW1lIjoiQm9ycm93ZWQgTGlnaHQsIFJldHVybmVkIiwiYXV0aG9yIjoiTGFudGVybiBUcmFpbHMiLCJwcm9ncmFtcyI6W1sicmlnaHQiLCJyaWdodCIsInVzZSJdLFsicmlnaHQiLCJyaWdodCIsInVzZSJdXSwicGFydHMiOlt7ImtpbmQiOiJsYXRjaCIsIngiOjMsInkiOjIsImNoYW5uZWwiOiJhbWJlciJ9LHsia2luZCI6InByaXNtIiwieCI6NSwieSI6Miwib3BlcmF0aW9uIjoibWlycm9yIn0seyJraW5kIjoicHJlc3MiLCJ4Ijo1LCJ5Ijo1LCJjaGFubmVsIjoiYW1iZXIiLCJvdXRwdXQiOiJqYWRlIn1dLCJwcm9vZiI6eyJ0aWNrcyI6MTF9fQo",
+      "stateSha": "e953f3ed9cf1cab5ec3a4e5c9a3807b79b552adb44d30cd00f675cdfb1166858"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 4,
+        "trialId": "duo-lantern-post",
+        "name": "The Remembering Night Post",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "right",
+            "wait",
+            "use"
+          ],
+          [
+            "up",
+            "up",
+            "use"
+          ]
+        ],
+        "parts": [
+          {
+            "kind": "prism",
+            "x": 5,
+            "y": 7,
+            "operation": "rotate"
+          },
+          {
+            "kind": "prism",
+            "x": 1,
+            "y": 7,
+            "operation": "rotate"
+          },
+          {
+            "kind": "press",
+            "x": 4,
+            "y": 1,
+            "channel": "amber",
+            "output": "jade"
+          },
+          {
+            "kind": "locker",
+            "x": 5,
+            "y": 4,
+            "channel": "violet",
+            "mode": "send"
+          },
+          {
+            "kind": "locker",
+            "x": 7,
+            "y": 5,
+            "channel": "violet",
+            "mode": "take"
+          },
+          {
+            "kind": "cargo",
+            "x": 7,
+            "y": 1,
+            "channel": "any",
+            "program": [
+              "down",
+              "down",
+              "use"
+            ],
+            "alternate": [
+              "right",
+              "right",
+              "use"
+            ]
+          },
+          {
+            "kind": "latch",
+            "x": 3,
+            "y": 1,
+            "channel": "amber"
+          }
+        ],
+        "proof": {
+          "ticks": 184
+        }
+      },
+      "serializedSha": "d37b1502ff07d53c243e0564d0dd30fd26100b3e6073cd7467ea2df6da264fa8",
+      "code": "PT1.f533230f.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo0LCJ0cmlhbElkIjoiZHVvLWxhbnRlcm4tcG9zdCIsIm5hbWUiOiJUaGUgUmVtZW1iZXJpbmcgTmlnaHQgUG9zdCIsImF1dGhvciI6IkxhbnRlcm4gVHJhaWxzIiwicHJvZ3JhbXMiOltbInJpZ2h0Iiwid2FpdCIsInVzZSJdLFsidXAiLCJ1cCIsInVzZSJdXSwicGFydHMiOlt7ImtpbmQiOiJwcmlzbSIsIngiOjUsInkiOjcsIm9wZXJhdGlvbiI6InJvdGF0ZSJ9LHsia2luZCI6InByaXNtIiwieCI6MSwieSI6Nywib3BlcmF0aW9uIjoicm90YXRlIn0seyJraW5kIjoicHJlc3MiLCJ4Ijo0LCJ5IjoxLCJjaGFubmVsIjoiYW1iZXIiLCJvdXRwdXQiOiJqYWRlIn0seyJraW5kIjoibG9ja2VyIiwieCI6NSwieSI6NCwiY2hhbm5lbCI6InZpb2xldCIsIm1vZGUiOiJzZW5kIn0seyJraW5kIjoibG9ja2VyIiwieCI6NywieSI6NSwiY2hhbm5lbCI6InZpb2xldCIsIm1vZGUiOiJ0YWtlIn0seyJraW5kIjoiY2FyZ28iLCJ4Ijo3LCJ5IjoxLCJjaGFubmVsIjoiYW55IiwicHJvZ3JhbSI6WyJkb3duIiwiZG93biIsInVzZSJdLCJhbHRlcm5hdGUiOlsicmlnaHQiLCJyaWdodCIsInVzZSJdfSx7ImtpbmQiOiJsYXRjaCIsIngiOjMsInkiOjEsImNoYW5uZWwiOiJhbWJlciJ9XSwicHJvb2YiOnsidGlja3MiOjE4NH19Cg",
+      "stateSha": "85f58547b7b4cd3a99420188a0d1b3c89d09c6888c4dc559563cef6b0c9aca3d"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 4,
+        "trialId": "duo-lantern-home",
+        "name": "The Council of Two Lanterns",
+        "author": "Lantern Trails",
+        "programs": [
+          [
+            "right",
+            "right",
+            "use"
+          ],
+          [
+            "right",
+            "right",
+            "use"
+          ]
+        ],
+        "parts": [
+          {
+            "kind": "latch",
+            "x": 3,
+            "y": 2,
+            "channel": "amber"
+          },
+          {
+            "kind": "latch",
+            "x": 5,
+            "y": 2,
+            "channel": "jade"
+          },
+          {
+            "kind": "prism",
+            "x": 7,
+            "y": 2,
+            "operation": "mirror"
+          },
+          {
+            "kind": "source",
+            "x": 3,
+            "y": 5,
+            "channel": "amber"
+          },
+          {
+            "kind": "press",
+            "x": 5,
+            "y": 5,
+            "channel": "amber",
+            "output": "blue"
+          },
+          {
+            "kind": "receiver",
+            "x": 7,
+            "y": 5,
+            "channel": "blue",
+            "parcels": 2
+          },
+          {
+            "kind": "signal",
+            "x": 9,
+            "y": 5,
+            "channel": "blue",
+            "program": [
+              "left",
+              "left",
+              "use"
+            ],
+            "alternate": [
+              "right",
+              "wait",
+              "use"
+            ]
+          }
+        ],
+        "proof": {
+          "ticks": 55
+        }
+      },
+      "serializedSha": "fc183b4f2d8bc935d2de5b96979faee189d725a571ebb4f4e66ea58c72dfc618",
+      "code": "PT1.88ac6248.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo0LCJ0cmlhbElkIjoiZHVvLWxhbnRlcm4taG9tZSIsIm5hbWUiOiJUaGUgQ291bmNpbCBvZiBUd28gTGFudGVybnMiLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJyaWdodCIsInJpZ2h0IiwidXNlIl1dLCJwYXJ0cyI6W3sia2luZCI6ImxhdGNoIiwieCI6MywieSI6MiwiY2hhbm5lbCI6ImFtYmVyIn0seyJraW5kIjoibGF0Y2giLCJ4Ijo1LCJ5IjoyLCJjaGFubmVsIjoiamFkZSJ9LHsia2luZCI6InByaXNtIiwieCI6NywieSI6Miwib3BlcmF0aW9uIjoibWlycm9yIn0seyJraW5kIjoic291cmNlIiwieCI6MywieSI6NSwiY2hhbm5lbCI6ImFtYmVyIn0seyJraW5kIjoicHJlc3MiLCJ4Ijo1LCJ5Ijo1LCJjaGFubmVsIjoiYW1iZXIiLCJvdXRwdXQiOiJibHVlIn0seyJraW5kIjoicmVjZWl2ZXIiLCJ4Ijo3LCJ5Ijo1LCJjaGFubmVsIjoiYmx1ZSIsInBhcmNlbHMiOjJ9LHsia2luZCI6InNpZ25hbCIsIngiOjksInkiOjUsImNoYW5uZWwiOiJibHVlIiwicHJvZ3JhbSI6WyJsZWZ0IiwibGVmdCIsInVzZSJdLCJhbHRlcm5hdGUiOlsicmlnaHQiLCJ3YWl0IiwidXNlIl19XSwicHJvb2YiOnsidGlja3MiOjU1fX0K",
+      "stateSha": "d4031b12e19c7c4596f482639f70176f5b96816461c1ba129d60d28942caf36e"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 4,
+        "trialId": "duo-creator",
+        "name": "The Remembering Night Post",
+        "author": "A trail keeper",
+        "programs": [
+          [
+            "right",
+            "wait",
+            "use"
+          ],
+          [
+            "up",
+            "up",
+            "use"
+          ]
+        ],
+        "parts": [
+          {
+            "kind": "signal",
+            "x": 1,
+            "y": 1,
+            "channel": "jade",
+            "program": [
+              "right",
+              "wait",
+              "use"
+            ],
+            "alternate": [
+              "left",
+              "wait",
+              "use"
+            ]
+          },
+          {
+            "kind": "source",
+            "x": 2,
+            "y": 1,
+            "channel": "amber"
+          },
+          {
+            "kind": "prism",
+            "x": 5,
+            "y": 1,
+            "operation": "rotate"
+          },
+          {
+            "kind": "pip-dock",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "kind": "cargo",
+            "x": 7,
+            "y": 3,
+            "channel": "any",
+            "program": [
+              "down",
+              "down",
+              "use"
+            ],
+            "alternate": [
+              "up",
+              "up",
+              "use"
+            ]
+          },
+          {
+            "kind": "receiver",
+            "x": 9,
+            "y": 1,
+            "channel": "jade",
+            "parcels": 3
+          },
+          {
+            "kind": "prism",
+            "x": 11,
+            "y": 1,
+            "operation": "mirror"
+          },
+          {
+            "kind": "signal",
+            "x": 7,
+            "y": 7,
+            "channel": "jade",
+            "program": [
+              "up",
+              "up",
+              "use"
+            ],
+            "alternate": [
+              "down",
+              "wait",
+              "use"
+            ]
+          },
+          {
+            "kind": "sprout-dock",
+            "x": 7,
+            "y": 8
+          },
+          {
+            "kind": "bridge",
+            "x": 7,
+            "y": 4,
+            "channel": "amber"
+          },
+          {
+            "kind": "prism",
+            "x": 5,
+            "y": 7,
+            "operation": "rotate"
+          },
+          {
+            "kind": "prism",
+            "x": 1,
+            "y": 7,
+            "operation": "rotate"
+          },
+          {
+            "kind": "press",
+            "x": 4,
+            "y": 1,
+            "channel": "amber",
+            "output": "jade"
+          },
+          {
+            "kind": "locker",
+            "x": 5,
+            "y": 4,
+            "channel": "violet",
+            "mode": "send"
+          },
+          {
+            "kind": "locker",
+            "x": 7,
+            "y": 5,
+            "channel": "violet",
+            "mode": "take"
+          },
+          {
+            "kind": "cargo",
+            "x": 7,
+            "y": 1,
+            "channel": "any",
+            "program": [
+              "down",
+              "down",
+              "use"
+            ],
+            "alternate": [
+              "right",
+              "right",
+              "use"
+            ]
+          },
+          {
+            "kind": "latch",
+            "x": 3,
+            "y": 1,
+            "channel": "amber"
+          }
+        ],
+        "board": {
+          "width": 13,
+          "height": 9,
+          "road": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 2,
+              "y": 1
+            },
+            {
+              "x": 3,
+              "y": 1
+            },
+            {
+              "x": 4,
+              "y": 1
+            },
+            {
+              "x": 5,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 7
+            },
+            {
+              "x": 2,
+              "y": 7
+            },
+            {
+              "x": 3,
+              "y": 7
+            },
+            {
+              "x": 4,
+              "y": 7
+            },
+            {
+              "x": 5,
+              "y": 7
+            },
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 5,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 3
+            },
+            {
+              "x": 5,
+              "y": 3
+            },
+            {
+              "x": 1,
+              "y": 4
+            },
+            {
+              "x": 5,
+              "y": 4
+            },
+            {
+              "x": 1,
+              "y": 5
+            },
+            {
+              "x": 5,
+              "y": 5
+            },
+            {
+              "x": 1,
+              "y": 6
+            },
+            {
+              "x": 5,
+              "y": 6
+            },
+            {
+              "x": 7,
+              "y": 1
+            },
+            {
+              "x": 8,
+              "y": 1
+            },
+            {
+              "x": 9,
+              "y": 1
+            },
+            {
+              "x": 10,
+              "y": 1
+            },
+            {
+              "x": 11,
+              "y": 1
+            },
+            {
+              "x": 7,
+              "y": 2
+            },
+            {
+              "x": 7,
+              "y": 3
+            },
+            {
+              "x": 7,
+              "y": 4
+            },
+            {
+              "x": 7,
+              "y": 5
+            },
+            {
+              "x": 7,
+              "y": 6
+            },
+            {
+              "x": 7,
+              "y": 7
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 7,
+              "y": 8
+            }
+          ]
+        },
+        "starts": [
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 7,
+            "y": 7
+          }
+        ],
+        "intro": "Rook: “The bridge remembers the lamp, and the post remembers every letter.” Repair seven parts in this new Clocktower crossing. Pip’s amber switch opens Sprout’s bridge, then closes it on another lap. Three jade letters travel through violet lockers. Inspect the waiting ticks before changing the pace.",
+        "ending": "Rook marks each waiting tick with a small star. The post is slower in places, but it has learned to remember the right light.",
+        "source": "Remix of The Remembering Night Post by Lantern Trails",
+        "handoffs": 0,
+        "relays": 3,
+        "emptyLockers": true,
+        "quietSwitches": false,
+        "proof": {
+          "ticks": 184
+        }
+      },
+      "serializedSha": "be29c4dc8593455c563c0f7fb59e0f5130f05b1a01639d523b1edf007c12cb5a",
+      "code": "PT1.87e1dadc.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo0LCJ0cmlhbElkIjoiZHVvLWNyZWF0b3IiLCJuYW1lIjoiVGhlIFJlbWVtYmVyaW5nIE5pZ2h0IFBvc3QiLCJhdXRob3IiOiJBIHRyYWlsIGtlZXBlciIsInByb2dyYW1zIjpbWyJyaWdodCIsIndhaXQiLCJ1c2UiXSxbInVwIiwidXAiLCJ1c2UiXV0sInBhcnRzIjpbeyJraW5kIjoic2lnbmFsIiwieCI6MSwieSI6MSwiY2hhbm5lbCI6ImphZGUiLCJwcm9ncmFtIjpbInJpZ2h0Iiwid2FpdCIsInVzZSJdLCJhbHRlcm5hdGUiOlsibGVmdCIsIndhaXQiLCJ1c2UiXX0seyJraW5kIjoic291cmNlIiwieCI6MiwieSI6MSwiY2hhbm5lbCI6ImFtYmVyIn0seyJraW5kIjoicHJpc20iLCJ4Ijo1LCJ5IjoxLCJvcGVyYXRpb24iOiJyb3RhdGUifSx7ImtpbmQiOiJwaXAtZG9jayIsIngiOjAsInkiOjF9LHsia2luZCI6ImNhcmdvIiwieCI6NywieSI6MywiY2hhbm5lbCI6ImFueSIsInByb2dyYW0iOlsiZG93biIsImRvd24iLCJ1c2UiXSwiYWx0ZXJuYXRlIjpbInVwIiwidXAiLCJ1c2UiXX0seyJraW5kIjoicmVjZWl2ZXIiLCJ4Ijo5LCJ5IjoxLCJjaGFubmVsIjoiamFkZSIsInBhcmNlbHMiOjN9LHsia2luZCI6InByaXNtIiwieCI6MTEsInkiOjEsIm9wZXJhdGlvbiI6Im1pcnJvciJ9LHsia2luZCI6InNpZ25hbCIsIngiOjcsInkiOjcsImNoYW5uZWwiOiJqYWRlIiwicHJvZ3JhbSI6WyJ1cCIsInVwIiwidXNlIl0sImFsdGVybmF0ZSI6WyJkb3duIiwid2FpdCIsInVzZSJdfSx7ImtpbmQiOiJzcHJvdXQtZG9jayIsIngiOjcsInkiOjh9LHsia2luZCI6ImJyaWRnZSIsIngiOjcsInkiOjQsImNoYW5uZWwiOiJhbWJlciJ9LHsia2luZCI6InByaXNtIiwieCI6NSwieSI6Nywib3BlcmF0aW9uIjoicm90YXRlIn0seyJraW5kIjoicHJpc20iLCJ4IjoxLCJ5Ijo3LCJvcGVyYXRpb24iOiJyb3RhdGUifSx7ImtpbmQiOiJwcmVzcyIsIngiOjQsInkiOjEsImNoYW5uZWwiOiJhbWJlciIsIm91dHB1dCI6ImphZGUifSx7ImtpbmQiOiJsb2NrZXIiLCJ4Ijo1LCJ5Ijo0LCJjaGFubmVsIjoidmlvbGV0IiwibW9kZSI6InNlbmQifSx7ImtpbmQiOiJsb2NrZXIiLCJ4Ijo3LCJ5Ijo1LCJjaGFubmVsIjoidmlvbGV0IiwibW9kZSI6InRha2UifSx7ImtpbmQiOiJjYXJnbyIsIngiOjcsInkiOjEsImNoYW5uZWwiOiJhbnkiLCJwcm9ncmFtIjpbImRvd24iLCJkb3duIiwidXNlIl0sImFsdGVybmF0ZSI6WyJyaWdodCIsInJpZ2h0IiwidXNlIl19LHsia2luZCI6ImxhdGNoIiwieCI6MywieSI6MSwiY2hhbm5lbCI6ImFtYmVyIn1dLCJib2FyZCI6eyJ3aWR0aCI6MTMsImhlaWdodCI6OSwicm9hZCI6W3sieCI6MSwieSI6MX0seyJ4IjoyLCJ5IjoxfSx7IngiOjMsInkiOjF9LHsieCI6NCwieSI6MX0seyJ4Ijo1LCJ5IjoxfSx7IngiOjEsInkiOjd9LHsieCI6MiwieSI6N30seyJ4IjozLCJ5Ijo3fSx7IngiOjQsInkiOjd9LHsieCI6NSwieSI6N30seyJ4IjoxLCJ5IjoyfSx7IngiOjUsInkiOjJ9LHsieCI6MSwieSI6M30seyJ4Ijo1LCJ5IjozfSx7IngiOjEsInkiOjR9LHsieCI6NSwieSI6NH0seyJ4IjoxLCJ5Ijo1fSx7IngiOjUsInkiOjV9LHsieCI6MSwieSI6Nn0seyJ4Ijo1LCJ5Ijo2fSx7IngiOjcsInkiOjF9LHsieCI6OCwieSI6MX0seyJ4Ijo5LCJ5IjoxfSx7IngiOjEwLCJ5IjoxfSx7IngiOjExLCJ5IjoxfSx7IngiOjcsInkiOjJ9LHsieCI6NywieSI6M30seyJ4Ijo3LCJ5Ijo0fSx7IngiOjcsInkiOjV9LHsieCI6NywieSI6Nn0seyJ4Ijo3LCJ5Ijo3fSx7IngiOjAsInkiOjF9LHsieCI6NywieSI6OH1dfSwic3RhcnRzIjpbeyJ4IjoxLCJ5IjoxfSx7IngiOjcsInkiOjd9XSwiaW50cm8iOiJSb29rOiDigJxUaGUgYnJpZGdlIHJlbWVtYmVycyB0aGUgbGFtcCwgYW5kIHRoZSBwb3N0IHJlbWVtYmVycyBldmVyeSBsZXR0ZXIu4oCdIFJlcGFpciBzZXZlbiBwYXJ0cyBpbiB0aGlzIG5ldyBDbG9ja3Rvd2VyIGNyb3NzaW5nLiBQaXDigJlzIGFtYmVyIHN3aXRjaCBvcGVucyBTcHJvdXTigJlzIGJyaWRnZSwgdGhlbiBjbG9zZXMgaXQgb24gYW5vdGhlciBsYXAuIFRocmVlIGphZGUgbGV0dGVycyB0cmF2ZWwgdGhyb3VnaCB2aW9sZXQgbG9ja2Vycy4gSW5zcGVjdCB0aGUgd2FpdGluZyB0aWNrcyBiZWZvcmUgY2hhbmdpbmcgdGhlIHBhY2UuIiwiZW5kaW5nIjoiUm9vayBtYXJrcyBlYWNoIHdhaXRpbmcgdGljayB3aXRoIGEgc21hbGwgc3Rhci4gVGhlIHBvc3QgaXMgc2xvd2VyIGluIHBsYWNlcywgYnV0IGl0IGhhcyBsZWFybmVkIHRvIHJlbWVtYmVyIHRoZSByaWdodCBsaWdodC4iLCJzb3VyY2UiOiJSZW1peCBvZiBUaGUgUmVtZW1iZXJpbmcgTmlnaHQgUG9zdCBieSBMYW50ZXJuIFRyYWlscyIsImhhbmRvZmZzIjowLCJyZWxheXMiOjMsImVtcHR5TG9ja2VycyI6dHJ1ZSwicXVpZXRTd2l0Y2hlcyI6ZmFsc2UsInByb29mIjp7InRpY2tzIjoxODR9fQo",
+      "stateSha": "2c79e28cb27de04ac023f33268ddcdc8fbffbbdd314a94dabf0e23307a0a8f82"
+    },
+    {
+      "project": {
+        "format": "pip-tinker-project",
+        "version": 4,
+        "trialId": "duo-creator",
+        "name": "The Council of Two Lanterns",
+        "author": "A trail keeper",
+        "programs": [
+          [
+            "right",
+            "right",
+            "use"
+          ],
+          [
+            "right",
+            "right",
+            "use"
+          ]
+        ],
+        "parts": [
+          {
+            "kind": "signal",
+            "x": 1,
+            "y": 2,
+            "channel": "blue",
+            "program": [
+              "right",
+              "right",
+              "use"
+            ],
+            "alternate": [
+              "left",
+              "wait",
+              "use"
+            ]
+          },
+          {
+            "kind": "pip-dock",
+            "x": 0,
+            "y": 2
+          },
+          {
+            "kind": "prism",
+            "x": 1,
+            "y": 5,
+            "operation": "mirror"
+          },
+          {
+            "kind": "bridge",
+            "x": 4,
+            "y": 5,
+            "channel": "amber"
+          },
+          {
+            "kind": "bridge",
+            "x": 6,
+            "y": 5,
+            "channel": "jade"
+          },
+          {
+            "kind": "sprout-dock",
+            "x": 10,
+            "y": 5
+          },
+          {
+            "kind": "latch",
+            "x": 3,
+            "y": 2,
+            "channel": "amber"
+          },
+          {
+            "kind": "latch",
+            "x": 5,
+            "y": 2,
+            "channel": "jade"
+          },
+          {
+            "kind": "prism",
+            "x": 7,
+            "y": 2,
+            "operation": "mirror"
+          },
+          {
+            "kind": "source",
+            "x": 3,
+            "y": 5,
+            "channel": "amber"
+          },
+          {
+            "kind": "press",
+            "x": 5,
+            "y": 5,
+            "channel": "amber",
+            "output": "blue"
+          },
+          {
+            "kind": "receiver",
+            "x": 7,
+            "y": 5,
+            "channel": "blue",
+            "parcels": 2
+          },
+          {
+            "kind": "signal",
+            "x": 9,
+            "y": 5,
+            "channel": "blue",
+            "program": [
+              "left",
+              "left",
+              "use"
+            ],
+            "alternate": [
+              "right",
+              "wait",
+              "use"
+            ]
+          }
+        ],
+        "board": {
+          "width": 11,
+          "height": 7,
+          "road": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 2,
+              "y": 2
+            },
+            {
+              "x": 3,
+              "y": 2
+            },
+            {
+              "x": 4,
+              "y": 2
+            },
+            {
+              "x": 5,
+              "y": 2
+            },
+            {
+              "x": 6,
+              "y": 2
+            },
+            {
+              "x": 7,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 5
+            },
+            {
+              "x": 2,
+              "y": 5
+            },
+            {
+              "x": 3,
+              "y": 5
+            },
+            {
+              "x": 4,
+              "y": 5
+            },
+            {
+              "x": 5,
+              "y": 5
+            },
+            {
+              "x": 6,
+              "y": 5
+            },
+            {
+              "x": 7,
+              "y": 5
+            },
+            {
+              "x": 8,
+              "y": 5
+            },
+            {
+              "x": 9,
+              "y": 5
+            },
+            {
+              "x": 10,
+              "y": 5
+            }
+          ]
+        },
+        "starts": [
+          {
+            "x": 1,
+            "y": 2
+          },
+          {
+            "x": 1,
+            "y": 5
+          }
+        ],
+        "intro": "Eid: “Two remembered lights. Two blue letters. A quiet homecoming.” Restore seven pieces. Amber and jade control separate bridges; blue windows control the return signals. Sprout may need to wait for another lighting cycle while returning for the second parcel. Finish with both hats home and every switch off.",
+        "ending": "Eid closes the council ledger after the second blue letter. Both lanterns are off, both couriers are home, and a clean page waits for the collection you will make next.",
+        "source": "Remix of The Council of Two Lanterns by Lantern Trails",
+        "handoffs": 0,
+        "relays": 0,
+        "emptyLockers": false,
+        "quietSwitches": true,
+        "proof": {
+          "ticks": 55
+        }
+      },
+      "serializedSha": "466bbbb5c9378ce043057f0350ac476544e960cc40848473a8bba136ded8c47f",
+      "code": "PT1.383ad629.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo0LCJ0cmlhbElkIjoiZHVvLWNyZWF0b3IiLCJuYW1lIjoiVGhlIENvdW5jaWwgb2YgVHdvIExhbnRlcm5zIiwiYXV0aG9yIjoiQSB0cmFpbCBrZWVwZXIiLCJwcm9ncmFtcyI6W1sicmlnaHQiLCJyaWdodCIsInVzZSJdLFsicmlnaHQiLCJyaWdodCIsInVzZSJdXSwicGFydHMiOlt7ImtpbmQiOiJzaWduYWwiLCJ4IjoxLCJ5IjoyLCJjaGFubmVsIjoiYmx1ZSIsInByb2dyYW0iOlsicmlnaHQiLCJyaWdodCIsInVzZSJdLCJhbHRlcm5hdGUiOlsibGVmdCIsIndhaXQiLCJ1c2UiXX0seyJraW5kIjoicGlwLWRvY2siLCJ4IjowLCJ5IjoyfSx7ImtpbmQiOiJwcmlzbSIsIngiOjEsInkiOjUsIm9wZXJhdGlvbiI6Im1pcnJvciJ9LHsia2luZCI6ImJyaWRnZSIsIngiOjQsInkiOjUsImNoYW5uZWwiOiJhbWJlciJ9LHsia2luZCI6ImJyaWRnZSIsIngiOjYsInkiOjUsImNoYW5uZWwiOiJqYWRlIn0seyJraW5kIjoic3Byb3V0LWRvY2siLCJ4IjoxMCwieSI6NX0seyJraW5kIjoibGF0Y2giLCJ4IjozLCJ5IjoyLCJjaGFubmVsIjoiYW1iZXIifSx7ImtpbmQiOiJsYXRjaCIsIngiOjUsInkiOjIsImNoYW5uZWwiOiJqYWRlIn0seyJraW5kIjoicHJpc20iLCJ4Ijo3LCJ5IjoyLCJvcGVyYXRpb24iOiJtaXJyb3IifSx7ImtpbmQiOiJzb3VyY2UiLCJ4IjozLCJ5Ijo1LCJjaGFubmVsIjoiYW1iZXIifSx7ImtpbmQiOiJwcmVzcyIsIngiOjUsInkiOjUsImNoYW5uZWwiOiJhbWJlciIsIm91dHB1dCI6ImJsdWUifSx7ImtpbmQiOiJyZWNlaXZlciIsIngiOjcsInkiOjUsImNoYW5uZWwiOiJibHVlIiwicGFyY2VscyI6Mn0seyJraW5kIjoic2lnbmFsIiwieCI6OSwieSI6NSwiY2hhbm5lbCI6ImJsdWUiLCJwcm9ncmFtIjpbImxlZnQiLCJsZWZ0IiwidXNlIl0sImFsdGVybmF0ZSI6WyJyaWdodCIsIndhaXQiLCJ1c2UiXX1dLCJib2FyZCI6eyJ3aWR0aCI6MTEsImhlaWdodCI6Nywicm9hZCI6W3sieCI6MCwieSI6Mn0seyJ4IjoxLCJ5IjoyfSx7IngiOjIsInkiOjJ9LHsieCI6MywieSI6Mn0seyJ4Ijo0LCJ5IjoyfSx7IngiOjUsInkiOjJ9LHsieCI6NiwieSI6Mn0seyJ4Ijo3LCJ5IjoyfSx7IngiOjEsInkiOjV9LHsieCI6MiwieSI6NX0seyJ4IjozLCJ5Ijo1fSx7IngiOjQsInkiOjV9LHsieCI6NSwieSI6NX0seyJ4Ijo2LCJ5Ijo1fSx7IngiOjcsInkiOjV9LHsieCI6OCwieSI6NX0seyJ4Ijo5LCJ5Ijo1fSx7IngiOjEwLCJ5Ijo1fV19LCJzdGFydHMiOlt7IngiOjEsInkiOjJ9LHsieCI6MSwieSI6NX1dLCJpbnRybyI6IkVpZDog4oCcVHdvIHJlbWVtYmVyZWQgbGlnaHRzLiBUd28gYmx1ZSBsZXR0ZXJzLiBBIHF1aWV0IGhvbWVjb21pbmcu4oCdIFJlc3RvcmUgc2V2ZW4gcGllY2VzLiBBbWJlciBhbmQgamFkZSBjb250cm9sIHNlcGFyYXRlIGJyaWRnZXM7IGJsdWUgd2luZG93cyBjb250cm9sIHRoZSByZXR1cm4gc2lnbmFscy4gU3Byb3V0IG1heSBuZWVkIHRvIHdhaXQgZm9yIGFub3RoZXIgbGlnaHRpbmcgY3ljbGUgd2hpbGUgcmV0dXJuaW5nIGZvciB0aGUgc2Vjb25kIHBhcmNlbC4gRmluaXNoIHdpdGggYm90aCBoYXRzIGhvbWUgYW5kIGV2ZXJ5IHN3aXRjaCBvZmYuIiwiZW5kaW5nIjoiRWlkIGNsb3NlcyB0aGUgY291bmNpbCBsZWRnZXIgYWZ0ZXIgdGhlIHNlY29uZCBibHVlIGxldHRlci4gQm90aCBsYW50ZXJucyBhcmUgb2ZmLCBib3RoIGNvdXJpZXJzIGFyZSBob21lLCBhbmQgYSBjbGVhbiBwYWdlIHdhaXRzIGZvciB0aGUgY29sbGVjdGlvbiB5b3Ugd2lsbCBtYWtlIG5leHQuIiwic291cmNlIjoiUmVtaXggb2YgVGhlIENvdW5jaWwgb2YgVHdvIExhbnRlcm5zIGJ5IExhbnRlcm4gVHJhaWxzIiwiaGFuZG9mZnMiOjAsInJlbGF5cyI6MCwiZW1wdHlMb2NrZXJzIjpmYWxzZSwicXVpZXRTd2l0Y2hlcyI6dHJ1ZSwicHJvb2YiOnsidGlja3MiOjU1fX0K",
+      "stateSha": "cf80032612caa63b3cc4c3fd33c1e06de9cf1dd8c7425e44ee23b0bd73cbb62e"
+    }
+  ],
+  "blueprints": [
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "Parcel atelier",
+      "author": "Lantern Trails",
+      "note": "Put a courier two tiles before Q. East / East / Use collects, converts and delivers. Choose different input and output parcels.",
+      "width": 5,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 3,
+          "y": 0
+        },
+        {
+          "x": 4,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "source",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "press",
+          "x": 2,
+          "y": 0,
+          "channel": "amber",
+          "output": "jade"
+        },
+        {
+          "kind": "receiver",
+          "x": 4,
+          "y": 0,
+          "channel": "jade",
+          "parcels": 1
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "A sign with two roads",
+      "author": "Lantern Trails",
+      "note": "Use on Z chooses its next route. The northern glass returns the courier; the other bank opens the road to the right. Add your own wells and windows.",
+      "width": 2,
+      "height": 3,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "parts": [
+        {
+          "kind": "prism",
+          "x": 0,
+          "y": 0,
+          "operation": "mirror-y"
+        },
+        {
+          "kind": "flip",
+          "x": 0,
+          "y": 2,
+          "program": [
+            "up",
+            "wait",
+            "use"
+          ],
+          "alternate": [
+            "right",
+            "wait",
+            "use"
+          ],
+          "initial": false
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "A little brass shortcut",
+      "author": "Lantern Trails",
+      "note": "Use on either U travels to the other end of its colour. Keep one complete pair per tube colour.",
+      "width": 3,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "tube",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "tube",
+          "x": 2,
+          "y": 0,
+          "channel": "amber"
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "A bridge for a friend",
+      "author": "Lantern Trails",
+      "note": "One partner holds P while the other crosses B. The plate and bridge share a numbered colour.",
+      "width": 3,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "plate",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "bridge",
+          "x": 2,
+          "y": 0,
+          "channel": "amber"
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 2,
+      "name": "Letters across the water",
+      "author": "Lantern Trails",
+      "note": "K sends at one end and collects at the other. Its numbered colour names the connection; any parcel can travel. One parcel fits in each channel.",
+      "width": 3,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "locker",
+          "x": 0,
+          "y": 0,
+          "channel": "amber",
+          "mode": "send"
+        },
+        {
+          "kind": "locker",
+          "x": 2,
+          "y": 0,
+          "channel": "amber",
+          "mode": "take"
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 2,
+      "name": "A compass for your pockets",
+      "author": "Lantern Trails",
+      "note": "Use C with a matching parcel to go east. Otherwise return west. The northern and western mirrors make a little road for experiments.",
+      "width": 5,
+      "height": 3,
+      "road": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 3,
+          "y": 2
+        },
+        {
+          "x": 4,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "prism",
+          "x": 0,
+          "y": 2,
+          "operation": "mirror"
+        },
+        {
+          "kind": "cargo",
+          "x": 2,
+          "y": 2,
+          "channel": "any",
+          "program": [
+            "left",
+            "left",
+            "use"
+          ],
+          "alternate": [
+            "right",
+            "right",
+            "use"
+          ]
+        },
+        {
+          "kind": "prism",
+          "x": 2,
+          "y": 0,
+          "operation": "mirror-y"
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 2,
+      "name": "The midnight dyehouse",
+      "author": "Lantern Trails",
+      "note": "Use two tiles before Q. Collect, convert and send through K. Place a matching collect locker on your partner’s road.",
+      "width": 5,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 3,
+          "y": 0
+        },
+        {
+          "x": 4,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "source",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "press",
+          "x": 2,
+          "y": 0,
+          "channel": "amber",
+          "output": "jade"
+        },
+        {
+          "kind": "locker",
+          "x": 4,
+          "y": 0,
+          "channel": "amber",
+          "mode": "send"
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 2,
+      "name": "The patient collector",
+      "author": "Lantern Trails",
+      "note": "A collect locker and cargo compass wait for a parcel. Mirrors return empty hands. Add a window two tiles east of C.",
+      "width": 5,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 3,
+          "y": 0
+        },
+        {
+          "x": 4,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "prism",
+          "x": 0,
+          "y": 0,
+          "operation": "mirror"
+        },
+        {
+          "kind": "locker",
+          "x": 2,
+          "y": 0,
+          "channel": "amber",
+          "mode": "take"
+        },
+        {
+          "kind": "cargo",
+          "x": 4,
+          "y": 0,
+          "channel": "any",
+          "program": [
+            "left",
+            "left",
+            "use"
+          ],
+          "alternate": [
+            "right",
+            "right",
+            "use"
+          ]
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 2,
+      "name": "A bell that waits",
+      "author": "Lantern Trails",
+      "note": "Put Sprout on C with Wait / Wait / Use, and a handoff beside it. Empty hands keep waiting; a parcel chooses North / North / Use, delivers at N and returns by the northern mirror.",
+      "width": 1,
+      "height": 5,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 3
+        },
+        {
+          "x": 0,
+          "y": 4
+        }
+      ],
+      "parts": [
+        {
+          "kind": "prism",
+          "x": 0,
+          "y": 0,
+          "operation": "mirror-y"
+        },
+        {
+          "kind": "receiver",
+          "x": 0,
+          "y": 2,
+          "channel": "amber",
+          "parcels": 1
+        },
+        {
+          "kind": "cargo",
+          "x": 0,
+          "y": 4,
+          "channel": "any",
+          "program": [
+            "wait",
+            "wait",
+            "use"
+          ],
+          "alternate": [
+            "up",
+            "up",
+            "use"
+          ]
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 3,
+      "name": "A bridge that remembers",
+      "author": "Lantern Trails",
+      "note": "Use L to toggle its numbered colour. Matching bridges open next tick and stay powered after a courier leaves. Use any matching L again to switch that channel off.",
+      "width": 3,
+      "height": 1,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "latch",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "bridge",
+          "x": 2,
+          "y": 0,
+          "channel": "amber"
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 3,
+      "name": "A fork beneath a lantern",
+      "author": "Lantern Trails",
+      "note": "Light the left L, then visit M to take its northern route. Another courier can switch L off while the first travels. M reads remembered power on its next Use.",
+      "width": 3,
+      "height": 3,
+      "road": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "parts": [
+        {
+          "kind": "latch",
+          "x": 0,
+          "y": 2,
+          "channel": "amber"
+        },
+        {
+          "kind": "signal",
+          "x": 2,
+          "y": 2,
+          "channel": "amber",
+          "program": [
+            "left",
+            "wait",
+            "use"
+          ],
+          "alternate": [
+            "up",
+            "wait",
+            "use"
+          ]
+        },
+        {
+          "kind": "prism",
+          "x": 2,
+          "y": 0,
+          "operation": "mirror-y"
+        }
+      ]
+    },
+    {
+      "format": "pip-duo-blueprint",
+      "version": 1,
+      "name": "The corner atelier",
+      "author": "Lantern Trails",
+      "note": "A well, recipe and clockwise corner lead to a window below. Begin two tiles west of Q with East / East / Use. Change the colours and delivery target to fit your tower.",
+      "width": 5,
+      "height": 3,
+      "road": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 3,
+          "y": 0
+        },
+        {
+          "x": 4,
+          "y": 0
+        },
+        {
+          "x": 4,
+          "y": 1
+        },
+        {
+          "x": 4,
+          "y": 2
+        }
+      ],
+      "parts": [
+        {
+          "kind": "source",
+          "x": 0,
+          "y": 0,
+          "channel": "amber"
+        },
+        {
+          "kind": "press",
+          "x": 2,
+          "y": 0,
+          "channel": "amber",
+          "output": "jade"
+        },
+        {
+          "kind": "prism",
+          "x": 4,
+          "y": 0,
+          "operation": "rotate"
+        },
+        {
+          "kind": "receiver",
+          "x": 4,
+          "y": 2,
+          "channel": "jade",
+          "parcels": 1
+        }
+      ]
+    }
+  ],
+  "collection": {
+    "format": "pip-adventure-collection",
+    "version": 1,
+    "name": "Remembered roads",
+    "author": "Lantern Trails",
+    "intro": "An unchanging collection from v0.50.",
+    "chapters": [
+      {
+        "title": "A Light Left Behind",
+        "note": "Four roads of remembered light.",
+        "project": {
+          "format": "pip-tinker-project",
+          "version": 4,
+          "trialId": "duo-lantern-first",
+          "name": "A Light Left Behind",
+          "author": "Lantern Trails",
+          "programs": [
+            [
+              "use",
+              "right",
+              "right"
+            ],
+            [
+              "use",
+              "right",
+              "right"
+            ]
+          ],
+          "parts": [
+            {
+              "kind": "press",
+              "x": 3,
+              "y": 5,
+              "channel": "amber",
+              "output": "jade"
+            }
+          ],
+          "proof": {
+            "ticks": 10
+          }
+        }
+      },
+      {
+        "title": "Borrowed Light, Returned",
+        "note": "Four roads of remembered light.",
+        "project": {
+          "format": "pip-tinker-project",
+          "version": 4,
+          "trialId": "duo-lantern-borrowed",
+          "name": "Borrowed Light, Returned",
+          "author": "Lantern Trails",
+          "programs": [
+            [
+              "right",
+              "right",
+              "use"
+            ],
+            [
+              "right",
+              "right",
+              "use"
+            ]
+          ],
+          "parts": [
+            {
+              "kind": "latch",
+              "x": 3,
+              "y": 2,
+              "channel": "amber"
+            },
+            {
+              "kind": "prism",
+              "x": 5,
+              "y": 2,
+              "operation": "mirror"
+            },
+            {
+              "kind": "press",
+              "x": 5,
+              "y": 5,
+              "channel": "amber",
+              "output": "jade"
+            }
+          ],
+          "proof": {
+            "ticks": 11
+          }
+        }
+      },
+      {
+        "title": "The Remembering Night Post",
+        "note": "Four roads of remembered light.",
+        "project": {
+          "format": "pip-tinker-project",
+          "version": 4,
+          "trialId": "duo-lantern-post",
+          "name": "The Remembering Night Post",
+          "author": "Lantern Trails",
+          "programs": [
+            [
+              "right",
+              "wait",
+              "use"
+            ],
+            [
+              "up",
+              "up",
+              "use"
+            ]
+          ],
+          "parts": [
+            {
+              "kind": "prism",
+              "x": 5,
+              "y": 7,
+              "operation": "rotate"
+            },
+            {
+              "kind": "prism",
+              "x": 1,
+              "y": 7,
+              "operation": "rotate"
+            },
+            {
+              "kind": "press",
+              "x": 4,
+              "y": 1,
+              "channel": "amber",
+              "output": "jade"
+            },
+            {
+              "kind": "locker",
+              "x": 5,
+              "y": 4,
+              "channel": "violet",
+              "mode": "send"
+            },
+            {
+              "kind": "locker",
+              "x": 7,
+              "y": 5,
+              "channel": "violet",
+              "mode": "take"
+            },
+            {
+              "kind": "cargo",
+              "x": 7,
+              "y": 1,
+              "channel": "any",
+              "program": [
+                "down",
+                "down",
+                "use"
+              ],
+              "alternate": [
+                "right",
+                "right",
+                "use"
+              ]
+            },
+            {
+              "kind": "latch",
+              "x": 3,
+              "y": 1,
+              "channel": "amber"
+            }
+          ],
+          "proof": {
+            "ticks": 184
+          }
+        }
+      },
+      {
+        "title": "The Council of Two Lanterns",
+        "note": "Four roads of remembered light.",
+        "project": {
+          "format": "pip-tinker-project",
+          "version": 4,
+          "trialId": "duo-lantern-home",
+          "name": "The Council of Two Lanterns",
+          "author": "Lantern Trails",
+          "programs": [
+            [
+              "right",
+              "right",
+              "use"
+            ],
+            [
+              "right",
+              "right",
+              "use"
+            ]
+          ],
+          "parts": [
+            {
+              "kind": "latch",
+              "x": 3,
+              "y": 2,
+              "channel": "amber"
+            },
+            {
+              "kind": "latch",
+              "x": 5,
+              "y": 2,
+              "channel": "jade"
+            },
+            {
+              "kind": "prism",
+              "x": 7,
+              "y": 2,
+              "operation": "mirror"
+            },
+            {
+              "kind": "source",
+              "x": 3,
+              "y": 5,
+              "channel": "amber"
+            },
+            {
+              "kind": "press",
+              "x": 5,
+              "y": 5,
+              "channel": "amber",
+              "output": "blue"
+            },
+            {
+              "kind": "receiver",
+              "x": 7,
+              "y": 5,
+              "channel": "blue",
+              "parcels": 2
+            },
+            {
+              "kind": "signal",
+              "x": 9,
+              "y": 5,
+              "channel": "blue",
+              "program": [
+                "left",
+                "left",
+                "use"
+              ],
+              "alternate": [
+                "right",
+                "wait",
+                "use"
+              ]
+            }
+          ],
+          "proof": {
+            "ticks": 55
+          }
+        }
+      }
+    ]
+  },
+  "collectionSha": "f691089f457ec5432c06ae837ea2daec166d223407bf18276d6f77314562691a",
+  "collectionCode": "PC1.ea266e75.eyJmb3JtYXQiOiJwaXAtYWR2ZW50dXJlLWNvbGxlY3Rpb24iLCJ2ZXJzaW9uIjoxLCJuYW1lIjoiUmVtZW1iZXJlZCByb2FkcyIsImF1dGhvciI6IkxhbnRlcm4gVHJhaWxzIiwiaW50cm8iOiJBbiB1bmNoYW5naW5nIGNvbGxlY3Rpb24gZnJvbSB2MC41MC4iLCJjaGFwdGVycyI6W3sidGl0bGUiOiJBIExpZ2h0IExlZnQgQmVoaW5kIiwibm90ZSI6IkZvdXIgcm9hZHMgb2YgcmVtZW1iZXJlZCBsaWdodC4iLCJwcm9qZWN0Ijp7ImZvcm1hdCI6InBpcC10aW5rZXItcHJvamVjdCIsInZlcnNpb24iOjQsInRyaWFsSWQiOiJkdW8tbGFudGVybi1maXJzdCIsIm5hbWUiOiJBIExpZ2h0IExlZnQgQmVoaW5kIiwiYXV0aG9yIjoiTGFudGVybiBUcmFpbHMiLCJwcm9ncmFtcyI6W1sidXNlIiwicmlnaHQiLCJyaWdodCJdLFsidXNlIiwicmlnaHQiLCJyaWdodCJdXSwicGFydHMiOlt7ImtpbmQiOiJwcmVzcyIsIngiOjMsInkiOjUsImNoYW5uZWwiOiJhbWJlciIsIm91dHB1dCI6ImphZGUifV0sInByb29mIjp7InRpY2tzIjoxMH19fSx7InRpdGxlIjoiQm9ycm93ZWQgTGlnaHQsIFJldHVybmVkIiwibm90ZSI6IkZvdXIgcm9hZHMgb2YgcmVtZW1iZXJlZCBsaWdodC4iLCJwcm9qZWN0Ijp7ImZvcm1hdCI6InBpcC10aW5rZXItcHJvamVjdCIsInZlcnNpb24iOjQsInRyaWFsSWQiOiJkdW8tbGFudGVybi1ib3Jyb3dlZCIsIm5hbWUiOiJCb3Jyb3dlZCBMaWdodCwgUmV0dXJuZWQiLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJyaWdodCIsInJpZ2h0IiwidXNlIl1dLCJwYXJ0cyI6W3sia2luZCI6ImxhdGNoIiwieCI6MywieSI6MiwiY2hhbm5lbCI6ImFtYmVyIn0seyJraW5kIjoicHJpc20iLCJ4Ijo1LCJ5IjoyLCJvcGVyYXRpb24iOiJtaXJyb3IifSx7ImtpbmQiOiJwcmVzcyIsIngiOjUsInkiOjUsImNoYW5uZWwiOiJhbWJlciIsIm91dHB1dCI6ImphZGUifV0sInByb29mIjp7InRpY2tzIjoxMX19fSx7InRpdGxlIjoiVGhlIFJlbWVtYmVyaW5nIE5pZ2h0IFBvc3QiLCJub3RlIjoiRm91ciByb2FkcyBvZiByZW1lbWJlcmVkIGxpZ2h0LiIsInByb2plY3QiOnsiZm9ybWF0IjoicGlwLXRpbmtlci1wcm9qZWN0IiwidmVyc2lvbiI6NCwidHJpYWxJZCI6ImR1by1sYW50ZXJuLXBvc3QiLCJuYW1lIjoiVGhlIFJlbWVtYmVyaW5nIE5pZ2h0IFBvc3QiLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsIndhaXQiLCJ1c2UiXSxbInVwIiwidXAiLCJ1c2UiXV0sInBhcnRzIjpbeyJraW5kIjoicHJpc20iLCJ4Ijo1LCJ5Ijo3LCJvcGVyYXRpb24iOiJyb3RhdGUifSx7ImtpbmQiOiJwcmlzbSIsIngiOjEsInkiOjcsIm9wZXJhdGlvbiI6InJvdGF0ZSJ9LHsia2luZCI6InByZXNzIiwieCI6NCwieSI6MSwiY2hhbm5lbCI6ImFtYmVyIiwib3V0cHV0IjoiamFkZSJ9LHsia2luZCI6ImxvY2tlciIsIngiOjUsInkiOjQsImNoYW5uZWwiOiJ2aW9sZXQiLCJtb2RlIjoic2VuZCJ9LHsia2luZCI6ImxvY2tlciIsIngiOjcsInkiOjUsImNoYW5uZWwiOiJ2aW9sZXQiLCJtb2RlIjoidGFrZSJ9LHsia2luZCI6ImNhcmdvIiwieCI6NywieSI6MSwiY2hhbm5lbCI6ImFueSIsInByb2dyYW0iOlsiZG93biIsImRvd24iLCJ1c2UiXSwiYWx0ZXJuYXRlIjpbInJpZ2h0IiwicmlnaHQiLCJ1c2UiXX0seyJraW5kIjoibGF0Y2giLCJ4IjozLCJ5IjoxLCJjaGFubmVsIjoiYW1iZXIifV0sInByb29mIjp7InRpY2tzIjoxODR9fX0seyJ0aXRsZSI6IlRoZSBDb3VuY2lsIG9mIFR3byBMYW50ZXJucyIsIm5vdGUiOiJGb3VyIHJvYWRzIG9mIHJlbWVtYmVyZWQgbGlnaHQuIiwicHJvamVjdCI6eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo0LCJ0cmlhbElkIjoiZHVvLWxhbnRlcm4taG9tZSIsIm5hbWUiOiJUaGUgQ291bmNpbCBvZiBUd28gTGFudGVybnMiLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJyaWdodCIsInJpZ2h0IiwidXNlIl1dLCJwYXJ0cyI6W3sia2luZCI6ImxhdGNoIiwieCI6MywieSI6MiwiY2hhbm5lbCI6ImFtYmVyIn0seyJraW5kIjoibGF0Y2giLCJ4Ijo1LCJ5IjoyLCJjaGFubmVsIjoiamFkZSJ9LHsia2luZCI6InByaXNtIiwieCI6NywieSI6Miwib3BlcmF0aW9uIjoibWlycm9yIn0seyJraW5kIjoic291cmNlIiwieCI6MywieSI6NSwiY2hhbm5lbCI6ImFtYmVyIn0seyJraW5kIjoicHJlc3MiLCJ4Ijo1LCJ5Ijo1LCJjaGFubmVsIjoiYW1iZXIiLCJvdXRwdXQiOiJibHVlIn0seyJraW5kIjoicmVjZWl2ZXIiLCJ4Ijo3LCJ5Ijo1LCJjaGFubmVsIjoiYmx1ZSIsInBhcmNlbHMiOjJ9LHsia2luZCI6InNpZ25hbCIsIngiOjksInkiOjUsImNoYW5uZWwiOiJibHVlIiwicHJvZ3JhbSI6WyJsZWZ0IiwibGVmdCIsInVzZSJdLCJhbHRlcm5hdGUiOlsicmlnaHQiLCJ3YWl0IiwidXNlIl19XSwicHJvb2YiOnsidGlja3MiOjU1fX19XX0K"
+}

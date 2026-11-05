@@ -1,0 +1,31 @@
+// New owned material. See LICENSE; prior MIT permissions remain effective.
+import {CLOCKTOWER_MISSIONS} from './pip-clocktower.mjs';
+const p=(x,y)=>({x,y}),row=(y,a,b)=>Array.from({length:b-a+1},(_,i)=>p(a+i,y)),part=(kind,x,y,extra={})=>({kind,x,y,...extra});
+const RR=['right','right','use'],LL=['left','left','use'];
+function mission(id,title,width,height,road,starts,parts,missing,solution,story,hint,ending,{relays=0,emptyLockers=false,maxBellDuration=6,difficulty='Expert'}={}){
+ const solutionParts=parts.filter(missing),inventory={};for(const item of solutionParts)inventory[item.kind]=(inventory[item.kind]||0)+1;
+ return {id,title,version:5,width,height,collection:'bellkeeper',difficulty,minutes:difficulty==='Tricky'?'10–20 min':'25–45 min',road,starts,fixed:parts.filter(item=>!missing(item)),solutionParts,budget:solutionParts.length,inventory,programs:[['wait','wait','wait'],['wait','wait','wait']],solution,handoffs:0,relays,emptyLockers,quietSwitches:false,quietBells:true,maxBellDuration,story,hint,ending};
+}
+const clock=CLOCKTOWER_MISSIONS[0],post=[...clock.fixed,...clock.solutionParts,part('pulse',1,2,{channel:'amber',duration:4}),part('bridge',10,1,{channel:'amber'})];
+export const BELLKEEPER_MISSIONS=Object.freeze([
+ mission('duo-bell-first','A Bridge for Four Beats',9,7,[...row(2,1,3),...row(5,1,7)],[p(1,2),p(1,5)],
+  [part('pulse',1,2,{channel:'amber',duration:4}),part('pip-dock',3,2),part('source',1,5,{channel:'amber'}),part('press',3,5,{channel:'amber',output:'jade'}),part('bridge',4,5,{channel:'amber'}),part('receiver',7,5,{channel:'jade',parcels:1})],item=>item.kind==='press',[['use','right','right'],['use','right','right']],
+  'Tavi: “A bell gives a bridge a little time, not a permanent light.” Use A to power its numbered channel for the next four ticks. Repair the jade recipe. Sprout must reach the bridge before the ringing ends. An occupied bridge remains safe until its courier leaves.',
+  'Both companions: Use / East / East. Amber → jade recipe at (4,6). Pip rings on tick 1; amber powers ticks 2–5. Sprout enters the bridge on 5 and delivers on 10. A bell never powers the tick in which it rings.',
+  'Tavi listens until the last beat fades. Sprout has crossed, the jade letter is safe, and nobody had to hold the bell.',{difficulty:'Tricky',maxBellDuration:4}),
+ mission('duo-bell-one','The One-Beat Promise',9,7,[...row(2,1,5),...row(5,1,8)],[p(1,2),p(1,5)],
+  [part('pip-dock',1,2),part('pulse',3,2,{channel:'amber',duration:1}),part('prism',5,2,{operation:'mirror'}),part('source',3,5,{channel:'amber'}),part('bridge',4,5,{channel:'amber'}),part('press',5,5,{channel:'amber',output:'jade'}),part('receiver',7,5,{channel:'jade',parcels:1}),part('sprout-dock',8,5)],item=>['pulse','prism','press'].includes(item.kind),[RR,RR],
+  'Moss: “One beat is enough if a friend keeps the promise.” Rebuild a one-tick amber bell, the turning glass and the jade recipe. Pip rings just before Sprout reaches the bridge. Bring both hats home and let the bells fall silent.',
+  'Both companions: East / East / Use. One-tick amber bell (4,3), East/West mirror (6,3), amber → jade recipe (6,6). Ring on 3; cross on 4. Pip rings again on 9, its final beat ends on 10, and both hats are home on 11.',
+  'Moss hangs a tiny promise beside the bell: “I will be there on the next beat.” Two paper hats nod beneath it.',{maxBellDuration:1}),
+ mission('duo-bell-post','The Bellkeeper’s Last Post',13,9,clock.road,clock.starts,post,
+  item=>item.kind==='pulse'||item.kind==='press'||item.kind==='locker'||item.kind==='cargo'&&item.y===1||item.kind==='prism'&&item.y===7&&item.x<=5,clock.solution,
+  'Rook: “The return crossing opens only when the bellkeeper comes around.” Restore seven parts. Three jade letters pass through violet lockers, but Sprout’s eastern return bridge waits for Pip’s four-beat amber bell. A late ring can change a whole lap. Finish every relay, empty the lockers and return both hats.',
+  'Pip: East / Wait / Use. Sprout: North / North / Use. Four-tick amber bell (2,3); amber → jade recipe (5,2); violet lockers send (6,5), collect (8,6). Clockwise prisms (6,8) and (2,8). Any-cargo compass (8,2): Otherwise South / South / Use; Matching East / East / Use. The fixed amber bridge is at (11,2).',
+  'Rook accepts the third letter after the long eastern wait. The last bell fades; the post office has kept every promise.',{relays:3,emptyLockers:true,maxBellDuration:4,difficulty:'Master'}),
+ mission('duo-bell-council','The Three-Beat Council',13,7,[...row(2,0,9),...row(5,1,12)],[p(1,2),p(1,5)],
+  [part('signal',1,2,{channel:'blue',program:RR,alternate:['left','wait','use']}),part('pip-dock',0,2),part('pulse',3,2,{channel:'amber',duration:1}),part('pulse',5,2,{channel:'jade',duration:1}),part('pulse',7,2,{channel:'violet',duration:1}),part('prism',9,2,{operation:'mirror'}),part('prism',1,5,{operation:'mirror'}),part('source',3,5,{channel:'amber'}),part('bridge',4,5,{channel:'amber'}),part('press',5,5,{channel:'amber',output:'blue'}),part('bridge',6,5,{channel:'jade'}),part('bridge',8,5,{channel:'violet'}),part('receiver',9,5,{channel:'blue',parcels:2}),part('signal',11,5,{channel:'blue',program:LL,alternate:['right','wait','use']}),part('sprout-dock',12,5)],item=>['pulse','source','press','receiver'].includes(item.kind)||item.kind==='prism'&&item.x===9||item.kind==='signal'&&item.x===11,[RR,RR],
+  'Eid: “Three one-beat bells. Two blue letters. One patient duet.” Restore eight parts. Amber, jade and violet open three separate crossings. Sprout will sometimes wait for another ringing cycle; a blocked move still advances a card. Fill both blue letters, bring both hats home, and leave every bell silent.',
+  'Both companions: East / East / Use. One-tick bells: amber (4,3), jade (6,3), violet (8,3). East/West mirror (10,3); amber well (4,6); amber → blue recipe (6,6); two-letter blue window (10,6). Blue signal (12,6): Quiet West / West / Use; Powered East / Wait / Use. Pip’s fixed blue signal sends it home after both letters arrive.',
+  'Eid closes the council with a moment of silence. Three bells, two friends, and a collection of roads waiting for their next keeper.',{maxBellDuration:1,difficulty:'Master'})
+].map((m,i)=>Object.freeze({...m,chapter:37+i})));

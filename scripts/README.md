@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **132 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **180 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -137,7 +137,7 @@ mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
 CI runs the complete release catalogue in three parallel groups. Each group has
-54 or 55 of the current 109 cases; both must pass before deployment. No scenario is
+60 of the current 180 cases; all three groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -218,3 +218,6 @@ Confirmed collection updates await the actual confirmation close event before in
 
 
 `pip-lantern-browser-checks.mjs` adds eight v0.50 cases: all four switch missions on phone/desktop, creator edits/goals/shelf Undo, version-3 lantern blueprint placement/capture/import, atomic collection variants and one-chapter sharing, remembered-power resume/Undo/full-backup restoration, enlarged themed controls and variant capacity, and protected new-format imports with exact old exports. The required catalogue has 172 distinct cases, partitioned exhaustively as 58, 57 and 57. `tests/pip-lanterns.test.mjs` covers next-tick power, global toggles, bridge safety, signals, quiet finishes, version boundaries, mixed saves, variant/source isolation and a captured v0.49 compatibility fixture.
+
+
+`pip-bellkeeper-browser-checks.mjs` adds eight v0.51 cases: four timed missions on phone/desktop, duration/goal editing with verified shelf saves, actual lantern/bell preview glyphs and configured blueprint exchange, selected chapter files/posters/public links and one-batch copy/Undo, exact countdown resume/Undo/full-backup rollback, enlarged curator/part menus and capacity across four viewport shapes, and starter/protected-format imports with exact v0.50 exports. The 180 distinct cases partition as 60/60/60. Local links remain disabled by the existing public-host guard; hosted runs test actual copied links. `tests/pip-bellkeeper.test.mjs` covers timing, power-source interactions, compatibility, mixed saves, source-progress isolation and curated exports.

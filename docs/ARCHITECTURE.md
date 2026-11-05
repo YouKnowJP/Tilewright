@@ -1217,3 +1217,11 @@ Version-4 simulation states add a bounded `switches` dictionary containing only 
 The switch dictionary participates in repeat detection. A quiet-switch goal blocks completion until it is empty, alongside normal windows, handoffs, locker and home goals. Collection snapshots still store a normalized project and tick count; replay reconstructs switch memory and Undo frames deterministically. Collection map identity includes the new finish goal only for version 4, preserving old identity strings.
 
 Variant presets build one to three independently normalized custom chapters, verify creator routes, add accurate transformed-garden instructions and enforce six-chapter/file bounds before returning. The UI applies the batch as one undoable assembly edit. One-chapter exports use the unchanged PC1 schema with authored data only. Captured v0.49 compatibility fixtures cover exact project/state/code, blueprint and collection bytes.
+
+### Bellkeeper timing and collection curation
+
+`pip-bellkeeper.mjs` defines chapters 37–40. Format-5 projects add `pulse` parts with an integer `duration` from 1–6 and a `quietBells` custom goal. Only format-5 states add `pulses`; older state shapes and codec bytes remain exact. Sample remembered/timed power before countdown decay and both couriers; decay once, then merge new rings using `max`. Both signals and bridges read the sampled power. Held plates/occupied bridges and dynamic window/plate signal rules remain unchanged. State identity includes countdown values; saved positions replay deterministic ticks to rebuild counters and Undo.
+
+Blueprint format 4 maps to project format 5 and retains duration through configuration, placement and capture. Minimal upgrades never downgrade old or new goals. Captured v0.50 fixtures lock canonical project/code/state/blueprint/PC1 behavior.
+
+`selectCollectionChapters` creates a validated credit-preserving PC1 subset without progress. `appendCollectionSelection` validates the combined batch atomically, including empty-assembly and capacity boundaries. `pip-collection-curator-ui.mjs` keeps transient checklist state, refreshes structural source identities, and uses existing assembly history and download/clipboard paths. Saved source records are read-only during copying. No new journal schema, runtime dependency or network service is introduced.
