@@ -1,4 +1,5 @@
 import {pipHomeScenarios} from './pip-home-browser-checks.mjs';
+import {pipInputScenarios} from './pip-input-browser-checks.mjs';
 import {pipWorkshopToolsScenarios} from './pip-workshop-tools-browser-checks.mjs';
 import {pipCanopyScenarios} from './pip-canopy-browser-checks.mjs';
 import {pipCollectionsScenarios} from './pip-collections-browser-checks.mjs';
@@ -117,6 +118,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await pipDuoScenarios(scenario);
     await pipTinkerScenarios(scenario);
     await presentationScenarios(scenario);
+    await pipInputScenarios(scenario);
     const report={browser:browser.version(),baseURL,shard,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
   }finally{await browser.close();}
 }

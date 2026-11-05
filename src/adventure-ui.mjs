@@ -685,8 +685,8 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   });
   function controllerPress(command) {
     clockworkUI.stopForInput();
-    if(pipStudio.control(command))return;
     if(controlDropdown(command))return;
+    if(pipStudio.control(command))return;
     if(clueUI.control(command))return;
     if(command==='undo'){if(!$('#training-camp').hidden)training.control('undo');else rewindAction();return;}
     const dialog=document.activeElement?.closest('dialog[open]')||document.querySelector('dialog[open]'),menu=$('#game-tools').open?$('#game-tools'):$('#game-menu');

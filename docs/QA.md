@@ -1,5 +1,49 @@
 # Verification record
 
+## Input safety and interruption recovery — v0.54.0
+
+The release contains **1,665 Node tests**, including five focused keyboard-policy
+cases, and **204 required gameplay browser cases** in exhaustive groups of
+**68/68/68**. The package contains **176 files**. Existing project, journal,
+collection, blueprint and backup formats remain unchanged.
+
+An isolated checkout of v0.53 reproduced controller Undo changing cards behind
+an open dropdown and behind a confirmation, plus playback continuing after
+window blur. The revised input route lets the current menu or dialog own the
+controller. Canceled confirmations, menu Undo and practice cannot alter the
+parent project. The focused garden supports per-mode keyboard commands and
+saved inspection layouts; modified/composing/already-handled events pass through.
+Held action keys never repeat. Escape pauses before leaving; controller Start
+runs/pauses and Back pauses before returning home.
+
+Six new release cases play classic and duo routes through keyboard controls on
+phone/desktop; test real controller edges in menus, confirmations and practice;
+interrupt collection playback by blur, visibility and pagehide; reconstruct its
+exact saved tick/Undo after reload; retain enlarged IJKL controls and ordinary
+text-field input; and tap/rotate/complete practice and a real story. The captured
+v0.51 journal retains its timed-bell state and history. Existing full-backup and
+classic keyboard construction regressions remain required.
+
+A separate required recovery runner aborts an actual startup module request,
+retries without changing existing save bytes, delays loading beyond the real
+15-second notice and resumes it, then tests loaded-game controls while offline
+and exact Continue/Undo after reconnecting. Its expected load-failure messages
+are isolated from the ordinary suite's zero-error policy. Failures retain
+screenshots, console JSON and a trace. This does not add offline startup or
+caching; a fresh page still needs the website connection.
+
+Chromium, Firefox and WebKit checks cover the new flows and selected prior
+save/backup, enlarged-menu and classic construction cases. Each also passes the
+19-check device-controls family: all five styles, ten viewport sizes, real
+keyboard/pad/swipe/tap clears, input cancellation, controller/menu isolation,
+training and old/unavailable preferences. Four retained responsive/fullscreen
+cases per engine cover native dialogs/external exit and the expanded fallback.
+Reviewed captures cover running/paused play, keyboard help, practice and themed
+menus at 320/390/768/844/1440 pixels, including largest text and high contrast.
+Viewport/touch and
+controller emulation remain separate from physical-device, actual Safari,
+screen-reader and human usability checks. Generated builds/reports stay ignored.
+
 ## Adventure Home, staged clues and tiny practice — v0.53.0
 
 The release suite contains **1,660 Node tests**, including sixteen focused

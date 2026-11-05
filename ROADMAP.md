@@ -1,6 +1,8 @@
 # Tilewright roadmap
 
-Version **0.53** adds the direct Pip & Sprout Adventure Home, all forty-four duo
+Version **0.54** adds focused garden keyboard/controller play, active-menu input
+isolation, immediate interruption pauses and a compact playback state. Save and
+collection formats remain unchanged. Version **0.53** added the direct Pip & Sprout Adventure Home, all forty-four duo
 story chapters with search/progress filters, saved-collection continuation,
 staged clues, three separate practice gardens and compact workbench shortcuts.
 See the [player guide](docs/PLAYER_GUIDE.md). Visual solution comparisons,

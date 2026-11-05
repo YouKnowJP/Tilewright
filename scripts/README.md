@@ -22,6 +22,7 @@ Install the locked development tools with `npm ci`. For the release checks:
 ```sh
 npx playwright install --with-deps --only-shell chromium
 npm run test:browser:smoke
+npm run test:browser:recovery
 ```
 
 The command builds the static package, starts a temporary loopback server, and
@@ -29,6 +30,23 @@ plays that exact package. It checks phone/desktop looks and recovery while frame
 are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
+
+The release catalogue retains all earlier cases and adds six focused Pip input
+scenarios: phone/desktop keyboard clears, controller dropdown/confirmation
+isolation, interruption-safe collection history, enlarged saved-layout controls,
+and touch/rotation/practice play. It has **204 distinct cases**, split exhaustively
+as **68/68/68**. Inspection repeat is tested separately from action-key holds;
+fields, composition and browser shortcuts preserve their own behavior.
+
+The recovery command additionally interrupts a real startup module request,
+checks the Retry flow with untouched saves, holds loading past the real 15-second
+notice, and disconnects/reconnects a loaded game before exact Continue/Undo.
+Run it with `-- chromium firefox webkit` after installing those engines to test
+all three. CI requires these three recovery checks alongside preserved migration
+in browser group 1. Expected network-failure console messages are checked only
+inside this isolated runner; ordinary release cases still reject all errors.
+Recovery failures keep screenshots, console JSON and a trace under
+`playwright-report/startup-recovery/`.
 
 This suite gates deployment in CI. Failures retain a screenshot, console/error
 JSON, and Playwright trace in `playwright-report/release-smoke/<engine>/`; successful

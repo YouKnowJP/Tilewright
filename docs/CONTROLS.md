@@ -129,3 +129,24 @@ backup before switching. See [screen guide](SCREEN_AND_SAGAS.md).
 Pause moves keyboard focus to Resume. Tab and Shift+Tab cycle through the
 visible pause/results actions. **Quest & notes** is also available from that
 panel; closing it returns focus without spending a turn or advancing a book.
+
+## Pip and Sprout garden controls
+
+Choose **Garden** in the workshop to focus the board. These shortcuts apply
+while the garden has focus; fields and menus retain their own controls.
+
+| Input | At the bench | During a test | Tiny practice |
+| --- | --- | --- | --- |
+| Arrows or saved WASD/IJKL | Inspect a tile | Inspect and pause | Use the text garden or Cards controls |
+| Space / Enter | Place or inspect selected part | Advance one tick | Advance both chosen cards |
+| Z | Undo one edit | Undo one tick | Undo one practice tick |
+| R | No action | Run / pause | No action |
+| Escape | Return to Adventure Home | Pause a running test; press again to leave | Return to the adventure |
+
+Inspection follows the saved key-repeat preference. Action shortcuts require a
+fresh press, even when inspection repeat is on. Controller A steps when a test
+or practice garden has focus, Start toggles test playback, and Back pauses a
+running test before leaving. Controller Undo never changes the adventure behind
+an open dropdown or confirmation. Losing window focus or hiding the page pauses
+playback immediately; returning leaves it paused. The garden's playback line
+explains its current state.

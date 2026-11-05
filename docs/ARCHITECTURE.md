@@ -20,6 +20,7 @@ state, with bounded Undo and no proof/best attachment.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-controls.mjs` | Focused garden command policy, saved keyboard layouts, repeat/composition/modifier isolation and mode-specific instructions; workshop/practice UI owns dispatch. |
 | `src/pip-home-model.mjs` / `src/pip-home-ui.mjs` | Read-only story catalogue/progress filters and suggested routes; direct Adventure Home, saved-collection launches and explicit main-menu navigation. |
 | `src/pip-staged-hints.mjs` | Two distinct non-solution clues for every duo story, followed by its existing authored worked route. |
 | `src/pip-practice.mjs` / `src/pip-practice-ui.mjs` | Three isolated two-courier practice rooms using real engine steps, explicit next-card choices, guided steps and in-memory Undo; no persistence or awards. |

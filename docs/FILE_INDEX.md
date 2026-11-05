@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**490 files in 15 folders.** Stage new files before refreshing. Run
+**494 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,10 +23,10 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 6 |
-| [scripts/browser/](../scripts/browser/) | 59 |
+| [scripts/browser/](../scripts/browser/) | 61 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 144 |
-| [tests/](../tests/) | 76 |
+| [src/](../src/) | 145 |
+| [tests/](../tests/) | 77 |
 | [tests/fixtures/](../tests/fixtures/) | 36 |
 
 <details>
@@ -259,7 +259,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 59 files</summary>
+<summary>scripts/browser/ — 61 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -294,6 +294,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-gardens-browser-checks.mjs](../scripts/browser/pip-gardens-browser-checks.mjs)
 - [pip-glassworks-browser-checks.mjs](../scripts/browser/pip-glassworks-browser-checks.mjs)
 - [pip-home-browser-checks.mjs](../scripts/browser/pip-home-browser-checks.mjs)
+- [pip-input-browser-checks.mjs](../scripts/browser/pip-input-browser-checks.mjs)
 - [pip-lantern-browser-checks.mjs](../scripts/browser/pip-lantern-browser-checks.mjs)
 - [pip-loom-browser-checks.mjs](../scripts/browser/pip-loom-browser-checks.mjs)
 - [pip-night-mail-browser-checks.mjs](../scripts/browser/pip-night-mail-browser-checks.mjs)
@@ -314,6 +315,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [save-profiles-browser-checks.mjs](../scripts/browser/save-profiles-browser-checks.mjs)
 - [settings-browser-checks.mjs](../scripts/browser/settings-browser-checks.mjs)
 - [sluice-browser-checks.mjs](../scripts/browser/sluice-browser-checks.mjs)
+- [startup-recovery-browser-checks.mjs](../scripts/browser/startup-recovery-browser-checks.mjs)
 - [storybook-browser-checks.mjs](../scripts/browser/storybook-browser-checks.mjs)
 - [trailhouse-browser-checks.mjs](../scripts/browser/trailhouse-browser-checks.mjs)
 - [training-browser-checks.mjs](../scripts/browser/training-browser-checks.mjs)
@@ -336,7 +338,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 144 files</summary>
+<summary>src/ — 145 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -401,6 +403,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-collection-tools.mjs](../src/pip-collection-tools.mjs)
 - [pip-collections-ui.mjs](../src/pip-collections-ui.mjs)
 - [pip-collections.mjs](../src/pip-collections.mjs)
+- [pip-controls.mjs](../src/pip-controls.mjs)
 - [pip-dawn-workshop.mjs](../src/pip-dawn-workshop.mjs)
 - [pip-duo-blueprints.mjs](../src/pip-duo-blueprints.mjs)
 - [pip-duo-storage.mjs](../src/pip-duo-storage.mjs)
@@ -486,7 +489,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 76 files</summary>
+<summary>tests/ — 77 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -523,6 +526,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-collection-storage.test.mjs](../tests/pip-collection-storage.test.mjs)
 - [pip-collection-tools.test.mjs](../tests/pip-collection-tools.test.mjs)
 - [pip-collections.test.mjs](../tests/pip-collections.test.mjs)
+- [pip-controls.test.mjs](../tests/pip-controls.test.mjs)
 - [pip-duo.test.mjs](../tests/pip-duo.test.mjs)
 - [pip-freight.test.mjs](../tests/pip-freight.test.mjs)
 - [pip-gardens.test.mjs](../tests/pip-gardens.test.mjs)

@@ -87,7 +87,9 @@ jobs:
         run: npm run test:browser:smoke -- --shard=${{ matrix.shard }}/3
       - name: Check standalone paths, notices, and save continuity
         if: matrix.shard == 1
-        run: npm run test:browser:migration
+        run: |
+          npm run test:browser:migration
+          npm run test:browser:recovery
       - name: Keep browser failure diagnostics
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

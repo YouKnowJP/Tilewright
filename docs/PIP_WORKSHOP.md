@@ -60,8 +60,21 @@ both ends. Each tray limits both total parts and the available kind of part.
 companion once; **Next event** stops at the next Use or obstacle. **Run** continues
 until completion, a repeating state, or the 240-tick safety limit. Pause, Undo a
 tick, Reset the test, or return to the bench. Closing the workshop, changing
-sections or hiding the browser tab stops playback. Your ordinary trail does not
-advance during practice.
+sections, leaving the game window or hiding the browser tab stops playback.
+Choosing other workshop controls pauses it too. The playback line says when the
+test is paused; returning never restarts it. Your ordinary trail does not advance
+during practice.
+
+Focus **Garden** to use keyboard controls. Arrows or your saved WASD/IJKL layout
+inspect tiles; your inspection repeat preference applies. At the bench,
+Space/Enter places or inspects the selected part. During a test, Space/Enter
+advances one tick and R runs/pauses. Z undoes an edit or test tick. Holding an
+action key never repeats it. Escape first pauses a running test; press again to
+leave. Controller Start runs/pauses, Back pauses before leaving, and A advances
+when the garden has focus. Menus and confirmations own their controller input.
+Practice's focused garden supports Space/Enter or controller A for the next pair
+of cards, and Z/controller Undo for one tick. Text fields and browser shortcuts
+keep their normal behavior. See [controls](CONTROLS.md).
 
 In relay prototypes, **Pip acts first and Sprout second**. They cannot overlap or
 swap through each other. Pip can Use the H handoff when an empty-handed partner

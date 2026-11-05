@@ -16,6 +16,12 @@ creator garden has parts to configure. **Briefing & progress** holds the longer
 story and personal bests; **Hints** offers a small clue, an experiment and an
 optional worked route. Loading an example asks before replacing the draft.
 
+With the garden focused: **Space/Enter** steps a test, **R** runs/pauses and **Z**
+undoes. Arrows or your saved WASD/IJKL layout inspect tiles. At the bench,
+Space/Enter places or inspects. Escape pauses a running test; press again to
+leave. Playback also pauses when the window or page is away. Choose Run yourself
+when you return. Menus keep controller input inside the current choice.
+
 **Try a tiny practice garden** opens a separate handoff, bell or passport lesson.
 Choose one next card per friend and advance them together, or step through a
 guided run. Undo/reset are free. Returning leaves your adventure where it was;

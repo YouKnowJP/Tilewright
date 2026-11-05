@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.54.0 — 2026-11-05
+
+- Keep controller input inside the active dropdown or confirmation. Undo cannot change cards or history behind those overlays; canceled choices preserve the adventure and menu focus.
+- Add focused garden keyboard play: Space/Enter advances one test tick, R runs/pauses, and Z undoes. Bench placement remains Space/Enter. Inspection honors the saved arrow/WASD/IJKL layout and repeat preference; held action keys never spend extra ticks or edits.
+- Add keyboard/controller stepping and Undo in the tiny practice gardens without touching the parent adventure. Keep ordinary field editing, composition and browser shortcuts independent.
+- Show a compact playback state beside the garden. Pause immediately when the game window loses focus, the page hides, or the player explores other workshop controls. Returning never restarts playback automatically.
+- Let Escape pause a running test first; another deliberate press returns home. Controller Start toggles playback and Back pauses before leaving. Preserve save formats, exact collection continuation and Undo history.
+
 ## 0.53.0 — 2026-11-05
 
 - Add a direct Play Pip & Sprout entrance and an Adventure Home with all forty-four story chapters, progress/mechanic filters, literal search, six-card pages, a suggested next road and saved-setup continuation.
