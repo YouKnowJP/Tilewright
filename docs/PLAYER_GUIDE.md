@@ -431,3 +431,9 @@ the same action. Reading preserves the result, and Back returns to its opener.
 In Pip & Sprout, choose **The Bellkeeper** for four timed adventures. Use a numbered **Timed bell A** to power matching bridges and signals starting on the next tick. Use **One tick** or pause the run to inspect at your own pace. Its countdown shows how many powered ticks remain; an occupied bridge stays safe until its courier leaves. Some stories require both home flags and complete silence before ending.
 
 Creators can set one to six powered ticks on a bell, capture it in a blueprint, and add a silent-bell finish goal. In the collection builder’s **Curator tray**, choose chapters from the assembly or a saved collection. Add independent copies together, undo that batch, or share only the selected chapters as a file, link or poster. Original maker credits travel with the maps; your saved attempts and clears stay private in this journey.
+
+### Passport roads and optional ribbons
+
+Try **The Sealkeepers** in Pip & Sprout. A **Parcel seal G** checks who is entering and what they carry. An inspection arrow checks only that travel direction; other directions pass freely. The seal keeps the parcel. Read the tile or blocked-entry message, pause, undo and inspect at your own pace.
+
+Collection creators can add optional tick and placed-part limits under a chapter’s **Optional bonus goal**, or copy a verified creator answer as its par. Clearing the chapter always counts. A bonus ribbon rewards one answer meeting all selected limits, and a later slower retry keeps an earned ribbon. Bonus details stay folded in the chapter menu. Share goal editions, selected chapters and posters using the same collection tools; your personal progress stays in this journey and its backups.

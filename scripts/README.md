@@ -66,7 +66,7 @@ failure, and simulated standard-controller handoff/Undo isolation. New chapter
 witnesses and version-2 portability/legacy checks live in `tests/cartographer.test.mjs`.
 
 
-The release suite contains **180 scenarios**. `presentation-browser-checks.mjs`
+The release suite contains **188 scenarios**. `presentation-browser-checks.mjs`
 adds eight viewport sizes, native/external fullscreen exit, rejected-request
 fallback, launcher assets, safe areas, large controls, long message reading,
 unchanged-action confirmation, searched/paged shelves, all eighteen new book
@@ -137,7 +137,7 @@ mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
 CI runs the complete release catalogue in three parallel groups. Each group has
-60 of the current 180 cases; all three groups must pass before deployment. No scenario is
+62 or 63 of the current 188 cases; all three groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -221,3 +221,6 @@ Confirmed collection updates await the actual confirmation close event before in
 
 
 `pip-bellkeeper-browser-checks.mjs` adds eight v0.51 cases: four timed missions on phone/desktop, duration/goal editing with verified shelf saves, actual lantern/bell preview glyphs and configured blueprint exchange, selected chapter files/posters/public links and one-batch copy/Undo, exact countdown resume/Undo/full-backup rollback, enlarged curator/part menus and capacity across four viewport shapes, and starter/protected-format imports with exact v0.50 exports. The 180 distinct cases partition as 60/60/60. Local links remain disabled by the existing public-host guard; hosted runs test actual copied links. `tests/pip-bellkeeper.test.mjs` covers timing, power-source interactions, compatibility, mixed saves, source-progress isolation and curated exports.
+
+
+`pip-sealkeeper-browser-checks.mjs` adds eight v0.52 cases: four passport missions at phone/desktop widths; real badge/cargo/direction editing with blocked-entry feedback and shelf saves; transformed seal blueprints with protected imports; bonus par editing, Undo, selection/PC2/poster sharing and independent copies; earned ribbons through slower retries, reload/Undo and full-backup rollback; enlarged themed menus and numeric validation; and the starter, protected edition prefixes and a captured v0.51 paused journal. The 188-case catalogue partitions as 63/63/62. `tests/pip-seals.test.mjs` and `tests/pip-collection-challenges.test.mjs` cover deterministic entry, geometry, exact compatibility, optional scoring and persistent/progress-free sharing.

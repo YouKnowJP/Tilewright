@@ -39,3 +39,5 @@ restoration, separate journeys, and a fresh start. No player data is uploaded
 by the repository migration.
 
 Timed bell countdowns are reconstructed from the saved test position inside the existing local collection journal. Curator exports include chosen authored chapters and maker credits, with no personal setups, clears or countdown saves. No new storage key or network service is added.
+
+Optional collection goals are authored PC2 metadata. Personal bonus ribbons are derived from verified local clears and remain in the existing journey collection journal. Shared collections/posters exclude personal results, current setups and retry positions. No new storage key, tracking or network service is added.

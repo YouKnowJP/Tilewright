@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {preferCollectionClear,hasChapterChallenge} from './pip-collection-challenges.mjs';
 import {duoText} from './pip-duo.mjs';
 import {normalizeTinkerProject,startTinker,tinkerStep} from './pip-tinker.mjs';
 import {normalizePipCollection,serializePipCollection,collectionChapterShape} from './pip-collections.mjs';
@@ -7,8 +8,8 @@ const size=text=>new TextEncoder().encode(text).length;
 const emptyState=()=>({project:null,testing:false,ticks:0,clear:null});
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 export function normalizeCollectionAssembly(raw={}){
- const value={format:'pip-adventure-collection',version:1,name:duoText(raw.name,'Our little adventure collection'),author:duoText(raw.author,'A trail keeper'),intro:duoText(raw.intro,'Choose a chapter and make a road together.',240),chapters:raw.chapters??[]};
- if(!Array.isArray(value.chapters))throw Error('Include a collection chapter list.');return value.chapters.length?normalizePipCollection(value):value;
+ const value={format:'pip-adventure-collection',version:raw.version??1,name:duoText(raw.name,'Our little adventure collection'),author:duoText(raw.author,'A trail keeper'),intro:duoText(raw.intro,'Choose a chapter and make a road together.',240),chapters:raw.chapters??[]};
+ if(![1,2].includes(value.version))throw Error('This assembly edition is not supported.');if(!Array.isArray(value.chapters))throw Error('Include a collection chapter list.');return value.chapters.length?normalizePipCollection(value):value;
 }
 export function emptyCollectionJournal(){return {version:1,assembly:normalizeCollectionAssembly(),records:[],current:null,editing:null};}
 function stateFor(raw,chapter,{verify=true}={}){
@@ -32,10 +33,10 @@ export function saveCollectionJournal(storage,journal,expectedRaw){
 export function keepCollection(journal,input,id=null,{copy=false}={}){
  const collection=normalizePipCollection(input);let old=id?journal.records.find(r=>r.id===id):null;if(id&&!old)throw Error('Choose an existing collection slot.');if(!id&&!copy){const matching=journal.records.filter(r=>serializePipCollection(r.collection)===serializePipCollection(collection));old=matching.find(r=>r.id===journal.current)||matching[0];if(old)return {journal:{...journal,current:old.id},id:old.id};}
  if(!id){id=Array.from({length:MAX_SAVED_COLLECTIONS},(_,i)=>'collection-'+(i+1)).find(id=>!journal.records.some(r=>r.id===id));if(!id)throw Error('All eight collection slots are full. Export or remove one before saving another.');}
- const available=old?old.collection.chapters.map((c,i)=>({key:collectionChapterShape(c.project),title:c.title,note:c.note,state:old.states[i],index:i})):[],used=new Set(),keys=collection.chapters.map(c=>collectionChapterShape(c.project));
+ const available=old?old.collection.chapters.map((c,i)=>({key:collectionChapterShape(c.project),title:c.title,note:c.note,challengeKey:hasChapterChallenge(c)?JSON.stringify(c.challenge):'',state:old.states[i],index:i})):[],used=new Set(),keys=collection.chapters.map(c=>collectionChapterShape(c.project));
  // Reserve unchanged chapter cards first. Otherwise a renamed/changed duplicate
  // could steal a later unchanged card's setup or clear during reordering.
- const mapping=collection.chapters.map((chapter,i)=>{const index=available.findIndex(c=>!used.has(c.index)&&c.key===keys[i]&&c.title===chapter.title&&c.note===chapter.note);if(index<0)return null;used.add(index);return index;});
+ const mapping=collection.chapters.map((chapter,i)=>{const index=available.findIndex(c=>!used.has(c.index)&&c.key===keys[i]&&c.title===chapter.title&&c.note===chapter.note&&c.challengeKey===(hasChapterChallenge(chapter)?JSON.stringify(chapter.challenge):''));if(index<0)return null;used.add(index);return index;});
  for(let i=0;i<mapping.length;i++)if(mapping[i]===null){const index=available.findIndex(c=>!used.has(c.index)&&c.key===keys[i]);if(index>=0){used.add(index);mapping[i]=index;}}
  const states=mapping.map(index=>index===null?emptyState():available[index].state);
  const previous=old?.lastChapter,lastChapter=previous===null||previous===undefined?null:(mapping.indexOf(previous)<0?null:mapping.indexOf(previous));const record={id,collection,states,lastChapter};return {journal:{...journal,current:id,records:[...journal.records.filter(r=>r.id!==id),record]},id};
@@ -43,7 +44,7 @@ export function keepCollection(journal,input,id=null,{copy=false}={}){
 export function setCollectionAssembly(journal,raw,editing=journal.editing){if(editing!==null&&!journal.records.some(r=>r.id===editing))throw Error('Choose a saved collection to edit.');const assembly=normalizeCollectionAssembly(raw);return same(assembly,journal.assembly)&&editing===journal.editing?journal:{...journal,assembly,editing};}
 export function captureCollectionChapter(journal,id,index,{project,testing,ticks,clear=null}){
  const record=journal.records.find(r=>r.id===id);if(!record||!Number.isInteger(index)||!record.states[index])throw Error('Choose a saved collection chapter.');const previous=record.states[index],draft=same(previous.project,project)?previous.project:normalizeTinkerProject(project),verified=clear?(same(previous.clear,clear)?previous.clear:normalizeTinkerProject(clear)):previous.clear;
- const state=stateFor({...previous,project:draft,testing,ticks:testing?ticks:0,clear:verified},record.collection.chapters[index],{verify:false});if(same(state,previous)&&record.lastChapter===index&&journal.current===id)return journal;
+ const candidate=stateFor({...previous,project:draft,testing,ticks:testing?ticks:0,clear:verified},record.collection.chapters[index],{verify:false}),state=record.collection.version===2?{...candidate,clear:preferCollectionClear(record.collection.chapters[index],previous.clear,candidate.clear)}:candidate;if(same(state,previous)&&record.lastChapter===index&&journal.current===id)return journal;
  return {...journal,current:id,records:journal.records.map(r=>r.id===id?{...r,lastChapter:index,states:r.states.map((s,i)=>i===index?state:s)}:r)};
 }
 export function resetCollectionProgress(journal,id){const old=journal.records.find(r=>r.id===id);if(!old)throw Error('Choose a saved collection.');return {...journal,records:journal.records.map(r=>r.id===id?{...r,lastChapter:null,states:r.states.map(emptyState)}:r)};}

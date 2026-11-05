@@ -33,6 +33,8 @@ Visit **Adventure Workshop → Puzzle Lab → Pip’s workshop** for ten new sho
 
 **The Bellkeeper** adds four timed-power challenges for forty duo chapters. Configure two bell blueprints, coordinate one to six powered ticks, and design silent-bell homecomings. In the folded **Curator tray**, choose chapters from assemblies or saved collections, copy them as one undoable batch, or share a selected collection, link or poster with original maker credits.
 
+**The Sealkeepers** adds four passport missions for forty-four duo chapters. Parcel seals inspect cargo, courier badges and selected entry directions; two reusable pieces help build outward and return lanes. Add optional tick/part goals, set a verified creator par and share bonus editions alongside ordinary collections. Earned ribbons retain their best answer through later retries.
+
 The Clockwork Gardens Storybook still offers six longer adventures with remembered routes, returning parcels, a shared ferry and independent flip stamps. Existing worlds and saves keep their identities.
 
 Start with **Training camp**. See the [player guide](docs/PLAYER_GUIDE.md),

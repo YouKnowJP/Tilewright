@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.52.0 — 2026-11-05
+
+- Add parcel seals that inspect courier badges and cargo on entry, optionally in one direction. Other directions pass freely; seals retain cargo and let their occupants leave. Blocked-entry messages explain the rule.
+- Add four Sealkeeper missions for forty-four duo chapters: a two-recipe passport, a timed three-badge night post, a two-handoff receiving loop and a directional return-route council.
+- Add configurable passport-arch and outward/home-lane blueprints. Rotation/reflection transforms inspection arrows, palettes preserve empty/any-hand conditions, and trading couriers swaps badge requirements. Fix ordinary colour selection after editing wildcard cargo or seals.
+- Add optional per-chapter tick and placed-part goals, one-click creator pars and undoable goal editing. Normal clears remain available without bonuses. Earned bonus ribbons and their best qualifying answers survive slower retries, reloads and full backups.
+- Share goal editions as PC2 files/codes/links and illustrated posters. Preserve credits, original source progress and captured PC1 bytes; selected and copied goal chapters keep their targets. Remixed/replaced maps clear their old targets for review.
+- Keep bonus details folded in the chapter menu, align desktop play buttons, and show whether a creator answer meets its goal. New seals use project format 6 and blueprint format 5; older projects, codes, blueprints and saved journal fingerprints stay exact.
+
 ## 0.51.0 — 2026-11-05
 
 - Add timed bells: one to six following ticks of numbered power, refreshed by matching bells without shortening an existing ring. Signals sample power at tick start; occupied crossings and held plates retain their safety rules.

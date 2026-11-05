@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {normalizeChapterChallenge} from './pip-collection-challenges.mjs';
 import {duoEditable,remixDuoProject} from './pip-duo.mjs';
 import {transformDuoGarden} from './pip-garden-tools.mjs';
 import {normalizeTinkerProject,startTinker,tinkerStep,clearTinkerProject} from './pip-tinker.mjs';
@@ -12,15 +13,15 @@ export function remixCollectionChapter(input,index,operation){
  // Courier order can change a traded route. Re-run the engine rather than reuse
  // its old proof. An unfinished transformed route remains an honest draft.
  if(old.proof){let state=startTinker(project);while(state.status==='playing')state=tinkerStep(state);if(state.status==='won')project=clearTinkerProject(state);}
- return normalizePipCollection({...pack,chapters:pack.chapters.map((c,i)=>i===index?{...c,project}:c)});
+ return normalizePipCollection({...pack,chapters:pack.chapters.map((c,i)=>i===index?{...c,project,...(pack.version===2?{challenge:{ticks:null,parts:null}}:{})}:c)});
 }
 export function replaceCollectionChapter(input,index,raw){
  const pack=normalizePipCollection(input);chapterAt(pack,index);const project=normalizeTinkerProject(raw);if(project.version<2)throw Error('Choose a two-companion adventure.');
- return normalizePipCollection({...pack,chapters:pack.chapters.map((c,i)=>i===index?{...c,project}:c)});
+ return normalizePipCollection({...pack,chapters:pack.chapters.map((c,i)=>i===index?{...c,project,...(pack.version===2?{challenge:{ticks:null,parts:null}}:{})}:c)});
 }
 export function copyCollectionChapter(input,source,index){
- const other=normalizePipCollection(source),chapter=chapterAt(other,index);if(Array.isArray(input?.chapters)&&!input.chapters.length)return normalizePipCollection({...input,chapters:[structuredClone(chapter)]});const pack=normalizePipCollection(input);if(pack.chapters.length>=MAX_COLLECTION_CHAPTERS)throw Error('Keep at most six collection chapters.');
- return normalizePipCollection({...pack,chapters:[...pack.chapters,structuredClone(chapter)]});
+ const other=normalizePipCollection(source),chapter=chapterAt(other,index);if(Array.isArray(input?.chapters)&&!input.chapters.length)return normalizePipCollection({...input,version:Math.max(input.version||1,other.version),chapters:[structuredClone(chapter)]});const pack=normalizePipCollection(input);if(pack.chapters.length>=MAX_COLLECTION_CHAPTERS)throw Error('Keep at most six collection chapters.');
+ return normalizePipCollection({...pack,version:Math.max(pack.version,other.version),chapters:[...pack.chapters,structuredClone(chapter)]});
 }
 export const COLLECTION_VARIANTS=Object.freeze([
  Object.freeze({id:'mirrors',name:'A pair of looking glasses',labels:['Left-right mirror','Up-down mirror'],operations:[['horizontal'],['vertical']]}),
@@ -41,5 +42,8 @@ export function selectCollectionChapters(input,indices){
 }
 export function appendCollectionSelection(input,source,indices){
  const selected=selectCollectionChapters(source,indices);if(!Array.isArray(input?.chapters)||input.chapters.length+selected.chapters.length>MAX_COLLECTION_CHAPTERS)throw Error('The selected chapters do not fit. Keep at most six assembly chapters.');
- return normalizePipCollection({...input,chapters:[...input.chapters,...selected.chapters]});
+ return normalizePipCollection({...input,version:Math.max(input.version||1,selected.version),chapters:[...input.chapters,...selected.chapters]});
 }
+
+export function setCollectionChallenge(input,index,raw){const pack=normalizePipCollection(input);chapterAt(pack,index);const challenge=normalizeChapterChallenge(raw);return normalizePipCollection({...pack,version:2,chapters:pack.chapters.map((c,i)=>i===index?{...c,challenge}:c)});}
+export function setCollectionCreatorPar(input,index){const pack=normalizePipCollection(input),chapter=chapterAt(pack,index);if(!chapter.project.proof)throw Error('Verify a creator route before setting its par.');return setCollectionChallenge(pack,index,{ticks:chapter.project.proof.ticks,parts:chapter.project.parts.length});}

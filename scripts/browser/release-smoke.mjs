@@ -1,6 +1,7 @@
 import {pipWorkshopToolsScenarios} from './pip-workshop-tools-browser-checks.mjs';
 import {pipCanopyScenarios} from './pip-canopy-browser-checks.mjs';
 import {pipCollectionsScenarios} from './pip-collections-browser-checks.mjs';
+import {pipSealkeeperScenarios} from './pip-sealkeeper-browser-checks.mjs';
 import {pipBellkeeperScenarios} from './pip-bellkeeper-browser-checks.mjs';
 import {pipLanternScenarios} from './pip-lantern-browser-checks.mjs';
 import {pipAtlasCollectionsScenarios} from './pip-atlas-collections-browser-checks.mjs';
@@ -102,6 +103,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await pipSwitchbackScenarios(scenario);
     await pipGlassworksScenarios(scenario);
     await pipGardensScenarios(scenario);
+    await pipSealkeeperScenarios(scenario);
     await pipBellkeeperScenarios(scenario);
     await pipLanternScenarios(scenario);
     await pipAtlasCollectionsScenarios(scenario);
