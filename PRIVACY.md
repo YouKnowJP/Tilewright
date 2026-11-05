@@ -43,3 +43,5 @@ Timed bell countdowns are reconstructed from the saved test position inside the 
 Optional collection goals are authored PC2 metadata. Personal bonus ribbons are derived from verified local clears and remain in the existing journey collection journal. Shared collections/posters exclude personal results, current setups and retry positions. No new storage key, tracking or network service is added.
 
 Adventure Home reads existing local drafts, verified bests and collection progress. Selecting a story keeps its draft as the most recently used duo setup in the existing journal. Tiny practice gardens have separate in-memory state and do not save practice results, change adventure progress or upload anything. Save keys, backup formats and profile boundaries remain unchanged.
+
+If the collection shelf is full, the current visit-only collection can remain in memory through Adventure Home navigation. Its collection progress is not included in saved-data backups until it is saved to a shelf slot; download the collection to keep its authored chapters.

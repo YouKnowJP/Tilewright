@@ -22,7 +22,11 @@ guided run. Undo/reset are free. Returning leaves your adventure where it was;
 practice does not award clears or write over your cards.
 
 **Your collections** opens saved chapters or resumes a saved test with its Undo
-history. Ordinary story continuation restores cards and parts. **Create & share**
+history. A collection played with a full shelf is labelled **This visit** and
+remains available through Adventure Home while the page stays open. Free a shelf
+slot and save the collection to keep its progress between visits. A collection
+download keeps the authored chapters. Ordinary story continuation
+restores cards and parts. **Create & share**
 opens your garden, collection builder or project import. **How to play** includes
 the classic single-Pip lessons. Adventure Home returns to the main menu.
 Full journey backups preserve creations, collections and personal progress.

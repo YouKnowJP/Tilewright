@@ -11,6 +11,9 @@ that supplies recent duo setup selection without adding a save key or schema.
 Collection launches use the validated live collection journal and its existing
 replay/Undo reconstruction. Leaving a collection for a separate story clears
 only its current selection, preserving every collection record and chapter state.
+A bounded in-memory current-visit cache retains a collection that could not fit
+on the eight-slot saved shelf; home can resume its snapshot even after a story
+detour. It neither creates a save key nor replaces a saved record.
 Staged hints do not alter project bytes or proofs. Tiny practice rooms have no
 storage dependency: each next-card pair advances the real engine in separate
 state, with bounded Undo and no proof/best attachment.

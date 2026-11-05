@@ -27,6 +27,12 @@ switching; and Escape/focus/main-menu/legacy Workshop navigation. The full
 catalogue contains **198 distinct cases**, partitioned **66/66/66**, with prior
 gameplay, migration and publication gates retained.
 
+The storage-fallback scenario also fills all eight collection slots, opens a
+ninth collection for the visit, pauses a real test and returns through Adventure
+Home. It verifies exact resume/Undo, keeps that visit accessible after playing
+another story, and compares all eight saved records and the assembly unchanged.
+An in-memory visit cache supplies this continuation without an extra save slot.
+
 Local Chromium runs cover all ten new flows and fourteen selected older creator,
 collection and classic-invention regressions. Firefox and WebKit each pass all
 ten new flows plus collection-replacement and blueprint regressions. Final

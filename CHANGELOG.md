@@ -4,6 +4,7 @@
 
 - Add a direct Play Pip & Sprout entrance and an Adventure Home with all forty-four story chapters, progress/mechanic filters, literal search, six-card pages, a suggested next road and saved-setup continuation.
 - Open saved collections and resume their exact test positions from the home shelf. Reach the creator, collection builder, friend imports and classic lessons directly; return through Adventure Home to the main menu.
+- Retain the current visit-only collection when all eight save slots are full. Resume its test and Undo from Adventure Home, including after playing another story, without replacing any saved collection.
 - Replace repeated duo hints with forty-four authored clue/experiment/worked-route progressions. Keep the final route and example replacement explicit, add previous-clue navigation and pause playback while reading hints.
 - Add three isolated playable practice gardens for handoffs, next-tick bell power and passport checks. Choose each friend's next card, step together, Undo, reset or follow a guided run without changing adventure saves or awards.
 - Compact the workbench section buttons, fold briefing/progress and move the advanced adventure chooser out of the play area. Put Test, Undo, status and playback beside the garden, with persistent Garden/Cards/Tools/Hints shortcuts and measured sticky-header spacing.
