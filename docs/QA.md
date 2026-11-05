@@ -23,7 +23,8 @@ staged clues and canceled example replacement; guided/manual practice with
 unchanged parent saves and paused tests; captured v0.51 collection tick-58
 continuation, Undo/reload and actual full-backup rollback from tick 59; recent
 ordinary drafts; protected unreadable/quota saves; enlarged themed menus and
-sticky-header offsets; creator/builder/import/classic paths with journey
+sticky-header offsets; whole-word enlarged navigation and selected-tab contrast
+including hover; creator/builder/import/classic paths with journey
 switching; and Escape/focus/main-menu/legacy Workshop navigation. The full
 catalogue contains **198 distinct cases**, partitioned **66/66/66**, with prior
 gameplay, migration and publication gates retained.

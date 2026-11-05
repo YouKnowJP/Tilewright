@@ -8,7 +8,7 @@
 - Replace repeated duo hints with forty-four authored clue/experiment/worked-route progressions. Keep the final route and example replacement explicit, add previous-clue navigation and pause playback while reading hints.
 - Add three isolated playable practice gardens for handoffs, next-tick bell power and passport checks. Choose each friend's next card, step together, Undo, reset or follow a guided run without changing adventure saves or awards.
 - Compact the workbench section buttons, fold briefing/progress and move the advanced adventure chooser out of the play area. Put Test, Undo, status and playback beside the garden, with persistent Garden/Cards/Tools/Hints shortcuts and measured sticky-header spacing.
-- Keep large-text controls and main-menu buttons readable on narrow phones. Preserve project, collection, journal and backup formats; existing drafts, verified bests and saved collection history remain available.
+- Keep large-text controls and main-menu buttons readable on narrow phones, with whole-word home navigation and readable selected tabs even on hover. Preserve project, collection, journal and backup formats; existing drafts, verified bests and saved collection history remain available.
 - Cover Ubuntu's mirror-list files as well as direct APT sources in CI setup. Keep bounded downloads and signed repositories; regression-test both configuration formats so slow Azure mirrors cannot bypass the HTTPS rewrite.
 
 ## 0.52.0 — 2026-11-05
