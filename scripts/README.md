@@ -136,13 +136,14 @@ full phone/desktop books, parcel inventory and powered routes, guarded dock rese
 mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
-CI runs the complete release catalogue in two parallel groups. Each group has
+CI runs the complete release catalogue in three parallel groups. Each group has
 54 or 55 of the current 109 cases; both must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
-npm run test:browser:smoke -- --shard=1/2
-npm run test:browser:smoke -- --shard=2/2
+npm run test:browser:smoke -- --shard=1/3
+npm run test:browser:smoke -- --shard=2/3
+npm run test:browser:smoke -- --shard=3/3
 ```
 
 The partition is stable when case names are supplied for a focused retry. Reports
@@ -211,4 +212,6 @@ main adventure rules, including both initial banks for the memory lesson.
 `pip-persistence-browser-checks.mjs` adds eight v0.48 cases: four Clocktower repairs at phone/desktop widths; autosaved assembly, duplicate chapters, independent copies and full-shelf saving; exact test resume/Undo, verified clears and confirmed restart; reorder/update identity; real journey/backup/reset/restore flows; corruption/quota/other-tab protection; and enlarged themed shelf menus, focus return and confirmed removal. The required catalogue now contains 156 distinct cases, split exhaustively into two groups of 78. `tests/pip-collection-storage.test.mjs` covers bounded persistence, proof validation, replay, remapping, copy isolation, storage failures, journey scopes and sharing isolation.
 
 
-`pip-atlas-collections-browser-checks.mjs` adds eight v0.49 cases: four Star Atlas repairs at phone/desktop widths; source-copy/reverse/Undo/reload; all garden remix tools with real proof retention, draft fallback and protected turns; confirmed per-chapter map replacement and selective progress reset; six-map SVG/poster and PC1 sharing; enlarged themed menus across four viewport shapes; and starter/import/paused-test resume. The required catalogue contains 164 distinct cases, split exhaustively into groups of 82. `tests/pip-collection-tools.test.mjs` checks necessary repairs, immutable remixes, changed courier-order proofs, source isolation, bounded snapshots and escaped progress-free posters.
+`pip-atlas-collections-browser-checks.mjs` adds eight v0.49 cases: four Star Atlas repairs at phone/desktop widths; source-copy/reverse/Undo/reload; all garden remix tools with real proof retention, draft fallback and protected turns; confirmed per-chapter map replacement and selective progress reset; six-map SVG/poster and PC1 sharing; enlarged themed menus across four viewport shapes; and starter/import/paused-test resume. The required catalogue contains 164 distinct cases, split exhaustively into groups of 55, 55 and 54. `tests/pip-collection-tools.test.mjs` checks necessary repairs, immutable remixes, changed courier-order proofs, source isolation, bounded snapshots and escaped progress-free posters.
+
+Confirmed collection updates await the actual confirmation close event before inspecting saved state. The map-replacement regression deliberately delays that event and waits for the completed-save notice; it retains every progress assertion. This prevents a hosted check from reading the prior journal while a valid update is still pending.

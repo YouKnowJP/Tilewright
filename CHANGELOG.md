@@ -7,7 +7,7 @@
 - Add a folded collection director for combining chapters from saved collections, reversing arrangements and undoing up to eight chapter-tool changes. Copy source snapshots without moving their saved progress.
 - Add confirmed map replacement for an individual chapter, keeping its title and note. Existing collection updates retain progress for unchanged maps and reset changed maps only. Protect distinct duplicate chapter cards from taking one another’s progress during reordering, replacement or removal.
 - Add illustrated SVG collection posters with chapter maps, numbered parcel/link colours, maker credits, goals and creator-route labels. Small hosted collections can include a playable link. Shared posters, files and codes exclude personal chapter progress.
-- Expand live phone/desktop, enlarged-text, themed-menu, saved-progress, sharing, creator-route and compatibility coverage while retaining PC1/project/save formats.
+- Expand live phone/desktop, enlarged-text, themed-menu, saved-progress, sharing, creator-route and compatibility coverage while retaining PC1/project/save formats. Await completed confirmations before checking saved state, and retain the full release catalogue across three CI groups.
 
 ## 0.48.0 — 2026-11-04
 

@@ -13,7 +13,7 @@ async function builder(p){await p.locator('#ps-tab-share').click();await details
 async function library(p){await builder(p);await details(p,'#ps-pack-library');}
 async function shared(p,value){const u=new URL(p.url());u.hash='pip-pack='+pipCollectionCode(value);await p.goto(u.href);await waitForGameReady(p);await p.locator('#pip-collection[open]').waitFor();}
 async function reload(p){const u=new URL(p.url());u.hash='';await p.goto(u.href);await waitForGameReady(p);}
-async function saved(p){await p.locator('#ps-pack-storage').filter({hasText:/saved in this journey|saved automatically/}).waitFor({state:'attached'});}
+async function saved(p){await p.locator('#game-confirm-dialog').waitFor({state:'detached'});await p.locator('#ps-pack-storage').filter({hasText:/saved in this journey|saved automatically/}).waitFor({state:'attached'});}
 async function journal(p){return p.evaluate(key=>{const id=JSON.parse(localStorage.getItem('tilewright.profiles.v1')||'{"activeId":"original"}').activeId,physical=id==='original'?key:`tilewright.profile.${id}.${key.slice('tilewright.'.length)}`;return JSON.parse(localStorage.getItem(physical)||'null');},COLLECTION_SAVE_KEY);}
 async function download(p,id){const [d]=await Promise.all([p.waitForEvent('download'),p.locator(id).click()]),chunks=[];for await(const c of await d.createReadStream())chunks.push(c);return Buffer.concat(chunks);}
 async function example(p){await details(p,'#ps-help');for(let i=0;i<3;i++)await p.locator('#ps-nudge').click();await p.locator('#ps-example').click();await p.locator('#game-confirm-accept').click();await p.locator('#game-confirm-dialog').waitFor({state:'detached'});}
