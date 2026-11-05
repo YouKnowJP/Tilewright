@@ -25,5 +25,5 @@ export function collectionChapterShape(input){
  return JSON.stringify([p.version,p.trialId,{...p.board,road:[...p.board.road].sort(order)},p.starts,[...p.parts].sort(order),p.handoffs,p.relays,p.emptyLockers]);
 }
 export function editCollectionChapters(chapters,index,action){
- if(!Array.isArray(chapters)||!Number.isInteger(index)||index<0||index>=chapters.length||!['earlier','later','remove'].includes(action))throw Error('Choose a collection chapter and edit.');const result=[...chapters];if(action==='remove')result.splice(index,1);else{const other=index+(action==='earlier'?-1:1);if(other<0||other>=result.length)return result;[result[index],result[other]]=[result[other],result[index]];}return result;
+ if(!Array.isArray(chapters)||!Number.isInteger(index)||index<0||index>=chapters.length||!['earlier','later','remove','duplicate'].includes(action))throw Error('Choose a collection chapter and edit.');const result=[...chapters];if(action==='duplicate'){if(chapters.length>=MAX_COLLECTION_CHAPTERS)throw Error('Keep at most six collection chapters.');result.splice(index+1,0,structuredClone(result[index]));}else if(action==='remove')result.splice(index,1);else{const other=index+(action==='earlier'?-1:1);if(other<0||other>=result.length)return result;[result[index],result[other]]=[result[other],result[index]];}return result;
 }

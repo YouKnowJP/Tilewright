@@ -8,7 +8,9 @@ browser checks use a pinned Playwright package.
 | --- | --- |
 | `src/pip-after-hours.mjs` | Four explicit mastery variations of the Canopy layouts, with bounded repairs, transformed banks and three-delivery goals. |
 | `src/pip-collections.mjs` | Bounded six-chapter collection schema, verified individual proofs, PC1/file/link exchange, fresh-route construction and mechanical chapter identity. |
-| `src/pip-collections-ui.mjs` | Folded visit-only assembly, safe collection imports, chapter overview/replay/navigation and original-map completion tracking. |
+| `src/pip-clocktower.mjs` | Four original timing repairs, chapters 25–28, with immutable repair definitions and verified reference routes. |
+| `src/pip-collection-storage.mjs` | Bounded journey-scoped collection journal, map-identity progress remapping, verified clears, exact replay and protected compare-before-write persistence. |
+| `src/pip-collections-ui.mjs` | Folded persistent assembly/shelf, safe collection imports, chapter overview/replay/resume/navigation and original-map completion tracking. |
 | `src/pip-canopy-fair.mjs` | Four original version-3 tower/bridge/handoff repair stories, with bounded inventories and verified example programs. |
 | `src/pip-blueprint-links.mjs` / `src/pip-blueprint-links-ui.mjs` | Independent tube/locker remapping, unused-connection suggestions and immutable valid-space search, exposed through folded themed controls. |
 | `src/pip-dawn-workshop.mjs` | Four mastery repair variations built from the night-post network, with bounded inventories and deterministic clears. |
@@ -1180,3 +1182,14 @@ and world drafts remain separate snapshots. The folded drawer preview uses
 existing local tile/object drawing. Full shelves disable copying; failed writes
 and damaged storage preserve raw bytes and allow session downloads. Assembly
 storage and portable files remain version 1.
+
+
+## Persistent adventure collections
+
+`tilewright.pip-collections.v1` uses the generation-protected journey storage adapter. The version-1 local journal stores one 0–6-chapter assembly, eight numbered saved collections, editing/current IDs, per-chapter normalized setups, paused test ticks and independently verified original-map clear projects. It is bounded to 2 MB. Existing full archives, profile switching and reset discovery include the new key without changing those formats.
+
+Loading validates the complete journal and attached proofs before use. Mechanical identity ignores presentation/program edits and canonicalizes part/road ordering. Collection updates match old chapter occurrences by mechanical identity, preserving moved progress and remapping the last chapter; changed maps and additional duplicate occurrences get empty states. Explicit copies get independent empty progress, and explicit shelf opening retains its selected ID even for identical copies.
+
+UI writes are throttled at 450 ms, with immediate flushes on navigation, visibility loss and pagehide. Validated domain mutations avoid replaying already-verified clear proofs on every simulation tick. Writes compare the prior raw value, read back the result and stop on quota/conflicting-tab failures. Unreadable or future-version data is retained for recovery. Full shelves allow one volatile collection without eviction; it can transfer its visit progress into a newly freed slot. Shared PC1 serialization includes only authored collection data.
+
+Resume recreates the real engine from the saved setup and advances to the saved tick or earlier terminal state. Its intermediate frames become Undo history; restored tests remain paused. A snapshot setup may be a remix, but an earned clear must contain a valid proof and match the original chapter shape. Active chapter capture is suppressed during confirmed project replacement, avoiding accidental writes into the previous chapter.

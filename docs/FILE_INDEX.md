@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**456 files in 15 folders.** Stage new files before refreshing. Run
+**460 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,10 +23,10 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 5 |
-| [scripts/browser/](../scripts/browser/) | 53 |
+| [scripts/browser/](../scripts/browser/) | 54 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 129 |
-| [tests/](../tests/) | 68 |
+| [src/](../src/) | 131 |
+| [tests/](../tests/) | 69 |
 | [tests/fixtures/](../tests/fixtures/) | 33 |
 
 <details>
@@ -257,7 +257,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 53 files</summary>
+<summary>scripts/browser/ — 54 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -294,6 +294,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-orchard-browser-checks.mjs](../scripts/browser/pip-orchard-browser-checks.mjs)
 - [pip-orchestra-browser-checks.mjs](../scripts/browser/pip-orchestra-browser-checks.mjs)
 - [pip-parcelworks-browser-checks.mjs](../scripts/browser/pip-parcelworks-browser-checks.mjs)
+- [pip-persistence-browser-checks.mjs](../scripts/browser/pip-persistence-browser-checks.mjs)
 - [pip-prism-browser-checks.mjs](../scripts/browser/pip-prism-browser-checks.mjs)
 - [pip-switchback-browser-checks.mjs](../scripts/browser/pip-switchback-browser-checks.mjs)
 - [pip-tinker-browser-checks.mjs](../scripts/browser/pip-tinker-browser-checks.mjs)
@@ -328,7 +329,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 129 files</summary>
+<summary>src/ — 131 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -383,7 +384,9 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-blueprint-links-ui.mjs](../src/pip-blueprint-links-ui.mjs)
 - [pip-blueprint-links.mjs](../src/pip-blueprint-links.mjs)
 - [pip-canopy-fair.mjs](../src/pip-canopy-fair.mjs)
+- [pip-clocktower.mjs](../src/pip-clocktower.mjs)
 - [pip-coach.mjs](../src/pip-coach.mjs)
+- [pip-collection-storage.mjs](../src/pip-collection-storage.mjs)
 - [pip-collections-ui.mjs](../src/pip-collections-ui.mjs)
 - [pip-collections.mjs](../src/pip-collections.mjs)
 - [pip-dawn-workshop.mjs](../src/pip-dawn-workshop.mjs)
@@ -463,7 +466,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 68 files</summary>
+<summary>tests/ — 69 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -494,6 +497,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [packaging.test.mjs](../tests/packaging.test.mjs)
 - [pip-atlas.test.mjs](../tests/pip-atlas.test.mjs)
 - [pip-canopy-fair.test.mjs](../tests/pip-canopy-fair.test.mjs)
+- [pip-collection-storage.test.mjs](../tests/pip-collection-storage.test.mjs)
 - [pip-collections.test.mjs](../tests/pip-collections.test.mjs)
 - [pip-duo.test.mjs](../tests/pip-duo.test.mjs)
 - [pip-freight.test.mjs](../tests/pip-freight.test.mjs)

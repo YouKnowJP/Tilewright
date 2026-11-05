@@ -80,7 +80,7 @@ Duo adventures use project format 2 or 3 inside the existing PT1 file/code/link 
 
 ## The Night Post: six harder chapters
 
-Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All twenty-four duo chapters are available without grinding.
+Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All twenty-eight duo chapters are available without grinding.
 
 | Chapter | Story | Challenge | Worked clear |
 | --- | --- | --- | --- |
@@ -116,7 +116,7 @@ Choose **Dawn Workshop · 4 mastery repairs** in the Collection menu, or continu
 | 15 | Three Invitations at Daybreak | Two recipes and three locker relays | 84 ticks |
 | 16 | The Last Lantern Express | Two presses, a cargo compass and a tube end; three deliveries and both couriers home | 98 ticks |
 
-All twenty-four chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
+All twenty-eight chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
 
 ### Plan and replay a route
 
@@ -173,17 +173,40 @@ Choose **Canopy After Hours · 4 mastery repairs**, or continue after Canopy cha
 | 23 | The Last Rain Rehearsal | Pressure plate, mirror and both tube ends | 72 ticks |
 | 24 | Six Letters Before Sunrise | Four recipes and two collecting lockers; both windows three times, empty lockers and both home flags | 91 ticks |
 
+## The Clocktower Ledger: four timing repairs
+
+Choose **The Clocktower Ledger · 4 timing repairs**, or continue after chapter 24. These original layouts ask you to reason about different courier speeds, spare parcels and patient timing. There is no real-time deadline; pause and inspect each tick.
+
+| Chapter | Story | Repair idea | Verified example |
+| --- | --- | --- | --- |
+| 25 | The Slow Hand and the Swift | Four repairs; one-tile Pip and two-tile Sprout, three jade letters and both home flags | 181 ticks |
+| 26 | A Spare Letter for Tomorrow | Five repairs; two unequal loops and full-locker backpressure, with spare mail allowed | 181 ticks |
+| 27 | The Brass Minute | Five repairs; reconnect the blue tube across a missing road while preserving the cards | 163 ticks |
+| 28 | When Both Hands Meet | Eight recipes/lockers, six deliveries, empty lockers and two home flags | 181 ticks |
+
+**Wait** is a useful card. East / Wait / Use advances one tile per three ticks; North / North / Use advances two. Full lockers never overwrite parcels. Every repair has optional hints and a verified example you can step through.
+
 ## Build and play adventure collections
 
-Open **Share & feedback → Adventure collections**. Add the current two-companion adventure or choose one from your saved adventure shelf. Each addition takes its own snapshot: later bench edits do not rewrite that chapter. Keep up to six chapters, move them earlier/later, remove a chapter, or open **Chapter title & note** to personalize its presentation. Single-Pip inventions stay in their existing sharing flow.
+Open **Share & feedback → Adventure collections**. Add the current two-companion adventure or choose one from your saved adventure shelf. Each addition takes its own snapshot: later bench edits do not rewrite that chapter. Keep up to six chapters, move them earlier/later, duplicate or remove a chapter, or open **Chapter title & note** to personalize its presentation. Single-Pip inventions stay in their existing sharing flow.
 
 **Preview collection** opens a chapter menu before play. **Try a fresh route** clears the creator’s starting cards; official repair chapters also start with their missing parts unplaced. Custom gardens keep their authored roads, stations and goals. **Replay creator route** appears only when that chapter has a verified attached solution. Loading a different custom draft still asks before replacement.
 
 Every chapter is selectable. Finish a real test on the original chapter to mark it cleared and reveal **Next collection chapter**. Changing a custom garden’s hardware, terrain, starts or goals makes a remix; it remains playable but does not mark the original chapter cleared. Changing cards or presentation text is allowed. **Collection chapters** returns from the bench; **Open current collection** returns from the share drawer. Escape/Back returns to the control that opened the menu.
 
-**Try the After Hours collection** assembles the four new repairs with optional creator replays. It asks before replacing an existing assembly. A friend’s collection can be copied into your builder through **Use in collection builder**, also with confirmation before replacing a different assembly. Chapter and maker credits stay attached to their copied projects.
+**Try the After Hours collection** and **Try the Clocktower collection** assemble their four repairs with optional creator replays. It asks before replacing an existing assembly. A friend’s collection can be copied into your builder through **Use in collection builder**, also with confirmation before replacing a different assembly. Chapter and maker credits stay attached to their copied projects.
 
-Assembly and collection-menu progress last for the current visit. Download a collection to keep it. Ordinary project drafts, personal bests and saved adventures continue to use the existing journey saves; no new browser save namespace is introduced.
+### Keep collections between visits
+
+Your assembly saves automatically, including unfinished collections with no chapters yet. Open **Saved collections & progress** to keep up to eight collections in this journey. Opening a friend’s collection or previewing an assembly keeps it automatically when a slot is available. **Save assembly** updates the collection being edited; **Save a new copy** creates independent progress. Identical copies have numbered shelf slots. **Edit in builder** loads a saved assembly after confirmation.
+
+Chapter setups, paused test ticks and verified original-map clears save automatically. **Continue saved chapter** returns to the last chapter you opened. Each chapter also offers **Continue saved setup** or **Resume test · tick N**. Resuming reconstructs the actual simulation, including Undo history. Loading a creator’s proof alone does not award your own clear. A fresh route starts a new attempt while retaining an earned clear.
+
+Updating a saved collection asks first. Unchanged maps retain setups and clears through reordering or story edits; changed maps start fresh. Duplicate chapters receive separate progress. **Restart or remove a collection** contains confirmed progress reset and saved-slot removal; **Start a blank assembly** clears only the assembly.
+
+Collections belong to this browser and journey. **Options → Saved data** full backups, journey switching and fresh starts include collection saves. Clearing browser data or moving devices requires an exported full backup to keep personal progress. PC1 collection downloads are for sharing authored chapters and exclude your personal setups and clears.
+
+If all eight slots are full, another collection can still be played for the visit. Free a slot and choose **Save this collection** in its chapter menu to keep the current progress. Failed writes show a warning; unreadable existing saves are preserved with a recovery download. Conflicting tabs stop further writes until you download current work and reload. The bounded shelf has a 2 MB limit, so unusually large collections may need separate downloads.
 
 ### Share one collection
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.48.0 — 2026-11-04
+
+- Add The Clocktower Ledger: four original mastery repairs with unequal courier pacing, full-locker backpressure, a broken-road tube crossing and an eight-part two-way post. All twenty-eight duo chapters have optional hints and verified examples.
+- Keep up to eight adventure collections per journey, with an automatically saved six-chapter assembly, independent copies, chapter duplication, confirmed updates, restart and removal. Reordering unchanged chapters preserves their progress.
+- Save chapter setups, verified original-map clears and paused test positions between visits. Resume reconstructs the real simulation and Undo history; fresh routes and creator replays remain available.
+- Include collection saves in journey backups, profile switching and fresh-start controls. Protect unreadable saves and conflicting tabs; provide explicit recovery downloads and playable fallbacks when browser storage is unavailable or full. Shared PC1 files and links exclude personal progress.
+- Extend engine, persistence, accessibility, phone/desktop and live browser coverage while retaining existing project, blueprint and shared collection formats.
+
 ## 0.47.0 — 2026-11-04
 
 - Add Canopy After Hours: four mastery variations with mirrored routes, fresh palettes, three-delivery targets and three-to-six-part repairs. All twenty-four duo chapters offer optional hints and verified examples.

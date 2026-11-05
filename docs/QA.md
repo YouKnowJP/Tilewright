@@ -1,5 +1,15 @@
 # Verification record
 
+## Clocktower and persistent collections — v0.48.0
+
+**1,487 Node tests** pass, including 24 focused timing/persistence cases and four additional catalogue-wide rehearsal comparisons. The production package contains **161 files**. Four original mastery repairs have real-engine clears at 181, 181, 163 and 181 ticks, with four-to-eight-part trays, unequal courier pacing, full-locker backpressure, a required broken-road tube crossing and two-way deliveries. Every supplied reference repair is necessary; immutable frames, collision avoidance, required goals, mirrored/palette remixes and portable proofs are checked.
+
+The local journal tests cover empty and populated assemblies, eight-slot bounds without eviction, independently saved copies, setup snapshots, real-engine resume with Undo, proof validation, map-identity remapping through edits/reordering, duplicate chapter occurrences, restart/removal, malformed/future/oversized saves, quota failures and conflicting writers. Full journey archives, profile namespaces and generation-guarded fresh starts include the new key. Shared PC1 bytes exclude personal progress.
+
+Eight required live cases exercise all four missions at phone/desktop widths; autosaved assembly and independent copies; full-shelf visit fallback and later saving; exact resume/Undo/clear/reset across reloads; update/reorder/remix identity; real backup/journey/reset/restore controls; corruption downloads, quota and two-tab protection; and enlarged high-contrast shelf menus with focus return and confirmed removal. Existing collection, blueprint and creator cases remain required.
+
+The complete release catalogue has **156 distinct cases**, split into two exhaustive groups of **78**. Five platform jobs, preserved save migration and production artifact/deployment checks remain required. Local browser checks use Chromium, Firefox and WebKit. Reviewed captures cover the collection overview, saved shelf, paused-test resume and playable garden at 320/390/768/1440 pixels, including the largest high-contrast text and themed shelf menu. Storage warnings remain visible beside the active chapter while playing. Viewport/touch emulation does not substitute for physical-device or human usability testing. Generated screenshots, traces, builds and reports remain ignored.
+
 ## After Hours and adventure collections — v0.47.0
 
 **1,459 Node tests** pass, including 18 focused repair/collection cases and four additional full-engine rehearsal comparisons. The production package contains **159 files**. Four explicit Canopy mastery variations have verified clears at 96, 60, 72 and 91 ticks, with three-to-six-part trays and three deliveries per window. Each supplied reference-route repair is necessary; immutable turns, non-overlapping companions, handoffs, relays, empty lockers, home flags, mirrored remixes, exact clear timing and portable proofs are checked.
