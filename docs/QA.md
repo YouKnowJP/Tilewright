@@ -12,6 +12,8 @@ Eight required live scenarios cover all new missions at phone/desktop widths, re
 
 Local Chromium passes all eight new scenarios. Firefox and WebKit each pass those eight plus four selected older creator/collection regressions. Final targeted checks in all three engines verify the transformed passport-rule readout; Chromium also rechecks optional goal sharing, enlarged menus and saved Undo. Reviewed captures cover chapter menus, goal editing, live gardens, directional gates, resume, creator goals and blueprints at 320/390/768/1440 pixels, plus the standalone collection poster. The largest-text phone view and high-contrast theme retain accessible controls and themed dropdowns.
 
+The initial CI attempt passed five platform jobs and browser groups 1/3 and 3/3; group 2/3 timed out during an Ubuntu Azure mirror download before gameplay started. Its setup also stalled on retry. CI now substitutes the HTTPS Ubuntu archive for that mirror, retains signed repository configuration, sets 30-second HTTP/HTTPS acquisition timeouts with two retries, and caps browser installation at eight minutes. The full 35-minute group limit, gameplay catalogue and migration checks remain in place.
+
 ## The Bellkeeper and collection curation — v0.51.0
 
 **1,591 Node tests** pass, including 32 focused timed-power/curation cases, four additional full-engine rehearsal comparisons and four additional blueprint-template cases. The production package contains **167 files**. The four new stories have exact portable clears at **10, 11, 196 and 97 ticks**; every supplied repair is necessary, frames remain immutable, couriers never overlap, and required delivery/relay/home/silence goals hold.

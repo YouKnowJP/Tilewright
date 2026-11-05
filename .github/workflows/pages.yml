@@ -75,7 +75,29 @@ jobs:
         run: git fetch --no-tags origin a9a90e068940ac778cf02184860888d64f1a1ccd:refs/tags/legacy-mit-v0.30.1
       - name: Install locked browser tools
         run: npm ci --ignore-scripts
+      - name: Bound Ubuntu package downloads
+        timeout-minutes: 2
+        run: |
+          sudo python3 - <<'PY'
+          from pathlib import Path
+
+          apt = Path('/etc/apt')
+          sources = [apt / 'sources.list', *sorted((apt / 'sources.list.d').glob('*.list')), *sorted((apt / 'sources.list.d').glob('*.sources'))]
+          for source in sources:
+              if not source.is_file():
+                  continue
+              original = source.read_text(encoding='utf-8')
+              updated = original
+              for scheme in ('http', 'https'):
+                  updated = updated.replace(scheme + '://azure.archive.ubuntu.com/ubuntu', 'https://archive.ubuntu.com/ubuntu')
+              if updated != original:
+                  source.write_text(updated, encoding='utf-8')
+          (apt / 'apt.conf.d' / '99tilewright-network').write_text(
+              'Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "2";\n', encoding='utf-8')
+          PY
+          apt-config shell HTTP_TIMEOUT Acquire::http::Timeout HTTPS_TIMEOUT Acquire::https::Timeout RETRIES Acquire::Retries
       - name: Install Chromium and system dependencies
+        timeout-minutes: 8
         run: npx playwright install --with-deps --only-shell chromium
       - name: Play and inspect the built game
         run: npm run test:browser:smoke -- --shard=${{ matrix.shard }}/3

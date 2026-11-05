@@ -152,6 +152,11 @@ browser, and an empty selection still fails. CI allows 35 minutes per group;
 per-action timeouts remain 15 seconds. Preserved-baseline migration runs in the
 first group and remains part of the deployment gate.
 
+Ubuntu browser jobs use the HTTPS Ubuntu archive in place of the stalled Azure
+mirror. Package acquisition has 30-second HTTP/HTTPS timeouts and two retries;
+browser installation has an eight-minute step limit. Repository signatures and
+the complete gameplay gate remain enforced.
+
 
 `pip-switchback-browser-checks.mjs` adds eight required checks for both complete
 Switchback Station books, cargo questions and free rehearsal, dock reset/Undo,

@@ -8,6 +8,7 @@
 - Add optional per-chapter tick and placed-part goals, one-click creator pars and undoable goal editing. Normal clears remain available without bonuses. Earned bonus ribbons and their best qualifying answers survive slower retries, reloads and full backups.
 - Share goal editions as PC2 files/codes/links and illustrated posters. Preserve credits, original source progress and captured PC1 bytes; selected and copied goal chapters keep their targets. Remixed/replaced maps clear their old targets for review.
 - Keep bonus details folded in the chapter menu, align desktop play buttons, and show whether a creator answer meets its goal. New seals use project format 6 and blueprint format 5; older projects, codes, blueprints and saved journal fingerprints stay exact.
+- Bound CI package-network retries and browser setup time, and replace the stalled Azure Ubuntu mirror with the HTTPS Ubuntu archive. Retain the complete gameplay and migration gates before publication.
 
 ## 0.51.0 — 2026-11-05
 
