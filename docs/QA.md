@@ -1,5 +1,13 @@
 # Verification record
 
+## Star Atlas and collection direction — v0.49.0
+
+**1,519 Node tests** cover the expanded game, including 28 focused mission/tool/poster cases and four additional full-engine rehearsal comparisons. The production package contains **164 files**. Four explicit Clocktower variations require eight, nine, ten and twelve repairs, with verified clears at 181, 181, 163 and 181 ticks. Every reference repair is necessary; frames remain immutable, companions remain separate, required goals hold and project exports retain valid proofs.
+
+Pure tests cover all six transformations, source and maker credits, changed courier-order clear timing, genuinely broken route-to-draft fallback, protected quarter turns, atomic map replacement, empty/full assembly copying, original save/share isolation, selective progress reset/remapping and bounded escaped SVG covers. Duplicate-map cards reserve unchanged title/note matches before map-only fallback, preventing a changed or removed clear from reaching an unplayed copy. No shared output includes personal chapter progress. Existing journal formats and PC1/project bytes remain supported.
+
+Eight required live cases cover all new missions at phone/desktop widths, source copying and arrangement Undo across reloads, verified remixes and honest drafts, confirmed map replacement with unchanged progress preserved, six-map poster decoding and legacy PC1 round trips, enlarged high-contrast themed menus across phone/landscape/tablet/desktop sizes, and paused-test resume/Undo from the Star Atlas starter. The full release catalogue has **164 distinct scenarios**, split into two exhaustive groups of **82**. Five platform jobs, preserved migration and publication gates remain required. Local Chromium, Firefox and WebKit checks include the final duplicate-map replacement fix. Reviewed captures cover the director, chapter tools, themed remix menu, paused-test resume and playable garden at 320/390/768/1440 pixels, plus the standalone six-chapter poster. Viewport/touch emulation remains separate from physical-device and human usability testing; generated reports and captures remain ignored.
+
 ## Clocktower and persistent collections — v0.48.0
 
 **1,487 Node tests** pass, including 24 focused timing/persistence cases and four additional catalogue-wide rehearsal comparisons. The production package contains **161 files**. Four original mastery repairs have real-engine clears at 181, 181, 163 and 181 ticks, with four-to-eight-part trays, unequal courier pacing, full-locker backpressure, a required broken-road tube crossing and two-way deliveries. Every supplied reference repair is necessary; immutable frames, collision avoidance, required goals, mirrored/palette remixes and portable proofs are checked.

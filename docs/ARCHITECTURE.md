@@ -8,6 +8,9 @@ browser checks use a pinned Playwright package.
 | --- | --- |
 | `src/pip-after-hours.mjs` | Four explicit mastery variations of the Canopy layouts, with bounded repairs, transformed banks and three-delivery goals. |
 | `src/pip-collections.mjs` | Bounded six-chapter collection schema, verified individual proofs, PC1/file/link exchange, fresh-route construction and mechanical chapter identity. |
+| `src/pip-star-atlas.mjs` | Four explicit Clocktower variations, chapters 29–32, with eight-to-twelve-part repairs and transformed hints/reference cards. |
+| `src/pip-collection-tools.mjs` | Immutable cross-collection copies, map replacement and verified garden transformations preserving credits. |
+| `src/pip-collection-poster.mjs` | Bounded escaped SVG collection covers with map previews, maker credits and optional safe hosted links. |
 | `src/pip-clocktower.mjs` | Four original timing repairs, chapters 25–28, with immutable repair definitions and verified reference routes. |
 | `src/pip-collection-storage.mjs` | Bounded journey-scoped collection journal, map-identity progress remapping, verified clears, exact replay and protected compare-before-write persistence. |
 | `src/pip-collections-ui.mjs` | Folded persistent assembly/shelf, safe collection imports, chapter overview/replay/resume/navigation and original-map completion tracking. |
@@ -1188,8 +1191,17 @@ storage and portable files remain version 1.
 
 `tilewright.pip-collections.v1` uses the generation-protected journey storage adapter. The version-1 local journal stores one 0–6-chapter assembly, eight numbered saved collections, editing/current IDs, per-chapter normalized setups, paused test ticks and independently verified original-map clear projects. It is bounded to 2 MB. Existing full archives, profile switching and reset discovery include the new key without changing those formats.
 
-Loading validates the complete journal and attached proofs before use. Mechanical identity ignores presentation/program edits and canonicalizes part/road ordering. Collection updates match old chapter occurrences by mechanical identity, preserving moved progress and remapping the last chapter; changed maps and additional duplicate occurrences get empty states. Explicit copies get independent empty progress, and explicit shelf opening retains its selected ID even for identical copies.
+Loading validates the complete journal and attached proofs before use. Mechanical identity ignores presentation/program edits and canonicalizes part/road ordering. Collection updates reserve unchanged map/title/note occurrences before matching remaining cards by mechanical identity, preserving distinct duplicate-card progress, moved progress and the last chapter; changed maps and additional duplicate occurrences get empty states. Explicit copies get independent empty progress, and explicit shelf opening retains its selected ID even for identical copies.
 
 UI writes are throttled at 450 ms, with immediate flushes on navigation, visibility loss and pagehide. Validated domain mutations avoid replaying already-verified clear proofs on every simulation tick. Writes compare the prior raw value, read back the result and stop on quota/conflicting-tab failures. Unreadable or future-version data is retained for recovery. Full shelves allow one volatile collection without eviction; it can transfer its visit progress into a newly freed slot. Shared PC1 serialization includes only authored collection data.
 
 Resume recreates the real engine from the saved setup and advances to the saved tick or earlier terminal state. Its intermediate frames become Undo history; restored tests remain paused. A snapshot setup may be a remix, but an earned clear must contain a valid proof and match the original chapter shape. Active chapter capture is suppressed during confirmed project replacement, avoiding accidental writes into the previous chapter.
+
+
+## Collection direction and posters
+
+Chapter tools operate on normalized PC1 snapshots. Transforms convert official missions into custom gardens before applying existing geometric/card/prism operations. Existing custom provenance and original authors remain. An attached source proof triggers a fresh real-engine run up to 240 ticks, producing a new valid proof or a clearly unverified draft; courier trades can change both timing and solvability. No personal collection state is passed into these pure functions.
+
+The collection UI retains at most eight chapter-array snapshots for local tool Undo. Text edits to chapter cards and assembly replacement clear that ephemeral history. Source collection/chapter pickers copy authored snapshots, including into an empty assembly, without modifying source saves. Failed transformations do not consume Undo. Confirmed project replacement preserves chapter presentation; the existing journal identity rules determine progress remapping when an assembly is saved.
+
+Posters normalize the same bounded collection schema, escape text/attributes and draw at most six static map cards in a standalone SVG. Station letters and numbered channels supplement palette colours. Posters contain authored maps and credits, never journal states or clear claims from personal progress. Optional links use the existing hosted-link safety and length checks. Generation and downloading are entirely local.

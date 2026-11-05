@@ -80,7 +80,7 @@ Duo adventures use project format 2 or 3 inside the existing PT1 file/code/link 
 
 ## The Night Post: six harder chapters
 
-Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All twenty-eight duo chapters are available without grinding.
+Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All thirty-two duo chapters are available without grinding.
 
 | Chapter | Story | Challenge | Worked clear |
 | --- | --- | --- | --- |
@@ -116,7 +116,7 @@ Choose **Dawn Workshop · 4 mastery repairs** in the Collection menu, or continu
 | 15 | Three Invitations at Daybreak | Two recipes and three locker relays | 84 ticks |
 | 16 | The Last Lantern Express | Two presses, a cargo compass and a tube end; three deliveries and both couriers home | 98 ticks |
 
-All twenty-eight chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
+All thirty-two chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
 
 ### Plan and replay a route
 
@@ -186,6 +186,19 @@ Choose **The Clocktower Ledger · 4 timing repairs**, or continue after chapter 
 
 **Wait** is a useful card. East / Wait / Use advances one tile per three ticks; North / North / Use advances two. Full lockers never overwrite parcels. Every repair has optional hints and a verified example you can step through.
 
+## Star Atlas: four cartographer variations
+
+Choose **Star Atlas · 4 cartographer repairs**, or continue after Clocktower chapter 28. These are explicit Clocktower variations with reflected roads, shifted colours and more missing hardware. Plan at your own pace; every supplied piece is necessary for the worked example.
+
+| Chapter | Story | Repair | Verified example |
+| --- | --- | --- | --- |
+| 29 | The Westward Constellation | Eight pieces: recipe, lockers, cargo compass and all four turning prisms | 181 ticks |
+| 30 | A Timetable Beneath the Tide | Nine pieces: every recipe and locker, plus a return prism | 181 ticks |
+| 31 | The Comet’s Missing Crossing | Ten pieces: tube pair, recipe, lockers, cargo compass and four prisms across a broken road | 163 ticks |
+| 32 | Twelve Stars to Guide Us Home | Twelve pieces: four recipes, four lockers and four turning prisms; six letters, empty lockers and both home flags | 181 ticks |
+
+Hints list the transformed cards and exact part settings with column/row coordinates. The worked example is optional and can be tested one tick at a time.
+
 ## Build and play adventure collections
 
 Open **Share & feedback → Adventure collections**. Add the current two-companion adventure or choose one from your saved adventure shelf. Each addition takes its own snapshot: later bench edits do not rewrite that chapter. Keep up to six chapters, move them earlier/later, duplicate or remove a chapter, or open **Chapter title & note** to personalize its presentation. Single-Pip inventions stay in their existing sharing flow.
@@ -194,7 +207,19 @@ Open **Share & feedback → Adventure collections**. Add the current two-compani
 
 Every chapter is selectable. Finish a real test on the original chapter to mark it cleared and reveal **Next collection chapter**. Changing a custom garden’s hardware, terrain, starts or goals makes a remix; it remains playable but does not mark the original chapter cleared. Changing cards or presentation text is allowed. **Collection chapters** returns from the bench; **Open current collection** returns from the share drawer. Escape/Back returns to the control that opened the menu.
 
-**Try the After Hours collection** and **Try the Clocktower collection** assemble their four repairs with optional creator replays. It asks before replacing an existing assembly. A friend’s collection can be copied into your builder through **Use in collection builder**, also with confirmation before replacing a different assembly. Chapter and maker credits stay attached to their copied projects.
+**Try the After Hours collection**, **Try the Clocktower collection** and **Try the Star Atlas collection** assemble their four repairs with optional creator replays. It asks before replacing an existing assembly. A friend’s collection can be copied into your builder through **Use in collection builder**, also with confirmation before replacing a different assembly. Chapter and maker credits stay attached to their copied projects.
+
+### Direct and remix your collection
+
+Open **Arrange & combine chapters** to choose a saved source collection and one of its chapters. **Copy chapter into assembly** appends an independent snapshot, including its maker credit and optional creator route. It also works in a blank assembly. Source collections and their personal progress stay on their shelves. The six-chapter bound still applies.
+
+**Reverse chapter order** changes the arrangement. **Undo last chapter tool** restores up to eight recent additions, copies, moves, duplicates, removals, replacements, remixes or reversals. This tool history lasts for the visit; the restored assembly saves normally. Editing a chapter’s title/note, opening another assembly or using a starter clears the history. Collection-level name, maker and opening note are separate from chapter-tool Undo.
+
+Each chapter has a folded **Remix or replace this chapter** drawer. Mirror the garden, shift its palette, trade Pip and Sprout, or turn it. Transformations copy official hardware into an editable garden and preserve maker/source credits. Courier order can change timing: creator routes are re-tested in the real engine, with new clear times when appropriate. A route that no longer clears becomes a draft. These creator proofs do not award personal collection clears.
+
+Quarter turns must fit the existing 7–13 column and 5–9 row limits. A 13-column map cannot become 13 rows; mirror it, or open/remix/resize it at the bench first. Failed transforms leave the assembly and its Undo history intact.
+
+**Replace map with current adventure** asks first, then replaces only that chapter’s project snapshot while retaining its title and note. Save assembly to update the kept collection. Unchanged maps retain their personal progress; changed maps start fresh. Unchanged duplicate cards keep their own progress when other copies are renamed, replaced or removed. You can Undo before saving, and the source bench stays unchanged.
 
 ### Keep collections between visits
 
@@ -209,6 +234,8 @@ Collections belong to this browser and journey. **Options → Saved data** full 
 If all eight slots are full, another collection can still be played for the visit. Free a slot and choose **Save this collection** in its chapter menu to keep the current progress. Failed writes show a warning; unreadable existing saves are preserved with a recovery download. Conflicting tabs stop further writes until you download current work and reload. The bounded shelf has a 2 MB limit, so unusually large collections may need separate downloads.
 
 ### Share one collection
+
+**Download illustrated poster** exports an SVG cover with all chapter maps, collection and chapter makers, numbered parcel/link colours, delivery goals and honest creator-route labels. SVG stays sharp when enlarged. Share it alongside the playable collection file/code; on a hosted copy, a collection small enough for a play link also gets a clickable link in the poster. Posters exclude personal setups, paused tests and earned clears.
 
 Download a `pip-adventure-collection.json` file, copy a **PC1** collection code, or copy a hosted play link. A link opens the chapter menu first. The file contains one to six normalized duo projects, chapter titles/notes, collection name/maker/opening note and any verified creator routes. Draft chapters remain clearly labelled unverified.
 

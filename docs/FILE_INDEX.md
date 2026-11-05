@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**460 files in 15 folders.** Stage new files before refreshing. Run
+**465 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,10 +23,10 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 5 |
-| [scripts/browser/](../scripts/browser/) | 54 |
+| [scripts/browser/](../scripts/browser/) | 55 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 131 |
-| [tests/](../tests/) | 69 |
+| [src/](../src/) | 134 |
+| [tests/](../tests/) | 70 |
 | [tests/fixtures/](../tests/fixtures/) | 33 |
 
 <details>
@@ -257,7 +257,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 54 files</summary>
+<summary>scripts/browser/ — 55 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -283,6 +283,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [mastery-browser-checks.mjs](../scripts/browser/mastery-browser-checks.mjs)
 - [migration-browser-checks.mjs](../scripts/browser/migration-browser-checks.mjs)
 - [pip-atlas-browser-checks.mjs](../scripts/browser/pip-atlas-browser-checks.mjs)
+- [pip-atlas-collections-browser-checks.mjs](../scripts/browser/pip-atlas-collections-browser-checks.mjs)
 - [pip-canopy-browser-checks.mjs](../scripts/browser/pip-canopy-browser-checks.mjs)
 - [pip-collections-browser-checks.mjs](../scripts/browser/pip-collections-browser-checks.mjs)
 - [pip-duo-browser-checks.mjs](../scripts/browser/pip-duo-browser-checks.mjs)
@@ -329,7 +330,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 131 files</summary>
+<summary>src/ — 134 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -386,7 +387,9 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-canopy-fair.mjs](../src/pip-canopy-fair.mjs)
 - [pip-clocktower.mjs](../src/pip-clocktower.mjs)
 - [pip-coach.mjs](../src/pip-coach.mjs)
+- [pip-collection-poster.mjs](../src/pip-collection-poster.mjs)
 - [pip-collection-storage.mjs](../src/pip-collection-storage.mjs)
+- [pip-collection-tools.mjs](../src/pip-collection-tools.mjs)
 - [pip-collections-ui.mjs](../src/pip-collections-ui.mjs)
 - [pip-collections.mjs](../src/pip-collections.mjs)
 - [pip-dawn-workshop.mjs](../src/pip-dawn-workshop.mjs)
@@ -411,6 +414,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-programs.mjs](../src/pip-programs.mjs)
 - [pip-rehearsal-ui.mjs](../src/pip-rehearsal-ui.mjs)
 - [pip-rehearsal.mjs](../src/pip-rehearsal.mjs)
+- [pip-star-atlas.mjs](../src/pip-star-atlas.mjs)
 - [pip-studio-ui.mjs](../src/pip-studio-ui.mjs)
 - [pip-switchback-worlds.mjs](../src/pip-switchback-worlds.mjs)
 - [pip-tinker.mjs](../src/pip-tinker.mjs)
@@ -466,7 +470,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 69 files</summary>
+<summary>tests/ — 70 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -498,6 +502,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-atlas.test.mjs](../tests/pip-atlas.test.mjs)
 - [pip-canopy-fair.test.mjs](../tests/pip-canopy-fair.test.mjs)
 - [pip-collection-storage.test.mjs](../tests/pip-collection-storage.test.mjs)
+- [pip-collection-tools.test.mjs](../tests/pip-collection-tools.test.mjs)
 - [pip-collections.test.mjs](../tests/pip-collections.test.mjs)
 - [pip-duo.test.mjs](../tests/pip-duo.test.mjs)
 - [pip-freight.test.mjs](../tests/pip-freight.test.mjs)

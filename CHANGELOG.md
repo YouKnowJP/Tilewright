@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.49.0 — 2026-11-04
+
+- Add Star Atlas: four explicit Clocktower mastery variations with reflected roads, new parcel palettes and eight-, nine-, ten- and twelve-part repairs. All thirty-two duo chapters offer optional hints and verified examples.
+- Add chapter garden remixes inside collection cards: mirrors, quarter turns, palette shifts and courier trades. Preserve maker credits, re-run creator routes in the real engine and retain an honest draft when a traded route no longer clears.
+- Add a folded collection director for combining chapters from saved collections, reversing arrangements and undoing up to eight chapter-tool changes. Copy source snapshots without moving their saved progress.
+- Add confirmed map replacement for an individual chapter, keeping its title and note. Existing collection updates retain progress for unchanged maps and reset changed maps only. Protect distinct duplicate chapter cards from taking one another’s progress during reordering, replacement or removal.
+- Add illustrated SVG collection posters with chapter maps, numbered parcel/link colours, maker credits, goals and creator-route labels. Small hosted collections can include a playable link. Shared posters, files and codes exclude personal chapter progress.
+- Expand live phone/desktop, enlarged-text, themed-menu, saved-progress, sharing, creator-route and compatibility coverage while retaining PC1/project/save formats.
+
 ## 0.48.0 — 2026-11-04
 
 - Add The Clocktower Ledger: four original mastery repairs with unequal courier pacing, full-locker backpressure, a broken-road tube crossing and an eight-part two-way post. All twenty-eight duo chapters have optional hints and verified examples.
