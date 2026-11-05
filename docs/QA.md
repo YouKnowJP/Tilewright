@@ -2,8 +2,9 @@
 
 ## Adventure Home, staged clues and tiny practice — v0.53.0
 
-The release suite contains **1,654 Node tests**, including sixteen focused
-navigation/hint/practice cases. The production package contains **175 files**.
+The release suite contains **1,660 Node tests**, including sixteen focused
+navigation/hint/practice cases and six CI package-configuration regressions.
+The production package contains **175 files**.
 Catalogue checks cover all forty-four real missions and ten regions, literal
 combined search/progress filters, meaningful saved-setup selection, suggested
 roads, exact final authored routes and unchanged classic hints. Every duo story
@@ -32,6 +33,15 @@ ninth collection for the visit, pauses a real test and returns through Adventure
 Home. It verifies exact resume/Undo, keeps that visit accessible after playing
 another story, and compares all eight saved records and the assembly unchanged.
 An in-memory visit cache supplies this continuation without an extra save slot.
+
+Two CI workers timed out before gameplay while downloading fonts through
+`mirror+file:/etc/apt/apt-mirrors.txt`. The previous inline setup rewrote direct
+sources but missed those mirror-list files. `scripts/ci-apt.mjs` now covers both
+source formats and root mirror lists, including the security fallback, with
+HTTPS Ubuntu endpoints and the existing bounded timeouts. Six temporary-root
+tests cover the actual mirror indirection, signing keys/suites, unrelated hosts
+and files, repeat execution, optional files and the command entry point. They
+never modify the developer machine's package manager.
 
 Local Chromium runs cover all ten new flows and fourteen selected older creator,
 collection and classic-invention regressions. Firefox and WebKit each pass all

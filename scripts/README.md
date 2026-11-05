@@ -157,6 +157,12 @@ mirror. Package acquisition has 30-second HTTP/HTTPS timeouts and two retries;
 browser installation has an eight-minute step limit. Repository signatures and
 the complete gameplay gate remain enforced.
 
+[`ci-apt.mjs`](ci-apt.mjs) configures the ephemeral Ubuntu runner before browser
+installation. It handles direct `.list`/`.sources` entries and the runner's
+`apt-mirrors*.txt` files used by `mirror+file:` URLs. Normal unit tests use
+temporary directories to verify the rewrite and bounded settings on every Node
+platform; running tests never edits the host's APT configuration.
+
 `pip-home-browser-checks.mjs` adds ten required v0.53 cases: direct phone/desktop
 entry and every story card; three-stage hints with protected example cancellation;
 all three real-engine practice rooms with guided/manual clears, Undo and save

@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**488 files in 15 folders.** Stage new files before refreshing. Run
+**490 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -22,11 +22,11 @@ captures, dependencies, and operating-system metadata are excluded.
 | [docs/screenshots/](../docs/screenshots/) | 73 |
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
-| [scripts/](../scripts/) | 5 |
+| [scripts/](../scripts/) | 6 |
 | [scripts/browser/](../scripts/browser/) | 59 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
 | [src/](../src/) | 144 |
-| [tests/](../tests/) | 75 |
+| [tests/](../tests/) | 76 |
 | [tests/fixtures/](../tests/fixtures/) | 36 |
 
 <details>
@@ -247,12 +247,13 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/ — 5 files</summary>
+<summary>scripts/ — 6 files</summary>
 
 - [README.md](../scripts/README.md)
 - [build.mjs](../scripts/build.mjs)
 - [check-public.mjs](../scripts/check-public.mjs)
 - [check.mjs](../scripts/check.mjs)
+- [ci-apt.mjs](../scripts/ci-apt.mjs)
 - [repository-files.mjs](../scripts/repository-files.mjs)
 
 </details>
@@ -485,7 +486,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 75 files</summary>
+<summary>tests/ — 76 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -503,6 +504,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [atlas-runs.test.mjs](../tests/atlas-runs.test.mjs)
 - [browser-yield.test.mjs](../tests/browser-yield.test.mjs)
 - [cartographer.test.mjs](../tests/cartographer.test.mjs)
+- [ci-apt.test.mjs](../tests/ci-apt.test.mjs)
 - [clockwork.test.mjs](../tests/clockwork.test.mjs)
 - [echo.test.mjs](../tests/echo.test.mjs)
 - [expansion-mechanics.test.mjs](../tests/expansion-mechanics.test.mjs)

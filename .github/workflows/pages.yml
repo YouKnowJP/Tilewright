@@ -78,23 +78,7 @@ jobs:
       - name: Bound Ubuntu package downloads
         timeout-minutes: 2
         run: |
-          sudo python3 - <<'PY'
-          from pathlib import Path
-
-          apt = Path('/etc/apt')
-          sources = [apt / 'sources.list', *sorted((apt / 'sources.list.d').glob('*.list')), *sorted((apt / 'sources.list.d').glob('*.sources'))]
-          for source in sources:
-              if not source.is_file():
-                  continue
-              original = source.read_text(encoding='utf-8')
-              updated = original
-              for scheme in ('http', 'https'):
-                  updated = updated.replace(scheme + '://azure.archive.ubuntu.com/ubuntu', 'https://archive.ubuntu.com/ubuntu')
-              if updated != original:
-                  source.write_text(updated, encoding='utf-8')
-          (apt / 'apt.conf.d' / '99tilewright-network').write_text(
-              'Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "2";\n', encoding='utf-8')
-          PY
+          sudo "$(command -v node)" scripts/ci-apt.mjs
           apt-config shell HTTP_TIMEOUT Acquire::http::Timeout HTTPS_TIMEOUT Acquire::https::Timeout RETRIES Acquire::Retries
       - name: Install Chromium and system dependencies
         timeout-minutes: 8
