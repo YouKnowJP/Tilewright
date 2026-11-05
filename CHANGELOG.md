@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.53.0 — 2026-11-05
+
+- Add a direct Play Pip & Sprout entrance and an Adventure Home with all forty-four story chapters, progress/mechanic filters, literal search, six-card pages, a suggested next road and saved-setup continuation.
+- Open saved collections and resume their exact test positions from the home shelf. Reach the creator, collection builder, friend imports and classic lessons directly; return through Adventure Home to the main menu.
+- Replace repeated duo hints with forty-four authored clue/experiment/worked-route progressions. Keep the final route and example replacement explicit, add previous-clue navigation and pause playback while reading hints.
+- Add three isolated playable practice gardens for handoffs, next-tick bell power and passport checks. Choose each friend's next card, step together, Undo, reset or follow a guided run without changing adventure saves or awards.
+- Compact the workbench section buttons, fold briefing/progress and move the advanced adventure chooser out of the play area. Put Test, Undo, status and playback beside the garden, with persistent Garden/Cards/Tools/Hints shortcuts and measured sticky-header spacing.
+- Keep large-text controls and main-menu buttons readable on narrow phones. Preserve project, collection, journal and backup formats; existing drafts, verified bests and saved collection history remain available.
+
 ## 0.52.0 — 2026-11-05
 
 - Add parcel seals that inspect courier badges and cargo on entry, optionally in one direction. Other directions pass freely; seals retain cargo and let their occupants leave. Blocked-entry messages explain the rule.

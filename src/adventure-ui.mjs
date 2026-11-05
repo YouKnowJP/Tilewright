@@ -44,7 +44,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
   let expeditions, workshop, training, workshopActions = [], workshopClearNote = '';
   let active = false, paused = false, dashArmed = false, frame = null, lastDraw = 0, lastAction = 0;
   let mapInput,gamepadInput;
-  const playLayout=createPlayLayout();const pipStudio=createPipStudio({storage,getPreferences:()=>front?.preferences||{},onLook(){paint();}});const gamePreferences=()=>({...front?.preferences,pipLook:pipStudio.look});const clockworkUI=createClockworkUI({onAction:action,storage,onStudio:id=>pipStudio.open(id),canAdvance:()=>active&&!outsideBoard()&&!paused&&!front.dialogOpen&&!notesDialog.open&&!document.querySelector('dialog[open]')&&!$('#game-menu').open&&!$('#game-tools').open});
+  const playLayout=createPlayLayout();const pipStudio=createPipStudio({storage,onHomeExit:showTitle,getPreferences:()=>front?.preferences||{},onLook(){paint();}});const gamePreferences=()=>({...front?.preferences,pipLook:pipStudio.look});const clockworkUI=createClockworkUI({onAction:action,storage,onStudio:id=>pipStudio.open(id),canAdvance:()=>active&&!outsideBoard()&&!paused&&!front.dialogOpen&&!notesDialog.open&&!document.querySelector('dialog[open]')&&!$('#game-menu').open&&!$('#game-tools').open});
   let saveFailed = false, hintVisible = false;
   let interactionId = null;
   let guildRecords = loadGuild(storage), selectedKit = 'echoist', guildSaveFailed = false;

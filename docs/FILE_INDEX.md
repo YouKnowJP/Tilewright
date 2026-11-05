@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**480 files in 15 folders.** Stage new files before refreshing. Run
+**488 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -13,7 +13,7 @@ captures, dependencies, and operating-system metadata are excluded.
 
 | Folder | Files |
 | --- | ---: |
-| [Repository root](.././) | 36 |
+| [Repository root](.././) | 37 |
 | [.github/](../.github/) | 3 |
 | [.github/ISSUE_TEMPLATE/](../.github/ISSUE_TEMPLATE/) | 3 |
 | [.github/workflows/](../.github/workflows/) | 1 |
@@ -23,14 +23,14 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 5 |
-| [scripts/browser/](../scripts/browser/) | 58 |
+| [scripts/browser/](../scripts/browser/) | 59 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 139 |
-| [tests/](../tests/) | 74 |
+| [src/](../src/) | 144 |
+| [tests/](../tests/) | 75 |
 | [tests/fixtures/](../tests/fixtures/) | 36 |
 
 <details>
-<summary>Repository root — 36 files</summary>
+<summary>Repository root — 37 files</summary>
 
 - [.editorconfig](../.editorconfig)
 - [.gitattributes](../.gitattributes)
@@ -56,6 +56,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [manifest.webmanifest](../manifest.webmanifest)
 - [package-lock.json](../package-lock.json)
 - [package.json](../package.json)
+- [pip-home.css](../pip-home.css)
 - [pip-studio.css](../pip-studio.css)
 - [play.css](../play.css)
 - [rights.html](../rights.html)
@@ -257,7 +258,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 58 files</summary>
+<summary>scripts/browser/ — 59 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -291,6 +292,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-foundry-browser-checks.mjs](../scripts/browser/pip-foundry-browser-checks.mjs)
 - [pip-gardens-browser-checks.mjs](../scripts/browser/pip-gardens-browser-checks.mjs)
 - [pip-glassworks-browser-checks.mjs](../scripts/browser/pip-glassworks-browser-checks.mjs)
+- [pip-home-browser-checks.mjs](../scripts/browser/pip-home-browser-checks.mjs)
 - [pip-lantern-browser-checks.mjs](../scripts/browser/pip-lantern-browser-checks.mjs)
 - [pip-loom-browser-checks.mjs](../scripts/browser/pip-loom-browser-checks.mjs)
 - [pip-night-mail-browser-checks.mjs](../scripts/browser/pip-night-mail-browser-checks.mjs)
@@ -333,7 +335,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 139 files</summary>
+<summary>src/ — 144 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -409,6 +411,8 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-garden-tools.mjs](../src/pip-garden-tools.mjs)
 - [pip-gardens-worlds.mjs](../src/pip-gardens-worlds.mjs)
 - [pip-glassworks-worlds.mjs](../src/pip-glassworks-worlds.mjs)
+- [pip-home-model.mjs](../src/pip-home-model.mjs)
+- [pip-home-ui.mjs](../src/pip-home-ui.mjs)
 - [pip-lantern-workshop.mjs](../src/pip-lantern-workshop.mjs)
 - [pip-look.mjs](../src/pip-look.mjs)
 - [pip-loom-worlds.mjs](../src/pip-loom-worlds.mjs)
@@ -416,12 +420,15 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-orchard-worlds.mjs](../src/pip-orchard-worlds.mjs)
 - [pip-orchestra-worlds.mjs](../src/pip-orchestra-worlds.mjs)
 - [pip-parcelworks-worlds.mjs](../src/pip-parcelworks-worlds.mjs)
+- [pip-practice-ui.mjs](../src/pip-practice-ui.mjs)
+- [pip-practice.mjs](../src/pip-practice.mjs)
 - [pip-prism-worlds.mjs](../src/pip-prism-worlds.mjs)
 - [pip-programs-ui.mjs](../src/pip-programs-ui.mjs)
 - [pip-programs.mjs](../src/pip-programs.mjs)
 - [pip-rehearsal-ui.mjs](../src/pip-rehearsal-ui.mjs)
 - [pip-rehearsal.mjs](../src/pip-rehearsal.mjs)
 - [pip-sealkeeper.mjs](../src/pip-sealkeeper.mjs)
+- [pip-staged-hints.mjs](../src/pip-staged-hints.mjs)
 - [pip-star-atlas.mjs](../src/pip-star-atlas.mjs)
 - [pip-studio-ui.mjs](../src/pip-studio-ui.mjs)
 - [pip-switchback-worlds.mjs](../src/pip-switchback-worlds.mjs)
@@ -478,7 +485,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 74 files</summary>
+<summary>tests/ — 75 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -518,6 +525,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-freight.test.mjs](../tests/pip-freight.test.mjs)
 - [pip-gardens.test.mjs](../tests/pip-gardens.test.mjs)
 - [pip-glassworks.test.mjs](../tests/pip-glassworks.test.mjs)
+- [pip-home.test.mjs](../tests/pip-home.test.mjs)
 - [pip-lanterns.test.mjs](../tests/pip-lanterns.test.mjs)
 - [pip-loom.test.mjs](../tests/pip-loom.test.mjs)
 - [pip-night-mail.test.mjs](../tests/pip-night-mail.test.mjs)

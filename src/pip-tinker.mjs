@@ -1,6 +1,7 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 import {DUO_STORIES,DUO_CUSTOM,duoMission,duoDefinition,normalizeDuoProject,newDuoProject,duoReadiness,duoRequiredVersion,sealAllows,sealDescription} from './pip-duo.mjs';
 import {normalizeProgram,transformProgram,PRISM_OPERATIONS} from './clockwork.mjs';
+import {duoHintStages} from './pip-staged-hints.mjs';
 import {blankAdventure,editAdventure} from './workshop-model.mjs';
 const at=(a,b)=>a.x===b.x&&a.y===b.y;
 const point=(x,y)=>({x,y}),row=(y,a=1,b=7)=>Array.from({length:b-a+1},(_,i)=>point(a+i,y));
@@ -91,7 +92,7 @@ export function tinkerStep(input){
 export function verifyTinkerProof(project){let state=startTinker(project);for(let i=0;i<project.proof.ticks;i++)state=tinkerStep(state);return state.status==='won'&&state.ticks===project.proof.ticks;}
 export function clearTinkerProject(state){if(state.status!=='won')fail('Finish a test before attaching its solution.');return normalizeTinkerProject({...state.project,proof:{ticks:state.ticks}});}
 export function tinkerMetrics(project){const p=project.parts;return {parts:p.length,ticks:project.proof?.ticks||null,footprint:p.length?(Math.max(...p.map(p=>p.x))-Math.min(...p.map(p=>p.x))+1)*(Math.max(...p.map(p=>p.y))-Math.min(...p.map(p=>p.y))+1):0};}
-export function tinkerHint(project,level=0){if(project.version>=2){const d=tinkerDefinition(project);return [d.story,d.hint||'Test one tick at a time. Use acts on the current tile; every window must fill. Pip acts before Sprout.',d.hint||'Start a courier with East / East / Use, with stations two tiles apart. Use a handoff beside the partner, or give each partner its own route.'][Math.max(0,Math.min(2,level))];}const t=tinkerTrial(project.trialId),h=TINKER_SOLUTIONS[t.id];return [t.story,`Try ${h.tip}. You can inspect every tick for free.`,h.explain][Math.max(0,Math.min(2,level))];}
+export function tinkerHint(project,level=0){if(project.version>=2)return duoHintStages(tinkerDefinition(project))[Math.max(0,Math.min(2,level))];const t=tinkerTrial(project.trialId),h=TINKER_SOLUTIONS[t.id];return [t.story,`Try ${h.tip}. You can inspect every tick for free.`,h.explain][Math.max(0,Math.min(2,level))];}
 export const TINKER_SOLUTIONS=Object.freeze({
  'first-use':{programs:ordinary,parts:[],tip:'East / East / Use',explain:'Set East / East / Use. Collect on tick 3, deliver on tick 6.'},
  'corner-turn':{programs:ordinary,parts:[part('prism',5,3,{operation:'rotate-left'})],tip:'turning north at column 6, row 4',explain:'Place a Turn left prism at (6, 4). East / East / Use collects, refracts and delivers in 9 ticks.'},

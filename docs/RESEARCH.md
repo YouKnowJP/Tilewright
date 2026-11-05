@@ -1,4 +1,29 @@
-# Research behind Guild jobs — v0.8
+# Game design research
+
+## Adventure Home and staged duo learning — v0.53
+
+The published v0.52 menu required Workshop → Puzzle Lab to reach Pip and Sprout.
+Its duo hints repeated the authored full route in the last two stages. This
+release adds a direct title entrance, searchable story cards, existing saved
+collection continuation and three distinct clue stages. It keeps the full route
+explicit and optional. These are design decisions, not measured retention gains.
+
+The developer's [Can of Wormholes description](https://store.steampowered.com/app/1295320/Can_of_Wormholes/)
+describes optional miniature playable hints. The [contextual-help accessibility
+guideline](https://gameaccessibilityguidelines.com/include-contextual-in-game-helpguidancetips/)
+recommends gradual guidance and repeatable small practice spaces. Pip's three new
+practice rooms apply those principles with original handoff, bell and passport
+layouts using its own engine. They do not borrow puzzles, artwork or writing.
+
+Research also identified [Opus Magnum's solution sharing](https://www.zachtronics.com/opus-magnum/)
+and [Nintendo's World Maker](https://play.nintendo.com/news-tips/news/super-mario-maker-2-free-final-update-details/)
+as references for future visual comparisons and connected duo campaigns. Those
+features, the proposed parcel mixer, public uploads and offline caching are not
+part of this navigation/learning release. Human playtests should check time to
+find a suitable mission, comprehension of Use/turn order, reliance on full worked
+routes, and the ability to return to a saved creation.
+
+## Guild jobs — v0.8
 
 These are primary developer sources read for this expansion. The design choices
 below are Tilewright’s own interpretation, not claims of endorsement or proof

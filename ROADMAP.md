@@ -1,5 +1,12 @@
 # Tilewright roadmap
 
+Version **0.53** adds the direct Pip & Sprout Adventure Home, all forty-four duo
+story chapters with search/progress filters, saved-collection continuation,
+staged clues, three separate practice gardens and compact workbench shortcuts.
+See the [player guide](docs/PLAYER_GUIDE.md). Visual solution comparisons,
+branching duo collections, a parcel-mixer prototype, public community uploads
+and offline caching remain separate proposed work.
+
 The current editor, 24 story missions, eight Guild jobs, three featured Workshop
 adventures, player authoring/sharing, and replayable expedition game are usable. These are **unfinished** feature
 proposals with planning estimates, not completed work or hours already spent.

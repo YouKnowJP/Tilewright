@@ -41,3 +41,5 @@ by the repository migration.
 Timed bell countdowns are reconstructed from the saved test position inside the existing local collection journal. Curator exports include chosen authored chapters and maker credits, with no personal setups, clears or countdown saves. No new storage key or network service is added.
 
 Optional collection goals are authored PC2 metadata. Personal bonus ribbons are derived from verified local clears and remain in the existing journey collection journal. Shared collections/posters exclude personal results, current setups and retry positions. No new storage key, tracking or network service is added.
+
+Adventure Home reads existing local drafts, verified bests and collection progress. Selecting a story keeps its draft as the most recently used duo setup in the existing journal. Tiny practice gardens have separate in-memory state and do not save practice results, change adventure progress or upload anything. Save keys, backup formats and profile boundaries remain unchanged.

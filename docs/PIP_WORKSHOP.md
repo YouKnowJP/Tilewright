@@ -1,5 +1,26 @@
 # Pip’s invention workshop
 
+Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
+forty-four duo chapters in six-card pages; filter by region, saved/completed
+progress or title/mechanic words. The suggested road follows verified story
+clears, while every chapter remains available. Continue restores an ordinary
+story's saved cards/parts, or a collection chapter's exact test and Undo history.
+**Your collections**, **Create & share** and **How to play** provide direct
+routes to saved collections, the creator, builder, imports and classic lessons.
+
+The workbench's Garden/Cards/Tools/Hints shortcuts keep navigation close. Tools
+is offered for repairs and creator gardens. The full briefing/progress and
+advanced adventure chooser stay available below the compact play area.
+Test/Undo/playback sit beside the garden. Staged duo hints reveal an authored
+clue, an experiment and finally the exact optional worked route. Previous clue
+does not edit the adventure. Reading hints pauses automatic playback.
+
+Three tiny practice gardens use the real engine in separate session state:
+handoffs, next-tick bell power and passport cargo checks. Choose one next card
+for each friend, then advance both; Undo/reset or follow a guided run. They
+teach individual actions before three-card route planning. Closing practice
+restores focus to the adventure; no practice proof, best or save is awarded.
+
 Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station

@@ -1,0 +1,57 @@
+// New owned material. See LICENSE; prior MIT permissions remain effective.
+// Early clues describe decisions, never the authored programs or repair coordinates.
+const clues = {
+ 'duo-first-letter': ['The letter needs two couriers. Decide who can reach each window.', 'Keep Sprout near the handoff until Pip arrives. Use passes a parcel only when a friend is beside H.'],
+ 'duo-dyehouse': ['Follow the invitation’s colours through both gardens.', 'Inspect each press’s input and output. Sprout needs time to receive Pip’s parcel before using the second recipe.'],
+ 'duo-rain-bridges': ['Each friend holds a crossing open for the other.', 'A blocked move still spends its card. Watch where each friend stands when the other reaches a bridge.'],
+ 'duo-long-road': ['The far window has a road you cannot reach by walking.', 'Tubes need Use at an entrance. After delivery, keep following the road to Sprout’s home flag.'],
+ 'duo-signmaker': ['One letter is not enough. Both friends need a way back.', 'Inspect which route the memory loads first. Rehearse a complete return trip and look for the second meeting.'],
+ 'duo-lantern-festival': ['Delivering the letters and returning home are different parts of the journey.', 'Read Quiet and Powered on each signal. Pip acts before Sprout, so their first answers can change on different ticks.'],
+ 'duo-night-post': ['A locker can carry a promise between separate roads.', 'Match the locker numbers. Let one courier send before the other tries to collect; keep both return roads working.'],
+ 'duo-cargo-crossroads': ['The right road depends on what the courier is carrying.', 'Compare the cargo compass’s Otherwise and Matching banks. Use reads the parcel without taking it away.'],
+ 'duo-blue-promise': ['The blue window needs a recipe as well as a route.', 'Trace the parcel from its well through the press and locker. A wrong recipe leaves the parcel unchanged.'],
+ 'duo-twin-depots': ['Both roads help complete the same greenhouse.', 'Follow a parcel through each depot. A filled window can change a signal’s answer on a later visit.'],
+ 'duo-tube-repair': ['The missing crossing must carry a courier and its parcel.', 'Complete each tube pair and check its link. Then inspect the compass bank that sends a loaded courier toward it.'],
+ 'duo-last-collection': ['The final delivery is only part of the closing routine.', 'Follow the recipe chain, then check the home flags. A courier may need another loop before its signal reads Powered.'],
+ 'duo-dawn-library': ['A reflected road asks the compass a different question.', 'Read the garden’s actual directions. Compare loaded and empty-hand returns before choosing the compass banks.'],
+ 'duo-dawn-relay': ['A locker’s role matters as much as its number.', 'Find who sends and who collects. A relay counts when the other courier collects the stored parcel.'],
+ 'duo-dawn-dyehouse': ['Each invitation must finish the same colour journey.', 'Check both recipes and follow one complete relay first. The returning couriers must be ready to repeat it.'],
+ 'duo-dawn-express': ['Repair the route as one connected parcel journey.', 'Inspect the recipes, compass and both tube ends together. A working outward trip also needs a working return.'],
+ 'duo-bellflower-lift': ['The lift waits for a real parcel, not just a passing courier.', 'Follow the locker exchange and inspect the cargo compass. Its parcel answer must change before the balcony trip.'],
+ 'duo-patient-bell': ['A patient friend can turn a handoff into the next instruction.', 'Keep the receiving courier nearby. Its cargo compass can choose a new route after the parcel arrives.'],
+ 'duo-rain-bridge': ['A dry road on one bank can depend on the other friend’s position.', 'Inspect plates, numbered bridges and tube exits. Rehearse a blocked crossing to see how the next card changes the timing.'],
+ 'duo-canopy-homecoming': ['The last light must shine before both friends leave their routes.', 'Check the recipes and locker relays first. Then watch when each signal changes from Quiet to Powered.'],
+ 'duo-after-lift': ['More letters mean the lift must work on the return journey too.', 'Inspect the cargo compass before and after collection. Trace the second lap instead of stopping at the first delivery.'],
+ 'duo-after-bell': ['The waiting friend must be ready for every new letter.', 'Count actual handoffs and deliveries. Check which parcel the waiting compass sees between visits.'],
+ 'duo-after-rain': ['The right plate keeps the other friend’s crossing useful.', 'Read the bridge numbers in this garden. Test a complete tube return with both couriers’ positions visible.'],
+ 'duo-after-lanterns': ['A busy post needs repeatable routes before it needs a homeward route.', 'Follow one parcel through both recipes and its locker. Then inspect the final signals after all windows are full.'],
+ 'duo-clock-hands': ['The two couriers do not need the same rhythm.', 'Watch the slower route beside the faster one. A cargo question can separate a delivery trip from an empty-hand return.'],
+ 'duo-clock-spare': ['A full locker can delay the next letter without losing it.', 'Inspect the stored parcel when a send cannot happen. Check whether the collecting friend returns before the next attempt.'],
+ 'duo-clock-minute': ['The brass road needs its missing crossing to keep time.', 'Trace both tube entrances and the cargo-controlled return. Inspect a later lap, not just the first arrival.'],
+ 'duo-clock-ledger': ['Every letter needs a complete journey through the ledger.', 'Rehearse the recipes and relay as one loop. Compare the last delivery with the signals that send each friend home.'],
+ 'duo-atlas-west': ['Use the directions drawn in this garden, not the remembered shape of another.', 'Follow the reflected road through each repair. Check the cargo banks on both outward and homeward journeys.'],
+ 'duo-atlas-tide': ['A changed palette still has to describe one connected delivery route.', 'Read well, recipe, locker and window numbers in order. Test the return after the first successful delivery.'],
+ 'duo-atlas-comet': ['The comet’s crossing must connect both halves of a courier route.', 'Check tube links and compass answers together. A courier carries its parcel through a tube when it uses the entrance.'],
+ 'duo-atlas-home': ['Many missing stars can still belong to a few repeatable loops.', 'Group repairs by recipe, locker and direction. Rehearse one delivery, then inspect how the last windows change the homeward signals.'],
+ 'duo-lantern-first': ['A light can stay on after its friend walks away.', 'Use a lantern to toggle its numbered power. Bridges read the change next tick; simply standing on L does not toggle it.'],
+ 'duo-lantern-borrowed': ['Borrowed light must be useful on the way out and quiet at the finish.', 'Inspect the return route to the lantern. Using it again turns remembered power off without taking the parcel.'],
+ 'duo-lantern-post': ['The night post needs lasting power as well as the right parcels.', 'Check when the lantern changes the bridge and signal. Then follow all locker relays before both homeward routes.'],
+ 'duo-lantern-home': ['Two lights can keep independent promises.', 'Track each numbered lantern separately. Check that every remembered light is off when the last friend reaches home.'],
+ 'duo-bell-first': ['A bell gives a crossing a short future opening.', 'Ring before the crossing is needed. Its first powered tick is the following tick; inspect the countdown while both friends move.'],
+ 'duo-bell-one': ['One beat is enough if the friends arrive together.', 'Compare the ring with the very next move onto the bridge. Watch blocked cards advance before changing the rhythm.'],
+ 'duo-bell-post': ['A return bridge can depend on a bell rung elsewhere.', 'Inspect the bell’s numbered channel, then the loaded and empty-hand routes. Keep the locker loop working while you adjust timing.'],
+ 'duo-bell-council': ['The three bridges need a rhythm, not one permanent light.', 'Read each one-beat countdown. Check the two recipes and both home flags, then let every bell fall silent.'],
+ 'duo-seal-first': ['A passport asks what is in the courier’s hands at entry.', 'Read G’s badge and cargo rule. Put the colour change before the arch and check what the delivery window wants afterward.'],
+ 'duo-seal-post': ['Each inspection belongs to a particular leg of the postal route.', 'Read badges, cargo and inspection arrows. A directional arch leaves the other directions free, including an empty-hand return.'],
+ 'duo-seal-exchange': ['Pip carries the letters; Sprout must be ready to receive them.', 'Trace one loaded lap and one empty-hand lap. Inspect every arch before trying the second handoff.'],
+ 'duo-seal-council': ['The same arch can ask a question on one journey and none on the other.', 'Read the inspection arrow beside the well. Then compare one-beat bridge openings with the parcel recipes and final empty-hand roads.']
+};
+
+export const DUO_CLUE_IDS = Object.freeze(Object.keys(clues));
+export function duoHintStages(definition) {
+ const pair = clues[definition.id] || [
+  'Choose one small delivery to make work before expanding the garden.',
+  'Inspect the well, any recipes, and the matching window. Use acts on the tile under a courier; Pip acts before Sprout.'
+ ];
+ return [...pair, definition.hint || 'Try a short route with Use on the stations. Inspect each tick, then change one card at a time. Your own garden has many possible answers.'];
+}

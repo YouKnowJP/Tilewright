@@ -137,7 +137,7 @@ mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
 CI runs the complete release catalogue in three parallel groups. Each group has
-62 or 63 of the current 188 cases; all three groups must pass before deployment. No scenario is
+66 of the current 198 cases; all three groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -156,6 +156,15 @@ Ubuntu browser jobs use the HTTPS Ubuntu archive in place of the stalled Azure
 mirror. Package acquisition has 30-second HTTP/HTTPS timeouts and two retries;
 browser installation has an eight-minute step limit. Repository signatures and
 the complete gameplay gate remain enforced.
+
+`pip-home-browser-checks.mjs` adds ten required v0.53 cases: direct phone/desktop
+entry and every story card; three-stage hints with protected example cancellation;
+all three real-engine practice rooms with guided/manual clears, Undo and save
+isolation; exact legacy collection resume/reload/backups; recent ordinary drafts;
+protected unreadable/quota saves; enlarged themed menus and sticky-header
+navigation; creator/builder/import/classic-learning paths with separate journeys;
+and Escape/focus/main-menu/legacy Workshop navigation. The full catalogue has
+**198 distinct cases**, split **66/66/66** with all older coverage retained.
 
 
 `pip-switchback-browser-checks.mjs` adds eight required checks for both complete

@@ -4,8 +4,23 @@ Tilewright is a static browser application. Playing needs no backend, package
 installation, build-time framework, database service, or remote API. Development
 browser checks use a pinned Playwright package.
 
+Adventure Home derives its chapter list and verified completion from the existing
+duo catalogue/journal. Browsing does not write drafts. An explicitly opened or
+edited draft moves to the end of the existing draft object's insertion order;
+that supplies recent duo setup selection without adding a save key or schema.
+Collection launches use the validated live collection journal and its existing
+replay/Undo reconstruction. Leaving a collection for a separate story clears
+only its current selection, preserving every collection record and chapter state.
+Staged hints do not alter project bytes or proofs. Tiny practice rooms have no
+storage dependency: each next-card pair advances the real engine in separate
+state, with bounded Undo and no proof/best attachment.
+
 | File | Responsibility |
 | --- | --- |
+| `src/pip-home-model.mjs` / `src/pip-home-ui.mjs` | Read-only story catalogue/progress filters and suggested routes; direct Adventure Home, saved-collection launches and explicit main-menu navigation. |
+| `src/pip-staged-hints.mjs` | Two distinct non-solution clues for every duo story, followed by its existing authored worked route. |
+| `src/pip-practice.mjs` / `src/pip-practice-ui.mjs` | Three isolated two-courier practice rooms using real engine steps, explicit next-card choices, guided steps and in-memory Undo; no persistence or awards. |
+| `pip-home.css` | Adventure Home/practice layouts, compact workbench navigation and measured sticky-header offsets, including enlarged narrow-phone controls. |
 | `src/pip-after-hours.mjs` | Four explicit mastery variations of the Canopy layouts, with bounded repairs, transformed banks and three-delivery goals. |
 | `src/pip-collections.mjs` | Bounded six-chapter collection schema, verified individual proofs, PC1/file/link exchange, fresh-route construction and mechanical chapter identity. |
 | `src/pip-lantern-workshop.mjs` | Four original remembered-power stories, chapters 33–36, with verified references and limited repair trays. |

@@ -1,5 +1,46 @@
 # Verification record
 
+## Adventure Home, staged clues and tiny practice — v0.53.0
+
+The release suite contains **1,654 Node tests**, including sixteen focused
+navigation/hint/practice cases. The production package contains **175 files**.
+Catalogue checks cover all forty-four real missions and ten regions, literal
+combined search/progress filters, meaningful saved-setup selection, suggested
+roads, exact final authored routes and unchanged classic hints. Every duo story
+has three distinct stages; early clues contain no authored card sequences or
+repair coordinates. Browsing and hints preserve projects, share codes and saves.
+
+The three practice rooms clear through the real engine in **5, 5 and 6 ticks**.
+Checks cover immutable turns, collision avoidance, correct cargo/deliveries,
+blocked bridges and seals, all six next-card choices, strict invalid commands,
+terminal behavior, exact Undo/reset, no attached proof/best and no save access.
+Populated mixed-version journals, complete backups and separate journey
+namespaces retain their original projects and progress.
+
+Ten required live cases cover direct phone/desktop entry and every mission card;
+staged clues and canceled example replacement; guided/manual practice with
+unchanged parent saves and paused tests; captured v0.51 collection tick-58
+continuation, Undo/reload and actual full-backup rollback from tick 59; recent
+ordinary drafts; protected unreadable/quota saves; enlarged themed menus and
+sticky-header offsets; creator/builder/import/classic paths with journey
+switching; and Escape/focus/main-menu/legacy Workshop navigation. The full
+catalogue contains **198 distinct cases**, partitioned **66/66/66**, with prior
+gameplay, migration and publication gates retained.
+
+Local Chromium runs cover all ten new flows and fourteen selected older creator,
+collection and classic-invention regressions. Firefox and WebKit each pass all
+ten new flows plus collection-replacement and blueprint regressions. Final
+Chromium checks cover the enlarged practice/status alignment and classic
+keyboard placement after the last navigation adjustment.
+
+Visual review covers title/home, live garden, route cards, hints, practice,
+creator menus, collection shelf and paused-test resume at **320/390/768/844/1440**
+pixels, including short landscape, largest text and high contrast. Review fixes
+keep main-menu/header words intact, use measured scroll clearance, preserve the
+inspection readout beside the garden, and give practice its own Garden/Cards
+shortcuts. Viewport/touch emulation remains separate from physical-device,
+screen-reader and human-enjoyment testing. Generated reports/captures are ignored.
+
 ## Sealkeepers and optional bonus editions — v0.52.0
 
 **1,638 Node tests** pass, including 39 focused checkpoint/bonus cases, four added full-engine rehearsal comparisons and four added blueprint-template cases. The production package contains **169 files**. New reference clears are **13, 196, 61 and 97 ticks**; every supplied repair is necessary. Frame checks prove immutability, non-overlapping couriers, correct inspected entry, required deliveries/handoffs/relays/home flags and quiet bells.

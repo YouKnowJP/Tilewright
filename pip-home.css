@@ -1,0 +1,91 @@
+/* New owned material. See LICENSE; prior MIT permissions remain effective. */
+.pip-home,.pip-practice{width:min(960px,calc(100vw - 24px));max-width:960px;max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain;padding:clamp(14px,2vw,26px);scroll-padding-top:88px}
+:is(.pip-home,.pip-practice) *{box-sizing:border-box}
+:is(.pip-home,.pip-practice) [hidden]{display:none!important}
+:is(.pip-home,.pip-practice) button{min-height:44px;white-space:normal;overflow-wrap:anywhere}
+:is(.pip-home,.pip-practice) label{display:grid;gap:6px;min-width:0;margin:10px 0}
+:is(.pip-home,.pip-practice) input{width:100%;min-width:0;min-height:44px;padding:10px;background:#10313a;color:#fff2cf;border:1px solid #9ab494;font:inherit}
+:is(.pip-home,.pip-practice) input:focus-visible{outline:3px solid #ffe7a5;outline-offset:2px}
+:is(.pip-home,.pip-practice) summary{display:flex;align-items:center;min-height:44px;color:#ffe3a1;font-weight:700;cursor:pointer}
+:is(.pip-home,.pip-practice) .front-dialog-heading{background:inherit}
+:is(.pip-home .front-dialog-heading,.pp-heading-line)>p{min-width:0;flex:1}
+:is(.pip-home .front-dialog-heading,.pp-heading-line)>button{flex:0 0 auto;min-width:104px;overflow-wrap:normal}
+.ph-hero{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;margin:12px 0}
+.ph-hero h2{font-size:clamp(30px,4vw,44px);margin:8px 0}
+.ph-hero p{margin:6px 0}
+.ph-hero canvas{display:block;width:100%;height:auto;image-rendering:pixelated;border:1px solid #779c8a;border-radius:8px}
+.ph-resume{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.ph-resume>button{flex:1 1 240px;text-align:left}
+.ph-resume>p{flex-basis:100%;margin:4px 0;font-size:.9em}
+.ph-tabs,.ph-pages,.pp-actions{display:flex;flex-wrap:wrap;gap:8px}
+.ph-tabs{border-block:1px solid #648776;padding:12px 0;margin:18px 0}
+.ph-tabs>button{flex:1 1 160px}
+.ph-tabs>button[aria-pressed=true]{background:#d3b779;color:#15333c;border-color:#f4dda2}
+.ph-filters{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.ph-search{grid-column:1/-1}
+.ph-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.ph-card{display:flex;flex-direction:column;min-width:0;border:1px solid #779c8a;border-radius:8px;background:#173d44;padding:16px;overflow-wrap:anywhere}
+.ph-card h4{font:600 22px/1.35 Georgia,serif;color:#ffe3a1;margin:4px 0 8px}
+.ph-card p{margin:6px 0}
+.ph-card .ph-tags{color:#f0d49c;font-size:.9em;margin-bottom:16px}
+.ph-card>button,.ph-card>.ph-pages{margin-top:auto}
+.ph-card .ph-pages>button{flex:1 1 140px}
+.ph-pages>button,.pp-actions>button{flex:1 1 150px}
+.ph-steps{padding-left:24px;line-height:1.7}
+.ph-steps li{padding:6px 0 12px}
+.pip-practice{max-width:720px}
+.pip-practice{scroll-padding-top:calc(var(--pp-header-height,132px) + 16px);overflow-anchor:none}
+.pip-practice .pp-heading{display:block;top:calc(-1 * clamp(14px,2vw,26px));padding:8px 0 10px;border-bottom:1px solid #648776;z-index:3}
+.pp-heading-line{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.pp-heading .pp-actions{display:grid;grid-template-columns:1fr 1fr}
+.pp-heading .pp-actions>button{padding:8px;overflow-wrap:normal}
+.pp-workbench{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;gap:18px}
+.pp-workbench>div{min-width:0}
+#pp-garden:focus-visible,#pp-card-desk:focus-visible{outline:3px solid #ffe7a5;outline-offset:3px}
+.pip-practice details{border-top:1px solid #648776;padding:10px 0;margin-top:12px}
+#pp-canvas{display:block;width:min(100%,420px);height:auto;margin:auto;image-rendering:pixelated;border:2px solid #b2a979;border-radius:8px}
+#pp-status,#pp-goal{border-left:3px solid #e4c481;background:#193b43;padding:10px 12px;overflow-wrap:anywhere}
+#pp-friends{overflow-wrap:anywhere}
+.pp-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pp-cards .game-select-trigger{padding-left:8px;padding-right:24px}
+.pip-studio .ps-heading{display:block;top:calc(-1 * clamp(14px,2vw,28px));padding:8px 0 10px;border-bottom:1px solid #648776;z-index:3}
+.ps-heading-line{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.ps-heading-line .ps-actions{justify-content:flex-end}
+.pip-studio .ps-heading-line button{min-height:44px}
+.ps-jump-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}
+.ps-jump-nav:has(>button[hidden]){grid-template-columns:repeat(3,minmax(0,1fr))}
+.pip-studio .ps-jump-nav button{min-width:0;padding:8px}
+.pip-studio{scroll-padding-top:calc(var(--ps-header-height,132px) + 20px)}
+body:is([data-game-text=large],[data-game-text=largest]) .pip-studio{scroll-padding-top:calc(var(--ps-header-height,132px) + 20px)}
+.pip-studio #ps-story-details{padding:0;border:0}
+.pip-studio #ps-story-details>summary{min-height:36px;font-size:.9em}
+.pip-studio #ps-best{font-size:.9em}
+.ps-play-dock>.ps-actions{margin:10px 0}
+.ps-play-dock .ps-status{min-height:3em;margin:10px 0}
+.ps-play-dock .ps-goals{margin:10px 0}
+.pip-studio #ps-hint-stage{margin:8px 0 0;color:#efd390;font-weight:700}
+.pip-studio[data-ps-tab=build] #pip-studio-title{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.pip-studio .ps-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:10px;padding-bottom:10px}
+.pip-studio .ps-tabs>button{min-width:0;padding:8px}
+.pip-studio #ps-remix{margin-top:10px}
+.title-home .title-menu>#title-pip{grid-column:1/-1}
+.pip-studio :is(#ps-programs,#ps-build-tools,#ps-actor-tabs):focus-visible{outline:3px solid #ffe7a5;outline-offset:4px}
+@media(min-width:741px){.pip-studio .ps-board{position:static!important}}
+@media(min-width:741px) and (min-height:1000px){body:not([data-game-text=large]):not([data-game-text=largest]) .pip-studio .ps-board:has(#ps-map-text:not([open])){position:sticky!important;top:calc(var(--ps-header-height,132px) + 12px)}}
+@media(max-width:600px){
+ .pip-home,.pip-practice{width:calc(100vw - 16px);max-height:calc(100dvh - 16px)}
+ .ph-hero{grid-template-columns:1fr;gap:6px}.ph-hero canvas{max-height:80px;object-fit:cover}
+ .ph-cards,.ph-filters{grid-template-columns:1fr}.ph-tabs{display:grid;grid-template-columns:1fr 1fr}.ph-search{grid-column:auto}
+ .pp-workbench{grid-template-columns:1fr}
+ .ph-tabs>button{padding:8px}.ph-pages{display:grid;grid-template-columns:1fr}
+ .ps-heading-line{align-items:flex-start}.ps-heading-line .title-kicker{display:none}.ps-heading-line>.ps-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}
+ .pip-studio .ps-heading-line .ps-actions>button{min-width:0;overflow-wrap:normal}
+ .ps-heading-line>.ps-actions:has(#ps-home[hidden]){grid-template-columns:1fr}
+ .pip-studio #ps-story-details>summary{min-height:44px}
+}
+@media(max-width:400px){body:is([data-game-text=large],[data-game-text=largest]) .ps-jump-nav{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){body:is([data-game-text=large],[data-game-text=largest]) .pip-studio .ps-tabs{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){body:is([data-game-text=large],[data-game-text=largest]) .ps-play-dock>.ps-actions{display:grid;grid-template-columns:minmax(0,1fr)}body:is([data-game-text=large],[data-game-text=largest]) .ps-play-dock button{overflow-wrap:normal}}
+@media(max-width:600px){body:is([data-game-text=large],[data-game-text=largest]) .title-home .title-menu{grid-template-columns:1fr}body:is([data-game-text=large],[data-game-text=largest]) .title-home .title-menu button{overflow-wrap:normal}}
+@media(max-width:600px){body:is([data-game-text=large],[data-game-text=largest]) :is(.pip-home .front-dialog-heading,.pp-heading-line)>.title-kicker{display:none}body:is([data-game-text=large],[data-game-text=largest]) :is(.pip-home .front-dialog-heading,.pp-heading-line)>button{width:100%;overflow-wrap:normal}}
+body[data-game-contrast=high] :is(.ph-card,#pp-status,#pp-goal){background:#071619;color:#fff;border-color:#dceaf0}

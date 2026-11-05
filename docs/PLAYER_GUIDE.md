@@ -5,11 +5,28 @@ journey, or make a world for someone else to discover.
 
 ## Pip’s invention workshop
 
-Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. Start with
-**Learn with Pip**, then try four **Tinkerer’s Trials** or two optional
-**Pip & Sprout** prototypes. Build, test one tick at a time, Undo, and try a
-different answer. Dress Pip, keep an invention display, and share working
-projects from the same compact workshop. **Pip & Sprout · story & creator** adds six story chapters and an open garden editor; **The Night Post** adds six harder chapters with lockers, cargo compasses and repair challenges. **Dawn Workshop** continues with four mastery repairs. **Canopy After Hours** adds four harder repair variations. Use **Share & feedback → Adventure collections** to arrange up to six duo chapters and share one file/code/link; the chapter menu offers fresh routes and optional creator replays. **The Clocktower Ledger** adds four original timing repairs for twenty-eight duo chapters. Keep eight collections per journey; assemblies, setups, paused tests and earned clears save automatically. Resume with Undo, duplicate chapters, or use confirmed update/restart/remove controls. Full journey backups preserve personal progress; shared collections contain authored chapters. **Star Atlas** adds four harder Clocktower variations for thirty-two duo chapters. The folded collection director combines saved chapters and reverses/undoes arrangements; chapter drawers remix gardens or replace maps. Illustrated posters provide a shareable cover with maps and maker credits. **Lantern Workshop** adds four remembered-power stories for thirty-six duo chapters. Use L to toggle matching bridges/signals on the next tick; its power stays after the courier leaves. Two new blueprints and a switch-off finish goal support your own puzzles. A chapter’s folded **Variants & chapter sharing** drawer builds verified variant sets or downloads one chapter without changing the assembly. **The Canopy Fair** adds four original tower adventures with waiting handoffs, bridge teamwork and a two-tower homecoming. In the creator’s **Blueprints** drawer, reconnect tubes and lockers, choose unused connections, or find room for a piece before placing it. **Plan & replay a route** helps inspect events before testing; **Shape your garden** turns, resizes or paints your own maps with Undo. Use the folded Blueprint drawer to mirror, arrange, capture and revise reusable pieces. See the [complete workshop guide](PIP_WORKSHOP.md).
+Choose **Play Pip & Sprout** on the main menu. Start with **Begin the story**,
+continue a saved setup, or browse any of forty-four chapters. **Find an
+adventure** filters by region, progress, title or mechanic. No chapter is locked.
+
+Use **Cards** to set Pip and Sprout's three repeating instructions, then
+**Garden** to return to the board. **Test invention** starts your route. Step
+once, advance to an event, Run or Undo. **Tools** appears when a repair or
+creator garden has parts to configure. **Briefing & progress** holds the longer
+story and personal bests; **Hints** offers a small clue, an experiment and an
+optional worked route. Loading an example asks before replacing the draft.
+
+**Try a tiny practice garden** opens a separate handoff, bell or passport lesson.
+Choose one next card per friend and advance them together, or step through a
+guided run. Undo/reset are free. Returning leaves your adventure where it was;
+practice does not award clears or write over your cards.
+
+**Your collections** opens saved chapters or resumes a saved test with its Undo
+history. Ordinary story continuation restores cards and parts. **Create & share**
+opens your garden, collection builder or project import. **How to play** includes
+the classic single-Pip lessons. Adventure Home returns to the main menu.
+Full journey backups preserve creations, collections and personal progress.
+See the [complete workshop guide](PIP_WORKSHOP.md) for all mechanics and tools.
 
 ## The Clockwork Gardens — v0.41
 
