@@ -8,6 +8,7 @@ browser checks use a pinned Playwright package.
 | --- | --- |
 | `src/pip-after-hours.mjs` | Four explicit mastery variations of the Canopy layouts, with bounded repairs, transformed banks and three-delivery goals. |
 | `src/pip-collections.mjs` | Bounded six-chapter collection schema, verified individual proofs, PC1/file/link exchange, fresh-route construction and mechanical chapter identity. |
+| `src/pip-lantern-workshop.mjs` | Four original remembered-power stories, chapters 33–36, with verified references and limited repair trays. |
 | `src/pip-star-atlas.mjs` | Four explicit Clocktower variations, chapters 29–32, with eight-to-twelve-part repairs and transformed hints/reference cards. |
 | `src/pip-collection-tools.mjs` | Immutable cross-collection copies, map replacement and verified garden transformations preserving credits. |
 | `src/pip-collection-poster.mjs` | Bounded escaped SVG collection covers with map previews, maker credits and optional safe hosted links. |
@@ -1205,3 +1206,14 @@ Chapter tools operate on normalized PC1 snapshots. Transforms convert official m
 The collection UI retains at most eight chapter-array snapshots for local tool Undo. Text edits to chapter cards and assembly replacement clear that ephemeral history. Source collection/chapter pickers copy authored snapshots, including into an empty assembly, without modifying source saves. Failed transformations do not consume Undo. Confirmed project replacement preserves chapter presentation; the existing journal identity rules determine progress remapping when an assembly is saved.
 
 Posters normalize the same bounded collection schema, escape text/attributes and draw at most six static map cards in a standalone SVG. Station letters and numbered channels supplement palette colours. Posters contain authored maps and credits, never journal states or clear claims from personal progress. Optional links use the existing hosted-link safety and length checks. Generation and downloading are entirely local.
+
+
+## Lantern power and version boundaries
+
+Duo project format 4 adds `latch` parts and the custom `quietSwitches` boolean. Version-2/3 canonical output, proof replay and state fingerprints remain exact. Old parts retain their minimum supported versions; existing data is not automatically rewritten. Custom edits upgrade to the minimum needed format and never downgrade existing goals. Blueprint format 3 maps to project format 4, while old blueprint formats remain unchanged.
+
+Version-4 simulation states add a bounded `switches` dictionary containing only active numbered channels. A Use toggles its channel without consuming cargo or restarting cards. Bridge power and remembered signal input are sampled at the start of each tick; switch changes affect the next tick. The existing occupied-bridge and pressure-plate safety rules remain. Signals retain their existing dynamic plate/window behavior. `tinkerPoweredChannels` supplies the same next-tick bridge readiness to the renderer.
+
+The switch dictionary participates in repeat detection. A quiet-switch goal blocks completion until it is empty, alongside normal windows, handoffs, locker and home goals. Collection snapshots still store a normalized project and tick count; replay reconstructs switch memory and Undo frames deterministically. Collection map identity includes the new finish goal only for version 4, preserving old identity strings.
+
+Variant presets build one to three independently normalized custom chapters, verify creator routes, add accurate transformed-garden instructions and enforce six-chapter/file bounds before returning. The UI applies the batch as one undoable assembly edit. One-chapter exports use the unchanged PC1 schema with authored data only. Captured v0.49 compatibility fixtures cover exact project/state/code, blueprint and collection bytes.

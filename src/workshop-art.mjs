@@ -80,6 +80,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-lantern-switch': rect('#324d57',2,3,20,20);rect('#c9aa71',4,4,16,17);rect(item.powered?color:'#173842',6,6,9,12);if(item.powered){rect('#fff4bf',9,7,3,8);ring('#fff1b533',10,12,6);}rect('#152f39',16,6,3,13);rect('#fff0bc',15,item.powered?6:14,5,4);rect('#d8c18a',5,21,14,2);break;
     case 'pip-press': rect('#324a58',2,4,20,19);rect(color,4,7,7,12);rect(CHANNEL_COLORS[item.output]||'#8ed8ae',13,7,7,12);rect('#f5df9d',8,3,8,4);rect('#183d43',10,7,4,9);rect('#fff1c7',9,13,7,3);rect('#8eac99',5,20,14,3);break;
     case 'pip-flip': rect('#354e5c',2,3,20,20);rect('#f0c785',4,5,7,14);rect('#9cd4bb',13,5,7,14);rect('#193c42',6,8,3,8);rect('#193c42',15,8,3,8);rect('#f7edbd',10,10,4,4);rect('#bbad7b',5,20,14,3);break;
     case 'pip-locker': rect('#354e5c',2,3,20,20);rect(color,3,4,18,3);rect('#ceb47e',4,8,16,13);rect('#173b43',6,10,12,8);if(item.stored){rect(CHANNEL_COLORS[item.stored]||'#f4dfa5',8,11,8,6);rect('#fff1c7',11,11,2,6);}else rect('#a8c0b3',14,12,2,4);rect('#d9cc99',5,21,14,2);break;

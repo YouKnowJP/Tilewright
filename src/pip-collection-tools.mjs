@@ -22,3 +22,16 @@ export function copyCollectionChapter(input,source,index){
  const other=normalizePipCollection(source),chapter=chapterAt(other,index);if(Array.isArray(input?.chapters)&&!input.chapters.length)return normalizePipCollection({...input,chapters:[structuredClone(chapter)]});const pack=normalizePipCollection(input);if(pack.chapters.length>=MAX_COLLECTION_CHAPTERS)throw Error('Keep at most six collection chapters.');
  return normalizePipCollection({...pack,chapters:[...pack.chapters,structuredClone(chapter)]});
 }
+export const COLLECTION_VARIANTS=Object.freeze([
+ Object.freeze({id:'mirrors',name:'A pair of looking glasses',labels:['Left-right mirror','Up-down mirror'],operations:[['horizontal'],['vertical']]}),
+ Object.freeze({id:'palettes',name:'Three colour roads',labels:['Palette 1','Palette 2','Palette 3'],operations:[['palette'],['palette','palette'],['palette','palette','palette']]}),
+ Object.freeze({id:'partners',name:'A courier role study',labels:['Couriers traded'],operations:[['partners']]})
+]);
+const clipped=(value,max)=>{let s=value.slice(0,max);const last=s.charCodeAt(s.length-1);if(last>=0xd800&&last<=0xdbff)s=s.slice(0,-1);return s;};
+export function appendCollectionVariants(input,index,preset){
+ const pack=normalizePipCollection(input),source=chapterAt(pack,index),spec=COLLECTION_VARIANTS.find(v=>v.id===preset);if(!spec)throw Error('Choose a collection variant set.');
+ if(pack.chapters.length+spec.operations.length>MAX_COLLECTION_CHAPTERS)throw Error(`This variant set needs ${spec.operations.length} free chapter slots.`);
+ const chapters=spec.operations.map((operations,i)=>{let one={...pack,chapters:[structuredClone(source)]};for(const op of operations)one=remixCollectionChapter(one,0,op);const suffix=' · '+spec.labels[i],title=clipped(source.title,48-suffix.length)+suffix,note=clipped(source.note,180-suffix.length)+suffix,base=one.chapters[0].project,goals=[base.handoffs?`make ${base.handoffs} handoffs`:'',base.relays?`complete ${base.relays} locker relays`:'',base.emptyLockers?'empty every locker':'',base.quietSwitches?'switch every lantern off':'',base.parts.some(p=>p.kind.endsWith('-dock'))?'return to each marked home flag':''].filter(Boolean),intro=`Pip: “A different road, the same promise.” ${spec.labels[i]}. Follow this garden’s numbered stations; its colours and directions may differ from the original. Fill every window.${goals.length?' Finish rules: '+goals.join('; ')+'.':''}`,project=normalizeTinkerProject({...base,name:title,intro,ending:'Pip and Sprout close this chapter together. Another road in the collection is ready when you are.'});return {title,note,project};});
+ return normalizePipCollection({...pack,chapters:[...pack.chapters,...chapters]});
+}
+export function singleChapterCollection(input,index){const pack=normalizePipCollection(input),chapter=chapterAt(pack,index);return normalizePipCollection({...pack,name:chapter.title,intro:chapter.note,chapters:[structuredClone(chapter)]});}

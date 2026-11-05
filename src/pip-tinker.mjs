@@ -1,5 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
-import {DUO_STORIES,DUO_CUSTOM,duoMission,duoDefinition,normalizeDuoProject,newDuoProject,duoReadiness,DUO_ADVANCED_KINDS} from './pip-duo.mjs';
+import {DUO_STORIES,DUO_CUSTOM,duoMission,duoDefinition,normalizeDuoProject,newDuoProject,duoReadiness,duoRequiredVersion} from './pip-duo.mjs';
 import {normalizeProgram,transformProgram,PRISM_OPERATIONS} from './clockwork.mjs';
 import {blankAdventure,editAdventure} from './workshop-model.mjs';
 const at=(a,b)=>a.x===b.x&&a.y===b.y;
@@ -26,8 +26,8 @@ export function tinkerTrial(id){return TINKER_TRIALS.find(t=>t.id===id)||fail('C
 function text(value,fallback,max=48){if(value===undefined)return fallback;if(typeof value!=='string'||value.length>max||/[\u0000-\u001f\u007f]/.test(value))fail('Use a short, printable name.');return value.trim()||fallback;}
 export function newTinkerProject(id='first-use'){if(id===DUO_CUSTOM.id||duoMission(id))return newDuoProject(id);const trial=tinkerTrial(id);return {format:'pip-tinker-project',version:1,trialId:id,name:trial.title,author:'A trail keeper',programs:trial.programs.map(p=>[...p]),parts:id==='repair-relay'?[part('prism',5,3,{operation:'mirror'})]:[]};}
 export function normalizeTinkerProject(input,{verify=true}={}){
- if(input?.format==='pip-tinker-project'&&[2,3].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
- if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1, 2 or 3.');
+ if(input?.format==='pip-tinker-project'&&[2,3,4].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
+ if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1, 2, 3 or 4.');
  const trial=tinkerTrial(input.trialId);
  if(!Array.isArray(input.programs)||input.programs.length!==trial.starts.length)fail('Each companion needs one three-card program.');
  const project={format:'pip-tinker-project',version:1,trialId:trial.id,name:text(input.name,trial.title),author:text(input.author,'A trail keeper'),programs:input.programs.map(normalizeProgram),parts:[]};
@@ -45,20 +45,22 @@ export function normalizeTinkerProject(input,{verify=true}={}){
  if(input.proof!==undefined){if(project.parts.filter(p=>p.kind==='tube').length===1)fail('A working solution needs both tube ends.');if(!Number.isInteger(input.proof?.ticks)||input.proof.ticks<1||input.proof.ticks>TINKER_LIMIT)fail('The solution exceeds the workshop’s tick limit.');project.proof={ticks:input.proof.ticks};if(verify&&!verifyTinkerProof(project))fail('The attached solution does not finish this invention.');}
  return project;
 }
-export function editTinkerProject(input,patch){const {proof,...base}=input;const next={...base,...patch};if(next.trialId==='duo-creator'&&next.version===2&&(next.parts?.some(p=>DUO_ADVANCED_KINDS.includes(p.kind))||patch.relays!==undefined||patch.emptyLockers!==undefined))next.version=3;return normalizeTinkerProject(next);}
+export function editTinkerProject(input,patch){const {proof,...base}=input;const next={...base,...patch};if(next.trialId==='duo-creator')next.version=Math.max(next.version,duoRequiredVersion(next.parts||[]),patch.quietSwitches!==undefined?4:patch.relays!==undefined||patch.emptyLockers!==undefined?3:2);return normalizeTinkerProject(next);}
 export function placeTinkerPart(input,kind,x,y,extra={}){return editTinkerProject(input,{parts:[...input.parts.filter(p=>p.x!==x||p.y!==y),...(kind==='erase'?[]:[part(kind,x,y,extra)])]});}
 export function tinkerDefinition(project){return project.version>=2?duoDefinition(project):tinkerTrial(project.trialId);}
 export function tinkerCatalogue(){return [...TINKER_TRIALS,...DUO_STORIES,DUO_CUSTOM];}
-export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready'})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version===3?{lockers:{},lockerTransfers:0}:{})};}
+export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready'})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version>=3?{lockers:{},lockerTransfers:0}:{}),...(project.version===4?{switches:{}}:{})};}
 export function tinkerParts(project){return [...tinkerDefinition(project).fixed,...project.parts].map((p,i)=>({...p,id:String(i)}));}
-export function tinkerStateKey(state){return JSON.stringify([state.bots,state.received,state.flips,state.transfers,...(state.lockers?[state.lockers,state.lockerTransfers]:[])]);}
+export function tinkerPoweredChannels(state,parts=tinkerParts(state.project)){return new Set([...Object.keys(state.switches||{}),...parts.filter(p=>['plate','bridge'].includes(p.kind)&&state.bots.some(b=>at(b,p))).map(p=>p.channel)]);}
+export function tinkerStateKey(state){return JSON.stringify([state.bots,state.received,state.flips,state.transfers,...(state.lockers?[state.lockers,state.lockerTransfers]:[]),...(state.switches?[state.switches]:[])]);}
 export function tinkerStep(input){
  if(input.status!=='playing')return input;
  const state=structuredClone(input),trial=tinkerDefinition(state.project),parts=tinkerParts(state.project),tubes=parts.filter(p=>p.kind==='tube');state.events=[];state.ticks++;
  const occupied=p=>state.bots.some(b=>at(b,p));
  // A held or occupied crossing remains safe throughout this tick, including Pip leaving its plate.
  const held=parts.some(p=>p.kind==='plate'&&occupied(p))||parts.some(p=>p.kind==='bridge'&&occupied(p));
- const heldChannels=new Set(parts.filter(p=>(p.kind==='plate'||p.kind==='bridge')&&occupied(p)).map(p=>p.channel));
+ const switchChannels=new Set(Object.keys(state.switches||{}));
+ const heldChannels=tinkerPoweredChannels(state,parts);
  for(const bot of state.bots){
   const command=bot.program[bot.index];bot.index=(bot.index+1)%3;bot.last=command;
   const direction={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0]}[command];
@@ -69,7 +71,8 @@ export function tinkerStep(input){
    if(tile?.kind==='receiver'){if((state.received[tile.id]||0)>=(tile.parcels||1))bot.last='Window already filled; parcel kept';else if(bot.parcel===tile.channel){bot.parcel=null;state.received[tile.id]=(state.received[tile.id]||0)+1;bot.last=`Delivered ${tile.channel}`;}else bot.last=`Window needs ${tile.channel}; ${bot.parcel||'empty hands'} kept`;}
    if(tile?.kind==='press'){if(bot.parcel===tile.channel){bot.parcel=tile.output;bot.last=`Pressed ${tile.channel} into ${tile.output}`;}else bot.last=`Recipe needs ${tile.channel}; ${bot.parcel||'empty hands'} kept`;}
    if(tile?.kind==='prism'){bot.program=transformProgram(bot.program,tile.operation);restart=true;bot.last='Prism changed the cards';}
-   if(tile?.kind==='signal'){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===tile.channel),plates=parts.filter(p=>p.kind==='plate'&&p.channel===tile.channel);const powered=Boolean(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))||Boolean(plates.length&&plates.every(occupied));bot.program=[...(powered?tile.alternate:tile.program)];restart=true;bot.last=`Signal loaded ${powered?'Powered':'Quiet'}`;}
+   if(tile?.kind==='signal'){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===tile.channel),plates=parts.filter(p=>p.kind==='plate'&&p.channel===tile.channel);const powered=switchChannels.has(tile.channel)||Boolean(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))||Boolean(plates.length&&plates.every(occupied));bot.program=[...(powered?tile.alternate:tile.program)];restart=true;bot.last=`Signal loaded ${powered?'Powered':'Quiet'}`;}
+   if(tile?.kind==='latch'){if(state.switches[tile.channel])delete state.switches[tile.channel];else state.switches[tile.channel]=true;bot.last=`Lantern ${tile.channel} ${state.switches[tile.channel]?'lit':'off'} · power changes next tick`;}
    if(tile?.kind==='locker'){const held=state.lockers[tile.channel];if(bot.parcel){if(tile.mode==='take')bot.last='Collect-only locker; cargo kept';else if(held)bot.last='Locker full; cargo kept';else{state.lockers[tile.channel]={parcel:bot.parcel,by:bot.id};bot.parcel=null;bot.last='Stored parcel in locker';}}else if(tile.mode==='send')bot.last='Send-only locker; awaiting a parcel';else if(!held)bot.last='Locker empty';else{bot.parcel=held.parcel;if(held.by!==bot.id)state.lockerTransfers=Math.min(240,state.lockerTransfers+1);delete state.lockers[tile.channel];bot.last='Collected '+bot.parcel+' from locker';}}
    if(tile?.kind==='cargo'){const matches=tile.channel==='any'?Boolean(bot.parcel):bot.parcel===tile.channel;bot.program=[...(matches?tile.alternate:tile.program)];restart=true;bot.last='Cargo compass loaded '+(matches?'Matching':'Otherwise');}
    if(tile?.kind==='flip'){const bank=state.flips[tile.id]??tile.initial;bot.program=[...(bank?tile.alternate:tile.program)];state.flips[tile.id]=!bank;restart=true;bot.last=`Loaded Route ${bank?'B':'A'}`;}
@@ -79,7 +82,7 @@ export function tinkerStep(input){
   }
   if(command==='use'||bot.last==='Blocked')state.events.push(`${bot.id}: ${bot.last}`);
  }
- const receivers=parts.filter(p=>p.kind==='receiver');const parked=parts.filter(p=>['pip-dock','sprout-dock'].includes(p.kind)).every(p=>at(p,state.bots[p.kind==='pip-dock'?0:1]));if(receivers.length&&receivers.every(p=>(state.received[p.id]||0)>=(p.parcels||1))&&(state.project.version>=2?state.transfers>=(trial.handoffs||0)&&parked&&(state.project.version!==3||state.lockerTransfers>=(trial.relays||0)&&(!trial.emptyLockers||!Object.keys(state.lockers).length)):trial.id!=='parcel-partners'||state.transfers>0))state.status='won';else if(state.ticks>=TINKER_LIMIT)state.status='limit';
+ const receivers=parts.filter(p=>p.kind==='receiver');const parked=parts.filter(p=>['pip-dock','sprout-dock'].includes(p.kind)).every(p=>at(p,state.bots[p.kind==='pip-dock'?0:1]));if(receivers.length&&receivers.every(p=>(state.received[p.id]||0)>=(p.parcels||1))&&(state.project.version>=2?state.transfers>=(trial.handoffs||0)&&parked&&(state.project.version<3||state.lockerTransfers>=(trial.relays||0)&&(!trial.emptyLockers||!Object.keys(state.lockers).length))&&(state.project.version<4||!trial.quietSwitches||!Object.keys(state.switches).length):trial.id!=='parcel-partners'||state.transfers>0))state.status='won';else if(state.ticks>=TINKER_LIMIT)state.status='limit';
  state.last=state.status==='won'?(state.project.version>=2?'Adventure complete! '+trial.ending:'Invention complete! Keep this answer, or try a smaller or faster one.'):state.status==='limit'?'Tick limit reached. Return to the bench and try a different idea.':state.events.join(' · ')||state.bots.map(b=>`${b.id}: ${b.last}`).join(' · ');return state;
 }
 export function verifyTinkerProof(project){let state=startTinker(project);for(let i=0;i<project.proof.ticks;i++)state=tinkerStep(state);return state.status==='won'&&state.ticks===project.proof.ticks;}

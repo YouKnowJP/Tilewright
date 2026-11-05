@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.50.0 — 2026-11-04
+
+- Add remembered lantern switches. Use L toggles a numbered power channel; matching bridges and signal stamps read its new state next tick. Lights remain on after a courier leaves. Occupied bridges and pressure plates retain their safety rules.
+- Add four Lantern Workshop stories, bringing the duo story to thirty-six chapters. Repair recipes, return borrowed bridge power, coordinate a remembered night-post crossing and solve a two-lantern homecoming with every switch off.
+- Add a switch-off finish goal, visible on/off switch art, bridge readiness outlines, numbered power status and readable switch inspection. Theme all workshop dialogue, blueprint-note and share-code text fields. Keep new controls inside existing creator drawers and hide irrelevant locker goals in lantern gardens.
+- Add two configurable lantern blueprints with rotation, mirroring, capture, placement and sharing. New mechanics use project format 4 and blueprint format 3; captured v0.49 projects, codes, states, blueprints and PC1 collections retain exact behavior and bytes.
+- Add atomic collection variant sets: looking-glass pairs, three colour roads and courier-role studies. Keep maker credits, give generated variants accurate instructions, verify creator routes and Undo the whole set together.
+- Add one-chapter collection downloads without removing other chapters or exposing personal progress. Preserve existing collection, save-key and backup formats.
+- Extend rules, compatibility, saved-power replay/Undo, backups, phone/desktop, themed-menu, enlarged-text and live sharing coverage.
+
 ## 0.49.0 — 2026-11-04
 
 - Add Star Atlas: four explicit Clocktower mastery variations with reflected roads, new parcel palettes and eight-, nine-, ten- and twelve-part repairs. All thirty-two duo chapters offer optional hints and verified examples.

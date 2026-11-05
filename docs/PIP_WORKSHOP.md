@@ -80,7 +80,7 @@ Duo adventures use project format 2 or 3 inside the existing PT1 file/code/link 
 
 ## The Night Post: six harder chapters
 
-Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All thirty-two duo chapters are available without grinding.
+Choose **The Night Post · 6 harder missions** in the Collection menu. Chapter 6 also continues into chapter 7 after a clear. All thirty-six duo chapters are available without grinding.
 
 | Chapter | Story | Challenge | Worked clear |
 | --- | --- | --- | --- |
@@ -116,7 +116,7 @@ Choose **Dawn Workshop · 4 mastery repairs** in the Collection menu, or continu
 | 15 | Three Invitations at Daybreak | Two recipes and three locker relays | 84 ticks |
 | 16 | The Last Lantern Express | Two presses, a cargo compass and a tube end; three deliveries and both couriers home | 98 ticks |
 
-All thirty-two chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
+All thirty-six chapters remain available immediately. A commission’s tray limits placed parts; fixed hardware stays protected. Optional hints explain the exact repair. Worked examples are verified in the same engine as your own tests.
 
 ### Plan and replay a route
 
@@ -199,6 +199,23 @@ Choose **Star Atlas · 4 cartographer repairs**, or continue after Clocktower ch
 
 Hints list the transformed cards and exact part settings with column/row coordinates. The worked example is optional and can be tested one tick at a time.
 
+## Lantern Workshop: remembered power
+
+Choose **Lantern Workshop · 4 switch adventures**, or continue after Star Atlas chapter 32. A **Lantern switch L** shares one remembered on/off state with every L of the same numbered colour. All channels start off. Use flips the channel; its new power reaches matching bridges and signal stamps on the **next tick**. The light stays on after a courier walks away. Two matching switches used in the same tick toggle twice.
+
+A bridge stays safe for the whole tick if its channel was powered or a matching plate/bridge was occupied at the start. Turning off a lantern does not strand a courier on an occupied bridge. Signal stamps still respond to their ordinary filled-window and pressure-plate rules; remembered light is an additional way to supply power.
+
+| Chapter | Story | Idea | Verified example |
+| --- | --- | --- | --- |
+| 33 | A Light Left Behind | Repair a recipe; Pip lights a bridge and goes home while Sprout delivers | 10 ticks |
+| 34 | Borrowed Light, Returned | Three repairs; open a crossing, return to switch it off and bring both hats home | 11 ticks |
+| 35 | The Remembering Night Post | Seven repairs; unequal courier pacing, a switched bridge and three locker relays | 184 ticks |
+| 36 | The Council of Two Lanterns | Seven repairs; two bridge colours, two blue letters, return signals and a quiet homecoming | 55 ticks |
+
+In your creator’s **Your story & goals**, **Switch every lantern off before finishing** adds a required finish condition. The counter shows numbered channels that remain on; switches also have different lever positions and explicit on/off text. Illuminated bridge outlines describe readiness for the next tick. Switch controls appear with the part, and ordinary locker goals stay hidden in lantern gardens that do not use lockers.
+
+**A bridge that remembers** and **A fork beneath a lantern** join the reusable blueprint shelf. Choose their numbered link colour, turn or mirror them, then place/capture/share them like other pieces. Placing a lantern piece upgrades only that garden to project format 4. Blueprint format 3 carries the new part; old projects and blueprints keep their formats. Existing saved collections and full journey backups include the new projects and paused test positions.
+
 ## Build and play adventure collections
 
 Open **Share & feedback → Adventure collections**. Add the current two-companion adventure or choose one from your saved adventure shelf. Each addition takes its own snapshot: later bench edits do not rewrite that chapter. Keep up to six chapters, move them earlier/later, duplicate or remove a chapter, or open **Chapter title & note** to personalize its presentation. Single-Pip inventions stay in their existing sharing flow.
@@ -207,7 +224,7 @@ Open **Share & feedback → Adventure collections**. Add the current two-compani
 
 Every chapter is selectable. Finish a real test on the original chapter to mark it cleared and reveal **Next collection chapter**. Changing a custom garden’s hardware, terrain, starts or goals makes a remix; it remains playable but does not mark the original chapter cleared. Changing cards or presentation text is allowed. **Collection chapters** returns from the bench; **Open current collection** returns from the share drawer. Escape/Back returns to the control that opened the menu.
 
-**Try the After Hours collection**, **Try the Clocktower collection** and **Try the Star Atlas collection** assemble their four repairs with optional creator replays. It asks before replacing an existing assembly. A friend’s collection can be copied into your builder through **Use in collection builder**, also with confirmation before replacing a different assembly. Chapter and maker credits stay attached to their copied projects.
+**Try the After Hours collection**, **Try the Clocktower collection** and **Try the Star Atlas collection** and **Try the Lantern Workshop collection** assemble their four repairs with optional creator replays. It asks before replacing an existing assembly. A friend’s collection can be copied into your builder through **Use in collection builder**, also with confirmation before replacing a different assembly. Chapter and maker credits stay attached to their copied projects.
 
 ### Direct and remix your collection
 
@@ -220,6 +237,14 @@ Each chapter has a folded **Remix or replace this chapter** drawer. Mirror the g
 Quarter turns must fit the existing 7–13 column and 5–9 row limits. A 13-column map cannot become 13 rows; mirror it, or open/remix/resize it at the bench first. Failed transforms leave the assembly and its Undo history intact.
 
 **Replace map with current adventure** asks first, then replaces only that chapter’s project snapshot while retaining its title and note. Save assembly to update the kept collection. Unchanged maps retain their personal progress; changed maps start fresh. Unchanged duplicate cards keep their own progress when other copies are renamed, replaced or removed. You can Undo before saving, and the source bench stays unchanged.
+
+### Build a family of challenges
+
+A chapter’s **Remix or replace this chapter → Variants & chapter sharing** drawer offers three sets: a left/right and up/down looking-glass pair, three successive palette shifts, or a courier-role study. The set must fit within six chapters. All new snapshots are built together; a failure leaves the assembly intact, and one chapter-tool Undo removes the whole set.
+
+Generated variants keep maker/source credits and receive their own titles, instructions and progress. Their instructions point to the transformed garden’s numbered stations and required finish rules. Creator routes are checked again; a courier trade that no longer clears is labelled as a draft. Existing chapter progress stays with its original map when you save the assembly.
+
+**Download this chapter collection** exports just that chapter as a normal PC1 collection file, including its note, maker credits and any authored creator route. It does not remove other chapters, change the bench, or include personal setups, test positions or earned clears. Friends can open it through the usual collection file/code flow. Whole-collection files, links and illustrated posters remain available.
 
 ### Keep collections between visits
 
