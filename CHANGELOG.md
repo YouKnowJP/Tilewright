@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.59.0 — 2026-11-06
+
+- Add mixing bowls Y: Use leaves one of two ingredients in an independent bowl. Adding the other returns the blended parcel to the finishing courier. Either order works; empty hands, duplicates and wrong ingredients preserve existing cargo. Cards keep their place.
+- Add four original Mixing House repairs for sixty-four duo chapters: The First Shared Recipe, The Twice-Baked Road, The Borrowed Ingredients and The Four-Way Kitchen. Worked routes clear in 34/219/69/196 ticks; coordinate delayed ingredients, four-lap recipes, two locker exchanges and a six-letter shared crossing with both friends returning home.
+- Add mixing-lane and cargo-dispatch blueprints plus folded parcel-palette tools. Swap recipe ingredients, windows and cargo predicates independently of numbered power, tube and locker links. Combine parcel remixes with route-card composition, facing, reflection, copies, capture and sharing without changing the saved source until kept or placed.
+- Add project format 10 and blueprint format 9, independent per-bowl engine state and two-input readiness checks. Preserve old save keys, formats and literal v0.58 project/PT1/PC1/PC2, blueprint and engine-state bytes. Collection snapshots rebuild partial bowls, Undo and backup rollback from their existing saved tick.
+- Retain all earlier release checks and add six required phone/desktop, creator, checkpoint, import-protection and enlarged-menu cases. Permanent Firefox/WebKit gates now cover fourteen cases each, including the earlier Echo Post and legacy save/share regressions.
+
 ## 0.58.0 — 2026-11-06
 
 - Add echo stamps: Use learns the other courier’s three cards from the shared turn-start snapshot, optionally turning, mirroring or reversing them. Restart at card 1 and keep cargo; simultaneous replies never cascade Pip’s new cards into Sprout’s copy.

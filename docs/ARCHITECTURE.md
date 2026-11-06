@@ -20,6 +20,8 @@ state, with bounded Undo and no proof/best attachment.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-mixers.mjs` / `src/pip-mixing-house.mjs` | Pure two-input parcel mixing and four authored repairs. |
+| `src/pip-blueprint-recipes.mjs` / `src/pip-blueprint-recipes-ui.mjs` | Independent parcel-palette permutations and folded preview controls. |
 | `src/pip-echoes.mjs` / `src/pip-echo-post.mjs` | Immutable shared-turn card learning, geometric conjugation and four authored repairs. |
 | `src/pip-blueprint-cards.mjs` / `src/pip-blueprint-cards-ui.mjs` | Pure station-bank rewriting and a folded single-bank composer, applied before geometric arrangement. |
 | `src/pip-scales.mjs` / `src/pip-balancekeeper.mjs` | Cargo/badge predicates and turn-start power, four original expert/master repairs. |
@@ -1320,3 +1322,42 @@ part editing/protected formats and enlarged themed menus with old/new replays.
 The full catalogue runs across four groups without removing cases or raising
 action deadlines. A reusable compatibility runner adds the six new cases plus
 two legacy-save/share regressions in Firefox and WebKit; both jobs gate Pages.
+
+
+## Mixing bowls and blueprint parcel palettes — v0.59
+
+Project format 10 adds `mixer` with `channel`, `second` and `output`: three
+known, distinct parcel colours. Blueprint format 9 maps to that version. A pure
+`useMixer` transition returns the retained ingredient, courier cargo and a
+readable event. The first valid ingredient stays in the bowl; the complementary
+ingredient produces the blend for the courier. Wrong/duplicate parcels and
+empty hands preserve the existing state. Ordinary card advancement is retained.
+
+Only version-10 engine states add a `mixers` dictionary, keyed by normalized
+station ID rather than colour. Empty bowls have no entry. Bowl contents enter
+`tinkerStateKey`, so rehearsal cannot confuse an unfinished recipe with an
+otherwise identical frame. The existing saved tick reconstructs contents and
+Undo history; no new local-storage key or collection-journal format is needed.
+Earlier states omit the field and retain captured fingerprints exactly.
+Readiness computes a bounded parcel closure: a mixer output becomes reachable
+only when both ingredients are reachable. Circular unsupplied recipes fail.
+
+`recolourBlueprintParcels` validates a four-colour permutation before returning
+an immutable piece. It maps source/window parcels, press inputs/outputs, both
+mixer ingredients/output, cargo/parcel-seal matches and scale cargo predicates.
+It preserves power channels, tube/locker links, wildcard conditions, cards,
+flags, geometry, maker credits and format. Window-based signal fallback retains
+its numbered meaning; changing a window colour can intentionally change it.
+
+The folded UI composes swaps as a permutation held outside project/journal
+state. Its source signature excludes temporary card edits, so rewriting a bank
+does not reset the parcel palette; restoring parcels does not reset cards.
+Composition precedes geometric/palette arrangement and independent link/power
+rewiring. Existing keep/capture/share paths and atomic placement Undo are reused.
+
+Six new required browser cases cover all missions at phone/desktop widths,
+partial bowls across collection reload/Undo/full-backup rollback, composed
+recipe/card previews, saved-source isolation, protected files and enlarged
+custom menus with old/new project replays. The prior exhaustive catalogue and
+Echo compatibility checks stay required. Firefox/WebKit now check fourteen
+cases each before publication, with unchanged action deadlines and tracing.

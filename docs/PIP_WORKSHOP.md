@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-sixty duo chapters in six-card pages; filter by region, saved/completed
+sixty-four duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,49 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Mixing House — v0.59
+
+Choose **The Mixing House** in Adventure Home, or **Share → Adventure collections
+→ Try the Mixing House collection**. All four chapters have staged clues and
+optional verified worked routes.
+
+| Chapter | Mission | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 61 | The First Shared Recipe | Three repairs; a friend leaves an ingredient before the shared crossing, two presses and both home flags | 34 ticks |
+| 62 | The Twice-Baked Road | Six repairs; two independent bowls, return-road ingredients and four laps to deliver twice on each loop | 219 ticks |
+| 63 | The Borrowed Ingredients | Eleven repairs; borrow ingredients through two locker channels, press a return parcel, complete two relays and empty the lockers | 69 ticks |
+| 64 | The Four-Way Kitchen | Seven repairs; four ingredient approaches, a shared bowl and crossing, six invitations and powered home roads | 196 ticks |
+
+**Mixing bowl Y** activates on Use. Choose two different ingredients and a third
+output colour. Either ingredient can arrive first. The bowl keeps that first
+parcel; the courier adding the other carries the result. Each bowl has its own
+contents, even when recipes match. Empty hands, repeated ingredients and wrong
+parcels leave everything safe. Use advances the current card normally; it never
+restarts or rewrites the route. Walking onto a bowl does not activate it.
+
+Inspect a bowl to read its recipe and the missing ingredient. The status line
+shows how many bowls are holding an ingredient; the text map explains each one.
+Saved collection tests reconstruct those contents and the complete Undo history.
+
+In **Tools → Blueprints**, choose **The little mixing house** or **The bowl and
+the cargo fork**. Configure both ingredients, the blend and any window target.
+The dispatch piece sends empty hands west and a blended parcel north; its cargo
+banks can be rewritten in **Rewrite route cards**.
+
+Open **Remix parcel colours** to swap two parcel colours in any piece containing
+recipes or cargo checks. Repeat swaps to build a palette of your own. Sources,
+windows, press/mixer recipes, cargo compasses and colour-specific seal/scale
+checks follow the parcel palette. Power circuits, tube colours and locker links
+keep their existing numbers. Wildcard and empty-hand conditions keep their
+meaning. Signals that depend on filled windows still need windows of their
+numbered colour, so inspect those connections after a recipe remix.
+
+Parcel remixes and route-card edits remain independent. Restoring one leaves
+the other intact. Facing, reflection and repeated copies apply afterward; the
+final preview and station rules describe the resulting piece. Keep/update,
+download or place it when ready. Previewing never changes the garden or saved
+source; a placement is one Undo edit.
 
 ## The Echo Post — v0.58
 

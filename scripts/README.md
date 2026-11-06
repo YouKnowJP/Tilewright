@@ -32,11 +32,11 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains all earlier cases and adds six Echo Post cases:
-four-mission phone/desktop clears, echo/card-composer capture and exchange,
-part editing and protected imports, exact shared-snapshot continuation with
-reload/Undo/backup rollback, and enlarged themed menus with new/legacy replays.
-It has **228 distinct cases**, split exhaustively **57/57/57/57**. All earlier
+The release catalogue retains all earlier cases and adds six Mixing House cases:
+four-mission phone/desktop clears, independent recipe/card composition with
+capture and exchange, part editing and protected imports, exact partial-bowl
+continuation through reload/Undo/backup, and enlarged menus with old/new replays.
+It has **234 distinct cases**, split exhaustively **59/59/58/58**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -49,7 +49,8 @@ npm run test:browser:pip -- chromium
 npm run test:browser:pip -- firefox webkit
 ```
 
-The runner checks the exact six new cases plus two legacy save/share cases,
+The runner checks six Mixing House cases, six retained Echo Post cases and two
+legacy save/share cases (fourteen total),
 records the built release metadata, closes the browser/server and removes its
 owned temporary build. Firefox and WebKit run as separate required CI jobs with
 original action deadlines and full tracing. Their reports are retained for
@@ -279,3 +280,13 @@ Confirmed collection updates await the actual confirmation close event before in
 
 
 `pip-sealkeeper-browser-checks.mjs` adds eight v0.52 cases: four passport missions at phone/desktop widths; real badge/cargo/direction editing with blocked-entry feedback and shelf saves; transformed seal blueprints with protected imports; bonus par editing, Undo, selection/PC2/poster sharing and independent copies; earned ribbons through slower retries, reload/Undo and full-backup rollback; enlarged themed menus and numeric validation; and the starter, protected edition prefixes and a captured v0.51 paused journal. The 188-case catalogue partitions as 63/63/62. `tests/pip-seals.test.mjs` and `tests/pip-collection-challenges.test.mjs` cover deterministic entry, geometry, exact compatibility, optional scoring and persistent/progress-free sharing.
+
+
+`pip-mixing-house-browser-checks.mjs` adds six v0.59 cases. Both phone and
+desktop finish all four stories and retain bests. A collection pauses at a
+partly filled bowl, reloads, finishes its blend, undoes and restores a full
+backup with exact state-key comparison. Creator cases combine ingredient-only
+colour swaps with bank edits, verify independent numbered wiring and saved
+sources, capture/share/reload pieces, reject invalid old/future recipes and
+lock controls in tests. Largest high-contrast menus are measured at
+320/390/768/844/1440 views; new projects and captured v0.58 exports replay.

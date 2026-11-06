@@ -1,5 +1,10 @@
 # Tilewright roadmap
 
+Version **0.59** adds persistent mixing bowls, four Mixing House repairs for
+sixty-four duo chapters, and independent blueprint parcel palettes. New bowls
+use project format 10 and blueprint format 9; old formats and save keys remain
+supported. Previewed recipe swaps compose with card edits and atomic placement.
+
 Version **0.58** adds echo stamps, four original Echo Post repairs for sixty
 duo chapters, and a blueprint card composer. Projects with echoes use format 9
 and echo pieces use format 8; older formats and save keys remain supported.

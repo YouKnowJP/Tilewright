@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-mix-first':['A bowl lets a recipe wait for a second arrival.','Inspect what each friend carries at the crossing. The first ingredient stays behind; the friend completing the pair carries the blend onward.'],
+ 'duo-mix-second':['The second lap can carry something the first lap left behind.','Follow one courier around the whole loop. A full hand passes a well safely; an unfinished bowl remembers exactly which ingredient is missing.'],
+ 'duo-mix-exchange':['Your next ingredient grows in the other garden.','Trace both parcels through their locker colours. Compare the borrowed ingredient with the waiting bowl; one return road needs another recipe before it fits.'],
+ 'duo-mix-council':['The shared bowl and the shared crossing answer different questions.','Watch who leaves an ingredient and who completes it. Blocked moves still advance a card. Check both windows before following the powered home roads.'],
  'duo-echo-reply':['The first reply and the homeward reply carry different roads.','On a shared Use turn, J hears the cards from before either friend changes them. Compare the first echo with the final homecoming.'],
  'duo-echo-backwards':['Sometimes the right message needs a different card order.','A Use-first route keeps copying itself. Ask which arrangement moves before its next Use, and what Pip will say when the last window fills.'],
  'duo-echo-chorus':['An echo can turn a reply into a different road.','Follow both friends up to the compass turn. Sprout hears the old direction on their shared Use, then applies the echo’s own turn.'],

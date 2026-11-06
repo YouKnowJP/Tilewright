@@ -80,6 +80,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-mixer': rect('#344f5a',2,3,20,20);rect('#d5bc83',3,18,18,4);rect('#edcf92',4,9,16,10);rect('#173b43',6,10,12,7);rect(color,4,4,5,4);rect(CHANNEL_COLORS[item.second]||'#9bd9c9',15,4,5,4);rect(item.stored?(CHANNEL_COLORS[item.stored]||'#fff1bd'):'#607b7b',8,12,8,4);rect(CHANNEL_COLORS[item.output]||'#b1dfb9',10,19,4,3);rect('#fff1bc',11,7,2,3);rect('#fff1bc',9,8,6,1);break;
     case 'pip-echo': rect('#304d55',2,3,20,20);rect('#dbbf7d',4,5,6,15);rect('#fff1ba',5,7,3,3);rect('#dbbf7d',14,5,6,15);rect('#fff1ba',16,7,3,3);rect('#91d3c1',9,10,6,3);rect('#91d3c1',10,15,4,3);break;
     case 'pip-scale': rect('#35535a',2,3,20,20);rect('#d5bb7e',3,20,18,3);rect('#edcc87',11,6,3,14);rect(item.powered?color:'#92a6a0',3,7,18,3);rect('#edcc87',4,10,2,5);rect('#edcc87',18,10,2,5);rect(item.powered?'#fff2bd':'#637e81',2,15,7,3);rect(item.powered?'#fff2bd':'#637e81',16,15,7,3);break;
     case 'pip-tide': rect('#314d59',2,2,20,21);rect('#d5ba7c',3,2,18,3);rect('#d5ba7c',3,20,18,3);rect(item.powered?color:'#7b8e93',5,6,14,12);rect('#173d44',7,8,10,8);rect('#fff1bc',11,8,2,5);rect('#fff1bc',11,12,5,2);for(let n=0;n<3;n++)rect(item.powered?'#fff1bc':'#becac4',4+n*6,18-(n%2),4,1);break;

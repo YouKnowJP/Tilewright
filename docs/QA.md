@@ -1,5 +1,50 @@
 # Verification record
 
+## Mixing House and independent parcel palettes — v0.59.0
+
+Coverage includes **1,852 Node tests**, **234 required gameplay browser cases**
+in exhaustive groups of **59/59/58/58**, and a **194-file** static package.
+Four Mixing House repairs bring the duo story to sixty-four chapters. Reference
+routes clear in **34, 219, 69 and 196 ticks**. Every loose repair is necessary
+for its worked route; blank cards fail. Immutable frames, courier separation,
+required letters/relays/home flags, empty lockers and reflected/palette-remixed
+routes are checked. The shared crossing also exercises blocked-card advancement.
+
+Thirty-three focused unit cases enumerate all 24 three-colour recipes in both
+ingredient orders, independent bowls, duplicate/wrong parcels and empty hands,
+ordinary card advancement, delayed blending, per-bowl state identity and
+no activation by walking. Readiness requires both reachable ingredients and
+rejects unsupplied circular recipes. All 24 parcel permutations preserve
+independent power/tube/locker numbers and cargo wildcards; a complete two-bowl
+mission retains its 219-tick clear under each parcel palette. Card edits and
+parcel remixes compose independently, preserving credits and old blueprint bytes.
+
+Captured v0.58 project/PT1, PC1/PC2, card-composed blueprint and turn-20/21 state
+keys remain exact, alongside all earlier fixture families. Only version-10
+engine states add bowl contents; no save key or collection journal changes.
+New-format saves, full backups and isolated journeys retain both progress and
+creative pieces. A partially filled bowl reconstructs from the saved tick with
+complete Undo history.
+
+Six new required live cases finish all four stories on phone/desktop, retain
+bests across reload, keep/capture/download/import composed pieces, preserve
+saved sources and Undo atomic placements. A collection pauses with one blue
+ingredient on tick 12, reloads, blends on 18, undoes and restores a full backup
+with an exact engine-state comparison. Invalid old/future/duplicate recipes
+leave prior saves and previews protected. Largest high-contrast themed menus,
+focus return and read-only test controls are checked at 320/390/768/844/1440
+views; a new shared route and a captured v0.58 route replay successfully.
+
+All earlier release cases remain required. Five platform jobs, four full
+Chromium groups, migration and three startup-recovery checks gate deployment.
+Firefox/WebKit retain the six Echo Post cases, add the six Mixing House cases
+and keep two legacy save/share cases: fourteen per engine, with original action
+deadlines and full tracing. Ordinary cases reject unexpected console, script
+and asset failures. Public files and live play/recovery flows are audited
+against the pushed commit. Layout/touch captures use browser emulation;
+physical devices, actual Safari, screen readers and human usability are separate
+checks and are not claimed here.
+
 ## Echo Post and blueprint card composition — v0.58.0
 
 Coverage includes **1,811 Node tests**, **228 required gameplay browser cases**
