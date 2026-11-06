@@ -21,7 +21,7 @@ exact. Older fixture families remain required. New mechanics use project format
 
 Six new required live cases clear all four missions on phone/desktop, edit and
 Undo a real beacon, exchange and retime staggered blueprint downloads without
-overwriting their saved source, and refuse malformed imports. Collection tests
+overwriting their saved source, and refuse malformed imports. Repeated beacons share one OR-combined HUD status per numbered channel. Collection tests
 pause just before an opening, reload the exact next phase and Undo history,
 roll back a full backup, and compare the saved replay with the real engine.
 Enlarged high-contrast themed menus retain focus at 320/390/768/844/1440-pixel

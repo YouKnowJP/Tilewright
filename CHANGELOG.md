@@ -2,7 +2,7 @@
 
 ## 0.56.0 — 2026-11-05
 
-- Add automatic tide beacons: configurable 2–8-beat cycles, open beats and phase offsets power matching bridges and signal stamps at turn start. Occupied crossings retain their safety rule; tide-specific blocked messages and numbered previews explain timing.
+- Add automatic tide beacons: configurable 2–8-beat cycles, open beats and phase offsets power matching bridges and signal stamps at turn start. Occupied crossings retain their safety rule; tide-specific blocked messages and numbered previews explain timing. Group the HUD by channel so repeated beacons stay compact.
 - Add four Tidekeeper expert/master missions for fifty-two duo chapters, with verified 88/102/118/196-tick routes, six-to-eleven-part repairs, staged hints and a ready-to-share collection.
 - Add tide-crossing and rhythmic dispatch blueprints, staggered copy phases, optional atomic retiming of imported/saved pieces, and readable per-beacon forecasts. Preserve maker credits, transformations, Undo and protected invalid arrangements.
 - Add project format 7 and blueprint format 6 while retaining old formats and captured v0.55 project/code/state/stencil/PC1 bytes. Collection saves reconstruct clock phases and Undo from their existing saved tick; no new storage key is required.
