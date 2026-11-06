@@ -1,5 +1,48 @@
 # Verification record
 
+## Cargo scales and the Balancekeepers — v0.57.0
+
+The release contains **1,771 Node tests**, **222 required gameplay browser
+cases** in exhaustive groups of **74/74/74**, and a **186-file** static package.
+Four original Balancekeeper repairs bring the duo story to fifty-six chapters.
+Verified routes clear in **190, 114, 148 and 175 ticks**. Removing any supplied
+repair prevents its reference clear; empty cards do not win. Immutable frames,
+courier separation, required deliveries/relays/home flags, mirrored gardens and
+shifted cargo/power palettes retain the checked outcomes.
+
+Thirty-three focused unit cases enumerate every cargo/badge/parcel predicate,
+first-turn power, incorrect cargo and badges, held/occupied crossings, Use cargo
+retention, OR-combined numbered scales and signal sampling. A handoff test checks
+that gaining a parcel cannot open or close a bridge midway through the turn.
+Power rewiring checks atomic swaps, invalid/merged circuits, unchanged recipes
+and cargo matches, metadata, unused-channel reservation including window
+fallbacks, transformations, capture and file sharing. Captured v0.56 project,
+PT1/PC1, blueprint and engine fingerprint bytes remain exact; earlier fixture
+families remain required. New mechanics use project format 8 and blueprint
+format 7; save keys and older envelopes retain their meanings.
+
+Six new required live cases play all four missions on phone/desktop, edit scale
+cargo/badges and independently visible power channels, rewire/capture/exchange
+blueprints, retain saved pieces across reload, Undo whole placements and reject
+old/future malformed scale files without writing saves. Collection tests pause
+at the ferry’s one-turn opening on tick 109, reload, cross, Undo and roll back a
+full backup, comparing the replay with the actual engine. Enlarged, high-contrast
+themed menus keep focus and fit 320/390/768/844/1440-pixel views. Test mode locks
+creator controls. Shared new adventures and a captured v0.56 route clear again.
+
+Selected Chromium, Firefox and WebKit regression coverage includes older
+blueprint imports, collection continuation, the native-close/share-link event-order fix,
+controller menu isolation and both fullscreen paths. Reviewed captures cover
+the running garden, Adventure Home, scale settings, themed cargo menu, folded
+power tools and collection overview at five viewport sizes. Viewport/touch
+emulation is distinct from physical devices, actual Safari, screen-reader
+testing and human usability checks.
+
+All five platform jobs, the complete browser catalogue, preserved migration,
+three startup recovery checks and Pages publication remain release gates.
+Public artifact comparison and selected public-site live flows verify the
+deployed commit. Generated sites, screenshots, reports and traces stay ignored.
+
 ## Automatic tides and clock blueprints — v0.56.0
 
 The release contains **1,730 Node tests**, **216 required gameplay browser

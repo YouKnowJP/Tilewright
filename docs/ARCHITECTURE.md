@@ -20,6 +20,8 @@ state, with bounded Undo and no proof/best attachment.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-scales.mjs` / `src/pip-balancekeeper.mjs` | Cargo/badge predicates and turn-start power, four original expert/master repairs. |
+| `src/pip-blueprint-power.mjs` / `src/pip-blueprint-power-ui.mjs` | Independent, injective power rewiring and folded preview controls; recipes and link endpoints remain separate. |
 | `src/pip-tides.mjs` / `src/pip-tidekeeper.mjs` / `src/pip-tide-editor.mjs` | Bounded automatic tide phases, four authored repairs and shared accessible rhythm controls. |
 | `src/pip-rainwright.mjs` | Four original chapters 45–48 with bounded repairs, verified reference programs, multi-delivery goals and authored story/hints/endings. |
 | `src/pip-road-planner.mjs` / `src/pip-road-planner-ui.mjs` | Immutable orthogonal path planning, protected water, numbered preview/text alternative, atomic edits and credited road-only blueprints. |
@@ -1255,3 +1257,35 @@ Blueprint format 4 maps to project format 5 and retains duration through configu
 `pip-collection-challenges.mjs` validates optional tick/part limits and computes ribbons from verified clears. Collection format 2 carries normalized challenge metadata; PC2 envelopes must match their payload edition. PC1 serialization/code bytes remain exact. Assemblies derive their edition from chapter metadata. Selection/batch-copy operations preserve goals and upgrade their target edition; map replacement/remix resets old goals. Chapter-tool Undo includes goal fields.
 
 The existing collection journal version/key remains unchanged. Validate incoming clears before selecting a bonus result, including while an earlier earned result is protected. For goal chapters, retain a qualifying clear before comparing speed/part count. Current setup/tick snapshots remain separate and replay deterministic state. PC1 retains its existing latest-clear policy. Exact duplicate-card reservations include active challenge identity; fallback ignores goal edits so changing a target preserves normal map progress. No shared file, code, link or poster includes private progress.
+
+## Cargo scales and independent power wiring — v0.57
+
+Project format 8 adds `scale` with a numbered `channel`, cargo `match` and
+`courier` badge. Blueprint format 7 maps to project format 8. Normalization
+accepts old envelopes without upgrading their contents, rejects unknown future
+versions and retains explicit defaults. `pip-scales.mjs` is independent of the
+project module to avoid an engine/schema import cycle.
+
+`scalePower(parts, bots)` derives matching occupied channels from existing bot
+positions and parcel fields. `tinkerStep` samples those channels before either
+bot acts for both signal and bridge decisions. The existing held/occupied
+bridge rule remains. No mutable scale field, journal key or replay fingerprint
+field is introduced; positions and parcels already participate in state keys.
+The compact HUD groups the resulting readiness by channel. Tile descriptions,
+blueprint cargo rules and poster tooltips expose the full predicates.
+
+Power wiring maps only plate, bridge, signal, latch, pulse, tide and scale
+channels. Mapping keys must name existing piece circuits; destinations are
+known channels and injective within the piece. Swaps resolve atomically. Cargo
+matches, recipes, sources, windows, tubes and lockers remain untouched. Unused
+channel suggestions reserve garden power components and receiver numbers,
+because filled windows also power signals. Manual choices can intentionally
+join a garden circuit. All rewiring is a pure preview until placement; placement
+uses the existing atomic garden edit and Undo. Palette transforms deliberately
+shift scale matches as well as power; partner transforms exchange scale badges.
+
+The four Balancekeeper chapters preserve the usual fixed/repair boundaries and
+verified creator proofs. Captured v0.56 fixtures test literal serialized PT1,
+PC1, blueprint and engine fingerprint bytes. Collection continuation reconstructs
+the one-turn ferry opening by replaying its saved tick and retains Undo and
+full-backup rollback through the existing journal format.

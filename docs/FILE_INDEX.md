@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**505 files in 15 folders.** Stage new files before refreshing. Run
+**512 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,11 +23,11 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 6 |
-| [scripts/browser/](../scripts/browser/) | 63 |
+| [scripts/browser/](../scripts/browser/) | 64 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 151 |
-| [tests/](../tests/) | 79 |
-| [tests/fixtures/](../tests/fixtures/) | 37 |
+| [src/](../src/) | 155 |
+| [tests/](../tests/) | 80 |
+| [tests/fixtures/](../tests/fixtures/) | 38 |
 
 <details>
 <summary>Repository root — 37 files</summary>
@@ -259,7 +259,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 63 files</summary>
+<summary>scripts/browser/ — 64 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -286,6 +286,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [migration-browser-checks.mjs](../scripts/browser/migration-browser-checks.mjs)
 - [pip-atlas-browser-checks.mjs](../scripts/browser/pip-atlas-browser-checks.mjs)
 - [pip-atlas-collections-browser-checks.mjs](../scripts/browser/pip-atlas-collections-browser-checks.mjs)
+- [pip-balancekeeper-browser-checks.mjs](../scripts/browser/pip-balancekeeper-browser-checks.mjs)
 - [pip-bellkeeper-browser-checks.mjs](../scripts/browser/pip-bellkeeper-browser-checks.mjs)
 - [pip-canopy-browser-checks.mjs](../scripts/browser/pip-canopy-browser-checks.mjs)
 - [pip-collections-browser-checks.mjs](../scripts/browser/pip-collections-browser-checks.mjs)
@@ -340,7 +341,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 151 files</summary>
+<summary>src/ — 155 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -392,9 +393,12 @@ captures, dependencies, and operating-system metadata are excluded.
 - [operations.mjs](../src/operations.mjs)
 - [pip-after-hours.mjs](../src/pip-after-hours.mjs)
 - [pip-atlas-worlds.mjs](../src/pip-atlas-worlds.mjs)
+- [pip-balancekeeper.mjs](../src/pip-balancekeeper.mjs)
 - [pip-bellkeeper.mjs](../src/pip-bellkeeper.mjs)
 - [pip-blueprint-links-ui.mjs](../src/pip-blueprint-links-ui.mjs)
 - [pip-blueprint-links.mjs](../src/pip-blueprint-links.mjs)
+- [pip-blueprint-power-ui.mjs](../src/pip-blueprint-power-ui.mjs)
+- [pip-blueprint-power.mjs](../src/pip-blueprint-power.mjs)
 - [pip-canopy-fair.mjs](../src/pip-canopy-fair.mjs)
 - [pip-clocktower.mjs](../src/pip-clocktower.mjs)
 - [pip-coach.mjs](../src/pip-coach.mjs)
@@ -436,6 +440,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-rehearsal.mjs](../src/pip-rehearsal.mjs)
 - [pip-road-planner-ui.mjs](../src/pip-road-planner-ui.mjs)
 - [pip-road-planner.mjs](../src/pip-road-planner.mjs)
+- [pip-scales.mjs](../src/pip-scales.mjs)
 - [pip-sealkeeper.mjs](../src/pip-sealkeeper.mjs)
 - [pip-staged-hints.mjs](../src/pip-staged-hints.mjs)
 - [pip-star-atlas.mjs](../src/pip-star-atlas.mjs)
@@ -497,7 +502,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 79 files</summary>
+<summary>tests/ — 80 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -549,6 +554,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-prisms.test.mjs](../tests/pip-prisms.test.mjs)
 - [pip-programs.test.mjs](../tests/pip-programs.test.mjs)
 - [pip-rainwright.test.mjs](../tests/pip-rainwright.test.mjs)
+- [pip-scales.test.mjs](../tests/pip-scales.test.mjs)
 - [pip-seals.test.mjs](../tests/pip-seals.test.mjs)
 - [pip-switchback.test.mjs](../tests/pip-switchback.test.mjs)
 - [pip-tides.test.mjs](../tests/pip-tides.test.mjs)
@@ -582,7 +588,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/fixtures/ — 37 files</summary>
+<summary>tests/fixtures/ — 38 files</summary>
 
 - [adventure-routes.json](../tests/fixtures/adventure-routes.json)
 - [atlas-routes.json](../tests/fixtures/atlas-routes.json)
@@ -612,6 +618,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-v050-duo.json](../tests/fixtures/pip-v050-duo.json)
 - [pip-v051-duo.json](../tests/fixtures/pip-v051-duo.json)
 - [pip-v055-duo.json](../tests/fixtures/pip-v055-duo.json)
+- [pip-v056-duo.json](../tests/fixtures/pip-v056-duo.json)
 - [pre-guild-checkpoints.json](../tests/fixtures/pre-guild-checkpoints.json)
 - [pre-horizon-campaign.json](../tests/fixtures/pre-horizon-campaign.json)
 - [saga-alternates.json](../tests/fixtures/saga-alternates.json)

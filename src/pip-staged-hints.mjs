@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-balance-four':['A loaded crossing and an empty return ask different questions.','Read both scales on each road. Each friend powers the opposite bridge, so compare their cargo before moving either courier.'],
+ 'duo-balance-ferry':['One friend carries the weight; the other must finish before releasing it.','Keep Sprout on its badge scale until all jade letters arrive. The final empty-hand opening lasts one turn, and an occupied bridge remains safe.'],
+ 'duo-balance-dispatch':['The dispatch scale and the final window can answer the same signal.','Follow the climbing approach before the upper sign. Later, a filled window can hold the route open even after Sprout leaves its scale.'],
+ 'duo-balance-council':['Sending a parcel can make an empty hand into a key.','Trace both locker colours and the badge on each scale. Compare what each courier holds at the start of the crossing turn.'],
  'duo-tide-split':['Two crossings can keep different rhythms without a deadline.','Read each beacon’s open beats, then watch a blocked move advance the next card. Test an outward trip and an empty-hand return before changing the rhythm.'],
  'duo-tide-dispatch':['The departure sign listens to a different tide from the crossing.','Compare the signal’s Quiet and Powered cards. A beacon powers from turn one; waiting at a sign can align a later bridge without using the beacon.'],
  'duo-tide-moon':['A changing sea can move a meeting without taking away its promise.','Watch the receiving friend at the handoff after each gate. Read the numbered phase of the next tick before changing a courier’s cards.'],

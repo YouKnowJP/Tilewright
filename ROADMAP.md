@@ -1,5 +1,10 @@
 # Tilewright roadmap
 
+Version **0.57** adds cargo scales, four Balancekeeper expert/master repairs for
+fifty-six duo chapters, and independently rewired power blueprints. Projects
+with scales use format 8 and scale pieces use format 7. Old saves and formats
+remain supported.
+
 Version **0.56** adds automatic tide beacons, four Tidekeeper missions for
 fifty-two duo chapters, and staggered/retimed clock blueprints. New mechanics
 use project format 7 and blueprint format 6; previous formats remain supported.

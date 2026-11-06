@@ -1,0 +1,34 @@
+{
+  "sourceCommit": "c3dd7645b63f77371234f96f4840e12bcc812e4f",
+  "project": "{\"format\":\"pip-tinker-project\",\"version\":7,\"trialId\":\"duo-tide-dispatch\",\"name\":\"The Crosswind Dispatch\",\"author\":\"Lantern Trails\",\"programs\":[[\"wait\",\"wait\",\"use\"],[\"wait\",\"wait\",\"use\"]],\"parts\":[{\"kind\":\"press\",\"x\":5,\"y\":2,\"channel\":\"amber\",\"output\":\"jade\"},{\"kind\":\"prism\",\"x\":9,\"y\":2,\"operation\":\"mirror\"},{\"kind\":\"press\",\"x\":11,\"y\":4,\"channel\":\"blue\",\"output\":\"amber\"},{\"kind\":\"prism\",\"x\":11,\"y\":8,\"operation\":\"mirror-y\"},{\"kind\":\"tide\",\"x\":3,\"y\":6,\"channel\":\"blue\",\"period\":7,\"beats\":2,\"offset\":0},{\"kind\":\"tide\",\"x\":5,\"y\":6,\"channel\":\"violet\",\"period\":7,\"beats\":2,\"offset\":0}],\"proof\":{\"ticks\":102}}\n",
+  "code": "PT1.f3381ece.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo3LCJ0cmlhbElkIjoiZHVvLXRpZGUtZGlzcGF0Y2giLCJuYW1lIjoiVGhlIENyb3Nzd2luZCBEaXNwYXRjaCIsImF1dGhvciI6IkxhbnRlcm4gVHJhaWxzIiwicHJvZ3JhbXMiOltbIndhaXQiLCJ3YWl0IiwidXNlIl0sWyJ3YWl0Iiwid2FpdCIsInVzZSJdXSwicGFydHMiOlt7ImtpbmQiOiJwcmVzcyIsIngiOjUsInkiOjIsImNoYW5uZWwiOiJhbWJlciIsIm91dHB1dCI6ImphZGUifSx7ImtpbmQiOiJwcmlzbSIsIngiOjksInkiOjIsIm9wZXJhdGlvbiI6Im1pcnJvciJ9LHsia2luZCI6InByZXNzIiwieCI6MTEsInkiOjQsImNoYW5uZWwiOiJibHVlIiwib3V0cHV0IjoiYW1iZXIifSx7ImtpbmQiOiJwcmlzbSIsIngiOjExLCJ5Ijo4LCJvcGVyYXRpb24iOiJtaXJyb3IteSJ9LHsia2luZCI6InRpZGUiLCJ4IjozLCJ5Ijo2LCJjaGFubmVsIjoiYmx1ZSIsInBlcmlvZCI6NywiYmVhdHMiOjIsIm9mZnNldCI6MH0seyJraW5kIjoidGlkZSIsIngiOjUsInkiOjYsImNoYW5uZWwiOiJ2aW9sZXQiLCJwZXJpb2QiOjcsImJlYXRzIjoyLCJvZmZzZXQiOjB9XSwicHJvb2YiOnsidGlja3MiOjEwMn19Cg",
+  "piece": "{\"format\":\"pip-duo-blueprint\",\"version\":6,\"name\":\"A bridge with a tide chart\",\"author\":\"Lantern Trails\",\"note\":\"T runs automatically from turn one. Its open beats power B; occupied crossings stay safe. Tune the cycle and phase, then rehearse both couriers.\",\"width\":7,\"height\":1,\"road\":[{\"x\":0,\"y\":0},{\"x\":1,\"y\":0},{\"x\":2,\"y\":0},{\"x\":4,\"y\":0},{\"x\":5,\"y\":0},{\"x\":6,\"y\":0}],\"parts\":[{\"kind\":\"tide\",\"x\":0,\"y\":0,\"channel\":\"amber\",\"period\":7,\"beats\":2,\"offset\":1},{\"kind\":\"bridge\",\"x\":2,\"y\":0,\"channel\":\"amber\"},{\"kind\":\"tide\",\"x\":4,\"y\":0,\"channel\":\"jade\",\"period\":7,\"beats\":2,\"offset\":3},{\"kind\":\"bridge\",\"x\":6,\"y\":0,\"channel\":\"jade\"}]}\n",
+  "collection": "{\"format\":\"pip-adventure-collection\",\"version\":1,\"name\":\"Before the balances\",\"author\":\"Nessa\",\"intro\":\"Keep the old tide.\",\"chapters\":[{\"title\":\"The Crosswind Dispatch\",\"note\":\"An unchanged route.\",\"project\":{\"format\":\"pip-tinker-project\",\"version\":7,\"trialId\":\"duo-tide-dispatch\",\"name\":\"The Crosswind Dispatch\",\"author\":\"Lantern Trails\",\"programs\":[[\"wait\",\"wait\",\"use\"],[\"wait\",\"wait\",\"use\"]],\"parts\":[{\"kind\":\"press\",\"x\":5,\"y\":2,\"channel\":\"amber\",\"output\":\"jade\"},{\"kind\":\"prism\",\"x\":9,\"y\":2,\"operation\":\"mirror\"},{\"kind\":\"press\",\"x\":11,\"y\":4,\"channel\":\"blue\",\"output\":\"amber\"},{\"kind\":\"prism\",\"x\":11,\"y\":8,\"operation\":\"mirror-y\"},{\"kind\":\"tide\",\"x\":3,\"y\":6,\"channel\":\"blue\",\"period\":7,\"beats\":2,\"offset\":0},{\"kind\":\"tide\",\"x\":5,\"y\":6,\"channel\":\"violet\",\"period\":7,\"beats\":2,\"offset\":0}],\"proof\":{\"ticks\":102}}}]}\n",
+  "collectionCode": "PC1.874f2c9a.eyJmb3JtYXQiOiJwaXAtYWR2ZW50dXJlLWNvbGxlY3Rpb24iLCJ2ZXJzaW9uIjoxLCJuYW1lIjoiQmVmb3JlIHRoZSBiYWxhbmNlcyIsImF1dGhvciI6Ik5lc3NhIiwiaW50cm8iOiJLZWVwIHRoZSBvbGQgdGlkZS4iLCJjaGFwdGVycyI6W3sidGl0bGUiOiJUaGUgQ3Jvc3N3aW5kIERpc3BhdGNoIiwibm90ZSI6IkFuIHVuY2hhbmdlZCByb3V0ZS4iLCJwcm9qZWN0Ijp7ImZvcm1hdCI6InBpcC10aW5rZXItcHJvamVjdCIsInZlcnNpb24iOjcsInRyaWFsSWQiOiJkdW8tdGlkZS1kaXNwYXRjaCIsIm5hbWUiOiJUaGUgQ3Jvc3N3aW5kIERpc3BhdGNoIiwiYXV0aG9yIjoiTGFudGVybiBUcmFpbHMiLCJwcm9ncmFtcyI6W1sid2FpdCIsIndhaXQiLCJ1c2UiXSxbIndhaXQiLCJ3YWl0IiwidXNlIl1dLCJwYXJ0cyI6W3sia2luZCI6InByZXNzIiwieCI6NSwieSI6MiwiY2hhbm5lbCI6ImFtYmVyIiwib3V0cHV0IjoiamFkZSJ9LHsia2luZCI6InByaXNtIiwieCI6OSwieSI6Miwib3BlcmF0aW9uIjoibWlycm9yIn0seyJraW5kIjoicHJlc3MiLCJ4IjoxMSwieSI6NCwiY2hhbm5lbCI6ImJsdWUiLCJvdXRwdXQiOiJhbWJlciJ9LHsia2luZCI6InByaXNtIiwieCI6MTEsInkiOjgsIm9wZXJhdGlvbiI6Im1pcnJvci15In0seyJraW5kIjoidGlkZSIsIngiOjMsInkiOjYsImNoYW5uZWwiOiJibHVlIiwicGVyaW9kIjo3LCJiZWF0cyI6Miwib2Zmc2V0IjowfSx7ImtpbmQiOiJ0aWRlIiwieCI6NSwieSI6NiwiY2hhbm5lbCI6InZpb2xldCIsInBlcmlvZCI6NywiYmVhdHMiOjIsIm9mZnNldCI6MH1dLCJwcm9vZiI6eyJ0aWNrcyI6MTAyfX19XX0K",
+  "frames": [
+    {
+      "tick": 0,
+      "key": "[[{\"x\":1,\"y\":2,\"id\":\"Pip\",\"program\":[\"wait\",\"wait\",\"use\"],\"index\":0,\"parcel\":null,\"last\":\"Ready\"},{\"x\":11,\"y\":0,\"id\":\"Sprout\",\"program\":[\"wait\",\"wait\",\"use\"],\"index\":0,\"parcel\":null,\"last\":\"Ready\"}],{},{},0,{},0,{},{},[0,0]]"
+    },
+    {
+      "tick": 1,
+      "key": "[[{\"x\":1,\"y\":2,\"id\":\"Pip\",\"program\":[\"wait\",\"wait\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"wait\"},{\"x\":11,\"y\":0,\"id\":\"Sprout\",\"program\":[\"wait\",\"wait\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"wait\"}],{},{},0,{},0,{},{},[1,1]]"
+    },
+    {
+      "tick": 13,
+      "key": "[[{\"x\":4,\"y\":2,\"id\":\"Pip\",\"program\":[\"right\",\"right\",\"use\"],\"index\":1,\"parcel\":\"amber\",\"last\":\"right\"},{\"x\":11,\"y\":3,\"id\":\"Sprout\",\"program\":[\"down\",\"down\",\"use\"],\"index\":1,\"parcel\":\"blue\",\"last\":\"down\"}],{},{},0,{},0,{},{},[6,6]]"
+    },
+    {
+      "tick": 14,
+      "key": "[[{\"x\":5,\"y\":2,\"id\":\"Pip\",\"program\":[\"right\",\"right\",\"use\"],\"index\":2,\"parcel\":\"amber\",\"last\":\"right\"},{\"x\":11,\"y\":4,\"id\":\"Sprout\",\"program\":[\"down\",\"down\",\"use\"],\"index\":2,\"parcel\":\"blue\",\"last\":\"down\"}],{},{},0,{},0,{},{},[0,0]]"
+    },
+    {
+      "tick": 58,
+      "key": "[[{\"x\":6,\"y\":2,\"id\":\"Pip\",\"program\":[\"right\",\"right\",\"use\"],\"index\":1,\"parcel\":\"jade\",\"last\":\"right\"},{\"x\":11,\"y\":5,\"id\":\"Sprout\",\"program\":[\"down\",\"down\",\"use\"],\"index\":1,\"parcel\":\"amber\",\"last\":\"down\"}],{\"3\":1,\"7\":1},{},0,{},0,{},{},[2,2]]"
+    },
+    {
+      "tick": 102,
+      "key": "[[{\"x\":7,\"y\":2,\"id\":\"Pip\",\"program\":[\"right\",\"right\",\"use\"],\"index\":0,\"parcel\":null,\"last\":\"Delivered jade\"},{\"x\":11,\"y\":6,\"id\":\"Sprout\",\"program\":[\"down\",\"down\",\"use\"],\"index\":0,\"parcel\":null,\"last\":\"Delivered amber\"}],{\"3\":3,\"7\":3},{},0,{},0,{},{},[4,4]]"
+    }
+  ]
+}

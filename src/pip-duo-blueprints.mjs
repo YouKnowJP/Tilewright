@@ -4,6 +4,8 @@ import {DUO_CHANNELS,duoRequiredVersion,normalizeDuoPart,normalizeDuoProject,duo
 import {transformProgram,transformPrismOperation} from './clockwork.mjs';
 const p=(x,y)=>({x,y}),part=(kind,x,y,extra={})=>({kind,x,y,...extra});
 export const DUO_BLUEPRINTS=Object.freeze([
+ {id:'scale-crossing',name:'A bridge with a cargo scale',note:'V powers B only while the chosen courier stands on it with matching cargo. Power is sampled before either courier acts; occupied bridges stay safe.'},
+ {id:'scale-dispatch',name:'The weighhouse dispatch',note:'A cargo scale powers a matching signal. Quiet waits; Powered takes the delivery road. Choose a cargo condition and badge, then wire its power independently.'},
  {id:'tide-crossing',name:'A bridge with a tide chart',note:'T runs automatically from turn one. Its open beats power B; occupied crossings stay safe. Tune the cycle and phase, then rehearse both couriers.'},
  {id:'tide-fork',name:'The rhythmic dispatch sign',note:'T powers the numbered signal at the start of a turn. Quiet waits; Powered sends a courier east. Adjust its phase, or stagger repeated copies.'},
  {id:'recipe',name:'Parcel atelier',note:'Put a courier two tiles before Q. East / East / Use collects, converts and delivers. Choose different input and output parcels.'},
@@ -24,7 +26,7 @@ export const DUO_BLUEPRINTS=Object.freeze([
  {id:'turning-atelier',name:'The corner atelier',note:'A well, recipe and clockwise corner lead to a window below. Begin two tiles west of Q with East / East / Use. Change the colours and delivery target to fit your tower.'}
 ]);
 export function normalizeDuoBlueprint(raw){
- if(!raw||raw.format!=='pip-duo-blueprint'||![1,2,3,4,5,6].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||(!raw.parts.length&&(raw.version!==5||!raw.road.length))||raw.parts.length>32)throw Error('Choose a garden-sized blueprint with stations or a nonempty road stencil.');
+ if(!raw||raw.format!=='pip-duo-blueprint'||![1,2,3,4,5,6,7].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||(!raw.parts.length&&(raw.version!==5||!raw.road.length))||raw.parts.length>32)throw Error('Choose a garden-sized blueprint with stations or a nonempty road stencil.');
  const valid=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=0&&p.y>=0&&p.x<raw.width&&p.y<raw.height,road=[],parts=[];
  for(const cell of raw.road){if(!valid(cell)||road.some(p=>p.x===cell.x&&p.y===cell.y))throw Error('Blueprint roads must be unique and inside the piece.');road.push(p(cell.x,cell.y));}
  for(const rawPart of raw.parts){const item=normalizeDuoPart(rawPart,{version:raw.version+1});if(!valid(item)||!road.some(p=>p.x===item.x&&p.y===item.y)||parts.some(p=>p.x===item.x&&p.y===item.y))throw Error('Each blueprint part needs its own garden tile.');parts.push(item);}
@@ -35,6 +37,8 @@ export function normalizeDuoBlueprint(raw){
 export function duoBlueprint(id,{input='amber',output='jade',channel='amber',initial=false,turns=0,parcels=1,duration=3,match='jade',courier='either',heading='all',period=4,beats=2,offset=0}={}){
  const spec=DUO_BLUEPRINTS.find(b=>b.id===id);if(!spec)throw Error('Choose a duo blueprint.');if(![input,output,channel].every(c=>DUO_CHANNELS.includes(c))||typeof initial!=='boolean'||!Number.isInteger(parcels)||parcels<1||parcels>3||!Number.isInteger(duration)||duration<1||duration>6||!['all','empty','any',...DUO_CHANNELS].includes(match)||!['either','pip','sprout'].includes(courier)||!['all','up','right','down','left'].includes(heading))throw Error('Choose known blueprint colours, routes and delivery targets.');
  let width,height,road,parts;
+ if(id==='scale-crossing'){width=3;height=1;road=[p(0,0),p(1,0),p(2,0)];parts=[part('scale',0,0,{channel,match,courier}),part('bridge',2,0,{channel})];}
+ if(id==='scale-dispatch'){width=3;height=2;road=[p(0,0),...Array.from({length:3},(_,x)=>p(x,1))];parts=[part('scale',0,0,{channel,match,courier}),part('signal',0,1,{channel,program:['wait','wait','use'],alternate:['right','right','use']})];}
  if(id==='tide-crossing'){width=3;height=1;road=[p(0,0),p(1,0),p(2,0)];parts=[part('tide',0,0,{channel,...normalizeTide({period,beats,offset})}),part('bridge',2,0,{channel})];}
  if(id==='tide-fork'){width=3;height=2;road=[p(0,0),...Array.from({length:3},(_,x)=>p(x,1))];parts=[part('tide',0,0,{channel,...normalizeTide({period,beats,offset})}),part('signal',0,1,{channel,program:['wait','wait','use'],alternate:['right','right','use']})];}
  if(id==='recipe'){if(input===output)throw Error('The atelier needs different input and output parcels.');width=5;height=1;road=Array.from({length:5},(_,x)=>p(x,0));parts=[part('source',0,0,{channel:input}),part('press',2,0,{channel:input,output}),part('receiver',4,0,{channel:output,parcels})];}
@@ -57,7 +61,7 @@ export function duoBlueprint(id,{input='amber',output='jade',channel='amber',ini
 }
 export function configureDuoBlueprint(input,{turns=0,palette=0,first='keep',reflection='none'}={}){
  let piece=normalizeDuoBlueprint(input);if(!Number.isInteger(turns)||turns<0||turns>3||!Number.isInteger(palette)||palette<0||palette>3||!['keep','a','b'].includes(first)||!['none','horizontal','vertical'].includes(reflection))throw Error('Choose a blueprint direction, reflection, palette and first route.');
- const colour=c=>DUO_CHANNELS.includes(c)?DUO_CHANNELS[(DUO_CHANNELS.indexOf(c)+palette)%4]:c;piece={...piece,parts:piece.parts.map(p=>({...p,...(p.channel?{channel:colour(p.channel)}:{}),...(p.output?{output:colour(p.output)}:{}),...(p.kind==='flip'&&first!=='keep'?{initial:first==='b'}:{})}))};
+ const colour=c=>DUO_CHANNELS.includes(c)?DUO_CHANNELS[(DUO_CHANNELS.indexOf(c)+palette)%4]:c;piece={...piece,parts:piece.parts.map(p=>({...p,...(p.channel?{channel:colour(p.channel)}:{}),...(p.output?{output:colour(p.output)}:{}),...(p.kind==='scale'?{match:colour(p.match)}:{}),...(p.kind==='flip'&&first!=='keep'?{initial:first==='b'}:{})}))};
  if(reflection!=='none'){const horizontal=reflection==='horizontal',point=p=>({x:horizontal?piece.width-1-p.x:p.x,y:horizontal?p.y:piece.height-1-p.y}),programOperation=horizontal?'mirror':'mirror-y',prismOperation=horizontal?'mirror-x':'mirror-y';piece={...piece,road:piece.road.map(point),parts:piece.parts.map(p=>({...p,...point(p),...(p.program?{program:transformProgram(p.program,programOperation)}:{}),...(p.alternate?{alternate:transformProgram(p.alternate,programOperation)}:{}),...(p.operation?{operation:transformPrismOperation(p.operation,prismOperation)}:{}),...(p.kind==='seal'&&p.heading!=='all'?{heading:transformProgram([p.heading,'wait','wait'],programOperation)[0]}:{})}))};}
  for(let i=0;i<turns;i++){
   const rotate=p=>({x:piece.height-1-p.y,y:p.x});

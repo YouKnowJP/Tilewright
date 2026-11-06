@@ -31,13 +31,14 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains all earlier cases and adds six Tidekeeper cases:
-four-mission phone/desktop clears, clock-blueprint staggering/retiming/exchange,
-part editing and protected imports, exact phase continuation with backup rollback,
-and enlarged themed menus with new/legacy playable shares. It has **216 distinct
-cases**, split exhaustively **72/72/72**. Existing road, keyboard, controller,
-interruption, touch, fullscreen and practice checks remain required. Ordinary
-cases reject every unexpected console, script or failed-asset response.
+The release catalogue retains all earlier cases and adds six Balancekeeper cases:
+four-mission phone/desktop clears, scale-blueprint rewiring/capture/exchange,
+cargo/badge editing and protected imports, the one-turn crossing checkpoint with
+reload/Undo/backup rollback, and enlarged themed menus with new/legacy playable
+shares. It has **222 distinct cases**, split exhaustively **74/74/74**. Existing
+road, tide, keyboard, controller, interruption, touch, fullscreen and practice
+checks remain required. Ordinary cases reject every unexpected console, script
+or failed-asset response.
 
 The recovery command additionally interrupts a real startup module request,
 checks the Retry flow with untouched saves, holds loading past the real 15-second

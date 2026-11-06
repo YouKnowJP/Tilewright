@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-fifty-two duo chapters in six-card pages; filter by region, saved/completed
+fifty-six duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,51 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Balancekeepers — v0.57
+
+Choose **The Balancekeepers** in Adventure Home, or **Share → Adventure
+collections → Try the Balancekeepers collection** for the four-chapter edition.
+
+| Chapter | Mission | Repair | Worked route |
+| --- | --- | --- | --- |
+| 53 | The Four Counterweights | Eight pieces; loaded outward scales and empty return scales | 190 ticks |
+| 54 | The Moonweigher’s Ferry | Six pieces; hold a weighted crossing, then catch a one-turn empty-hand opening | 114 ticks |
+| 55 | The Weighhouse Dispatch | Seven pieces; cargo-driven signs, a delayed approach and filled-window return | 148 ticks |
+| 56 | The Empty-Hand Council | Twelve pieces; unload before opening each other’s bridge, trade parcels, deliver six letters and return home | 175 ticks |
+
+A **cargo scale V** has three separate settings: the numbered **power channel**,
+**required cargo** and **courier badge**. Cargo can mean any hands, empty hands,
+any parcel or one of four parcel colours. A matching courier must stand on the
+scale. It keeps the parcel and needs no Use card.
+
+Power is sampled at the start of each turn, before either friend acts. Stepping
+onto a scale or receiving a handoff changes its power on the next turn. Leaving
+does not close the other friend’s crossing midway through a turn. A courier
+already on a bridge may leave safely. Several scales with the same power number
+combine: any matching scale can power that circuit. The compact goals line shows
+each scale number’s next-turn readiness; inspect the tile for its full cargo rule.
+
+In **Tools → Blueprints**, choose **A bridge with a cargo scale** or **The
+weighhouse dispatch**. Choose cargo and badge, then rotate, reflect or repeat the
+piece. Palette shifts move both parcel requirements and power colours together;
+empty/any-hand conditions stay the same.
+
+Open **Wire power circuits** to change only the power connections. Scales,
+plates, bridges, signals, lanterns, bells and tides move together. Parcel wells,
+recipes, delivery windows, seal/cargo conditions and tube/locker links keep their
+colours. A signal’s filled-window fallback follows the signal’s new number.
+Different circuits within a piece need separate destinations; choose both sides
+to swap numbers. **Use unused power channels** also avoids existing window
+numbers. Manual wiring can intentionally join a garden circuit. All these
+choices preview a piece; **Place at cursor** changes the garden in one undoable
+edit. Capture, keep or download the result to reuse or share it.
+
+Saved collections restore the couriers’ positions and parcels, so scale power
+and the entire test Undo history return exactly. Full journey backups include
+these saves. Shared projects/collections include maps and creator proofs rather
+than personal progress. Scales use project format 8 and blueprint format 7;
+earlier formats keep their existing meanings.
 
 ## The Tidekeepers — v0.56
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.57.0 — 2026-11-06
+
+- Add cargo scales: choose a parcel condition and courier badge independently of the numbered power circuit. Weight is sampled before either courier acts; movement and handoffs take effect next turn, and occupied bridges stay safe. Numbered scale status stays compact.
+- Add four Balancekeeper expert/master repairs for fifty-six duo chapters, with verified 190/114/148/175-tick routes, staged hints and a four-chapter collection. Coordinate loaded/empty return crossings, a one-turn ferry, cargo-driven dispatch and empty-hand locker relays.
+- Add scale-crossing and weighhouse blueprints, plus folded power rewiring for scales, plates, bridges, signals, lanterns, bells and tides. Remap circuits without changing parcel recipes, cargo matches or tube/locker connections; suggest unused channels, capture pieces, share files and Undo whole placements.
+- Add project format 8 and blueprint format 7, retaining old formats, save keys and captured v0.56 exports, codes, state keys and collection bytes. Reconstruct cargo-scale power and Undo from existing saved collection checkpoints.
+
 ## 0.56.0 — 2026-11-05
 
 - Add automatic tide beacons: configurable 2–8-beat cycles, open beats and phase offsets power matching bridges and signal stamps at turn start. Occupied crossings retain their safety rule; tide-specific blocked messages and numbered previews explain timing. Group the HUD by channel so repeated beacons stay compact.
