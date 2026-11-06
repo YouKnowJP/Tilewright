@@ -2,7 +2,7 @@
 
 ## Automatic tides and clock blueprints — v0.56.0
 
-The release contains **1,729 Node tests**, **216 required gameplay browser
+The release contains **1,730 Node tests**, **216 required gameplay browser
 cases** in exhaustive groups of **72/72/72**, and a **182-file** static package.
 Four Tidekeeper missions bring the duo story to fifty-two chapters. Their real
 routes clear in 88, 102, 118 and 196 ticks; removing any supplied repair prevents
