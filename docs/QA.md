@@ -38,6 +38,11 @@ power tools and collection overview at five viewport sizes. Viewport/touch
 emulation is distinct from physical devices, actual Safari, screen-reader
 testing and human usability checks.
 
+A WebKit trace exposed a test-triggered reload while the preceding navigation
+was still importing startup modules. The blueprint persistence check now waits
+for game readiness before its deliberate reload. Its no-console-error assertion
+remains intact; the canceled-import error is not excluded.
+
 All five platform jobs, the complete browser catalogue, preserved migration,
 three startup recovery checks and Pages publication remain release gates.
 Public artifact comparison and selected public-site live flows verify the
