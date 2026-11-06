@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.62.0 — 2026-11-06
+
+- Add Memory Drums D: record a numbered source at turn start and repeat its beat on a different output one to six turns later. Drums read physical sources, completed windows and Weave outputs, while their own outputs do not cascade into other drums or Weaves. Initial memories are quiet; bell rings and deliveries are first recorded next turn.
+- Add four original expert/master Drumkeeper adventures for seventy-six duo chapters: The Beat across the Brook, The Letter after the Bell, The Night That Remembers and The Drumkeepers’ Homecoming. Verified routes finish in 174/168/177/189 ticks. Coordinate delayed tides, remote one-beat bells, remembered kiln recipes and two home flags that must wait for every drum memory to empty.
+- Add an optional quiet-drum finish goal, distinct saved memory queues and their state fingerprints. Project format 13 and blueprint format 12 support drums; existing formats, save keys and literal v0.61 project/code/piece/collection/state-key bytes remain unchanged. Save/Continue, Undo, journey isolation and backups reconstruct outstanding beats.
+- Add delayed-crossing and returning-beat blueprints, plus folded per-station timing composition for clocks, bells and drums. Copy timing to matching stations, shift/stagger existing clocks, restore individual/all edits and inspect sixteen conditional beats. Preview the final composition, including edited Weaves, palettes, facing, repeated copies and power wiring. The preview explicitly assumes quiet couriers, bells, lights and windows; normal garden tests include their actions.
+- Preserve distinct drum source/output ports under whole-piece palettes and atomic power rewiring; parcel-only remixes leave both intact. Share captured pieces and collections with maker credits and quiet-drum goals. Align the poster’s N window symbol with the garden so D clearly denotes a Memory Drum.
+- Keep the new adventures’ completion goals beside the board and fold their detailed power/machine readouts. Use compact readable beat cards with separately folded preview assumptions.
+- Add six required live release cases and retain every earlier gameplay case. Check phone/tablet/desktop, enlarged themed menus, pending-memory reload/Undo/backups, protected imports and both new/legacy replays. Firefox/WebKit compatibility now includes thirty-two cases each, with the existing action deadlines and release gates.
+
 ## 0.61.0 — 2026-11-06
 
 - Add automatic Weave relays: combine two distinct physical power/window sources with Both, Either, Exactly one or Neither, and supply a separate numbered output to bridges, signals and kilns. Every relay reads the same turn-start snapshot; relay outputs never cascade. No extra save-state field is needed.

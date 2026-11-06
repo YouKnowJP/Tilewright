@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {advanceDrum,drumOutput} from './pip-drums.mjs';
 import {weaveOutputs} from './pip-weaves.mjs';
 import {fireKiln} from './pip-kilns.mjs';
 import {useMixer} from './pip-mixers.mjs';
@@ -33,8 +34,8 @@ export function tinkerTrial(id){return TINKER_TRIALS.find(t=>t.id===id)||fail('C
 function text(value,fallback,max=48){if(value===undefined)return fallback;if(typeof value!=='string'||value.length>max||/[\u0000-\u001f\u007f]/.test(value))fail('Use a short, printable name.');return value.trim()||fallback;}
 export function newTinkerProject(id='first-use'){if(id===DUO_CUSTOM.id||duoMission(id))return newDuoProject(id);const trial=tinkerTrial(id);return {format:'pip-tinker-project',version:1,trialId:id,name:trial.title,author:'A trail keeper',programs:trial.programs.map(p=>[...p]),parts:id==='repair-relay'?[part('prism',5,3,{operation:'mirror'})]:[]};}
 export function normalizeTinkerProject(input,{verify=true}={}){
- if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
- if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 12.');
+ if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
+ if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 13.');
  const trial=tinkerTrial(input.trialId);
  if(!Array.isArray(input.programs)||input.programs.length!==trial.starts.length)fail('Each companion needs one three-card program.');
  const project={format:'pip-tinker-project',version:1,trialId:trial.id,name:text(input.name,trial.title),author:text(input.author,'A trail keeper'),programs:input.programs.map(normalizeProgram),parts:[]};
@@ -52,18 +53,20 @@ export function normalizeTinkerProject(input,{verify=true}={}){
  if(input.proof!==undefined){if(project.parts.filter(p=>p.kind==='tube').length===1)fail('A working solution needs both tube ends.');if(!Number.isInteger(input.proof?.ticks)||input.proof.ticks<1||input.proof.ticks>TINKER_LIMIT)fail('The solution exceeds the workshop’s tick limit.');project.proof={ticks:input.proof.ticks};if(verify&&!verifyTinkerProof(project))fail('The attached solution does not finish this invention.');}
  return project;
 }
-export function editTinkerProject(input,patch){const {proof,...base}=input;const next={...base,...patch};if(next.trialId==='duo-creator')next.version=Math.max(next.version,duoRequiredVersion(next.parts||[]),patch.quietBells!==undefined?5:patch.quietSwitches!==undefined?4:patch.relays!==undefined||patch.emptyLockers!==undefined?3:2);return normalizeTinkerProject(next);}
+export function editTinkerProject(input,patch){const {proof,...base}=input;const next={...base,...patch};if(next.trialId==='duo-creator')next.version=Math.max(next.version,duoRequiredVersion(next.parts||[]),patch.quietDrums!==undefined?13:patch.quietBells!==undefined?5:patch.quietSwitches!==undefined?4:patch.relays!==undefined||patch.emptyLockers!==undefined?3:2);return normalizeTinkerProject(next);}
 export function placeTinkerPart(input,kind,x,y,extra={}){return editTinkerProject(input,{parts:[...input.parts.filter(p=>p.x!==x||p.y!==y),...(kind==='erase'?[]:[part(kind,x,y,extra)])]});}
 export function tinkerDefinition(project){return project.version>=2?duoDefinition(project):tinkerTrial(project.trialId);}
 export function tinkerCatalogue(){return [...TINKER_TRIALS,...DUO_STORIES,DUO_CUSTOM];}
-export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready'})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version>=3?{lockers:{},lockerTransfers:0}:{}),...(project.version>=4?{switches:{}}:{}),...(project.version>=5?{pulses:{}}:{}),...(project.version>=10?{mixers:{}}:{})};}
+export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready'})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version>=3?{lockers:{},lockerTransfers:0}:{}),...(project.version>=4?{switches:{}}:{}),...(project.version>=5?{pulses:{}}:{}),...(project.version>=10?{mixers:{}}:{}),...(project.version>=13?{drums:{}}:{})};}
 export function tinkerParts(project){return [...tinkerDefinition(project).fixed,...project.parts].map((p,i)=>({...p,id:String(i)}));}
 function physicalPowerChannels(state,parts,turn){return new Set([...scalePower(parts,state.bots),...parts.filter(p=>p.kind==='tide'&&tideOpen(p,turn)).map(p=>p.channel),...Object.keys(state.switches||{}),...Object.keys(state.pulses||{}),...parts.filter(p=>['plate','bridge'].includes(p.kind)&&state.bots.some(b=>at(b,p))).map(p=>p.channel)]);}
 function completedWindowPower(state,parts,power){for(const channel of ['amber','jade','violet','blue']){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===channel);if(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))power.add(channel);}return power;}
 export function weavePowerChannels(state,parts=tinkerParts(state.project),turn=state.ticks+1){if(!parts.some(p=>p.kind==='weave'))return new Set();return weaveOutputs(parts,completedWindowPower(state,parts,physicalPowerChannels(state,parts,turn)));}
-export function tinkerPoweredChannels(state,parts=tinkerParts(state.project),turn=state.ticks+1){const power=physicalPowerChannels(state,parts,turn);if(parts.some(p=>p.kind==='weave'))for(const c of weavePowerChannels(state,parts,turn))power.add(c);return power;}
+export function drumPowerChannels(state,parts=tinkerParts(state.project)){return new Set(parts.filter(p=>p.kind==='drum'&&drumOutput(p,state.drums?.[p.id])).map(p=>p.channel));}
+export function drumSourceChannels(state,parts=tinkerParts(state.project),turn=state.ticks+1){const power=completedWindowPower(state,parts,physicalPowerChannels(state,parts,turn));for(const c of weavePowerChannels(state,parts,turn))power.add(c);return power;}
+export function tinkerPoweredChannels(state,parts=tinkerParts(state.project),turn=state.ticks+1){const power=physicalPowerChannels(state,parts,turn);if(parts.some(p=>p.kind==='weave'))for(const c of weavePowerChannels(state,parts,turn))power.add(c);for(const c of drumPowerChannels(state,parts))power.add(c);return power;}
 export function kilnPowerChannels(state,parts=tinkerParts(state.project),turn=state.ticks+1){return completedWindowPower(state,parts,tinkerPoweredChannels(state,parts,turn));}
-export function tinkerStateKey(state){return JSON.stringify([state.bots,state.received,state.flips,state.transfers,...(state.lockers?[state.lockers,state.lockerTransfers]:[]),...(state.switches?[state.switches]:[]),...(state.pulses?[state.pulses]:[]),...(state.project.version>=7?[tinkerParts(state.project).filter(p=>p.kind==='tide').map(p=>tidePhase(p,state.ticks+1))]:[]),...(state.project.version>=10?[state.mixers]:[])]);}
+export function tinkerStateKey(state){return JSON.stringify([state.bots,state.received,state.flips,state.transfers,...(state.lockers?[state.lockers,state.lockerTransfers]:[]),...(state.switches?[state.switches]:[]),...(state.pulses?[state.pulses]:[]),...(state.project.version>=7?[tinkerParts(state.project).filter(p=>p.kind==='tide').map(p=>tidePhase(p,state.ticks+1))]:[]),...(state.project.version>=10?[state.mixers]:[]),...(state.project.version>=13?[state.drums]:[])]);}
 export function tinkerStep(input){
  if(input.status!=='playing')return input;
  const state=structuredClone(input),trial=tinkerDefinition(state.project),parts=tinkerParts(state.project),tubes=parts.filter(p=>p.kind==='tube');state.events=[];state.ticks++;
@@ -72,8 +75,10 @@ export function tinkerStep(input){
  const occupied=p=>state.bots.some(b=>at(b,p));
  // A held or occupied crossing remains safe throughout this tick, including Pip leaving its plate.
  const held=parts.some(p=>p.kind==='plate'&&occupied(p))||parts.some(p=>p.kind==='bridge'&&occupied(p));
- const switchChannels=new Set([...weavePowerChannels(input,parts,state.ticks),...scalePower(parts,state.bots),...Object.keys(state.switches||{}),...Object.keys(state.pulses||{}),...parts.filter(p=>p.kind==='tide'&&tideOpen(p,state.ticks)).map(p=>p.channel)]);
+ const switchChannels=new Set([...drumPowerChannels(input,parts),...weavePowerChannels(input,parts,state.ticks),...scalePower(parts,state.bots),...Object.keys(state.switches||{}),...Object.keys(state.pulses||{}),...parts.filter(p=>p.kind==='tide'&&tideOpen(p,state.ticks)).map(p=>p.channel)]);
  const heldChannels=tinkerPoweredChannels(state,parts,state.ticks);
+ // Every drum records the same pre-action source snapshot. New beats are for later turns.
+ if(state.drums){const sources=drumSourceChannels(input,parts,state.ticks);for(const p of parts.filter(p=>p.kind==='drum')){const memory=advanceDrum(p,input.drums?.[p.id],sources);if(memory.some(Boolean))state.drums[p.id]=memory;else delete state.drums[p.id];}}
  // Count down old rings once. New rings supply the following ticks, never this one.
  if(state.pulses)for(const c of Object.keys(state.pulses)){if(--state.pulses[c]===0)delete state.pulses[c];}
  for(const bot of state.bots){
@@ -95,6 +100,7 @@ export function tinkerStep(input){
    if(tile?.kind==='echo'){const other=state.bots.findIndex(b=>b!==bot);bot.program=echoProgram(echoCards[other],tile.operation);restart=true;bot.last=`Echo learned ${state.bots[other].id} · ${ECHO_OPERATIONS[tile.operation]}`;}
    if(tile?.kind==='prism'){bot.program=transformProgram(bot.program,tile.operation);restart=true;bot.last='Prism changed the cards';}
    if(tile?.kind==='signal'){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===tile.channel),plates=parts.filter(p=>p.kind==='plate'&&p.channel===tile.channel);const powered=switchChannels.has(tile.channel)||Boolean(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))||Boolean(plates.length&&plates.every(occupied));bot.program=[...(powered?tile.alternate:tile.program)];restart=true;bot.last=`Signal loaded ${powered?'Powered':'Quiet'}`;}
+   if(tile?.kind==='drum')bot.last='Memory Drum repeats earlier power automatically; no Use is needed';
    if(tile?.kind==='weave')bot.last='Weave relay reads its two sources at turn start; no Use is needed';
    if(tile?.kind==='scale')bot.last='Scale reads cargo at turn start; no Use is needed';
    if(tile?.kind==='tide')bot.last='Tide runs automatically; its next beat needs no Use';
@@ -109,7 +115,7 @@ export function tinkerStep(input){
   }
   if(command==='use'||bot.last.startsWith('Blocked'))state.events.push(`${bot.id}: ${bot.last}`);
  }
- const receivers=parts.filter(p=>p.kind==='receiver');const parked=parts.filter(p=>['pip-dock','sprout-dock'].includes(p.kind)).every(p=>at(p,state.bots[p.kind==='pip-dock'?0:1]));if(receivers.length&&receivers.every(p=>(state.received[p.id]||0)>=(p.parcels||1))&&(state.project.version>=2?state.transfers>=(trial.handoffs||0)&&parked&&(state.project.version<3||state.lockerTransfers>=(trial.relays||0)&&(!trial.emptyLockers||!Object.keys(state.lockers).length))&&(state.project.version<4||!trial.quietSwitches||!Object.keys(state.switches).length)&&(state.project.version<5||!trial.quietBells||!Object.keys(state.pulses).length):trial.id!=='parcel-partners'||state.transfers>0))state.status='won';else if(state.ticks>=TINKER_LIMIT)state.status='limit';
+ const receivers=parts.filter(p=>p.kind==='receiver');const parked=parts.filter(p=>['pip-dock','sprout-dock'].includes(p.kind)).every(p=>at(p,state.bots[p.kind==='pip-dock'?0:1]));if(receivers.length&&receivers.every(p=>(state.received[p.id]||0)>=(p.parcels||1))&&(state.project.version>=2?state.transfers>=(trial.handoffs||0)&&parked&&(state.project.version<3||state.lockerTransfers>=(trial.relays||0)&&(!trial.emptyLockers||!Object.keys(state.lockers).length))&&(state.project.version<4||!trial.quietSwitches||!Object.keys(state.switches).length)&&(state.project.version<5||!trial.quietBells||!Object.keys(state.pulses).length)&&(state.project.version<13||!trial.quietDrums||!Object.keys(state.drums).length):trial.id!=='parcel-partners'||state.transfers>0))state.status='won';else if(state.ticks>=TINKER_LIMIT)state.status='limit';
  state.last=state.status==='won'?(state.project.version>=2?'Adventure complete! '+trial.ending:'Invention complete! Keep this answer, or try a smaller or faster one.'):state.status==='limit'?'Tick limit reached. Return to the bench and try a different idea.':state.events.join(' · ')||state.bots.map(b=>`${b.id}: ${b.last}`).join(' · ');return state;
 }
 export function verifyTinkerProof(project){let state=startTinker(project);for(let i=0;i<project.proof.ticks;i++)state=tinkerStep(state);return state.status==='won'&&state.ticks===project.proof.ticks;}

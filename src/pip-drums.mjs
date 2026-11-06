@@ -1,0 +1,7 @@
+// New owned material. See LICENSE; prior MIT permissions remain effective.
+const colours=['amber','jade','violet','blue'];
+export function normalizeDrum(raw){const {input,channel,delay}=raw||{};if(!colours.includes(input)||!colours.includes(channel)||input===channel)throw Error('A Memory Drum needs different source and output power numbers.');if(!Number.isInteger(delay)||delay<1||delay>6)throw Error('Choose a drum delay of one to six turns.');return {input,channel,delay};}
+export function drumMemory(part,memory){const p=normalizeDrum(part);if(memory===undefined)return Array(p.delay).fill(false);if(!Array.isArray(memory)||memory.length!==p.delay||memory.some(b=>typeof b!=='boolean'))throw Error('A drum memory needs one on/off beat for each delayed turn.');return [...memory];}
+export function drumOutput(part,memory){return drumMemory(part,memory)[0];}
+export function advanceDrum(part,memory,power){return [...drumMemory(part,memory).slice(1),power.has(part.input)];}
+export function drumDescription(part,memory){const p=normalizeDrum(part),number=c=>`${colours.indexOf(c)+1} · ${c}`;return `Power ${number(p.input)} → ${number(p.channel)}, ${p.delay} turn${p.delay===1?'':'s'} later. Records the source at turn start; a source beat on turn 1 returns on turn ${p.delay+1}. Reads physical power, filled windows and Weave outputs; other drums do not feed it. No Use needed.${memory!==undefined?' Next turn: '+(drumOutput(p,memory)?'Powered.':'Quiet.'):''}`;}

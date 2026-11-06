@@ -2,7 +2,7 @@
 import {DUO_CHANNELS} from './pip-duo.mjs';
 import {WEAVE_RULES,weaveTruthTable} from './pip-weaves.mjs';
 export function createWeaveEditor({prefix,anchor,onChange=()=>{}}){
- const element=document.createElement('fieldset');element.id=prefix+'fields';element.innerHTML='<legend>Weave two sources</legend><p>W runs automatically. It reads both source numbers at turn start. Physical power and filled window groups count; other relay outputs do not. Choose a separate output number for bridges, signs or kilns.</p>';const controls={};
+ const element=document.createElement('fieldset');element.id=prefix+'fields';element.innerHTML='<legend>Weave two sources</legend><p>W runs automatically. It reads both source numbers at turn start. Physical power and filled window groups count; other relay or drum outputs do not. Choose a separate output number for bridges, signs or kilns.</p>';const controls={};
  for(const [key,label,value]of [['first','Power source A','amber'],['second','Power source B','jade'],['channel','Relay output','violet'],['rule','Relay rule','both']]){
   const row=document.createElement('label'),select=document.createElement('select');row.textContent=label;select.id=prefix+key;select.replaceChildren(...(key==='rule'?Object.entries(WEAVE_RULES).map(([v,t])=>new Option(t,v)):DUO_CHANNELS.map((c,i)=>new Option(`${i+1} · ${c}`,c))));select.value=value;select.onchange=()=>{onChange();render();};row.append(select);element.append(row);controls[key]=select;
  }

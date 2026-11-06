@@ -32,11 +32,11 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains all earlier cases and adds six Weavekeeper cases:
-four-mission phone/desktop clears, individual/bulk relay/card/power
+The release catalogue retains all earlier cases and adds six Drumkeeper cases:
+four-mission phone/desktop clears, individual/bulk timing/relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
-pre-lantern relay checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **246 distinct cases**, split **62/62/61/61**. All earlier
+recorded-beat checkpoints through reload/Undo/backup, and enlarged menus
+with old/new replays. It has **252 distinct cases**, split **63/63/63/63**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -49,8 +49,9 @@ npm run test:browser:pip -- chromium
 npm run test:browser:pip -- firefox webkit
 ```
 
-The runner checks six Weavekeeper cases, six Kilnkeeper cases, six Mixing House
-cases, six retained Echo Post cases and two legacy save/share cases (twenty-six total),
+The runner checks six Drumkeeper cases, six Weavekeeper cases, six Kilnkeeper
+cases, six Mixing House cases, six retained Echo Post cases and two legacy
+save/share cases (thirty-two total),
 records the built release metadata, closes the browser/server and removes its
 owned temporary build. Firefox and WebKit run as separate required CI jobs with
 original action deadlines and full tracing. Their reports are retained for
@@ -308,3 +309,13 @@ individual/bulk relay edits, atomic power wiring, cards, capture and file exchan
 It checks truth tables, rejected port collisions, protected old/future imports,
 320/390/768/844/1440 enlarged themed menus, read-only tests and literal v0.60 replay.
 All six cases are required in the release catalogue and Firefox/WebKit gates.
+
+## Drumkeepers and timing composition — v0.62
+
+`pip-drumkeepers-browser-checks.mjs` clears the four delayed-power missions at
+390/1440, restores a recorded tide beat through reload/Undo/backup, and exercises
+individual/bulk clock/bell/drum timing, final-composition forecasts, atomic power
+swaps, cards, capture and file exchange. It checks quiet-memory goals, protected
+imports, 320/390/768/844/1440 enlarged menus, read-only tests and literal v0.61 replay.
+All six cases are required in the release catalogue and Firefox/WebKit gates.
+Unsupported import probes derive their next versions from the supported parts.

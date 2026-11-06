@@ -15,5 +15,6 @@ export function rehearsalAdvice(project,trace){
  if(trace.stop==='repeat'){const blocked=trace.events.filter(e=>e.kind==='blocked');return blocked.length?'This route repeats after blocked moves. Inspect the last obstacle: blocked movement still advances the card.':'This route repeats without completing every goal. Inspect the last station and the parcel each partner holds.';}
  const parts=tinkerParts(project),last=trace.frames.at(-1);if(parts.some(p=>p.kind==='receiver'&&!(last.received[p.id]>= (p.parcels||1))))return 'Some windows are still waiting. Filter deliveries, then inspect the last collection, recipe or locker exchange.';
  if(project.version>=5&&duoDefinition(project).quietBells&&Object.keys(last.pulses||{}).length)return 'Timed bells are still ringing. Let their countdowns reach zero while returning both couriers to any marked home flags.';
+ if(project.version>=13&&duoDefinition(project).quietDrums&&Object.keys(last.drums||{}).length)return 'Drums still hold recorded beats. Switch their sources off, then allow each delayed beat to leave before bringing both friends home.';
  return 'Check the remaining handoffs, locker goals and home flags. A longer rehearsal may reveal the return route.';
 }

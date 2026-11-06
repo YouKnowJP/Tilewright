@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-drum-brook':['The bridge can answer after its clock stops shining.','Read the jade clock and the violet crossing separately. Each drum records a source at turn start and returns it two turns later; blocked cards still advance.'],
+ 'duo-drum-bell':['Send a short ring to a road your friend has not reached yet.','The ring begins next turn. A six-turn drum then returns that one beat at the crossing. Trace the sampling turn as well as the ringing turn.'],
+ 'duo-drum-night':['The kiln listens to a remembered answer from the clocks.','Exactly one source can change before the drum repeats it. Inspect the recorded beat, the next kiln heat and the window colours together.'],
+ 'duo-drum-home':['A quiet lamp can leave a few beats behind.','Both friends must hold their home flags long enough for the drum memories to empty. Compare the last toggle with the following three turns.'],
  'duo-weave-tides':['Two open sources must meet before violet can power a crossing.','Compare the four-beat and five-beat clocks at the start of each blocked approach. A bridge already occupied stays safe after either source closes.'],
  'duo-weave-lanterns':['The faster friend and the slower friend change a shared answer.','Exactly one light powers the kiln. Follow one complete bowl recipe, then inspect which lantern stays on after the final delivery.'],
  'duo-weave-silence':['Quiet is an answer a circuit can listen for.','Neither source opens the violet recipe. Finished amber and jade windows are lasting sources too; inspect which letters have to be made before that change.'],

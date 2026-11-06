@@ -1,5 +1,11 @@
 # Tilewright roadmap
 
+Version **0.62** adds Memory Drums, four Drumkeeper adventures for seventy-six
+duo chapters, quiet-memory homecomings and individual clock/bell/drum timing
+composition. Drums use project format 13 and blueprint format 12; old formats,
+local save keys and earlier state fingerprints stay supported. New checkpoints
+reconstruct their pending beats from the existing saved project and tick.
+
 Version **0.61** adds two-source Weave relays, four Weavekeeper stories for
 seventy-two duo chapters and a folded circuit composer with truth tables.
 New relays use project format 12 and blueprint format 11. All earlier formats

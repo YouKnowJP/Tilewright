@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-seventy-two duo chapters in six-card pages; filter by region, saved/completed
+seventy-six duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,62 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Drumkeepers — v0.62
+
+Choose **The Drumkeepers** in Adventure Home, or **Share → Adventure collections
+→ Try the Drumkeepers collection**. Staged clues and optional worked routes are
+available; all chapters remain open without a time limit on planning.
+
+| Chapter | Adventure | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 73 | The Beat across the Brook | Eight repairs; delayed tide crossings for six letters | 174 ticks |
+| 74 | The Letter after the Bell | Ten repairs; six-turn memories relay two one-beat bells | 168 ticks |
+| 75 | The Night That Remembers | Eight repairs; a Weave and drum supply changing kiln recipes for eight letters | 177 ticks |
+| 76 | The Drumkeepers’ Homecoming | Twelve repairs; four letters, both flags, quiet lamps and empty drum memories | 189 ticks |
+
+**Memory Drum D** records its **power source** at turn start and repeats that
+on/off beat on a different **output number** one to six turns later. It begins
+quiet. A source beat on turn 1 returns on turn `1 + delay`; a bell rung during
+turn 1 begins powering on turn 2 and is first recorded then. Turning a source
+off leaves its recorded beats to return in order. Use on D keeps cargo and
+cards; no Use is required to run it.
+
+Drums read physical power, completed window groups and Weave outputs from the
+same turn-start snapshot. Deliveries, switch toggles and movement during that
+turn affect later recordings. **Drum outputs do not feed other drums or Weaves.**
+They can power bridges, signals and kilns. An occupied crossing stays safe.
+Inspect a drum or the text map for its source, delay and next returned beat.
+The new adventures keep completion goals beside the board; **Power & machines**
+opens detailed next-turn device readouts and pauses playback for inspection.
+
+In **Your story & goals**, require **Finish with every drum memory quiet** for
+an optional cleanup challenge. Both flags and quiet lamps can be satisfied
+while a drum still holds a beat. Memories empty only after their sources stop
+and the recorded turns drain. Changing this goal changes the collection map’s
+identity, so a clear from an easier goal cannot award the revised chapter.
+
+The **delayed crossing** and **returning beat** blueprints provide clock/bridge
+and bell/dispatch starting points. Open **Compose clock & drum timing** to
+select one T clock, A bell or D drum. Edit its timing, **Use for matching
+stations**, shift every clock one beat, stagger existing clocks or restore
+one/all timing edits. Whole-piece retiming happens first; individual edits
+apply next. Port numbers, cards, recipes, geometry and credits stay intact.
+
+**Preview the next sixteen beats** previews the final composed piece, including
+Weave edits, palettes, power wiring and repeated copies. Its assumptions are
+shown explicitly: clocks run from turn one; couriers, bells, lanterns and
+filled windows are quiet; drums start empty. It is a timing study rather than
+a courier solution. Use a garden test for real delivery and Use interactions.
+The beat cards and themed menus support enlarged text on narrow screens.
+
+Power rewiring maps each drum’s source and output together. Parcel-only colour
+remixes leave them intact; whole-piece colour shifts remap both. Capture,
+keep/update, file exchange, shared collections and atomic placement Undo work
+as before. Project format **13** and blueprint format **12** add drums while
+older project/piece/code formats retain their original bytes. Paused collection
+saves reconstruct their exact queued beats and Undo history; ordinary story
+continuation restores saved cards and parts. Full journey backups retain both.
 
 ## The Weavekeepers — v0.61
 

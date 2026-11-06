@@ -4,9 +4,9 @@ import {DUO_STORIES} from './pip-duo.mjs';
 export const PIP_REGIONS = Object.freeze([
  ['adventures','The first letters'],['night-mail','The Night Post'],['dawn-workshop','Dawn Workshop'],
  ['canopy-fair','The Canopy Fair'],['after-hours','Canopy After Hours'],['clocktower','The Clocktower Ledger'],
- ['star-atlas','Star Atlas'],['lantern-workshop','Lantern Workshop'],['bellkeeper','The Bellkeeper'],['sealkeeper','The Sealkeepers'],['rainwright','The Rainwrights'],['tidekeeper','The Tidekeepers'],['balancekeeper','The Balancekeepers'],['echo-post','The Echo Post'],['mixing-house','The Mixing House'],['kiln-house','The Kilnkeepers'],['weave-house','The Weavekeepers']
+ ['star-atlas','Star Atlas'],['lantern-workshop','Lantern Workshop'],['bellkeeper','The Bellkeeper'],['sealkeeper','The Sealkeepers'],['rainwright','The Rainwrights'],['tidekeeper','The Tidekeepers'],['balancekeeper','The Balancekeepers'],['echo-post','The Echo Post'],['mixing-house','The Mixing House'],['kiln-house','The Kilnkeepers'],['weave-house','The Weavekeepers'],['drum-house','The Drumkeepers']
 ].map(([id,name])=>Object.freeze({id,name})));
-const labels = {handoff:'Teamwork',press:'Recipes & presses',prism:'Compass prisms',flip:'Route memories',plate:'Pressure plates',bridge:'Shared bridges',locker:'Parcel lockers',cargo:'Cargo compasses',tube:'Tube journeys',signal:'Signal stamps',latch:'Remembered lights',pulse:'Timed bells',seal:'Passport checks',tide:'Automatic tides',scale:'Cargo scales',echo:'Borrowed route cards',mixer:'Mixing recipes',kiln:'Powered recipes',weave:'Two-source circuits'};
+const labels = {handoff:'Teamwork',press:'Recipes & presses',prism:'Compass prisms',flip:'Route memories',plate:'Pressure plates',bridge:'Shared bridges',locker:'Parcel lockers',cargo:'Cargo compasses',tube:'Tube journeys',signal:'Signal stamps',latch:'Remembered lights',pulse:'Timed bells',seal:'Passport checks',tide:'Automatic tides',scale:'Cargo scales',echo:'Borrowed route cards',mixer:'Mixing recipes',kiln:'Powered recipes',weave:'Two-source circuits',drum:'Remembered power beats'};
 export function pipMissionTags(mission) {
  const kinds = new Set([...mission.fixed,...(mission.solutionParts||[])].map(p=>p.kind));
  return Object.entries(labels).filter(([kind])=>kinds.has(kind)).map(([,label])=>label);

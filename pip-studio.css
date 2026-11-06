@@ -38,3 +38,5 @@ body:is([data-game-text=large],[data-game-text=largest]) .ps-panel #ps-programs 
 .ps-weave-truth{width:100%;table-layout:fixed;border-collapse:collapse;margin:12px 0;font-size:inherit}.ps-weave-truth caption{padding:6px;text-align:left;color:#fff0be}.ps-weave-truth th,.ps-weave-truth td{border:1px solid #668782;padding:6px 3px;text-align:center;overflow-wrap:anywhere}.ps-weave-truth th{background:#203f45;color:#fff0be}.ps-weave-truth td{color:#e8f2dc}
 .pip-studio fieldset[id*="weave"] .game-select-trigger>span{white-space:normal;text-overflow:clip;overflow-wrap:anywhere}
 body:is([data-game-text=large],[data-game-text=largest]) .ps-weave-truth{font-size:var(--reading-ui-size);line-height:1.55}
+
+.ps-beat-strip{padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:6px}.ps-beat-strip li{border:1px solid #779c8a;border-radius:5px;padding:8px;color:#fff1c4;background:#143942;overflow-wrap:anywhere}.pip-studio fieldset[id*=drum] .game-select-trigger>span{white-space:normal;text-overflow:clip;overflow-wrap:anywhere}
