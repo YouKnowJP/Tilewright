@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**543 files in 15 folders.** Stage new files before refreshing. Run
+**544 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,7 +23,7 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 6 |
-| [scripts/browser/](../scripts/browser/) | 69 |
+| [scripts/browser/](../scripts/browser/) | 70 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
 | [src/](../src/) | 173 |
 | [tests/](../tests/) | 84 |
@@ -259,7 +259,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 69 files</summary>
+<summary>scripts/browser/ — 70 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -293,6 +293,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-compatibility-checks.mjs](../scripts/browser/pip-compatibility-checks.mjs)
 - [pip-duo-browser-checks.mjs](../scripts/browser/pip-duo-browser-checks.mjs)
 - [pip-echo-post-browser-checks.mjs](../scripts/browser/pip-echo-post-browser-checks.mjs)
+- [pip-format-boundaries.mjs](../scripts/browser/pip-format-boundaries.mjs)
 - [pip-foundry-browser-checks.mjs](../scripts/browser/pip-foundry-browser-checks.mjs)
 - [pip-gardens-browser-checks.mjs](../scripts/browser/pip-gardens-browser-checks.mjs)
 - [pip-glassworks-browser-checks.mjs](../scripts/browser/pip-glassworks-browser-checks.mjs)
