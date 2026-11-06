@@ -20,6 +20,8 @@ state, with bounded Undo and no proof/best attachment.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-echoes.mjs` / `src/pip-echo-post.mjs` | Immutable shared-turn card learning, geometric conjugation and four authored repairs. |
+| `src/pip-blueprint-cards.mjs` / `src/pip-blueprint-cards-ui.mjs` | Pure station-bank rewriting and a folded single-bank composer, applied before geometric arrangement. |
 | `src/pip-scales.mjs` / `src/pip-balancekeeper.mjs` | Cargo/badge predicates and turn-start power, four original expert/master repairs. |
 | `src/pip-blueprint-power.mjs` / `src/pip-blueprint-power-ui.mjs` | Independent, injective power rewiring and folded preview controls; recipes and link endpoints remain separate. |
 | `src/pip-tides.mjs` / `src/pip-tidekeeper.mjs` / `src/pip-tide-editor.mjs` | Bounded automatic tide phases, four authored repairs and shared accessible rhythm controls. |
@@ -1289,3 +1291,32 @@ verified creator proofs. Captured v0.56 fixtures test literal serialized PT1,
 PC1, blueprint and engine fingerprint bytes. Collection continuation reconstructs
 the one-turn ferry opening by replaying its saved tick and retains Undo and
 full-backup rollback through the existing journal format.
+
+## Echoes and blueprint card composition — v0.58
+
+Project format 9 adds `echo` with a validated `operation`; blueprint format 8
+maps to that project version. `pip-echoes.mjs` accepts Copy plus the five
+existing prism transformations. Copy is an identity transformation. Echo
+operations conjugate with geometry, including exchanging the two mirror axes
+on quarter turns. Ordinary prisms retain their existing schema and behavior.
+
+`tinkerStep` snapshots both program arrays before either courier acts. Use on J
+transforms the other snapshot, clones the result, restarts at index 0 and keeps
+cargo. Copying two ways cannot cascade the first courier’s newly changed cards.
+No new mutable engine field or save key is needed: programs and indices already
+participate in state identity. Existing captured fingerprints remain exact.
+
+`rewriteBlueprintRoute` validates a station index and only program/alternate
+patches, normalizes the piece, and returns one immutable bank rewrite. It cannot
+edit parcels, connection numbers, echo arrangements, initial-memory flags,
+credits or geometry. The composer keeps edits outside project/journal state.
+It applies them to the base piece before facing, reflection and repeated copies;
+the preview’s station rules describe the final transformed banks. Saving a piece
+or placing it uses the existing shelf/edit paths and atomic Undo.
+
+Six required release cases cover four-mission phone/desktop play, the turn-20/21
+shared snapshot through reload/Undo/backup, card composition and file exchange,
+part editing/protected formats and enlarged themed menus with old/new replays.
+The full catalogue runs across four groups without removing cases or raising
+action deadlines. A reusable compatibility runner adds the six new cases plus
+two legacy-save/share regressions in Firefox and WebKit; both jobs gate Pages.

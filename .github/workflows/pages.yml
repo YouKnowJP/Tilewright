@@ -53,14 +53,14 @@ jobs:
           path: dist
 
   browser:
-    name: Built game / Chromium ${{ matrix.shard }}/3
+    name: Built game / Chromium ${{ matrix.shard }}/4
     runs-on: ubuntu-24.04
-    # Keep all cases across three balanced groups; per-action timeouts stay unchanged.
+    # Keep all cases across four balanced groups; per-action timeouts stay unchanged.
     timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4]
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -84,7 +84,7 @@ jobs:
         timeout-minutes: 8
         run: npx playwright install --with-deps --only-shell chromium
       - name: Play and inspect the built game
-        run: npm run test:browser:smoke -- --shard=${{ matrix.shard }}/3
+        run: npm run test:browser:smoke -- --shard=${{ matrix.shard }}/4
       - name: Check standalone paths, notices, and save continuity
         if: matrix.shard == 1
         run: |
@@ -99,10 +99,47 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+  pip-compatibility:
+    name: Pip compatibility / ${{ matrix.engine }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [firefox, webkit]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install locked browser tools
+        run: npm ci --ignore-scripts
+      - name: Bound Ubuntu package downloads
+        timeout-minutes: 2
+        run: sudo "$(command -v node)" scripts/ci-apt.mjs
+      - name: Install browser and system dependencies
+        timeout-minutes: 8
+        run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Play Pip and Sprout in this browser
+        run: npm run test:browser:pip -- ${{ matrix.engine }}
+      - name: Keep compatibility reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tilewright-pip-${{ matrix.engine }}
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
   deploy:
     name: Publish playable website
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: [test, browser]
+    needs: [test, browser, pip-compatibility]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

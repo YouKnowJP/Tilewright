@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {transformEchoOperation} from './pip-echoes.mjs';
 import {DUO_CHANNELS,duoEditable,normalizeDuoProject} from './pip-duo.mjs';
 import {transformProgram,transformPrismOperation} from './clockwork.mjs';
 const at=(a,b)=>a.x===b.x&&a.y===b.y;
@@ -11,7 +12,7 @@ export function transformDuoGarden(input,operation){
  const turns=operation==='left'?3:1;for(let i=0;i<turns;i++){
   const rotate=['right','left'].includes(operation),horizontal=operation==='horizontal',width=rotate?p.board.height:p.board.width,height=rotate?p.board.width:p.board.height;if(width<7||width>13||height<5||height>9)throw Error('This garden cannot turn inside the 7–13 column and 5–9 row limits. Mirror it, or resize it first.');
   const point=part=>rotate?{x:p.board.height-1-part.y,y:part.x}:horizontal?{x:p.board.width-1-part.x,y:part.y}:{x:part.x,y:p.board.height-1-part.y},cards=rotate?'rotate':horizontal?'mirror':'mirror-y',prism=rotate?'rotate':horizontal?'mirror-x':'mirror-y';
-  p=finish(p,{board:{width,height,road:p.board.road.map(point)},starts:p.starts.map(point),programs:p.programs.map(program=>transformProgram(program,cards)),parts:p.parts.map(part=>({...part,...point(part),...(part.program?{program:transformProgram(part.program,cards)}:{}),...(part.alternate?{alternate:transformProgram(part.alternate,cards)}:{}),...(part.operation?{operation:transformPrismOperation(part.operation,prism)}:{}),...(part.kind==='seal'&&part.heading!=='all'?{heading:transformProgram([part.heading,'wait','wait'],cards)[0]}:{})}))});
+  p=finish(p,{board:{width,height,road:p.board.road.map(point)},starts:p.starts.map(point),programs:p.programs.map(program=>transformProgram(program,cards)),parts:p.parts.map(part=>({...part,...point(part),...(part.program?{program:transformProgram(part.program,cards)}:{}),...(part.alternate?{alternate:transformProgram(part.alternate,cards)}:{}),...(part.operation?{operation:part.kind==='echo'?transformEchoOperation(part.operation,prism):transformPrismOperation(part.operation,prism)}:{}),...(part.kind==='seal'&&part.heading!=='all'?{heading:transformProgram([part.heading,'wait','wait'],cards)[0]}:{})}))});
  }return p;
 }
 export function resizeDuoGarden(input,width,height,{anchor='corner'}={}){

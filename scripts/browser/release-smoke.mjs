@@ -1,3 +1,4 @@
+import {pipEchoPostScenarios} from './pip-echo-post-browser-checks.mjs';
 import {pipBalancekeeperScenarios} from './pip-balancekeeper-browser-checks.mjs';
 import {pipHomeScenarios} from './pip-home-browser-checks.mjs';
 import {pipInputScenarios} from './pip-input-browser-checks.mjs';
@@ -125,6 +126,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await pipRainwrightScenarios(scenario);
     await pipTidekeeperScenarios(scenario);
     await pipBalancekeeperScenarios(scenario);
+    await pipEchoPostScenarios(scenario);
     const report={browser:browser.version(),baseURL,shard,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
   }finally{await browser.close();}
 }

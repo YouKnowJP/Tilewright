@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-fifty-six duo chapters in six-card pages; filter by region, saved/completed
+sixty duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,55 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Echo Post — v0.58
+
+Choose **The Echo Post** in Adventure Home, or **Share → Adventure collections
+→ Try the Echo Post collection**. Each repair includes staged clues and an
+optional verified worked route.
+
+| Chapter | Mission | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 57 | The First Reply | Five repairs; mirrored delivery loops and a second, homeward reply | 190 ticks |
+| 58 | The Backward Letter | Five repairs; reverse a stationary sender’s Use-first message, then learn its final return | 220 ticks |
+| 59 | The Compass Chorus | Five repairs; four recipes, two echoes and a shared compass-turn interception | 40 ticks |
+| 60 | The Council of Borrowed Roads | Thirteen repairs; unload for scales, trade parcels, pass badge arches, deliver six letters and empty every locker | 190 ticks |
+
+**Echo stamp J** activates on Use. It learns the other friend’s complete three
+cards as they were **at the start of the turn**, then starts its own card 1.
+The partner’s next-card position is not copied. Both friends use the same
+snapshot, even when Pip changes cards first. Echoes keep carried parcels.
+
+Choose **Copy the cards**, **Turn right**, **Turn left**, **Mirror East / West**,
+**Mirror North / South**, or **Reverse card order**. Directions change; Wait and
+Use stay themselves. Reversing changes slot order. A learned Use before any move
+can keep a courier at the echo; inspect the three cards before running again.
+The Compass Chorus makes this visible on turn 21: Pip turns south while Sprout
+hears the old eastward route and turns that reply north.
+
+In **Tools → Blueprints**, configure **The echo atelier** or **A reply at the
+dispatch fork**. The friend supplies the live route; choose how J arranges it.
+The atelier also has recipe colours and a delivery target.
+
+Open **Rewrite route cards** on a piece with memories, signals or cargo
+compasses. Select a stamp, then one of its two banks. Edit three cards, swap
+both banks, move card 1 to the end, or restore one/all original stamps. Only one
+bank is shown at a time. Coordinates name the original piece; facing, mirroring
+and repeated copies apply afterward. **Read station rules** shows the final
+transformed instructions. Power and tube/locker rewiring stay separate.
+
+Composition changes the preview. **Place at cursor** adds it in one undoable
+edit. Keep/download the piece to reuse it, or capture the placed result. Saved
+source blueprints remain intact until an explicit update. Test mode locks all
+creator controls. Shared files, codes and collections retain the echo operation
+and rewritten banks. Collection saves and journey backups restore the exact
+pre-echo turn, copied cards and full Undo history.
+
+Gardens allow up to 32 parts, including at most eight route memories, signals,
+cargo compasses and echoes combined.
+
+Echo projects use format 9 and echo blueprints format 8. Earlier projects and
+blueprints keep their existing meanings and serialized bytes.
 
 ## The Balancekeepers — v0.57
 

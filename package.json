@@ -1,6 +1,6 @@
 {
   "name": "tilewright",
-  "version": "0.57.0",
+  "version": "0.58.0",
   "private": true,
   "type": "module",
   "description": "A local-first tile map editor and original turn-based puzzle adventure game.",
@@ -19,7 +19,8 @@
     "check:public": "node scripts/check-public.mjs",
     "check:repository": "node scripts/repository-files.mjs --check",
     "test:browser:migration": "node scripts/browser/migration-browser-checks.mjs",
-    "test:browser:recovery": "node scripts/browser/startup-recovery-browser-checks.mjs"
+    "test:browser:recovery": "node scripts/browser/startup-recovery-browser-checks.mjs",
+    "test:browser:pip": "node scripts/browser/pip-compatibility-checks.mjs"
   },
   "repository": {
     "type": "git",

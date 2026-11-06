@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-echo-reply':['The first reply and the homeward reply carry different roads.','On a shared Use turn, J hears the cards from before either friend changes them. Compare the first echo with the final homecoming.'],
+ 'duo-echo-backwards':['Sometimes the right message needs a different card order.','A Use-first route keeps copying itself. Ask which arrangement moves before its next Use, and what Pip will say when the last window fills.'],
+ 'duo-echo-chorus':['An echo can turn a reply into a different road.','Follow both friends up to the compass turn. Sprout hears the old direction on their shared Use, then applies the echo’s own turn.'],
+ 'duo-echo-council':['An empty hand can open a bridge; a borrowed road can bring a friend home.','Trace what leaves each locker, then inspect the cargo before each badge arch. The last echo should hear Pip’s northward home route.'],
  'duo-balance-four':['A loaded crossing and an empty return ask different questions.','Read both scales on each road. Each friend powers the opposite bridge, so compare their cargo before moving either courier.'],
  'duo-balance-ferry':['One friend carries the weight; the other must finish before releasing it.','Keep Sprout on its badge scale until all jade letters arrive. The final empty-hand opening lasts one turn, and an occupied bridge remains safe.'],
  'duo-balance-dispatch':['The dispatch scale and the final window can answer the same signal.','Follow the climbing approach before the upper sign. Later, a filled window can hold the route open even after Sprout leaves its scale.'],

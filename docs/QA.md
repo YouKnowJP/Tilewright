@@ -1,5 +1,45 @@
 # Verification record
 
+## Echo Post and blueprint card composition — v0.58.0
+
+Coverage includes **1,811 Node tests**, **228 required gameplay browser cases**
+in exhaustive groups of **57/57/57/57**, and a **190-file** static package.
+Four Echo Post repairs bring the duo story to sixty chapters. Their verified
+routes clear in **190, 220, 40 and 190 ticks**. Every supplied repair is needed
+for its reference clear; blank cards do not win. Immutable frames, separate
+courier positions, required deliveries/relays/home flags, empty lockers and
+mirrored/palette remixes retain the checked results.
+
+Thirty-two focused unit cases cover all 216 card programs under six echo
+arrangements and their geometric conjugations; simultaneous copies and a
+partner’s same-turn prism; fresh card-1 indices, independent arrays and retained
+cargo; and no activation merely by walking onto a stamp. Card composition
+checks one-bank isolation, protected fields, metadata, geometric arrangement,
+repetition, invalid patches and unchanged legacy blueprint versions. Captured
+v0.57 project/PT1, PC1/PC2, piece and state-key bytes remain exact; all older
+fixture families remain required. Save keys remain unchanged.
+
+Six new required live cases play every mission on phone and desktop, check
+captured/kept/imported card compositions, swaps/cycling/restoration, exact
+placement Undo, unchanged saved sources, part editing and protected imports.
+The collection checkpoint pauses before the shared Use on turn 21: after
+reload, Pip turns south and Sprout learns the old eastward route then turns
+north. Undo and full-backup rollback reconstruct both programs and history.
+Nested text spans and live label changes retain their accessible dropdown names;
+controls/decorations do not enter the name. Named power fields are checked in brush and blueprint
+flows. Enlarged, high-contrast themed menus, focus return and read-only test fields are
+checked at 320/390/768/844/1440-pixel views. New and captured older shares replay.
+
+Five platform jobs, all four Chromium groups, migration and three startup
+recovery checks remain release gates. Permanent Firefox and WebKit jobs use
+the same original action deadlines and full tracing for the six new cases plus
+two older save/share checks. The generic compatibility runner validates the
+exact case set and records the built release metadata. No unexpected console,
+script or asset errors are excluded. Published files and selected public-site
+play/recovery flows are audited against the pushed commit. Responsive captures
+remain viewport/touch emulation, distinct from physical-device, actual Safari,
+screen-reader and human usability checks.
+
 ## Cargo scales and the Balancekeepers — v0.57.0
 
 The release contains **1,771 Node tests**, **222 required gameplay browser

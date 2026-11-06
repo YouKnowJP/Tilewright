@@ -4,17 +4,18 @@ const widgets=new Map();let active=null,serial=0,frame=0;
 const set=(node,name,value)=>{if(node.getAttribute(name)!==String(value))node.setAttribute(name,String(value));};
 const enabled=option=>!option.hidden&&!option.disabled&&!option.closest('optgroup[disabled],optgroup[hidden]');
 const visible=node=>node.isConnected&&!node.closest('[hidden], [inert]')&&node.getClientRects().length>0;
+function labelText(node){if(node.nodeType===3)return node.textContent;if(node.nodeType!==1||node.matches('select,input,textarea,button,svg,[aria-hidden="true"],[hidden]'))return '';return [...node.childNodes].map(labelText).join(' ');}
 function nameOf(widget){
   const {source,labels}=widget,by=source.getAttribute('aria-labelledby');
-  return source.getAttribute('aria-label')||(by?by.split(/\s+/).map(id=>document.getElementById(id)?.textContent||'').join(' '):labels.map(label=>[...label.childNodes].filter(node=>node.nodeType===3).map(node=>node.textContent).join(' ')).join(' ')).trim()||'Choose an option';
+  return source.getAttribute('aria-label')||(by?by.split(/\s+/).map(id=>document.getElementById(id)?.textContent||'').join(' '):labels.map(labelText).join(' ').replace(/\s+/g,' ')).trim()||'Choose an option';
 }
 function refresh(widget){
   const {source,trigger}=widget,option=source.selectedOptions[0];
   const text=option?.label||'Choose an option';if(trigger.firstChild.textContent!==text)trigger.firstChild.textContent=text;
   trigger.disabled=source.matches(':disabled')||!Array.from(source.options).some(enabled);trigger.hidden=source.hidden;
-  set(trigger,'aria-label',nameOf(widget));set(trigger,'aria-disabled',trigger.disabled);
+  const name=nameOf(widget);set(trigger,'aria-label',name);set(trigger,'aria-disabled',trigger.disabled);
   if(source.title)trigger.title=source.title;else trigger.removeAttribute('title');
-  if(active?.widget===widget){if(trigger.disabled||!visible(trigger))close(false);else renderChoices();}
+  if(active?.widget===widget){if(trigger.disabled||!visible(trigger))close(false);else{if(active.menu.firstChild.textContent!==name)active.menu.firstChild.textContent=name;set(active.list,'aria-label',name);renderChoices();}}
 }
 function close(focus=true){
   if(!active)return;const {widget,menu}=active;active=null;
@@ -104,6 +105,9 @@ export function installGameDropdowns(){
   document.addEventListener('reset',()=>queueMicrotask(()=>widgets.forEach(refresh)));
   const observer=new MutationObserver(records=>{
     for(const record of records){
+      // Context labels change separately from selects; ignore our own control text.
+      const changed=record.target.nodeType===3?record.target.parentElement:record.target;
+      if(!changed?.closest?.('select,input,textarea,button,svg')){const label=changed?.closest?.('label'),id=label?.control?.dataset.gameSelect,widget=id&&widgets.get(document.getElementById(id));if(widget)refresh(widget);}
       if(record.type==='attributes'&&record.attributeName==='disabled'&&record.target.matches('fieldset')){
         record.target.querySelectorAll('select').forEach(source=>{const widget=widgets.get(source);if(widget)refresh(widget);});
       }
@@ -111,6 +115,6 @@ export function installGameDropdowns(){
     }
     if(active&&!visible(active.widget.trigger))close(false);
   });
-  observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','open','inert','disabled']});
+  observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','open','inert','disabled','aria-hidden']});
   window.addEventListener('resize',schedulePosition);window.addEventListener('scroll',schedulePosition,true);window.visualViewport?.addEventListener('resize',schedulePosition);window.visualViewport?.addEventListener('scroll',schedulePosition);window.addEventListener('blur',()=>close(false));
 }

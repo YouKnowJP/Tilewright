@@ -12,6 +12,7 @@ npm run verify
 | [check.mjs](check.mjs) | Recursively checks syntax in source, tests, and tools. |
 | [build.mjs](build.mjs) | Packages only the explicit public-file allowlist into `dist/`. |
 | [browser/checks.mjs](browser/checks.mjs) | Entry point for all 30 optional live browser-check families. |
+| [browser/pip-compatibility-checks.mjs](browser/pip-compatibility-checks.mjs) | Built-game cross-engine Pip checks and release metadata. |
 | [browser/](browser/) | Feature-specific checks and shared UI/capture helpers. |
 | [solvers/](solvers/) | Developer witness generators; produce ordinary input journals through the public rules. |
 
@@ -31,14 +32,28 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains all earlier cases and adds six Balancekeeper cases:
-four-mission phone/desktop clears, scale-blueprint rewiring/capture/exchange,
-cargo/badge editing and protected imports, the one-turn crossing checkpoint with
-reload/Undo/backup rollback, and enlarged themed menus with new/legacy playable
-shares. It has **222 distinct cases**, split exhaustively **74/74/74**. Existing
-road, tide, keyboard, controller, interruption, touch, fullscreen and practice
-checks remain required. Ordinary cases reject every unexpected console, script
-or failed-asset response.
+The release catalogue retains all earlier cases and adds six Echo Post cases:
+four-mission phone/desktop clears, echo/card-composer capture and exchange,
+part editing and protected imports, exact shared-snapshot continuation with
+reload/Undo/backup rollback, and enlarged themed menus with new/legacy replays.
+It has **228 distinct cases**, split exhaustively **57/57/57/57**. All earlier
+road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
+practice checks remain required. Ordinary cases reject every unexpected console,
+script or failed-asset response.
+
+Run the focused compatibility suite against a freshly built package:
+
+```sh
+npx playwright install --with-deps firefox webkit
+npm run test:browser:pip -- chromium
+npm run test:browser:pip -- firefox webkit
+```
+
+The runner checks the exact six new cases plus two legacy save/share cases,
+records the built release metadata, closes the browser/server and removes its
+owned temporary build. Firefox and WebKit run as separate required CI jobs with
+original action deadlines and full tracing. Their reports are retained for
+seven days; publication requires both jobs as well as the full release suite.
 
 The recovery command additionally interrupts a real startup module request,
 checks the Retry flow with untouched saves, holds loading past the real 15-second

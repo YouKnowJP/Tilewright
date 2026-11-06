@@ -1,5 +1,10 @@
 # Tilewright roadmap
 
+Version **0.58** adds echo stamps, four original Echo Post repairs for sixty
+duo chapters, and a blueprint card composer. Projects with echoes use format 9
+and echo pieces use format 8; older formats and save keys remain supported.
+Permanent Firefox/WebKit checks and four exhaustive gameplay groups gate release.
+
 Version **0.57** adds cargo scales, four Balancekeeper expert/master repairs for
 fifty-six duo chapters, and independently rewired power blueprints. Projects
 with scales use format 8 and scale pieces use format 7. Old saves and formats

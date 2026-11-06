@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.58.0 — 2026-11-06
+
+- Add echo stamps: Use learns the other courier’s three cards from the shared turn-start snapshot, optionally turning, mirroring or reversing them. Restart at card 1 and keep cargo; simultaneous replies never cascade Pip’s new cards into Sprout’s copy.
+- Add four original Echo Post repairs for sixty duo chapters: The First Reply, The Backward Letter, The Compass Chorus and The Council of Borrowed Roads. Verified routes clear in 190/220/40/190 ticks; combine remote instruction changes, four-letter street crossings, empty-hand scales, locker trades and homecoming replies.
+- Add echo atelier/dispatch blueprints and a folded route-card composer. Select one station and bank, rewrite its three cards, swap banks, cycle slots or restore the original. Facing/reflection/copies apply after composition; readable station rules show the resulting instructions. Previewing keeps the garden and saved source intact.
+- Add project format 9 and blueprint format 8 while preserving older formats, save keys and captured v0.57 project, PT1/PC1/PC2, stencil and engine-state bytes. Collection checkpoints replay the shared pre-echo turn with complete Undo and backup restoration.
+- Preserve accessible dropdown names when labels wrap text in spans or change with the selected tool, while excluding controls, decorative icons and hidden content from the label. Verify named power controls in live creator flows.
+- Retain every release browser case across four balanced groups and add permanent Firefox/WebKit compatibility gates before publication. Original action timeouts, recovery checks and migration coverage remain required.
+
 ## 0.57.0 — 2026-11-06
 
 - Add cargo scales: choose a parcel condition and courier badge independently of the numbered power circuit. Weight is sampled before either courier acts; movement and handoffs take effect next turn, and occupied bridges stay safe. Numbered scale status stays compact.
