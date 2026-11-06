@@ -7,7 +7,7 @@ export function normalizeMixer(raw={}){
 }
 export function mixerDescription(part,stored=null){
  const p=normalizeMixer(part),recipe=`${p.channel} + ${p.second} → ${p.output}`;
- return `Use mixes ${recipe}. Either ingredient can go first. The bowl keeps the first parcel; the courier adding the other carries the result. ${stored?`Holding ${stored}; add ${stored===p.channel?p.second:p.channel}.`:'Bowl empty.'} Empty hands and wrong ingredients leave everything safe. Cards keep their place.`;
+ return `Use mixes ${recipe}. Either ingredient can go first. The bowl keeps the first parcel; the courier adding the other carries the result. ${stored?`Holding ${stored}; add ${stored===p.channel?p.second:p.channel}.`:'Bowl empty.'} Empty hands and wrong ingredients leave everything safe. Use advances to the next card.`;
 }
 export function useMixer(part,stored,parcel){
  const p=normalizeMixer(part),ingredients=[p.channel,p.second],held=stored??null;
