@@ -1,5 +1,41 @@
 # Verification record
 
+## Automatic tides and clock blueprints — v0.56.0
+
+The release contains **1,729 Node tests**, **216 required gameplay browser
+cases** in exhaustive groups of **72/72/72**, and a **182-file** static package.
+Four Tidekeeper missions bring the duo story to fifty-two chapters. Their real
+routes clear in 88, 102, 118 and 196 ticks; removing any supplied repair prevents
+the reference clear. Immutable frames, courier separation, mirrors and palette
+transforms preserve the checked outcomes.
+
+Focused tests enumerate every supported period/open-beat/offset combination;
+check first-turn and closed-entry behavior, shared sampling by both couriers,
+occupied crossing safety, OR-combined numbered power and no-Use cargo retention;
+and include phases in rehearsal identity to avoid a false repeated-route stop.
+Blueprint checks cover bounded settings, transforms, capture, credits, staggered
+copies, explicit atomic retiming and refusal of oversized/invalid pieces.
+Captured v0.55 exports, codes, state fingerprints, stencils and PC1 bytes remain
+exact. Older fixture families remain required. New mechanics use project format
+7 and blueprint format 6; old envelopes and save keys remain supported.
+
+Six new required live cases clear all four missions on phone/desktop, edit and
+Undo a real beacon, exchange and retime staggered blueprint downloads without
+overwriting their saved source, and refuse malformed imports. Collection tests
+pause just before an opening, reload the exact next phase and Undo history,
+roll back a full backup, and compare the saved replay with the real engine.
+Enlarged high-contrast themed menus retain focus at 320/390/768/844/1440-pixel
+widths; test mode locks creator fields. New and captured older shared adventures
+clear again. Chromium, Firefox and WebKit checks also retain selected prior
+Rainwright, station-blueprint and collection-backup regressions. Reviewed captures
+cover the board, running garden, rhythm editor, menus, blueprints and collection.
+Viewport/touch emulation remains distinct from physical devices, actual Safari,
+screen-reader and human usability checks.
+
+The complete release catalogue, five platform jobs, preserved migration,
+three startup recovery checks and public artifact checks continue to gate
+publication. Generated sites, captures and reports stay ignored.
+
 ## Rainwright missions and reusable roads — v0.55.0
 
 The release contains **1,693 Node tests**, **210 required gameplay browser

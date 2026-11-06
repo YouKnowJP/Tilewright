@@ -31,14 +31,13 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains all earlier cases and adds six Rainwright/road
-scenarios: four-mission phone/desktop clears, atomic road preview and Undo,
-stencil exchange and shelf protection, exact collection continuation and backup
-restoration, and enlarged themed menus with a playable creator export. It has
-**210 distinct cases**, split exhaustively as **70/70/70**. Existing keyboard,
-controller, interruption, touch and practice checks remain required. Inspection
-repeat is tested separately from action-key holds; fields, composition and
-browser shortcuts preserve their own behavior.
+The release catalogue retains all earlier cases and adds six Tidekeeper cases:
+four-mission phone/desktop clears, clock-blueprint staggering/retiming/exchange,
+part editing and protected imports, exact phase continuation with backup rollback,
+and enlarged themed menus with new/legacy playable shares. It has **216 distinct
+cases**, split exhaustively **72/72/72**. Existing road, keyboard, controller,
+interruption, touch, fullscreen and practice checks remain required. Ordinary
+cases reject every unexpected console, script or failed-asset response.
 
 The recovery command additionally interrupts a real startup module request,
 checks the Retry flow with untouched saves, holds loading past the real 15-second

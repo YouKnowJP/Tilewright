@@ -1,5 +1,9 @@
 # Tilewright roadmap
 
+Version **0.56** adds automatic tide beacons, four Tidekeeper missions for
+fifty-two duo chapters, and staggered/retimed clock blueprints. New mechanics
+use project format 7 and blueprint format 6; previous formats remain supported.
+
 Version **0.55** adds four Rainwright chapters for forty-eight duo adventures,
 plus a previewed road planner and reusable/shareable road stencils. Existing
 project and save formats remain compatible. Version **0.54** added focused garden keyboard/controller play, active-menu input

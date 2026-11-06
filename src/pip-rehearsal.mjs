@@ -11,6 +11,7 @@ export function rehearsalAdvice(project,trace){
  if(project.version>=2){const ready=duoReadiness(project);if(!ready.ready)return ready.errors[0];}
  if(!project.programs.flat().includes('use'))return (project.programs.length===1?'Pip’s program has no Use card.':'Both programs have no Use card.')+' Add Use so a companion can collect, deliver or activate a station.';
  if(trace.stop==='won')return 'The route works. Inspect any frame, then try a different route or keep this clear.';
+ if(trace.stop==='repeat'&&tinkerParts(project).some(p=>p.kind==='tide'))return 'This route repeats across a complete tide cycle. Inspect the next tick’s phase and the blocked cards, then adjust the beacon or the approach.';
  if(trace.stop==='repeat'){const blocked=trace.events.filter(e=>e.kind==='blocked');return blocked.length?'This route repeats after blocked moves. Inspect the last obstacle: blocked movement still advances the card.':'This route repeats without completing every goal. Inspect the last station and the parcel each partner holds.';}
  const parts=tinkerParts(project),last=trace.frames.at(-1);if(parts.some(p=>p.kind==='receiver'&&!(last.received[p.id]>= (p.parcels||1))))return 'Some windows are still waiting. Filter deliveries, then inspect the last collection, recipe or locker exchange.';
  if(project.version>=5&&duoDefinition(project).quietBells&&Object.keys(last.pulses||{}).length)return 'Timed bells are still ringing. Let their countdowns reach zero while returning both couriers to any marked home flags.';

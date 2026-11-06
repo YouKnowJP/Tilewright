@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-tide-split':['Two crossings can keep different rhythms without a deadline.','Read each beacon’s open beats, then watch a blocked move advance the next card. Test an outward trip and an empty-hand return before changing the rhythm.'],
+ 'duo-tide-dispatch':['The departure sign listens to a different tide from the crossing.','Compare the signal’s Quiet and Powered cards. A beacon powers from turn one; waiting at a sign can align a later bridge without using the beacon.'],
+ 'duo-tide-moon':['A changing sea can move a meeting without taking away its promise.','Watch the receiving friend at the handoff after each gate. Read the numbered phase of the next tick before changing a courier’s cards.'],
+ 'duo-tide-orrery':['The same opening must work for two workshops and their return loops.','Trace both locker numbers separately from parcel colours. The home flags lie on the loops; compare each friend’s next arrival after the sixth delivery.'],
  'duo-first-letter': ['The letter needs two couriers. Decide who can reach each window.', 'Keep Sprout near the handoff until Pip arrives. Use passes a parcel only when a friend is beside H.'],
  'duo-dyehouse': ['Follow the invitation’s colours through both gardens.', 'Inspect each press’s input and output. Sprout needs time to receive Pip’s parcel before using the second recipe.'],
  'duo-rain-bridges': ['Each friend holds a crossing open for the other.', 'A blocked move still spends its card. Watch where each friend stands when the other reaches a bridge.'],

@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-forty-eight duo chapters in six-card pages; filter by region, saved/completed
+fifty-two duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,47 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Tidekeepers — v0.56
+
+Choose **The Tidekeepers** in Adventure Home, or **Share → Adventure
+collections → Try the Tidekeepers collection** for the four-chapter edition.
+
+| Chapter | Mission | Repair | Worked route |
+| --- | --- | --- | --- |
+| 49 | The Split-Tide Post | Two rhythms, six letters, both homes; six pieces | 88 ticks |
+| 50 | The Crosswind Dispatch | Two waiting signs and cross-linked tidal gates; six pieces | 102 ticks |
+| 51 | Three Meetings with the Moon | Two gates, three handoffs and both homes; seven pieces | 118 ticks |
+| 52 | The Tidal Orrery | Two workshops, shared tides, locker relays and return-loop flags; eleven pieces | 196 ticks |
+
+**Tide beacon T** runs automatically. Choose a cycle of 2–8 beats, 1 to
+cycle-minus-one open beats, and an offset inside that cycle. At turn 1, offset
+0 starts on beat 1; offset 1 starts on beat 2. The first chosen number of beats
+are open, then the remaining beats are closed. The pattern repeats. Both
+couriers read the same opening at the start of the turn. No Use starts or stops
+it. A blocked move advances its card. An occupied bridge stays safe.
+
+Matching beacons combine their open beats. Plates, occupied crossings, lanterns
+and bells retain their existing bridge-power rules; signals retain their plate
+and filled-window rules too. Use different numbered channels for independent
+rhythms. Reading the next-beat labels and the eight-turn OPEN/CLOSED strip never
+changes your adventure.
+
+Choose **A bridge with a tide chart** or **The rhythmic dispatch sign** in
+Blueprints. **Reflect & arrange copies → Phase step for each copy** advances
+each copy's starting phase, wrapping within its own cycle. Shift the palette
+for independent channels. One placement and one Undo apply to the entire
+arrangement. Turns that would exceed the garden bounds are refused.
+
+Saved/imported pieces retain their individual rhythms. Check **Apply one
+rhythm to every beacon in this piece** to enable the retiming controls. Keeping
+or exporting this preview does not overwrite its saved source; **Update saved
+blueprint** remains explicit. Maker credits, captures and file exchange retain
+all tide settings. Collection files/codes contain maps and creator proofs, not
+personal progress. Saved collection tests reconstruct the exact next beat and
+Undo history from their existing saved turn; journey backups include them.
+New tide projects use format 7 and tide pieces use format 6. Existing project,
+piece, PC1/PC2 and backup formats continue to load.
 
 ## The Rainwrights and road stencils — v0.55
 

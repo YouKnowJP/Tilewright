@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "cf780ba057bf3c85b547161f5a81ac7cfb9873ea",
+  "project": "{\"format\":\"pip-tinker-project\",\"version\":6,\"trialId\":\"duo-rain-three\",\"name\":\"Three Letters for the Rain\",\"author\":\"Lantern Trails\",\"programs\":[[\"right\",\"right\",\"use\"],[\"down\",\"down\",\"use\"]],\"parts\":[{\"kind\":\"press\",\"x\":5,\"y\":1,\"channel\":\"amber\",\"output\":\"jade\"},{\"kind\":\"press\",\"x\":7,\"y\":1,\"channel\":\"jade\",\"output\":\"blue\"},{\"kind\":\"prism\",\"x\":9,\"y\":1,\"operation\":\"rotate\"},{\"kind\":\"handoff\",\"x\":9,\"y\":3},{\"kind\":\"prism\",\"x\":9,\"y\":5,\"operation\":\"rotate\"},{\"kind\":\"prism\",\"x\":1,\"y\":5,\"operation\":\"rotate\"}],\"proof\":{\"ticks\":109}}\n",
+  "code": "PT1.b9e006d5.eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo2LCJ0cmlhbElkIjoiZHVvLXJhaW4tdGhyZWUiLCJuYW1lIjoiVGhyZWUgTGV0dGVycyBmb3IgdGhlIFJhaW4iLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJkb3duIiwiZG93biIsInVzZSJdXSwicGFydHMiOlt7ImtpbmQiOiJwcmVzcyIsIngiOjUsInkiOjEsImNoYW5uZWwiOiJhbWJlciIsIm91dHB1dCI6ImphZGUifSx7ImtpbmQiOiJwcmVzcyIsIngiOjcsInkiOjEsImNoYW5uZWwiOiJqYWRlIiwib3V0cHV0IjoiYmx1ZSJ9LHsia2luZCI6InByaXNtIiwieCI6OSwieSI6MSwib3BlcmF0aW9uIjoicm90YXRlIn0seyJraW5kIjoiaGFuZG9mZiIsIngiOjksInkiOjN9LHsia2luZCI6InByaXNtIiwieCI6OSwieSI6NSwib3BlcmF0aW9uIjoicm90YXRlIn0seyJraW5kIjoicHJpc20iLCJ4IjoxLCJ5Ijo1LCJvcGVyYXRpb24iOiJyb3RhdGUifV0sInByb29mIjp7InRpY2tzIjoxMDl9fQo",
+  "stencil": "{\"format\":\"pip-duo-blueprint\",\"version\":5,\"name\":\"Before the tides\",\"author\":\"A trail keeper\",\"note\":\"A road stencil from A new duo adventure. Place it, then add your own stations and story.\",\"width\":5,\"height\":3,\"road\":[{\"x\":0,\"y\":0},{\"x\":1,\"y\":0},{\"x\":1,\"y\":1},{\"x\":2,\"y\":1},{\"x\":2,\"y\":2},{\"x\":3,\"y\":2},{\"x\":4,\"y\":2}],\"parts\":[]}\n",
+  "collection": "{\"format\":\"pip-adventure-collection\",\"version\":1,\"name\":\"The old rain road\",\"author\":\"Nessa\",\"intro\":\"Keep every old beat.\",\"chapters\":[{\"title\":\"Three Letters for the Rain\",\"note\":\"The original route.\",\"project\":{\"format\":\"pip-tinker-project\",\"version\":6,\"trialId\":\"duo-rain-three\",\"name\":\"Three Letters for the Rain\",\"author\":\"Lantern Trails\",\"programs\":[[\"right\",\"right\",\"use\"],[\"down\",\"down\",\"use\"]],\"parts\":[{\"kind\":\"press\",\"x\":5,\"y\":1,\"channel\":\"amber\",\"output\":\"jade\"},{\"kind\":\"press\",\"x\":7,\"y\":1,\"channel\":\"jade\",\"output\":\"blue\"},{\"kind\":\"prism\",\"x\":9,\"y\":1,\"operation\":\"rotate\"},{\"kind\":\"handoff\",\"x\":9,\"y\":3},{\"kind\":\"prism\",\"x\":9,\"y\":5,\"operation\":\"rotate\"},{\"kind\":\"prism\",\"x\":1,\"y\":5,\"operation\":\"rotate\"}],\"proof\":{\"ticks\":109}}}]}\n",
+  "collectionCode": "PC1.3887067a.eyJmb3JtYXQiOiJwaXAtYWR2ZW50dXJlLWNvbGxlY3Rpb24iLCJ2ZXJzaW9uIjoxLCJuYW1lIjoiVGhlIG9sZCByYWluIHJvYWQiLCJhdXRob3IiOiJOZXNzYSIsImludHJvIjoiS2VlcCBldmVyeSBvbGQgYmVhdC4iLCJjaGFwdGVycyI6W3sidGl0bGUiOiJUaHJlZSBMZXR0ZXJzIGZvciB0aGUgUmFpbiIsIm5vdGUiOiJUaGUgb3JpZ2luYWwgcm91dGUuIiwicHJvamVjdCI6eyJmb3JtYXQiOiJwaXAtdGlua2VyLXByb2plY3QiLCJ2ZXJzaW9uIjo2LCJ0cmlhbElkIjoiZHVvLXJhaW4tdGhyZWUiLCJuYW1lIjoiVGhyZWUgTGV0dGVycyBmb3IgdGhlIFJhaW4iLCJhdXRob3IiOiJMYW50ZXJuIFRyYWlscyIsInByb2dyYW1zIjpbWyJyaWdodCIsInJpZ2h0IiwidXNlIl0sWyJkb3duIiwiZG93biIsInVzZSJdXSwicGFydHMiOlt7ImtpbmQiOiJwcmVzcyIsIngiOjUsInkiOjEsImNoYW5uZWwiOiJhbWJlciIsIm91dHB1dCI6ImphZGUifSx7ImtpbmQiOiJwcmVzcyIsIngiOjcsInkiOjEsImNoYW5uZWwiOiJqYWRlIiwib3V0cHV0IjoiYmx1ZSJ9LHsia2luZCI6InByaXNtIiwieCI6OSwieSI6MSwib3BlcmF0aW9uIjoicm90YXRlIn0seyJraW5kIjoiaGFuZG9mZiIsIngiOjksInkiOjN9LHsia2luZCI6InByaXNtIiwieCI6OSwieSI6NSwib3BlcmF0aW9uIjoicm90YXRlIn0seyJraW5kIjoicHJpc20iLCJ4IjoxLCJ5Ijo1LCJvcGVyYXRpb24iOiJyb3RhdGUifV0sInByb29mIjp7InRpY2tzIjoxMDl9fX1dfQo",
+  "frames": [
+    {
+      "tick": 0,
+      "key": "[[{\"x\":1,\"y\":1,\"id\":\"Pip\",\"program\":[\"right\",\"right\",\"use\"],\"index\":0,\"parcel\":null,\"last\":\"Ready\"},{\"x\":10,\"y\":1,\"id\":\"Sprout\",\"program\":[\"down\",\"down\",\"use\"],\"index\":0,\"parcel\":null,\"last\":\"Ready\"}],{},{},0,{},0,{},{}]"
+    },
+    {
+      "tick": 1,
+      "key": "[[{\"x\":2,\"y\":1,\"id\":\"Pip\",\"program\":[\"right\",\"right\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"right\"},{\"x\":10,\"y\":2,\"id\":\"Sprout\",\"program\":[\"down\",\"down\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"down\"}],{},{},0,{},0,{},{}]"
+    },
+    {
+      "tick": 13,
+      "key": "[[{\"x\":9,\"y\":2,\"id\":\"Pip\",\"program\":[\"down\",\"down\",\"use\"],\"index\":1,\"parcel\":\"blue\",\"last\":\"down\"},{\"x\":10,\"y\":2,\"id\":\"Sprout\",\"program\":[\"down\",\"down\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"down\"}],{},{},0,{},0,{},{}]"
+    },
+    {
+      "tick": 58,
+      "key": "[[{\"x\":6,\"y\":5,\"id\":\"Pip\",\"program\":[\"left\",\"left\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"left\"},{\"x\":10,\"y\":2,\"id\":\"Sprout\",\"program\":[\"up\",\"up\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"up\"}],{\"5\":2},{},2,{},0,{},{}]"
+    },
+    {
+      "tick": 109,
+      "key": "[[{\"x\":0,\"y\":1,\"id\":\"Pip\",\"program\":[\"left\",\"wait\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"left\"},{\"x\":10,\"y\":7,\"id\":\"Sprout\",\"program\":[\"down\",\"down\",\"use\"],\"index\":1,\"parcel\":null,\"last\":\"Blocked\"}],{\"5\":3},{},3,{},0,{},{}]"
+    }
+  ]
+}

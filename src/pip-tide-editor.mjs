@@ -1,0 +1,11 @@
+// New owned material. See LICENSE; prior MIT permissions remain effective.
+import {normalizeTide,tideStrip,tideDescription} from './pip-tides.mjs';
+export function createTideEditor({prefix,anchor,onChange}){
+ const field=document.createElement('fieldset');field.hidden=true;field.className='ps-tide-editor';field.id=prefix+'fields';field.innerHTML=`<legend>Automatic tide T</legend><p>Offset 0 starts on beat one; higher offsets start farther into the cycle. Open beats power matching bridges and signals at the start of each turn. No Use is needed; occupied bridges stay safe. Beacons sharing a number combine their open beats. Shift copy colours for independent rhythms.</p><div class="ps-pickers"><label>Cycle length<select id="${prefix}period"></select></label><label>Open beats<select id="${prefix}beats"></select></label><label>Phase offset<select id="${prefix}offset"></select></label></div><p id="${prefix}note" role="status"></p><ol class="ps-tide-strip" id="${prefix}strip" aria-label="Next eight tide beats"></ol>`;anchor.after(field);
+ const $=id=>field.querySelector('#'+prefix+id);$('period').replaceChildren(...Array.from({length:7},(_,i)=>new Option(String(i+2),String(i+2))));$('period').value='4';
+ function bounds(){const period=Number($('period').value);for(const[id,length,first,fallback]of [['beats',period-1,1,2],['offset',period,0,0]]){const value=Math.min(Number($(id).value||fallback),first+length-1);$(id).replaceChildren(...Array.from({length},(_,i)=>new Option(String(i+first),String(i+first))));$(id).value=String(value);}}
+ const value=()=>normalizeTide({period:Number($('period').value),beats:Number($('beats').value),offset:Number($('offset').value)});
+ function preview(turn=1){$('note').textContent=tideDescription(value(),turn);$('strip').replaceChildren(...tideStrip(value(),turn).map(beat=>{const n=document.createElement('li');n.textContent=`${beat.turn} ${beat.open?'OPEN':'CLOSED'}`;n.dataset.open=String(beat.open);return n;}));}
+ for(const id of ['period','beats','offset'])$(id).onchange=()=>{bounds();preview();onChange?.();};bounds();preview();
+ return {element:field,value,preview,set(part){const p=normalizeTide(part);$('period').value=String(p.period);bounds();$('beats').value=String(p.beats);$('offset').value=String(p.offset);preview();}};
+}

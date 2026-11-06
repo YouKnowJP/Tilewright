@@ -6,7 +6,7 @@ journey, or make a world for someone else to discover.
 ## Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu. Start with **Begin the story**,
-continue a saved setup, or browse any of forty-eight chapters. **Find an
+continue a saved setup, or browse any of fifty-two chapters. **Find an
 adventure** filters by region, progress, title or mechanic. No chapter is locked.
 
 Use **Cards** to set Pip and Sprout's three repeating instructions, then
@@ -37,6 +37,8 @@ opens your garden, collection builder or project import. **How to play** include
 the classic single-Pip lessons. Adventure Home returns to the main menu.
 Full journey backups preserve creations, collections and personal progress.
 See the [complete workshop guide](PIP_WORKSHOP.md) for all mechanics and tools.
+
+**The Tidekeepers** adds four harder missions with automatic crossings and dispatch signs. A **T** beacon powers its numbered channel on selected beats. Offset 0 starts at beat 1; offsets start farther into the cycle. No Use is needed. The editor shows eight numbered OPEN/CLOSED turns. In Blueprints, tune a crossing or dispatch sign, stagger repeated copies, or explicitly apply one rhythm to all beacons in an imported piece. [The workshop guide](PIP_WORKSHOP.md) explains timing and saved progress.
 
 **The Rainwrights** adds four harder adventures with three-letter meetings,
 covered depots, timed crossings and a two-workshop finale. In a creator garden,

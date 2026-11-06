@@ -20,6 +20,7 @@ state, with bounded Undo and no proof/best attachment.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-tides.mjs` / `src/pip-tidekeeper.mjs` / `src/pip-tide-editor.mjs` | Bounded automatic tide phases, four authored repairs and shared accessible rhythm controls. |
 | `src/pip-rainwright.mjs` | Four original chapters 45–48 with bounded repairs, verified reference programs, multi-delivery goals and authored story/hints/endings. |
 | `src/pip-road-planner.mjs` / `src/pip-road-planner-ui.mjs` | Immutable orthogonal path planning, protected water, numbered preview/text alternative, atomic edits and credited road-only blueprints. |
 | `src/pip-controls.mjs` | Focused garden command policy, saved keyboard layouts, repeat/composition/modifier isolation and mode-specific instructions; workshop/practice UI owns dispatch. |
