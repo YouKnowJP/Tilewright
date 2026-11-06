@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-kiln-clock':['The same input can be fired into two different letters.','Compare the tide at each Use, not when the courier arrives. The first pair shares a beat; the later pair needs different kinds of warmth.'],
+ 'duo-kiln-windows':['The first finished letter can warm the next recipe.','Follow what happens after the first windows fill. The kiln reads that warmth on its next turn; the violet windows have a different job at homecoming.'],
+ 'duo-kiln-hourglass':['Two roads can share a clock without sharing a timetable.','Watch a blocked move advance a card. A parcel kept at the wrong window can still reach the other window after the next turn-around.'],
+ 'duo-kiln-council':['A friend’s lantern can change what your bowl is missing.','Trace the two ingredients over separate laps. The other courier supplies the heat; after the last blend, there is still a lantern to return to.'],
  'duo-mix-first':['A bowl lets a recipe wait for a second arrival.','Inspect what each friend carries at the crossing. The first ingredient stays behind; the friend completing the pair carries the blend onward.'],
  'duo-mix-second':['The second lap can carry something the first lap left behind.','Follow one courier around the whole loop. A full hand passes a well safely; an unfinished bowl remembers exactly which ingredient is missing.'],
  'duo-mix-exchange':['Your next ingredient grows in the other garden.','Trace both parcels through their locker colours. Compare the borrowed ingredient with the waiting bowl; one return road needs another recipe before it fits.'],

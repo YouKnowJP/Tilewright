@@ -20,6 +20,8 @@ state, with bounded Undo and no proof/best attachment.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-kilns.mjs` / `src/pip-kiln-house.mjs` / `src/pip-kiln-editor.mjs` | Pure two-recipe firing, four authored repairs and shared brush/preset controls. |
+| `src/pip-blueprint-formulas.mjs` / `src/pip-blueprint-formulas-ui.mjs` | Per-machine/bulk recipe rewriting and folded, focus-preserving preview controls. |
 | `src/pip-mixers.mjs` / `src/pip-mixing-house.mjs` | Pure two-input parcel mixing and four authored repairs. |
 | `src/pip-blueprint-recipes.mjs` / `src/pip-blueprint-recipes-ui.mjs` | Independent parcel-palette permutations and folded preview controls. |
 | `src/pip-echoes.mjs` / `src/pip-echo-post.mjs` | Immutable shared-turn card learning, geometric conjugation and four authored repairs. |
@@ -1361,3 +1363,44 @@ recipe/card previews, saved-source isolation, protected files and enlarged
 custom menus with old/new project replays. The prior exhaustive catalogue and
 Echo compatibility checks stay required. Firefox/WebKit now check fourteen
 cases each before publication, with unchanged action deadlines and tracing.
+
+
+## Recipe kilns and blueprint formulas — v0.60
+
+Project format 11 adds `kiln` with a numbered power `channel` and three distinct
+parcel colours: `input`, `quiet`, `powered`. Blueprint format 10 maps to that
+project version. `fireKiln` is immutable and chooses one output from an explicit
+boolean start-of-turn power state. Wrong cargo is retained. It never rewrites
+cards or restarts their index. The shared editor separates all four fields.
+
+`kilnPowerChannels` combines the existing held/switch/bell/tide/scale power with
+nonempty groups of fully filled windows. `tinkerStep` captures this set before
+either courier acts or bells count down, and only when a kiln is present. Thus
+a same-turn delivery, switch or arrival cannot change the second courier's
+recipe. Old signal semantics remain unchanged. All inputs to heat already
+participate in state identity; no new engine dictionary or save key is added.
+Replaying the existing saved tick reconstructs heat and full Undo history.
+Readiness adds both outputs only after the input is source-reachable.
+
+Blueprint power wiring includes kilns while recipe colour swaps map only their
+three parcel fields. Whole-piece/garden palette changes transform both as usual.
+The canvas passes `poweredOutput` separately because the renderer's `powered`
+property is a transient boolean. Inspect/text/rule/poster views describe the
+original normalized recipe fields and next-turn heat where a live state exists.
+
+`rewriteBlueprintRecipe` normalizes one station patch or atomically copies its
+complete recipe to every station of the same kind. It protects power, route
+cards, flags, geometry, maker credits and format. Old no-op bytes remain exact.
+The folded composer keeps recipe patches outside project/journal state and
+applies them to the raw piece before route-card edits, independent parcel
+palettes, geometry and wiring. Slot controls persist through edits and their
+visible labels update when switching kinds, retaining focus and themed menus.
+Restoring formulas keeps other preview tools intact; existing saved-source,
+capture/share and atomic placement/Undo paths are reused.
+
+Six new required live cases cover all four stories on phone/desktop, exact
+pre-delivery heat checkpoints across reload/Undo/full backups, recipe/copy/card/
+palette/power composition, source isolation and capture/exchange, protected
+imports, enlarged menus and new/legacy verified replays. All prior gameplay
+checks stay required. Firefox/WebKit retain both earlier expansion suites and
+add this one: twenty cases per engine, with the original action deadlines.

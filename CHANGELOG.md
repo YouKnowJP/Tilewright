@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.60.0 — 2026-11-06
+
+- Add recipe kilns I: the same input becomes a different Quiet or Powered parcel. Heat is sampled at turn start for both couriers, before deliveries, movement or new switches can change it. Existing windows, held plates/bridges, lanterns, bells, tides and cargo scales supply power. Wrong cargo stays held; cards advance normally.
+- Add four original Kilnkeeper repairs for sixty-eight duo chapters: The Clock-Fired Letters, The Windows That Stoke the Fire, The Hourglass Crossing and The Council of Glazed Letters. Worked routes clear in 37/184/210/177 ticks; coordinate four timed letters, window-powered recipes, eight deliveries across a shared crossing, alternating bowl ingredients and a lantern-off finale.
+- Add clock-fired atelier/lantern-kiln blueprints and folded station recipe tools. Edit individual presses, bowls or kilns, copy a recipe to matching machines, trade kiln outputs and restore originals. Formulas compose with card banks, parcel palettes, power wiring, geometry, capture and sharing. Previewing preserves the saved source and adventure; placement stays one Undo edit.
+- Reflow card controls in narrow panels and stack enlarged cards so complete direction names remain visible without reducing their text size.
+- Add project format 11 and blueprint format 10 without adding a mutable engine field or storage key. Readiness follows both kiln outputs; parcel palettes recolour ingredients and both recipes while power rewiring keeps recipe colours separate. Preserve literal v0.59 project/PT1/PC1/PC2, blueprint and engine-state bytes and every older fixture family.
+- Add six required live cases for complete phone/desktop story clears, exact pre-delivery checkpoint/Undo/backup restoration, composed formula editing and file exchange, protected imports and enlarged themed menus. Keep all earlier gameplay cases and expand Firefox/WebKit compatibility to twenty cases per engine.
+
 ## 0.59.0 — 2026-11-06
 
 - Add mixing bowls Y: Use leaves one of two ingredients in an independent bowl. Adding the other returns the blended parcel to the finishing courier. Either order works; empty hands, duplicates and wrong ingredients preserve existing cargo. Cards keep their place.

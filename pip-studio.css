@@ -28,3 +28,9 @@
 .pip-collection .ps-collection-card{display:flex;flex-direction:column}.pip-collection .ps-collection-card>.ps-actions{margin-top:auto}.ps-bonus-brief{margin:10px 0;border-left:3px solid #d3b779;padding:4px 10px;background:#193b43}.ps-bonus-brief>summary{display:flex;align-items:center;min-height:44px;cursor:pointer;color:#ffe3a1;font-weight:700;line-height:1.5}.ps-bonus-brief .ps-bonus-goal{border:0;background:transparent;padding:0;margin:6px 0}
 
 #ps-bp-card-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}#ps-bp-card-fields label{margin:4px 0}@media(max-width:740px){#ps-bp-card-fields{grid-template-columns:1fr}#ps-bp-card-fields label{grid-template-columns:65px minmax(0,1fr);align-items:center}}
+
+/* Keep complete command names visible when a workbench panel becomes narrow. */
+.ps-panel #ps-programs fieldset{grid-template-columns:repeat(auto-fit,minmax(min(100%,96px),1fr))}
+.ps-panel #ps-programs .game-select-trigger{padding-left:8px;padding-right:24px!important}
+body:is([data-game-text=large],[data-game-text=largest]) .ps-panel #ps-programs fieldset{grid-template-columns:minmax(0,1fr)}
+body:is([data-game-text=large],[data-game-text=largest]) .ps-panel #ps-programs fieldset label{grid-template-columns:65px minmax(0,1fr);align-items:center}

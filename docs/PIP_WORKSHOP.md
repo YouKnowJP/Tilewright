@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-sixty-four duo chapters in six-card pages; filter by region, saved/completed
+sixty-eight duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,52 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Kilnkeepers — v0.60
+
+Choose **The Kilnkeepers** in Adventure Home, or **Share → Adventure collections
+→ Try the Kilnkeepers collection**. Each chapter includes staged clues and an
+optional worked route.
+
+| Chapter | Mission | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 65 | The Clock-Fired Letters | Six repairs; four kilns, two tides, four different letters and both home flags | 37 ticks |
+| 66 | The Windows That Stoke the Fire | Six repairs; Quiet letters warm the next recipe, then four violet letters open the home roads | 184 ticks |
+| 67 | The Hourglass Crossing | Five repairs; two couriers share a seven-beat clock, retain unmatched parcels and fill four windows twice | 210 ticks |
+| 68 | The Council of Glazed Letters | Ten repairs; borrow a friend's lantern heat, alternate bowl ingredients, deliver six letters and finish both lanterns off | 177 ticks |
+
+**Recipe kiln I** has a numbered **power channel**, an **input**, a **Quiet
+output** and a **Powered output**. All three parcel colours must differ. Use
+reads power **at the start of the turn**, before either courier moves, delivers
+or toggles a switch. The matching input becomes the chosen output. Wrong cargo
+stays held, and Use advances to the next card normally. Walking onto I does not
+fire it. Both couriers read the same start-of-turn heat.
+
+Held plates/bridges, lanterns, timed bells, tides and cargo scales supply their
+numbered power. A colour also supplies heat when all of its delivery windows
+are full. With no matching windows, there is no window heat. Delivering the last
+letter warms a kiln on the following turn. An occupied bridge keeps supplying
+its safe held power for the current turn. Inspect a kiln or the text map for
+both recipes and its predicted next-turn heat.
+
+In **Tools → Blueprints**, configure **The clock-fired atelier** or **The lantern
+kiln**. The atelier includes a well, kiln, Powered window and adjustable tide;
+the lantern piece invites your own input supply and cargo routes. The delivery
+target and tide rhythm remain separate from the kiln's power and recipes.
+
+Open **Rewrite station recipes** on a piece with presses, bowls or kilns. Select
+one machine, edit its recipe, **Trade kiln outputs**, or **Use for matching
+machines** to copy it to every machine of that kind in this piece. Kiln power
+numbers stay separate. Invalid recipes leave the last valid preview intact.
+**Restore this recipe** and **Restore all recipes** keep your card, parcel and
+power changes as set. Only one machine's two/three recipe fields are shown.
+
+Recipe edits happen before parcel palettes, facing, reflections and copies.
+Combine them with **Rewrite route cards**, **Remix parcel colours** and **Wire
+power circuits**. Final station rules describe the arranged piece. Keep/update,
+capture or share it through the existing shelf; Place is one Undo edit. Test mode
+locks the creator controls. Saved collection tests restore their exact heat,
+clock phase and complete Undo history from the same saved turn.
 
 ## The Mixing House — v0.59
 
@@ -60,7 +106,7 @@ recipes or cargo checks. Repeat swaps to build a palette of your own. Sources,
 windows, press/mixer recipes, cargo compasses and colour-specific seal/scale
 checks follow the parcel palette. Power circuits, tube colours and locker links
 keep their existing numbers. Wildcard and empty-hand conditions keep their
-meaning. Signals that depend on filled windows still need windows of their
+meaning. Signals and kilns that depend on filled windows still need windows of their
 numbered colour, so inspect those connections after a recipe remix.
 
 Parcel remixes and route-card edits remain independent. Restoring one leaves

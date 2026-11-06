@@ -32,11 +32,11 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains all earlier cases and adds six Mixing House cases:
-four-mission phone/desktop clears, independent recipe/card composition with
-capture and exchange, part editing and protected imports, exact partial-bowl
-continuation through reload/Undo/backup, and enlarged menus with old/new replays.
-It has **234 distinct cases**, split exhaustively **59/59/58/58**. All earlier
+The release catalogue retains all earlier cases and adds six Kilnkeeper cases:
+four-mission phone/desktop clears, individual/bulk formula/card/palette/power
+composition with capture and exchange, part editing/protected imports, exact
+pre-delivery heat checkpoints through reload/Undo/backup, and enlarged menus
+with old/new replays. It has **240 distinct cases**, split **60/60/60/60**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -49,8 +49,8 @@ npm run test:browser:pip -- chromium
 npm run test:browser:pip -- firefox webkit
 ```
 
-The runner checks six Mixing House cases, six retained Echo Post cases and two
-legacy save/share cases (fourteen total),
+The runner checks six Kilnkeeper cases, six Mixing House cases, six retained
+Echo Post cases and two legacy save/share cases (twenty total),
 records the built release metadata, closes the browser/server and removes its
 owned temporary build. Firefox and WebKit run as separate required CI jobs with
 original action deadlines and full tracing. Their reports are retained for
@@ -290,3 +290,12 @@ colour swaps with bank edits, verify independent numbered wiring and saved
 sources, capture/share/reload pieces, reject invalid old/future recipes and
 lock controls in tests. Largest high-contrast menus are measured at
 320/390/768/844/1440 views; new projects and captured v0.58 exports replay.
+
+
+`pip-kilnkeepers-browser-checks.mjs` adds six v0.60 cases: four complete mission
+clears at phone/desktop widths, tick-17/18 window-heat continuation and exact
+Undo/backup rollback, recipe copying/restoration with independent palette/cards/
+power and preserved focus, creator/capture/import/shelf/reload isolation, invalid
+old/future recipes, and largest high-contrast themed menus at five viewport
+sizes. New/legacy projects replay and old exports retain exact bytes. The new
+collection poster is decoded, and all new cases remain in the cross-engine gate.

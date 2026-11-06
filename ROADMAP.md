@@ -1,5 +1,10 @@
 # Tilewright roadmap
 
+Version **0.60** adds two-recipe kilns, four Kilnkeeper repairs for sixty-eight
+duo chapters, and individual/bulk blueprint recipe editing. New kilns use
+project format 11 and blueprint format 10. Existing formats and save keys stay
+supported; power is reconstructed from the existing saved tick and world state.
+
 Version **0.59** adds persistent mixing bowls, four Mixing House repairs for
 sixty-four duo chapters, and independent blueprint parcel palettes. New bowls
 use project format 10 and blueprint format 9; old formats and save keys remain
@@ -27,7 +32,7 @@ collection formats remain unchanged. Version **0.53** added the direct Pip & Spr
 story chapters with search/progress filters, saved-collection continuation,
 staged clues, three separate practice gardens and compact workbench shortcuts.
 See the [player guide](docs/PLAYER_GUIDE.md). Visual solution comparisons,
-branching duo collections, a parcel-mixer prototype, public community uploads
+branching duo collections, public community uploads
 and offline caching remain separate proposed work.
 
 The current editor, 24 story missions, eight Guild jobs, three featured Workshop

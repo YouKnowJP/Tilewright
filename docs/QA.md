@@ -1,5 +1,47 @@
 # Verification record
 
+## Kilnkeepers and individual blueprint recipes — v0.60.0
+
+Coverage includes **1,896 Node tests**, **240 required gameplay browser cases**
+in exhaustive groups of **60/60/60/60**, and a **199-file** static package.
+Four Kilnkeeper repairs bring the duo story to sixty-eight chapters. Reference
+routes clear in **37, 184, 210 and 177 ticks**. Every loose part is necessary
+for its worked route; blank cards fail. Immutable frames, separate courier
+positions, required windows/home flags, the lantern-off finish and reflected/
+palette-remixed routes retain their checked outcomes.
+
+Thirty-six focused unit cases enumerate all 96 kiln channel/recipe combinations
+with both heat states and every possible parcel. Same-turn windows/switches,
+one-tick bells, entering/leaving plates, occupied bridges, scale cargo changes,
+OR-combined power and no-window heat are checked. Movement does not fire a kiln;
+Use preserves card order/index advancement. Readiness follows both outputs and
+rejects unsupplied recipe cycles. Formula patches and same-kind copying protect
+power, routes, metadata, geometry, formats and old no-op bytes. Composition with
+all parcel palettes, power wiring, reflection, repetition and card edits is
+verified. Literal v0.59 PT1/PC1/PC2, blueprint and engine frames remain exact,
+alongside all older fixture families. No engine field/save key is added.
+
+Six new required live cases complete every mission on phone/desktop and reload
+verified bests. A collection pauses before the first windows fill on tick 18:
+reload, delivery, heat prediction, Undo and full-backup rollback reproduce the
+actual engine key and complete history. The illustrated collection SVG decodes.
+All six command labels fit normal card controls across five panel sizes; enlarged cards stack without reducing text. Creator flows compose/copy/restore formulas with cards, palettes and independent
+power numbers, preserve focus and saved sources, and capture/export/import/
+reload pieces with atomic placement Undo. Invalid old/future/duplicate recipes
+preserve prior saves and previews. Largest high-contrast custom menus retain
+focus and fit 320/390/768/844/1440 views; tests lock authoring controls, replay a
+new route and re-export a captured v0.59 route byte-for-byte.
+
+All earlier checks remain required. Five platform jobs, four full Chromium
+groups, migration and three startup-recovery checks gate deployment. Required
+Firefox/WebKit jobs retain Echo Post, Mixing House and two legacy save/share
+checks, add the six Kilnkeeper cases and validate all twenty names per engine.
+Original action deadlines and full tracing remain enabled. Ordinary cases reject
+unexpected console, script and asset errors. Public files and selected live
+play/recovery flows are audited against the pushed commit. Layout/touch captures
+use browser emulation; physical devices, actual Safari, assistive technology and
+human usability checks are separate and are not claimed here.
+
 ## Mixing House and independent parcel palettes — v0.59.0
 
 Coverage includes **1,852 Node tests**, **234 required gameplay browser cases**
