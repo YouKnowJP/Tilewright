@@ -30,7 +30,7 @@
 #ps-bp-card-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}#ps-bp-card-fields label{margin:4px 0}@media(max-width:740px){#ps-bp-card-fields{grid-template-columns:1fr}#ps-bp-card-fields label{grid-template-columns:65px minmax(0,1fr);align-items:center}}
 
 /* Keep complete command names visible when a workbench panel becomes narrow. */
-.ps-panel #ps-programs fieldset{grid-template-columns:repeat(auto-fit,minmax(min(100%,96px),1fr))}
+.ps-panel #ps-programs fieldset{grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr))}
 .ps-panel #ps-programs .game-select-trigger{padding-left:8px;padding-right:24px!important}
 body:is([data-game-text=large],[data-game-text=largest]) .ps-panel #ps-programs fieldset{grid-template-columns:minmax(0,1fr)}
 body:is([data-game-text=large],[data-game-text=largest]) .ps-panel #ps-programs fieldset label{grid-template-columns:65px minmax(0,1fr);align-items:center}
