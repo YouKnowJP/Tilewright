@@ -34,3 +34,7 @@
 .ps-panel #ps-programs .game-select-trigger{padding-left:8px;padding-right:24px!important}
 body:is([data-game-text=large],[data-game-text=largest]) .ps-panel #ps-programs fieldset{grid-template-columns:minmax(0,1fr)}
 body:is([data-game-text=large],[data-game-text=largest]) .ps-panel #ps-programs fieldset label{grid-template-columns:65px minmax(0,1fr);align-items:center}
+
+.ps-weave-truth{width:100%;table-layout:fixed;border-collapse:collapse;margin:12px 0;font-size:inherit}.ps-weave-truth caption{padding:6px;text-align:left;color:#fff0be}.ps-weave-truth th,.ps-weave-truth td{border:1px solid #668782;padding:6px 3px;text-align:center;overflow-wrap:anywhere}.ps-weave-truth th{background:#203f45;color:#fff0be}.ps-weave-truth td{color:#e8f2dc}
+.pip-studio fieldset[id*="weave"] .game-select-trigger>span{white-space:normal;text-overflow:clip;overflow-wrap:anywhere}
+body:is([data-game-text=large],[data-game-text=largest]) .ps-weave-truth{font-size:var(--reading-ui-size);line-height:1.55}

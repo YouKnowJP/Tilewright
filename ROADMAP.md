@@ -1,5 +1,10 @@
 # Tilewright roadmap
 
+Version **0.61** adds two-source Weave relays, four Weavekeeper stories for
+seventy-two duo chapters and a folded circuit composer with truth tables.
+New relays use project format 12 and blueprint format 11. All earlier formats
+and local save keys remain supported; outputs derive from the saved tick/state.
+
 Version **0.60** adds two-recipe kilns, four Kilnkeeper repairs for sixty-eight
 duo chapters, and individual/bulk blueprint recipe editing. New kilns use
 project format 11 and blueprint format 10. Existing formats and save keys stay

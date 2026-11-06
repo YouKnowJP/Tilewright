@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.61.0 — 2026-11-06
+
+- Add automatic Weave relays: combine two distinct physical power/window sources with Both, Either, Exactly one or Neither, and supply a separate numbered output to bridges, signals and kilns. Every relay reads the same turn-start snapshot; relay outputs never cascade. No extra save-state field is needed.
+- Add The Weavekeepers: four original expert/master repairs for seventy-two duo chapters. Restore overlapping-tide crossings, an unequal-pace lantern recipe, a quiet-interval observatory and a six-letter homecoming. Verified routes finish in 147/237/207/187 ticks with staged clues and optional worked examples.
+- Add two reusable relay blueprints and a folded circuit composer with four-state truth tables, individual port/rule editing, bulk rule copying, number cycling and independent restoration. Compose with route cards, whole-piece wiring, palettes, rotation/reflection, repeated copies, capture, atomic Undo and sharing. Power rewiring includes every relay input and output; parcel-only palettes leave them intact.
+- Use project format 12 and blueprint format 11 for relays, retaining every older format, save key and captured v0.60 project/code/piece/collection/state-key byte. Checkpoints reconstruct relay power from existing world state and tick history, including reload/Undo and journey backups.
+- Keep relay controls inside existing creator drawers, with numbered text, readable Quiet/Powered rules and responsive truth tables. Align the poster’s Q well symbol with the garden so W clearly denotes a relay. Add six required release cases and retain all earlier gameplay checks plus Firefox/WebKit coverage.
+
 ## 0.60.0 — 2026-11-06
 
 - Add recipe kilns I: the same input becomes a different Quiet or Powered parcel. Heat is sampled at turn start for both couriers, before deliveries, movement or new switches can change it. Existing windows, held plates/bridges, lanterns, bells, tides and cargo scales supply power. Wrong cargo stays held; cards advance normally.

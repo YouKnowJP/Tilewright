@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-sixty-eight duo chapters in six-card pages; filter by region, saved/completed
+seventy-two duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,49 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Weavekeepers — v0.61
+
+Choose **The Weavekeepers** in Adventure Home, or **Share → Adventure collections
+→ Try the Weavekeepers collection**. Optional staged clues and worked routes are
+available throughout; these chapters expect experience with clocks and recipes.
+
+| Chapter | Mission | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 69 | The Meeting of Two Tides | Seven repairs; overlapping clocks power two violet crossings for six letters | 147 ticks |
+| 70 | The Lanterns Disagree | Nine repairs; unequal walking rhythms change a kiln recipe, fill a bowl and finish with both lanterns off | 237 ticks |
+| 71 | The Silent Observatory | Seven repairs; fire eight letters between clock beats before completed windows change the heat | 207 ticks |
+| 72 | The Council of Woven Roads | Seven repairs; either clock opens the crossings, six blue letters open the homeward signs | 187 ticks |
+
+**Weave relay W** has two distinct **power sources**, a different **output number**,
+and a rule. **Both** powers only when both sources are on; **Either** when one or
+both are on; **Exactly one** when the source states differ; **Neither** when both
+are off. Its four-row truth table shows every case using text rather than colour.
+No Use is needed, and stepping onto W does not change cargo or route cards.
+
+Relays read physical power and completed window groups at **turn start**, before
+either courier acts or an old bell counts down. Sources include lanterns, bells,
+tides, scales and held plates/bridges. All relays share that snapshot. **Other
+relay outputs do not feed a relay**, so looping or reordered wiring never creates
+an instantaneous cascade. Output can power numbered bridges, signals and kilns.
+A same-turn delivery or switch change takes effect on the next turn. An occupied
+bridge retains its normal safety rule. Save/Continue and Undo reconstruct all of
+this from existing state; no new storage key or relay memory is introduced.
+
+Try **The two-source crossing** or **The woven dispatch** in the blueprint drawer.
+Use **Compose relay circuits** to select any relay in an imported/captured piece,
+change its ports or rule, **Use this rule for all relays**, **Cycle this relay’s
+numbers**, or restore one/all relay edits. Port collisions are rejected while the
+last valid preview remains available. **Wire power circuits** maps all three
+ports atomically along with other power stations. Parcel-only colour swaps keep
+relay ports unchanged. Whole-piece palette shifts map all ports consistently.
+Route cards, geometry, repeated copies, capture, maker credits, files and atomic
+placement Undo work together. Preview edits do not alter a kept blueprint until
+you explicitly keep/update it; sharing contains no personal progress.
+
+Relays use project format **12** and blueprint format **11**. Older projects,
+pieces, codes and collections keep their original formats and bytes. Unknown
+future versions remain protected.
 
 ## The Kilnkeepers — v0.60
 

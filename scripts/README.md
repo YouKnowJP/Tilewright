@@ -32,11 +32,11 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains all earlier cases and adds six Kilnkeeper cases:
-four-mission phone/desktop clears, individual/bulk formula/card/palette/power
+The release catalogue retains all earlier cases and adds six Weavekeeper cases:
+four-mission phone/desktop clears, individual/bulk relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
-pre-delivery heat checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **240 distinct cases**, split **60/60/60/60**. All earlier
+pre-lantern relay checkpoints through reload/Undo/backup, and enlarged menus
+with old/new replays. It has **246 distinct cases**, split **62/62/61/61**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -49,8 +49,8 @@ npm run test:browser:pip -- chromium
 npm run test:browser:pip -- firefox webkit
 ```
 
-The runner checks six Kilnkeeper cases, six Mixing House cases, six retained
-Echo Post cases and two legacy save/share cases (twenty total),
+The runner checks six Weavekeeper cases, six Kilnkeeper cases, six Mixing House
+cases, six retained Echo Post cases and two legacy save/share cases (twenty-six total),
 records the built release metadata, closes the browser/server and removes its
 owned temporary build. Firefox and WebKit run as separate required CI jobs with
 original action deadlines and full tracing. Their reports are retained for
@@ -299,3 +299,12 @@ power and preserved focus, creator/capture/import/shelf/reload isolation, invali
 old/future recipes, and largest high-contrast themed menus at five viewport
 sizes. New/legacy projects replay and old exports retain exact bytes. The new
 collection poster is decoded, and all new cases remain in the cross-engine gate.
+
+## Weavekeepers and circuit composition — v0.61
+
+`pip-weavekeepers-browser-checks.mjs` clears all four chapters on phone/desktop,
+rebuilds a pre-lantern checkpoint through reload/Undo/backup, and exercises
+individual/bulk relay edits, atomic power wiring, cards, capture and file exchange.
+It checks truth tables, rejected port collisions, protected old/future imports,
+320/390/768/844/1440 enlarged themed menus, read-only tests and literal v0.60 replay.
+All six cases are required in the release catalogue and Firefox/WebKit gates.

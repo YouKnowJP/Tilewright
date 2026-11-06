@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-weave-tides':['Two open sources must meet before violet can power a crossing.','Compare the four-beat and five-beat clocks at the start of each blocked approach. A bridge already occupied stays safe after either source closes.'],
+ 'duo-weave-lanterns':['The faster friend and the slower friend change a shared answer.','Exactly one light powers the kiln. Follow one complete bowl recipe, then inspect which lantern stays on after the final delivery.'],
+ 'duo-weave-silence':['Quiet is an answer a circuit can listen for.','Neither source opens the violet recipe. Finished amber and jade windows are lasting sources too; inspect which letters have to be made before that change.'],
+ 'duo-weave-council':['Either clock can lend the road one open beat.','Follow the press and crossing through three laps. The home signs read both blue windows together; one filled window is still a delivery road.'],
  'duo-kiln-clock':['The same input can be fired into two different letters.','Compare the tide at each Use, not when the courier arrives. The first pair shares a beat; the later pair needs different kinds of warmth.'],
  'duo-kiln-windows':['The first finished letter can warm the next recipe.','Follow what happens after the first windows fill. The kiln reads that warmth on its next turn; the violet windows have a different job at homecoming.'],
  'duo-kiln-hourglass':['Two roads can share a clock without sharing a timetable.','Watch a blocked move advance a card. A parcel kept at the wrong window can still reach the other window after the next turn-around.'],
