@@ -44,7 +44,11 @@ const clues = {
  'duo-seal-first': ['A passport asks what is in the courier’s hands at entry.', 'Read G’s badge and cargo rule. Put the colour change before the arch and check what the delivery window wants afterward.'],
  'duo-seal-post': ['Each inspection belongs to a particular leg of the postal route.', 'Read badges, cargo and inspection arrows. A directional arch leaves the other directions free, including an empty-hand return.'],
  'duo-seal-exchange': ['Pip carries the letters; Sprout must be ready to receive them.', 'Trace one loaded lap and one empty-hand lap. Inspect every arch before trying the second handoff.'],
- 'duo-seal-council': ['The same arch can ask a question on one journey and none on the other.', 'Read the inspection arrow beside the well. Then compare one-beat bridge openings with the parcel recipes and final empty-hand roads.']
+ 'duo-seal-council': ['The same arch can ask a question on one journey and none on the other.', 'Read the inspection arrow beside the well. Then compare one-beat bridge openings with the parcel recipes and final empty-hand roads.'],
+ 'duo-rain-three': ['The long garden and the short garden must keep the same meeting.', 'Follow a complete loaded lap and an empty-hand return. The receiving courier must visit the handoff beside the window before either signal can send a friend home.'],
+ 'duo-rain-depot': ['A bell opens a crossing; a locker waits without losing a letter.', 'Inspect which direction each passport checks. Watch a loaded outward trip and an empty return, then compare the bell countdown with the crossing.'],
+ 'duo-rain-detour': ['The western climb changes the first meeting, and the southern bell protects the return.', 'Separate the first approach from a complete lap. A bridge samples the bell at the start of the following tick; once occupied, the crossing remains safe.'],
+ 'duo-rain-council': ['Each workshop needs the other workshop’s parcel before it can finish.', 'Trace the two locker numbers separately from parcel colours. Follow both lantern visits during one lap, and check that the southern crossing closes only after Sprout has passed.']
 };
 
 export const DUO_CLUE_IDS = Object.freeze(Object.keys(clues));

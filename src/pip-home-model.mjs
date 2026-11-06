@@ -4,7 +4,7 @@ import {DUO_STORIES} from './pip-duo.mjs';
 export const PIP_REGIONS = Object.freeze([
  ['adventures','The first letters'],['night-mail','The Night Post'],['dawn-workshop','Dawn Workshop'],
  ['canopy-fair','The Canopy Fair'],['after-hours','Canopy After Hours'],['clocktower','The Clocktower Ledger'],
- ['star-atlas','Star Atlas'],['lantern-workshop','Lantern Workshop'],['bellkeeper','The Bellkeeper'],['sealkeeper','The Sealkeepers']
+ ['star-atlas','Star Atlas'],['lantern-workshop','Lantern Workshop'],['bellkeeper','The Bellkeeper'],['sealkeeper','The Sealkeepers'],['rainwright','The Rainwrights']
 ].map(([id,name])=>Object.freeze({id,name})));
 const labels = {handoff:'Teamwork',press:'Recipes & presses',prism:'Compass prisms',flip:'Route memories',plate:'Pressure plates',bridge:'Shared bridges',locker:'Parcel lockers',cargo:'Cargo compasses',tube:'Tube journeys',signal:'Signal stamps',latch:'Remembered lights',pulse:'Timed bells',seal:'Passport checks'};
 export function pipMissionTags(mission) {

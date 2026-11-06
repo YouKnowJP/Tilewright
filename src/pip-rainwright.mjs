@@ -1,0 +1,40 @@
+// New owned material. See LICENSE; prior MIT permissions remain effective.
+const p=(x,y)=>({x,y}),row=(y,a,b)=>Array.from({length:b-a+1},(_,i)=>p(a+i,y)),column=(x,a,b)=>Array.from({length:b-a+1},(_,i)=>p(x,a+i)),part=(kind,x,y,extra={})=>({kind,x,y,...extra});
+const RR=['right','right','use'],LL=['left','left','use'],DD=['down','down','use'],UU=['up','up','use'],R=['right','wait','use'],L=['left','wait','use'];
+const glass=(x,y,operation='rotate')=>part('prism',x,y,{operation}),press=(x,y,channel,output)=>part('press',x,y,{channel,output}),seal=(x,y,channel,courier,heading='all')=>part('seal',x,y,{channel,courier,heading});
+const signal=(x,y,channel,program,alternate)=>part('signal',x,y,{channel,program,alternate}),locker=(x,y,channel,mode)=>part('locker',x,y,{channel,mode}),window=(x,y,channel)=>part('receiver',x,y,{channel,parcels:3});
+const unique=cells=>cells.filter((cell,i)=>cells.findIndex(c=>c.x===cell.x&&c.y===cell.y)===i);
+function mission(id,title,road,starts,parts,missing,solution,story,hint,ending,goals={}){
+ const solutionParts=parts.filter(missing),inventory={};for(const item of solutionParts)inventory[item.kind]=(inventory[item.kind]||0)+1;
+ return {id,title,version:6,width:13,height:9,collection:'rainwright',difficulty:'Master',minutes:'25–45 min',road:unique(road),starts,fixed:parts.filter(item=>!missing(item)),solutionParts,budget:solutionParts.length,inventory,programs:[['wait','wait','wait'],['wait','wait','wait']],solution,handoffs:0,relays:0,emptyLockers:false,quietSwitches:false,quietBells:false,maxBellDuration:6,story,hint,ending,...goals};
+}
+const exchangeRoad=[...row(1,0,9),...row(5,1,9),...column(1,2,4),...column(9,2,4),...column(10,1,7)];
+const depotRoad=[...row(2,0,11),...row(6,1,11)];
+const detourRoad=[...row(1,0,7),...row(7,1,7),...column(1,2,6),...column(7,2,6),...column(8,1,7)];
+const councilRoad=[...row(1,0,5),...row(5,1,5),...column(1,2,4),...column(5,2,4),...row(1,7,12),...row(5,7,11),...column(7,2,4),...column(11,2,4)];
+export const RAINWRIGHT_MISSIONS=Object.freeze([
+ mission('duo-rain-three','Three Letters for the Rain',exchangeRoad,[p(1,1),p(10,1)],
+  [signal(1,1,'blue',RR,['left','wait','use']),part('pip-dock',0,1),part('source',3,1,{channel:'amber'}),press(5,1,'amber','jade'),seal(6,1,'jade','pip'),press(7,1,'jade','blue'),glass(9,1),part('handoff',9,3),glass(9,5),glass(1,5),glass(10,1,'mirror-y'),window(10,3,'blue'),signal(10,5,'blue',UU,DD),part('sprout-dock',10,7)],
+  item=>['press','handoff'].includes(item.kind)||item.kind==='prism'&&item.x!==10,[RR,DD],
+  'Tavi: “The first roof needs three blue letters before the rain returns.” Rebuild six pieces. Pip makes two recipes on a long loop; Sprout visits a shorter receiving road. They must meet three times, then both follow their own home signal. Passport G expects jade between the two presses. There is no timer: rehearse a lap before running.',
+  'Pip East / East / Use; Sprout South / South / Use. Recipes amber → jade (6,2), jade → blue (8,2). Clockwise prisms (10,2), (10,6), (2,6); fixed North/South mirror (11,2); handoff (10,4). Three meetings fill the blue window before both home signals change.',
+  'Tavi shelters three blue envelopes beneath one dry roof. “A road becomes a promise,” she says, “when a friend comes around again.”',{handoffs:3,difficulty:'Expert'}),
+ mission('duo-rain-depot','The Covered Depot',depotRoad,[p(1,2),p(1,6)],
+  [signal(1,2,'blue',RR,['left','wait','use']),part('pip-dock',0,2),part('source',3,2,{channel:'amber'}),press(5,2,'amber','jade'),seal(6,2,'jade','pip','right'),locker(7,2,'violet','send'),part('pulse',9,2,{channel:'amber',duration:6}),glass(11,2,'mirror'),glass(1,6,'mirror'),locker(3,6,'violet','take'),seal(4,6,'jade','sprout','right'),press(5,6,'jade','blue'),part('bridge',6,6,{channel:'amber'}),window(7,6,'blue'),signal(9,6,'blue',LL,RR),part('sprout-dock',11,6)],
+  item=>['press','locker','pulse'].includes(item.kind)||item.kind==='prism'&&item.x!==1,[RR,RR],
+  'Rook: “A covered depot holds one letter, never a whole queue.” Restore six pieces. Pip rings six amber beats while sending jade through violet lockers. Sprout must collect jade before the eastbound passport and cross while the bell is ringing. Deliver three blue letters, empty the depot, bring both hats home and let every bell fade.',
+  'Both couriers East / East / Use. Amber → jade press (6,3); violet send locker (8,3); six-tick amber bell (10,3); East/West mirror (12,3), with Sprout’s fixed mirror (2,7); violet collect locker (4,7); jade → blue press (6,7). The fixed amber bridge opens on the tick after a ring. Quiet signals keep the shuttle going until three blue deliveries.',
+  'Rook closes the depot on an empty shelf and three dry letters. The last ring fades before the two hats settle under the eaves.',{relays:3,emptyLockers:true,quietBells:true}),
+ mission('duo-rain-detour','The One-Beat Rainwalk',detourRoad,[p(1,3),p(8,1)],
+  [signal(1,1,'blue',RR,['left','wait','use']),part('pip-dock',0,1),part('source',3,1,{channel:'amber'}),press(5,1,'amber','blue'),seal(6,1,'blue','pip'),glass(7,1),part('handoff',7,3),glass(7,7),part('pulse',5,7,{channel:'amber',duration:1}),part('bridge',4,7,{channel:'amber'}),glass(1,7),glass(8,1,'mirror-y'),window(8,3,'blue'),signal(8,5,'blue',UU,DD),part('sprout-dock',8,7)],
+  item=>['press','handoff','pulse'].includes(item.kind)||item.kind==='prism'&&item.x!==8,[UU,DD],
+  'Moss: “The long way home has one dry stepping stone.” Rebuild six pieces. Pip begins on the western climb, changes direction at the blue signal, and meets Sprout three times. On each southern lap, ring a one-beat amber bell immediately before entering the bridge. An occupied bridge stays safe. Finish at both flags with the bell silent.',
+  'Pip North / North / Use; Sprout South / South / Use. Amber → blue press (6,2); clockwise prisms (8,2), (8,8), (2,8); fixed North/South mirror (9,2); handoff (8,4); one-tick amber bell (6,8). The fixed bridge is one step west of that bell. Let the home signals watch three blue letters.',
+  'Moss puts a single dry stone beside the three letters. “Enough time,” she says, “can be one beat shared well.”',{handoffs:3,quietBells:true,maxBellDuration:1}),
+ mission('duo-rain-council','The Rainwrights’ Last Roof',councilRoad,[p(1,1),p(11,1)],
+  [signal(1,1,'violet',R,['left','wait','use']),part('pip-dock',0,1),part('source',2,1,{channel:'amber'}),press(4,1,'amber','jade'),glass(5,1),locker(5,3,'amber','send'),part('latch',5,4,{channel:'amber'}),glass(5,5),locker(3,5,'blue','take'),part('latch',2,5,{channel:'amber'}),glass(1,5),press(1,4,'amber','jade'),seal(1,3,'jade','pip','up'),window(1,2,'jade'),signal(11,1,'jade',L,['right','wait','use']),part('sprout-dock',12,1),part('source',10,1,{channel:'blue'}),press(8,1,'blue','amber'),glass(7,1,'rotate-left'),locker(7,3,'blue','send'),glass(7,5,'rotate-left'),part('bridge',8,5,{channel:'amber'}),locker(9,5,'amber','take'),seal(10,5,'jade','sprout','right'),glass(11,5,'rotate-left'),press(11,4,'jade','violet'),window(11,2,'violet')],
+  item=>['press','locker','latch'].includes(item.kind),[R,L],
+  'Eid: “Two workshops trade the colours neither can make alone.” Restore ten parts. Each courier moves once per three cards. Pip sends jade; Sprout sends amber back through a different locker number. Two amber lanterns open Sprout’s southern bridge and switch it off again. Fill both windows three times, empty both lockers, bring both hats home and leave every lantern off.',
+  'Pip East / Wait / Use; Sprout West / Wait / Use. Presses: amber → jade (5,2), blue → amber (9,2), amber → jade (2,5), jade → violet (12,5). Amber lockers send (6,4), collect (10,6); blue lockers send (8,4), collect (4,6). Amber lanterns (6,5) and (3,6) open the southern crossing then turn it off. Both windows need three letters.',
+  'Eid lays six dry letters under the last roof. The lockers are empty, the lanterns are dark, and two hats wait beside a fresh sheet of road paper. “Build the next shelter your way.”',{emptyLockers:true,quietSwitches:true})
+].map((m,i)=>Object.freeze({...m,chapter:45+i})));

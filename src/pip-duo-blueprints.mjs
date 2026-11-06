@@ -21,7 +21,7 @@ export const DUO_BLUEPRINTS=Object.freeze([
  {id:'turning-atelier',name:'The corner atelier',note:'A well, recipe and clockwise corner lead to a window below. Begin two tiles west of Q with East / East / Use. Change the colours and delivery target to fit your tower.'}
 ]);
 export function normalizeDuoBlueprint(raw){
- if(!raw||raw.format!=='pip-duo-blueprint'||![1,2,3,4,5].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||!raw.parts.length||raw.parts.length>32)throw Error('Choose a duo blueprint with parts inside a garden-sized area.');
+ if(!raw||raw.format!=='pip-duo-blueprint'||![1,2,3,4,5].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||(!raw.parts.length&&(raw.version!==5||!raw.road.length))||raw.parts.length>32)throw Error('Choose a garden-sized blueprint with stations or a nonempty road stencil.');
  const valid=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=0&&p.y>=0&&p.x<raw.width&&p.y<raw.height,road=[],parts=[];
  for(const cell of raw.road){if(!valid(cell)||road.some(p=>p.x===cell.x&&p.y===cell.y))throw Error('Blueprint roads must be unique and inside the piece.');road.push(p(cell.x,cell.y));}
  for(const rawPart of raw.parts){const item=normalizeDuoPart(rawPart,{version:raw.version+1});if(!valid(item)||!road.some(p=>p.x===item.x&&p.y===item.y)||parts.some(p=>p.x===item.x&&p.y===item.y))throw Error('Each blueprint part needs its own garden tile.');parts.push(item);}
@@ -64,12 +64,12 @@ export function placeDuoBlueprint(input,piece,x,y){
  if(!duoEditable(input))throw Error('Remix a story before placing blueprints.');const a=normalizeDuoBlueprint(piece);if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||y<0||x+a.width>input.board.width||y+a.height>input.board.height)throw Error('Move the cursor so the whole blueprint fits.');
  const shifted=a.parts.map(p=>({...p,x:p.x+x,y:p.y+y}));if(shifted.some(p=>input.parts.some(q=>p.x===q.x&&p.y===q.y)))throw Error('Place blueprint parts on free tiles. Existing parts stay safe.');
  const road=[...input.board.road];for(const p of a.road){const cell={x:p.x+x,y:p.y+y};if(!road.some(p=>p.x===cell.x&&p.y===cell.y))road.push(cell);}
- const {proof,...base}=input;return normalizeDuoProject({...base,version:Math.max(base.version,a.version+1),parts:[...base.parts,...shifted],board:{...base.board,road}});
+ if(!shifted.length&&road.length===input.board.road.length)return normalizeDuoProject(input);const {proof,...base}=input;return normalizeDuoProject({...base,version:Math.max(base.version,a.parts.length?a.version+1:2),parts:[...base.parts,...shifted],board:{...base.board,road}});
 }
 export function captureDuoBlueprint(input,{x,y,width,height},name='My little invention'){
  if(!duoEditable(input)||![x,y,width,height].every(Number.isInteger)||x<0||y<0||width<1||height<1||x+width>input.board.width||y+height>input.board.height)throw Error('Capture an area inside your duo garden.');
  const inside=p=>p.x>=x&&p.y>=y&&p.x<x+width&&p.y<y+height,shift=p=>({...p,x:p.x-x,y:p.y-y});
- const parts=input.parts.filter(inside).map(shift);return normalizeDuoBlueprint({format:'pip-duo-blueprint',version:duoRequiredVersion(parts)-1,name,author:input.author,note:'Captured from '+input.name,width,height,road:input.board.road.filter(inside).map(shift),parts});
+ const parts=input.parts.filter(inside).map(shift);return normalizeDuoBlueprint({format:'pip-duo-blueprint',version:parts.length?duoRequiredVersion(parts)-1:5,name,author:input.author,note:'Captured from '+input.name,width,height,road:input.board.road.filter(inside).map(shift),parts});
 }
 export function repeatDuoBlueprint(input,{count=1,axis='right',gap=1,shiftColours=false}={}){
  const piece=normalizeDuoBlueprint(input);if(!Number.isInteger(count)||count<1||count>3||!['right','down'].includes(axis)||!Number.isInteger(gap)||gap<0||gap>2||typeof shiftColours!=='boolean')throw Error('Arrange one to three copies with a gap of zero to two tiles.');

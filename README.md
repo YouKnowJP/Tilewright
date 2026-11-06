@@ -25,7 +25,7 @@ these restrictions apply only to new protected material. Read the
 - Character customization, separate save journeys, Undo, exact Continue, training lessons, and portable backups.
 - Phone/tablet/desktop layouts, pad/swipe/tap/keyboard/controller choices, fullscreen with expanded fallback, large text, high contrast, and color-independent map cues.
 
-Choose **Play Pip & Sprout** on the main menu. Adventure Home offers forty-four story chapters, a suggested next road, saved setups, searchable mechanic/progress filters, and your saved collections. Open the creator or collection builder from **Create & share**. **How to play → Learn the cards with Pip** opens the classic lessons. The older Workshop and Trailhouse entrances remain available. [Workshop guide](docs/PIP_WORKSHOP.md).
+Choose **Play Pip & Sprout** on the main menu. Adventure Home offers forty-eight story chapters, a suggested next road, saved setups, searchable mechanic/progress filters, and your saved collections. Open the creator or collection builder from **Create & share**. **How to play → Learn the cards with Pip** opens the classic lessons. The older Workshop and Trailhouse entrances remain available. [Workshop guide](docs/PIP_WORKSHOP.md).
 
 Use **Garden, Cards, Tools and Hints** to navigate the workbench. Test/Undo/playback sit beside the garden; briefing and advanced choices stay folded. Duo hints progress from a clue to an experiment and finally an optional worked route. Three tiny practice gardens teach handoffs, bell timing and passport checks without changing your adventure. Saved collections resume their test position with Undo; ordinary story continuation restores saved cards and parts. Dress Pip, display three favorite inventions, and share projects, collection files/codes/links or illustrated posters. Existing ordinary Pip adventures retain **Advance to next event**, numbered rehearsals and the Community shelf.
 
@@ -38,6 +38,8 @@ With the garden focused, **Space/Enter** steps a test, **R** runs/pauses and **Z
 **The Bellkeeper** adds four timed-power challenges for forty duo chapters. Configure two bell blueprints, coordinate one to six powered ticks, and design silent-bell homecomings. In the folded **Curator tray**, choose chapters from assemblies or saved collections, copy them as one undoable batch, or share a selected collection, link or poster with original maker credits.
 
 **The Sealkeepers** adds four passport missions for forty-four duo chapters. Parcel seals inspect cargo, courier badges and selected entry directions; two reusable pieces help build outward and return lanes. Add optional tick/part goals, set a verified creator par and share bonus editions alongside ordinary collections. Earned ribbons retain their best answer through later retries.
+
+**The Rainwrights** adds four original expert/master chapters for forty-eight duo adventures. Coordinate three handoffs, a covered locker depot, a one-beat return crossing and a six-letter lantern council. In **Shape your garden → Sketch a road**, preview across-first, down-first or staircase paths before applying one undoable edit. Water protects companions and stations. Save road-only stencils to the blueprint shelf, then turn, mirror, place or download them for a friend. Previewing and stencil sharing keep adventure progress separate.
 
 The Clockwork Gardens Storybook still offers six longer adventures with remembered routes, returning parcels, a shared ferry and independent flip stamps. Existing worlds and saves keep their identities.
 

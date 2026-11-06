@@ -1,6 +1,8 @@
 # Tilewright roadmap
 
-Version **0.54** adds focused garden keyboard/controller play, active-menu input
+Version **0.55** adds four Rainwright chapters for forty-eight duo adventures,
+plus a previewed road planner and reusable/shareable road stencils. Existing
+project and save formats remain compatible. Version **0.54** added focused garden keyboard/controller play, active-menu input
 isolation, immediate interruption pauses and a compact playback state. Save and
 collection formats remain unchanged. Version **0.53** added the direct Pip & Sprout Adventure Home, all forty-four duo
 story chapters with search/progress filters, saved-collection continuation,

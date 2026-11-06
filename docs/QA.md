@@ -1,5 +1,39 @@
 # Verification record
 
+## Rainwright missions and reusable roads — v0.55.0
+
+The release contains **1,693 Node tests**, **210 required gameplay browser
+cases** in exhaustive groups of **70/70/70**, and a **179-file** static package.
+Four original Rainwright repairs bring the duo story to forty-eight chapters.
+Their real creator routes clear in 109, 91, 112 and 145 ticks. Removing any
+authored repair prevents its clear; immutable frames, courier separation,
+mirrored roads and changed parcel palettes retain the checked outcomes.
+
+Road plans cover all three shapes, reverse directions and maximum garden
+bounds. Previewing never writes a project. Applying a road or water path is one
+Undo edit; a path that would cover a station or companion is refused as a whole.
+Changed roads remove an old proof. Road-only stencils use the existing version-5
+blueprint envelope; older empty pieces and empty-road stencils remain invalid.
+Capture, rotation, reflection, placement, maker credits and the full twelve-piece
+shelf are covered. Placing an already-drawn stencil preserves proof and does not
+consume an Undo entry. Older serialized fixtures retain their exact bytes.
+
+Six new required live cases clear all four missions on phone and desktop, preview
+and Undo actual road edits, exchange stencil downloads, protect malformed imports
+and full shelves, share a four-chapter collection, and restore its exact paused
+bell tick and Undo history after reload and a full-backup rollback. Enlarged,
+high-contrast themed menus retain focus at 320/390/768/844/1440-pixel widths;
+creator controls remain read-only during tests. A changed creator road is solved,
+exported and cleared again as a shared adventure. Chromium, Firefox and WebKit
+checks include these flows and selected prior home, backup and station-blueprint
+regressions. Captures cover the story board, running garden, road preview, menus,
+stencil and collection cards. Viewport/touch emulation does not substitute for
+physical-device, actual Safari, screen-reader or human usability testing.
+
+Existing save keys, project versions, collection codes and full-backup formats
+remain unchanged. The full required suite, preserved migration, three startup
+recovery checks, public artifact checks and deployment gate remain in place.
+
 ## Input safety and interruption recovery — v0.54.0
 
 The release contains **1,665 Node tests**, including five focused keyboard-policy

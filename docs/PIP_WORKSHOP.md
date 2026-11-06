@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-forty-four duo chapters in six-card pages; filter by region, saved/completed
+forty-eight duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,36 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Rainwrights and road stencils — v0.55
+
+Adventure Home now has forty-eight chapters. Choose **The Rainwrights** in
+**Find an adventure → Region**, or use **Share → Adventure collections → Try
+the Rainwrights collection** to keep or share all four together.
+
+| Chapter | Adventure | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 45 | Three Letters for the Rain | Two recipes, three timed handoffs and two home signals; six repairs | 109 ticks |
+| 46 | The Covered Depot | Six-beat crossings, directional passports and three locker deliveries; six repairs | 91 ticks |
+| 47 | The One-Beat Rainwalk | A new starting approach, three handoffs and a one-beat return bridge; six repairs | 112 ticks |
+| 48 | The Rainwrights’ Last Roof | Two workshops, six letters, two lantern visits and empty lockers; ten repairs | 145 ticks |
+
+All four include optional staged clues and verified examples. Every supplied
+repair matters to its reference route; alternate answers remain welcome.
+
+In a creator garden or a remixed story, open **Shape your garden → Sketch a
+road · keep a stencil**. Choose two endpoints by column/row, or capture the
+selected garden tile. Choose across-first, down-first or staircase geometry.
+The numbered preview and **Read the planned tiles** describe the entire path.
+Previewing preserves the adventure. **Apply planned road** is one Undo edit.
+Water refuses the entire path if it touches a station or companion start.
+
+**Keep this road for another adventure** saves a road-only stencil with your
+maker credit. Open **Blueprints** to place, turn, mirror, rename or download it.
+Friends can import that file in their own blueprint tray. Stencils contain road
+tiles without stations, companion cards or personal progress. The twelve-piece
+shelf and full journey backups include them; a full shelf never evicts a piece.
+Capturing an existing road-only rectangle also produces a stencil.
 
 ## Ten short inventions
 

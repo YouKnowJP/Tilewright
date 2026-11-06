@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.55.0 — 2026-11-05
+
+- Add The Rainwrights: four original expert/master missions, bringing Pip and Sprout to forty-eight chapters. Coordinate three handoffs, a covered locker depot, a one-beat return crossing and a six-letter lantern council with verified 109/91/112/145-tick routes.
+- Add a folded road planner with across-first, down-first and staircase paths, a numbered visual/text preview, cursor endpoint capture, safe water removal and one-edit Undo. Previewing never writes a project; protected stations and companions block the whole water path.
+- Keep road-only stencils in the existing blueprint shelf, with maker credits, rotation/reflection, file sharing and full-journey backups. Version-5 blueprint envelopes accept bounded nonempty road stencils; older piece bytes remain exact, and road placement preserves the garden’s required version.
+- Add Rainwright Adventure Home filtering, distinct staged hints, a ready-to-play/share collection and saved test continuation. Keep creative tools folded and test enlarged themed controls on phone and desktop.
+
 ## 0.54.0 — 2026-11-05
 
 - Keep controller input inside the active dropdown or confirmation. Undo cannot change cards or history behind those overlays; canceled choices preserve the adventure and menu focus.

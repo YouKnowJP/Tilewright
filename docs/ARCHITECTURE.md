@@ -20,6 +20,8 @@ state, with bounded Undo and no proof/best attachment.
 
 | File | Responsibility |
 | --- | --- |
+| `src/pip-rainwright.mjs` | Four original chapters 45–48 with bounded repairs, verified reference programs, multi-delivery goals and authored story/hints/endings. |
+| `src/pip-road-planner.mjs` / `src/pip-road-planner-ui.mjs` | Immutable orthogonal path planning, protected water, numbered preview/text alternative, atomic edits and credited road-only blueprints. |
 | `src/pip-controls.mjs` | Focused garden command policy, saved keyboard layouts, repeat/composition/modifier isolation and mode-specific instructions; workshop/practice UI owns dispatch. |
 | `src/pip-home-model.mjs` / `src/pip-home-ui.mjs` | Read-only story catalogue/progress filters and suggested routes; direct Adventure Home, saved-collection launches and explicit main-menu navigation. |
 | `src/pip-staged-hints.mjs` | Two distinct non-solution clues for every duo story, followed by its existing authored worked route. |

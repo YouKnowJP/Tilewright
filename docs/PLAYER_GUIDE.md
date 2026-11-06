@@ -6,7 +6,7 @@ journey, or make a world for someone else to discover.
 ## Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu. Start with **Begin the story**,
-continue a saved setup, or browse any of forty-four chapters. **Find an
+continue a saved setup, or browse any of forty-eight chapters. **Find an
 adventure** filters by region, progress, title or mechanic. No chapter is locked.
 
 Use **Cards** to set Pip and Sprout's three repeating instructions, then
@@ -37,6 +37,13 @@ opens your garden, collection builder or project import. **How to play** include
 the classic single-Pip lessons. Adventure Home returns to the main menu.
 Full journey backups preserve creations, collections and personal progress.
 See the [complete workshop guide](PIP_WORKSHOP.md) for all mechanics and tools.
+
+**The Rainwrights** adds four harder adventures with three-letter meetings,
+covered depots, timed crossings and a two-workshop finale. In a creator garden,
+**Shape your garden → Sketch a road** plans an elbow or staircase with a numbered
+preview. Apply it as one Undo edit, or keep a road stencil in Blueprints to reuse
+and share. Water protects companions and stations. The [workshop guide](PIP_WORKSHOP.md)
+explains the four chapters and stencil controls.
 
 ## The Clockwork Gardens — v0.41
 
