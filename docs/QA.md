@@ -32,6 +32,13 @@ cover the board, running garden, rhythm editor, menus, blueprints and collection
 Viewport/touch emulation remains distinct from physical devices, actual Safari,
 screen-reader and human usability checks.
 
+A retained CI trace reproduced a native dialog close arriving after a new
+collection link had reopened the workbench. Closed-dialog cleanup now ignores
+that stale event, and overview focus stays with the new modal. The Sealkeeper
+compatibility case forces this event order through the real close button and
+public hash handler, waits for the native close event, and compares the new
+collection export before continuing its existing legacy-journal checks.
+
 The complete release catalogue, five platform jobs, preserved migration,
 three startup recovery checks and public artifact checks continue to gate
 publication. Generated sites, captures and reports stay ignored.
