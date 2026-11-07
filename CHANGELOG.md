@@ -8,7 +8,7 @@
 - Add delayed-crossing and returning-beat blueprints, plus folded per-station timing composition for clocks, bells and drums. Copy timing to matching stations, shift/stagger existing clocks, restore individual/all edits and inspect sixteen conditional beats. Preview the final composition, including edited Weaves, palettes, facing, repeated copies and power wiring. The preview explicitly assumes quiet couriers, bells, lights and windows; normal garden tests include their actions.
 - Preserve distinct drum source/output ports under whole-piece palettes and atomic power rewiring; parcel-only remixes leave both intact. Share captured pieces and collections with maker credits and quiet-drum goals. Align the poster’s N window symbol with the garden so D clearly denotes a Memory Drum.
 - Keep the new adventures’ completion goals beside the board and fold their detailed power/machine readouts. Use compact readable beat cards with separately folded preview assumptions.
-- Add six required live release cases and retain every earlier gameplay case. Check phone/tablet/desktop, enlarged themed menus, pending-memory reload/Undo/backups, protected imports and both new/legacy replays. Firefox/WebKit compatibility now includes thirty-two cases each, with the existing action deadlines and release gates.
+- Add six required live release cases and retain every earlier gameplay case. Check phone/tablet/desktop, enlarged themed menus, pending-memory reload/Undo/backups, protected imports and both new/legacy replays. Firefox/WebKit compatibility now includes thirty-two cases each, split into two required groups per engine within the existing job/action deadlines and release gates; check that the groups cover every case exactly once.
 
 ## 0.61.0 — 2026-11-06
 

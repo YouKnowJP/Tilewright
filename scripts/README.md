@@ -47,15 +47,20 @@ Run the focused compatibility suite against a freshly built package:
 npx playwright install --with-deps firefox webkit
 npm run test:browser:pip -- chromium
 npm run test:browser:pip -- firefox webkit
+npm run test:browser:pip -- webkit --shard=1/2
+npm run test:browser:pip -- webkit --shard=2/2
 ```
 
 The runner checks six Drumkeeper cases, six Weavekeeper cases, six Kilnkeeper
 cases, six Mixing House cases, six retained Echo Post cases and two legacy
 save/share cases (thirty-two total),
 records the built release metadata, closes the browser/server and removes its
-owned temporary build. Firefox and WebKit run as separate required CI jobs with
-original action deadlines and full tracing. Their reports are retained for
-seven days; publication requires both jobs as well as the full release suite.
+owned temporary build. Firefox and WebKit each run in two required CI groups of
+sixteen, retaining all thirty-two cases per engine within the existing twenty-minute
+job limit. Original action deadlines and full tracing remain enforced. Reports
+record the group and use distinct filenames; all four jobs and the full release
+suite must pass before publication. Reports are retained for seven days. Unsharded
+local commands still run the complete compatibility suite.
 
 The recovery command additionally interrupts a real startup module request,
 checks the Retry flow with untouched saves, holds loading past the real 15-second
@@ -173,14 +178,15 @@ full phone/desktop books, parcel inventory and powered routes, guarded dock rese
 mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
-CI runs the complete release catalogue in three parallel groups. Each group has
-66 of the current 198 cases; all three groups must pass before deployment. No scenario is
+CI runs the complete release catalogue in four parallel groups. Each group has
+63 of the current 252 cases; all four groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
-npm run test:browser:smoke -- --shard=1/3
-npm run test:browser:smoke -- --shard=2/3
-npm run test:browser:smoke -- --shard=3/3
+npm run test:browser:smoke -- --shard=1/4
+npm run test:browser:smoke -- --shard=2/4
+npm run test:browser:smoke -- --shard=3/4
+npm run test:browser:smoke -- --shard=4/4
 ```
 
 The partition is stable when case names are supplied for a focused retry. Reports
