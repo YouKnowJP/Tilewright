@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.66.0 — 2026-11-06
+
+- Add Switch Rails with quiet and powered exits. Arrivals queue a ride on the following turn and leave the next card ready. Rails can chain and interact with existing power, movement and arrival rules.
+- Add four original Switchyard missions and their starter collection. The 92-chapter story now includes a pulse crossing, a fork changed by a delivery, a timed handoff and a four-lap foundry.
+- Add two rail blueprints, a folded exit editor and a sample ride preview. Exit editing composes with wiring, geometry, copies, capture and sharing.
+- Add project format 17 and blueprint format 16. Keep earlier save and share bytes and restore queued rides with Undo. Add live checks for mission clears, backup recovery, creator tools and large-text menus.
+
 ## 0.65.0 — 2026-11-06
 
 - Add Footfall Counters O, with a chosen courier badge, threshold, starting marks and a pulse on the following turns. Count successful arrivals, feed existing machines, and inspect marks and pulse state in the garden and rehearsal.

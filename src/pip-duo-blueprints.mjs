@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {transformRailExits} from './pip-rails.mjs';
 import {normalizeRest} from './pip-rests.mjs';
 import {normalizeDrum} from './pip-drums.mjs';
 import {normalizeWeave} from './pip-weaves.mjs';
@@ -10,6 +11,8 @@ import {DUO_CHANNELS,duoRequiredVersion,normalizeDuoPart,normalizeDuoProject,duo
 import {transformProgram,transformPrismOperation} from './clockwork.mjs';
 const p=(x,y)=>({x,y}),part=(kind,x,y,extra={})=>({kind,x,y,...extra});
 export const DUO_BLUEPRINTS=Object.freeze([
+ {id:'rail-corner',name:'Sidecar corner',note:'Start two steps west of Q with East / East / Use. Ride south after the first East and use the second East to reach the window.'},
+ {id:'rail-fork',name:'Two-way switch',note:'A quiet rail rolls east. Power sends it around the upper dogleg. Try the ride in each state, then add stations after the exits.'},
  {id:'footfall-bridge',name:'A crossing on two steps',note:'Start two couriers at the western ends. East / Wait / Use on the upper path and East / West / Wait below. A second arrival at O powers the bridge for three turns.'},
  {id:'footfall-kiln',name:'The walking kiln',note:'East / Wait / Use from the western end. O starts one mark from ringing; a five-turn beat reaches the kiln Use. Try a different starting count or arrival rhythm.'},
  {id:'wind-corner',name:'A walking corner',note:'East / East / Use from the western end collects at Q. F turns the very next movement south toward the press; the second vane turns east again toward the window.'},
@@ -48,7 +51,7 @@ export const DUO_BLUEPRINTS=Object.freeze([
  {id:'turning-atelier',name:'The corner atelier',note:'A well, recipe and clockwise corner lead to a window below. Begin two tiles west of Q with East / East / Use. Change the colours and delivery target to fit your tower.'}
 ]);
 export function normalizeDuoBlueprint(raw){
- if(!raw||raw.format!=='pip-duo-blueprint'||![1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||(!raw.parts.length&&(raw.version!==5||!raw.road.length))||raw.parts.length>32)throw Error('Choose a garden-sized blueprint with stations or a nonempty road stencil.');
+ if(!raw||raw.format!=='pip-duo-blueprint'||![1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||(!raw.parts.length&&(raw.version!==5||!raw.road.length))||raw.parts.length>32)throw Error('Choose a garden-sized blueprint with stations or a nonempty road stencil.');
  const valid=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=0&&p.y>=0&&p.x<raw.width&&p.y<raw.height,road=[],parts=[];
  for(const cell of raw.road){if(!valid(cell)||road.some(p=>p.x===cell.x&&p.y===cell.y))throw Error('Blueprint roads must be unique and inside the piece.');road.push(p(cell.x,cell.y));}
  for(const rawPart of raw.parts){const item=normalizeDuoPart(rawPart,{version:raw.version+1});if(!valid(item)||!road.some(p=>p.x===item.x&&p.y===item.y)||parts.some(p=>p.x===item.x&&p.y===item.y))throw Error('Each blueprint part needs its own garden tile.');parts.push(item);}
@@ -59,6 +62,14 @@ export function normalizeDuoBlueprint(raw){
 export function duoBlueprint(id,{input='amber',second='blue',output='jade',channel='amber',initial=false,turns=0,parcels=1,duration=3,match='jade',courier='either',heading='all',period=4,beats=2,offset=0,echoOperation='copy',kilnInput='amber',kilnQuiet='jade',kilnPowered='blue',kilnChannel='violet',weaveFirst='amber',weaveSecond='jade',weaveChannel='violet',weaveRule='both',drumInput='amber',drumChannel='jade',drumDelay=2,restDuration=2}={}){
  const spec=DUO_BLUEPRINTS.find(b=>b.id===id);if(!spec)throw Error('Choose a duo blueprint.');if(![input,output,channel].every(c=>DUO_CHANNELS.includes(c))||typeof initial!=='boolean'||!Number.isInteger(parcels)||parcels<1||parcels>3||!Number.isInteger(duration)||duration<1||duration>6||!['all','empty','any',...DUO_CHANNELS].includes(match)||!['either','pip','sprout'].includes(courier)||!['all','up','right','down','left'].includes(heading))throw Error('Choose known blueprint colours, routes and delivery targets.');
  let width,height,road,parts;
+ if(id==='rail-corner'){
+  width=5;height=2;road=[p(0,0),p(1,0),p(2,0),p(3,0),p(3,1),p(4,1)];
+  parts=[part('source',2,0,{channel}),part('rail',3,0,{channel,quietExit:'down',poweredExit:'down'}),part('receiver',4,1,{channel,parcels})];
+ }
+ if(id==='rail-fork'){
+  width=5;height=3;road=[...Array.from({length:5},(_,x)=>p(x,1)),p(1,0),p(2,0),p(0,2),p(1,2)];
+  parts=[part('rail',1,1,{channel,quietExit:'right',poweredExit:'up'}),part('rail',1,0,{channel,quietExit:'right',poweredExit:'right'}),part('rail',2,0,{channel,quietExit:'down',poweredExit:'down'}),part('counter',1,2,{channel,threshold:2,phase:0,duration:3,courier:'either'})];
+ }
  if(id==='footfall-bridge'){width=5;height=3;road=[...Array.from({length:5},(_,x)=>p(x,0)),p(0,2),p(1,2)];parts=[part('source',1,0,{channel}),part('bridge',3,0,{channel}),part('receiver',4,0,{channel,parcels}),part('counter',1,2,{channel,threshold:2,phase:0,duration:3,courier:'either'})];}
  if(id==='footfall-kiln'){width=6;height=1;road=Array.from({length:6},(_,x)=>p(x,0));parts=[part('source',1,0,{channel:kilnInput}),part('counter',2,0,{channel:kilnChannel,threshold:2,phase:1,duration:5,courier:'either'}),part('kiln',3,0,{channel:kilnChannel,input:kilnInput,quiet:kilnQuiet,powered:kilnPowered}),part('receiver',5,0,{channel:kilnPowered,parcels})];}
  if(id==='wind-corner'){width=5;height=3;road=[p(0,0),p(1,0),p(2,0),p(3,0),p(3,1),p(3,2),p(4,2)];parts=[part('source',2,0,{channel:input}),part('vane',3,0,{operation:'rotate'}),part('press',3,1,{channel:input,output}),part('vane',3,2,{operation:'rotate-left'}),part('receiver',4,2,{channel:output,parcels})];}
@@ -100,10 +111,10 @@ export function duoBlueprint(id,{input='amber',second='blue',output='jade',chann
 export function configureDuoBlueprint(input,{turns=0,palette=0,first='keep',reflection='none'}={}){
  let piece=normalizeDuoBlueprint(input);if(!Number.isInteger(turns)||turns<0||turns>3||!Number.isInteger(palette)||palette<0||palette>3||!['keep','a','b'].includes(first)||!['none','horizontal','vertical'].includes(reflection))throw Error('Choose a blueprint direction, reflection, palette and first route.');
  const colour=c=>DUO_CHANNELS.includes(c)?DUO_CHANNELS[(DUO_CHANNELS.indexOf(c)+palette)%4]:c;piece={...piece,parts:piece.parts.map(p=>({...p,...(p.channel?{channel:colour(p.channel)}:{}),...(p.output?{output:colour(p.output)}:{}),...(p.kind==='mixer'?{second:colour(p.second)}:{}),...(p.kind==='drum'?{input:colour(p.input)}:{}),...(p.kind==='weave'?{first:colour(p.first),second:colour(p.second)}:{}),...(p.kind==='kiln'?{input:colour(p.input),quiet:colour(p.quiet),powered:colour(p.powered)}:{}),...(p.kind==='scale'?{match:colour(p.match)}:{}),...(p.kind==='flip'&&first!=='keep'?{initial:first==='b'}:{})}))};
- if(reflection!=='none'){const horizontal=reflection==='horizontal',point=p=>({x:horizontal?piece.width-1-p.x:p.x,y:horizontal?p.y:piece.height-1-p.y}),programOperation=horizontal?'mirror':'mirror-y',prismOperation=horizontal?'mirror-x':'mirror-y';piece={...piece,road:piece.road.map(point),parts:piece.parts.map(p=>({...p,...point(p),...(p.program?{program:transformProgram(p.program,programOperation)}:{}),...(p.alternate?{alternate:transformProgram(p.alternate,programOperation)}:{}),...(p.operation?{operation:p.kind==='echo'?transformEchoOperation(p.operation,prismOperation):transformPrismOperation(p.operation,prismOperation)}:{}),...(p.kind==='seal'&&p.heading!=='all'?{heading:transformProgram([p.heading,'wait','wait'],programOperation)[0]}:{})}))};}
+ if(reflection!=='none'){const horizontal=reflection==='horizontal',point=p=>({x:horizontal?piece.width-1-p.x:p.x,y:horizontal?p.y:piece.height-1-p.y}),programOperation=horizontal?'mirror':'mirror-y',prismOperation=horizontal?'mirror-x':'mirror-y';piece={...piece,road:piece.road.map(point),parts:piece.parts.map(p=>({...p,...point(p),...(p.program?{program:transformProgram(p.program,programOperation)}:{}),...(p.alternate?{alternate:transformProgram(p.alternate,programOperation)}:{}),...(p.operation?{operation:p.kind==='echo'?transformEchoOperation(p.operation,prismOperation):transformPrismOperation(p.operation,prismOperation)}:{}),...(p.kind==='rail'?transformRailExits(p,programOperation):{}),...(p.kind==='seal'&&p.heading!=='all'?{heading:transformProgram([p.heading,'wait','wait'],programOperation)[0]}:{})}))};}
  for(let i=0;i<turns;i++){
   const rotate=p=>({x:piece.height-1-p.y,y:p.x});
-  piece={...piece,width:piece.height,height:piece.width,road:piece.road.map(rotate),parts:piece.parts.map(p=>({...p,...rotate(p),...(p.program?{program:transformProgram(p.program,'rotate')}:{}),...(p.alternate?{alternate:transformProgram(p.alternate,'rotate')}:{}),...(p.operation?{operation:p.kind==='echo'?transformEchoOperation(p.operation,'rotate'):transformPrismOperation(p.operation,'rotate')}:{}),...(p.kind==='seal'&&p.heading!=='all'?{heading:transformProgram([p.heading,'wait','wait'],'rotate')[0]}:{})}))};
+  piece={...piece,width:piece.height,height:piece.width,road:piece.road.map(rotate),parts:piece.parts.map(p=>({...p,...rotate(p),...(p.program?{program:transformProgram(p.program,'rotate')}:{}),...(p.alternate?{alternate:transformProgram(p.alternate,'rotate')}:{}),...(p.operation?{operation:p.kind==='echo'?transformEchoOperation(p.operation,'rotate'):transformPrismOperation(p.operation,'rotate')}:{}),...(p.kind==='rail'?transformRailExits(p,'rotate'):{}),...(p.kind==='seal'&&p.heading!=='all'?{heading:transformProgram([p.heading,'wait','wait'],'rotate')[0]}:{})}))};
  }
  return normalizeDuoBlueprint(piece);
 }

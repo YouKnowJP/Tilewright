@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-88 duo chapters in six-card pages; filter by region, saved/completed
+92 duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,37 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Switchyard — v0.66
+
+Choose **Find an adventure → Region → Switchyard** or open the starter collection
+from **Share → Adventure collections**. The four repairs have staged clues and
+optional worked routes.
+
+| Chapter | Adventure | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 89 | The Sidecar Crossing | Use a footfall pulse to send Pip through two rides and onto a parcel press | 11 turns |
+| 90 | The Window Switchback | Deliver to a window to change the fork on the second lap | 29 turns |
+| 91 | The Delayed Dispatch | Carry a delayed beat to a rail and kiln, then meet at the handoff | 11 turns |
+| 92 | The Roundabout Foundry | Alternate two recipes over four laps and return with the lantern off | 147 turns |
+
+Entering a **Switch Rail »** queues a one-tile ride for the following turn. The
+rail samples its numbered channel when the ride starts, then takes its quiet or
+powered exit. Filled windows can supply that power. Each rail in a chain takes
+one turn, leaving the courier's next card and parcel in place. A blocked ride
+ends the chain and the next card resumes on the following turn. Starting on a
+rail, Wait, and Use do not queue a ride. **Couriers & machines** shows queued
+rides, and **Switch Rail rides** filters them in rehearsal.
+
+Open **Route switch rails** in the blueprint editor. Edit each exit, copy exits
+to matching rails, or swap the quiet and powered directions. **Try a ride**
+sketches a chain under sample power and flags water, loops or exits beyond the
+piece. Rehearse the placed garden to test actual timing and obstacles. Exit
+directions rotate and reflect with the piece, and the power tools wire their
+channels separately.
+
+Switch Rails use project format 17 and blueprint format 16. Earlier formats
+remain supported. A collection checkpoint keeps queued rides and Undo history.
 
 ## The Footfall Archive — v0.65
 

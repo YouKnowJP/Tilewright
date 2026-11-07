@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-rail-sidecar':['Ride around the bend before spending the second movement card.','The counter lights the first ride when Sprout makes its second arrival. The next rail continues east while Pip’s second East stays queued.'],
+ 'duo-rail-switchback':['Fill the amber window before choosing the lower road.','Use the top return line to go back for a new parcel. Starting a chain on the second East leaves Use queued until you get back to the start.'],
+ 'duo-rail-dispatch':['Give the drum a beat before the rail needs to move.','The two Sprout rides leave Use at the compass on turn 8. Then Sprout can stand beside the handoff before Pip uses it.'],
+ 'duo-rail-foundry':['Use a different branch for each ingredient.','Both branches should leave Pip at the same mixing bowl. Set the lantern on the outer lap and return to the flag after the fourth branch.'],
  'duo-counter-crossing':['The shorter path can give the longer path its timing.','Count only actual arrivals. Let Sprout walk onto O twice, then keep the bridge powered until Pip’s next movement reaches it.'],
  'duo-counter-relay':['Each friend powers a different step of the trip.','The kiln uses its beat immediately after Sprout’s arrival. The bridge needs Pip’s beat two turns later, so route that one through a Memory Drum.'],
  'duo-counter-terraces':['The first and second kiln pairs should alternate on opposite laps.','Give one counter a starting mark. Its first pulse is one lap earlier. Both count-to-two pulses need to reach Use through the same delayed channel.'],

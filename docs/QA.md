@@ -1,5 +1,19 @@
 # Verification record
 
+## Switchyard and rail composer — v0.66.0
+
+The four worked routes clear in 11, 29, 11 and 147 turns. Each loose part is
+needed on its worked route, and reflection and palette shifts preserve every
+clear. The 2,117 Node tests cover sampled power, arrival chains, blocked exits,
+card and cargo retention, counter and rest interactions, route previews, queued
+ride recovery, and literal v0.65 saves and exports. The static build has 228
+files.
+
+Six new browser cases verify phone and desktop clears, reload and backup with a
+queued ride, blueprint edits and file exchange, protected imports, and
+largest-text menus at five viewport sizes. The release gates cover 276 Chromium
+cases and 56 each in Firefox and WebKit. Device coverage uses browser emulation.
+
 ## Footfall Archive and counter composer — v0.65.0
 
 The four worked routes clear in 9, 30, 138 and 111 turns. Every loose part

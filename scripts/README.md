@@ -36,7 +36,7 @@ The release catalogue includes the latest story and creator cases:
 four-mission phone/desktop clears, individual/bulk timing/relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
 memory, pause and wind checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **270 distinct cases**, split **54/54/54/54/54**. All earlier
+with old/new replays. It has **276 distinct cases**, split **56/55/55/55/55**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -180,7 +180,7 @@ mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
 CI runs the complete release catalogue in five parallel groups. The groups contain
-54 cases each, covering all 270 cases; all five groups must pass before deployment. No scenario is
+56, 55, 55, 55 and 55 cases, covering all 276 cases; all five groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -363,3 +363,11 @@ composition, counter editing and protected imports, and enlarged menu checks wit
 a literal v0.64 replay. The five Chromium groups retain all 270 release cases.
 Firefox and WebKit each run 50 compatibility cases in three groups. No action
 or job deadline was increased.
+
+## Switchyard and rail composer — v0.66
+
+`pip-switchyard-browser-checks.mjs` adds six cases. They clear the four missions
+on phone and desktop, restore a queued ride and Undo through reload and backup,
+exercise route samples and exit editing, verify blueprint exchange and protected
+imports, and check enlarged menus with a literal v0.65 replay. Chromium runs
+all 276 gameplay cases. Firefox and WebKit each run 56 compatibility cases.

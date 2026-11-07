@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {RAIL_DIRECTIONS} from './pip-rails.mjs';
 import {counterArrival} from './pip-counters.mjs';
 import {restRemaining} from './pip-rests.mjs';
 import {advanceDrum,drumOutput} from './pip-drums.mjs';
@@ -9,7 +10,7 @@ import {echoProgram,ECHO_OPERATIONS} from './pip-echoes.mjs';
 import {scalePower} from './pip-scales.mjs';
 import {tideOpen,tidePhase} from './pip-tides.mjs';
 import {DUO_STORIES,DUO_CUSTOM,duoMission,duoDefinition,normalizeDuoProject,newDuoProject,duoReadiness,duoRequiredVersion,sealAllows,sealDescription} from './pip-duo.mjs';
-import {normalizeProgram,transformProgram,PRISM_OPERATIONS} from './clockwork.mjs';
+import {normalizeProgram,transformProgram,PRISM_OPERATIONS,CLOCKWORK_LABELS} from './clockwork.mjs';
 import {duoHintStages} from './pip-staged-hints.mjs';
 import {blankAdventure,editAdventure} from './workshop-model.mjs';
 const at=(a,b)=>a.x===b.x&&a.y===b.y;
@@ -36,8 +37,8 @@ export function tinkerTrial(id){return TINKER_TRIALS.find(t=>t.id===id)||fail('C
 function text(value,fallback,max=48){if(value===undefined)return fallback;if(typeof value!=='string'||value.length>max||/[\u0000-\u001f\u007f]/.test(value))fail('Use a short, printable name.');return value.trim()||fallback;}
 export function newTinkerProject(id='first-use'){if(id===DUO_CUSTOM.id||duoMission(id))return newDuoProject(id);const trial=tinkerTrial(id);return {format:'pip-tinker-project',version:1,trialId:id,name:trial.title,author:'A trail keeper',programs:trial.programs.map(p=>[...p]),parts:id==='repair-relay'?[part('prism',5,3,{operation:'mirror'})]:[]};}
 export function normalizeTinkerProject(input,{verify=true}={}){
- if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
- if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 16.');
+ if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
+ if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 17.');
  const trial=tinkerTrial(input.trialId);
  if(!Array.isArray(input.programs)||input.programs.length!==trial.starts.length)fail('Each companion needs one three-card program.');
  const project={format:'pip-tinker-project',version:1,trialId:trial.id,name:text(input.name,trial.title),author:text(input.author,'A trail keeper'),programs:input.programs.map(normalizeProgram),parts:[]};
@@ -59,7 +60,7 @@ export function editTinkerProject(input,patch){const {proof,...base}=input;const
 export function placeTinkerPart(input,kind,x,y,extra={}){return editTinkerProject(input,{parts:[...input.parts.filter(p=>p.x!==x||p.y!==y),...(kind==='erase'?[]:[part(kind,x,y,extra)])]});}
 export function tinkerDefinition(project){return project.version>=2?duoDefinition(project):tinkerTrial(project.trialId);}
 export function tinkerCatalogue(){return [...TINKER_TRIALS,...DUO_STORIES,DUO_CUSTOM];}
-export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready',...(project.version>=14?{resting:0}:{})})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version>=3?{lockers:{},lockerTransfers:0}:{}),...(project.version>=4?{switches:{}}:{}),...(project.version>=5?{pulses:{}}:{}),...(project.version>=10?{mixers:{}}:{}),...(project.version>=13?{drums:{}}:{}),...(project.version>=16?{counters:Object.fromEntries(tinkerParts(project).filter(p=>p.kind==='counter').map(p=>[p.id,[p.phase,0]]))}:{})};}
+export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready',...(project.version>=14?{resting:0}:{}),...(project.version>=17?{rolling:false}:{})})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version>=3?{lockers:{},lockerTransfers:0}:{}),...(project.version>=4?{switches:{}}:{}),...(project.version>=5?{pulses:{}}:{}),...(project.version>=10?{mixers:{}}:{}),...(project.version>=13?{drums:{}}:{}),...(project.version>=16?{counters:Object.fromEntries(tinkerParts(project).filter(p=>p.kind==='counter').map(p=>[p.id,[p.phase,0]]))}:{})};}
 export function tinkerParts(project){return [...tinkerDefinition(project).fixed,...project.parts].map((p,i)=>({...p,id:String(i)}));}
 function counterChannels(state,parts){return state.counters?parts.filter(p=>p.kind==='counter'&&state.counters[p.id][1]>0).map(p=>p.channel):[];}
 function physicalPowerChannels(state,parts,turn){return new Set([...scalePower(parts,state.bots),...parts.filter(p=>p.kind==='tide'&&tideOpen(p,turn)).map(p=>p.channel),...Object.keys(state.switches||{}),...Object.keys(state.pulses||{}),...counterChannels(state,parts),...parts.filter(p=>['plate','bridge'].includes(p.kind)&&state.bots.some(b=>at(b,p))).map(p=>p.channel)]);}
@@ -73,7 +74,7 @@ export function tinkerStateKey(state){return JSON.stringify([state.bots,state.re
 export function tinkerStep(input){
  if(input.status!=='playing')return input;
  const state=structuredClone(input),trial=tinkerDefinition(state.project),parts=tinkerParts(state.project),tubes=parts.filter(p=>p.kind==='tube');state.events=[];state.ticks++;
- const kilnPower=parts.some(p=>p.kind==='kiln')?kilnPowerChannels(input,parts,input.ticks+1):new Set();
+ const machinePower=parts.some(p=>p.kind==='kiln'||p.kind==='rail')?kilnPowerChannels(input,parts,input.ticks+1):new Set();
  const echoCards=state.bots.map(bot=>[...bot.program]);
  const occupied=p=>state.bots.some(b=>at(b,p));
  // A held or occupied crossing remains safe throughout this tick, including Pip leaving its plate.
@@ -88,24 +89,40 @@ export function tinkerStep(input){
  for(const bot of state.bots){
   if(state.project.version>=14&&restRemaining(bot.resting)>0){bot.resting--;bot.last=bot.resting?`Resting · ${bot.resting} turn${bot.resting===1?'':'s'} left; cards and parcel held`:'Rest complete · next card ready';state.events.push(`${bot.id}: ${bot.last}`);continue;}
   const before={x:bot.x,y:bot.y};
-  const command=bot.program[bot.index];bot.index=(bot.index+1)%3;bot.last=command;
-  const direction={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0]}[command];
+  const rail=bot.rolling&&parts.find(part=>part.kind==='rail'&&at(part,bot));
+  let command;
+  if(rail){
+   const powered=machinePower.has(rail.channel);
+   command=powered?rail.poweredExit:rail.quietExit;
+   bot.rolling=false;
+   bot.last=`Switch Rail · ${powered?'Powered':'Quiet'} ${CLOCKWORK_LABELS[command]} · card held`;
+  }else{
+   command=bot.program[bot.index];
+   bot.index=(bot.index+1)%3;
+   bot.last=command;
+  }
+  const direction=Object.hasOwn(RAIL_DIRECTIONS,command)?RAIL_DIRECTIONS[command]:null;
   if(direction){
    const target=point(bot.x+direction[0],bot.y+direction[1]),bridge=parts.find(p=>p.kind==='bridge'&&at(p,target));
    const closed=bridge&&!(state.project.version>=2?heldChannels.has(bridge.channel):held);
    if(!trial.road.some(p=>at(p,target))||state.bots.some(b=>b!==bot&&at(b,target))||closed)bot.last=closed&&parts.some(p=>p.kind==='tide'&&p.channel===bridge.channel)?'Blocked by tide · tick '+state.ticks+' closed':'Blocked';
    else{const seal=parts.find(p=>p.kind==='seal'&&at(p,target));if(seal&&!sealAllows(seal,bot,command))bot.last='Blocked by parcel seal · '+sealDescription(seal);else Object.assign(bot,target);}
   }
+  if(rail){
+   if(at(before,bot))bot.last=`${bot.last} · Switch Rail blocked; card held`;
+   state.events.push(`${bot.id}: ${bot.last}`);
+  }
   if(command==='use'){
    const tile=parts.find(p=>at(p,bot));let restart=false;bot.last='Nothing to use here';
    if(tile?.kind==='source'){if(bot.parcel)bot.last=`Holding ${bot.parcel}; the well keeps its parcel`;else {bot.parcel=tile.channel;bot.last=`Collected ${tile.channel}`;}}
    if(tile?.kind==='receiver'){if((state.received[tile.id]||0)>=(tile.parcels||1))bot.last='Window already filled; parcel kept';else if(bot.parcel===tile.channel){bot.parcel=null;state.received[tile.id]=(state.received[tile.id]||0)+1;bot.last=`Delivered ${tile.channel}`;}else bot.last=`Window needs ${tile.channel}; ${bot.parcel||'empty hands'} kept`;}
    if(tile?.kind==='press'){if(bot.parcel===tile.channel){bot.parcel=tile.output;bot.last=`Pressed ${tile.channel} into ${tile.output}`;}else bot.last=`Recipe needs ${tile.channel}; ${bot.parcel||'empty hands'} kept`;}
-   if(tile?.kind==='kiln'){const fired=fireKiln(tile,bot.parcel,kilnPower.has(tile.channel));bot.parcel=fired.parcel;bot.last=fired.message;}
+   if(tile?.kind==='kiln'){const fired=fireKiln(tile,bot.parcel,machinePower.has(tile.channel));bot.parcel=fired.parcel;bot.last=fired.message;}
    if(tile?.kind==='mixer'){const mixed=useMixer(tile,state.mixers[tile.id],bot.parcel);bot.parcel=mixed.parcel;if(mixed.stored)state.mixers[tile.id]=mixed.stored;else delete state.mixers[tile.id];bot.last=mixed.message;}
    if(tile?.kind==='echo'){const other=state.bots.findIndex(b=>b!==bot);bot.program=echoProgram(echoCards[other],tile.operation);restart=true;bot.last=`Echo learned ${state.bots[other].id} · ${ECHO_OPERATIONS[tile.operation]}`;}
    if(tile?.kind==='prism'){bot.program=transformProgram(bot.program,tile.operation);restart=true;bot.last='Prism changed the cards';}
    if(tile?.kind==='signal'){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===tile.channel),plates=parts.filter(p=>p.kind==='plate'&&p.channel===tile.channel);const powered=switchChannels.has(tile.channel)||Boolean(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))||Boolean(plates.length&&plates.every(occupied));bot.program=[...(powered?tile.alternate:tile.program)];restart=true;bot.last=`Signal loaded ${powered?'Powered':'Quiet'}`;}
+   if(tile?.kind==='rail')bot.last='Switch Rail rides after entry; Use keeps it still';
    if(tile?.kind==='counter')bot.last='Footfall Counter counts arrivals; Use adds no mark';
    if(tile?.kind==='vane')bot.last='Wind Vanes turn cards on arrival; Use keeps cargo and does not turn again';
    if(tile?.kind==='rest')bot.last='Rest Stone pauses on arrival; Use keeps cargo and does not restart the pause';
@@ -126,7 +143,12 @@ export function tinkerStep(input){
   const vane=state.project.version>=15&&direction&&!at(before,bot)&&parts.find(p=>p.kind==='vane'&&at(p,bot));if(vane){bot.program=transformProgram(bot.program,vane.operation);bot.last=`Wind Vane turned cards · ${PRISM_OPERATIONS[vane.operation]} · next card ${bot.index+1}`;state.events.push(`${bot.id}: ${bot.last}`);}
   const counter=state.counters&&direction&&!at(before,bot)&&parts.find(p=>p.kind==='counter'&&at(p,bot));
   if(counter){const hit=counterArrival(counter,state.counters[counter.id],bot.id.toLowerCase());if(hit){state.counters[counter.id]=hit.record;bot.last=hit.triggered?`Footfall Counter rang · ${counter.channel} for ${counter.duration} ahead`:`Footfall Counter · ${hit.record[0]}/${counter.threshold} marks`;state.events.push(`${bot.id}: ${bot.last}`);}else{bot.last='Footfall Counter · other badge';state.events.push(`${bot.id}: ${bot.last}`);}}
-  if(command==='use'||bot.last.startsWith('Blocked'))state.events.push(`${bot.id}: ${bot.last}`);
+  if(state.project.version>=17&&direction&&!at(before,bot)&&parts.some(part=>part.kind==='rail'&&at(part,bot))){
+   bot.rolling=true;
+   bot.last=rail?'Switch Rail linked · another ride next turn':'Switch Rail reached · ride next turn';
+   state.events.push(`${bot.id}: ${bot.last}`);
+  }
+  if(!rail&&(command==='use'||bot.last.startsWith('Blocked')))state.events.push(`${bot.id}: ${bot.last}`);
  }
  const receivers=parts.filter(p=>p.kind==='receiver');const parked=parts.filter(p=>['pip-dock','sprout-dock'].includes(p.kind)).every(p=>at(p,state.bots[p.kind==='pip-dock'?0:1]));if(receivers.length&&receivers.every(p=>(state.received[p.id]||0)>=(p.parcels||1))&&(state.project.version>=2?state.transfers>=(trial.handoffs||0)&&parked&&(state.project.version<3||state.lockerTransfers>=(trial.relays||0)&&(!trial.emptyLockers||!Object.keys(state.lockers).length))&&(state.project.version<4||!trial.quietSwitches||!Object.keys(state.switches).length)&&(state.project.version<5||!trial.quietBells||!Object.keys(state.pulses).length)&&(state.project.version<13||!trial.quietDrums||!Object.keys(state.drums).length):trial.id!=='parcel-partners'||state.transfers>0))state.status='won';else if(state.ticks>=TINKER_LIMIT)state.status='limit';
  state.last=state.status==='won'?(state.project.version>=2?'Adventure complete! '+trial.ending:'Invention complete! Keep this answer, or try a smaller or faster one.'):state.status==='limit'?'Tick limit reached. Return to the bench and try a different idea.':state.events.join(' · ')||state.bots.map(b=>`${b.id}: ${b.last}`).join(' · ');return state;

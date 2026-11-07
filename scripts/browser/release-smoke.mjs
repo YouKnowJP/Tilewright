@@ -1,3 +1,4 @@
+import {pipRailScenarios} from './pip-switchyard-browser-checks.mjs';
 import {pipCounterScenarios} from './pip-footfall-browser-checks.mjs';
 import {pipWindwardScenarios} from './pip-windward-browser-checks.mjs';
 import {pipRestkeepersScenarios} from './pip-restkeepers-browser-checks.mjs';
@@ -141,6 +142,7 @@ export async function runReleaseSmoke(browserType,{baseURL,channel,widths=[390,1
     await pipRestkeepersScenarios(scenario);
   await pipWindwardScenarios(scenario);
   await pipCounterScenarios(scenario);
+  await pipRailScenarios(scenario);
     const report={browser:browser.version(),baseURL,shard,results};await writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2));if(!results.length)throw Error('No release browser checks matched the requested names.');if(results.some(item=>!item.pass))throw Error('Release browser checks failed. See playwright-report/release-smoke for screenshots, console output, and traces.');return report;
   }finally{await browser.close();}
 }

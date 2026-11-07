@@ -80,6 +80,11 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-rail':
+      rect('#183947', 2, 4, 20, 16); rect('#c4b083', 3, 6, 18, 12);
+      rect('#294c53', 4, 8, 16, 2); rect('#294c53', 4, 14, 16, 2);
+      for (const x of [6, 11, 16]) rect('#fff0bc', x, 9, 2, 6);
+      break;
     case 'pip-counter': rect('#183947',2,20,20,3);rect('#a7c3a3',4,5,16,15);rect('#153b43',6,8,12,8);rect(item.powered?'#ffe7a5':'#82b99e',8,10,3,4);rect(item.powered?'#ffe7a5':'#5f8d79',13,10,3,4);rect('#ca9a59',7,17,10,2);break;
     case 'pip-vane': rect('#1c3e4b',2,20,20,3);rect('#729b99',5,18,14,3);rect('#a9d6ba',10,4,3,15);rect('#eec781',3,7,16,4);rect('#f7dc99',16,5,4,8);rect('#eec781',20,7,2,4);rect('#d99555',3,5,4,8);rect('#f5ead0',10,7,3,4);break;
     case 'pip-rest': rect('#294d55',2,15,20,7);rect('#97ad9c',4,9,16,11);rect('#d5d9b1',6,7,12,4);rect('#173b43',8,11,3,6);rect('#173b43',14,11,3,6);rect('#a6c5a0',2,20,7,3);rect('#7ca487',17,19,5,3);break;
