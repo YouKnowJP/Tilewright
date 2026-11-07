@@ -11,6 +11,8 @@ import {DUO_CHANNELS,duoRequiredVersion,normalizeDuoPart,normalizeDuoProject,duo
 import {transformProgram,transformPrismOperation} from './clockwork.mjs';
 const p=(x,y)=>({x,y}),part=(kind,x,y,extra={})=>({kind,x,y,...extra});
 export const DUO_BLUEPRINTS=Object.freeze([
+ {id:'fare-crossing',name:'Crossing for two',note:'Start at both west ends. Pip East / East / Use and Sprout East / Wait / Use. The first parcel buys Sprout’s crossing; both friends collect separate mail.'},
+ {id:'fare-dispatch',name:'The fare and the sidecar',note:'East / East / Use from the west end collects a fare. The powered rail sends the courier north for fresh mail. Extend the quiet east route with your own stops.'},
  {id:'meeting-lanes',name:'Meeting lanes',note:'Set both starts at the west ends. East / Wait / Use collects, waits at the matching posts and delivers.'},
  {id:'meeting-stagger',name:'Staggered lanes',note:'Start on the wells with Use / East / East. One lane pauses before the posts. Both resume together and deliver.'},
  {id:'rail-corner',name:'Sidecar corner',note:'Start two steps west of Q with East / East / Use. Ride south after the first East and use the second East to reach the window.'},
@@ -53,7 +55,7 @@ export const DUO_BLUEPRINTS=Object.freeze([
  {id:'turning-atelier',name:'The corner atelier',note:'A well, recipe and clockwise corner lead to a window below. Begin two tiles west of Q with East / East / Use. Change the colours and delivery target to fit your tower.'}
 ]);
 export function normalizeDuoBlueprint(raw){
- if(!raw||raw.format!=='pip-duo-blueprint'||![1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||(!raw.parts.length&&(raw.version!==5||!raw.road.length))||raw.parts.length>32)throw Error('Choose a garden-sized blueprint with stations or a nonempty road stencil.');
+ if(!raw||raw.format!=='pip-duo-blueprint'||![1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18].includes(raw.version)||!Number.isInteger(raw.width)||!Number.isInteger(raw.height)||raw.width<1||raw.width>13||raw.height<1||raw.height>9||!Array.isArray(raw.road)||raw.road.length>raw.width*raw.height||!Array.isArray(raw.parts)||(!raw.parts.length&&(raw.version!==5||!raw.road.length))||raw.parts.length>32)throw Error('Choose a garden-sized blueprint with stations or a nonempty road stencil.');
  const valid=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=0&&p.y>=0&&p.x<raw.width&&p.y<raw.height,road=[],parts=[];
  for(const cell of raw.road){if(!valid(cell)||road.some(p=>p.x===cell.x&&p.y===cell.y))throw Error('Blueprint roads must be unique and inside the piece.');road.push(p(cell.x,cell.y));}
  for(const rawPart of raw.parts){const item=normalizeDuoPart(rawPart,{version:raw.version+1});if(!valid(item)||!road.some(p=>p.x===item.x&&p.y===item.y)||parts.some(p=>p.x===item.x&&p.y===item.y))throw Error('Each blueprint part needs its own garden tile.');parts.push(item);}
@@ -64,6 +66,17 @@ export function normalizeDuoBlueprint(raw){
 export function duoBlueprint(id,{input='amber',second='blue',output='jade',channel='amber',initial=false,turns=0,parcels=1,duration=3,match='jade',courier='either',heading='all',period=4,beats=2,offset=0,echoOperation='copy',kilnInput='amber',kilnQuiet='jade',kilnPowered='blue',kilnChannel='violet',weaveFirst='amber',weaveSecond='jade',weaveChannel='violet',weaveRule='both',drumInput='amber',drumChannel='jade',drumDelay=2,restDuration=2}={}){
  const spec=DUO_BLUEPRINTS.find(b=>b.id===id);if(!spec)throw Error('Choose a duo blueprint.');if(![input,output,channel].every(c=>DUO_CHANNELS.includes(c))||typeof initial!=='boolean'||!Number.isInteger(parcels)||parcels<1||parcels>3||!Number.isInteger(duration)||duration<1||duration>6||!['all','empty','any',...DUO_CHANNELS].includes(match)||!['either','pip','sprout'].includes(courier)||!['all','up','right','down','left'].includes(heading))throw Error('Choose known blueprint colours, routes and delivery targets.');
  let width,height,road,parts;
+ if(id==='fare-crossing'){
+  width=7;height=3;road=[...Array.from({length:7},(_,x)=>p(x,0)),...Array.from({length:5},(_,x)=>p(x,2))];
+  parts=[part('source',2,0,{channel:'amber'}),part('turnstile',3,0,{fare:'amber',channel:'blue',duration:3}),
+   part('source',4,0,{channel:'jade'}),part('receiver',6,0,{channel:'jade',parcels}),part('source',1,2,{channel:'violet'}),
+   part('bridge',3,2,{channel:'blue'}),part('receiver',4,2,{channel:'violet',parcels})];
+ }
+ if(id==='fare-dispatch'){
+  width=7;height=2;road=[...Array.from({length:7},(_,x)=>p(x,1)),p(4,0),p(5,0),p(6,0)];
+  parts=[part('source',2,1,{channel:'amber'}),part('turnstile',3,1,{fare:'amber',channel:'blue',duration:2}),
+   part('rail',4,1,{channel:'blue',quietExit:'right',poweredExit:'up'}),part('source',4,0,{channel:'jade'}),part('receiver',6,0,{channel:'jade',parcels})];
+ }
  if(id==='meeting-lanes'||id==='meeting-stagger'){
   const stagger=id==='meeting-stagger';
   width=5;height=3;road=[0,2].flatMap(y=>Array.from({length:5},(_,x)=>p(x,y)));
@@ -118,7 +131,7 @@ export function duoBlueprint(id,{input='amber',second='blue',output='jade',chann
 }
 export function configureDuoBlueprint(input,{turns=0,palette=0,first='keep',reflection='none'}={}){
  let piece=normalizeDuoBlueprint(input);if(!Number.isInteger(turns)||turns<0||turns>3||!Number.isInteger(palette)||palette<0||palette>3||!['keep','a','b'].includes(first)||!['none','horizontal','vertical'].includes(reflection))throw Error('Choose a blueprint direction, reflection, palette and first route.');
- const colour=c=>DUO_CHANNELS.includes(c)?DUO_CHANNELS[(DUO_CHANNELS.indexOf(c)+palette)%4]:c;piece={...piece,parts:piece.parts.map(p=>({...p,...(p.channel?{channel:colour(p.channel)}:{}),...(p.output?{output:colour(p.output)}:{}),...(p.kind==='mixer'?{second:colour(p.second)}:{}),...(p.kind==='drum'?{input:colour(p.input)}:{}),...(p.kind==='weave'?{first:colour(p.first),second:colour(p.second)}:{}),...(p.kind==='kiln'?{input:colour(p.input),quiet:colour(p.quiet),powered:colour(p.powered)}:{}),...(p.kind==='scale'?{match:colour(p.match)}:{}),...(p.kind==='flip'&&first!=='keep'?{initial:first==='b'}:{})}))};
+ const colour=c=>DUO_CHANNELS.includes(c)?DUO_CHANNELS[(DUO_CHANNELS.indexOf(c)+palette)%4]:c;piece={...piece,parts:piece.parts.map(p=>({...p,...(p.channel?{channel:colour(p.channel)}:{}),...(p.output?{output:colour(p.output)}:{}),...(p.kind==='mixer'?{second:colour(p.second)}:{}),...(p.kind==='drum'?{input:colour(p.input)}:{}),...(p.kind==='weave'?{first:colour(p.first),second:colour(p.second)}:{}),...(p.kind==='kiln'?{input:colour(p.input),quiet:colour(p.quiet),powered:colour(p.powered)}:{}),...(p.kind==='scale'?{match:colour(p.match)}:{}),...(p.kind==='turnstile'?{fare:colour(p.fare)}:{}),...(p.kind==='flip'&&first!=='keep'?{initial:first==='b'}:{})}))};
  if(reflection!=='none'){const horizontal=reflection==='horizontal',point=p=>({x:horizontal?piece.width-1-p.x:p.x,y:horizontal?p.y:piece.height-1-p.y}),programOperation=horizontal?'mirror':'mirror-y',prismOperation=horizontal?'mirror-x':'mirror-y';piece={...piece,road:piece.road.map(point),parts:piece.parts.map(p=>({...p,...point(p),...(p.program?{program:transformProgram(p.program,programOperation)}:{}),...(p.alternate?{alternate:transformProgram(p.alternate,programOperation)}:{}),...(p.operation?{operation:p.kind==='echo'?transformEchoOperation(p.operation,prismOperation):transformPrismOperation(p.operation,prismOperation)}:{}),...(p.kind==='rail'?transformRailExits(p,programOperation):{}),...(p.kind==='seal'&&p.heading!=='all'?{heading:transformProgram([p.heading,'wait','wait'],programOperation)[0]}:{})}))};}
  for(let i=0;i<turns;i++){
   const rotate=p=>({x:piece.height-1-p.y,y:p.x});

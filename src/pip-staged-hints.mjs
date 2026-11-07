@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-toll-tickets':['Pip can buy Sprout’s crossing before collecting the mail.','Count from the turn after payment to Sprout’s third East. Pip needs a second well after the gate.'],
+ 'duo-toll-echo':['The two receipts need different lifetimes.','The drum should listen to Sprout’s receipt and repeat it two turns later. Pip needs immediate power for its own bridge.'],
+ 'duo-toll-handoff':['An empty hand at the post makes room for another fare.','The posts should hold both couriers just beside the handoff. Sprout’s next East spends Pip’s parcel one turn before the bridge.'],
+ 'duo-toll-rounds':['Trace each receipt from one garden to the other, twice per lap.','The outward pulse must last until the drums can fire both kilns. Each return pulse needs just one turn. Both gardens also need a return well.'],
  'duo-meeting-dusk':['Let Pip wait on a linked post while Sprout takes the slower route.','Pip keeps its second East queued. Pair the posts so the press is the next place Pip uses after they both resume.'],
  'duo-meeting-tickets':['Use a different link for each appointment.','A northbound rail takes Sprout to the higher press. Its violet post should meet Pip at the end of Pip’s second East.'],
  'duo-meeting-bridge':['Build the meeting just beside the handoff.','Send the earlier amber footfall through the drum. Sprout needs that delayed power on the turn after receiving the parcel.'],

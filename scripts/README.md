@@ -374,6 +374,10 @@ all 276 gameplay cases. Firefox and WebKit each run 56 compatibility cases.
 
 ## Meeting House and timing preview — v0.67
 
+`pip-toll-browser-checks.mjs` adds six cases for Toll House campaign clears,
+mid-receipt recovery and backup, turnstile blueprint exchange, protected imports,
+and five screen sizes with enlarged menus.
+
 `pip-meeting-browser-checks.mjs` adds six cases for phone and desktop clears,
 waiting-state recovery and Undo, copied links, timing previews, blueprint
 exchange, protected imports, and enlarged menus with a literal v0.66 replay.

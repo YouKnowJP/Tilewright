@@ -80,6 +80,12 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-turnstile':
+      rect('#233f4a', 2, 4, 20, 17); rect('#e8cf96', 3, 4, 18, 3);
+      rect('#e8cf96', 4, 7, 3, 13); rect('#e8cf96', 17, 7, 3, 13);
+      rect(CHANNEL_COLORS[item.fare], 8, 9, 4, 5); rect(color, 13, 9, 3, 5);
+      rect('#fff0bc', 8, 16, 8, 2);
+      break;
     case 'pip-sync':
       rect('#26454e', 3, 4, 18, 16); rect('#c4aa6c', 3, 4, 18, 3);
       rect('#d2c2a0', 5, 8, 3, 10); rect('#d2c2a0', 16, 8, 3, 10);

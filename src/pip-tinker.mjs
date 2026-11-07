@@ -10,6 +10,7 @@ import {useMixer} from './pip-mixers.mjs';
 import {echoProgram,ECHO_OPERATIONS} from './pip-echoes.mjs';
 import {scalePower} from './pip-scales.mjs';
 import {tideOpen,tidePhase} from './pip-tides.mjs';
+import {turnstilePayment} from './pip-turnstile.mjs';
 import {DUO_STORIES,DUO_CUSTOM,duoMission,duoDefinition,normalizeDuoProject,newDuoProject,duoReadiness,duoRequiredVersion,sealAllows,sealDescription} from './pip-duo.mjs';
 import {normalizeProgram,transformProgram,PRISM_OPERATIONS,CLOCKWORK_LABELS} from './clockwork.mjs';
 import {duoHintStages} from './pip-staged-hints.mjs';
@@ -38,8 +39,8 @@ export function tinkerTrial(id){return TINKER_TRIALS.find(t=>t.id===id)||fail('C
 function text(value,fallback,max=48){if(value===undefined)return fallback;if(typeof value!=='string'||value.length>max||/[\u0000-\u001f\u007f]/.test(value))fail('Use a short, printable name.');return value.trim()||fallback;}
 export function newTinkerProject(id='first-use'){if(id===DUO_CUSTOM.id||duoMission(id))return newDuoProject(id);const trial=tinkerTrial(id);return {format:'pip-tinker-project',version:1,trialId:id,name:trial.title,author:'A trail keeper',programs:trial.programs.map(p=>[...p]),parts:id==='repair-relay'?[part('prism',5,3,{operation:'mirror'})]:[]};}
 export function normalizeTinkerProject(input,{verify=true}={}){
- if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
- if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 18.');
+ if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
+ if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 19.');
  const trial=tinkerTrial(input.trialId);
  if(!Array.isArray(input.programs)||input.programs.length!==trial.starts.length)fail('Each companion needs one three-card program.');
  const project={format:'pip-tinker-project',version:1,trialId:trial.id,name:text(input.name,trial.title),author:text(input.author,'A trail keeper'),programs:input.programs.map(normalizeProgram),parts:[]};
@@ -114,16 +115,32 @@ export function tinkerStep(input){
    bot.last=command;
   }
   const direction=Object.hasOwn(RAIL_DIRECTIONS,command)?RAIL_DIRECTIONS[command]:null;
+  let paymentNote;
   if(direction){
    const target=point(bot.x+direction[0],bot.y+direction[1]),bridge=parts.find(p=>p.kind==='bridge'&&at(p,target));
    const closed=bridge&&!(state.project.version>=2?heldChannels.has(bridge.channel):held);
    if(!trial.road.some(p=>at(p,target))||state.bots.some(b=>b!==bot&&at(b,target))||closed)bot.last=closed&&parts.some(p=>p.kind==='tide'&&p.channel===bridge.channel)?'Blocked by tide · tick '+state.ticks+' closed':'Blocked';
-   else{const seal=parts.find(p=>p.kind==='seal'&&at(p,target));if(seal&&!sealAllows(seal,bot,command))bot.last='Blocked by parcel seal · '+sealDescription(seal);else Object.assign(bot,target);}
+   else{
+    const seal=parts.find(p=>p.kind==='seal'&&at(p,target));
+    const turnstile=parts.find(p=>p.kind==='turnstile'&&at(p,target));
+    const payment=turnstile&&turnstilePayment(turnstile,bot.parcel,state.ticks);
+    if(seal&&!sealAllows(seal,bot,command))bot.last='Blocked by parcel seal · '+sealDescription(seal);
+    else if(turnstile&&!payment)bot.last=`Blocked by Parcel Turnstile · needs ${turnstile.fare} fare; parcel kept`;
+    else{
+     Object.assign(bot,target);
+     if(payment){
+      bot.parcel=null;
+      state.pulses[turnstile.channel]=Math.max(state.pulses[turnstile.channel]||0,turnstile.duration);
+      paymentNote=`Parcel Turnstile · paid ${turnstile.fare}; ${turnstile.channel} powered on ${payment.first===payment.last?`turn ${payment.first}`:`turns ${payment.first}–${payment.last}`}`;
+     }
+    }
+   }
   }
   if(rail){
    if(at(before,bot))bot.last=`${bot.last} · Switch Rail blocked; card held`;
    state.events.push(`${bot.id}: ${bot.last}`);
   }
+  if(paymentNote){bot.last=paymentNote;state.events.push(`${bot.id}: ${bot.last}`);}
   if(command==='use'){
    const tile=parts.find(p=>at(p,bot));let restart=false;bot.last='Nothing to use here';
    if(tile?.kind==='source'){if(bot.parcel)bot.last=`Holding ${bot.parcel}; the well keeps its parcel`;else {bot.parcel=tile.channel;bot.last=`Collected ${tile.channel}`;}}
@@ -134,6 +151,7 @@ export function tinkerStep(input){
    if(tile?.kind==='echo'){const other=state.bots.findIndex(b=>b!==bot);bot.program=echoProgram(echoCards[other],tile.operation);restart=true;bot.last=`Echo learned ${state.bots[other].id} · ${ECHO_OPERATIONS[tile.operation]}`;}
    if(tile?.kind==='prism'){bot.program=transformProgram(bot.program,tile.operation);restart=true;bot.last='Prism changed the cards';}
    if(tile?.kind==='signal'){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===tile.channel),plates=parts.filter(p=>p.kind==='plate'&&p.channel===tile.channel);const powered=switchChannels.has(tile.channel)||Boolean(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))||Boolean(plates.length&&plates.every(occupied));bot.program=[...(powered?tile.alternate:tile.program)];restart=true;bot.last=`Signal loaded ${powered?'Powered':'Quiet'}`;}
+   if(tile?.kind==='turnstile')bot.last='Parcel Turnstile takes fare on entry; Use keeps cargo';
    if(tile?.kind==='sync')bot.last='Rendezvous Post waits on entry; Use does not queue it';
    if(tile?.kind==='rail')bot.last='Switch Rail rides after entry; Use keeps it still';
    if(tile?.kind==='counter')bot.last='Footfall Counter counts arrivals; Use adds no mark';

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.68.0 — 2026-11-07
+
+- Add Parcel Turnstiles. Matching cargo pays on entry and powers a numbered circuit for one to six following turns. Wrong cargo stays safe.
+- Add four Toll House missions and a starter collection, bringing the duo story to 100 chapters. Spend fares to open a partner’s bridge, replay a receipt with a Memory Drum, and time handoffs and kiln routes.
+- Add two fare blueprints and a station editor with a sample crossing preview. Adjust fares and wiring independently, then rotate, recolour, place, save or share the piece.
+- Add project format 19 and blueprint format 18. Include fare events in rehearsal and preserve earlier saved and shared routes.
+
 ## 0.67.0 — 2026-11-07
 
 - Add Rendezvous Posts. A matching pair holds cards and parcels until both couriers arrive, then releases them together on the following turn.

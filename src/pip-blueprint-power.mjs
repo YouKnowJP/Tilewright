@@ -1,7 +1,7 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 import {DUO_CHANNELS,duoEditable,normalizeDuoProject} from './pip-duo.mjs';
 import {normalizeDuoBlueprint} from './pip-duo-blueprints.mjs';
-export const POWER_PARTS=Object.freeze(['plate','bridge','signal','latch','pulse','tide','scale','kiln','weave','drum','counter','rail']);
+export const POWER_PARTS=Object.freeze(['plate','bridge','signal','latch','pulse','tide','scale','kiln','weave','drum','counter','rail','turnstile']);
 const ports=p=>p.kind==='drum'?[p.input,p.channel]:p.kind==='weave'?[p.first,p.second,p.channel]:POWER_PARTS.includes(p.kind)?[p.channel]:[];
 export function blueprintPowerChannels(input){const piece=normalizeDuoBlueprint(input);return DUO_CHANNELS.filter(c=>piece.parts.some(p=>ports(p).includes(c))).map(channel=>({channel,parts:piece.parts.filter(p=>ports(p).includes(channel)).length}));}
 export function rewireBlueprintPower(input,mapping={}){
