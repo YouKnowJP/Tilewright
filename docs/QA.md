@@ -1,5 +1,26 @@
 # Verification record
 
+## Windward Post and compass composer — v0.64.0
+
+Four missions bring the duo story to 84 chapters. The worked routes finish in
+11, 102, 138 and 121 turns. Removing any loose piece breaks its worked route;
+blank cards do not clear. Reflected and recoloured gardens retain each solution.
+The 2,061 Node checks include all three-card sequences across the six available commands and three positions for
+both compass kinds and all five operations, blocked entries and re-entry, cargo,
+Rest and Echo interactions, checkpoint replay, and byte-exact v0.63 exchanges.
+
+The six new live cases play the whole region at phone and desktop widths, then
+check cleared scores after reload. They restore transformed cards, progress and
+Undo through a collection checkpoint and full journey backup. They also combine
+compass, timing, card, power and geometry edits, verify independent saved pieces,
+exercise capture and exchange, and protect saves from invalid imports. Themed
+menus are checked at widths 320, 390, 768, 844 and 1440 with the largest text and
+high contrast; Escape returns focus and testing locks authoring controls.
+
+The release gate runs 264 Chromium cases in four groups and 44 cases each in
+Firefox and WebKit. It retains the earlier migration and recovery checks and
+packages 218 files. Device checks use browser emulation.
+
 ## Kilnkeepers and individual blueprint recipes — v0.60.0
 
 Coverage includes **1,896 Node tests**, **240 required gameplay browser cases**

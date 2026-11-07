@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.64.0 — 2026-11-06
+
+- Add Wind Vanes F: entering turns or mirrors the cards, or reverses their order. The next card position and cargo stay held. Standing, waiting, using and blocked movement never activate a vane. Prisms still restart at card 1 when used.
+- Add The Windward Post, four missions that bring the duo story to 84 chapters. Build two walking stairs, time three handoffs, work four changing kilns, and find new Use positions for four mixed parcels and a quiet return. Each mission has staged clues and a verified worked route. Play or remix the four gardens as a shareable starter collection.
+- Add two reusable blueprints and a folded compass composer. Edit one station, copy to its kind, swap corner directions or mirror axes, alternate turns, and try any three example cards with a selected trigger position. Compose edits with timing, cards, power, geometry, repeated copies and capture.
+- Add Wind turns to rehearsal and vane rules to text inspection and collection posters. Add project format 15 and blueprint format 14 while retaining existing save keys and earlier formats. Add six live gameplay cases covering clears, save recovery, composition, imports, and enlarged menus on phones, tablets and desktops.
+
 ## 0.63.0 — 2026-11-06
 
 - Add Rest Stones R: entering pauses that courier for one to six following turns. Its next card and parcel remain held while the other courier, clocks, bells and drum memories advance. Starting on a stone, Wait and Use do not restart a pause. Re-entering begins a fresh hold; ordinary occupancy and handoff rules still apply.

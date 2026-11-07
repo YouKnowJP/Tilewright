@@ -80,6 +80,7 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-vane': rect('#1c3e4b',2,20,20,3);rect('#729b99',5,18,14,3);rect('#a9d6ba',10,4,3,15);rect('#eec781',3,7,16,4);rect('#f7dc99',16,5,4,8);rect('#eec781',20,7,2,4);rect('#d99555',3,5,4,8);rect('#f5ead0',10,7,3,4);break;
     case 'pip-rest': rect('#294d55',2,15,20,7);rect('#97ad9c',4,9,16,11);rect('#d5d9b1',6,7,12,4);rect('#173b43',8,11,3,6);rect('#173b43',14,11,3,6);rect('#a6c5a0',2,20,7,3);rect('#7ca487',17,19,5,3);break;
     case 'pip-drum': rect('#304f58',2,3,20,20);rect('#d4b37b',4,3,16,4);rect('#a07b55',4,7,16,12);rect('#f1d294',4,18,16,4);rect(CHANNEL_COLORS[item.input]||'#f2c46f',5,10,4,5);rect(item.powered?color:'#647f80',15,10,4,5);rect('#173b43',10,7,4,12);rect('#e7dcb1',11,9,2,2);rect('#e7dcb1',11,14,2,2);break;
     case 'pip-weave': rect('#2c4e57',2,2,20,21);rect('#d9bc83',3,3,18,3);rect(CHANNEL_COLORS[item.first]||'#f3c67f',4,8,5,5);rect(CHANNEL_COLORS[item.second]||'#a7d9b9',15,8,5,5);rect('#c8d6c6',8,11,3,5);rect('#c8d6c6',13,11,3,5);rect(item.powered?color:'#6b8284',9,15,6,6);rect(item.powered?'#fff4c3':'#aec2b6',11,16,2,2);break;

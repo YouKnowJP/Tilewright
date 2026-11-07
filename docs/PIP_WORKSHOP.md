@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-eighty duo chapters in six-card pages; filter by region, saved/completed
+84 duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,37 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Windward Post — v0.64
+
+Choose **Find an adventure → Region → The Windward Post**, or open the starter
+collection from **Share → Adventure collections** to remix its four gardens.
+Each story has staged clues and an optional worked route.
+
+| Chapter | Adventure | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 81 | The Windward Stair | Eight repairs; turn between steps, press two parcels, and reach both flags | 11 turns |
+| 82 | The Crossing of Unequal Wings | Ten repairs; delay a one-beat ring and make three handoffs | 102 turns |
+| 83 | The Windglass Observatory | Fourteen repairs; feed four kilns and deliver twice to each of eight windows | 138 turns |
+| 84 | The Kitekeeper’s Return | Sixteen repairs; reverse cards, mix four blends, and return with lamps and drums quiet | 121 turns |
+
+A **Wind Vane F** changes all three cards as a courier walks onto it. The
+movement card is spent and the next **position** stays next, even when you
+reverse the card order. A vane does not turn when a courier starts on it,
+waits, uses it, or is blocked from entering. Leaving and walking back can turn
+again. A **Compass Prism X** still needs Use and restarts at card 1.
+
+Open **Shape turns & mirrors** on a blueprint that contains either station.
+Change one compass, match stations of the same kind, swap left and right or the
+two mirror axes, or alternate corner turns. **Try three example cards** lets
+you choose any cards and the one that triggers the station. It previews a
+single station. Use **Plan & replay a route → Wind turns** to find actual
+arrivals in the garden. Keep or download the edited piece, or place it as one
+Undoable change. Geometry and repeated copies apply after compass edits.
+
+Wind Vanes use project format 15 and blueprint format 14. Earlier file and
+share versions remain supported. Your saved collection position and Undo
+history reconstruct the turned cards when you continue.
 
 ## The Wayside Keepers — v0.63
 

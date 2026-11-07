@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-wind-corner':['Try turning between two steps instead of turning on Use.','At the first corner, the first movement card is already spent. Point the second card toward the press; use the next corner to send both movement cards toward the window.'],
+ 'duo-wind-rendezvous':['Give the shorter road a safe place to wait.','A one-turn ring will end before the bridge. Use the drum to catch that beat, and let the cargo compass keep Sprout nearby until Pip arrives.'],
+ 'duo-wind-observatory':['Each terrace has two chances to bake a letter per lap.','Trace the four kiln Use turns. Exactly one clock must power the relay before the delayed beat reaches a kiln. A finished window can influence later heat, so inspect the final rounds too.'],
+ 'duo-wind-home':['Where could Use land if the last card moved to the front?','Reverse once before the wells and again on the return climb. The first lap should leave one ingredient in each bowl and light the other friend’s kiln for the second.'],
  'duo-rest-crossing':['Let one friend wait while the river keeps its beat.','The pause holds the next card, so count the following turns separately. Match each bridge arrival to its own one-beat clock.'],
  'duo-rest-rendezvous':['A meeting is about when both friends are there.','Pip hands over first on a turn. Two equal pauses shift both friends into the first meeting without changing their three cards. Repeat the timing for all three letters.'],
  'duo-rest-observatory':['Let the sky change while a friend takes a breath.','The two pauses are different. Trace the next kiln Use after the hold ends; the Weave and drum keep changing heat during every resting turn.'],

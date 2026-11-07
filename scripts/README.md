@@ -32,11 +32,11 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains all earlier cases and adds six Drumkeeper cases:
+The release catalogue retains the Drumkeeper, Wayside Keeper and Windward Post cases:
 four-mission phone/desktop clears, individual/bulk timing/relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
-recorded-beat checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **258 distinct cases**, split **65/65/64/64**. All earlier
+memory, pause and wind checkpoints through reload/Undo/backup, and enlarged menus
+with old/new replays. It has **264 distinct cases**, split **66/66/66/66**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -180,7 +180,7 @@ mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
 CI runs the complete release catalogue in four parallel groups. The groups contain
-65, 65, 64 and 64 of the current 258 cases; all four groups must pass before deployment. No scenario is
+66 cases each, covering all 264 cases; all four groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -339,5 +339,17 @@ They check brush editing and inspection, protected old/future/malformed imports,
 320/390/768/844/1440 largest high-contrast menus, focus return, read-only controls
 and literal v0.62 replay/export. All six cases remain required in the complete
 release catalogue and both compatibility engines. Compatibility groups have
-separate report filenames and metadata; their union must cover all 38 cases
+separate report filenames and metadata; their union then covered all 38 cases
 exactly once per engine. Original action and job deadlines remain unchanged.
+
+## Windward Post and compass composer — v0.64
+
+`pip-windward-browser-checks.mjs` plays all four Windward Post missions at phone
+and desktop widths. It resumes turned cards and Undo history after reload and
+full-backup restore, inspects arrival frames, and validates an illustrated
+collection export. The creator case combines compass edits with timing, card,
+power and geometry changes, then keeps, places, captures and reopens the result.
+Brush edits, protected imports, largest high-contrast menus across five viewport
+sizes, and literal v0.63 replay/export round out the six new cases. All are
+required in the 264-case Chromium catalogue and the 44-case Firefox and WebKit
+catalogues. Earlier cases and the original timeouts remain required.

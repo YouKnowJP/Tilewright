@@ -35,8 +35,8 @@ export function tinkerTrial(id){return TINKER_TRIALS.find(t=>t.id===id)||fail('C
 function text(value,fallback,max=48){if(value===undefined)return fallback;if(typeof value!=='string'||value.length>max||/[\u0000-\u001f\u007f]/.test(value))fail('Use a short, printable name.');return value.trim()||fallback;}
 export function newTinkerProject(id='first-use'){if(id===DUO_CUSTOM.id||duoMission(id))return newDuoProject(id);const trial=tinkerTrial(id);return {format:'pip-tinker-project',version:1,trialId:id,name:trial.title,author:'A trail keeper',programs:trial.programs.map(p=>[...p]),parts:id==='repair-relay'?[part('prism',5,3,{operation:'mirror'})]:[]};}
 export function normalizeTinkerProject(input,{verify=true}={}){
- if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
- if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 14.');
+ if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
+ if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 15.');
  const trial=tinkerTrial(input.trialId);
  if(!Array.isArray(input.programs)||input.programs.length!==trial.starts.length)fail('Each companion needs one three-card program.');
  const project={format:'pip-tinker-project',version:1,trialId:trial.id,name:text(input.name,trial.title),author:text(input.author,'A trail keeper'),programs:input.programs.map(normalizeProgram),parts:[]};
@@ -103,6 +103,7 @@ export function tinkerStep(input){
    if(tile?.kind==='echo'){const other=state.bots.findIndex(b=>b!==bot);bot.program=echoProgram(echoCards[other],tile.operation);restart=true;bot.last=`Echo learned ${state.bots[other].id} · ${ECHO_OPERATIONS[tile.operation]}`;}
    if(tile?.kind==='prism'){bot.program=transformProgram(bot.program,tile.operation);restart=true;bot.last='Prism changed the cards';}
    if(tile?.kind==='signal'){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===tile.channel),plates=parts.filter(p=>p.kind==='plate'&&p.channel===tile.channel);const powered=switchChannels.has(tile.channel)||Boolean(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))||Boolean(plates.length&&plates.every(occupied));bot.program=[...(powered?tile.alternate:tile.program)];restart=true;bot.last=`Signal loaded ${powered?'Powered':'Quiet'}`;}
+   if(tile?.kind==='vane')bot.last='Wind Vanes turn cards on arrival; Use keeps cargo and does not turn again';
    if(tile?.kind==='rest')bot.last='Rest Stone pauses on arrival; Use keeps cargo and does not restart the pause';
    if(tile?.kind==='drum')bot.last='Memory Drum repeats earlier power automatically; no Use is needed';
    if(tile?.kind==='weave')bot.last='Weave relay reads its two sources at turn start; no Use is needed';
@@ -118,6 +119,7 @@ export function tinkerStep(input){
    if(restart)bot.index=0;
   }
   const entered=parts.find(p=>p.kind==='rest'&&at(p,bot));if(entered&&!at(before,bot)){bot.resting=entered.duration;bot.last=`Reached Rest Stone · pause ${entered.duration} following turn${entered.duration===1?'':'s'}; next card held`;state.events.push(`${bot.id}: ${bot.last}`);}
+  const vane=state.project.version>=15&&direction&&!at(before,bot)&&parts.find(p=>p.kind==='vane'&&at(p,bot));if(vane){bot.program=transformProgram(bot.program,vane.operation);bot.last=`Wind Vane turned cards · ${PRISM_OPERATIONS[vane.operation]} · next card ${bot.index+1}`;state.events.push(`${bot.id}: ${bot.last}`);}
   if(command==='use'||bot.last.startsWith('Blocked'))state.events.push(`${bot.id}: ${bot.last}`);
  }
  const receivers=parts.filter(p=>p.kind==='receiver');const parked=parts.filter(p=>['pip-dock','sprout-dock'].includes(p.kind)).every(p=>at(p,state.bots[p.kind==='pip-dock'?0:1]));if(receivers.length&&receivers.every(p=>(state.received[p.id]||0)>=(p.parcels||1))&&(state.project.version>=2?state.transfers>=(trial.handoffs||0)&&parked&&(state.project.version<3||state.lockerTransfers>=(trial.relays||0)&&(!trial.emptyLockers||!Object.keys(state.lockers).length))&&(state.project.version<4||!trial.quietSwitches||!Object.keys(state.switches).length)&&(state.project.version<5||!trial.quietBells||!Object.keys(state.pulses).length)&&(state.project.version<13||!trial.quietDrums||!Object.keys(state.drums).length):trial.id!=='parcel-partners'||state.transfers>0))state.status='won';else if(state.ticks>=TINKER_LIMIT)state.status='limit';
