@@ -1,5 +1,17 @@
 # Verification record
 
+## Meeting House and timing preview — v0.67.0
+
+The four worked routes clear in 12, 19, 21 and 127 turns. The 2,142 Node tests
+cover paired departure, held cards and parcels, missed meetings, blueprint
+copies and links, waiting-state recovery and literal v0.66 exports. The static
+build has 231 files.
+
+Six new browser cases cover phone and desktop clears, reload and backup while
+waiting, blueprint copies and link edits, protected imports, and enlarged menus
+at five viewport sizes. The release gate includes 282 Chromium cases and 62
+cases each in Firefox and WebKit. Device coverage uses browser emulation.
+
 ## Switchyard and rail composer — v0.66.0
 
 The four worked routes clear in 11, 29, 11 and 147 turns. Each loose part is

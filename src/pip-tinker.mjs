@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {readyRendezvous} from './pip-rendezvous.mjs';
 import {RAIL_DIRECTIONS} from './pip-rails.mjs';
 import {counterArrival} from './pip-counters.mjs';
 import {restRemaining} from './pip-rests.mjs';
@@ -37,8 +38,8 @@ export function tinkerTrial(id){return TINKER_TRIALS.find(t=>t.id===id)||fail('C
 function text(value,fallback,max=48){if(value===undefined)return fallback;if(typeof value!=='string'||value.length>max||/[\u0000-\u001f\u007f]/.test(value))fail('Use a short, printable name.');return value.trim()||fallback;}
 export function newTinkerProject(id='first-use'){if(id===DUO_CUSTOM.id||duoMission(id))return newDuoProject(id);const trial=tinkerTrial(id);return {format:'pip-tinker-project',version:1,trialId:id,name:trial.title,author:'A trail keeper',programs:trial.programs.map(p=>[...p]),parts:id==='repair-relay'?[part('prism',5,3,{operation:'mirror'})]:[]};}
 export function normalizeTinkerProject(input,{verify=true}={}){
- if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
- if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 17.');
+ if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
+ if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 18.');
  const trial=tinkerTrial(input.trialId);
  if(!Array.isArray(input.programs)||input.programs.length!==trial.starts.length)fail('Each companion needs one three-card program.');
  const project={format:'pip-tinker-project',version:1,trialId:trial.id,name:text(input.name,trial.title),author:text(input.author,'A trail keeper'),programs:input.programs.map(normalizeProgram),parts:[]};
@@ -60,7 +61,7 @@ export function editTinkerProject(input,patch){const {proof,...base}=input;const
 export function placeTinkerPart(input,kind,x,y,extra={}){return editTinkerProject(input,{parts:[...input.parts.filter(p=>p.x!==x||p.y!==y),...(kind==='erase'?[]:[part(kind,x,y,extra)])]});}
 export function tinkerDefinition(project){return project.version>=2?duoDefinition(project):tinkerTrial(project.trialId);}
 export function tinkerCatalogue(){return [...TINKER_TRIALS,...DUO_STORIES,DUO_CUSTOM];}
-export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready',...(project.version>=14?{resting:0}:{}),...(project.version>=17?{rolling:false}:{})})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version>=3?{lockers:{},lockerTransfers:0}:{}),...(project.version>=4?{switches:{}}:{}),...(project.version>=5?{pulses:{}}:{}),...(project.version>=10?{mixers:{}}:{}),...(project.version>=13?{drums:{}}:{}),...(project.version>=16?{counters:Object.fromEntries(tinkerParts(project).filter(p=>p.kind==='counter').map(p=>[p.id,[p.phase,0]]))}:{})};}
+export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready',...(project.version>=14?{resting:0}:{}),...(project.version>=17?{rolling:false}:{}),...(project.version>=18?{syncing:false}:{})})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version>=3?{lockers:{},lockerTransfers:0}:{}),...(project.version>=4?{switches:{}}:{}),...(project.version>=5?{pulses:{}}:{}),...(project.version>=10?{mixers:{}}:{}),...(project.version>=13?{drums:{}}:{}),...(project.version>=16?{counters:Object.fromEntries(tinkerParts(project).filter(p=>p.kind==='counter').map(p=>[p.id,[p.phase,0]]))}:{})};}
 export function tinkerParts(project){return [...tinkerDefinition(project).fixed,...project.parts].map((p,i)=>({...p,id:String(i)}));}
 function counterChannels(state,parts){return state.counters?parts.filter(p=>p.kind==='counter'&&state.counters[p.id][1]>0).map(p=>p.channel):[];}
 function physicalPowerChannels(state,parts,turn){return new Set([...scalePower(parts,state.bots),...parts.filter(p=>p.kind==='tide'&&tideOpen(p,turn)).map(p=>p.channel),...Object.keys(state.switches||{}),...Object.keys(state.pulses||{}),...counterChannels(state,parts),...parts.filter(p=>['plate','bridge'].includes(p.kind)&&state.bots.some(b=>at(b,p))).map(p=>p.channel)]);}
@@ -86,7 +87,18 @@ export function tinkerStep(input){
  // Count down old rings once. New rings supply the following ticks, never this one.
  if(state.pulses)for(const c of Object.keys(state.pulses)){if(--state.pulses[c]===0)delete state.pulses[c];}
  if(state.counters)for(const record of Object.values(state.counters))if(record[1]>0)record[1]--;
+ // Snapshot the meeting before either courier moves or leaves a post.
+ const meetingReady=state.project.version>=18&&readyRendezvous(input,parts);
  for(const bot of state.bots){
+  if(bot.syncing){
+   if(!meetingReady){
+    bot.last='Rendezvous · waiting for partner';
+    state.events.push(`${bot.id}: ${bot.last}`);
+    continue;
+   }
+   bot.syncing=false;
+   state.events.push(`${bot.id}: Rendezvous · resumed together`);
+  }
   if(state.project.version>=14&&restRemaining(bot.resting)>0){bot.resting--;bot.last=bot.resting?`Resting · ${bot.resting} turn${bot.resting===1?'':'s'} left; cards and parcel held`:'Rest complete · next card ready';state.events.push(`${bot.id}: ${bot.last}`);continue;}
   const before={x:bot.x,y:bot.y};
   const rail=bot.rolling&&parts.find(part=>part.kind==='rail'&&at(part,bot));
@@ -122,6 +134,7 @@ export function tinkerStep(input){
    if(tile?.kind==='echo'){const other=state.bots.findIndex(b=>b!==bot);bot.program=echoProgram(echoCards[other],tile.operation);restart=true;bot.last=`Echo learned ${state.bots[other].id} · ${ECHO_OPERATIONS[tile.operation]}`;}
    if(tile?.kind==='prism'){bot.program=transformProgram(bot.program,tile.operation);restart=true;bot.last='Prism changed the cards';}
    if(tile?.kind==='signal'){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===tile.channel),plates=parts.filter(p=>p.kind==='plate'&&p.channel===tile.channel);const powered=switchChannels.has(tile.channel)||Boolean(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))||Boolean(plates.length&&plates.every(occupied));bot.program=[...(powered?tile.alternate:tile.program)];restart=true;bot.last=`Signal loaded ${powered?'Powered':'Quiet'}`;}
+   if(tile?.kind==='sync')bot.last='Rendezvous Post waits on entry; Use does not queue it';
    if(tile?.kind==='rail')bot.last='Switch Rail rides after entry; Use keeps it still';
    if(tile?.kind==='counter')bot.last='Footfall Counter counts arrivals; Use adds no mark';
    if(tile?.kind==='vane')bot.last='Wind Vanes turn cards on arrival; Use keeps cargo and does not turn again';
@@ -147,6 +160,14 @@ export function tinkerStep(input){
    bot.rolling=true;
    bot.last=rail?'Switch Rail linked · another ride next turn':'Switch Rail reached · ride next turn';
    state.events.push(`${bot.id}: ${bot.last}`);
+  }
+  if(state.project.version>=18&&direction&&!at(before,bot)){
+   const post=parts.find(part=>part.kind==='sync'&&at(part,bot));
+   if(post){
+    bot.syncing=true;
+    bot.last=`Rendezvous · reached ${post.channel} post`;
+    state.events.push(`${bot.id}: ${bot.last}`);
+   }
   }
   if(!rail&&(command==='use'||bot.last.startsWith('Blocked')))state.events.push(`${bot.id}: ${bot.last}`);
  }

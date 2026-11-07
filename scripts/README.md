@@ -36,7 +36,7 @@ The release catalogue includes the latest story and creator cases:
 four-mission phone/desktop clears, individual/bulk timing/relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
 memory, pause and wind checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **276 distinct cases**, split **56/55/55/55/55**. All earlier
+with old/new replays. It has **282 distinct cases**, split **57/57/56/56/56**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -180,7 +180,7 @@ mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
 CI runs the complete release catalogue in five parallel groups. The groups contain
-56, 55, 55, 55 and 55 cases, covering all 276 cases; all five groups must pass before deployment. No scenario is
+57, 57, 56, 56 and 56 cases, covering all 282 cases; all five groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -371,3 +371,10 @@ on phone and desktop, restore a queued ride and Undo through reload and backup,
 exercise route samples and exit editing, verify blueprint exchange and protected
 imports, and check enlarged menus with a literal v0.65 replay. Chromium runs
 all 276 gameplay cases. Firefox and WebKit each run 56 compatibility cases.
+
+## Meeting House and timing preview — v0.67
+
+`pip-meeting-browser-checks.mjs` adds six cases for phone and desktop clears,
+waiting-state recovery and Undo, copied links, timing previews, blueprint
+exchange, protected imports, and enlarged menus with a literal v0.66 replay.
+Chromium runs all 282 cases. Firefox and WebKit each run 62 compatibility cases.

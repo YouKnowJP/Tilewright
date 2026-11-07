@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-92 duo chapters in six-card pages; filter by region, saved/completed
+96 duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,34 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Meeting House — v0.67
+
+Choose **Find an adventure → Region → Meeting House** or open the starter
+collection from **Share → Adventure collections**. The four repairs include
+staged clues and optional worked routes.
+
+| Chapter | Adventure | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 93 | Meet at Dusk | Hold the faster courier until both parcels can continue | 12 turns |
+| 94 | Two Meeting Tickets | Keep two appointments and take a rail to a higher press | 19 turns |
+| 95 | The Bridge Appointment | Meet at a handoff and catch a one-turn bridge pulse | 21 turns |
+| 96 | The Lantern Rounds | Match a tide beat and two meetings per lap before a quiet return | 127 turns |
+
+Enter a **Rendezvous Post ↔** to hold that courier's next card and parcel.
+When both couriers have reached the matching posts, they resume together on
+the following turn. Clocks and other machines keep running while they wait.
+A rail can carry a courier into a post. Starting on a post or using it leaves
+the courier ready. After a meeting, a new arrival is needed to wait again.
+Each numbered link takes two posts. Link numbers identify pairs independently
+of parcels and power.
+
+In a blueprint, **Reconnect stations** moves both posts to a new link number.
+Copies use separate numbers automatically. Up to four pairs fit in one piece.
+**Preview a meeting** compares two sample arrival turns and shows how long each
+courier waits. Rehearse the placed garden to check the actual route and timing.
+Project format 18 and blueprint format 17 carry the new posts. Collection
+checkpoints restore waiting couriers and Undo history.
 
 ## The Switchyard — v0.66
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.67.0 — 2026-11-07
+
+- Add Rendezvous Posts. A matching pair holds cards and parcels until both couriers arrive, then releases them together on the following turn.
+- Add four Meeting House missions and their starter collection. The 96-chapter story now includes timed crossings, a rail-assisted second appointment, and a four-lap lantern puzzle.
+- Add two meeting blueprints, a sample timing preview, and independent link numbers when arranging copies. Link changes preserve parcel and power channels.
+- Add project format 18 and blueprint format 17. Preserve earlier save and share bytes and restore waiting couriers with Undo. Extend browser checks for meetings, mobile menus, and blueprint exchange.
+
 ## 0.66.0 — 2026-11-06
 
 - Add Switch Rails with quiet and powered exits. Arrivals queue a ride on the following turn and leave the next card ready. Rails can chain and interact with existing power, movement and arrival rules.
