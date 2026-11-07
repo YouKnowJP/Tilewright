@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-84 duo chapters in six-card pages; filter by region, saved/completed
+88 duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,36 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Footfall Archive — v0.65
+
+Choose **Find an adventure → Region → Footfall Archive** or open the four-map
+starter collection from **Share → Adventure collections**. All four repairs
+have staged clues and optional worked routes.
+
+| Chapter | Adventure | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 85 | The Second Footfall | Count two arrivals to power the crossing while Pip presses a parcel | 9 turns |
+| 86 | The Borrowed Beat | Send a direct kiln beat and a delayed bridge beat, then hand off blue mail | 30 turns |
+| 87 | The Alternating Terraces | Stagger two counters so four kilns fill eight windows twice | 138 turns |
+| 88 | The Last Four Letters | Trade kiln power, cross after delivery, and reach both flags with quiet drums | 111 turns |
+
+A **Footfall Counter O** marks each successful walking arrival by its chosen
+courier. Reaching its threshold clears the marks and powers its channel for one
+to six **following** turns. Starting marks put the first ring closer; they do
+not start a pulse. Starting on the tile, Wait, Use and blocked moves add no mark.
+A new ring refreshes a pulse. Counter power can feed bridges, signals, Weaves,
+Memory Drums and recipe kilns. **Couriers & machines** shows current marks and
+next-turn power; **Footfalls & pulses** finds arrivals in rehearsal.
+
+In **Tune footfall counters**, set threshold, starting marks, duration and badge.
+Copy the setup to every counter without changing the wiring, stagger starting
+marks across the piece, or clear them. The arrival rhythm sample shows the next
+12 turns under the selected arrival spacing. Use garden rehearsal to check actual
+courier routes. Keep or download the piece after composing it with other tools.
+
+Footfall Counters use project format 16 and blueprint format 15. Earlier formats
+remain supported. Resuming a collection recreates marks, power and Undo history.
 
 ## The Windward Post — v0.64
 

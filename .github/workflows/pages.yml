@@ -53,14 +53,14 @@ jobs:
           path: dist
 
   browser:
-    name: Built game / Chromium ${{ matrix.shard }}/4
+    name: Built game / Chromium ${{ matrix.shard }}/5
     runs-on: ubuntu-24.04
-    # Keep all cases across four balanced groups; per-action timeouts stay unchanged.
+    # Keep all cases across five balanced groups; per-action timeouts stay unchanged.
     timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5]
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -84,7 +84,7 @@ jobs:
         timeout-minutes: 8
         run: npx playwright install --with-deps --only-shell chromium
       - name: Play and inspect the built game
-        run: npm run test:browser:smoke -- --shard=${{ matrix.shard }}/4
+        run: npm run test:browser:smoke -- --shard=${{ matrix.shard }}/5
       - name: Check standalone paths, notices, and save continuity
         if: matrix.shard == 1
         run: |

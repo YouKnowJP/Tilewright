@@ -1,3 +1,4 @@
+import {pipCounterScenarios} from './pip-footfall-browser-checks.mjs';
 import {pipWindwardScenarios} from './pip-windward-browser-checks.mjs';
 import {pipRestkeepersScenarios} from './pip-restkeepers-browser-checks.mjs';
 import {pipDrumkeepersScenarios} from './pip-drumkeepers-browser-checks.mjs';
@@ -16,7 +17,7 @@ import {pipEchoPostScenarios} from './pip-echo-post-browser-checks.mjs';
 import {parseReleaseArgs,createReleaseSelector} from './release-selection.mjs';
 export async function pipCompatibilityNames({shard=null}={}){
  const selected=createReleaseSelector({shard});
- const names=[];await pipEchoPostScenarios(async name=>names.push(name));await pipMixingHouseScenarios(async name=>names.push(name));await pipKilnkeepersScenarios(async name=>names.push(name));await pipWeavekeepersScenarios(async name=>names.push(name));await pipDrumkeepersScenarios(async name=>names.push(name));await pipRestkeepersScenarios(async name=>names.push(name));await pipWindwardScenarios(async name=>names.push(name));names.push('pip-sealkeeper-starter-codes-and-legacy-journals','pip-balance-enlarged-menus-readonly-and-legacy-share');assert.equal(names.length,44);assert.equal(new Set(names).size,44);
+ const names=[];await pipEchoPostScenarios(async name=>names.push(name));await pipMixingHouseScenarios(async name=>names.push(name));await pipKilnkeepersScenarios(async name=>names.push(name));await pipWeavekeepersScenarios(async name=>names.push(name));await pipDrumkeepersScenarios(async name=>names.push(name));await pipRestkeepersScenarios(async name=>names.push(name));await pipWindwardScenarios(async name=>names.push(name));await pipCounterScenarios(async name=>names.push(name));names.push('pip-sealkeeper-starter-codes-and-legacy-journals','pip-balance-enlarged-menus-readonly-and-legacy-share');assert.equal(names.length,50);assert.equal(new Set(names).size,50);
  return names.filter(selected);
 }
 export async function checkPipCompatibility(browserType,{shard=null}={}){

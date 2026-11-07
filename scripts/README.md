@@ -32,11 +32,11 @@ are suspended, both training lessons and a real creator export, journey-specific
 wardrobe backups and fresh starts, quota failures, and the full Lanternfair book.
 It closes the browser and server afterward. No separate server is needed.
 
-The release catalogue retains the Drumkeeper, Wayside Keeper and Windward Post cases:
+The release catalogue includes the latest story and creator cases:
 four-mission phone/desktop clears, individual/bulk timing/relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
 memory, pause and wind checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **264 distinct cases**, split **66/66/66/66**. All earlier
+with old/new replays. It has **270 distinct cases**, split **54/54/54/54/54**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -179,15 +179,16 @@ full phone/desktop books, parcel inventory and powered routes, guarded dock rese
 mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
-CI runs the complete release catalogue in four parallel groups. The groups contain
-66 cases each, covering all 264 cases; all four groups must pass before deployment. No scenario is
+CI runs the complete release catalogue in five parallel groups. The groups contain
+54 cases each, covering all 270 cases; all five groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
-npm run test:browser:smoke -- --shard=1/4
-npm run test:browser:smoke -- --shard=2/4
-npm run test:browser:smoke -- --shard=3/4
-npm run test:browser:smoke -- --shard=4/4
+npm run test:browser:smoke -- --shard=1/5
+npm run test:browser:smoke -- --shard=2/5
+npm run test:browser:smoke -- --shard=3/5
+npm run test:browser:smoke -- --shard=4/5
+npm run test:browser:smoke -- --shard=5/5
 ```
 
 The partition is stable when case names are supplied for a focused retry. Reports
@@ -353,3 +354,12 @@ Brush edits, protected imports, largest high-contrast menus across five viewport
 sizes, and literal v0.63 replay/export round out the six new cases. All are
 required in the 264-case Chromium catalogue and the 44-case Firefox and WebKit
 catalogues. Earlier cases and the original timeouts remain required.
+
+## Footfall Archive and counter composer — v0.65
+
+`pip-footfall-browser-checks.mjs` adds six cases: four story clears at phone and
+desktop widths, live collection pulse reload and Undo, creator rhythm and power
+composition, counter editing and protected imports, and enlarged menu checks with
+a literal v0.64 replay. The five Chromium groups retain all 270 release cases.
+Firefox and WebKit each run 50 compatibility cases in three groups. No action
+or job deadline was increased.

@@ -1,5 +1,21 @@
 # Verification record
 
+## Footfall Archive and counter composer — v0.65.0
+
+The four worked routes clear in 9, 30, 138 and 111 turns. Every loose part
+matters to its worked route. The 2,092 Node checks cover counter badges,
+thresholds, initial marks, overlapping pulses, power sampling, downstream
+machines, reflected solutions, and literal v0.64 project and share bytes.
+The new six-case live suite covers the four missions on phone and desktop,
+collection pulse and Undo restoration through reload and backup, counter editing,
+blueprint rhythm and power composition, protected imports, and largest-text
+menus at five viewport sizes. The static build contains 223 files.
+
+The release gates retain all 270 Chromium cases across five groups and all 50
+compatibility cases per engine in Firefox and WebKit. The fifth Chromium group
+maintains the existing time limit as the game catalogue grows. Device coverage
+uses browser emulation.
+
 ## Windward Post and compass composer — v0.64.0
 
 Four missions bring the duo story to 84 chapters. The worked routes finish in

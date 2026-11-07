@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.65.0 — 2026-11-06
+
+- Add Footfall Counters O, with a chosen courier badge, threshold, starting marks and a pulse on the following turns. Count successful arrivals, feed existing machines, and inspect marks and pulse state in the garden and rehearsal.
+- Add four original Footfall Archive missions and a starter collection. The 88-chapter story now includes a two-step crossing, a two-way timing relay, four alternating kilns, and a final quiet return after four blends.
+- Add two counter blueprints, a folded editor with setup copying and staggered starting marks, and a sample rhythm preview. Counter settings compose with power rewiring, rotation, capture, files and sharing.
+- Add project format 16 and blueprint format 15. Preserve prior save and share bytes and restore counter marks and remaining power with Undo. Extend live browser checks and split the full Chromium gate into five groups to keep the existing time budget.
+
 ## 0.64.0 — 2026-11-06
 
 - Add Wind Vanes F: entering turns or mirrors the cards, or reverses their order. The next card position and cargo stay held. Standing, waiting, using and blocked movement never activate a vane. Prisms still restart at card 1 when used.

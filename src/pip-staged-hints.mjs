@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-counter-crossing':['The shorter path can give the longer path its timing.','Count only actual arrivals. Let Sprout walk onto O twice, then keep the bridge powered until Pip’s next movement reaches it.'],
+ 'duo-counter-relay':['Each friend powers a different step of the trip.','The kiln uses its beat immediately after Sprout’s arrival. The bridge needs Pip’s beat two turns later, so route that one through a Memory Drum.'],
+ 'duo-counter-terraces':['The first and second kiln pairs should alternate on opposite laps.','Give one counter a starting mark. Its first pulse is one lap earlier. Both count-to-two pulses need to reach Use through the same delayed channel.'],
+ 'duo-counter-home':['Think in two laps: one ingredient to keep and one to carry away.','Use the short beats to fire your friend’s kiln and longer ones to cross after the windows. Occupied bridges keep power for the turn, so wait for that last drum beat to leave.'],
  'duo-wind-corner':['Try turning between two steps instead of turning on Use.','At the first corner, the first movement card is already spent. Point the second card toward the press; use the next corner to send both movement cards toward the window.'],
  'duo-wind-rendezvous':['Give the shorter road a safe place to wait.','A one-turn ring will end before the bridge. Use the drum to catch that beat, and let the cargo compass keep Sprout nearby until Pip arrives.'],
  'duo-wind-observatory':['Each terrace has two chances to bake a letter per lap.','Trace the four kiln Use turns. Exactly one clock must power the relay before the delayed beat reaches a kiln. A finished window can influence later heat, so inspect the final rounds too.'],
