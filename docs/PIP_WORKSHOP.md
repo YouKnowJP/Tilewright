@@ -1,7 +1,7 @@
 # Pip’s invention workshop
 
 Choose **Play Pip & Sprout** on the main menu for Adventure Home. Browse all
-seventy-six duo chapters in six-card pages; filter by region, saved/completed
+eighty duo chapters in six-card pages; filter by region, saved/completed
 progress or title/mechanic words. The suggested road follows verified story
 clears, while every chapter remains available. Continue restores an ordinary
 story's saved cards/parts, or a collection chapter's exact test and Undo history.
@@ -25,6 +25,54 @@ Open **Adventure Workshop → Puzzle Lab → Visit Pip’s workshop**. The same
 inventions are available from the Trailhouse village’s **Your invention display**.
 Pip’s program panel also offers a short practice lesson based on the station
 or obstacle Pip is currently facing. Practice leaves your adventure untouched.
+
+## The Wayside Keepers — v0.63
+
+Choose **Find an adventure → Region → The Wayside Keepers**, or **Share → Adventure
+collections → Try the Wayside Keepers collection**. Each repair has staged hints
+and an optional worked route. Planning has no timer.
+
+| Chapter | Adventure | Challenge | Worked route |
+| --- | --- | --- | --- |
+| 77 | The Patient Crossing | Six repairs; two different pauses meet one-beat tides | 20 ticks |
+| 78 | The Rootbridge Rendezvous | Nine repairs; three precisely timed handoffs and deliveries | 201 ticks |
+| 79 | The Sleeping Observatory | Ten repairs; pauses change the timing of eight kiln recipes | 189 ticks |
+| 80 | The Long Lantern Walk | Sixteen repairs; two blends, tide crossings, both flags, quiet lamps and drums | 121 ticks |
+
+**Rest Stone R** pauses one courier for **one to six following turns** after entry.
+The entering movement has already spent its card. The next card index, program
+and parcel stay held during the pause. The other courier and all clocks, bells,
+Weaves and Memory Drums continue normally. Entering a two-turn stone on turn 4
+holds turns 5–6; the next card runs on turn 7. Starting on a stone does not arm it.
+Wait and Use while already there do not restart a pause; ordinary Use still
+advances a card. Leaving and returning begins a fresh pause. A resting courier
+still occupies its tile and can receive a normal adjacent handoff.
+
+The new missions’ compact turn readout shows each friend’s current action or
+remaining pause. Open **Couriers & machines** for cargo, held next cards and
+numbered machine details. Reading it pauses playback. Inspect R or open the
+text garden for its full rule; R’s following number is its pause length.
+
+**The patient crossing** combines a tide, stone and bridge. **The wayside meeting**
+provides two stones, a handoff and a window. In **Compose station timing**, choose
+R and edit **Pause after each arrival**, or copy it to matching stations. **Add one
+turn to each pause** and **Remove one turn from each pause** preserve different
+holds. **Stagger pauses from one to six** assigns 1, 2, 3… in station order. Every
+result must remain 1–6; invalid edits are rejected together. Restore one or all
+timing edits independently of card, circuit, palette and wiring changes.
+
+Clock/drum beat previews remain clock-only; a selected Rest Stone hides that
+preview. Run a garden test or **Plan & replay a route** to include courier holds.
+Filter **Resting & pacing** to inspect arrival, each held turn and resumption.
+**Inspect this frame** opens the real paused test with its Undo history. A
+rehearsal alone keeps the draft and progress unchanged.
+
+Keep/capture/transform/repeat pieces, exchange blueprint files and share PC1/PC2
+collections normally. Project format **14** and blueprint format **13** carry the
+stones. Earlier formats and portable bytes stay supported. Saved collection
+positions reconstruct remaining pauses and held cards, including Undo and full
+journey backup restoration. Ordinary story continuation restores its saved
+bench setup. Personal progress stays in the selected browser and journey.
 
 ## The Drumkeepers — v0.62
 
@@ -61,7 +109,7 @@ and the recorded turns drain. Changing this goal changes the collection map’s
 identity, so a clear from an easier goal cannot award the revised chapter.
 
 The **delayed crossing** and **returning beat** blueprints provide clock/bridge
-and bell/dispatch starting points. Open **Compose clock & drum timing** to
+and bell/dispatch starting points. Open **Compose station timing** to
 select one T clock, A bell or D drum. Edit its timing, **Use for matching
 stations**, shift every clock one beat, stagger existing clocks or restore
 one/all timing edits. Whole-piece retiming happens first; individual edits

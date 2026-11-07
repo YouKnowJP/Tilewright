@@ -1,5 +1,12 @@
 # Tilewright roadmap
 
+Version **0.63** adds Rest Stones, four Wayside Keeper adventures for eighty duo
+chapters, individual/bulk blueprint pacing, staggered rests and a rehearsal pause
+filter. The new compact readout keeps courier cards and machines folded. Rest
+Stones use project format 14 and blueprint format 13; older formats, state keys
+and save keys remain supported. Held turns reconstruct through checkpoints,
+Undo and full journey backups.
+
 Version **0.62** adds Memory Drums, four Drumkeeper adventures for seventy-six
 duo chapters, quiet-memory homecomings and individual clock/bell/drum timing
 composition. Drums use project format 13 and blueprint format 12; old formats,

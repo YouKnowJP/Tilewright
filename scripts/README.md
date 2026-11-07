@@ -36,7 +36,7 @@ The release catalogue retains all earlier cases and adds six Drumkeeper cases:
 four-mission phone/desktop clears, individual/bulk timing/relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
 recorded-beat checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **252 distinct cases**, split **63/63/63/63**. All earlier
+with old/new replays. It has **258 distinct cases**, split **65/65/64/64**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -47,18 +47,19 @@ Run the focused compatibility suite against a freshly built package:
 npx playwright install --with-deps firefox webkit
 npm run test:browser:pip -- chromium
 npm run test:browser:pip -- firefox webkit
-npm run test:browser:pip -- webkit --shard=1/2
-npm run test:browser:pip -- webkit --shard=2/2
+npm run test:browser:pip -- webkit --shard=1/3
+npm run test:browser:pip -- webkit --shard=2/3
+npm run test:browser:pip -- webkit --shard=3/3
 ```
 
-The runner checks six Drumkeeper cases, six Weavekeeper cases, six Kilnkeeper
+The runner checks six Wayside Keeper cases, six Drumkeeper cases, six Weavekeeper cases, six Kilnkeeper
 cases, six Mixing House cases, six retained Echo Post cases and two legacy
-save/share cases (thirty-two total),
+save/share cases (thirty-eight total),
 records the built release metadata, closes the browser/server and removes its
-owned temporary build. Firefox and WebKit each run in two required CI groups of
-sixteen, retaining all thirty-two cases per engine within the existing twenty-minute
+owned temporary build. Firefox and WebKit each run in three required CI groups of
+13, 13 and 12, retaining all thirty-eight cases per engine within the existing twenty-minute
 job limit. Original action deadlines and full tracing remain enforced. Reports
-record the group and use distinct filenames; all four jobs and the full release
+record the group and use distinct filenames; all six jobs and the full release
 suite must pass before publication. Reports are retained for seven days. Unsharded
 local commands still run the complete compatibility suite.
 
@@ -178,8 +179,8 @@ full phone/desktop books, parcel inventory and powered routes, guarded dock rese
 mirrored puzzle previews and downloads, actual creator/shared play, enlarged UI
 and original v0.37 save continuation.
 
-CI runs the complete release catalogue in four parallel groups. Each group has
-63 of the current 252 cases; all four groups must pass before deployment. No scenario is
+CI runs the complete release catalogue in four parallel groups. The groups contain
+65, 65, 64 and 64 of the current 258 cases; all four groups must pass before deployment. No scenario is
 removed. Local `npm run test:browser:smoke` still runs everything. To run a group:
 
 ```sh
@@ -325,3 +326,18 @@ swaps, cards, capture and file exchange. It checks quiet-memory goals, protected
 imports, 320/390/768/844/1440 enlarged menus, read-only tests and literal v0.61 replay.
 All six cases are required in the release catalogue and Firefox/WebKit gates.
 Unsupported import probes derive their next versions from the supported parts.
+
+
+## Wayside Keepers and blueprint pacing — v0.63
+
+`pip-restkeepers-browser-checks.mjs` clears all four pacing missions at 390/1440,
+restores two held next cards through reload/Undo/full backup, and inspects the
+same turn through the resting-event rehearsal filter. Creator checks exercise
+individual/copy/raise/lower/stagger/reset timing, unchanged clock-only forecasts,
+composed cards and power wiring, rotated capture, source isolation and file exchange.
+They check brush editing and inspection, protected old/future/malformed imports,
+320/390/768/844/1440 largest high-contrast menus, focus return, read-only controls
+and literal v0.62 replay/export. All six cases remain required in the complete
+release catalogue and both compatibility engines. Compatibility groups have
+separate report filenames and metadata; their union must cover all 38 cases
+exactly once per engine. Original action and job deadlines remain unchanged.

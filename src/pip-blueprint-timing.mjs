@@ -3,11 +3,11 @@ import {normalizeDuoBlueprint} from './pip-duo-blueprints.mjs';
 import {tideOpen} from './pip-tides.mjs';
 import {weaveOutputs} from './pip-weaves.mjs';
 import {advanceDrum,drumOutput} from './pip-drums.mjs';
-export const TIMING_KINDS=Object.freeze(['tide','pulse','drum']);
+export const TIMING_KINDS=Object.freeze(['tide','pulse','drum','rest']);
 export function blueprintTimingStations(input){return normalizeDuoBlueprint(input).parts.flatMap((p,index)=>TIMING_KINDS.includes(p.kind)?[{...p,index}]:[]);}
 export function rewriteBlueprintTiming(input,index,patch={},{all=false}={}){
- const p=normalizeDuoBlueprint(input),part=p.parts[index],allowed={tide:['period','beats','offset'],pulse:['duration'],drum:['delay']}[part?.kind];
- if(!Number.isInteger(index)||!allowed||!patch||typeof patch!=='object'||Array.isArray(patch)||Object.keys(patch).some(k=>!allowed.includes(k))||typeof all!=='boolean'||Object.values(patch).some(v=>!Number.isInteger(v)))throw Error('Choose a clock, bell or drum and edit only its timing.');
+ const p=normalizeDuoBlueprint(input),part=p.parts[index],allowed={tide:['period','beats','offset'],pulse:['duration'],drum:['delay'],rest:['duration']}[part?.kind];
+ if(!Number.isInteger(index)||!allowed||!patch||typeof patch!=='object'||Array.isArray(patch)||Object.keys(patch).some(k=>!allowed.includes(k))||typeof all!=='boolean'||Object.values(patch).some(v=>!Number.isInteger(v)))throw Error('Choose a clock, bell, drum or Rest Stone and edit only its timing.');
  const timing=Object.fromEntries(allowed.map(k=>[k,Object.hasOwn(patch,k)?patch[k]:part[k]]));
  // Validate all edited stations together before returning a replacement.
  return normalizeDuoBlueprint({...p,parts:p.parts.map((s,i)=>i===index||all&&s.kind===part.kind?{...s,...timing}:s)});

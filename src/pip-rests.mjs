@@ -1,0 +1,4 @@
+// New owned material. See LICENSE; prior MIT permissions remain effective.
+export function normalizeRest(raw){const duration=raw?.duration===undefined?2:raw.duration;if(!Number.isInteger(duration)||duration<1||duration>6)throw Error('A Rest Stone pauses a courier for one to six turns.');return {duration};}
+export function restRemaining(value=0){if(!Number.isInteger(value)||value<0||value>6)throw Error('A resting courier needs zero to six turns remaining.');return value;}
+export function restDescription(part){const {duration}=normalizeRest(part);return `Pause this courier for ${duration} following turn${duration===1?'':'s'} after entering. The other courier, clocks and machines keep moving. Cards and cargo stay held; resume the next card after the pause. Standing, waiting or using this stone does not restart it. Starting here does not trigger it.`;}

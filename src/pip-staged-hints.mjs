@@ -1,6 +1,10 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
 // Early clues describe decisions, never the authored programs or repair coordinates.
 const clues = {
+ 'duo-rest-crossing':['Let one friend wait while the river keeps its beat.','The pause holds the next card, so count the following turns separately. Match each bridge arrival to its own one-beat clock.'],
+ 'duo-rest-rendezvous':['A meeting is about when both friends are there.','Pip hands over first on a turn. Two equal pauses shift both friends into the first meeting without changing their three cards. Repeat the timing for all three letters.'],
+ 'duo-rest-observatory':['Let the sky change while a friend takes a breath.','The two pauses are different. Trace the next kiln Use after the hold ends; the Weave and drum keep changing heat during every resting turn.'],
+ 'duo-rest-home':['The same long walk can make two different recipes.','Use the stones to reach the first tide openings. The first lap leaves lantern heat for your friend’s next recipe; after the second lap, both flags and quiet memories still matter.'],
  'duo-drum-brook':['The bridge can answer after its clock stops shining.','Read the jade clock and the violet crossing separately. Each drum records a source at turn start and returns it two turns later; blocked cards still advance.'],
  'duo-drum-bell':['Send a short ring to a road your friend has not reached yet.','The ring begins next turn. A six-turn drum then returns that one beat at the crossing. Trace the sampling turn as well as the ringing turn.'],
  'duo-drum-night':['The kiln listens to a remembered answer from the clocks.','Exactly one source can change before the drum repeats it. Inspect the recorded beat, the next kiln heat and the window colours together.'],
