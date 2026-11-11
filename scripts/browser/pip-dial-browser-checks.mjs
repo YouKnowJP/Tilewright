@@ -55,6 +55,7 @@ export async function pipDialScenarios(scenario) {
       await waitForGameReady(page);
       await click('#ps-tab-build');
 
+      let firstFootprint;
       for (const wraps of [true,false]) {
         const piece = {
           format:'pip-duo-blueprint',version:19,name:'Two Card Dials',width:5,height:2,
@@ -71,6 +72,9 @@ export async function pipDialScenarios(scenario) {
           name:'two-card-dials.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(piece)),
         });
         await page.locator('#ps-notice').filter({hasText:'Blueprint opened for preview'}).waitFor();
+        const footprint=await page.locator('#ps-bp-preview').evaluate(c=>c.toDataURL());
+        if(wraps)firstFootprint=footprint;
+        else assert.notEqual(footprint,firstFootprint,'Blueprint symbols distinguish Skip and Rewind settings.');
         await open('#ps-bp-dials');
         await select('bp-dial-next','2');
         assert.equal(await preview(),wraps?'Skip ahead. Next to run is Card 1 · North ↑.':'Rewind one. Next to run is Card 2 · East →.');
