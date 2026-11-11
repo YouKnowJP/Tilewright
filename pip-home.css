@@ -61,8 +61,15 @@ body:is([data-game-text=large],[data-game-text=largest]) .pip-studio{scroll-padd
 .pip-studio #ps-story-details{padding:0;border:0}
 .pip-studio #ps-story-details>summary{min-height:36px;font-size:.9em}
 .pip-studio #ps-best{font-size:.9em}
+.ps-story-goal{padding:10px 12px;border-left:3px solid #e4c481;background:#193b43;color:#fff0c5}
+#ps-card-help{color:#fff0c5}
+.ps-tool-mode{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px;margin-bottom:10px;border-left:3px solid #e4c481;background:#193b43}
+.ps-tool-mode p{flex:1 1 150px;margin:0;overflow-wrap:anywhere}
+.ps-tool-mode button{flex:0 1 auto}
 .ps-play-dock>.ps-actions{margin:10px 0}
 .ps-play-dock .ps-status{min-height:3em;margin:10px 0}
+.ps-play-dock .ps-clear{border-color:#e4c481;background:#213f37;color:#fff2cf}
+#ps-next-story{width:100%;overflow-wrap:normal}
 .ps-play-dock .ps-goals{margin:10px 0}
 .pip-studio .ps-playback-state{margin:8px 0;padding:8px 10px;border-left:3px solid #edc885;background:#193b43;color:#fff0c5;font-size:.9em;overflow-wrap:anywhere}
 .pip-practice #pp-canvas:focus-visible{outline:3px solid #ffe7a5;outline-offset:3px}

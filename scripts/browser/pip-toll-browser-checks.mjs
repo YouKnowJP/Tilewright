@@ -35,7 +35,8 @@ export async function pipTollScenarios(scenario){
   assert.match(await p.locator('#ps-budget').textContent(),new RegExp(m.budget+'/'+m.budget));
   await win(p,times[i]);
   assert.ok((await p.locator('#ps-status').textContent()).includes(m.ending));if(i<3)await p.locator('#ps-next-story').click();}
-  assert.equal(await p.locator('#ps-next-story').isVisible(),false);
+  await p.locator('#ps-next-story').click();
+  assert.equal(await p.locator('#ps-title').textContent(),'The Three-Lap Dispatch');
   await mainMenu(p);
   await p.reload();
   await home(p);

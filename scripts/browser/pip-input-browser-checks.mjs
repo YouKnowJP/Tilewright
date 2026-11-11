@@ -18,6 +18,30 @@ async function controller(p){await p.evaluate(()=>{window.__pipInputPad={connect
 async function pressPad(p,index){await p.evaluate(i=>window.__pipInputPad.buttons[i].pressed=true,index);await p.waitForTimeout(150);await p.evaluate(i=>window.__pipInputPad.buttons[i].pressed=false,index);await p.waitForTimeout(50);}
 
 export async function pipInputScenarios(scenario){
+ for(const width of [390,1440])await scenario(`pip-input-bench-resets-test-without-losing-edits-${width}`,width,async p=>{
+  const press=selector=>p.locator(selector)[width<500?'tap':'click']();
+  await story(p);await example(p);
+  const initialMap=await p.locator('#ps-map-list').textContent();
+  await chooseOption(p,'#ps-card-pip-0','wait');
+  const editedMap=await p.locator('#ps-map-list').textContent();
+  await press('#ps-test');await press('#ps-step');assert.equal(await tick(p),1);
+  await press('#ps-test');
+  assert.equal(await p.locator('#ps-map-list').textContent(),editedMap);
+  assert.equal(await p.locator('#ps-card-pip-0').inputValue(),'wait');
+  assert.equal(await p.locator('#ps-undo').isEnabled(),true);
+  await press('#ps-undo');assert.equal(await p.locator('#ps-map-list').textContent(),initialMap);
+  await press('#ps-test');assert.equal(await tick(p),0);
+  for(let i=0;i<9;i++)await press('#ps-step');
+  assert.match(await p.locator('#ps-status').textContent(),/Adventure complete!/);
+  await press('#ps-test');
+  assert.equal(await p.locator('#ps-map-list').textContent(),initialMap);
+  assert.match(await p.locator('#ps-duo-goals').textContent(),/Letters 0\/1/);
+  assert.match(await p.locator('#ps-best').textContent(),/9 ticks/);
+  await p.reload();await story(p);
+  assert.equal(await p.locator('#ps-map-list').textContent(),initialMap);
+  assert.match(await p.locator('#ps-best').textContent(),/9 ticks/);
+  await fit(p,'#pip-studio');
+ });
  for(const width of [390,1440])await scenario(`pip-input-focused-keyboard-classic-and-duo-${width}`,width,async p=>{
   await story(p);await example(p);await p.locator('#ps-test').click();await garden(p);await p.keyboard.press('Space');assert.equal(await tick(p),1);await p.keyboard.down('Space');await p.keyboard.down('Space');await p.keyboard.up('Space');assert.equal(await tick(p),2);await p.keyboard.press('z');assert.equal(await tick(p),1);await p.keyboard.press('r');assert.equal(await p.locator('#ps-run').getAttribute('aria-pressed'),'true');await p.keyboard.down('Escape');await p.keyboard.down('Escape');await p.keyboard.up('Escape');assert.equal(await p.locator('#pip-studio').isVisible(),true);await still(p,await tick(p));await p.keyboard.press('r');await p.locator('#ps-status').filter({hasText:'Adventure complete!'}).waitFor();assert.equal(await tick(p),solvedTinkerProject('duo-first-letter').proof.ticks);await p.keyboard.press('z');await p.keyboard.press('Enter');assert.match(await p.locator('#ps-status').textContent(),/Adventure complete!/);
   await p.locator('#ps-close').click();await p.locator('#ph-tab-learn').click();await p.locator('#ph-classic').click();await example(p);await p.locator('#ps-test').click();await garden(p);for(let i=0;i<6;i++)await p.keyboard.press('Space');assert.match(await p.locator('#ps-status').textContent(),/Invention complete!/);await p.keyboard.press('z');assert.equal(await tick(p),5);await p.keyboard.press('Enter');assert.match(await p.locator('#ps-status').textContent(),/Invention complete!/);await fit(p,'#pip-studio');

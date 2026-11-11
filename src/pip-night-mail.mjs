@@ -9,7 +9,7 @@ const story=(id,title,width,road,starts,fixed,solution,relays,intro,hint,ending,
 export const NIGHT_MAIL_MISSIONS=Object.freeze([
  story('duo-night-post','The Midnight Post',13,[...row(5,1,7),...row(1,1,11)],[p(1,5),p(1,1)], [...producer,glass(1,1),locker(3,1,'amber','take'),n(9,1,'amber'),glass(11,1)],[R,R],2,
   'Nessa: “We cannot meet before midnight. Leave the letters in locker K1; Sprout can collect them from the other end.” Send-only lockers never take parcels back. Collect-only lockers keep held cargo. Fill the upstairs window twice, with two locker relays between partners.',
-  'Both partners: East / East / Use. Pip leaves the first letter on tick 6. Sprout misses it on the outward road, collects on its return, and delivers on 42 and 72. A locker relay counts only when the other partner collects.',
+  'Both partners: East / East / Use. Pip leaves the first letter on tick 6. Sprout collects on the return trips on 27 and 57, then delivers on 42 and 72. Each pickup from Pip’s locker counts as a relay.',
   'Nessa finds two letters, a cold cup of tea and a note: “You did not have to wait for us.” The night post opens its doors.'),
  story('duo-cargo-crossroads','The Compass That Listens',11,[...row(5,1,7),...row(1,1,9)],[p(1,5),p(1,1)],[...producer,glass(1,1),locker(3,1,'amber','take'),cargo(5,1),n(7,1,'amber'),glass(9,1)],[R,R],2,
   'Tavi: “Some compasses listen to your pockets.” Use C to read the parcel being carried: Matching takes a letter east; Otherwise turns empty hands back toward the locker. Deliver twice. A compass keeps cargo and restarts at card 1.',

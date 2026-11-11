@@ -13,8 +13,81 @@ async function place(p,kind,x,y){await chooseOption(p,'#ps-brush',kind);await ce
 async function fit(p){assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Page fits');assert.ok(await p.locator('#pip-studio').evaluate(n=>n.scrollWidth<=n.clientWidth+1),'Workshop fits');for(const n of await p.locator('#pip-studio button:visible,#pip-studio [role=combobox]:visible').all()){assert.ok(await n.evaluate(n=>{const r=n.getBoundingClientRect(),d=n.closest('dialog').getBoundingClientRect();return r.left>=d.left-1&&r.right<=d.right+1;}),'Controls stay in the workshop');}}
 async function download(p,id){const [d]=await Promise.all([p.waitForEvent('download'),p.locator(id).click()]),chunks=[];for await(const c of await d.createReadStream())chunks.push(c);return Buffer.concat(chunks);}
 async function recipe(p){await collection(p,'create');await place(p,'sprout-start',7,5);await chooseOption(p,'#ps-brush','inspect');await cell(p,3,3);await details(p,'#ps-blueprints');await p.locator('#ps-bp-place').click();await chooseOption(p,'#ps-card-pip-0','right');await chooseOption(p,'#ps-card-pip-1','right');await chooseOption(p,'#ps-card-pip-2','use');}
+
+const earlyStoryChecks={
+ 'duo-dyehouse': {help:/Pip starts on the amber well/,events:{1:/Collected amber/,4:/Pressed amber into jade/,8:/Pressed jade into blue/}},
+ 'duo-rain-bridges': {help:/A blocked move still spends the card/,events:{5:/Pip: Bridge 2 was closed at the start of this turn/}},
+ 'duo-long-road': {help:/matching exit/,events:{8:/Traveled through the tube/,14:/Delivered amber/}},
+ 'duo-signmaker': {help:/follow both return trips/,events:{9:/Delivered jade/,24:/Passed parcel to Sprout/}},
+};
+
+async function playOpeningChapter(p,press,mission,turns){
+ const read=id=>p.locator('#ps-'+id).textContent();
+ const {help,events}=earlyStoryChecks[mission.id];
+ const rain=mission.id==='duo-rain-bridges';
+ assert.equal(await p.locator('#ps-story-goal').isVisible(),true);
+ assert.equal(await p.locator('#ps-story-details').getAttribute('open'),null);
+ await press('[data-ps-jump=programs]');
+ assert.match(await read('card-help'),help);
+ assert.equal(await p.locator('#ps-card-help').evaluate(n=>n===document.activeElement),true);
+ for(const [i,actor] of ['pip','sprout'].entries()){
+  await press('#ps-actor-'+actor);
+  for(const [index,card] of mission.solution[i].entries())await chooseOption(p,`#ps-card-${actor}-${index}`,card);
+ }
+ await press('#ps-test-route');
+ assert.match(await read('status'),/^Tick 0\//);
+ if(rain){
+  await cell(p,4,2);
+  assert.match(await read('inspect'),/power jade · next tick closed/);
+  assert.match(await read('duo-goals'),/Bridge 1 closed · Bridge 2 closed/);
+ }
+ for(let turn=1;turn<=turns;turn++){
+  await press('#ps-step');
+  if(events[turn])assert.match(await read('status'),events[turn]);
+  if(rain&&turn===3)assert.match(await read('duo-goals'),/Bridge 1 open · Bridge 2 closed/);
+  if(rain&&turn===5){
+   assert.match(await read('duo-goals'),/Bridge 1 open · Bridge 2 open/);
+   assert.match(await read('inspect'),/power jade · next tick open/);
+   await press('#ps-undo');
+   assert.match(await read('duo-goals'),/Bridge 1 open · Bridge 2 closed/);
+   await press('#ps-step');
+   assert.match(await read('duo-goals'),/Bridge 1 open · Bridge 2 open/);
+  }
+  if((mission.id==='duo-long-road'&&turn===14)||(mission.id==='duo-signmaker'&&turn===9)){
+   assert.equal(await p.locator('#ps-next-story').isVisible(),false);
+   assert.match(await read('duo-goals'),mission.id==='duo-long-road'?/Letters 1\/1.*S away/:/Letters 1\/2 · handoffs 1\/2/);
+  }
+ }
+}
+
 export async function pipDuoScenarios(scenario){
- for(const width of [390,1440])await scenario(`pip-duo-six-story-missions-${width}`,width,async p=>{await open(p);for(const [i,m]of DUO_MISSIONS.entries()){assert.equal(await p.locator('#ps-title').textContent(),m.title);assert.match(await p.locator('#ps-story').textContent(),/Tavi|Rook|Moss|Nessa|Eid/);assert.equal(await p.locator('#ps-card-sprout-0').isVisible(),false);await p.locator('#ps-actor-sprout').click();assert.equal(await p.locator('[data-game-select=ps-card-sprout-0]').isVisible(),true);await p.locator('#ps-actor-pip').click();await example(p);await win(p);assert.match(await p.locator('#ps-status').textContent(),new RegExp('Tick '+[9,11,13,19,27,55][i]+'/'));assert.ok((await p.locator('#ps-status').textContent()).includes(m.ending));await fit(p);if(i<5)await p.locator('#ps-next-story').click();}const saved=JSON.parse(await p.evaluate(k=>localStorage.getItem(k),DUO_KEY));assert.equal(Object.keys(saved.bests).length,6);await p.locator('#ps-test').click();await p.locator('#ps-tab-gallery').click();await p.locator('#ps-slots article').first().getByRole('button',{name:'Display current invention'}).click();assert.match(await p.locator('#ps-slots article').first().textContent(),/55 ticks/);await p.locator('#ps-close').click();await p.reload();await open(p);await collection(p,'adventures','duo-lantern-festival');assert.match(await p.locator('#ps-best').textContent(),/55 ticks/);});
+ for(const width of [390,1440])await scenario(`pip-duo-six-story-missions-${width}`,width,async p=>{
+  const press=selector=>p.locator(selector)[width<500?'tap':'click']();
+  await open(p);
+  for(const [i,mission] of DUO_MISSIONS.entries()){
+   const turns=[9,11,13,19,27,55][i];
+   assert.equal(await p.locator('#ps-title').textContent(),mission.title);
+   assert.match(await p.locator('#ps-story').textContent(),/Tavi|Rook|Moss|Nessa|Eid/);
+   assert.equal(await p.locator('[data-game-select=ps-card-sprout-0]').isVisible(),false);
+   await press('#ps-actor-sprout');
+   assert.equal(await p.locator('[data-game-select=ps-card-sprout-0]').isVisible(),true);
+   await press('#ps-actor-pip');
+   if(earlyStoryChecks[mission.id])await playOpeningChapter(p,press,mission,turns);
+   else{await example(p);await win(p);}
+   const status=await p.locator('#ps-status').textContent();
+   assert.match(status,new RegExp('^Tick '+turns+'/240 · Adventure complete!'));
+   assert.ok(status.includes(mission.ending));
+   await fit(p);
+   if(i<5)await press('#ps-next-story');
+  }
+  const saved=JSON.parse(await p.evaluate(k=>localStorage.getItem(k),DUO_KEY));
+  assert.equal(Object.keys(saved.bests).length,6);
+  await press('#ps-test');await press('#ps-tab-gallery');
+  await p.locator('#ps-slots article').first().getByRole('button',{name:'Display current invention'}).click();
+  assert.match(await p.locator('#ps-slots article').first().textContent(),/55 ticks/);
+  await press('#ps-close');await p.reload();await open(p);await collection(p,'adventures','duo-lantern-festival');
+  assert.match(await p.locator('#ps-best').textContent(),/55 ticks/);
+ });
  await scenario('pip-duo-creator-build-play-shelf-and-sharing',390,async p=>{await open(p);await recipe(p);await details(p,'#ps-name-details');await p.locator('#ps-name').fill('Our jade post office');await p.locator('#ps-name').press('Tab');await win(p);assert.match(await p.locator('#ps-duo-goals').textContent(),/Letters 1\/1/);await p.locator('#ps-test').click();await details(p,'#ps-adventure-library');await p.locator('#ps-save-adventure').click();assert.match(await p.locator('#ps-shelf-note').textContent(),/1\/12 adventures/);await p.locator('#ps-copy-adventure').click();assert.match(await p.locator('#ps-shelf-note').textContent(),/2\/12 adventures/);await p.locator('#ps-tab-share').click();const exported=parseTinkerProject((await download(p,'#ps-export')).toString());assert.equal(exported.version,2);assert.equal(exported.proof.ticks,9);assert.deepEqual(parseTinkerCode(await p.locator('#ps-code').inputValue()),exported);assert.equal(await p.locator('#ps-world').isDisabled(),true);const png=await download(p,'#ps-postcard');assert.deepEqual([...png.subarray(0,8)],[137,80,78,71,13,10,26,10]);await p.locator('#ps-close').click();await p.reload();await open(p);await collection(p,'create');await details(p,'#ps-adventure-library');await chooseOption(p,'#ps-saved-adventure','adventure-1');await p.locator('#ps-load-adventure').click();await details(p,'#ps-name-details');await p.locator('#ps-name').fill('Revised jade post office');await p.locator('#ps-name').press('Tab');await details(p,'#ps-adventure-library');await p.locator('#ps-save-adventure').click();await p.locator('#game-confirm-cancel').click();assert.equal(JSON.parse(await p.evaluate(k=>localStorage.getItem(k),DUO_KEY)).adventures[0].project.name,'Our jade post office');await p.locator('#ps-save-adventure').click();await p.locator('#game-confirm-accept').click();await p.locator('#ps-delete-adventure').click();await p.locator('#game-confirm-cancel').click();assert.match(await p.locator('#ps-shelf-note').textContent(),/2\/12/);await win(p);await fit(p);});
  await scenario('pip-duo-custom-blueprints-capture-import-and-undo',1440,async p=>{await open(p);await collection(p,'create');await details(p,'#ps-blueprints');await chooseOption(p,'#ps-bp-input','violet');await chooseOption(p,'#ps-bp-output','blue');await chooseOption(p,'#ps-bp-parcels','2');await chooseOption(p,'#ps-bp-turns','1');let piece=parseDuoBlueprint((await download(p,'#ps-bp-export')).toString());assert.equal(piece.height,5);assert.equal(piece.parts[2].parcels,2);await p.locator('#ps-bp-keep').click();piece=parseDuoBlueprint((await download(p,'#ps-bp-export')).toString());assert.equal(piece.height,5);await chooseOption(p,'#ps-bp-palette','2');assert.match(await p.locator('#ps-bp-preview').getAttribute('aria-label'),/amber/);await chooseOption(p,'#ps-bp-palette','0');await cell(p,3,1);await p.locator('#ps-bp-place').click();assert.match(await p.locator('#ps-budget').textContent(),/3\/32/);assert.equal(await p.locator('#ps-bp-place').isDisabled(),true);assert.match(await p.locator('#ps-bp-fit').textContent(),/free tiles/);await p.locator('#ps-undo').click();assert.match(await p.locator('#ps-budget').textContent(),/0\/32/);await p.locator('#ps-bp-place').click();await chooseOption(p,'#ps-capture-width','1');await chooseOption(p,'#ps-capture-height','5');await p.locator('#ps-capture-name').fill('A blue garden');await p.locator('#ps-capture-piece').click();const captured=await download(p,'#ps-bp-export');assert.equal(parseDuoBlueprint(captured.toString()).name,'A blue garden');await p.locator('#ps-bp-file').setInputFiles({name:'friend.json',mimeType:'application/json',buffer:captured});assert.match(await p.locator('#ps-notice').textContent(),/opened for preview/);await cell(p,5,1);await p.locator('#ps-bp-place').click();assert.match(await p.locator('#ps-budget').textContent(),/6\/32/);await chooseOption(p,'#ps-blueprint','return-sign');await chooseOption(p,'#ps-bp-first','b');await chooseOption(p,'#ps-bp-turns','1');const sign=parseDuoBlueprint((await download(p,'#ps-bp-export')).toString());assert.equal(sign.parts.find(p=>p.kind==='flip').initial,true);assert.equal(sign.parts.find(p=>p.kind==='flip').program[0],'right');await fit(p);});
  await scenario('pip-duo-shared-finale-proof-validation-and-remix',390,async p=>{const url=new URL(p.url());url.hash='pip='+tinkerCode(solvedTinkerProject('duo-lantern-festival'));await p.goto(url.href);await p.locator('#pip-studio[open]').waitFor();await win(p);assert.match(await p.locator('#ps-duo-goals').textContent(),/P home, S home/);await p.locator('#ps-test').click();await p.locator('#ps-remix').click();assert.equal(await p.locator('#ps-duo-creator').isVisible(),true);assert.match(await p.locator('#ps-credit').textContent(),/Festival of Two Lights/);await win(p);await p.locator('#ps-tab-share').click();await details(p,'#ps-import-details');await p.locator('#ps-import-code').fill(tinkerCode(newDuoProject()).slice(0,-3));await p.locator('#ps-import').click();assert.match(await p.locator('#ps-notice').textContent(),/transit|incomplete/);const bad={...solvedTinkerProject('duo-first-letter'),proof:{ticks:1}};await p.locator('#ps-file').setInputFiles({name:'forged.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(bad))});assert.match(await p.locator('#ps-notice').textContent(),/does not finish/);await fit(p);});

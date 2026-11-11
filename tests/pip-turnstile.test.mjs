@@ -114,8 +114,8 @@ test('readiness identifies an impossible fare and formats reject invalid setting
   for (const patch of [{fare:'any'}, {channel:'silver'}, {duration:0}, {duration:7}, {duration:'3'}]) {
     assert.throws(()=>normalizeTurnstile({...gate,...patch}),/parcel fare/);
   }
-  for (const version of [18,20]) assert.throws(()=>normalizeDuoProject({...project,version}),/version/);
-  for (const version of [17,19]) assert.throws(()=>normalizeDuoBlueprint({...duoBlueprint('fare-crossing'),version}));
+  for (const version of [18,21]) assert.throws(()=>normalizeDuoProject({...project,version}),/version/);
+  for (const version of [17,20]) assert.throws(()=>normalizeDuoBlueprint({...duoBlueprint('fare-crossing'),version}));
 });
 test('fare and power transformations compose independently through capture and exchange', () => {
   const piece = duoBlueprint('fare-crossing'), toll = p=>p.parts.find(s=>s.kind==='turnstile');

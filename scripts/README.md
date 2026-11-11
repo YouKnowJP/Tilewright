@@ -36,7 +36,7 @@ The release catalogue includes the latest story and creator cases:
 four-mission phone/desktop clears, individual/bulk timing/relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
 memory, pause and wind checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **282 distinct cases**, split **57/57/56/56/56**. All earlier
+with old/new replays. It has **285 distinct cases**, split **57/57/57/57/57**. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -52,14 +52,12 @@ npm run test:browser:pip -- webkit --shard=2/3
 npm run test:browser:pip -- webkit --shard=3/3
 ```
 
-The runner checks six Wayside Keeper cases, six Drumkeeper cases, six Weavekeeper cases, six Kilnkeeper
-cases, six Mixing House cases, six retained Echo Post cases and two legacy
-save/share cases (thirty-eight total),
+The runner checks seventy-two Pip story, creator, and legacy save/share cases,
 records the built release metadata, closes the browser/server and removes its
 owned temporary build. Firefox and WebKit each run in three required CI groups of
-13, 13 and 12, retaining all thirty-eight cases per engine within the existing twenty-minute
+24, 24 and 24, retaining all seventy-two cases per engine within the existing twenty-minute
 job limit. Original action deadlines and full tracing remain enforced. Reports
-record the group and use distinct filenames; all six jobs and the full release
+record the group and use distinct filenames; all six compatibility jobs and the full release
 suite must pass before publication. Reports are retained for seven days. Unsharded
 local commands still run the complete compatibility suite.
 

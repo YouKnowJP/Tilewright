@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**595 files in 15 folders.** Stage new files before refreshing. Run
+**600 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,10 +23,10 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 6 |
-| [scripts/browser/](../scripts/browser/) | 77 |
+| [scripts/browser/](../scripts/browser/) | 78 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
-| [src/](../src/) | 203 |
-| [tests/](../tests/) | 91 |
+| [src/](../src/) | 206 |
+| [tests/](../tests/) | 92 |
 | [tests/fixtures/](../tests/fixtures/) | 49 |
 
 <details>
@@ -259,7 +259,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 77 files</summary>
+<summary>scripts/browser/ — 78 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -291,6 +291,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-canopy-browser-checks.mjs](../scripts/browser/pip-canopy-browser-checks.mjs)
 - [pip-collections-browser-checks.mjs](../scripts/browser/pip-collections-browser-checks.mjs)
 - [pip-compatibility-checks.mjs](../scripts/browser/pip-compatibility-checks.mjs)
+- [pip-dial-browser-checks.mjs](../scripts/browser/pip-dial-browser-checks.mjs)
 - [pip-drumkeepers-browser-checks.mjs](../scripts/browser/pip-drumkeepers-browser-checks.mjs)
 - [pip-duo-browser-checks.mjs](../scripts/browser/pip-duo-browser-checks.mjs)
 - [pip-echo-post-browser-checks.mjs](../scripts/browser/pip-echo-post-browser-checks.mjs)
@@ -354,7 +355,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>src/ — 203 files</summary>
+<summary>src/ — 206 files</summary>
 
 - [adventure-accessibility.mjs](../src/adventure-accessibility.mjs)
 - [adventure-art.mjs](../src/adventure-art.mjs)
@@ -431,6 +432,8 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-blueprint-weaves-ui.mjs](../src/pip-blueprint-weaves-ui.mjs)
 - [pip-blueprint-weaves.mjs](../src/pip-blueprint-weaves.mjs)
 - [pip-canopy-fair.mjs](../src/pip-canopy-fair.mjs)
+- [pip-card-dial-ui.mjs](../src/pip-card-dial-ui.mjs)
+- [pip-card-dial.mjs](../src/pip-card-dial.mjs)
 - [pip-clocktower.mjs](../src/pip-clocktower.mjs)
 - [pip-coach.mjs](../src/pip-coach.mjs)
 - [pip-collection-challenges.mjs](../src/pip-collection-challenges.mjs)
@@ -445,6 +448,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-counter-house.mjs](../src/pip-counter-house.mjs)
 - [pip-counters.mjs](../src/pip-counters.mjs)
 - [pip-dawn-workshop.mjs](../src/pip-dawn-workshop.mjs)
+- [pip-dial-finale.mjs](../src/pip-dial-finale.mjs)
 - [pip-drum-editor.mjs](../src/pip-drum-editor.mjs)
 - [pip-drum-house.mjs](../src/pip-drum-house.mjs)
 - [pip-drums.mjs](../src/pip-drums.mjs)
@@ -563,7 +567,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>tests/ — 91 files</summary>
+<summary>tests/ — 92 files</summary>
 
 - [accessibility.test.mjs](../tests/accessibility.test.mjs)
 - [adventure-controls.test.mjs](../tests/adventure-controls.test.mjs)
@@ -596,6 +600,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [pip-atlas.test.mjs](../tests/pip-atlas.test.mjs)
 - [pip-bellkeeper.test.mjs](../tests/pip-bellkeeper.test.mjs)
 - [pip-canopy-fair.test.mjs](../tests/pip-canopy-fair.test.mjs)
+- [pip-card-dial.test.mjs](../tests/pip-card-dial.test.mjs)
 - [pip-collection-challenges.test.mjs](../tests/pip-collection-challenges.test.mjs)
 - [pip-collection-storage.test.mjs](../tests/pip-collection-storage.test.mjs)
 - [pip-collection-tools.test.mjs](../tests/pip-collection-tools.test.mjs)

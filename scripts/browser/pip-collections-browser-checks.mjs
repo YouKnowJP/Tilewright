@@ -8,15 +8,146 @@ const pack=(projects=[solvedTinkerProject('duo-first-letter'),solvedTinkerProjec
 async function details(p,id){if(!await p.locator(id).evaluate(n=>n.open))await p.locator(id+'>summary').click();}
 async function open(p){await waitForGameReady(p);await p.locator('#title-workshop').click();await p.locator('#ws-tab-lab').click();await p.locator('#ws-duo-adventures').click();}
 async function collection(p,value,id){await details(p,'#ps-chooser');await chooseOption(p,'#ps-collection',value);if(id){await details(p,'#ps-chooser');await chooseOption(p,'#ps-trial',id);}}
-async function example(p){await details(p,'#ps-help');for(let i=0;i<3;i++)await p.locator('#ps-nudge').click();await p.locator('#ps-example').click();await p.locator('#game-confirm-accept').click();await p.locator('#game-confirm-dialog').waitFor({state:'detached'});}
 async function win(p,ticks){await details(p,'#ps-test-options');await chooseOption(p,'#ps-speed','quick');await p.locator('#ps-test').click();await p.locator('#ps-run').click();await p.locator('#ps-status').filter({hasText:'Adventure complete!'}).waitFor({timeout:Math.max(15000,ticks*220+2000)});assert.match(await p.locator('#ps-status').textContent(),new RegExp('Tick '+ticks+'/'));}
 async function shared(p,value,kind='pip-pack'){const u=new URL(p.url());u.hash=kind+'='+(kind==='pip-pack'?pipCollectionCode(value):tinkerCode(value));await p.goto(u.href);await waitForGameReady(p);await p.locator(kind==='pip-pack'?'#pip-collection[open]':'#pip-studio[open]').waitFor();}
 async function download(p,id){const [d]=await Promise.all([p.waitForEvent('download'),p.locator(id).click()]),chunks=[];for await(const c of await d.createReadStream())chunks.push(c);return Buffer.concat(chunks);}
 async function project(p){await p.locator('#ps-tab-share').click();const value=parseTinkerProject((await download(p,'#ps-export')).toString());await p.locator('#ps-tab-build').click();return value;}
 async function builder(p){await p.locator('#ps-tab-share').click();await details(p,'#ps-pack-builder');}
 async function fit(p,id='#pip-studio'){assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.ok(await p.locator(id).evaluate(n=>n.scrollWidth<=n.clientWidth+1));for(const button of await p.locator(id+' button:visible,'+id+' [role=combobox]:visible').all())assert.ok(await button.evaluate(n=>{const r=n.getBoundingClientRect(),d=n.closest('dialog').getBoundingClientRect();return r.left>=d.left-1&&r.right<=d.right+1;}));}
+async function playAfterHoursRepair(p,mission,width){
+ const press=selector=>p.locator(selector)[width<500?'tap':'click']();
+ const read=id=>p.locator('#ps-'+id).textContent();
+ async function place(part){
+  await press('[data-ps-jump=build-tools]');await chooseOption(p,'#ps-brush',part.kind);
+  if(part.kind==='press'){
+   await chooseOption(p,'#ps-input',part.channel);await chooseOption(p,'#ps-output',part.output);
+  }else if(part.kind==='cargo'){
+   await chooseOption(p,'#ps-cargo-match',part.channel);
+   for(const [bank,cards] of [['a',part.program],['b',part.alternate]])for(const [i,card] of cards.entries())await chooseOption(p,`#ps-card-route-${bank}-${i}`,card);
+  }else if(part.kind==='prism')await chooseOption(p,'#ps-operation',part.operation);
+  else{
+   await chooseOption(p,'#ps-channel',part.channel);
+   if(part.kind==='locker')await chooseOption(p,'#ps-locker-mode',part.mode);
+  }
+  await press('[data-ps-jump=canvas]');
+  if(width<=320){
+   await details(p,'#ps-map-text');await chooseOption(p,'#ps-cursor-x',String(part.x));await chooseOption(p,'#ps-cursor-y',String(part.y));
+   await press('#ps-go-tile');await press('#ps-place-tile');
+  }else{
+   const canvas=p.locator('#ps-canvas'),bounds=await canvas.boundingBox(),point={x:bounds.width*(part.x+.5)/mission.width,y:bounds.height*(part.y+.5)/mission.height};
+   if(width<500)await p.touchscreen.tap(bounds.x+point.x,bounds.y+point.y);
+   else await canvas.click({position:point});
+  }
+ }
+ async function test(){
+  await press('[data-ps-jump=programs]');
+  for(const [i,actor] of ['pip','sprout'].entries()){
+   await press('#ps-actor-'+actor);
+   for(const [index,card] of mission.solution[i].entries())await chooseOption(p,`#ps-card-${actor}-${index}`,card);
+  }
+  await press('#ps-test-route');assert.equal(await read('event'),'Next milestone');
+  await details(p,'#ps-test-options');await chooseOption(p,'#ps-speed','quick');await press('#ps-test-options > summary');
+ }
+ async function milestone(turn,message){
+  await press('#ps-event');await p.locator('#ps-run[aria-pressed=false]').waitFor();
+  assert.match(await read('status'),new RegExp('^Tick '+turn+'/240'));
+  if(message)assert.match(await read('playback-state'),message);
+ }
+ assert.equal(await p.locator('#ps-story-goal').isVisible(),true);
+ assert.match(await read('status'),new RegExp('Repair parts 0/'+mission.budget+' placed'));
+ await press('[data-ps-jump=build-tools]');assert.equal(await p.locator('#ps-repair-help').isVisible(),true);
+ const parts=mission.id==='duo-after-lanterns'?[...mission.solutionParts.filter(part=>part.kind==='press'&&part.y===5),...mission.solutionParts.filter(part=>part.kind!=='press'||part.y!==5)]:mission.solutionParts;
+ for(const [i,part] of parts.entries()){
+  if(mission.id==='duo-after-rain'&&part.kind==='plate')continue;
+  await place(part);
+  if(mission.id==='duo-after-lanterns'&&i===1)assert.match(await read('status'),/2\/6 placed.*Parcel locker K \(2 left\).*Recipe press E \(2 left\).*violet window needs/);
+ }
+ if(mission.id==='duo-after-lift'){
+  await press('#ps-undo');assert.match(await read('status'),/2\/3 placed.*Compass prism X/);
+  await place(parts.at(-1));
+ }
+ if(mission.id==='duo-after-rain'){
+  assert.match(await read('status'),/3\/4 placed.*Pressure plate P/);
+  await test();assert.match(await read('duo-goals'),/Bridge 1 closed/);await press('#ps-run');
+  const feedback=p.locator('#ps-playback-state').filter({hasText:'Check the amber plate'});await feedback.waitFor();
+  assert.match(await read('status'),/^Tick 8\/240.*Bridge 1 was closed at the start/);
+  assert.equal(await p.locator('#ps-next-story').isVisible(),false);
+  assert.ok(await feedback.evaluate(n=>{const r=n.getBoundingClientRect(),header=n.closest('dialog').querySelector('.ps-heading').getBoundingClientRect();return r.top>=header.bottom-1&&r.bottom<=innerHeight;}));
+  await press('#ps-test');await place(parts.find(part=>part.kind==='plate'));
+ }
+ await test();
+ if(mission.id==='duo-after-lift'){
+  await milestone(6,/Cargo compass loaded Otherwise/);await milestone(9,/Pressed violet into blue/);
+  await milestone(18,/Stored parcel/);assert.match(await read('duo-goals'),/Locker K1 holding blue from Pip/);
+  await milestone(21,/Collected blue/);
+  for(const turn of [30,33,36])await milestone(turn);
+  assert.match(await read('duo-goals'),/Letters 1\/3/);
+  for(const turn of [39,45,48,51,60,63,66])await milestone(turn);
+  assert.match(await read('duo-goals'),/Letters 2\/3/);
+ }else if(mission.id==='duo-after-bell'){
+  await milestone(6,/Pressed jade into violet/);assert.doesNotMatch(await read('playback-state'),/Otherwise/);
+  await milestone(9,/Passed parcel to Sprout.*Sprout: Cargo compass loaded Matching/);
+  assert.match(await read('duo-goals'),/handoffs 1\/3/);assert.doesNotMatch(await read('duo-goals'),/locker relays/);
+  await press('#ps-undo');assert.match(await read('duo-goals'),/handoffs 0\/3/);
+  await milestone(9,/Passed parcel to Sprout.*Cargo compass loaded Matching/);await milestone(12,/Delivered violet/);
+  assert.match(await read('duo-goals'),/Letters 1\/3/);
+  await milestone(21,/Cargo compass loaded Otherwise/);await milestone(30,/Pressed jade into violet/);
+  await milestone(33,/Passed parcel to Sprout/);await milestone(36,/Delivered violet/);
+  assert.match(await read('duo-goals'),/Letters 2\/3/);
+  for(const turn of [45,54,57])await milestone(turn);
+ }else if(mission.id==='duo-after-rain'){
+  await milestone(2,/Bridge 1 opens next turn/);assert.match(await read('duo-goals'),/Bridge 1 open/);
+  assert.doesNotMatch(await read('duo-goals'),/handoffs|locker relays/);
+  await press('#ps-undo');assert.match(await read('duo-goals'),/Bridge 1 closed/);
+  await milestone(2,/Bridge 1 opens next turn/);await milestone(5,/Sprout entered Bridge 1/);
+  assert.match(await read('status'),/Pip: Holding Plate 1/);
+  await press('#ps-step');assert.match(await read('status'),/^Tick 6\/240.*Pip: Holding Plate 1/);
+  await milestone(9,/Traveled through the tube/);await milestone(12,/Delivered amber/);
+  for(const turn of [21,23,35,39,42])await milestone(turn);
+  assert.match(await read('duo-goals'),/Letters 2\/3.*Bridge 1 open/);
+  for(const turn of [51,53,65,69])await milestone(turn);
+ }else{
+  await milestone(9,/Pressed blue into amber.*Pressed jade into blue/);await milestone(12,/Stored parcel/);
+  assert.match(await read('duo-goals'),/Locker K3 holding blue from Sprout.*Locker K4 holding amber from Pip/);
+  await milestone(18,/Collected blue.*Collected amber/);await milestone(24,/Pressed blue into violet.*Pressed amber into jade/);
+  await milestone(27,/Delivered violet.*Delivered jade/);assert.match(await read('duo-goals'),/Letters 2\/6/);
+  for(const turn of [39,42,48,54,57])await milestone(turn);
+  assert.match(await read('duo-goals'),/Letters 4\/6/);
+  for(const channel of ['Jade','Violet'])assert.match(await read('duo-goals'),new RegExp(channel+' Quiet'));
+  assert.equal(await p.locator('#ps-next-story').isVisible(),false);
+  for(const turn of [69,72,78,84,87])await milestone(turn);
+  assert.match(await read('duo-goals'),/Letters 6\/6.*lockers empty/);
+  for(const channel of ['Jade','Violet'])assert.match(await read('duo-goals'),new RegExp(channel+' Powered'));
+  assert.equal(await p.locator('#ps-next-story').isVisible(),false);
+  await milestone(90,/Pip: Signal loaded Powered.*Sprout: Signal loaded Powered/);
+ }
+ assert.equal(await p.locator('#ps-next-story').isVisible(),false);
+ await press('#ps-run');await p.locator('#ps-status').filter({hasText:'Adventure complete!'}).waitFor();await fit(p);
+}
 export async function pipCollectionsScenarios(scenario){
- for(const width of [390,1440])await scenario(`pip-after-hours-four-mastery-repairs-${width}`,width,async p=>{await open(p);await collection(p,'after-hours');for(const [i,m]of AFTER_HOURS_MISSIONS.entries()){assert.equal(await p.locator('#ps-title').textContent(),m.title);assert.match(await p.locator('#ps-kicker').textContent(),new RegExp('Chapter '+(21+i)+'/'+DUO_STORIES.length));await example(p);await p.locator('#ps-budget').filter({hasText:`${m.budget}/${m.budget}`}).waitFor();await win(p,[96,60,72,91][i]);assert.ok((await p.locator('#ps-status').textContent()).includes(m.ending));if(i<3)await p.locator('#ps-next-story').click();}assert.equal(await p.locator('#ps-next-story').isVisible(),true);await p.locator('#ps-close').click();await p.reload();await open(p);await collection(p,'after-hours','duo-after-lanterns');assert.match(await p.locator('#ps-best').textContent(),/91 ticks/);await fit(p);});
+ await scenario('pip-after-hours-repaired-plate-large-text',320,async p=>{
+  await p.locator('#title-accessibility').tap();await chooseOption(p,'#settings-reading-size','largest');
+  await chooseOption(p,'#settings-contrast','high');await p.locator('#settings-close').tap();
+  await open(p);await collection(p,'after-hours','duo-after-rain');
+  await playAfterHoursRepair(p,AFTER_HOURS_MISSIONS[2],320);
+  assert.match(await p.locator('#ps-status').textContent(),/^Tick 72\/240 · Adventure complete!/);
+ });
+ for(const width of [390,1440])await scenario(`pip-after-hours-four-mastery-repairs-${width}`,width,async p=>{
+  await waitForGameReady(p);await p.locator('#title-pip').click();await details(p,'#ph-filters');
+  await p.locator('#ph-search').fill(AFTER_HOURS_MISSIONS[0].title);await p.locator('[data-ph-mission=duo-after-lift]').click();
+  for(const [i,m]of AFTER_HOURS_MISSIONS.entries()){
+   assert.equal(await p.locator('#ps-title').textContent(),m.title);
+   assert.match(await p.locator('#ps-kicker').textContent(),new RegExp('Chapter '+(21+i)+'/'+DUO_STORIES.length));
+   await playAfterHoursRepair(p,m,width);assert.match(await p.locator('#ps-budget').textContent(),new RegExp(m.budget+'/'+m.budget));
+   assert.match(await p.locator('#ps-status').textContent(),new RegExp('^Tick '+[96,60,72,91][i]+'/240 · Adventure complete!'));
+   assert.ok((await p.locator('#ps-status').textContent()).includes(m.ending));
+   if(i<3)await p.locator('#ps-next-story')[width<500?'tap':'click']();
+  }
+  assert.equal(await p.locator('#ps-next-story').isVisible(),true);
+  await p.locator('#ps-next-story').click();assert.equal(await p.locator('#ps-title').textContent(),'The Slow Hand and the Swift');
+  await p.locator('#ps-close').click();await p.reload();await open(p);await collection(p,'after-hours','duo-after-lanterns');
+  assert.match(await p.locator('#ps-best').textContent(),/91 ticks/);await fit(p);
+ });
  await scenario('pip-collection-builder-snapshots-reorder-metadata-and-capacity',390,async p=>{
   const original={...remixDuoProject(solvedTinkerProject('duo-first-letter')),proof:{ticks:9}};await shared(p,original,'pip');await details(p,'#ps-adventure-library');await p.locator('#ps-save-adventure').click();await builder(p);await p.locator('#ps-pack-add-current').click();await p.locator('#ps-pack-name').fill('Our paper roads');await p.locator('#ps-pack-author').fill('Rook');await p.locator('#ps-pack-intro').fill('Two friends carry a small constellation.');await p.locator('#ps-pack-intro').press('Tab');await chooseOption(p,'#ps-pack-saved','adventure-1');await p.locator('#ps-pack-add-saved').click();await p.locator('#ps-tab-build').click();await details(p,'#ps-name-details');await p.locator('#ps-name').fill('A later bench name');await p.locator('#ps-name').press('Tab');await builder(p);await p.locator('#ps-pack-add-current').click();assert.equal((await p.locator('#ps-pack-chapters h4').allTextContents())[0],'1 · '+original.name);await p.locator('[data-pack-edit=earlier][data-chapter="2"]').click();await p.locator('[data-pack-edit=remove][data-chapter="0"]').click();await details(p,'#ps-pack-chapters article:first-child>details:first-of-type');await p.getByLabel('Chapter 1 title',{exact:true}).fill('Rook’s first paper road');await p.getByLabel('Chapter 1 title',{exact:true}).press('Tab');await p.getByLabel('Chapter 1 note',{exact:true}).fill('A note for the next builder.');await p.getByLabel('Chapter 1 note',{exact:true}).press('Tab');const value=parsePipCollection((await download(p,'#ps-pack-export')).toString());assert.equal(value.chapters.length,2);assert.equal(value.chapters[0].project.name,'A later bench name');assert.equal(value.chapters[1].project.name,original.name);assert.equal(value.chapters[0].title,'Rook’s first paper road');assert.equal(value.chapters[0].note,'A note for the next builder.');assert.deepEqual(parsePipCollectionCode(await p.locator('#ps-pack-code').inputValue()),value);for(let i=0;i<4;i++)await p.locator('#ps-pack-add-current').click();assert.match(await p.locator('#ps-pack-count').textContent(),/6\/6/);assert.equal(await p.locator('#ps-pack-add-current').isDisabled(),true);assert.equal(await p.locator('#ps-pack-add-saved').isDisabled(),true);await p.locator('[data-pack-edit=remove][data-chapter="5"]').click();assert.equal(await p.locator('#ps-pack-add-current').isEnabled(),true);await fit(p);
  });

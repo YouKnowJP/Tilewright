@@ -36,7 +36,34 @@ export async function pipHomeScenarios(scenario){
   for(const tab of ['collections','create','learn','stories']){await p.locator('#ph-tab-'+tab).click();await p.locator('#ph-tab-'+tab).hover();await readableNavigation(p,'.ph-tabs>button');}
   const found=[];while(true){found.push(...await p.locator('[data-ph-mission]').evaluateAll(nodes=>nodes.map(n=>n.dataset.phMission)));if(await p.locator('#ph-following').isDisabled())break;await p.locator('#ph-following').click();}assert.deepEqual(found,DUO_STORIES.map(m=>m.id));
   await details(p,'#ph-filters');for(const r of PIP_REGIONS){await chooseOption(p,'#ph-region',r.id);assert.equal(await p.locator('[data-ph-mission]').count(),DUO_STORIES.filter(m=>m.collection===r.id).length);}assert.equal(await raw(p,DUO_KEY),before);
-  await p.locator('#ph-next').click();assert.equal(await p.locator('#ps-title').textContent(),'A Letter for Two');await p.locator('.ps-tabs>button[aria-pressed=true]').hover();await readableNavigation(p,'.ps-tabs>button');await example(p);await p.locator('[data-ps-jump=canvas]').click();await p.locator('#ps-test').click();await p.locator('#ps-run').click();await p.locator('#ps-status').filter({hasText:'Adventure complete!'}).waitFor();await back(p);assert.match(await p.locator('#ph-progress').textContent(),new RegExp("1/"+DUO_STORIES.length));assert.match(await p.locator('#ph-next').textContent(),/Dyehouse/);await fit(p,'#pip-home');
+  const press=selector=>p.locator(selector)[width<500?'tap':'click']();
+  const status=p.locator('#ps-status'),next=p.locator('#ps-next-story');
+  await press('#ph-next');
+  assert.equal(await p.locator('#ps-title').textContent(),'A Letter for Two');
+  assert.equal(await p.locator('#ps-story-details').getAttribute('open'),null);
+  assert.match(await p.locator('#ps-story-goal').textContent(),/Pip collects.*Sprout delivers/s);
+  await p.locator('.ps-tabs>button[aria-pressed=true]').hover();await readableNavigation(p,'.ps-tabs>button');
+  assert.equal(await p.locator('[data-ps-jump=programs]').textContent(),'Plan cards');
+  await press('[data-ps-jump=programs]');
+  assert.equal(await p.locator('#ps-card-help').evaluate(n=>n===document.activeElement),true);
+  for(const [actor,cards] of [['pip',['right','right','use']],['sprout',['wait','wait','use']]]){
+   await press('#ps-actor-'+actor);
+   for(const [i,card] of cards.entries())await chooseOption(p,`#ps-card-${actor}-${i}`,card);
+  }
+  await press('#ps-test-route');
+  assert.equal(await p.locator('#ps-canvas').evaluate(n=>n===document.activeElement),true);
+  assert.match(await status.textContent(),/^Tick 0\//);
+  assert.equal(await next.isVisible(),false);
+  for(let i=0;i<9;i++)await press('#ps-step');
+  assert.match(await status.textContent(),/^Tick 9\/240 · Adventure complete!/);
+  assert.equal(await next.textContent(),'Next chapter · The Dyehouse Promise');
+  assert.equal(await next.evaluate(n=>n.previousElementSibling.id),'ps-status');
+  await press('#ps-undo');assert.match(await status.textContent(),/^Tick 8\//);assert.equal(await next.isVisible(),false);
+  await press('#ps-step');await press('#ps-next-story');
+  assert.equal(await p.locator('#ps-title').textContent(),'The Dyehouse Promise');
+  assert.match(await p.locator('#ps-story-goal').textContent(),/amber into jade, then blue/);
+  assert.equal(await next.isVisible(),false);
+  await back(p);assert.match(await p.locator('#ph-progress').textContent(),new RegExp("1/"+DUO_STORIES.length));assert.match(await p.locator('#ph-next').textContent(),/Dyehouse/);await fit(p,'#pip-home');
   await p.locator('#ph-close').click();await p.locator('#game-title-screen').waitFor();assert.equal(await p.locator('#title-pip').evaluate(n=>n===document.activeElement),true);
  });
  await scenario('pip-home-staged-clues-worked-reveal-and-cancel',390,async p=>{

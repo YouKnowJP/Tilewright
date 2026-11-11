@@ -10,6 +10,7 @@ import {useMixer} from './pip-mixers.mjs';
 import {echoProgram,ECHO_OPERATIONS} from './pip-echoes.mjs';
 import {scalePower} from './pip-scales.mjs';
 import {tideOpen,tidePhase} from './pip-tides.mjs';
+import {CARD_DIAL_LABELS,dialNextCard} from './pip-card-dial.mjs';
 import {turnstilePayment} from './pip-turnstile.mjs';
 import {DUO_STORIES,DUO_CUSTOM,duoMission,duoDefinition,normalizeDuoProject,newDuoProject,duoReadiness,duoRequiredVersion,sealAllows,sealDescription} from './pip-duo.mjs';
 import {normalizeProgram,transformProgram,PRISM_OPERATIONS,CLOCKWORK_LABELS} from './clockwork.mjs';
@@ -39,8 +40,8 @@ export function tinkerTrial(id){return TINKER_TRIALS.find(t=>t.id===id)||fail('C
 function text(value,fallback,max=48){if(value===undefined)return fallback;if(typeof value!=='string'||value.length>max||/[\u0000-\u001f\u007f]/.test(value))fail('Use a short, printable name.');return value.trim()||fallback;}
 export function newTinkerProject(id='first-use'){if(id===DUO_CUSTOM.id||duoMission(id))return newDuoProject(id);const trial=tinkerTrial(id);return {format:'pip-tinker-project',version:1,trialId:id,name:trial.title,author:'A trail keeper',programs:trial.programs.map(p=>[...p]),parts:id==='repair-relay'?[part('prism',5,3,{operation:'mirror'})]:[]};}
 export function normalizeTinkerProject(input,{verify=true}={}){
- if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
- if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 19.');
+ if(input?.format==='pip-tinker-project'&&[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].includes(input.version)){const project=normalizeDuoProject(input);if(project.proof&&verify){const check=duoReadiness(project);if(!check.ready)throw Error(check.errors[0]);if(!verifyTinkerProof(project))throw Error('The attached duo solution does not finish this adventure.');}return project;}
+ if(!input||input.format!=='pip-tinker-project'||input.version!==1)fail('Choose a Pip workshop project, version 1 through 20.');
  const trial=tinkerTrial(input.trialId);
  if(!Array.isArray(input.programs)||input.programs.length!==trial.starts.length)fail('Each companion needs one three-card program.');
  const project={format:'pip-tinker-project',version:1,trialId:trial.id,name:text(input.name,trial.title),author:text(input.author,'A trail keeper'),programs:input.programs.map(normalizeProgram),parts:[]};
@@ -151,6 +152,7 @@ export function tinkerStep(input){
    if(tile?.kind==='echo'){const other=state.bots.findIndex(b=>b!==bot);bot.program=echoProgram(echoCards[other],tile.operation);restart=true;bot.last=`Echo learned ${state.bots[other].id} · ${ECHO_OPERATIONS[tile.operation]}`;}
    if(tile?.kind==='prism'){bot.program=transformProgram(bot.program,tile.operation);restart=true;bot.last='Prism changed the cards';}
    if(tile?.kind==='signal'){const windows=parts.filter(p=>p.kind==='receiver'&&p.channel===tile.channel),plates=parts.filter(p=>p.kind==='plate'&&p.channel===tile.channel);const powered=switchChannels.has(tile.channel)||Boolean(windows.length&&windows.every(p=>(state.received[p.id]||0)>=(p.parcels||1)))||Boolean(plates.length&&plates.every(occupied));bot.program=[...(powered?tile.alternate:tile.program)];restart=true;bot.last=`Signal loaded ${powered?'Powered':'Quiet'}`;}
+   if(tile?.kind==='dial')bot.last='Card Dial shifts on entry; Use keeps the normal card order';
    if(tile?.kind==='turnstile')bot.last='Parcel Turnstile takes fare on entry; Use keeps cargo';
    if(tile?.kind==='sync')bot.last='Rendezvous Post waits on entry; Use does not queue it';
    if(tile?.kind==='rail')bot.last='Switch Rail rides after entry; Use keeps it still';
@@ -184,6 +186,15 @@ export function tinkerStep(input){
    if(post){
     bot.syncing=true;
     bot.last=`Rendezvous · reached ${post.channel} post`;
+    state.events.push(`${bot.id}: ${bot.last}`);
+   }
+  }
+  if(state.project.version>=20&&direction&&!at(before,bot)){
+   const dial=parts.find(part=>part.kind==='dial'&&at(part,bot));
+   if(dial){
+    const previous=bot.index;
+    bot.index=dialNextCard(previous,dial.shift);
+    bot.last=`Card Dial · ${CARD_DIAL_LABELS[dial.shift]} · card ${previous+1} → ${bot.index+1} · ${CLOCKWORK_LABELS[bot.program[bot.index]]}`;
     state.events.push(`${bot.id}: ${bot.last}`);
    }
   }

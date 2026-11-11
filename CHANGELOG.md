@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.69.0 — 2026-11-11
+
+- Add the Card Dial finale and imported-blueprint previews that agree with actual Skip ahead and Rewind one behavior, including wraparound.
+- Guide the opening through Clocktower chapters with repair steps, meaningful milestones, locker contents, bridge forecasts, and home-signal progress.
+- Reset couriers consistently when returning to the bench, preserve edits and clears, and show an active-tool indicator with an Inspect garden action.
+- Explain safe spare mail and relay minimums, and keep completion actions visible below the fixed header on touch screens and enlarged text layouts.
+- Expand browser checks for manual repairs, wrong-route recovery, imports, save continuation, keyboard/touch controls, and the six-letter Card Dial finale.
+
 ## 0.68.0 — 2026-11-07
 
 - Add Parcel Turnstiles. Matching cargo pays on entry and powers a numbered circuit for one to six following turns. Wrong cargo stays safe.
