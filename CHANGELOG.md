@@ -3,6 +3,7 @@
 ## 0.69.0 — 2026-11-11
 
 - Add the Card Dial finale and imported-blueprint previews that agree with actual Skip ahead and Rewind one behavior, including wraparound.
+- Draw distinct Skip ahead and Rewind one stations on the garden and blueprint previews.
 - Guide the opening through Clocktower chapters with repair steps, meaningful milestones, locker contents, bridge forecasts, and home-signal progress.
 - Reset couriers consistently when returning to the bench, preserve edits and clears, and show an active-tool indicator with an Inspect garden action.
 - Explain safe spare mail and relay minimums, and keep completion actions visible below the fixed header on touch screens and enlarged text layouts.

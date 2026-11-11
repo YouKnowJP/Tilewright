@@ -9,12 +9,17 @@ export async function pipDialScenarios(scenario) {
     const mission=CARD_DIAL_FINALE,url=new URL(page.url());url.hash='pip='+tinkerCode(newDuoProject(mission.id));
     const press=selector=>page.locator(selector)[width<500?'tap':'click']();
     await page.goto(url.href);await waitForGameReady(page);await page.locator('#pip-studio[open]').waitFor();
+    const canvas=page.locator('#ps-canvas'),rendered=new Map();
+    const pixels=part=>canvas.evaluate((c,p)=>Array.from(c.getContext('2d').getImageData(p.x*50+8,p.y*50+10,30,20).data),part);
     for(const part of mission.solutionParts){
+      const before=await pixels(part);
       await press('[data-ps-jump=build-tools]');await chooseOption(page,'#ps-brush','dial');await chooseOption(page,'#ps-dial-shift',part.shift);
       await press('[data-ps-jump=canvas]');
-      const canvas=page.locator('#ps-canvas'),bounds=await canvas.boundingBox(),point={x:bounds.width*(part.x+.5)/mission.width,y:bounds.height*(part.y+.5)/mission.height};
+      const bounds=await canvas.boundingBox(),point={x:bounds.width*(part.x+.5)/mission.width,y:bounds.height*(part.y+.5)/mission.height};
       if(width<500)await page.touchscreen.tap(bounds.x+point.x,bounds.y+point.y);else await canvas.click({position:point});
+      const after=await pixels(part);assert.notDeepEqual(after,before,'A placed Card Dial has a visible station body.');rendered.set(part.shift,after);
     }
+    assert.notDeepEqual(rendered.get('skip'),rendered.get('rewind'),'Skip and Rewind dials have distinct artwork.');
     await press('[data-ps-jump=programs]');
     for(const [i,actor] of ['pip','sprout'].entries()){
       await press('#ps-actor-'+actor);

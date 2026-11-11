@@ -80,6 +80,15 @@ export function drawWorkshopObject(ctx, item, size = 24) {
   const rect = (color, x, y, w, h) => { ctx.fillStyle = color; ctx.fillRect(x, y, w, h); }, color = CHANNEL_COLORS[item.channel] || '#efc47a';
   const ring = (ink, x, y, r) => { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); };
   switch (item.kind) {
+    case 'pip-dial':
+      rect('#233f4a', 2, 3, 20, 20);
+      ring('#d4b67b', 12, 11, 8); ring('#183947', 12, 11, 6);
+      for (const [x, y] of [[7, 6], [15, 6], [11, 15]]) rect('#a9d6ba', x, y, 2, 2);
+      ctx.save();
+      if (item.shift === 'rewind') { ctx.translate(24, 0); ctx.scale(-1, 1); }
+      rect('#fff0bc', 9, 10, 9, 2); rect('#fff0bc', 14, 7, 2, 3); rect('#fff0bc', 14, 12, 2, 3);
+      ctx.restore();
+      break;
     case 'pip-turnstile':
       rect('#233f4a', 2, 4, 20, 17); rect('#e8cf96', 3, 4, 18, 3);
       rect('#e8cf96', 4, 7, 3, 13); rect('#e8cf96', 17, 7, 3, 13);
