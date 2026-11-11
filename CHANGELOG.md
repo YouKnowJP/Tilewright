@@ -8,6 +8,7 @@
 - Reset couriers consistently when returning to the bench, preserve edits and clears, and show an active-tool indicator with an Inspect garden action.
 - Explain safe spare mail and relay minimums, and keep completion actions visible below the fixed header on touch screens and enlarged text layouts.
 - Expand browser checks for manual repairs, wrong-route recovery, imports, save continuation, keyboard/touch controls, and the six-letter Card Dial finale.
+- Bound optional CI report uploads so report-storage failures cannot hold up a release after all required game checks pass.
 
 ## 0.68.0 — 2026-11-07
 
