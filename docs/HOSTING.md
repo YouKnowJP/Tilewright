@@ -40,6 +40,17 @@ has `pages: write` and `id-token: write`; GitHub's short-lived token/OIDC handle
 publication. No cross-repository key or hosting secret is required. Public
 source is readable but only authorized collaborators can push official changes.
 
+CI uses a versioned concurrency namespace so a GitHub-side orphaned run cannot
+hold the release queue indefinitely. Report uploads are optional, time-limited,
+and stop on cancellation; all game tests and the tested website artifact remain
+required. The publish job checks the current `main` SHA before deploying, so an
+obsolete validated run cannot replace a newer release.
+
+If cancellation and force cancellation reject an apparently active run as
+already completed, preserve the run metadata and use a new concurrency namespace
+for recovery. GitHub Support may still be needed to clear the orphaned record.
+Keep the test matrix and deployment checks intact during recovery.
+
 ## Verify and roll back
 
 Check Actions, open the public game, and read `release.json`: its sourceCommit

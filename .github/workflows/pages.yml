@@ -8,7 +8,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # The previous namespace contains a GitHub-side orphan that rejects cancellation.
+  group: ${{ github.workflow }}-release-v2-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -131,7 +132,7 @@ jobs:
       - name: Play Pip and Sprout in this browser
         run: npm run test:browser:pip -- ${{ matrix.engine }} --shard=${{ matrix.shard }}/3
       - name: Keep compatibility reports
-        if: always()
+        if: ${{ !cancelled() }}
         continue-on-error: true
         timeout-minutes: 1
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -148,6 +149,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
@@ -157,6 +159,16 @@ jobs:
       group: github-pages
       cancel-in-progress: false
     steps:
+      - name: Confirm release is the current main commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          main_sha=$(gh api "repos/${GITHUB_REPOSITORY}/commits/main" --jq '.sha')
+          if [ "$main_sha" != "$RELEASE_SHA" ]; then
+            echo "::error::The validated release is no longer the current main commit."
+            exit 1
+          fi
       - name: Configure GitHub Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - name: Publish tested game
