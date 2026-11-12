@@ -12,6 +12,7 @@ export async function checkPublic(directory=path.join(root,'dist')){
  for(const name of ['LICENSE','LEGACY-MIT-LICENSE.txt','THIRD_PARTY_NOTICES.md','PRIVACY.md','rights.html'])assert.equal(await readFile(path.join(directory,name),'utf8'),await readFile(path.join(root,name),'utf8'),`${name} must retain its complete source notice.`);
  assert.match(await readFile(path.join(directory,'LEGACY-MIT-LICENSE.txt'),'utf8'),/Copyright \(c\) 2025 Thong Pham/);assert.match(await readFile(path.join(directory,'rights.html'),'utf8'),/Earlier MIT releases remain an exception/);
  const html=await readFile(path.join(directory,'index.html'),'utf8');assert.match(html,/href="rights.html"/);assert.doesNotMatch(html,/OPEN SOURCE <span>·<\/span> MIT LICENSE/);
+ assert.equal(html.match(/data-release-version[^>]*>([^<]*)<\/span>/)?.[1],`v${release.version}`,'The displayed version must match the deployed release.');
  const manifest=JSON.parse(await readFile(path.join(directory,'manifest.webmanifest'),'utf8'));assert.equal(manifest.start_url,'./#play');assert.equal(manifest.scope,'./');
  return {version:release.version,files:files.length,sourceCommit:release.sourceCommit};
 }

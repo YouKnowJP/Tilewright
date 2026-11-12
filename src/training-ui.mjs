@@ -15,7 +15,7 @@ import { readPractice, savePractice, restorePractice } from './training-checkpoi
 export function createTrainingUI({ storage, getPreferences, onControls, onHome, onStory, onWorkshop }) {
   const $ = id => document.getElementById(`training-${id}`), root = $('camp'), canvas = $('map');
   const sessions = new Map(), progress = readTraining(storage);
-  let state = null, renderer = null, saveFailed = false, pointer = null, lastStep = '', lastKeyboardMove = 0,loadToken=0,practiceFailed=false;
+  let state = null, renderer = null, saveFailed = false, pointer = null, lastStep = '', lastKeyboardMove = 0,loadToken=0,practiceFailed=false,workshopTransferPending=false;
   drawAtlasArt($('play-art'), CHAPTERS[0]); drawAtlasArt($('create-art'), CHAPTERS.find(chapter => chapter.id === 'coast'));
 
   const editing = () => state?.kind === 'create' && state.mode === 'build';
@@ -203,7 +203,12 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
     }
   };
   $('link-text').addEventListener('copy', () => keep());
-  $('workshop').onclick = () => { if (state.won && onWorkshop(state.pack)) keep(); };
+  $('workshop').onclick = async () => {
+    if (!state?.won || workshopTransferPending) return;
+    const session=state;workshopTransferPending=true;
+    try { if (await onWorkshop(session.pack)) keep(session); }
+    finally { workshopTransferPending=false; }
+  };
   canvas.addEventListener('keydown', event => {
     if (root.hidden || $('lesson').hidden || event.ctrlKey || event.metaKey || event.altKey) return;
     const direction=movementKey(event.key,getPreferences().keyboardLayout);

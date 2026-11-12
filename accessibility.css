@@ -7,6 +7,7 @@
 .access-welcome p { margin:8px 0 14px; }
 #settings-access>.control-field { margin-top:22px; }
 #settings-access details { margin:20px 0; }
+#settings-access details>summary { min-height:44px; align-content:center; cursor:pointer; }
 #settings-access-reset { margin-top:12px; }
 .reading-view { padding:12px 16px;border:1px solid #8ba983;background:#102a29;color:#f4f5e8;border-radius:6px;margin:12px 0; }
 .reading-view summary { cursor:pointer;font-size:16px;font-weight:700;min-height:32px; }
@@ -33,6 +34,7 @@ body[data-game-contrast="high"] :is(button:disabled,input:disabled) { color:#bac
 body[data-game-contrast="high"] a { color:#fff4ac!important;text-decoration:underline; }
 :focus-visible { outline:3px solid #fff3a4;outline-offset:4px; }
 @media(max-width:600px) {
+  body:is([data-game-text="large"],[data-game-text="largest"]) .adventure-library-tabs { grid-template-columns:minmax(0,1fr); }
   body:is([data-game-text="large"],[data-game-text="largest"]) :is(.controls-pair,.book-library-heading,.book-form,.ws-filter-row) { grid-template-columns:minmax(0,1fr); }
   body:is([data-game-text="large"],[data-game-text="largest"]) .game-hud { display:grid;grid-template-columns:repeat(3,minmax(0,1fr)); }
   body:is([data-game-text="large"],[data-game-text="largest"]) .game-toolbar-actions { width:100%; }

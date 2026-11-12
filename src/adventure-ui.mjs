@@ -749,7 +749,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     canResumeBook(stage,rules){const meta=run?.stage.workshop?.storybook,source=savedTrail.data?.source;return Boolean(run?run.status!=='won'&&run.difficulty===rules&&JSON.stringify(meta)===JSON.stringify(stage.workshop.storybook):source?.kind==='book'&&savedTrail.data.header.difficulty===rules&&JSON.stringify(source.meta)===JSON.stringify(stage.workshop.storybook));},
     onPlay(stage, rules) { difficulty = rules; $('#game-difficulty').value = rules; start(stage); } });
   training = createTrainingUI({ storage, getPreferences:()=>front.preferences, onControls:()=>front.settings('controls',$('#training-controls-settings')), onHome: showTitle, onStory() { training.hide(); expeditions.show('story'); },
-    onWorkshop(pack) { if (!workshop.acceptDraft(pack)) return false; openWorkshop('build'); return true; } });
+    async onWorkshop(pack) { if (!await workshop.acceptDraft(pack)) return false; openWorkshop('build'); return true; } });
   front = createFrontMenu({ storage, sound, saveSession, onSaveReload,
     onMode(mode) { if (mode === 'guild') showGuild(); else expeditions.show(mode); },
     onContinue:continueTrail,

@@ -7,6 +7,10 @@
 :is(.pip-home,.pip-practice) input{width:100%;min-width:0;min-height:44px;padding:10px;background:#10313a;color:#fff2cf;border:1px solid #9ab494;font:inherit}
 :is(.pip-home,.pip-practice) input:focus-visible{outline:3px solid #ffe7a5;outline-offset:2px}
 :is(.pip-home,.pip-practice) summary{display:flex;align-items:center;min-height:44px;color:#ffe3a1;font-weight:700;cursor:pointer}
+:is(.pip-studio,.pip-home,.pip-practice,.pip-collection) summary{display:flex;align-items:center;gap:12px;min-height:44px;list-style:none}
+:is(.pip-studio,.pip-home,.pip-practice,.pip-collection) summary::-webkit-details-marker{display:none}
+:is(.pip-studio,.pip-home,.pip-practice,.pip-collection) summary::after{content:'';width:8px;height:8px;flex:0 0 8px;margin:0 4px 4px auto;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg)}
+:is(.pip-studio,.pip-home,.pip-practice,.pip-collection) details[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
 :is(.pip-home,.pip-practice) .front-dialog-heading{background:inherit}
 :is(.pip-home .front-dialog-heading,.pp-heading-line)>p{min-width:0;flex:1}
 :is(.pip-home .front-dialog-heading,.pp-heading-line)>button{flex:0 0 auto;min-width:104px;overflow-wrap:normal}
@@ -59,7 +63,7 @@
 .pip-studio{scroll-padding-top:calc(var(--ps-header-height,132px) + 20px)}
 body:is([data-game-text=large],[data-game-text=largest]) .pip-studio{scroll-padding-top:calc(var(--ps-header-height,132px) + 20px)}
 .pip-studio #ps-story-details{padding:0;border:0}
-.pip-studio #ps-story-details>summary{min-height:36px;font-size:.9em}
+.pip-studio #ps-story-details>summary{min-height:44px;font-size:.9em}
 .pip-studio #ps-best{font-size:.9em}
 .ps-story-goal{padding:10px 12px;border-left:3px solid #e4c481;background:#193b43;color:#fff0c5}
 #ps-card-help{color:#fff0c5}
@@ -80,6 +84,10 @@ body:is([data-game-text=large],[data-game-text=largest]) .pip-studio{scroll-padd
 .pip-studio[data-ps-tab=build] #pip-studio-title{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .pip-studio .ps-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:10px;padding-bottom:10px}
 .pip-studio .ps-tabs>button{min-width:0;padding:8px}
+.pip-studio input:not([type=checkbox]):not([type=radio]):not([type=range]){min-height:44px}
+/* Invention panels use the same green surfaces and brass edges as the camp. */
+body:not([data-game-contrast=high]) :is(.ph-card,.ps-slot,.ps-collection-card){background:#19372f;border-color:#6e8058;border-radius:3px}
+body:not([data-game-contrast=high]) :is(.ph-hero canvas,#ps-inspect,.ps-status,#pp-canvas,.pip-studio fieldset){border-radius:3px}
 .pip-studio #ps-remix{margin-top:10px}
 .title-home .title-menu>#title-pip{grid-column:1/-1}
 .pip-studio :is(#ps-programs,#ps-build-tools,#ps-actor-tabs):focus-visible{outline:3px solid #ffe7a5;outline-offset:4px}
@@ -97,6 +105,7 @@ body:is([data-game-text=large],[data-game-text=largest]) .pip-studio{scroll-padd
  .pip-studio #ps-story-details>summary{min-height:44px}
 }
 @media(max-width:400px){body:is([data-game-text=large],[data-game-text=largest]) .ps-jump-nav{grid-template-columns:1fr 1fr}}
+@media(max-width:360px){.pip-studio .ps-tabs{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){body:is([data-game-text=large],[data-game-text=largest]) .pip-studio .ps-tabs{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){body:is([data-game-text=large],[data-game-text=largest]) .pip-home .ph-tabs{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){body:is([data-game-text=large],[data-game-text=largest]) .ps-play-dock>.ps-actions{display:grid;grid-template-columns:minmax(0,1fr)}body:is([data-game-text=large],[data-game-text=largest]) .ps-play-dock button{overflow-wrap:normal}}

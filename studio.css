@@ -47,7 +47,9 @@ body:not(.playing) .palette-tip { color:#b9c5a7; }
 body:not(.playing) .palette-tip>span { display:none; }
 body:not(.playing) .canvas-panel { height:100%; align-self:stretch; background:#102c2b; }
 body:not(.playing) .toolbar { min-height:54px;background:#1b3730;border-color:#60774f; }
-body:not(.playing) .toolbar button { color:#d0dabb;min-width:34px;min-height:36px; }
+body:not(.playing) .toolbar button { color:#d0dabb;min-width:44px;min-height:44px; }
+body:not(.playing) .toolbar button:not(.game-select-trigger) { width:44px;height:44px; }
+body:not(.playing) .toolbar .game-select-trigger { display:block;place-items:normal;text-align:left; }
 body:not(.playing) .toolbar .tool.active { background:#4b4930;border-color:#cdb170;color:#ffe6ac; }
 body:not(.playing) .view-controls :is(select,.game-select-trigger) { color:#dddcb9; }
 body:not(.playing) .canvas-viewport { min-height:0; height:auto; background-color:#0c2528; background-image:radial-gradient(#8c9a6630 1px,transparent 1px); background-size:16px 16px; scrollbar-color:#738463 #0c2528; }
@@ -94,7 +96,7 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 .ws-heading-actions { display:flex;gap:6px;align-items:center; }
 .ws-heading-actions button { font-size:11px;padding:9px 12px; }
 .ws-navigation { margin:13px 0 12px; }
-.ws-navigation button { min-height:40px;padding:10px; }
+.ws-navigation button { min-height:44px;padding:10px; }
 .ws-banner { position:relative;isolation:isolate;display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:156px;padding:26px;margin:20px 0;border:1px solid #8f8f61;overflow:hidden;background:#1b3931; }
 #ws-scenery { position:absolute;inset:0 0 0 auto;z-index:-1;width:70%;height:100%;object-fit:cover;image-rendering:pixelated;opacity:.55;mask-image:linear-gradient(90deg,transparent,#000); }
 .ws-banner h3 { color:#f6dfaa;font:30px/1.3 Georgia,serif;margin:9px 0; }
@@ -113,18 +115,20 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 .workshop-designing .ws-heading h2 { font-size:25px; }
 .workshop-designing .ws-heading { padding-bottom:10px; }
 .workshop-designing .ws-status { padding:8px 12px;margin-bottom:11px; }
-.workshop-designing .ws-build-heading { margin-bottom:11px;gap:14px; }
+.workshop-designing .ws-build-heading { margin-bottom:11px;gap:14px;flex-wrap:wrap;align-items:start; }
+.workshop-designing .ws-build-heading>div:first-child { flex:1 1 260px;min-width:0; }
+.workshop-designing .ws-build-heading>div:last-child { flex:1 1 420px;min-width:0; }
 .workshop-designing .ws-build-heading .title-kicker { display:none; }
 .workshop-designing .ws-build-heading h3 { font-size:24px;margin:0 0 4px; }
 .workshop-designing .ws-build-heading p { font-size:11px;line-height:1.6; }
 .ws-journey-bar { display:flex;gap:0;margin:0 0 13px;border:1px solid #566e50;background:#142f2b; }
-.playing .ws-journey-bar button { border:0;border-right:1px solid #566e50;box-shadow:none;flex:1;text-align:left;font:11px/1.6 ui-monospace,monospace;padding:9px 13px;min-height:36px;color:#d2d8b8;background:transparent; }
+.playing .ws-journey-bar button { border:0;border-right:1px solid #566e50;box-shadow:none;flex:1;text-align:left;font:11px/1.6 ui-monospace,monospace;padding:9px 13px;min-height:44px;color:#d2d8b8;background:transparent; }
 .playing .ws-journey-bar button:last-child { border-right:0; }
 .ws-journey-bar span { color:#dabc7d;margin-right:10px;font-size:10px; }
 .ws-studio { grid-template-columns:minmax(0,1fr) 305px;gap:13px;height:clamp(460px,calc(100svh - 305px),900px); }
 .ws-workspace { min-height:0;overflow:hidden; }
 .ws-map-toolbar { padding:7px;flex-shrink:0; }
-.ws-map-toolbar button { min-height:34px; }
+.playing .ws-map-toolbar button { min-width:44px;min-height:44px; }
 .ws-quick-brushes { display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;padding:8px;background:#15322d;border-bottom:1px solid #536d4d;flex-shrink:0; }
 .playing .ws-quick-brushes button { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:57px;padding:6px 2px;font:9px/1.4 ui-monospace,monospace;border-color:#4c6850;background:#1e3b32; }
 .ws-quick-brushes canvas { image-rendering:pixelated;width:24px;height:24px; }
@@ -135,7 +139,7 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 #ws-active-brush { image-rendering:pixelated;width:24px;height:24px;flex-shrink:0; }
 #ws-brush-label { margin-right:auto; }
 .ws-quest-strip { display:flex;gap:5px;flex-wrap:wrap;padding:8px;border-top:1px solid #536e4f;background:#17352e;flex-shrink:0; }
-.playing .ws-quest-strip button { display:flex;align-items:center;gap:6px;padding:5px 8px;font-size:10px;min-height:30px;background:#122e2b;border-color:#526d4f;box-shadow:none; }
+.playing .ws-quest-strip button { display:flex;align-items:center;gap:6px;padding:5px 8px;font-size:10px;min-height:44px;background:#122e2b;border-color:#526d4f;box-shadow:none; }
 .ws-quest-strip canvas { width:19px;height:19px;image-rendering:pixelated; }
 .ws-inspector { height:100%;max-height:none; }
 .ws-inspector-heading { padding:13px 14px 10px; }
@@ -151,7 +155,7 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 .ws-detail-chapter label { margin:0 0 15px; }
 .ws-detail-chapter fieldset { border:0;margin:18px 0 8px;padding:0; }
 .ws-detail-chapter legend { font:11px ui-monospace,monospace;color:#d6d2aa; }
-.ws-props>button[type="submit"] { width:100%;margin-top:15px;min-height:42px; }
+.ws-props>button[type="submit"] { width:100%;margin-top:15px;min-height:44px; }
 .ws-readiness>div:not(.ws-readiness-actions) { border:1px solid #627753;background:#112e2a;padding:14px;margin:12px 0; }
 .ws-readiness strong { color:#e9d8a7;font:12px ui-monospace,monospace; }
 .ws-readiness p { color:#bdcfaf;font-size:12px;line-height:1.7;margin:7px 0 0; }
@@ -182,7 +186,7 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
   .ws-inspector-dialog .ws-inspector { height:auto;min-height:0;max-height:calc(100svh - 28px); }
   .ws-inspector-dialog .ws-inspector-scroll { max-height:calc(100svh - 150px); }
   .ws-panel-shortcuts { flex-shrink:0;padding:8px; }
-  .ws-panel-shortcuts button { min-height:38px; }
+  .ws-panel-shortcuts button { min-height:44px; }
 }
 @media(max-width:760px) {
   body:not(.playing) main { padding:0 10px; }
@@ -214,7 +218,7 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
   .ws-heading h2 { font-size:27px; }
   .ws-heading .title-kicker { display:none; }
   .ws-heading-actions { flex-wrap:wrap;justify-content:end;gap:5px;max-width:170px; }
-  .ws-heading-actions button { font-size:9px;padding:7px 8px;min-height:34px; }
+  .ws-heading-actions button { font-size:10px;padding:8px;min-height:44px; }
   #ws-terrain { display:none; }
   .ws-banner { padding:20px;flex-wrap:wrap;min-height:180px; }
   .ws-banner h3 { font-size:27px; }
@@ -228,7 +232,7 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
   .workshop-designing .ws-build-heading { gap:8px; }
   .workshop-designing .ws-build-heading h3 { font-size:22px; }
   .workshop-designing .ws-build-heading p { font-size:10px; }
-  .workshop-designing .ws-build-heading button { min-height:36px; }
+  .workshop-designing .ws-build-heading button { min-height:44px; }
   .ws-journey-bar { margin-bottom:9px; }
   .playing .ws-journey-bar button { font-size:9px;padding:7px 5px;text-align:center; }
   .ws-journey-bar span { display:block;margin:0 0 3px; }
@@ -259,7 +263,7 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 @media(max-width:760px) {
   .workshop-designing .ws-heading-actions { max-width:none;flex-wrap:nowrap; }
   .workshop-designing .ws-heading h2 { font-size:22px;white-space:nowrap; }
-  .workshop-designing .ws-heading-actions button { padding:7px 6px;font-size:8px; }
+  .workshop-designing .ws-heading-actions button { padding:8px 6px;font-size:10px; }
   .workshop-designing .ws-status { min-height:29px;font-size:9px;line-height:1.6; }
   .ws-journey-bar span { display:inline;margin:0 5px 0 0; }
   .playing .ws-journey-bar button { padding:8px 4px; }
@@ -279,7 +283,38 @@ body:not(.playing) .shortcut-list dd { color:#eddbac; }
 .playing .ws-journey-bar button[aria-current="step"] { color:#f5dfab;background:#324330;box-shadow:inset 3px 0 #c9ad70; }
 @media(max-width:760px) {
   .playing .ws-quick-brushes button { font-size:8.5px;gap:4px;min-height:54px; }
-  .ws-map-toolbar button:not(#ws-brush)>span { display:none; }
+  .ws-map-toolbar button:not(#ws-brush):not(.game-select-trigger)>span { display:none; }
+}
+
+/* Phone editing keeps complete zoom labels and separates drawing from history. */
+@media(max-width:760px) {
+  .workshop-designing .ws-heading { flex-wrap:wrap; }
+  .workshop-designing .ws-heading-actions { margin-left:auto; }
+  .playing .ws-journey-bar button { min-height:44px; }
+  .playing .ws-map-toolbar { display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;padding:6px; }
+  .playing .ws-map-toolbar button { min-width:44px;min-height:44px; }
+  .ws-map-toolbar #ws-brush { grid-column:span 3; }
+  .ws-map-toolbar #ws-zoom-control { grid-column:span 4;width:100%;max-width:none;text-align:left;justify-content:start;padding-left:12px; }
+  .playing .ws-quest-strip button { min-height:44px; }
+  .playing .ws-studio { height:clamp(560px,calc(100svh - 325px),820px); }
+  body:not(.playing) :is(.mode-switcher,.document-actions,.maker-compact-tools) button { min-height:44px; }
+  body:not(.playing) .source-link { min-height:44px; }
+  body:not(.playing) .workspace { height:clamp(420px,calc(100svh - 390px),700px); }
+  body:not(.playing) .toolbar { display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;padding:7px; }
+  body:not(.playing) .tool-buttons { grid-column:1/-1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px; }
+  body:not(.playing) .toolbar button { min-width:44px;height:44px;min-height:44px; }
+  body:not(.playing) .toolbar .tool-buttons button { width:100%; }
+  body:not(.playing) .history-buttons { padding:0;border:0;gap:6px; }
+  body:not(.playing) .view-controls { margin:0;display:grid;grid-template-columns:44px minmax(100px,1fr);gap:6px; }
+  body:not(.playing) .toolbar .game-select-trigger { width:100%;height:44px;max-width:none;padding-left:10px; }
+  body:not(.playing) #help-button { min-height:44px;padding:8px; }
+}
+@media(max-width:480px) {
+  .ws-quick-brushes { grid-template-columns:repeat(4,minmax(0,1fr)); }
+}
+@media(any-pointer:coarse) {
+  body:not(.playing) :is(.mode-switcher,.document-actions,.maker-compact-tools) button,
+  body:not(.playing) :is(.source-link,#help-button,.maker-guide-link) { min-height:44px; }
 }
 .ws-shell-navigation { position:sticky;top:0;z-index:6;background:#102b2bf5;padding-top:3px;backdrop-filter:blur(3px); }
 .creator-guide-art,.ws-dialog-scenery { object-position:center bottom; }

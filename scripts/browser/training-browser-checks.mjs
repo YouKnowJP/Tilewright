@@ -59,7 +59,7 @@ export async function checkTraining(browserType, { baseURL = 'http://127.0.0.1:4
       try {
         const page = await context.newPage(), errors = []; page.on('pageerror', e => errors.push(e.message)); page.on('response', r => { if (r.status() >= 400) errors.push(`${r.status()}: ${r.url()}`); });
         await page.goto(baseURL); await page.locator('#game-title-screen').waitFor(); await page.locator('#startup-status').waitFor({ state: 'hidden' });
-        assert.equal(await page.locator('#editor').isVisible(), false); assert.equal(await page.locator('a[href*="github.com"]').count(), 0);
+        assert.equal(await page.locator('#editor').isVisible(), false); assert.equal(await page.locator('a[href*="github.com"]:visible').count(), 0);
         await enterFirstTrail(page); await page.locator('#adventure-canvas').focus(); await page.keyboard.press('ArrowUp');
         const position = await page.locator('#adventure-canvas').getAttribute('aria-label');
         await page.locator('#game-home').click(); const before = await saves(page);

@@ -52,9 +52,9 @@
 .training-talk h4 { font:600 23px Georgia,serif; color:#f4deab; margin:0 0 10px; }
 .training-talk p,.training-plan-copy p { font:var(--adventure-text-size,16px)/1.7 Georgia,serif; margin:0 0 14px; }
 #training-story { margin:16px 0 8px; border-top:1px solid #8a8254; padding-top:12px; }
-#training-story summary { cursor:pointer; font:16px/1.6 Georgia,serif; color:#f0d8a0; }
+#training-story summary { cursor:pointer; font:16px/1.6 Georgia,serif; color:#f0d8a0; min-height:44px; align-content:center; }
 #training-story-form label,#training-link-fallback { display:block; font:13px/1.6 ui-monospace,monospace; margin-top:12px; color:#dddfc5; }
-#training-story-form input,#training-story-form textarea,#training-link-text { width:100%; min-width:0; display:block; background:#102c27; color:#f0e6c6; border:1px solid #8a8254; padding:9px; font:15px/1.5 Georgia,serif; }
+#training-story-form input,#training-story-form textarea,#training-link-text { width:100%; min-width:0; min-height:44px; display:block; background:#102c27; color:#f0e6c6; border:1px solid #8a8254; padding:9px; font:15px/1.5 Georgia,serif; }
 #training-story-form textarea { resize:vertical; }
 .training-coach .training-restart { color:#b7ccb8; margin-top:20px; border-color:#5a735e; }
 .training-earned { color:#f5da94!important; }

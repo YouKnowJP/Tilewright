@@ -5,7 +5,7 @@ Start with the [repository organization guide](README.md) or the
 staged addition that currently exists. Generated builds, browser
 captures, dependencies, and operating-system metadata are excluded.
 
-**600 files in 15 folders.** Stage new files before refreshing. Run
+**601 files in 15 folders.** Stage new files before refreshing. Run
 `node /path/to/Tilewright/scripts/repository-files.mjs`, or run
 `node scripts/repository-files.mjs` from the repository root.
 
@@ -23,7 +23,7 @@ captures, dependencies, and operating-system metadata are excluded.
 | [examples/](../examples/) | 1 |
 | [icons/](../icons/) | 3 |
 | [scripts/](../scripts/) | 6 |
-| [scripts/browser/](../scripts/browser/) | 78 |
+| [scripts/browser/](../scripts/browser/) | 79 |
 | [scripts/solvers/](../scripts/solvers/) | 6 |
 | [src/](../src/) | 206 |
 | [tests/](../tests/) | 92 |
@@ -259,7 +259,7 @@ captures, dependencies, and operating-system metadata are excluded.
 </details>
 
 <details>
-<summary>scripts/browser/ — 78 files</summary>
+<summary>scripts/browser/ — 79 files</summary>
 
 - [accessibility-browser-checks.mjs](../scripts/browser/accessibility-browser-checks.mjs)
 - [adventure-browser-checks.mjs](../scripts/browser/adventure-browser-checks.mjs)
@@ -278,6 +278,7 @@ captures, dependencies, and operating-system metadata are excluded.
 - [guild-browser-checks.mjs](../scripts/browser/guild-browser-checks.mjs)
 - [horizon-browser-checks.mjs](../scripts/browser/horizon-browser-checks.mjs)
 - [interface-browser-checks.mjs](../scripts/browser/interface-browser-checks.mjs)
+- [interface-polish-browser-checks.mjs](../scripts/browser/interface-polish-browser-checks.mjs)
 - [journal-browser-checks.mjs](../scripts/browser/journal-browser-checks.mjs)
 - [lab-browser-checks.mjs](../scripts/browser/lab-browser-checks.mjs)
 - [layout-browser-checks.mjs](../scripts/browser/layout-browser-checks.mjs)

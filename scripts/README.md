@@ -36,7 +36,9 @@ The release catalogue includes the latest story and creator cases:
 four-mission phone/desktop clears, individual/bulk timing/relay/card/power
 composition with capture and exchange, part editing/protected imports, exact
 memory, pause and wind checkpoints through reload/Undo/backup, and enlarged menus
-with old/new replays. It has **285 distinct cases**, split **57/57/57/57/57**. All earlier
+with old/new replays. It has **290 distinct cases**, split **58/58/58/58/58**. Creator
+controls, complete zoom labels, tablet headings, narrow navigation, and enlarged
+Pip tabs are checked at 320/390/768/844/1440-pixel sizes. All earlier
 road, scale, tide, keyboard, controller, interruption, touch, fullscreen and
 practice checks remain required. Ordinary cases reject every unexpected console,
 script or failed-asset response.
@@ -55,7 +57,7 @@ npm run test:browser:pip -- webkit --shard=3/3
 The runner checks seventy-two Pip story, creator, and legacy save/share cases,
 records the built release metadata, closes the browser/server and removes its
 owned temporary build. Firefox and WebKit each run in three required CI groups of
-24, 24 and 24, retaining all seventy-two cases per engine within the existing twenty-minute
+26, 26 and 25, retaining all seventy-seven cases per engine within the existing twenty-minute
 job limit. Original action deadlines and full tracing remain enforced. Reports
 record the group and use distinct filenames; all six compatibility jobs and the full release
 suite must pass before publication. Reports are retained for seven days. Unsharded

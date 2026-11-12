@@ -85,6 +85,7 @@ export async function checkFrontMenu(browserType, { baseURL = 'http://127.0.0.1:
         assert.equal(await page.locator('#game-turns').textContent(), '0');
         assert.equal(await page.evaluate(() => localStorage.getItem('tilewright.document.v1')), original);
         await clickControl(page, '#game-title-menu'); await page.locator('#title-mapmaker').click();
+        await page.locator('#map').focus();await page.keyboard.press('Space');
         await page.locator('#new-map').click(); await page.locator('#new-width').fill('1'); await page.locator('#new-height').fill('1');
         await withGameConfirmation(page,true,async()=>{await page.locator('#new-form button[type="submit"]').click();}); await page.locator('#mode-play').click();
         await page.locator('#title-play').click(); await page.locator('#front-custom').click();

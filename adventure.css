@@ -165,7 +165,7 @@
 .game-field-guide summary { font-size:13px; cursor:pointer; color:#627953; }
 [hidden].expedition-hub,[hidden].game-expedition-banner,[hidden].game-expedition-kit,#trail-picker[hidden],#game-cargo[hidden] { display:none; }
 .adventure-library-tabs { display:flex; gap:6px; margin:0 0 16px; }
-.adventure-library-tabs button { font-size:12px; padding:11px 15px; }
+.adventure-library-tabs button { font-size:12px; padding:11px 15px; min-width:0; white-space:normal; overflow-wrap:normal; }
 .adventure-library-tabs button[aria-pressed="true"] { background:#e5edd9; border-color:#9fb18c; }
 .expedition-hub { background:#fffefa; border:1px solid #d0ddc5; border-radius:9px; padding:25px; margin-bottom:20px; }
 .expedition-intro h2 { font-size:26px; font-weight:500; letter-spacing:-.6px; margin:9px 0; }
@@ -183,7 +183,7 @@
 .expedition-hub-actions button { min-height:42px; font-size:12px; }
 .expedition-checkpoint { margin:17px 0 0; }
 .expedition-logbook { border-top:1px solid #e0e6d7; margin-top:20px; padding-top:16px; }
-.expedition-logbook summary { font-size:13px; cursor:pointer; color:#58774a; }
+.expedition-logbook summary { font-size:13px; cursor:pointer; color:#58774a; min-height:44px; align-content:center; }
 .expedition-logbook>p,#expedition-bests p { font-size:11px; line-height:1.8; margin:15px 0; color:#7e8e6d; }
 .expedition-logbook h3 { font-size:13px; font-weight:500; margin-top:24px; }
 .expedition-badges { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:16px; }
@@ -457,9 +457,10 @@ summary:focus-visible,[role="tabpanel"]:focus-visible { outline:3px solid #b67d4
 }
 .library-notice { padding:12px 15px; background:#f7edcf; color:#72562f; border-radius:6px; font-size:12px; line-height:1.6; }
 .library-shortcuts { margin:16px 0 24px; color:#617451; font-size:12px; }
-.library-shortcuts summary { width:max-content; max-width:100%; padding:9px 0; cursor:pointer; }
+.library-shortcuts summary { width:max-content; max-width:100%; min-height:44px; padding:12px 0; cursor:pointer; }
 .library-shortcuts>div { display:flex; flex-wrap:wrap; gap:7px; padding-top:10px; }
 .library-shortcuts button { font-size:11px; min-height:40px; }
+@media(max-width:360px){.adventure-library-tabs{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:760px) {
   .library-return { margin:12px 0 18px; }
   .library-return span { display:none; }

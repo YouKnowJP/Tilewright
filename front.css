@@ -47,7 +47,7 @@ body.game-front { background:#102b2b; }
 .front-dialog::backdrop { background:#081f23c9; backdrop-filter:blur(3px); }
 .front-dialog-heading { display:flex; gap:12px; align-items:center; justify-content:space-between; position:sticky; top:-24px; z-index:2; padding:8px 0; background:#193630; }
 .front-dialog-heading p { margin:0; }
-.front-dialog-heading button { min-height:38px; padding:6px 12px; }
+.front-dialog-heading button { min-height:44px; padding:8px 12px; }
 .front-dialog h2 { font:600 29px/1.3 Georgia,serif; color:#f4dca6; margin:20px 0; }
 .front-dialog p { font-size:var(--adventure-text-size,16px); line-height:1.7; color:#dce5d1; }
 .front-dialog .title-kicker { color:#cdb878; font-size:10px; }
@@ -133,7 +133,7 @@ body[data-game-motion="reduced"] .adventure *,body[data-game-motion="reduced"] .
   .title-home h1 { font-size:48px; margin:12px 0 16px; }
   .title-story { font-size:14px; line-height:1.6; margin-bottom:16px; }
   .title-menu { gap:6px; }
-  .title-menu button { min-height:42px; padding:8px 15px; }
+  .title-menu button { min-height:44px; padding:8px 15px; }
   .title-footnote { font-size:10px; margin-top:16px; }
 }
 /* Keep the front door short; every destination remains available. */
@@ -152,6 +152,7 @@ body[data-game-motion="reduced"] .adventure *,body[data-game-motion="reduced"] .
 }
 .title-home .title-menu>button{grid-column:auto}
 .title-home .title-menu>#title-play,.title-home .title-menu>#title-continue,.title-home .title-menu>#title-expedition{grid-column:1/-1}
+@media(max-width:360px){.title-home .title-menu{grid-template-columns:minmax(0,1fr)}.title-home .title-menu button{overflow-wrap:normal}}
 #game-confirm-dialog[open]{display:flex;flex-direction:column;overflow:hidden;max-height:calc(100dvh - 32px)}
 #game-confirm-dialog h2,#game-confirm-dialog .dialog-actions{flex-shrink:0}
 #game-confirm-copy{overflow:auto;min-height:0;flex:1 1 auto;outline-offset:3px}

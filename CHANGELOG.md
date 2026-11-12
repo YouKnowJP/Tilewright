@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.69.1 — 2026-11-12
+
+- Wait for tutorial-to-Workshop replacement confirmation before leaving the completed lesson or marking the transfer complete. Cancel preserves the original draft and lesson; repeated clicks cannot begin another transfer.
+- Keep the Workshop world title readable beside its actions at tablet widths.
+- Restore complete zoom labels in both editors and arrange phone drawing, history, and zoom controls in aligned rows with full touch areas.
+- Reflow narrow-phone navigation and Pip workshop tabs without clipped or broken words; enlarge creator fields and disclosure controls.
+- Add visible expand arrows to Pip help panels and use the camp’s green surfaces and brass edges for invention cards.
+- Generate the Mapmaker version badge from the release version so the published interface cannot show an older release.
+- Align ending actions and keep every action reachable with enlarged reading text.
+- Add required Chromium, Firefox, and WebKit checks for tutorial cancellation, editor touch targets, zoom changes, tablet headings, narrow navigation, filters, enlarged reading tabs, and completed-level actions.
+
 ## 0.69.0 — 2026-11-11
 
 - Add the Card Dial finale and imported-blueprint previews that agree with actual Skip ahead and Rewind one behavior, including wraparound.

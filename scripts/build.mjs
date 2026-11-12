@@ -32,6 +32,9 @@ export async function build(destination = path.join(ROOT, 'dist')) {
       await cp(path.join(ROOT, file), path.join(staging, file));
     }
     const { version } = JSON.parse(await readFile(path.join(ROOT, 'package.json'), 'utf8'));
+    const indexPath=path.join(staging,'index.html');
+    const index=await readFile(indexPath,'utf8');
+    await writeFile(indexPath,index.replace(/(<span\b[^>]*\bdata-release-version[^>]*>)[^<]*(<\/span>)/,`$1v${version}$2`));
     let sourceCommit=null;try{sourceCommit=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim();}catch{}
     await writeFile(path.join(staging,'release.json'),JSON.stringify({project:'tilewright',version,repository:'https://github.com/YouKnowJP/Tilewright',playURL:'https://youknowjp.github.io/Tilewright/',sourceCommit,sourceVisibility:'public',legacyBaseline:'c1c7534e4641e0385293af004d1c5c7346e0a920',license:'SEE LICENSE IN LICENSE'},null,2)+'\n');
     await writeFile(path.join(staging, marker), JSON.stringify({ project: 'tilewright', version, files: PUBLIC_FILES }, null, 2) + '\n');

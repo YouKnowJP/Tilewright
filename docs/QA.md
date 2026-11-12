@@ -1,5 +1,33 @@
 # Verification record
 
+## Interface audit and tutorial transfer — v0.69.1
+
+The audit covers the main menu, adventure selection, Pip & Sprout, both editors,
+training, Storybooks, Trailhouse, options, journeys, imports, and endings. Layout
+captures cover 320, 390, 768, 844 and 1440-pixel widths, including a short landscape
+window. The fixes restore complete zoom labels, preserve a readable tablet title,
+enlarge touch areas, reflow narrow navigation, add disclosure arrows, and align
+cards and ending actions with the forest-and-brass presentation. Build metadata
+now supplies the displayed version.
+
+The tutorial transfer waits for the draft replacement decision. Creator lessons
+played at phone and desktop sizes verify that Cancel retains the completed lesson and the
+original draft bytes; Accept transfers the actual world with its verified proof.
+Five new required cases also exercise both zoom menus, all five layout sizes,
+search, standard/largest reading tabs, and every ending action after a real win.
+The release catalogue has 290 Chromium cases and 77 each in Firefox and WebKit.
+The five Chromium groups contain 58 cases each; compatibility groups contain
+26, 26 and 25 cases without dropping prior coverage.
+
+Extended browser suites cover front navigation, play layout, settings, dropdowns,
+accessibility, controller/focus behavior, training, Workshop, Trailhouse,
+Storybooks, save backup/recovery, isolated journeys, and creator tools. Checks
+passed in all thirteen extended suites; all forty object inspectors and the
+advertised featured-world shelf were exercised. The 2,165 Node tests, static
+package checks, and repository references pass. The five new scenarios also pass
+locally in Chromium and WebKit. Checks use browser/device emulation. Physical devices, native Safari, assistive
+technology, and a human usability study are separate checks and are not claimed.
+
 ## Meeting House and timing preview — v0.67.0
 
 The four worked routes clear in 12, 19, 21 and 127 turns. The 2,142 Node tests

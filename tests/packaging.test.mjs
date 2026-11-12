@@ -14,6 +14,8 @@ test('static builds contain only public assets and can be rebuilt', async () => 
     assert.equal(result.files.length, PUBLIC_FILES.length + GENERATED_FILES.length);
     const marker = JSON.parse(await readFile(path.join(destination, '.tilewright-build.json'), 'utf8'));
     assert.equal(marker.project, 'tilewright');
+    const html=await readFile(path.join(destination,'index.html'),'utf8');
+    assert.equal(html.match(/data-release-version[^>]*>([^<]*)<\/span>/)?.[1],`v${result.version}`,'The player sees the actual built release version.');
     for (const file of PUBLIC_FILES) assert.ok((await readFile(path.join(destination, file))).length > 0);
     assert.ok(!(await readdir(destination)).includes('tests'));
     await build(destination);

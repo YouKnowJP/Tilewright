@@ -77,6 +77,10 @@ body[data-control-size=large]{--console-width:300px}body[data-control-size=large
 @media(max-height:540px) and (min-width:500px){.playing #adventure[data-view=play] .game-main{grid-template-columns:minmax(0,1fr) var(--console-width)}}
 .playing #game-overlay:not([hidden]){position:fixed;inset:max(12px,var(--game-safe-top)) 12px max(12px,var(--game-safe-bottom));z-index:35;width:min(480px,calc(100vw - 24px));max-width:480px;box-sizing:border-box;max-height:calc(var(--play-height,100dvh) - max(12px,var(--game-safe-top)) - max(12px,var(--game-safe-bottom)));padding:22px;margin:auto;height:max-content;overflow-y:auto}
 .playing .game-overlay button{min-height:44px;font-size:13px}.playing .game-overlay #game-primary{flex:1 0 100%}
+.playing .game-overlay>div:last-child{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.playing .game-overlay>div:last-child>button{min-width:0;white-space:normal;overflow-wrap:normal}
+.playing .game-overlay #game-primary{grid-column:1/-1;width:100%}
+@media(max-width:400px){body:is([data-game-text=large],[data-game-text=largest]) .game-overlay>div:last-child{grid-template-columns:minmax(0,1fr)}}
 #game-fullscreen{display:grid;place-items:center}#game-fullscreen svg{width:22px;height:22px}#game-fullscreen[data-active=true] svg{transform:rotate(180deg) scale(.8)}
 
 .playing #game-layout:has(#game-overlay:not([hidden])) .game-main{height:100%}
