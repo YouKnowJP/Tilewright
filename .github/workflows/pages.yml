@@ -57,7 +57,7 @@ jobs:
     name: Built game / Chromium ${{ matrix.shard }}/5
     runs-on: ubuntu-24.04
     # Keep all cases across five balanced groups; per-action timeouts stay unchanged.
-    timeout-minutes: 35
+    timeout-minutes: 40
     strategy:
       fail-fast: false
       matrix:
@@ -105,7 +105,7 @@ jobs:
   pip-compatibility:
     name: Pip compatibility / ${{ matrix.engine }} ${{ matrix.shard }}/3
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:

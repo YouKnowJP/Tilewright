@@ -78,5 +78,7 @@
  .training-intro { font-size:16px; margin:16px 0; }
 }
 .training-utility { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:12px 0; }
+.training-step-cue { display:none; }
+@media(max-width:760px),(max-height:540px){.training-step-cue{display:block;margin:8px 0;padding:10px 12px;border-left:3px solid #e4c481;background:#19372f;color:#fff0c5;font:13px/1.6 ui-monospace,monospace;overflow-wrap:anywhere}}
 .training-utility button { min-height:44px; flex:1; margin:0; }
 #training-undo-action[hidden] { display:none!important; }

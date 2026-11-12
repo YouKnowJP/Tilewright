@@ -1,5 +1,45 @@
 # Verification record
 
+## Opening playthrough and progression — v0.69.2
+
+Fresh, isolated saves cover the play lesson, Candlebrook, Copper Crossing and
+The Ember Vault, followed by the first six Pip & Sprout chapters. Initial play
+included a wrong push, a patrol collision, an empty dyeing attempt and a return
+loop that missed its handoff. These informed the guidance fixes; model solutions
+alone are not treated as evidence of a clear player interface.
+
+The classic openings allow clean three-star routes in **54, 50 and 86 turns**
+against targets of 70, 85 and 110. No map, enemy timing, turn target or puzzle
+rule was relaxed. Live goals now explain the key, parked crates, both plates,
+and the final beacon. Push feedback distinguishes a parked crate from a player
+briefly holding its plate. Warden advice explains the current and next tiles,
+and the collision message points to Undo.
+
+The play lesson keeps a short next-step cue beside phone controls. Wait cannot
+skip walking to Mira; the lever describes its safe river door. Completing a
+lesson reveals its next choices and preserves focus on the primary story action.
+The creator lesson keeps its existing building, checking and export flow.
+
+Pip’s first six chapters clear in **9, 11, 13, 19, 27 and 55 ticks**. Fixed signs
+show both banks on inspection. The card panel displays the actual running cards,
+including mirror and stamp changes, and marks the next card. Undo restores the
+previous running cards; returning to the bench restores the original draft.
+Repeating routes pause with visible recovery advice and keep the setup. The two
+return-loop chapters have a more generous 10–25 minute estimate.
+
+Four new required scenarios run at 390 and 1440 pixels in Chromium, Firefox and
+WebKit. They play actual controls through the lesson and all nine opening
+chapters, exercise wrong-push and collision recovery, check running cards and
+fixed banks, and verify completed progress after reload. The release catalogue
+now has **294 Chromium cases and 81 each in Firefox and WebKit**: five Chromium
+groups of 59/59/59/59/58, and three compatibility groups of 27 per engine. Job
+budgets allow the added full playthroughs; all per-action checks remain required.
+
+The **2,171 Node tests**, syntax checks, **238-file** production build, public
+artifact checks and repository references pass. Local opening replays cover
+Chromium and WebKit at both sizes. Coverage uses browser/device emulation;
+physical-device play and native Safari are not claimed.
+
 ## Interface audit and tutorial transfer — v0.69.1
 
 The audit covers the main menu, adventure selection, Pip & Sprout, both editors,

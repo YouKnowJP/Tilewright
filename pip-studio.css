@@ -40,3 +40,8 @@ body:is([data-game-text=large],[data-game-text=largest]) .ps-panel #ps-programs 
 body:is([data-game-text=large],[data-game-text=largest]) .ps-weave-truth{font-size:var(--reading-ui-size);line-height:1.55}
 
 .ps-beat-strip{padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:6px}.ps-beat-strip li{border:1px solid #779c8a;border-radius:5px;padding:8px;color:#fff1c4;background:#143942;overflow-wrap:anywhere}.pip-studio fieldset[id*=drum] .game-select-trigger>span{white-space:normal;text-overflow:clip;overflow-wrap:anywhere}
+
+.ps-card-context{padding:8px 10px;border-left:3px solid #e4c481;background:#193b43;color:#fff0c5;overflow-wrap:anywhere}.ps-panel #ps-programs label[data-next-card]{outline:2px solid #e4c481;outline-offset:3px;border-radius:3px}
+/* Running cards are readable reference cards while editing stays on the bench. */
+.ps-panel #ps-programs .game-select-trigger:disabled{opacity:1;color:#f1e7c8;background:#102c2b;border-style:dashed;padding-right:8px!important}
+.ps-panel #ps-programs .game-select-trigger:disabled::after{display:none}

@@ -75,7 +75,7 @@ export const DUO_MISSIONS=Object.freeze([
   'Eid: “Light both windows, then bring both partners home.” Quiet signal stamps keep the post running; once every jade window is full, Powered sends the partners to their P and S flags. Signals read the world when Use happens. Pip acts before Sprout.',
   'Pip: East / East / Use. Sprout: North / Wait / Use. Handoffs occur on 6 and 24; windows fill on 9 and 36. Sprout reaches home on 41. Pip samples Quiet before the second window fills, so it makes one final loop and arrives home on 55.',
   'Both windows shine. Both paper hats are home. The keepers leave a clear space beside the post office: a place for the next adventure you will build.')
-].map((m,i)=>Object.freeze({...m,chapter:i+1,difficulty:i<2?'Gentle':i<4?'Tricky':'Expert'})));
+].map((m,i)=>Object.freeze({...m,chapter:i+1,difficulty:i<2?'Gentle':i<4?'Tricky':'Challenging',minutes:i<4?'5–15 min':'10–25 min'})));
 export const DUO_STORIES=Object.freeze([...DUO_MISSIONS,...NIGHT_MAIL_MISSIONS,...DAWN_WORKSHOP_MISSIONS,...CANOPY_FAIR_MISSIONS,...AFTER_HOURS_MISSIONS,...CLOCKTOWER_MISSIONS,...STAR_ATLAS_MISSIONS,...LANTERN_WORKSHOP_MISSIONS,...BELLKEEPER_MISSIONS,...SEALKEEPER_MISSIONS,...RAINWRIGHT_MISSIONS,...TIDEKEEPER_MISSIONS,...BALANCEKEEPER_MISSIONS,...ECHO_POST_MISSIONS,...MIXING_HOUSE_MISSIONS,...KILN_HOUSE_MISSIONS,...WEAVE_HOUSE_MISSIONS,...DRUM_HOUSE_MISSIONS,...REST_HOUSE_MISSIONS,...WIND_HOUSE_MISSIONS,...COUNTER_HOUSE_MISSIONS,...RAIL_HOUSE_MISSIONS,...MEETING_HOUSE_MISSIONS,...TOLL_HOUSE_MISSIONS,CARD_DIAL_FINALE]);
 export const DUO_CUSTOM=Object.freeze({id:'duo-creator',title:'Your duo adventure',collection:'create',difficulty:'Creator',minutes:'Your pace'});
 export function duoMission(id){return DUO_STORIES.find(m=>m.id===id);}

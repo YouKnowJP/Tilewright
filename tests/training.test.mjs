@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { practiceWorld, paintPractice, tellPracticeStory, playLessonSteps, creatorLessonSteps, readTraining, saveTraining, practiceClear, TRAINING_KEY } from '../src/training-model.mjs';
+import { practiceWorld, paintPractice, tellPracticeStory, playLessonSteps, creatorLessonSteps, readTraining, saveTraining, practiceClear, practiceFeedback, TRAINING_KEY } from '../src/training-model.mjs';
 import { adventureStage, checkAdventure, verifyAdventureProof, editAdventure } from '../src/workshop-model.mjs';
 import { createRun, stepRun } from '../src/adventure.mjs';
 import { serializeAdventure, parseAdventure } from '../src/workshop-sharing.mjs';
@@ -66,4 +66,13 @@ test('training records use a separate bounded store and tolerate unavailable sto
 test('each practice world is independent from other sessions', () => {
   const a = practiceWorld(), b = practiceWorld(); a.map.layers[0].tiles[12] = 3; a.markers[0].x = 8;
   assert.notEqual(a.map.layers[0].tiles[12], b.map.layers[0].tiles[12]); assert.equal(b.markers[0].x, 2);
+});
+
+test('waiting does not skip walking instruction and lever feedback describes the safe lesson',()=>{
+ const first=createRun(adventureStage(practiceWorld())),waited=stepRun(first,'wait');
+ assert.equal(playLessonSteps(waited)[0].done,false);assert.equal(playLessonSteps(stepRun(waited,'up'))[0].done,true);
+ assert.match(playLessonSteps(first)[0].cue,/Walk north/);
+ let run=['right','right','interact:crossing'].reduce(stepRun,first);assert.match(practiceFeedback(run),/door is open/);assert.doesNotMatch(practiceFeedback(run),/ember/i);
+ run=stepRun(run,'interact:crossing');assert.match(practiceFeedback(run),/door is closed/);
+ assert.equal(practiceFeedback(first),first.message);
 });

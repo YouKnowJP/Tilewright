@@ -1,7 +1,7 @@
 import { yieldToBrowser } from './browser-yield.mjs';
 import { movementKey, controlHelp } from './adventure-controls.mjs';
 import { createMapInput } from './adventure-input.mjs';
-import { practiceWorld, paintPractice, tellPracticeStory, playLessonSteps, creatorLessonSteps, readTraining, saveTraining, practiceClear, PRACTICE_SPOTS } from './training-model.mjs';
+import { practiceWorld, paintPractice, tellPracticeStory, playLessonSteps, creatorLessonSteps, practiceFeedback, readTraining, saveTraining, practiceClear, PRACTICE_SPOTS } from './training-model.mjs';
 import { adventureStage, checkAdventure, editAdventure } from './workshop-model.mjs';
 import { createRun, nearbyInteractions } from './adventure.mjs';
 import { createAdventureRenderer } from './adventure-render.mjs';
@@ -85,6 +85,8 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
     $('progress').max = data.length; $('progress').value = data.filter(item => item.done).length;
     $('goal').textContent = finished ? (state.kind === 'play' ? 'Welcome to the trails.' : 'You made a real adventure.') : step.title;
     $('instruction').textContent = finished ? 'Take another road, replay this lesson, or keep creating. Your main game and original worlds are waiting where you left them.' : step.text;
+    const cue=finished?'Lesson complete. Choose your next adventure below.':`Next: ${step.cue||step.title}`;
+    if($('step-cue').textContent!==cue)$('step-cue').textContent=cue;
     $('hint').hidden = finished; $('hint-copy').textContent = step?.hint || '';
     $('mode-note').textContent = editing() ? 'Practice table · marks show where to paint' : `Turn ${state.run.turns} · ${state.run.status === 'won' ? 'Trail restored' : 'No enemies or timer'}`;
     $('brushes').hidden = !editing(); $('build-actions').hidden = !editing();
@@ -136,8 +138,8 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
     if (!state || editing() || state.plan || $('lesson').hidden) return;
     const before = state.run;state.rewind=advanceRewind(state.rewind,action);state.run=state.rewind.run;state.actions=state.rewind.actions;
     if (state.run.status === 'won' && before.status !== 'won' && state.kind === 'create') { state.won = true; state.pack = practiceClear(state.pack, state.actions); }
-    render(); message(state.run.message);
-    if (state.run.status === 'won') (state.kind === 'play' ? $('next') : $('download')).focus({ preventScroll: true });
+    render(); message(practiceFeedback(state.run));
+    if (state.run.status === 'won') { $('finish').scrollIntoView({block:'nearest'}); (state.kind === 'play' ? $('story-adventure') : $('download')).focus({ preventScroll: true }); }
   }
   function interact() { const target = $('target').value; if (target) act(`interact:${target}`); }
   function undoAction(){const dialog=document.querySelector('dialog[open]');if(root.hidden||$('lesson').hidden||dialog&&dialog.id!=='training-talk'||!state||editing()||!canRewind(state.rewind))return;state.rewind=undoRewind(state.rewind);state.run=state.rewind.run;state.actions=state.rewind.actions;state.plan=false;renderer=null;render();message(`Last action undone. Back to turn ${state.run.turns}.`);if(!state.run.dialogue)canvas.focus({preventScroll:true});}
@@ -177,13 +179,14 @@ export function createTrainingUI({ storage, getPreferences, onControls, onHome, 
     if ($('test').disabled) return;
     state.run = createRun(adventureStage(state.pack), { memory: freshMemory() }); state.actions = []; state.mode = 'play'; state.plan = false; renderer = null;
     state.rewind=beginRewind(state.run,{kind:'world',world:state.pack,origin:'build'});
-    render(); message(state.run.message); canvas.focus({ preventScroll: true });
+    render(); message(practiceFeedback(state.run)); canvas.focus({ preventScroll: true });
   };
   $('edit').onclick = () => { state.mode = 'build'; state.plan = false; renderer = null; render(); message('Back at your practice table. Editing your world removes its previous creator clear.'); canvas.focus({ preventScroll: true }); };
-  for (const button of root.querySelectorAll('[data-training-move]')) button.onclick = () => { act(button.dataset.trainingMove); canvas.focus({ preventScroll: true }); };
-  $('wait').onclick = () => { act('wait'); canvas.focus({ preventScroll: true }); };
-  $('interact').onclick = () => { interact(); if (!$('talk').open) canvas.focus({ preventScroll: true }); };
-  $('talk-close').onclick = () => { act('close-dialogue'); canvas.focus({ preventScroll: true }); };
+  function focusPlayingLesson(){if(state.run.status==='playing'&&!$('talk').open)canvas.focus({preventScroll:true});}
+  for (const button of root.querySelectorAll('[data-training-move]')) button.onclick = () => { act(button.dataset.trainingMove); focusPlayingLesson(); };
+  $('wait').onclick = () => { act('wait'); focusPlayingLesson(); };
+  $('interact').onclick = () => { interact(); focusPlayingLesson(); };
+  $('talk-close').onclick = () => { act('close-dialogue'); focusPlayingLesson(); };
   $('plan').onclick = () => { state.plan = true; render(); $('plan-close').focus({ preventScroll: true }); };
   $('plan-close').onclick = () => { state.plan = false; render(); canvas.focus({ preventScroll: true }); };
   $('download').onclick = () => {

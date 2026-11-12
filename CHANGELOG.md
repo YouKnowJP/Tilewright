@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.69.2 — 2026-11-12
+
+- Keep the current lesson prompt beside phone controls. Waiting no longer completes the walking lesson; the practice lever explains its safe crossing.
+- Bring lesson completion choices into view and make story chapters the primary next adventure, preserving keyboard and touch focus.
+- Give Candlebrook, Copper Crossing, and the Ember Vault clear live goals for keys, crates, the two-plate crossing, and the final beacon.
+- Distinguish a parked crate from a player temporarily standing on its plate. Explain warden timing and Undo recovery without changing puzzle rules or saved routes.
+- Show the actual running Pip and Sprout cards after route memories, mirrors, and signals change them. Mark the next card and restore the saved starting cards on the bench.
+- Let players inspect both banks of fixed route memories and signal stamps. Keep repeating-route recovery advice beside playback controls.
+- Give the opening return-loop and signal chapters a more generous time estimate and a Challenging label.
+- Add required phone and desktop playthroughs of the tutorial, first three classic trails, and first six Pip chapters, including mistakes, Undo, bench recovery, progress reload, and actual card changes.
+
 ## 0.69.1 — 2026-11-12
 
 - Wait for tutorial-to-Workshop replacement confirmation before leaving the completed lesson or marking the transfer complete. Cancel preserves the original draft and lesson; repeated clicks cannot begin another transfer.

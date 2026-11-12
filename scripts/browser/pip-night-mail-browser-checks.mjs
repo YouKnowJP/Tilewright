@@ -75,7 +75,7 @@ export async function pipNightMailScenarios(scenario){
   await press('#ps-next-story');
 
   await press('[data-ps-jump=programs]');await press('#ps-test-route');await press('#ps-event');
-  await playback.filter({hasText:'This route repeats'}).waitFor();
+  await playback.filter({hasText:'Both friends are only waiting'}).waitFor();
   await press('#ps-test');
   await plan(midnight,/An early visit can find K1 empty/);
   for(let i=0;i<3;i++)await press('#ps-step');

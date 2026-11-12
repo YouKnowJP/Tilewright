@@ -1,4 +1,5 @@
 import {createPipStudio} from './pip-studio-ui.mjs';
+import {trailFeedback,openingTrailSubtitle,openingKeeperText} from './adventure-opening.mjs';
 import {createClockworkUI} from './clockwork-ui.mjs';
 import { createPlayLayout } from './play-layout.mjs';
 import { createClueUI } from './adventure-clues-ui.mjs';
@@ -188,7 +189,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
       const art = document.createElement('canvas'); art.setAttribute('aria-hidden', 'true'); drawAtlasArt(art, themeFor(stage), index % 3);
       const record = guildRecords[`${stage.id}-${selectedKit}-${difficulty}`];
       button.append(art, Object.assign(document.createElement('strong'), { textContent: stage.name }),
-        Object.assign(document.createElement('span'), { textContent: stage.subtitle }),
+        Object.assign(document.createElement('span'), { textContent: openingTrailSubtitle(stage) }),
         Object.assign(document.createElement('small'), { className: 'guild-merit-preview', textContent: stage.guild.merits.map(id => MERITS[id]).join(' / ') }),
         Object.assign(document.createElement('small'), { textContent: record ? `${record.merits}/3 commendations · ${record.turns} turns · ${record.score} points` : 'Open job · three optional commendations' }));
       button.addEventListener('click', () => start(stage)); return button;
@@ -237,7 +238,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
         const number = Object.assign(document.createElement('span'), { className: 'trail-number', textContent: String(index + 1).padStart(2, '0') });
         const art = document.createElement('canvas'); art.className = 'trail-art'; art.setAttribute('aria-hidden', 'true'); drawAtlasArt(art, chapter, index % 3);
         const title = Object.assign(document.createElement('strong'), { textContent: stage.name });
-        const subtitle = Object.assign(document.createElement('span'), { className: 'trail-subtitle', textContent: stage.subtitle });
+        const subtitle = Object.assign(document.createElement('span'), { className: 'trail-subtitle', textContent: openingTrailSubtitle(stage) });
         const record = stageRecord(stage);
         const progress = Object.assign(document.createElement('span'), { className: 'trail-progress',
           textContent: !stageUnlocked(index) ? `Finish ${campaign[index - 1].name} to unlock` : record ? `${'★'.repeat(record.stars)} · ${record.turns} turns · ${record.score} points` : 'Unexplored · your next story awaits' });
@@ -381,7 +382,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#game-cargo').hidden = !stage.relic; $('#game-cargo').disabled = !run.carrying || paused || run.status !== 'playing';
     $('#game-cargo').textContent = run.cargoDelivered ? 'Relic delivered' : run.carrying ? 'Set relic down (X)' : 'Relic on trail';
     $('#game-restart').disabled = Boolean(journey && ['camp', 'won'].includes(journey.phase) || (book || house) && run.status === 'won');
-    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : house ? (stage.workshop.trailhouse.festival ? 'Lantern festival' : 'Keeper commission') : book ? stage.workshop.storybook.page?`Page ${stage.workshop.storybook.page} / branching story`:`Chapter ${stage.workshop.storybook.chapter+1}/${stage.workshop.storybook.length}` : stage.workshop ? 'Adventure Workshop' : run.guild ? stage.subtitle : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${stage.subtitle}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
+    $('#game-subtitle').textContent = `${journey ? `Expedition leg ${journey.leg + 1} of ${journey.config.length}` : house ? (stage.workshop.trailhouse.festival ? 'Lantern festival' : 'Keeper commission') : book ? stage.workshop.storybook.page?`Page ${stage.workshop.storybook.page} / branching story`:`Chapter ${stage.workshop.storybook.chapter+1}/${stage.workshop.storybook.length}` : stage.workshop ? 'Adventure Workshop' : run.guild ? openingTrailSubtitle(stage) : index < 0 ? 'Expedition on your map' : `Trail ${index + 1} of ${campaign.length} · ${openingTrailSubtitle(stage)}`} · 3★ target: ${turnTarget(run)} turns${difficulty === 'nemesis' ? ' · NEMESIS' : ''}`;
     $('#game-story').textContent = stage.intro;
     $('#game-lanterns').textContent = `${run.collectedLanterns.length}/${stage.lanterns.length}`;
     $('#game-turns').textContent = run.turns;
@@ -442,8 +443,9 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     const warning = !intro && !progress && /block(?:ed|s)?|closed|locked|cannot|needs? |no .+ left|occupied|occupies|recharges|oath:/.test(run.message.toLowerCase());
     const danger = run.events.some(event => ['hurt', 'alarm'].includes(event.type)) || incoming || run.status === 'lost';
     const quietStep = run.message === 'Watch the hunters. Use cover, change direction, or create an opening.';
+    const feedback=trailFeedback(run);
     const travelText = run.carrying ? run.hunters.length ? 'The relic sings. Hunters can hear it.' : 'The relic sings. Bring it home to the beacon.' : run.noise ? 'Your footsteps echo along the trail.' : 'The trail leads onward.';
-    showStatus(paused ? 'Take a breath. The trail will wait.' : intro ? 'Find the lost lanterns. The beacon is waiting.' : `${quietStep ? travelText : run.message}${incoming ? ' A Watcher sweep is coming. Leave the marked ground!' : ''}`,
+    showStatus(paused ? 'Take a breath. The trail will wait.' : intro&&feedback===run.message ? 'Find the lost lanterns. The beacon is waiting.' : `${quietStep ? travelText : feedback}${incoming ? ' A Watcher sweep is coming. Leave the marked ground!' : ''}`,
       paused ? 'info' : danger ? 'danger' : warning ? 'warning' : progress ? 'success' : 'info');
     $('#dash-button').classList.toggle('armed', dashArmed); $('#dash-button').setAttribute('aria-pressed', String(dashArmed));
     $('#dash-button').disabled = paused || run.status !== 'playing' || run.energy < 2 || run.stage.restrictions.noDash;
@@ -468,7 +470,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#game-stars').hidden = Boolean(stage.workshop?.practice);
     $('#adventure').dataset.status = run.status;
     updateReadingView();
-    canvas.setAttribute('aria-label', `${stage.name}. ${run.difficulty} rules. Column ${run.player.x + 1}, row ${run.player.y + 1}. Health ${run.health} of 3. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns. ${quietStep?travelText:run.message}`);
+    canvas.setAttribute('aria-label', `${stage.name}. ${run.difficulty} rules. Column ${run.player.x + 1}, row ${run.player.y + 1}. Health ${run.health} of 3. ${run.collectedLanterns.length} of ${stage.lanterns.length} lanterns. ${quietStep?travelText:feedback}`);
     $('#game-overlay').hidden = !paused && run.status === 'playing';
     if (paused) {
       $('#game-result-eyebrow').textContent = 'A MOMENT ON THE TRAIL'; $('#game-result-title').textContent = 'Take a breather.';
@@ -567,7 +569,7 @@ export function createAdventureUI({ storage, saveSession, onSaveReload, getMap, 
     $('#conversation-wallet').textContent = `Unspent coins: ${wallet(run)}. Trades are optional and each keeper offers one parcel. Supplies are capped at three.`;
     $('#conversation-name').textContent = npc.name;
     const lines = run.wonders && Object.hasOwn(run.wonders.dialogue,npc.id) ? [run.wonders.dialogue[npc.id]] : run.rescued.includes(npc.id) && npc.after ? [npc.after] : selected ? [npc.choices.find(choice => choice.id === selected).response] : npc.lines;
-    $('#conversation-lines').replaceChildren(...lines.map(text => Object.assign(document.createElement('p'), { textContent: text })));
+    $('#conversation-lines').replaceChildren(...lines.map(text => Object.assign(document.createElement('p'), { textContent: openingKeeperText(run.stage,text) })));
     $('#conversation-options').replaceChildren(...(selected || run.rescued.includes(npc.id) ? [] : npc.choices || []).map(choice => {
       const button = document.createElement('button'), problem = choiceProblem(run, choice);
       button.textContent = `${choice.label}${problem ? ` · ${problem}` : ''}`; button.dataset.choice = choice.id;
