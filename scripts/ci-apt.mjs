@@ -20,7 +20,9 @@ export async function configureUbuntuApt(root) {
  const files=[path.join(root,'sources.list'),...sources.filter(name=>/\.(?:list|sources)$/.test(name)).sort().map(name=>path.join(sourceDir,name)),...entries.filter(name=>/^apt-mirrors.*\.txt$/.test(name)).sort().map(name=>path.join(root,name))],changed=[];
  for(const file of files){
   let before;try{before=await readFile(file,'utf8');}catch(error){if(error.code==='ENOENT')continue;throw error;}
-  let after=before;for(const [from,to]of replacements)after=after.replaceAll(from,to);
+  // Hosted AWS runners can use regional mirrors instead of the Azure mirror.
+  let after=before.replace(/https?:\/\/[a-z0-9-]+\.ec2\.archive\.ubuntu\.com\/ubuntu\b/g,'https://archive.ubuntu.com/ubuntu');
+  for(const [from,to]of replacements)after=after.replaceAll(from,to);
   if(after!==before){await writeFile(file,after,'utf8');changed.push(path.relative(root,file).split(path.sep).join('/'));}
  }
  await mkdir(path.join(root,'apt.conf.d'),{recursive:true});

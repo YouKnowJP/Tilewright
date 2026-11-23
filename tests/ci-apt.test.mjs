@@ -21,6 +21,16 @@ test('CI rewrites the real mirror+file lists as well as signed APT sources',()=>
 test('CI preserves suites, components, signing keys and unrelated repository hosts',()=>fixture(async root=>{
  const before='deb [signed-by=/keys/ubuntu.gpg] https://azure.archive.ubuntu.com/ubuntu noble main universe\ndeb [signed-by=/keys/vendor.gpg] https://vendor.example/repo stable main\n';await put(root,'sources.list',before);await put(root,'sources.list.d/security.list','deb http://security.ubuntu.com/ubuntu noble-security main\n');await configureUbuntuApt(root);assert.equal(await get(root,'sources.list'),before.replace('https://azure.archive.ubuntu.com/ubuntu','https://archive.ubuntu.com/ubuntu'));assert.equal(await get(root,'sources.list.d/security.list'),'deb https://security.ubuntu.com/ubuntu noble-security main\n');
 }));
+test('CI redirects regional EC2 Ubuntu mirrors in package sources and mirror lists',()=>fixture(async root=>{
+ const local='http://us-east-2.ec2.archive.ubuntu.com/ubuntu';
+ const regional='https://eu-west-1.ec2.archive.ubuntu.com/ubuntu';
+ const source=`Types: deb\nURIs: ${local}\nSuites: noble noble-security\nSigned-By: /keys/ubuntu.gpg\n`;
+ await put(root,'sources.list.d/ubuntu.sources',source);
+ await put(root,'apt-mirrors.txt',regional+' priority:1\n');
+ assert.deepEqual(await configureUbuntuApt(root),['apt-mirrors.txt','sources.list.d/ubuntu.sources']);
+ assert.equal(await get(root,'sources.list.d/ubuntu.sources'),source.replace(local,'https://archive.ubuntu.com/ubuntu'));
+ assert.equal(await get(root,'apt-mirrors.txt'),'https://archive.ubuntu.com/ubuntu priority:1\n');
+}));
 test('CI ignores unrelated text, backups and configuration files',()=>fixture(async root=>{
  const text='http://azure.archive.ubuntu.com/ubuntu\n';for(const file of ['notes.txt','sources.list.d/ignored.txt','sources.list.d/ubuntu.sources.backup'])await put(root,file,text);await configureUbuntuApt(root);for(const file of ['notes.txt','sources.list.d/ignored.txt','sources.list.d/ubuntu.sources.backup'])assert.equal(await get(root,file),text);
 }));

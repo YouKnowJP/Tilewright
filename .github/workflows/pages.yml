@@ -105,7 +105,7 @@ jobs:
   pip-compatibility:
     name: Pip compatibility / ${{ matrix.engine }} ${{ matrix.shard }}/3
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 32
     strategy:
       fail-fast: false
       matrix:
@@ -127,7 +127,7 @@ jobs:
         timeout-minutes: 2
         run: sudo "$(command -v node)" scripts/ci-apt.mjs
       - name: Install browser and system dependencies
-        timeout-minutes: 8
+        timeout-minutes: 14
         run: npx playwright install --with-deps ${{ matrix.engine }}
       - name: Play Pip and Sprout in this browser
         run: npm run test:browser:pip -- ${{ matrix.engine }} --shard=${{ matrix.shard }}/3
