@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {PIP_POSTCARDS} from './pip-postcards.mjs';
 import {readyRendezvous} from './pip-rendezvous.mjs';
 import {RAIL_DIRECTIONS} from './pip-rails.mjs';
 import {counterArrival} from './pip-counters.mjs';
@@ -62,7 +63,7 @@ export function normalizeTinkerProject(input,{verify=true}={}){
 export function editTinkerProject(input,patch){const {proof,...base}=input;const next={...base,...patch};if(next.trialId==='duo-creator')next.version=Math.max(next.version,duoRequiredVersion(next.parts||[]),patch.quietDrums!==undefined?13:patch.quietBells!==undefined?5:patch.quietSwitches!==undefined?4:patch.relays!==undefined||patch.emptyLockers!==undefined?3:2);return normalizeTinkerProject(next);}
 export function placeTinkerPart(input,kind,x,y,extra={}){return editTinkerProject(input,{parts:[...input.parts.filter(p=>p.x!==x||p.y!==y),...(kind==='erase'?[]:[part(kind,x,y,extra)])]});}
 export function tinkerDefinition(project){return project.version>=2?duoDefinition(project):tinkerTrial(project.trialId);}
-export function tinkerCatalogue(){return [...TINKER_TRIALS,...DUO_STORIES,DUO_CUSTOM];}
+export function tinkerCatalogue(){return [...TINKER_TRIALS,...DUO_STORIES,...PIP_POSTCARDS,DUO_CUSTOM];}
 export function startTinker(input){const project=normalizeTinkerProject(input,{verify:false}),trial=tinkerDefinition(project);return {project,bots:trial.starts.map((p,i)=>({...p,id:i?'Sprout':'Pip',program:[...project.programs[i]],index:0,parcel:null,last:'Ready',...(project.version>=14?{resting:0}:{}),...(project.version>=17?{rolling:false}:{}),...(project.version>=18?{syncing:false}:{})})),received:{},flips:{},ticks:0,transfers:0,status:'playing',last:'Ready to test. No keeper turns or rewrites are spent here.',events:[],...(project.version>=3?{lockers:{},lockerTransfers:0}:{}),...(project.version>=4?{switches:{}}:{}),...(project.version>=5?{pulses:{}}:{}),...(project.version>=10?{mixers:{}}:{}),...(project.version>=13?{drums:{}}:{}),...(project.version>=16?{counters:Object.fromEntries(tinkerParts(project).filter(p=>p.kind==='counter').map(p=>[p.id,[p.phase,0]]))}:{})};}
 export function tinkerParts(project){return [...tinkerDefinition(project).fixed,...project.parts].map((p,i)=>({...p,id:String(i)}));}
 function counterChannels(state,parts){return state.counters?parts.filter(p=>p.kind==='counter'&&state.counters[p.id][1]>0).map(p=>p.channel):[];}

@@ -114,3 +114,34 @@ body:not([data-game-contrast=high]) :is(.ph-hero canvas,#ps-inspect,.ps-status,#
 body[data-game-contrast=high] :is(.ph-card,#pp-status,#pp-goal){background:#071619;color:#fff;border-color:#dceaf0}
 
 .ps-tide-editor{min-width:0}.ps-tide-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:6px;padding:0;list-style:none}.ps-tide-strip li{border:1px solid #a6b4a0;padding:7px;background:#102f3e;color:#fff1bf;font-weight:700}.ps-tide-strip li[data-open=true]{border:2px solid #f2d18a;background:#294b45}body[data-game-contrast=high] .ps-tide-strip li{background:#071619;color:#fff;border-color:#dceaf0}
+
+.title-home .title-menu > #title-postcards { grid-column: 1 / -1; }
+.pip-postcards .front-dialog-heading {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  align-items: center;
+  gap: 10px;
+}
+.pip-postcards h2 { margin: 0; font-size: clamp(22px, 4vw, 38px); }
+.pip-postcards h3 { margin: 18px 0 8px; color: #f4dfaa; }
+.pip-postcards p { line-height: 1.55; }
+.pip-postcards .postcard-card { scroll-margin-block: 12px; }
+.pip-postcards .postcard-card h4 { margin-top: 0; }
+.pip-postcards .postcard-card button { scroll-margin-block: 24px; }
+.pip-postcards .postcard-time { color: var(--muted, #c5d3bc); }
+.pip-postcards .postcard-stamp {
+  align-self: flex-start;
+  margin: 8px 0 14px;
+  border: 1px dashed currentColor;
+  padding: 4px 10px;
+  color: #f0d49c;
+}
+.pip-postcards .postcard-stamp-earned { background: #ead095; color: #19372f; border-style: solid; }
+.pip-studio #ps-return-postcards { width: 100%; margin: 0 0 10px; }
+@media (max-width: 360px) {
+  .pip-postcards .front-dialog-heading { flex-wrap: wrap; }
+  .pip-postcards { scroll-padding-top: 130px; }
+}
+.pip-studio[data-postcard-play] > .ps-tabs,
+.pip-studio[data-postcard-play] :is(#ps-remix, #ps-name-details) { display: none; }

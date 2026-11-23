@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.70.0 — 2026-11-23
+
+- Open Pip’s Weekly Postcard from the main menu. Play three short delivery puzzles about a shared bridge, a dye press handoff, and a courier tube.
+- Feature a different postcard each Monday (UTC), with every other postcard available in the archive. Keep each puzzle’s cards, best clear, and optional postage stamp in the current journey.
+- Add touch and desktop playthroughs that verify the archive, rollover, optional stamps, and saved setups.
+
 ## 0.69.2 — 2026-11-12
 
 - Keep the current lesson prompt beside phone controls. Waiting no longer completes the walking lesson; the practice lever explains its safe crossing.

@@ -290,7 +290,7 @@ const clues = {
 
 export const DUO_CLUE_IDS = Object.freeze(Object.keys(clues));
 export function duoHintStages(definition) {
- const pair = clues[definition.id] || [
+ const pair = definition.clues || clues[definition.id] || [
   'Choose one small delivery to make work before expanding the garden.',
   'Inspect the well, any recipes, and the matching window. Use acts on the tile under a courier; Pip acts before Sprout.'
  ];

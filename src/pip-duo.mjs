@@ -1,4 +1,5 @@
 // New owned material. See LICENSE; prior MIT permissions remain effective.
+import {postcardById} from './pip-postcards.mjs';
 import {CARD_DIAL_FINALE} from './pip-dial-finale.mjs';
 import {TOLL_HOUSE_MISSIONS} from './pip-toll-house.mjs';
 import {normalizeCardDial} from './pip-card-dial.mjs';
@@ -78,7 +79,7 @@ export const DUO_MISSIONS=Object.freeze([
 ].map((m,i)=>Object.freeze({...m,chapter:i+1,difficulty:i<2?'Gentle':i<4?'Tricky':'Challenging',minutes:i<4?'5–15 min':'10–25 min'})));
 export const DUO_STORIES=Object.freeze([...DUO_MISSIONS,...NIGHT_MAIL_MISSIONS,...DAWN_WORKSHOP_MISSIONS,...CANOPY_FAIR_MISSIONS,...AFTER_HOURS_MISSIONS,...CLOCKTOWER_MISSIONS,...STAR_ATLAS_MISSIONS,...LANTERN_WORKSHOP_MISSIONS,...BELLKEEPER_MISSIONS,...SEALKEEPER_MISSIONS,...RAINWRIGHT_MISSIONS,...TIDEKEEPER_MISSIONS,...BALANCEKEEPER_MISSIONS,...ECHO_POST_MISSIONS,...MIXING_HOUSE_MISSIONS,...KILN_HOUSE_MISSIONS,...WEAVE_HOUSE_MISSIONS,...DRUM_HOUSE_MISSIONS,...REST_HOUSE_MISSIONS,...WIND_HOUSE_MISSIONS,...COUNTER_HOUSE_MISSIONS,...RAIL_HOUSE_MISSIONS,...MEETING_HOUSE_MISSIONS,...TOLL_HOUSE_MISSIONS,CARD_DIAL_FINALE]);
 export const DUO_CUSTOM=Object.freeze({id:'duo-creator',title:'Your duo adventure',collection:'create',difficulty:'Creator',minutes:'Your pace'});
-export function duoMission(id){return DUO_STORIES.find(m=>m.id===id);}
+export function duoMission(id){return DUO_STORIES.find(m=>m.id===id) || postcardById(id);}
 export function duoText(value,fallback,max=48){if(value===undefined)return fallback;if(typeof value!=='string'||value.length>max||/[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069]/.test(value))throw Error('Use short, printable story text.');return value.trim()||fallback;}
 const same=(a,b)=>a.x===b.x&&a.y===b.y;
 export function normalizeDuoPart(raw,{version=2}={}){
